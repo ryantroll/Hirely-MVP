@@ -1,0 +1,182 @@
+/* app css stylesheet */
+
+.hide {
+   display: none;
+}
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li.hide {
+   display: none;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+p.status {
+   color: red;
+}
+
+p.status.good, p.good {
+   color: green;
+}
+
+form label {
+   display: block;
+   margin: 15px 0;
+}
+
+form label span {
+   display: block;
+   font-weight: bold;
+}
+
+.error {
+   color: red;
+}
+
+fieldset {
+   float: left;
+   margin-right: 25px;
+   padding: 25px;
+}
+.progress-box {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.progress-box .percentage-cur .num {
+  margin-right: 5px;
+}
+
+.progress-box .progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #f2f1f1;
+  margin-bottom: 3px;
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 0 2px #D5D4D4 inset;
+  position: relative;
+}
+
+.progress-box .progress-bar .inner {
+  position: relative;
+  width: 0;
+  height:100%;
+  background: #239bd6; 
+}
+
+.progress-bar .inner {
+  height: 0;
+  width: 0;
+  transition: all 1s ease-out;
+}
+
+.progress-bar-slider .inner {
+  transition: none;
+}
+
+.progress-bar-slider .inner:after {
+  content: " ";
+  width: 5px;
+  height: 14px;;
+  background-color:#ccc;
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  box-shadow: 0px 0px 2px rgba(0,0,0,0.3);
+  margin: 0px;
+}
+
+.progress-slider {
+  opacity: 0;
+  width: 100%;
+  height: 15px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  cursor: pointer;
+  z-index: 1;
+}
+.help {
+    display:none;
+    font-size:90%;
+}
+input:focus + .help {
+    display:inline-block;
+}
+body{
+    padding:20px;
+    }
+.enhanced-datepicker {
+    position:relative;
+    .btn {
+        margin-right:5px;
+        }
+    input {
+/*         position:absolute;
+        top:0;
+        left:-9999px;
+         */        }
+    }
+ul.chatbox {
+    height: 100px;
+    background-color: #eee;
+    border: 1px solid #aaa;
+    padding: 10px;
+    border-radius: 10px;
+    overflow-y: auto;
+    word-break: break-all;
+    list-style-type: none;
+}
+p.result {
+    color: #00AA00;
+    font-weight: bold;
+}
+p.result.note {
+    color: gray;
+    font-weight: normal;
+    font-style: italic;
+}
+p.result.error {
+    color: red;
+}
+input[name="data"] {
+    width: 200px;
+}
+input[name="user"] {
+    width: 100px;
+}
+input {
+    font-size: 14px;
+    line-height: 16px;
+}
+.note {
+    color: gray;
+}

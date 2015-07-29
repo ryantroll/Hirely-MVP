@@ -1,0 +1,40 @@
+<h2>Job Search</h2>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+
+
+  <script src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/0.9.1/angularfire.min.js"></script>
+ <script src="js/arraySearch.js"></script>
+<div ng-app="myApp" ng-controller="ONetCtrl">
+    <p>
+        Sort by: 
+        <select ng-model="orderBy">
+            <option value="">--default--</option>
+            <option>Title</option>
+            <option>ONET_Code</option>
+            <option>Description</option>
+        </select>
+    </p>
+    <p>Search: <input ng-model="searchText" /></p>
+    <ul class="chatbox">
+        <!-- arrays are fully sortable and filterable in directives -->
+        <li ng-repeat="job in jobs | orderBy:orderBy | filter:searchText">
+           {{job.Title}}  {{job.ONET_Code}} {{job.Description}}
+            
+            <!-- delete a message using the $remove method -->
+            <a href="#" ng-click="jobs.$remove(message)">X</a>
+        </li>
+    </ul>
+    <form>
+  <input placeholder="Enter Job Title" ng-model="jobTitle">
+  <input placeholder="Enter ONET Code" ng-model="jobCode">
+  <input placeholder="Enter Job Description" ng-model="jobDesc">
+  <button type="submit" ng-click="searchJobs()">send</button>
+</form>
+
+    
+</div>
+<p>
+  Running the 'interpolate' filter:
+  {{ 'Current version is v%VERSION%.' | interpolate }}
+</p>

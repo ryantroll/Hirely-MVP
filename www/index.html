@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <title>Hirely App</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <link rel="stylesheet" href="css/app.css"/>
+ <link rel="stylesheet" href="css/font-awesome.css"/>
+
+
+  <link rel="stylesheet" href="css/metro.css"/>
+  <script src="lib/ionic/js/angular/angular.js"></script>
+  <script src="lib/ionic/js/angular/demo-utils-angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.10/angular-route.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/0.9.1/angularfire.min.js"></script>
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+  <link href="css/ionic.app.css" rel="stylesheet">
+  -->
+
+  <!-- ionic/angularjs js -->
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
+
+  <!-- your app's js -->
+  <script src="app/app.js"></script>
+</head>
+<body ng-cloak-auth class="hide">
+
+  <ul class="menu">
+    <li><a href="#/home">Home</a></li>
+    <li ng-show-auth="logout,error"><a href="#/login">Login</a></li>
+    <li ng-show-auth="login"><a href="#/account">Account</a></li>
+    <li ng-show-auth="login"><a href="#/job">Job Search</a></li>
+    <li ng-show-auth="login"><a href="#/jobdetails">Job Details</a></li>
+    <li ng-show-auth="login"><a href="#/can">Candidate</a></li>
+    <li ng-show-auth="login"><a href="#/candetails">Candidate Details</a></li>
+  </ul>
+
+
+  <div ng-view></div>
+
+  <div> ------------------------------------- </div>
+  <div>Welcome to Hirely!! v<span app-version></span></div>
+
+  <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+  <script src="https://cdn.firebase.com/v0/firebase-simple-login.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/routes.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/service.login.js"></script>
+  <script src="js/service.firebase.js"></script>
+  <script src="js/module.waitForAuth.js"></script>
+  <script src="js/module.routeSecurity.js"></script>
+</body>
+</html>
