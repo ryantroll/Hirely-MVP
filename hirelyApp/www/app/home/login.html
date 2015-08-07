@@ -1,0 +1,44 @@
+<div class="modal modal-login" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="loginModalLabel" class="modal-title text-center">Log in to your account</h4>
+            </div>
+            <div class="modal-body">
+                <div class="social-login text-center">
+                    <ul class="list-unstyled social-login">
+                        <li><button class="twitter-btn btn" type="button"><i class="fa fa-twitter"></i>Log in with Twitter</button></li>
+                        <li><button class="facebook-btn btn" type="button"><i class="fa fa-facebook"></i>Log in with Facebook</button></li>
+                        <li><button class="google-btn btn" type="button"><i class="fa fa-google-plus"></i>Log in with Google</button></li>
+                    </ul>
+                </div>
+                <div class="divider"><span>Or</span></div>
+                <div class="login-form-container">
+                    <form class="login-form">
+                        <div class="form-group email">
+                            <label class="sr-only" for="login-email">Your email</label>
+                            <input id="login-email" name="login-email" type="email" class="form-control login-email" placeholder="Your email">
+                        </div><!--//form-group-->
+                        <div class="form-group password">
+                            <label class="sr-only" for="login-password">Password</label>
+                            <input id="login-password" name="login-password" type="password" class="form-control login-password" placeholder="Password">
+                            <p class="forgot-password">
+                                <a href="#" id="resetpass-link" data-toggle="modal" data-target="#resetpass-modal">Forgot password?</a>
+                            </p>
+                        </div><!--//form-group-->
+                        <button type="submit" class="btn btn-block btn-cta-primary">Log in</button>
+                        <div class="checkbox remember">
+                            <label>
+                                <input type="checkbox"> Remember me
+                            </label>
+                        </div><!--//checkbox-->
+                    </form>
+                </div><!--//login-form-container-->
+            </div><!--//modal-body-->
+            <div class="modal-footer">
+                <p>New to Tempo? <a class="signup-link" id="signup-link" href="#">Sign up now</a></p>
+            </div><!--//modal-footer-->
+        </div><!--//modal-content-->
+    </div><!--//modal-dialog-->
+</div><!--//modal-->

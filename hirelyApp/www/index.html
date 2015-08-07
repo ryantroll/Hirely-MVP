@@ -1,34 +1,89 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html id="data-ng-app">
+<head>
+    <title>Hirely</title>
+    <!-- Meta -->
     <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="lib/bootstrap/less/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lib/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="lib/animate.css/animate.min.css">
+    <link rel="stylesheet" href="lib/flexslider/flexslider.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="css/style.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
 
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-    <link href="css/ionic.app.css" rel="stylesheet">
-    -->
 
-    <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+</head>
 
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+<body  data-ng-app="hirelyApp" class="home-page">
 
-    <!-- your app's js -->
-    <script src="app/app.js"></script>
-  </head>
-  <body ng-app="hirely">
+    <div ui-view ></div>
 
-    <ion-pane>
-      <ion-header-bar class="bar-stable">
-        <h1 class="title">Hirely</h1>
-      </ion-header-bar>
-      <ion-content>
-      </ion-content>
-    </ion-pane>
-  </body>
-</html>
+    <!--3rd party libraries -->
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <!--<script src="lib/angular/demo-utils-angular.js"></script>-->
+    <script src="lib/firebase/firebase.js"></script>
+    <script src="lib/angularfire/dist/angularfire.min.js"></script>
+
+    <script type="text/javascript" src="lib/jquery-2.1.4/dist/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="assets/plugins/jquery-migrate-1.2.1.min.js"></script>-->
+    <script type="text/javascript" src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.inview/jquery.inview.min.js"></script>
+    <script type="text/javascript" src="lib/isMobile/isMobile.min.js"></script>
+    <script type="text/javascript" src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <!--<script type="text/javascript" src="assets/plugins/back-to-top.js"></script>-->
+    <!--<script type="text/javascript" src="assets/plugins/jquery-placeholder/jquery.placeholder.js"></script>-->
+    <!--<script type="text/javascript" src="assets/plugins/FitVids/jquery.fitvids.js"></script>-->
+    <!--<![endif]-->
+    <script type="text/javascript" src="lib/flexslider/jquery.flexslider-min.js"></script>
+    <!-- Vimeo video API -->
+    <!--<script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script>-->
+    <!--<script type="text/javascript" src="assets/js/vimeo.js"></script>-->
+
+    <!--[if !IE]>-->
+    <script type="text/javascript" src="js/animations.js"></script>
+
+
+    <!--Custom js -->
+    <script type="text/javascript" src="js/main.js"></script>
+
+
+    <!--Modules -->
+    <script type="text/javascript" src="app/home/home.module.js"></script>
+    <script type="text/javascript" src="app/layout/layout.module.js"></script>
+    <script type="text/javascript" src="app/shared/shared.module.js"></script>
+
+    <!--Directives -->
+    <script type="text/javascript" src="app/shared/flexslider_directive.js"></script>
+    <script type="text/javascript" src="app/layout/header_directive.js"></script>
+    <script type="text/javascript" src="app/layout/footer_directive.js"></script>
+    <script type="text/javascript" src="app/layout/footerCtrl.js"></script>
+
+    <!--Controllers -->
+    <script type="text/javascript" src="app/layout/headerCtrl.js"></script>
+    <script type="text/javascript" src="app/home/homeCtrl.js"></script>
+
+    <!--app.js -->
+    <script type="application/javascript" src="app/app.js"></script>
+
+
+</body>
+</html> 
+

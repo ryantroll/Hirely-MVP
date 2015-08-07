@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Hirely</title>
+
+
+    <!-- css -->
+    <link href="lib/owl-carousel/css/owl.carousel.css" rel="stylesheet"/>
+    <link href="lib/owl-carousel/css/owl.theme.css" rel="stylesheet"/>
+    <link href="css/ionic.app.css" rel="stylesheet">
+
+
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="app/app.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <!--<script src="lib/angular/demo-utils-angular.js"></script>-->
+    <script src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.9.1/angularfire.min.js"></script>
+    <script src="lib/jquery-1.11.3.min/index.js"></script>
+    <script src="lib/owl-carousel/js/owl.carousel.min.js"></script>
+    <script src="app/shared/shared.module.js"></script>
+    <script src="app/shared/owlCarousel-directive.js"></script>
+    <script src="app/home/loginCtrl.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/service.login.js"></script>
+    <script src="js/service.firebase.js"></script>
+    <script src="js/module.waitForAuth.js"></script>
+    <script src="js/module.routeSecurity.js"></script>
+</head>
+
+<body ng-cloak-auth ng-app="hirelyApp">
+
+<ion-nav-view></ion-nav-view>
+</body>
+</html>

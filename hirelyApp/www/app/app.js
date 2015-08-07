@@ -1,15 +1,36 @@
+'use strict';
+angular.module('hirelyApp', ['ui.router', 'ui.bootstrap', 'hirelyApp.layout', 'hirelyApp.home', 'hirelyApp.shared'])
 
-angular.module('hirely', ['ionic'])
+    .config(function($stateProvider, $urlRouterProvider) {
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
-})
+      $stateProvider
+
+          .state('app', {
+              url: "/app",
+              abstract: true,
+              templateUrl: "app/layout/master.html"
+          })
+
+          .state('app.home', {
+              url: '/home',
+              parent: 'app',
+              templateUrl: 'app/home/home.html',
+              controller: 'HomeCtrl'
+          })
+          .state('app.login', {
+              url: '/login',
+              templateUrl: 'app/home/login.html'
+          })
+          .state('app.register', {
+              url: '/register',
+              views: {
+                  'mainContent': {
+                      templateUrl: 'app/home/register.html',
+                      //controller: 'LoginCtrl'
+                  }
+              }
+          })
+      // if none of the above states are matched, use this as the fallback
+      $urlRouterProvider.otherwise('/app/home');
+    })
+   ;
