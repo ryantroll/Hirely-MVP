@@ -1,6 +1,5 @@
-<div class="modal modal-login" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<div class="modal-login" ng-controller="LoginCtrl as vm">
+
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 id="loginModalLabel" class="modal-title text-center">Log in to your account</h4>
@@ -8,8 +7,8 @@
             <div class="modal-body">
                 <div class="social-login text-center">
                     <ul class="list-unstyled social-login">
+                        <li><button class="facebook-btn btn" type="button" ng-click="vm.FbLogin()"><i class="fa fa-facebook"></i>Log in with Facebook</button></li>
                         <li><button class="twitter-btn btn" type="button"><i class="fa fa-twitter"></i>Log in with Twitter</button></li>
-                        <li><button class="facebook-btn btn" type="button"><i class="fa fa-facebook"></i>Log in with Facebook</button></li>
                         <li><button class="google-btn btn" type="button"><i class="fa fa-google-plus"></i>Log in with Google</button></li>
                     </ul>
                 </div>
@@ -37,8 +36,6 @@
                 </div><!--//login-form-container-->
             </div><!--//modal-body-->
             <div class="modal-footer">
-                <p>New to Tempo? <a class="signup-link" id="signup-link" href="#">Sign up now</a></p>
+                <p>New to hirely? <a class="signup-link" id="signup-link" href="#">Sign up now</a></p>
             </div><!--//modal-footer-->
-        </div><!--//modal-content-->
-    </div><!--//modal-dialog-->
 </div><!--//modal-->

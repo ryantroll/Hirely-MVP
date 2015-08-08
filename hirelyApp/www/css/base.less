@@ -94,7 +94,17 @@ a.btn-cta-secondary,  .btn-cta-secondary {
     
 }
 
-
+a.btn-cta-blue, .btn-cta-blue {
+  background: @blue;
+  border: 2px solid @blue;
+  color: #fff;
+  text-transform: uppercase;
+  &:hover {
+    background: darken(@blue, 10%);
+    border: 2px solid darken(@blue, 10%);
+    color: #fff;
+  }
+}
 .form-control {
    .box-shadow(none);
     height: 40px;
@@ -637,28 +647,7 @@ select {
 }
 
 /* ======= Modal ======= */ 
-.modal {
-    
-    &.modal-video {
-        .modal-dialog {
-            width: 760px;
-            margin: 30px auto;
-        }
-        .modal-body {
-            padding: 10px;
-            padding-top: 0;
-        }
-        .modal-header {
-            border: none;
-            padding: 10px;
-            
-        }
-        .modal-title {
-            color: darken(@color, 25%);
-        }
-    }
-    
-    &.modal-login, &.modal-signup, &.modal-resetpass {
+&.modal-login, &.modal-signup, &.modal-resetpass {
         .modal-dialog {
             width: 460px;
             margin: 30px auto;
@@ -817,8 +806,6 @@ select {
         }
     }
     
-}
-
 
 
 /* ======= Pagination ======= */

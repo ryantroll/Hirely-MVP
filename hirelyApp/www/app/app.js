@@ -1,5 +1,15 @@
 'use strict';
-angular.module('hirelyApp', ['ui.router', 'ui.bootstrap', 'hirelyApp.layout', 'hirelyApp.home', 'hirelyApp.shared'])
+angular.module('hirelyApp',
+    [
+        'ui.router',
+        'ui.bootstrap',
+        'firebase',
+        'hirelyApp.layout',
+        'hirelyApp.home',
+        'hirelyApp.shared',
+        'hirelyApp.core',
+        'hirelyApp.user'
+    ])
 
     .config(function($stateProvider, $urlRouterProvider) {
 
@@ -19,14 +29,15 @@ angular.module('hirelyApp', ['ui.router', 'ui.bootstrap', 'hirelyApp.layout', 'h
           })
           .state('app.login', {
               url: '/login',
-              templateUrl: 'app/home/login.html'
+              templateUrl: 'app/user/login.html',
+              controller: 'LoginCtrl'
           })
           .state('app.register', {
               url: '/register',
               views: {
                   'mainContent': {
-                      templateUrl: 'app/home/register.html',
-                      //controller: 'LoginCtrl'
+                      templateUrl: 'app/user/register.html',
+                      //controller: 'RegisterCtrl'
                   }
               }
           })
