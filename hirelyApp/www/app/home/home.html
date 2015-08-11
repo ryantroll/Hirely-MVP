@@ -6,14 +6,13 @@
             <div class="container text-center">
                 <h1 class="title">The best way to find your next job</h1>
                 <form class="search-form">
-                    <div class="form-group">
-                        <label class="sr-only" for="semail1">Your email</label>
-                        <input type="email" id="semail1" name="semail1" class="form-control" placeholder="Find your next gig">
+                    <div class="form-group" ng-controller="HomeCtrl">
+                        <input type="text" id="search" ng-model="selected" typeahead="job as job.Lay_Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" typeahead-on-select="onSelect($Code, $Title, $Lay_Title)" class="form-control" ng-init="" placeholder="Find your next gig"> 
                     </div>
-                    <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
-                        <span class="btn-search-inner"></span>
-                    </button>
-                </form><!--//search-form-->
+                  <button type="submit" class="btn btn-cta btn-cta-primary btn-search" ng-click="searchJob(selected)">
+                  <span class="btn-search-inner"></span>
+                  </button>
+            </form><!--//search-form-->
             </div><!--//contianer-->
         </div><!--//search-->
 
