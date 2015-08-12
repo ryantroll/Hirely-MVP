@@ -5,23 +5,22 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('UserService', ['$rootScope', '$q','$firebaseAuth', 'fbutil', UserService]);
+        .service('UserService', ['$rootScope', '$q','FBURL', '$firebaseArray','fbutil', UserService]);
 
-    function UserService($rootScope, $q, $firebaseAuth, fbutil, UserService) {
+    function UserService($rootScope, $q, FBURL, $firebaseArray, fbutil, UserService) {
         var self = this;
-        var fbAuthRef = $firebaseAuth(fbutil.ref());
-        var usersDB =  fbutil.ref("users");
-
+        var fireRef = new Firebase(FBURL + '/users');
+        var users = $firebaseArray(fireRef);
 
         function userModel(){
             this.firstName = '';
             this.lastName = '';
             this.fullName = '';
             this.email = '';
-            this. profileImageUrl = '';
+            this.profileImageUrl = '';
             this.personalStatement = '';
             this.provider =  '';
-            this. providerId = '';
+            this.providerId = '';
             this.createdOn = '';
             this.lastModifiedOn = '';
 
@@ -47,57 +46,104 @@
 
         }
 
-        this.createUser =  function createUser(userId, user){
 
-            usersDB
-                .child(userId).set(user);
-
+        this.checkUserEmailExists = function checkUserEmailExists(email){
+           return _.find(users, function(item){ return item.email == email });
         }
 
-        this.checkUserIdExists = function checkUserIdExists(userId){
-            var userExists;
-            usersDB.once('value', function(snapshot) {
-                userExists = snapshot.hasChild(userId)
-            });
-        }
+        this.createUserfromThirdParty = function createUserfromThirdParty(provider, authData) {
+            var deferred = $q.defer();
+            var user;
+            switch(provider) {
+                case 'facebook':
+                    user = createFacebookUser(authData)
+                    break;
+                case 'twitter':
 
+                    break;
+                case 'google':
+
+<<<<<<< HEAD
         this.checkUserEmailExists = function checkUserEmailExists(email){
             var userExists;
             usersDB.orderByChild("email").equalTo(email).on("child_added", function(snapshot) {
                 userExists = snapshot.key();
             });
             return userExists
+=======
+>>>>>>> origin/master
+        }
+            var userExists = false;
+            if(this.checkUserEmailExists(user.email))
+            {
+                deferred.reject('User email already exists.');
+                userExists = true;
+            }
+
+            if(!userExists)
+            {
+                users.$add(user).then(function(ref) {
+                    var newUser = users.$getRecord(ref.key());
+                    self.setCurrentUser(newUser);
+                    deferred.resolve(newUser);
+                });
+
+            }
+
+            return deferred.promise;
+
+        }
+
+        this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
+            var deferred = $q.defer();
+            var user;
+
+            var userExists = false;
+            if(this.checkUserEmailExists(userData.email))
+            {
+                deferred.reject('User email already exists.');
+                userExists = true;
+            }
+
+            if(!userExists)
+            {
+                var timestamp = new Date();
+                user = new userModel();
+                user.fullName = userData.firstName + ' ' + userData.lastName;
+                user.firstName = userData.firstName;
+                user.lastName = userData.lastName;
+                user.email = userData.email;
+                user.provider = 'password';
+                user.providerId = providerId;
+                user.createdOn = timestamp;
+                user.lastModifiedOn = timestamp;
+                users.$add(user).then(function(ref) {
+                    var newUser = users.$getRecord(ref.key());
+                    deferred.resolve(newUser);
+                });
+
+            }
+
+            return deferred.promise;
+
         }
 
 
-        this.createUserfromFb  = function createUserfromFb(fbAuthData){
-            var deferred = $q.defer();
 
-            var currentdate = new Date();
-            var datetime =  (currentdate.getMonth()+1)  + "/"
-                + (currentdate.getDate()) + "/"
-                + (currentdate.getYear()) + " "
-                + currentdate.getHours() + ":"
-                + currentdate.getMinutes() + ":"
-                + currentdate.getSeconds();
-
+        function createFacebookUser(fbAuthData)
+        {
+            var timestamp = new Date();
             var fbUser = new userModel();
             fbUser.fullName = fbAuthData.facebook.displayName;
             fbUser.profileImageUrl =  fbAuthData.facebook.profileImageURL;
-            //fbUser.email = fbAuthData.facebook.email;
+            fbUser.email = fbAuthData.facebook.email;
             fbUser.provider = fbAuthData.provider;
             fbUser.providerId = fbAuthData.facebook.id;
-            fbUser.createdOn = datetime;
-            fbUser.lastModifiedOn = datetime;
+            fbUser.createdOn = timestamp;
+            fbUser.lastModifiedOn = timestamp;
 
-            //check if user exists
-            if(this.checkUserEmailExists(fbUser.email))
-            {
-                deferred.reject('User email does not exists.');
-            }
-            this.createUser(fbAuthData.facebook.id, fbUser);
+            return fbUser;
 
-            this.setCurrentUser(fbUser);
         }
 
 

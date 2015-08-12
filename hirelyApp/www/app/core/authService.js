@@ -13,15 +13,18 @@
         var authData = '';
         var service =  {
             thirdPartyLogin: thirdPartyLogin,
-            AuthRef: AuthRef
+            AuthRef: AuthRef,
+            registerNewUser: registerNewUser,
+            passwordLogin: passwordLogin
         };
         return service;
 
         // Handle third party login providers
         // returns a promise
         function thirdPartyLogin(provider) {
+
             var deferred = $q.defer();
-            firebaseRef.$authWithOAuthPopup(provider)
+            firebaseRef.$authWithOAuthPopup(provider,{scope: "email"})
                 .then(function(user) {
                    deferred.resolve(user);
                 }, function(err) {
@@ -30,6 +33,43 @@
 
 
           return deferred.promise;
+        };
+
+        function passwordLogin(email, password) {
+
+            var deferred = $q.defer();
+            firebaseRef.$authWithPassword({
+                email    : email,
+                password : password
+                })
+                .then(function(user) {
+                    deferred.resolve(user);
+                }, function(err) {
+                    deferred.reject(err);
+                });
+
+
+            return deferred.promise;
+        };
+
+        function AuthRef(){
+            return firebaseRef;
+        }
+
+        function registerNewUser(email, password) {
+
+            var deferred = $q.defer();
+            firebaseRef.$createUser({
+                    email: email,
+                    password : password})
+                .then(function(user) {
+                    deferred.resolve(user);
+                }, function(err) {
+                    deferred.reject(err);
+                });
+
+
+            return deferred.promise;
         };
 
         function AuthRef(){
