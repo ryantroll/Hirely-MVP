@@ -4,7 +4,7 @@
     <div class="fixed-container">
         <div class="search">
             <div class="container text-center">
-                <h1 class="title">The best way to find your next job</h1>
+                <h1 class="title">Opportunity Awaits</h1>
                 <form class="search-form">
                     <div class="form-group" ng-controller="HomeCtrl">
                         <input type="text" id="search" ng-model="selected" typeahead="job as job.Lay_Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" typeahead-on-select="onSelect($Code, $Title, $Lay_Title)" class="form-control" ng-init="" placeholder="Find your next gig"> 
