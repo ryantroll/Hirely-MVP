@@ -35,7 +35,7 @@ angular.module('hirelyApp',
           .state('app.job', {
               url: '/job',
               templateUrl: 'app/job/jobs.html',
-              controller: 'HomeCtrl'
+              controller: 'JobCtrl'
           })
           .state('app.register', {
               url: '/login',
