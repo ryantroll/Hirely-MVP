@@ -14,5 +14,5 @@
         .constant('loginRedirectPath', '/login')
 
         // your Firebase URL goes here
-        .constant('FirebaseUrl', 'https://shining-torch-5144.firebaseio.com')
+        .constant('FBURL', 'https://shining-torch-5144.firebaseio.com')
 })();

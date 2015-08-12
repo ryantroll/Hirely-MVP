@@ -1,7 +1,6 @@
 <header id="header" class="header">
     <div class="container" ng-controller="HeaderCtrl as vm">
-        <a ng-href="#" class="thumb"><img class="img-logo" src="img/hirely_logo.png" alt="optional logo"/></a>
-        <h1 class="logo pull-left">
+        <h1 ng-href="#" class="logo pull-left">
             <a href="index.html">
                 <span class="logo-title">hirely</span>
             </a>
@@ -10,22 +9,23 @@
             <div class="navbar-header">
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button><!--//nav-toggle-->
             </div><!--//navbar-header-->
             <div class="navbar-collapse collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active nav-item"><a href="index.html">Home</a></li>
-                    <li class="nav-item"><a href="tour.html">Find A Job</a></li>
-                    <li class="nav-item"><a href="pricing.html">Start Hiring</a></li>
+                    <li class="nav-item" ng-show="currentUser"><a href="#">Hello User</a></li>
+                    <li class="nav-item" ><a href="#">Start Hiring</a></li>
 
-                    <li class="nav-item"><a href="contact.html">How It Works</a></li>
-                    <li class="nav-item"><button type="button" class="login-trigger btn btn-link"  ng-click="vm.login()" >Log in</button></li>
-                    <li class="nav-item nav-item-cta last"><button type="button" class="btn btn-blue btn-cta-blue" >Get Started</button></li>
+                    <li class="nav-item"><a ng-click="vm.login()">
+                        <div class="sign-in-divider"></div>
+                        Log in</a></li>
+
+                    <li class="nav-item nav-item-cta last"><button type="button" class="btn btn-blue btn-cta-blue" ng-click="vm.register()" >Get Started</button></li>
                 </ul><!--//nav-->
             </div><!--//navabr-collapse-->
         </nav><!--//main-nav-->
+        </div>
         </div>
     </header>

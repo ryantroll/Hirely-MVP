@@ -8,7 +8,7 @@ angular.module('hirelyApp',
         'hirelyApp.home',
         'hirelyApp.shared',
         'hirelyApp.core',
-        'hirelyApp.user'
+        'hirelyApp.account'
     ])
 
     .config(function($stateProvider, $urlRouterProvider) {
@@ -29,7 +29,7 @@ angular.module('hirelyApp',
           })
           .state('app.login', {
               url: '/login',
-              templateUrl: 'app/user/login.html',
+              templateUrl: 'app/account/login.html',
               controller: 'LoginCtrl'
           })
           .state('app.job', {
@@ -38,13 +38,9 @@ angular.module('hirelyApp',
               controller: 'HomeCtrl'
           })
           .state('app.register', {
-              url: '/register',
-              views: {
-                  'mainContent': {
-                      templateUrl: 'app/user/register.html',
-                      //controller: 'RegisterCtrl'
-                  }
-              }
+              url: '/login',
+              templateUrl: 'app/account/register.html',
+              controller: 'RegisterCtrl'
           })
       // if none of the above states are matched, use this as the fallback
       $urlRouterProvider.otherwise('/app/home');

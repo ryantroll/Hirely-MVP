@@ -106,6 +106,7 @@ a.btn-cta-blue,
   border: 2px solid #024a68;
   color: #fff;
   text-transform: uppercase;
+  margin-left: 15px;
 }
 a.btn-cta-blue:hover,
 .btn-cta-blue:hover {
@@ -348,6 +349,13 @@ select {
   -o-background-size: cover;
   background-size: cover;
 }
+.bg-slider-wrapper .flexslider .slide.slide-4 {
+  background: #ffffff url('../img/restaurant_server.jpg') no-repeat 50% top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 .bg-slider-wrapper .flexslider .flex-control-nav {
   z-index: 20;
   bottom: 45px;
@@ -374,6 +382,9 @@ select {
 .header.navbar-fixed-top .main-nav .navbar-collapse {
   padding-left: 15px;
   padding-right: 15px;
+}
+.header .container {
+  width: 100%;
 }
 .header .img-logo {
   height: 46px;
@@ -422,6 +433,13 @@ select {
 }
 .header .main-nav .navbar-toggle .icon-bar {
   background-color: #fff;
+}
+.header .main-nav .nav .sign-in-divider {
+  float: left;
+  height: 20px;
+  width: 1px;
+  background: #e5e5e5;
+  margin: 0px 32px 0 0;
 }
 .header .main-nav .nav .nav-item {
   font-weight: normal;

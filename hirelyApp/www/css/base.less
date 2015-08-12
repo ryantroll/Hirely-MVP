@@ -99,6 +99,7 @@ a.btn-cta-blue, .btn-cta-blue {
   border: 2px solid @blue;
   color: #fff;
   text-transform: uppercase;
+  margin-left: 15px;
   &:hover {
     background: darken(@blue, 10%);
     border: 2px solid darken(@blue, 10%);
@@ -321,6 +322,10 @@ select {
                 background:#fff url('../img/bartender_bg.jpg') no-repeat 50% top;
                 .background-size(cover);
             }
+          &.slide-4 {
+            background:#fff url('../img/restaurant_server.jpg') no-repeat 50% top;
+            .background-size(cover);
+          }
             
         }
         .flex-control-nav {
@@ -352,6 +357,10 @@ select {
             padding-right: 15px;
         }
     }
+  .container{
+    width: 100%;
+
+  }
    .img-logo{
        height: 46px;
        width: 46px;
@@ -395,8 +404,16 @@ select {
             }
             
         }
-        
+
         .nav {
+          .sign-in-divider {
+            float: left;
+            height: 20px;
+            width: 1px;
+            background: #e5e5e5;
+            margin: 0px 32px 0 0;
+          }
+
             .nav-item {
                 font-weight: normal;
                 text-transform: uppercase;

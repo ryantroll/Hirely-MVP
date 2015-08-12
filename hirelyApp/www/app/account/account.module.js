@@ -4,5 +4,5 @@
 (function() {
     'use strict';
 
-    angular.module('hirelyApp.user', []);
+    angular.module('hirelyApp.account', ['hirelyApp.core','ui.bootstrap']);
 })();

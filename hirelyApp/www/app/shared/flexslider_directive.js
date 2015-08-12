@@ -1,4 +1,4 @@
-/**
+    /**
  * Created by labrina.loving on 8/6/2015.
  */
 angular.module("hirelyApp.shared").directive('flexslider', function () {
