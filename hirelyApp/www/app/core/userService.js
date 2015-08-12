@@ -63,7 +63,7 @@
 
         this.checkUserEmailExists = function checkUserEmailExists(email){
             var userExists;
-            usersDB.orderByChild("email").equalTo(25).on("child_added", function(snapshot) {
+            usersDB.orderByChild("email").equalTo(email).on("child_added", function(snapshot) {
                 userExists = snapshot.key();
             });
             return userExists

@@ -1,12 +1,20 @@
 /**
- * Created by labrina.loving on 8/6/2015.
+ * Created by mike.baker on 8/10/2015.
  */
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.jobs').controller('jobCtrl', ['$stateParams', jobCtrl ]);
+    angular.module('hirelyApp.job').controller('JobCtrl', ['$scope', '$firebaseArray', JobCtrl ]);
 
-    .controller('jobCtrl', function($scope) {
+      function JobCtrl($scope, $firebaseArray) {
 
-})
+        var url = 'https://shining-torch-5144.firebaseio.com/jobOpenings';
+        var fireRef = new Firebase(url);
+        
+
+        $scope.jobOpenings = $firebaseArray(fireRef);
+
+			$scope.split_jobs = [['job1', 'job2', 'job3'], ['job4', 'job5', 'job6'], ['job7', 'job8', 'job9']];
+		 }
+
 })();

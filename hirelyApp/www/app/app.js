@@ -7,6 +7,7 @@ angular.module('hirelyApp',
         'hirelyApp.layout',
         'hirelyApp.home',
         'hirelyApp.shared',
+        'hirelyApp.job',
         'hirelyApp.core',
         'hirelyApp.account'
     ])
@@ -20,7 +21,6 @@ angular.module('hirelyApp',
               abstract: true,
               templateUrl: "app/layout/master.html"
           })
-
           .state('app.home', {
               url: '/home',
               parent: 'app',
@@ -35,7 +35,7 @@ angular.module('hirelyApp',
           .state('app.job', {
               url: '/job',
               templateUrl: 'app/job/jobs.html',
-              controller: 'HomeCtrl'
+              controller: 'JobCtrl'
           })
           .state('app.register', {
               url: '/login',
