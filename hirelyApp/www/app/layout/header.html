@@ -15,14 +15,15 @@
             </div><!--//navbar-header-->
             <div class="navbar-collapse collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="nav-item" ng-show="currentUser"><a href="#">Hello User</a></li>
                     <li class="nav-item" ><a href="#">Start Hiring</a></li>
-
-                    <li class="nav-item"><a ng-click="vm.login()">
+                    <li class="nav-item" ng-show="currentUser"><a href="#">
+                        <div class="sign-in-divider"></div>
+                        Hello User</a></li>
+                    <li class="nav-item" ng-show="!currentUser"><a ng-click="vm.login()">
                         <div class="sign-in-divider"></div>
                         Log in</a></li>
 
-                    <li class="nav-item nav-item-cta last"><button type="button" class="btn btn-blue btn-cta-blue" ng-click="vm.register()" >Get Started</button></li>
+                    <li class="nav-item nav-item-cta last" ng-show="!currentUser"><button type="button" class="btn btn-blue btn-cta-blue" ng-click="vm.register()" >Get Started</button></li>
                 </ul><!--//nav-->
             </div><!--//navabr-collapse-->
         </nav><!--//main-nav-->
