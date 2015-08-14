@@ -21,8 +21,8 @@
                             <div class="sign-in-divider"></div>
                             <img alt="" class="img-circle" src="{{currentUser.profileImageUrl}}">
 						<span class="username username-hide-on-mobile">
-						Hello <span ng-bind="currentUser.firstName"> </span>
-                            </span>
+						Hi <span ng-bind="currentUser.firstName"> </span>
+                            </span>!
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
@@ -32,14 +32,13 @@
                             </li>
                             <li>
                                 <a href="#">
-                                    <i class="fa fa-heart"></i>     Favorites </a>
-                            </li>
-                            <li>
-                                <a href="#">
                                     <i class="fa fa-list"></i>     Applications
                                 </a>
                             </li>
-
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-heart"></i>     Favorites </a>
+                            </li>
                             <li>
                                 <a href="" ng-click="vm.logout()">
                                     <i class="fa fa-lock"></i>     Log Out </a>
