@@ -13,6 +13,7 @@
         var userService = UserService;
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: ''}
+
         vm.FbRegister = function () {
 
             registerThirdPartyUser('facebook')
@@ -29,18 +30,21 @@
         }
 
         vm.registerNewUser = function() {
-            registerUserinFirebase($scope.user)
+            registerPasswordUser($scope.user)
         }
 
         vm.CloseModal = function (){
             $modalInstance.close();
         }
 
-        function registerThirdPartyUser(provider) {
-            authService.thirdPartyLogin(provider)
+        //this function registers user in 3rd party and
+        //and then creates Firebase db
+        function registerThirdPartyUser(provider, scope) {
+            authService.thirdPartyLogin(provider, scope)
                 .then(function(user) {
                     userService.createUserfromThirdParty(provider, user)
                         .then(function(fbUser){
+                            userService.setCurrentUser(fbUser, provider.uid);
                             $modalInstance.close();
                         }, function(err) {
                             alert(err)
@@ -50,14 +54,15 @@
                 })
         }
 
-        function registerUserinFirebase(registeredUser){
+        function registerPasswordUser(registeredUser){
+            //register new user
             authService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(user) {
                     userService.createRegisteredNewUser(registeredUser, user.uid)
                         .then(function(newUser){
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
-                                    userService.setCurrentUser(newUser);
+                                    userService.setCurrentUser(newUser, user.uid);
                                     $modalInstance.close();
                                 }, function(err) {
                                     alert(err)

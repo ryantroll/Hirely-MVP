@@ -556,6 +556,16 @@ select {
   right: 30px;
   top: -10px;
 }
+.header .img-circle {
+  float: left;
+  margin-top: -8px;
+  margin-right: 7px;
+  height: 39px;
+  display: inline-block;
+  width: 39px;
+  vertical-align: top;
+  border: 1px solid #666666;
+}
 /* ======= Footer ======= */
 .footer {
   background: #ff3100;

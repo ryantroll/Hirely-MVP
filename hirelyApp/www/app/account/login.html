@@ -1,7 +1,6 @@
-<div class="modal-login" ng-controller="LoginCtrl as vm">
-
+<div class="modal-login">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.CloseModal()">&times;</button>
                 <h4 id="loginModalLabel" class="modal-title text-center">Log in to your account</h4>
             </div>
             <div class="modal-body">
@@ -17,19 +16,32 @@
                 </div>
                 <div class="divider"><span>Or</span></div>
                 <div class="login-form-container">
-                    <form class="login-form">
+                    <form class="login-form" name="loginForm" ng-submit="vm.PasswordLogin()">
                         <div class="form-group email">
-                            <label class="sr-only" for="login-email">Your email</label>
-                            <input id="login-email" name="login-email" type="email" class="form-control login-email" placeholder="Your email">
+                            <label class="sr-only" for="loginEmail">Your email</label>
+                            <input id="loginEmail" name="loginEmail" type="email" class="form-control login-email" placeholder="Your email" required ng-model="user.email">
+                            <div role="alert">
+                              <span class="error" ng-show="loginForm.loginEmail.$error.required && !loginForm.loginEmail.$pristine">
+                                Email is required</span>
+                              <span class="error" ng-show="loginForm.loginEmail.$error.email">
+                                Invalid email format</span>
+                            </div>
                         </div><!--//form-group-->
                         <div class="form-group password">
-                            <label class="sr-only" for="login-password">Password</label>
-                            <input id="login-password" name="login-password" type="password" class="form-control login-password" placeholder="Password">
+                            <label class="sr-only" for="loginPassword">Password</label>
+                            <input id="loginPassword" name="loginPassword" type="password" class="form-control login-password" placeholder="Password" required ng-minlength="6" ng-maxlength="12"
+                                   ng-model="user.password">
+                            <div role="alert">
+                              <span class="error" ng-show="loginForm.loginPassword.$error.required  && !loginForm.loginPassword.$pristine">
+                                Password is required</span>
+                              <span class="error" ng-show="loginForm.loginPassword.$error.minlength || loginForm.loginPassword.$error.maxlength">
+                                Password should be between 6 and 12 characters</span>
+                            </div>
                             <p class="forgot-password">
                                 <a href="#" id="resetpass-link" data-toggle="modal" data-target="#resetpass-modal">Forgot password?</a>
                             </p>
                         </div><!--//form-group-->
-                        <button type="submit" class="btn btn-block btn-cta-primary">Log in</button>
+                        <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="!loginForm.$valid">Log in</button>
                         <div class="checkbox remember">
                             <label>
                                 <input type="checkbox"> Remember me

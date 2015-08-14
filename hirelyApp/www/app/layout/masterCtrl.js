@@ -4,27 +4,38 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$stateParams', '$scope', '$modal', '$log', 'AuthService', 'UserService',MasterCtrl ]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$stateParams', '$scope', '$modal', '$log', '$q', 'AuthService', 'UserService',MasterCtrl ]);
 
-    function MasterCtrl($stateParams, $scope, $modal, $log, AuthService, UserService) {
+    function MasterCtrl($stateParams, $scope, $modal, $log, $q, AuthService, UserService) {
 
         var vm = this;
+
         $scope.authRef = AuthService.AuthRef();
         $scope.userService = UserService;
         $scope.currentUser = null;
         // any time auth status updates, add the user data to scope
         $scope.authRef.$onAuth(function(authData) {
-
-            if(authData)
+           if(authData)
             {
-                UserService.setIsLoggedIn(true);
+                if(!$scope.currentUser) {
+                    //try to retrieve user
+                    $scope.userService.getUserByKey(authData.uid)
+                        .then(function (snapshot) {
+                            var exists = (snapshot.val() != null);
+                            if (exists) {
+                                $scope.userService.setCurrentUser(snapshot.val(), snapshot.key());
+                                $scope.userService.setIsLoggedIn(true);
+                            }
 
-                //check if user is populated, populate if not
+                        }, function (err) {
+
+                        });
+                }
             }
             else
             {
-               UserService.setIsLoggedIn(false);
-                UserService.setCurrentUser(null)
+                $scope.userService.setIsLoggedIn(false);
+                $scope.userService.setCurrentUser(null)
             }
         });
 
