@@ -485,12 +485,17 @@ select {
                 &.last {
                     margin-right: 0;
                 }
+
+
             }
             
             .open {
                 &>a {
                     background: none;
                 }
+              i{
+                padding-right: 10px;
+              }
             }
             .dropdown-menu {
                 .border-radius(4px);
@@ -529,7 +534,17 @@ select {
             
         }
     }
-    
+    .img-circle{
+      float: left;
+      margin-top: -8px;
+      margin-right: 7px;
+      height: 38px;
+      display: inline-block;
+      width: 38px;
+      vertical-align: top;
+      border: 1px solid #666666;
+
+    }
 }
 
 /* ======= Footer ======= */
@@ -638,7 +653,7 @@ select {
     }
     .search-form {
         .form-control {
-            font-size: 16px;
+            font-size: 18px;
             color: @grey;
         }
         .form-group {
@@ -903,6 +918,7 @@ select {
              margin-top: 0;
              margin-bottom: 15px;
              .text-shadow(0 1px 1px rgba(0,0,0,.6));
+           text-transform: uppercase;
          }
          .summary {
              color: #fff;

@@ -14,7 +14,8 @@
 
         $scope.jobOpenings = $firebaseArray(fireRef);
 
-			$scope.split_jobs = [['job1', 'job2', 'job3'], ['job4', 'job5', 'job6'], ['job7', 'job8', 'job9']];
-		 }
-
+		$scope.split_jobs = [['job1', 'job2']];
+		
+     
+ }
 })();

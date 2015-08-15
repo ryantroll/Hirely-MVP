@@ -15,16 +15,17 @@
             thirdPartyLogin: thirdPartyLogin,
             AuthRef: AuthRef,
             registerNewUser: registerNewUser,
-            passwordLogin: passwordLogin
+            passwordLogin: passwordLogin,
+            logout: logout
         };
         return service;
 
         // Handle third party login providers
         // returns a promise
-        function thirdPartyLogin(provider) {
+        function thirdPartyLogin(provider, scope) {
 
             var deferred = $q.defer();
-            firebaseRef.$authWithOAuthPopup(provider,{scope: "email"})
+            firebaseRef.$authWithOAuthPopup(provider, scope)
                 .then(function(user) {
                    deferred.resolve(user);
                 }, function(err) {
@@ -54,6 +55,10 @@
 
         function AuthRef(){
             return firebaseRef;
+        }
+
+        function logout(){
+            firebaseRef.$unauth();
         }
 
         function registerNewUser(email, password) {

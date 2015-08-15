@@ -1,16 +1,18 @@
-    /**
+/**
  * Created by labrina.loving on 8/10/2015.
  */
 (function () {
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('UserService', ['$rootScope', '$q','FBURL', '$firebaseArray','fbutil', UserService]);
+        .service('UserService', ['$rootScope', '$q','FBURL', '$firebaseObject', 'fbutil', UserService]);
 
-    function UserService($rootScope, $q, FBURL, $firebaseArray, fbutil, UserService) {
+    function UserService($rootScope, $q, FBURL, $firebaseObject, fbutil, UserService) {
         var self = this;
-        var fireRef = new Firebase(FBURL + '/users');
-        var users = $firebaseArray(fireRef);
+        var ref = new Firebase(FBURL + "/users");
+        var currentUser;
+        var currentUserId;
+        var isLoggedIn = false;
 
         function userModel(){
             this.firstName = '';
@@ -24,131 +26,136 @@
             this.createdOn = '';
             this.lastModifiedOn = '';
 
-        };
-
-        var currentUser;
-        var isLoggedIn = false;
-
-      this.getCurrentUser = function getCurrentUser() {
-          return currentUser;
-      }
-
-       this.getIsLoggedIn =  function getIsLoggedIn(){
-            return isLoggedIn;
         }
 
-        this.setCurrentUser = function setCurrentUser(user){
+
+        this.getCurrentUser = function getCurrentUser() {
+            return currentUser;
+        };
+
+        this.getIsLoggedIn =  function getIsLoggedIn(){
+            return isLoggedIn;
+        };
+
+        this.setCurrentUser = function setCurrentUser(user, userId){
             currentUser = user;
-          }
+            currentUserId = userId;
+        };
 
         this.setIsLoggedIn = function setIsLoggedIn(aisLoggedIn){
             isLoggedIn = aisLoggedIn;
 
+        };
+
+        this.getUserByKey = function getUserByKey(key){
+            var userRef =  new Firebase(FBURL + "/users" + '/' + key);
+            var deferred = $q.defer();
+            userRef.once("value", function (snapshot) {
+                    deferred.resolve(snapshot);
+
+                }, function (err) {
+                    deferred.reject(snapshot);
+                }
+            );
+            return deferred.promise;
         }
 
 
-        this.checkUserEmailExists = function checkUserEmailExists(email){
-           return _.find(users, function(item){ return item.email == email });
+        this.getUserByEmail = function getUserByEmail(email) {
+
+            var deferred = $q.defer();
+            ref.orderByChild("email").equalTo(email).once("value", function (snapshot) {
+                    deferred.resolve(snapshot);
+
+                }, function (err) {
+                    deferred.reject(snapshot);
+                }
+            );
+            return deferred.promise;
+        };
+
+        this.createUserinFirebase = function createUserInFireBase(user, key) {
+
+            var ref = fbutil.ref('users', key);
+            ref.set(user)
         }
 
         this.createUserfromThirdParty = function createUserfromThirdParty(provider, authData) {
             var deferred = $q.defer();
             var user;
+
+            //get proper user for provider
             switch(provider) {
                 case 'facebook':
-                    user = createFacebookUser(authData)
+                    user = createFacebookUser(authData);
                     break;
                 case 'twitter':
 
                     break;
                 case 'google':
+            }
 
-<<<<<<< HEAD
-        this.checkUserEmailExists = function checkUserEmailExists(email){
-            var userExists;
-            usersDB.orderByChild("email").equalTo(email).on("child_added", function(snapshot) {
-                userExists = snapshot.key();
-            });
-            return userExists
-=======
->>>>>>> origin/master
-        }
+            //check if user previously exists
             var userExists = false;
-            if(this.checkUserEmailExists(user.email))
-            {
-                deferred.reject('User email already exists.');
-                userExists = true;
-            }
+            this.getUserByKey(authData.uid)
+                .then(function(snapshot) {
+                    var exists = (snapshot.val() != null);
+                    if(!exists)
+                    {
+                        self.createUserinFirebase(user, authData.uid)
 
-            if(!userExists)
-            {
-                users.$add(user).then(function(ref) {
-                    var newUser = users.$getRecord(ref.key());
-                    self.setCurrentUser(newUser);
-                    deferred.resolve(newUser);
+                    }
+                    deferred.resolve(user);
+                }, function(err) {
+                    deferred.reject(err);
                 });
-
-            }
 
             return deferred.promise;
 
-        }
+        };
+
+
 
         this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
+
             var deferred = $q.defer();
             var user;
 
-            var userExists = false;
-            if(this.checkUserEmailExists(userData.email))
-            {
-                deferred.reject('User email already exists.');
-                userExists = true;
-            }
+            var timestamp = Firebase.ServerValue.TIMESTAMP;
+            user = new userModel();
+            user.fullName = userData.firstName + ' ' + userData.lastName;
+            user.firstName = userData.firstName;
+            user.lastName = userData.lastName;
+            user.email = userData.email;
+            user.provider = 'password';
+            user.providerId = providerId;
+            user.createdOn = timestamp;
+            user.lastModifiedOn = timestamp;
 
-            if(!userExists)
-            {
-                var timestamp = new Date();
-                user = new userModel();
-                user.fullName = userData.firstName + ' ' + userData.lastName;
-                user.firstName = userData.firstName;
-                user.lastName = userData.lastName;
-                user.email = userData.email;
-                user.provider = 'password';
-                user.providerId = providerId;
-                user.createdOn = timestamp;
-                user.lastModifiedOn = timestamp;
-                users.$add(user).then(function(ref) {
-                    var newUser = users.$getRecord(ref.key());
-                    deferred.resolve(newUser);
-                });
+            self.createUserinFirebase(user, providerId)
 
-            }
 
+            deferred.resolve(user);
             return deferred.promise;
 
-        }
+        };
 
 
 
         function createFacebookUser(fbAuthData)
         {
-            var timestamp = new Date();
+            var timestamp = Firebase.ServerValue.TIMESTAMP;
             var fbUser = new userModel();
             fbUser.fullName = fbAuthData.facebook.displayName;
             fbUser.profileImageUrl =  fbAuthData.facebook.profileImageURL;
             fbUser.email = fbAuthData.facebook.email;
             fbUser.provider = fbAuthData.provider;
-            fbUser.providerId = fbAuthData.facebook.id;
+            fbUser.providerId = fbAuthData.uid;
             fbUser.createdOn = timestamp;
             fbUser.lastModifiedOn = timestamp;
 
             return fbUser;
 
         }
-
-
-
-
-
     }
 })();
