@@ -4,41 +4,25 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$stateParams', '$scope', '$modal', '$log', '$q', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl ]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$stateParams', '$scope', '$modal', '$log', '$q', '$window', 'AuthService', 'UserService',MasterCtrl ]);
 
-    function MasterCtrl($stateParams, $scope, $modal, $log, $q, $window, AuthService, UserService, GeocodeService) {
+    function MasterCtrl($stateParams, $scope, $modal, $log, $q, $window, AuthService, UserService) {
 
         var vm = this;
-        var geocodeService = GeocodeService;
 
         $scope.authRef = AuthService.AuthRef();
         $scope.userService = UserService;
         $scope.currentUser = null;
         $scope.location = {};
-        $scope.currentPlace = null;
-
 
         //
         $window.navigator.geolocation.getCurrentPosition(function(position){
-
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
 
             $scope.$apply(function() {
                     $scope.location.latitude = lat;
                     $scope.location.longitude = long;
-                    if(lat && long)
-                    {
-                        geocodeService.getPlacebyLatLong(lat, long)
-                            .then(function(place) {
-                               if(place){
-                                   $scope.currentPlace = place;
-                                   $scope.$broadcast('currentPlaceChanged', { message: place });
-                               }
-                            }, function(err) {
-                                deferred.reject(err);
-                            });
-                    }
 
                 }
             )

@@ -369,7 +369,7 @@ select {
 }
 /* ======= Header ======= */
 .header {
-  padding: 10px 15px;
+  padding: 15px 0;
   background: #fff;
   z-index: 888;
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
@@ -567,7 +567,7 @@ select {
   display: inline-block;
   width: 38px;
   vertical-align: top;
-  border: 2px solid #666666;
+  border: 1px solid #666666;
 }
 /* ======= Footer ======= */
 .footer {
@@ -653,7 +653,7 @@ select {
 }
 .search .search-form .form-control {
   font-size: 18px;
-  color: #444444;
+  color: #999999;
 }
 .search .search-form .form-group {
   display: inline-block;

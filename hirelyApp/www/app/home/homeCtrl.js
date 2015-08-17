@@ -4,28 +4,19 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$http', '$firebaseArray', '$location', '$log', '$timeout', '$state', '$stateParams', HomeCtrl ]);
 
-  function HomeCtrl ($scope, $state, $stateParams, GeocodeService) {
-      var geocodeService = GeocodeService;
+  function HomeCtrl ($scope, $http, $firebaseArray, $location, $log, $timeout, $state, $stateParams) {
 
-      $scope.results = '';
-      $scope.options = {
-          types: '(regions)'
-      };
+        var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobs';
+        var fireRef = new Firebase(firebaseUrl);
+        $scope.selected = undefined;
+      
+    
+      var jobs = fireRef.child("jobs");
 
-      $scope.details = '';
+      $scope.jobs = $firebaseArray(jobs);
 
-<<<<<<< Updated upstream
-
-      $scope.getResults = function() {
-          geocodeService.setPlace($scope.details);
-            $state.go('app.job')
-
-      }
-
-  }
-=======
       $scope.onSelect = function(place){
 	    var result = { selected :'place' };
 	    $state.go('app.job', result);
@@ -39,5 +30,4 @@
 };
 }
     
->>>>>>> Stashed changes
  })();
