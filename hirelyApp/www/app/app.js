@@ -1,6 +1,7 @@
 'use strict';
 angular.module('hirelyApp',
-    [   'uiGmapgoogle-maps',
+    [   
+        'uiGmapgoogle-maps',
         'ui.router',
         'ui.bootstrap',
         'firebase',
@@ -54,18 +55,28 @@ angular.module('hirelyApp',
     libraries: 'weather,geometry,visualization'
  });
 })  
-.controller("mapController", function($scope, uiGmapGoogleMapApi) {
+
+.controller("mapController", function($scope, $http, $firebaseArray, uiGmapGoogleMapApi) {
   
   // Define variables for our Map object
-  var areaLat      = 44.2126995,
-      areaLng      = -100.2471641,
-      areaZoom     = 3;
+  var areaLat      = 38.9047,
+      areaLng      = -77.0164,
+      areaZoom     = 11;
+
+ var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobs';
+ var fireRef = new Firebase(firebaseUrl);
 
   uiGmapGoogleMapApi.then(function(maps) {
     $scope.map     = { center: { latitude: areaLat, longitude: areaLng }, zoom: areaZoom };
     $scope.options = { scrollwheel: false };
-  });
+    $scope.googleMapsObject = maps;
+    $scope.jobOpenings = fireRef;
+
+
+
+
+    });
+
 
 });
  
-;
