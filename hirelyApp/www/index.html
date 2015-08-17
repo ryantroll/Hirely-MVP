@@ -37,8 +37,7 @@
     <div ui-view ></div>
 
     <!--3rd party libraries -->
-     <script src="lib/angular/angular.js"></script>
-
+    <script src="app/job/angular.min.js"></script>
     <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
     <!--<script src="lib/angular/demo-utils-angular.js"></script>-->
     <script src="lib/firebase/firebase.js"></script>
@@ -82,13 +81,14 @@
     <script type="text/javascript" src="app/shared/flexslider_directive.js"></script>
     <script type="text/javascript" src="app/layout/header_directive.js"></script>
     <script type="text/javascript" src="app/layout/footer_directive.js"></script>
-    <script type="text/javascript" src="app/shared/googlePlaces_directive.js"></script>
+    <script type="text/javascript" src="app/shared/googleAutocomplete_directive.js"></script>
 
 
     <!--Services -->
     <script type="text/javascript" src="app/core/authService.js"></script>
     <script type="text/javascript" src="app/core/userService.js"></script>
     <script type="text/javascript" src="app/core/firebase.utils.js"></script>
+    <script type="text/javascript" src="app/core/geocodeService.js"></script>
 
     <!--Core -->
     <script type="text/javascript" src="app/core/constants.js"></script>
@@ -107,11 +107,11 @@
 
     <!--app.js -->
     <script src="app/job/lodash.min.js"></script>
-    <script src="app/job/angular.min.js"></script>
+
     <script src="app/job/angular-google-maps.js"></script>
     <script src="app/job/markerclusterer.js"></script>
     <script type="application/javascript" src="app/app.js"></script>
-    
+
 
 </body>
 </html> 

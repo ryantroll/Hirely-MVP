@@ -376,7 +376,7 @@ select {
 }
 /* ======= Header ======= */
 .header {
-  padding: 15px 0;
+  padding: 10px 15px;
   background: #fff;
   z-index: 888;
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
@@ -574,7 +574,7 @@ select {
   display: inline-block;
   width: 38px;
   vertical-align: top;
-  border: 1px solid #666666;
+  border: 2px solid #666666;
 }
 /* ======= Footer ======= */
 .footer {
@@ -660,7 +660,7 @@ select {
 }
 .search .search-form .form-control {
   font-size: 18px;
-  color: #999999;
+  color: #444444;
 }
 .search .search-form .form-group {
   display: inline-block;
