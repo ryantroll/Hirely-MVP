@@ -5,17 +5,17 @@
         <div class="search" ng-controller="HomeCtrl">
             <div class="container text-center">
                 <h1 class="title">Opportunity Awaits</h1>
-               <form class="search-form">
-                   <!-- ****** Not for BETA ******  <div class="form-group">
-                        <input type="text" id="search" ng-model="selected" typeahead="job as job.Lay_Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" typeahead-on-select="onSelect($Code)"class="form-control" ng-init="" placeholder="What's your next gig?">
-                    </div>--> 
+                <form class="search-form" ng-submit="getResults()">
+                    <!-- ****** Not for BETA ******  <div class="form-group">
+                         <input type="text" id="search" ng-model="selected" typeahead="job as job.Lay_Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" typeahead-on-select="onSelect($Code)"class="form-control" ng-init="" placeholder="What's your next gig?">
+                     </div>-->
                     <div class="form-group">
-                        <input class="form-control" id="location" ng-model="place" googleplace placeholder="Where's your next gig?" ng-onselect="onSelect(place)">
+                        <input type="text" id="Autocomplete" class="form-control" ng-autocomplete="results" details="details" ng-model="results"  options="options" on-Place-Changed="getResults()" required placeholder="Where's your next gig?"/>
                     </div>
-                  <button type="submit" class="btn btn-cta btn-cta-primary btn-search" ng-model="selected" ng-click="selectedCity(selected)">
-                  <span class="btn-search-inner"></span>
-                  </button>
-            </form><!--//search-form-->
+                    <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
+                        <span class="btn-search-inner"></span>
+                    </button>
+                </form><!--//search-form-->
             </div><!--//contianer-->
         </div><!--//search-->
 

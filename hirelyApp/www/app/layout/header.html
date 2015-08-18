@@ -1,7 +1,7 @@
 <header id="header" class="header">
     <div class="container" ng-controller="HeaderCtrl as vm">
-        <h1 ng-href="#" class="logo pull-left">
-            <a href="index.html">
+        <h1 class="logo pull-left">
+            <a ui-sref="app.home">
                 <span class="logo-title">hirely</span>
             </a>
         </h1><!--//logo-->
@@ -27,7 +27,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
                             <li>
-                                <a href="#">
+                                <a ui-sref="app.candidateProfile">
                                     <i class="fa fa-user"></i>     My Profile </a>
                             </li>
                             <li>

@@ -1379,6 +1379,114 @@ select {
     }
 }
 
+/* ======= Profile Section ======= */
+.profile
+{
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+  .profile-body{
+    padding: 20px;
+    background: #f7f7f7;
+  }
+
+  .profile-img{
+    margin-bottom: 20px;
+  }
+
+
+  /*Sidebar Menu v1*/
+  .sidebar-nav-v1 li {
+    padding: 0;
+  }
+
+  .sidebar-nav-v1 li a {
+    display: block;
+    padding: 8px 30px 8px 10px;
+  }
+
+  .sidebar-nav-v1 li a:hover {
+    text-decoration: none;
+  }
+
+  .sidebar-nav-v1 > li.active,
+  .sidebar-nav-v1 > li.active:hover {
+    background: #717984;
+  }
+
+  .sidebar-nav-v1 > li.active,
+  .sidebar-nav-v1 > li.active:hover,
+  .sidebar-nav-v1 > li.active:focus {
+    border-color: #ddd;
+  }
+
+  .sidebar-nav-v1 > li.active > a {
+    color: #fff;
+  }
+
+  /*Sidebar Sub Navigation*/
+  .sidebar-nav-v1 li ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  .sidebar-nav-v1 li ul,
+  .sidebar-nav-v1 li.active ul a {
+    background: #f8f8f8;
+  }
+
+  .sidebar-nav-v1 li ul a {
+    color: #555;
+    font-size: 12px;
+    border-top: solid 1px #ddd;
+    padding: 6px 30px 6px 17px;
+  }
+
+  .sidebar-nav-v1 ul li:hover a,
+  .sidebar-nav-v1 ul li.active a {
+    color: #72c02c;
+  }
+
+  li a{
+    color: @darker-grey;
+    font-size: 13px;
+  }
+  .list-group i {
+    min-width: 20px;
+    margin-right: 5px;
+    text-align: center;
+  }
+  .service-block-u
+  {
+    background: @color;
+  }
+  .service-block-blue
+  {
+    background: @blue;
+  }
+    .service-block-v3 {
+        padding: 20px;
+        color: #fff;
+        .profile-card-info{
+          margin-top: -20px;
+        }
+
+          i{
+            float: left;
+            font-size: 75px;
+            margin: 0 20px 20px 0;
+          }
+          h3{
+            margin-bottom: 0px;
+          }
+          small{
+            display: block;
+          }
+
+      }
+  }
+
+
 /* ======= Blog Section ======= */
 .blog {
     padding-top: 60px;
@@ -1652,131 +1760,3 @@ select {
     font-size: 13px;
 }
 
-
-/* ======= Configure Style (REMOVE ON YOUR PRODUCTION SITE)  ======= */
-
-.config-wrapper {
-    position: absolute;
-    top: 100px;
-    right: 0;
-    z-index: 20;
-}
-
-.config-wrapper-inner {
-    position: relative;
-}
-.config-trigger {
-    display: block;
-    position: absolute;
-    left: -36px;
-    width: 36px;
-    height: 36px;
-    background: darken(@text-color, 10%);
-    color: #fff;
-    text-align: center;
-    .border-radiuses (@topright: 0, @bottomright: 0, @bottomleft: 4px, @topleft: 4px);
-    
-    &:hover {
-        background: #000;
-    }
-    .fa {
-        font-size: 22px;
-        padding-top: 8px;
-        display: block;
-        color: #fff;
-    }
-}
-
-.config-panel {
-    width: 190px;
-    display: none;
-    background: darken(@text-color, 10%);
-    color: #fff;
-    padding: 15px;
-    .border-radiuses (@topright: 0, @bottomright: 0, @bottomleft: 4px, @topleft: 0);
-    h5.device-title {
-        margin-bottom: 5px;
-    }
-    
-    #color-options {
-        margin-bottom: 15px;
-    }
-    
-    #color-options li {
-        a {
-           display: block;
-           width: 20px;
-           height: 20px; 
-           border: 2px solid transparent;
-           &:hover {
-               .opacity(0.9);
-               border: 2px solid rgba(256, 256, 256, 0.8);
-           }
-        }
-        &.active {
-            a {
-                border: 2px solid #fff;
-            }
-        }
-        &.theme-1 {
-            a {
-                background: @theme-1;
-            }
-        }
-        &.theme-2 {
-            a {
-                background-color: @theme-2;
-            }            
-        }
-        &.theme-3 {
-            a {
-                background-color: @theme-3;
-            }
-        }
-        &.theme-4 {
-            a {
-                background-color: @theme-4;
-            }
-        }
-        &.theme-5 {
-            a {
-                background-color: @theme-5;
-            }
-        }
-        &.theme-6 {
-            a {
-                background-color: @theme-6;
-            }
-        }
-        &.theme-7 {
-            a {
-                background-color: @theme-7;
-            }
-        }
-        &.theme-8 {
-            a {
-                background-color: @theme-8;
-            }
-        }
-        &.theme-9 {
-            a {
-                background-color: @theme-9;
-            }
-        }
-        &.theme-10 {
-            a {
-                background-color: @theme-10;
-            }
-        }
-        
-    }
-    .close {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        color: #fff;
-        .fa {
-            color: #fff;
-        }
-    }
-}

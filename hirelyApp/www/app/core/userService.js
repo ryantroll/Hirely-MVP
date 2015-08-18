@@ -147,7 +147,7 @@
             var timestamp = Firebase.ServerValue.TIMESTAMP;
             var fbUser = new userModel();
             fbUser.fullName = fbAuthData.facebook.displayName;
-            fbUser.profileImageUrl =  fbAuthData.facebook.profileImageURL;
+            fbUser.profileImageUrl =  fbAuthData.facebook.cachedUserProfile.picture;
             fbUser.email = fbAuthData.facebook.email;
             fbUser.provider = fbAuthData.provider;
             fbUser.providerId = fbAuthData.uid;

@@ -5,12 +5,14 @@ angular.module('hirelyApp',
         'ui.router',
         'ui.bootstrap',
         'firebase',
+        'tc.chartjs',
         'hirelyApp.layout',
         'hirelyApp.home',
         'hirelyApp.shared',
         'hirelyApp.job',
         'hirelyApp.core',
-        'hirelyApp.account'
+        'hirelyApp.account',
+        'hirelyApp.candidate'
     ])
 
     .config(function($stateProvider, $urlRouterProvider) {
@@ -42,6 +44,11 @@ angular.module('hirelyApp',
               url: '/login',
               templateUrl: 'app/account/register.html',
               controller: 'RegisterCtrl'
+          })
+          .state('app.candidateProfile', {
+              url: '/candidateP rofile',
+              templateUrl: 'app/candidate/candidate-profile.html',
+              controller: 'CandidateProfileCtrl'
           })
       // if none of the above states are matched, use this as the fallback
       $urlRouterProvider.otherwise('/app/home');
