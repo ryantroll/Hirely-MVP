@@ -158,8 +158,7 @@
 
                         <div class="row" ng-if="map.show">
                             <div style="height:315px;width:430px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-                       
-                           <div ng-repeat="job in jobDetails | orderBy:'orderBy' | filter:job.Hiring_Manager" >  
+                            <div ng-repeat="job in jobDetails | orderBy:'orderBy' | filter:job.Hiring_Manager" ng-if="jobUID != job.UID" >  
                             <h5><i class="fa fa-dot-circle-o"></i>{{job.Job_Title}} @ {{job.Company}}</a></h5>
                                <ul class="list-inline grid-boxes-news">
                                  <li><span>{{job.Wage}} - <i class="fa fa-clock-o"> - {{job.Shifts}}</i></span></li> 

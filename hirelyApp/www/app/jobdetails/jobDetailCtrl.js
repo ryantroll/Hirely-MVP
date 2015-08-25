@@ -16,12 +16,6 @@
         $scope.jobDetails = $firebaseArray(fireRef);
         $scope.jobUID = jobdetailsService.getJob();
 
-		$scope.viewHMListings = function() {
-            $state.go('app.hmListings')
-
-        }
-
-
 
         }
 
