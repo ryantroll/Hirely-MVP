@@ -5,45 +5,31 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
 
-<!-- JS Global Compulsory -->
-<script type="text/javascript" src="app/job/js/jquery.min.js"></script>
-<script type="text/javascript" src="app/job/js/jquery-migrate.min.js"></script>
+<!-- CSS Page Style -->
+<link href="css/blog_masonry_3col.css" rel="stylesheet">
 
-<!-- JS Implementing Plugins -->
-<script type="text/javascript" src="app/job/js/back-to-top.js"></script>
-<script type="text/javascript" src="app/job/js/smoothScroll.js"></script>
-<script type="text/javascript" src="app/job/js/jquery.masonry.min.js"></script>
-<!-- JS Customization -->
-<script type="text/javascript" src="app/job/js/custom.js"></script>
-<!-- JS Page Level -->
-<script type="text/javascript" src="app/job/js/blog-masonry.js"></script>
-<script src="//maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        App.init();
-    });
-</script>
-
-  <!-- CSS Page Style -->
-<link href="app/job/js/blog_masonry_3col.css" rel="stylesheet">
-
+<link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700'
+    rel='stylesheet' type='text/css'>
+    
 <style>
+
 .angular-google-map-container { 
-  height: 1500px;
-   width: 600px;
+  height: 600px;
+   width: 1200px;
 }
 </style>
+
 </head>
 <!--=== Job Img ===-->
-<div><div style="width:100%;">
+{{details.formatted_address}}  {{details.geometry.location.G}} {{details.geometry.location.K}}
+
 <div class="collapse navbar-collapse navbar-responsive-collapse">
   <div class="menu-container">
     <div class="job-img margin-bottom-30">
          <div class="container text-center">
                <h2>Let Hirely help you find the Job you Need ...</h2>
         </div>
-      <div class="grid-boxes-qoute bg-color-blue">
-      <div class="grid-boxes-caption grid-boxes-quote">
+  <hr>
         <div class="job-img-inputs">
             <div class="container">
                 <div class="row">
@@ -51,15 +37,15 @@
                       <div class="form-group" ng-controller="JobSearchCtrl">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                            <input type="text" id="search" ng-model="selected" typeahead="job as job.Lay_Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" class="form-control" ng-init="" placeholder="Find your next gig"> 
+                            <input type="text" id="search" ng-model="selected" typeahead="job as job.Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" class="form-control" ng-init="" placeholder="Find your next gig"> 
                         </div>
                       </div>
                     </div>
                     <div class="col-sm-4 md-margin-bottom-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                            <input class="form-control" id="location" ng-model="place" googleplace placeholder="where would you like to work??..." ng-onselect="onSelect(place)">
-                    </div>
+                            <input type="text" id="Autocomplete" class="form-control" ng-autocomplete="results" details="details" ng-model="results"  options="options" on-Place-Changed="getResults()" required placeholder="Search Jobs in other Cities!!"/>
+                        </div>
                     </div>
                     <div class="col-sm-4 md-margin-bottom-10">
                         <div class="input-group">
@@ -68,61 +54,26 @@
                   </div>
                  </div>
                </div>
-            </div>
-  </div>
+       
 
-<div class="job-img-inputs">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4 md-margin-bottom-10">
-                      <div class="form-group" ng-controller="JobSearchCtrl">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-check"></i></span>
-                            <select class="form-control" id="location" ng-model='day' placeholder="where would you like to work??..."> 
-                              <option value=''>Recent Jobs</option>
-                              <option value='5'>Last 5 days</option>
-                              <option value='10'>Last 10 days</option>
-                              <option value='15'>Last 15 days</option>
-                              <option value='30'>Last 30 days</option>
-                            </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-4 md-margin-bottom-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-filter"></i></span>
-                            <select class="form-control" id="location" ng-model='limit' placeholder="Narrow the displayed Jobs!!...">  > 
-                                <option value=''>Number of Jobs</option>
-                                <option value='5'>Show 5 per page</option>
-                                <option value='10'>Show 10 per page</option>
-                                <option value='15'>Show 15 per page</option>
-                                <option value='20'>Show 20 per page</option>
-                            </select>
-                       </div>
-                    </div>
-               </div>
-            </div>
-       </div>
-          </div>
-       </div>
-    </div>
+
   </div>
 </div>
-</div>
+
 <!--=== End Job Img ===-->
-
+<hr>
 <!--=== Content Part ===-->
 
 <div class="blog_masonry_3col">
-  <div class="container content grid-boxes" ng-app="hirelyApp" ng-controller="JobSearchCtrl">
-    <div class="col-md-4" ng-repeat="job in jobOpenings | orderBy:'orderBy'| filter:searchText | filter:selected.Lay_Title | limitTo:9" >
+  <div class="container content grid-boxes" ng-app="hirelyApp" ng-controller="JobCtrl" >
+    <div class="col-md-4" ng-repeat="job in jobOpenings | orderBy:'orderBy'| filter:searchText | filter:selected | limitTo:9" >
      <div class="grid-boxes-in">
         <img class="img-responsive" src="{{job.Image}}" alt="" width="450" height="333">
         <div class="grid-boxes-caption">
            <h3><a href="#">{{job.Job_Title}}</a></h3>
            <h5 style="color:white"><a href="#">@ {{job.Company}}</a></h5>
            <ul class="list-inline grid-boxes-news">
-           <li><span>{{job.Wage}} - <i class="fa fa-clock-o">{{job.Shifts}}</i></span></li> 
+           <li><span>{{job.Wage}} - <i class="fa fa-clock-o"> - {{job.Shifts}}</i></span></li> 
            <li>|</li>
              <li><a href="#">HM: {{job.Hiring_Manager}}</a></li>
              <li>|</li>
@@ -130,23 +81,63 @@
              <li>|</li>
              <li><a href="#">@2015</a></li>
            </ul>
+           <span>Job Details - </span>
+           <input type="radio"
+              value="{{job.UID}}"
+              jobid="jobUID" 
+              job="favorite"''
+              ng-init="jobUID='{{job.UID}}'" ng-model='jobUID' ng-Click='setJobResults(jobUID)'>
+       
            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
         </div>
-    </div>  
-  </div>
+    </div>
   </div>
 </div>  
-<!--=== End Content Part ===-->
 
-<body ng-app="customMap">
-  <div ng-controller="mapController">
-    <ui-gmap-google-map center="map.center" options="options" zoom="map.zoom"></ui-gmap-google-map>
-  </div>
-  <!-- Map Marker Under Construction 
-  <div class="col-xs-12 col-sm-6 col-md-3" data-location-item title="{{job.Title}}" ng-repeat="job in jobOpenings | filter:locationfilter">
-  <div class="location-item-container">
-    <a href="#" class="name" ng-click="locationItemClick($event,job)"><h5>{{job.Title}}</h5></a>
-  </div>
-</div>-->
-</body>
+</div><!--=== End Content Part ===-->
+ 
+<div class="container">
+<div class="row">
+    Show Map: <input type="checkbox" text="Show / Hide Map" ng-model="map.show">
 </div>
+<div class="row" ng-if="map.show">
+    <div ng-controller="mapController">
+    <ui-gmap-google-map center="map.center" options="options" zoom="map.zoom">
+      <ui-gmap-markers 
+        models="marker.id" 
+        coords="marker.coords" 
+        events="marker.events" 
+        options="marker.options"
+        icon="marker.options.icon"
+        idkey="marker.id">
+    </ui-gmap-markers>
+      </ui-gmap-google-map>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- End Tab v1 -->
+
+<!-- JS Global Compulsory -->
+
+<script src="js/jquery-migrate.min.js"></script>
+<!-- JS Implementing Plugins -->
+<script src="js/back-to-top.js"></script>
+<script src="js/smoothScroll.js"></script>
+<script src="js/jquery.masonry.min.js"></script>
+<!-- JS Customization -->
+<script src="js/custom.js"></script>
+<script src="js/ng-map.min.js"></script>
+<!-- JS Page Level -->
+<script src="js/blog-masonry.js"></script>
+<script src="//maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script>
+<script src="js/bapp.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        App.init();
+    });
+</script>
+</body>
+
+</html>

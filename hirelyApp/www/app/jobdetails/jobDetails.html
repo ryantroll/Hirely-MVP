@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <title>Jobs Description 1 | Unify - Responsive Website Template</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- Web Fonts -->
+    <link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/line-icons.css">
+ 
+    <!-- CSS Page Style -->
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700'
+    rel='stylesheet' type='text/css'>
+    
+    <link rel="stylesheet" href="css/page_job_inner1.css">
+</head>
+
+<div ng-app="hirelyApp" ng-controller="JobDetailCtrl" ><!--=== Job Selection ===-->
+<div ng-repeat="job in jobDetails | orderBy:'orderBy'| filter:jobUID | limitTo:1" >
+
+<body>
+ <div class="wrapper"><!--=== Content Part ===-->
+    <!--=== Job Description ===-->
+    <div class="job-description">
+        <div class="container content">
+            <div class="title-box-v2">
+                <h1>{{job.Job_Title}}</h1>
+                <p></p>
+            </div>
+            <div class="row">
+                <!-- Left Inner -->
+                <div class="col-md-7">
+                    <div class="left-inner">
+                        <img class="img-responsive" src="{{job.Image}}" alt="" width="450" height="333">
+                        <h3>{{job.Company}}</h3>
+                        <a href="#"><i class="position-top fa fa-print"></i></a>
+                        <div class="overflow-h">
+                            <p class="hex">{{job.Location}}</p>
+                            <div>
+                                <ul class="list-inline">    
+                                    <li></li>
+                                    <li></li>
+                                    <li><i class="fa fa-dollar sign"></i></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li><i class="fa fa-clock-o"></i></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li><i class="fa fa-heartbeat"></i></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul class="list-inline">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li>{{job.Wage}}</li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li>{{job.Shifts}}</li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li>Benefits</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h2>About the Job</h2>
+                        <p>This job was a great job for the pay and benefits when compared to waiting table and working fast food. I also preferred working for the vs other stores like . The biggest problem was unreasonable expectations from management. Even as one of there top employees you feel taken advantage of and over worked. Dealing with the customers was the other issue.</p>
+
+                        <hr>
+                        <h2>Perks and Benefits</h2>
+                        <p>Vestibulum justo est, pharetra fermentum justo in, tincidunt mollis turpis. Duis imperdiet non justo euismod semper. Nullam laoreet est sit amet felis tristique laoreet. Duis interdum laoreet enim, at adipiscing velit viverra id.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</li>
+                            <li><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations from management</li>
+                            <li><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</li>
+                        </ul>
+
+                        <hr>
+
+                        <h2>Responsibility</h2>
+                        <p>A Wal-Mart cashier is responsible for effectively executing and adhering to the “Basic Beliefs” of the founder, Sam Walton.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</li>
+                            <li><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations from management</li>
+                            <li><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</li>
+                        </ul>
+
+                        <hr>
+
+                        <h2>Your Task</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius hendrerit nisl id condimentum. Sed bibendum ultricies erat a vulputate. Curabitur id ultricies eros, at ultricies dui.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</li>
+                            <li><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations from management</li>
+                            <li><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- End Left Inner -->
+
+                <!-- Right Inner -->
+                <div class="col-md-5">
+                    <div class="right-inner">
+                        <h3>About the Hiring Manager</h3>
+                        <img src="{{job.HM_Photo}}" alt="">
+                        <div class="overflow-h">
+                            <span class="font-s">{{job.Hiring_Manager}}</span>
+                            <p class="color-green">Position: <span class="hex">Manager, Accounter</span></p>
+                            <ul class="list-inline">
+                                <li><i class="color-green fa fa-star"></i></li>
+                                <li><i class="color-green fa fa-star"></i></li>
+                                <li><i class="color-green fa fa-star"></i></li>
+                                <li><i class="color-green fa fa-star-half-o"></i></li>
+                                <li><i class="color-green fa fa-star-o"></i></li>
+                            </ul>
+                        </div>
+                        <div ng-controller="JobDetailCtrl">  
+                        <ul class="list-unstyled save-job">
+                            <li><i class="fa fa-refresh fa-spin"></i><a>Responds in 48 hours</a></li>
+                            <li><i class="fa fa-shield"></i><a>Member since 2015</a></li>
+                        </ul>
+                        <div class="container">
+                        <div class="row">
+                           Click here to view all my Job Listings: <input type="checkbox" text="Show / Hide Map" ng-model="map.show">
+                        </div>
+
+                        <div class="row" ng-if="map.show">
+                            <div style="height:315px;width:430px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+                       
+                           <div ng-repeat="job in jobDetails | orderBy:'orderBy' | filter:job.Hiring_Manager" >  
+                            <h5><i class="fa fa-dot-circle-o"></i>{{job.Job_Title}} @ {{job.Company}}</a></h5>
+                               <ul class="list-inline grid-boxes-news">
+                                 <li><span>{{job.Wage}} - <i class="fa fa-clock-o"> - {{job.Shifts}}</i></span></li> 
+                                 <li>|</li>
+                                 <li>{{job.Location}}</li>
+                               </ul>           
+                             <hr>  
+                           </div>
+                        </div>
+                       </div>
+                       </div>
+                       </div>
+
+                        <hr>
+
+                        <ul class="list-unstyled save-job">
+                            <li><i class="fa fa-download"></i> <a href="#">Save job</a></li>
+                            <li><i class="fa fa-plus"></i> <a href="#">Follow us</a></li>
+                        </ul>
+
+                        <hr>
+
+                        <h3>Latest Employee Recommendations</h3>
+                        <div class="people-say margin-bottom-20">
+                            <img src="assets/img/testimonials/img2.jpg" alt="">
+                            <div class="overflow-h">
+                                <span>{{job.Employee1}}</span>
+                                <small class="hex pull-right">5 - hours ago</small>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius hendrerit nisl id condimentum.</p>
+                            </div>
+                        </div>
+
+                        <div class="people-say margin-bottom-20">
+                            <img src="assets/img/testimonials/user.jpg" alt="">
+                            <div class="overflow-h">
+                                <span>{{job.Employee2}}</span>
+                                <small class="hex pull-right">2 - days ago</small>
+                                <p>Vestibulum justo est, pharetra fermentum justo in, tincidunt mollis turpis. Duis imperdiet non justo euismod semper.</p>
+                            </div>
+                        </div>
+
+                        <div class="people-say">
+                            <img src="assets/img/testimonials/img3.jpg" alt="">
+                            <div class="overflow-h">
+                                <span>{{job.Employee3}}</span>
+                                <small class="hex pull-right">3 - days ago</small>
+                                <p>A Wal-Mart cashier is responsible for effectively executing and adhering to the “Basic Beliefs” of the founder.</p>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <button type="button" class="btn-u btn-block"><a href="#">Apply with Resume</a></button>
+                    </div>
+                </div>
+                <!-- End Right Inner -->
+            </div>
+         </div>
+       </div><!--=== End Job Description ===-->
+    </div><!--/End Wrapepr-->
+  </body><!--/End Body-->
+</div>
+</div><!--=== /End Job Selection ===-->
+<!-- JS Global Compulsory -->
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-migrate.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- JS Implementing Plugins -->
+<script src="js/back-to-top.js"></script>
+<script src="js/smoothScroll.js"></script>
+<script src="js/circles.js"></script>
+<!-- JS Customization -->
+<script src="js/custom.js"></script>
+<script src="js/ng-map.min.js"></script>
+<!-- JS Page Level -->
+<script src="js/bapp.js"></script>
+<script src="js/circles-master.js"></script>
+<script src="js/style-switcher-rtl.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        App.init();
+        CirclesMaster.initCirclesMaster1();
+    });
+</script>
+<!--[if lt IE 9]>
+    <script src="assets/plugins/respond.js"></script>
+    <script src="assets/plugins/html5shiv.js"></script>
+    <script src="assets/plugins/placeholder-IE-fixes.js"></script>
+<![endif]-->
+
+</body>
+</html>

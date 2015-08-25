@@ -40,6 +40,11 @@ angular.module('hirelyApp',
               templateUrl: 'app/job/jobs.html',
               controller: 'JobCtrl'
           })
+          .state('app.jobDetails', {
+              url: '/jobDetails',
+              templateUrl: 'app/jobdetails/jobDetails.html',
+              controller: 'JobCtrl'
+          })
           .state('app.register', {
               url: '/login',
               templateUrl: 'app/account/register.html',
@@ -66,21 +71,45 @@ angular.module('hirelyApp',
 .controller("mapController", function($scope, $http, $firebaseArray, uiGmapGoogleMapApi) {
   
   // Define variables for our Map object
-  var areaLat      = 38.9047,
-      areaLng      = -77.0164,
-      areaZoom     = 11;
 
- var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobs';
+ var areaZoom  = 11;
+ var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobOpenings';
  var fireRef = new Firebase(firebaseUrl);
 
   uiGmapGoogleMapApi.then(function(maps) {
-    $scope.map     = { center: { latitude: areaLat, longitude: areaLng }, zoom: areaZoom };
-    $scope.options = { scrollwheel: false };
-    $scope.googleMapsObject = maps;
-    $scope.jobOpenings = fireRef;
-
-
-
+    
+        // for the map
+        $scope.map = {
+            center: {
+                latitude: 38.9047,
+                longitude: -77.0164
+            },
+            draggable: true,
+            zoom: 15
+        };
+       // map options
+        $scope.options = {
+            scrollwheel: true,
+            panControl: true,
+            rotateControl: true,
+            scaleControl: true,
+            streetViewControl: true
+        };
+       // map marker
+        $scope.marker = {
+            id: 0,
+            coords: {
+                latitude:  38.9047,
+                longitude: -77.0164
+            },
+            options: {
+                icon: 'img/marker.jpg',
+                draggable: false,
+                title: 'test',
+                animation: 1 // 1: BOUNCE, 2: DROP
+                
+            }
+        };
 
     });
 
