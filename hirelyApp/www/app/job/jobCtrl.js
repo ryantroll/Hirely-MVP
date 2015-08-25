@@ -24,7 +24,7 @@
 
         $scope.setJobResults = function(jobUID) {
              jobdetailsService.setJob(jobUID);
-            $state.go('app.jobDetails')
+            $state.go('app.jobdetails')
 
         }
 
