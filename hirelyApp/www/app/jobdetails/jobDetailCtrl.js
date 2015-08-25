@@ -16,6 +16,11 @@
         $scope.jobDetails = $firebaseArray(fireRef);
         $scope.jobUID = jobdetailsService.getJob();
 
+        $scope.setJobResults = function(jobUID) {
+             jobdetailsService.setJob(jobUID);
+            $state.go('app.jobdetails')
+
+        }
 
         }
 
