@@ -59,12 +59,13 @@ angular.module('hirelyApp',
               url: '/candidate',
               abstract: true,
               templateUrl: 'app/candidate/candidate.html',
-              authRequired: true
+              authRequired: true,
+              controller: 'CandidateCtrl'
           })
           .state('app.candidate.dashboard', {
               url: '/dashboard',
               templateUrl: 'app/candidate/candidate-dashboard.html',
-              //controller: 'CandidateDashboardCtrl',
+              controller: 'CandidateDashboardCtrl',
               authRequired: true
           })
           .state('app.candidate.profile', {

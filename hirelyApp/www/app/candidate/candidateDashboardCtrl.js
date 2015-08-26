@@ -4,20 +4,13 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', 'UserService', CandidateDashboardCtrl ]);
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
 
 
-    function CandidateDashboardCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
+    function CandidateDashboardCtrl($scope, $stateParams) {
+
         var vm = this;
-        $scope.user = userService.getCurrentUser();
 
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.user = args.message;
-
-
-        });
         // Chart.js Data
         $scope.data = [
             {
