@@ -4,25 +4,41 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$stateParams', '$scope', '$modal', '$log', '$q', '$window', 'AuthService', 'UserService',MasterCtrl ]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$stateParams', '$scope', '$modal', '$log', '$q', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl ]);
 
-    function MasterCtrl($stateParams, $scope, $modal, $log, $q, $window, AuthService, UserService) {
+    function MasterCtrl($stateParams, $scope, $modal, $log, $q, $window, AuthService, UserService, GeocodeService) {
 
         var vm = this;
+        var geocodeService = GeocodeService;
 
         $scope.authRef = AuthService.AuthRef();
         $scope.userService = UserService;
         $scope.currentUser = null;
         $scope.location = {};
+        $scope.currentPlace = null;
+
 
         //
         $window.navigator.geolocation.getCurrentPosition(function(position){
+
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
 
             $scope.$apply(function() {
                     $scope.location.latitude = lat;
                     $scope.location.longitude = long;
+                    if(lat && long)
+                    {
+                        geocodeService.getPlacebyLatLong(lat, long)
+                            .then(function(place) {
+                                if(place){
+                                    $scope.currentPlace = place;
+                                    $scope.$broadcast('currentPlaceChanged', { message: place });
+                                }
+                            }, function(err) {
+                                deferred.reject(err);
+                            });
+                    }
 
                 }
             )
@@ -30,7 +46,7 @@
 
         // any time auth status updates, add the user data to scope
         $scope.authRef.$onAuth(function(authData) {
-           if(authData)
+            if(authData)
             {
                 if(!$scope.currentUser) {
                     //try to retrieve user

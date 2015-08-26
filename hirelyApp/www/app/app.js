@@ -1,10 +1,13 @@
 'use strict';
+
 angular.module('hirelyApp',
     [   
         'uiGmapgoogle-maps',
         'ui.router',
         'ui.bootstrap',
+        'ui.grid',
         'firebase',
+        'ngMask',
         'tc.chartjs',
         'hirelyApp.layout',
         'hirelyApp.home',
@@ -15,6 +18,7 @@ angular.module('hirelyApp',
         'hirelyApp.account',
         'hirelyApp.candidate'
     ])
+
 
     .config(function($stateProvider, $urlRouterProvider) {
 
@@ -47,15 +51,54 @@ angular.module('hirelyApp',
               controller: 'JobCtrl'
           })
           .state('app.register', {
-              url: '/login',
+              url: '/register',
               templateUrl: 'app/account/register.html',
               controller: 'RegisterCtrl'
           })
-          .state('app.candidateProfile', {
-              url: '/candidateP rofile',
-              templateUrl: 'app/candidate/candidate-profile.html',
-              controller: 'CandidateProfileCtrl'
+          .state('app.candidate', {
+              url: '/candidate',
+              abstract: true,
+              templateUrl: 'app/candidate/candidate.html',
+              authRequired: true
           })
+          .state('app.candidate.dashboard', {
+              url: '/dashboard',
+              templateUrl: 'app/candidate/candidate-dashboard.html',
+              //controller: 'CandidateDashboardCtrl',
+              authRequired: true
+          })
+          .state('app.candidate.profile', {
+              abstract: true,
+              url: '/profile',
+              templateUrl: 'app/candidate/candidate-profile.html',
+              authRequired: true
+             // controller: 'CandidateProfileCtrl'
+          })
+          .state('app.candidate.profile.basics', {
+              url: '/basics',
+              templateUrl: "app/candidate/candidate-profile-basics.html",
+              //controller: 'CandidateProfileCtrl',
+              authRequired: true
+          })
+          .state('app.candidate.profile.availability', {
+              url: '/Availability',
+              templateUrl: 'app/candidate/candidate-profile-availability.html',
+              //controller: 'CandidateProfileCtrl',
+              authRequired: true
+          })
+          .state('app.candidate.profile.experience', {
+              url: '/Experience',
+              templateUrl: 'app/candidate/candidate-profile-experience.html',
+             // controller: 'CandidateProfileCtrl',
+              authRequired: true
+          })
+          .state('app.candidate.profile.personality', {
+              url: '/candidateProfileEducation',
+              templateUrl: 'app/candidate/candidate-profile-education.html',
+             //  controller: 'CandidateProfileCtrl',
+              authRequired: true
+          })
+
       // if none of the above states are matched, use this as the fallback
       $urlRouterProvider.otherwise('/app/home');
     })

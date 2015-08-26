@@ -1,5 +1,5 @@
 'use strict';
-angular.module("hirelyApp.shared").directive('ngAutocomplete', function($parse) {
+angular.module("hirelyApp.shared").directive('ngAutocomplete', ['GeocodeService', '$parse', function(GeocodeService, $parse) {
 
     return {
         scope: {
@@ -31,7 +31,21 @@ angular.module("hirelyApp.shared").directive('ngAutocomplete', function($parse) 
                     }
                 }
             }
-            initOpts()
+            initOpts();
+
+            var getCurrentLocation = function(){
+
+                var currentLocation = GeocodeService.getPlace();
+                if(currentLocation)
+                {
+                    scope.$apply(function() {
+                        scope.details = currentLocation;
+                        scope.ngAutocomplete = currentLocation.formatted_address;
+                    });
+
+                }
+            };
+
 
             //create new autocomplete
             //reinitializes on every change of the options provided
@@ -51,7 +65,8 @@ angular.module("hirelyApp.shared").directive('ngAutocomplete', function($parse) 
                     }
                 })
             }
-            newAutocomplete()
+            newAutocomplete();
+            //getCurrentLocation();
 
             //watch options provided to directive
             scope.watchOptions = function () {
@@ -63,6 +78,12 @@ angular.module("hirelyApp.shared").directive('ngAutocomplete', function($parse) 
                 element[0].value = '';
                 scope.ngAutocomplete = element.val();
             }, true);
+
+            scope.$on('currentPlaceChanged', function (event, args) {
+                scope.details = args.message;
+                scope.ngAutocomplete = args.message.formatted_address;
+            });
+
         }
     }
-});
+}]);

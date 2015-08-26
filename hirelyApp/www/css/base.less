@@ -290,6 +290,10 @@ select {
   -o-transition-delay: 2s;
 }
 
+.form-layout{
+  padding: 20px;
+  border: 1px solid #eee;
+}
 /* ======= Homepage Headline Background & Slideshow ======= */
 
 .bg-slider-wrapper {
@@ -550,7 +554,7 @@ select {
 /* ======= Footer ======= */
 
 .footer {
-    background: @color;
+    background: @darker-grey;
     color: #fff;
     padding: 15px 0;
     
@@ -583,7 +587,7 @@ select {
         }
         
         .title {
-            color: darken(@color, 30%);
+            color: darken(@color, 10%);
             font-weight: normal;
             font-size: 18px;
         }
@@ -654,7 +658,7 @@ select {
     .search-form {
         .form-control {
             font-size: 18px;
-            color: @grey;
+            color: @text-color;
         }
         .form-group {
             display: inline-block;
@@ -1385,6 +1389,11 @@ select {
   padding-top: 40px;
   padding-bottom: 40px;
 
+  h1,h2,h3,h4,h5{
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-weight:normal;
+  }
   .profile-body{
     padding: 20px;
     background: #f7f7f7;
@@ -1409,9 +1418,10 @@ select {
     text-decoration: none;
   }
 
-  .sidebar-nav-v1 > li.active,
-  .sidebar-nav-v1 > li.active:hover {
-    background: #717984;
+  .sidebar-nav-v1 > li a.active,
+  .sidebar-nav-v1 > li a.active:hover {
+    background: @grey;
+    color: #fff;
   }
 
   .sidebar-nav-v1 > li.active,
@@ -1467,296 +1477,89 @@ select {
     .service-block-v3 {
         padding: 20px;
         color: #fff;
-        .profile-card-info{
-          margin-top: -20px;
+        height: 300px;
+
+        .profile-stat-info{
+          text-align: center;
+        }
+        .profile-stat-trait{
+          text-align: center;
+          padding-top: 20px;
         }
 
-          i{
-            float: left;
-            font-size: 75px;
-            margin: 0 20px 20px 0;
-          }
-          h3{
-            margin-bottom: 0px;
-          }
-          small{
-            display: block;
-          }
+        i{
+          float: left;
+          font-size: 50px;
+          margin: 0 20px 20px 0;
+        }
+        h3{
+          margin-bottom: 0px;
+        }
+        small{
+          display: block;
+        }
 
       }
+  .progress
+  {
+    margin-bottom: 10px;
+
+
+  }
+  .progress-xxs{
+    height: 3px;
+  }
+  .service-in{
+    small{
+      display: inline;
+    }
+
   }
 
 
-/* ======= Blog Section ======= */
-.blog {
-    padding-top: 60px;
-    .title {
-        margin-bottom: 30px;
-        margin-top:0;
-        font-size: 28px;
-    }
-    .meta {
-        font-size: 13px;
-        color: @grey;
-        margin-bottom: 15px;
-        li {
-            margin-right: 0;
-            
-        }
-        .post-author {
-            &:before {
-                content: "/";
-                display: inline-block;
-                padding-right: 10px;
-            }
-            a {
-                color: @grey;
-                &:hover {
-                    color: @color;
-                }
-            }
-        }
-        .post-comments-link {
-            float: right;
-            .fa {
-                margin-right: 5px;
-            }
-        }
-    }
-}
 
-.blog-sidebar {
-    .widget {
-        margin-bottom: 60px;
-        .title {
-            font-size: 22px;
-            margin-bottom: 15px;
-            margin-top: 0;
-            font-weight: normal;
-            color: @text-color-secondary;
-        }
-        ul li{
-            margin-bottom: 10px;
-            font-size: 15px;
-            .count {
-                color: @grey
-            }
-        }
-        &.recent-posts {
-            .date {
-                color: @grey;
-                font-size: 12px;
-            }
-        }
-        &.social {
-            a {
-                .fa {
-                    font-size: 32px;
-                    color: @grey;
-                }
-                &:hover {
-                    .fa {
-                        color: @color;
-                    }
-                }
-            }
-            
-        }
-    }
-    .search-blog-form {
-        .form-group {
-            display: inline-block;
-            margin-bottom: 0;
-            vertical-align: middle;
-            max-width:168px;
-        }
-        .form-control {
-            height:38px;
-        }
-        .btn {
-            padding: 6px 12px;
-        }
-        .btn .fa {
-            margin-right: 0;
-        }
-    }
 }
+.profile-pic{
+  text-align: center;
 
-.post {
+  img{
+    height: 250px;
+    width: 250px;
+  }
+
+  a{
+
+    left: 50%;
+    bottom: 50%;
+    margin-left: -70px;
+    text-align: center;
+    position: absolute;
     margin-bottom: 60px;
-    .content {
-        .post-title {
-            font-size: 22px;
-            a {
-                color: @text-color;
-                &:hover {
-                    color:darken(@color, 25%);
-                }
-            }
-            
-        }
-        .post-entry {
-            p {
-                color: @text-color-secondary;
-            }
-            .read-more {
-                .fa {
-                    margin-left: 5px;
-                    position: relative;
-                    top: 1px;
-                }
-            }
-        }
-    }
+  }
+
+
 }
 
-.blog-entry {
-    .title {
-        margin-bottom: 15px;
-    }
-    .meta {
-        margin-bottom: 15px;
-    }
-    .post-thumb {
-        margin-bottom: 30px;
-    }
-    .custom-list-style {
-        margin-bottom: 30px;
-        li {
-            list-style: none;
-            margin-bottom: 5px;
-            .fa {
-                margin-right: 5px;
-                color: @color;
-            }
-        }
-    }
-    p {
-        margin-bottom: 30px;
-        line-height: 1.5;
-    }
-    .post-nav {
-        margin-bottom: 30px;
-        .nav-next {
-            float: right;
-        }
-    }
-}
 
-.custom-quote {
-    border-color: lighten(@color, 10%);
-    font-family: 'Montserrat', sans-serif;
-    font-weight: normal;
-    p {
-        color: @text-color-secondary;
-        line-height: 1.6;
-    }
-    .fa {
-        color: @color;
-        margin-right: 10px;
-    }
-    .source {
-        font-family: 'Lato', arial, sans-serif;
-        .name {
-            color: @text-color;
-            
-        }
-        .title {
-            font-size: 13px;
-            color: @grey;
-        }
-    }
-}
+/* User Profile Wizard */
+.user-profile
+{
+  .page-header{
+    background: @light-grey;
+    padding-top: 20px;
+  }
+  #status-buttons                 {  }
+  #status-buttons a               { color:@text-color; display:inline-block; font-size:12px; margin-right:10px; text-align:center; text-transform:uppercase; }
+  #status-buttons a:hover         { text-decoration:none; }
 
-/* ======= Contact ======= */
-.contact-main {
-    padding-top: 80px;
-    
-    .title {
-        margin-top:0;
-        margin-bottom: 30px;
-        font-size: 28px;
-    }
-    .intro {
-        margin-bottom: 30px;
-        color: @grey;
-    }
-    .item {
-        margin-bottom: 60px;
-        
-        .item-inner {
-            margin: 30px;
-            padding: 30px 10px;
-            background: @smoky-white;
-            min-height: 300px;
-            .border-radius(4px);
-        }
-        .icon {           
-            position:relative;
-            width: 90px;
-            height: 90px;
-            border: 2px solid @color;
-            background: #fff;
-            .border-radius(50%);
-            display: table;
-            margin: 0 auto;
-            -webkit-transition: -webkit-transform ease-out 0.2s, background 0.3s;
-            -moz-transition: -moz-transform ease-out 0.2s, background 0.3s;
-            transition: transform ease-out 0.2s, background 0.3s; 
-            margin-bottom: 30px;
-            
-            &:hover {
-                background: @color;
-                color: #fff;                                    
-                .fa, .pe-icon {
-                    color: #fff;   
-                    .scale(0.93);             
-                }
-            }
-            .fa, .pe-icon {
-                color: @color;
-                font-size: 48px;
-                display: table-cell;
-                text-align: center;
-                vertical-align: middle;
-                            
-            }
-            
-        }
-        .details {
-            font-size: 18px;
-            .day {
-                font-size: 13px;
-                color: @grey;
-            }
-        }
-    }
-    
-}
+  /* we will style the span as the circled number */
+  #status-buttons span            { background:@grey; color:@smoky-white; display:block; height:30px; margin:0 auto 10px; padding-top:5px; width:30px;
+    border-radius:50%; }
 
-.contact-form-section {
-    padding-bottom: 80px;
-    .title {
-        margin-bottom: 15px;
-        margin-top: 0;
-        font-size: 18px;
-    }
-    .intro {
-        max-width: 600px;
-        margin: 0 auto;
-        margin-bottom: 30px;
-        color: @text-color-secondary;
-    }
-    .form-control {
-        font-size: 16px;
-        color: @grey;
-    }
-}
+  /* active buttons turn light green-blue*/
+  #status-buttons a.active span   { background:@blue; }
+  #status-buttons a.active   { color:@color; }
 
-#map {
-    .reset-box-sizing();
-    height: 420px;
-    margin-bottom: 0;
-    font-size: 13px;
-}
 
+
+}

@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.candidate').controller('CandidateProfileCtrl', ['$scope','$stateParams', 'UserService', CandidateProfileCtrl ]);
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', 'UserService', CandidateDashboardCtrl ]);
 
 
-    function CandidateProfileCtrl($scope, $stateParams, UserService) {
+    function CandidateDashboardCtrl($scope, $stateParams, UserService) {
         var userService = UserService;
         var vm = this;
         $scope.user = userService.getCurrentUser();
@@ -21,22 +21,22 @@
         // Chart.js Data
         $scope.data = [
             {
-                value: 300,
-                color:'#F7464A',
-                highlight: '#FF5A5E',
-                label: 'Red'
+                value: 5,
+                color:'#FFA540',
+                highlight: '#BF7C30',
+                label: 'Review'
             },
             {
-                value: 50,
-                color: '#46BFBD',
+                value: 2,
+                color: '#38A2D0',
                 highlight: '#5AD3D1',
-                label: 'Green'
+                label: 'Interview Scheduled '
             },
             {
-                value: 100,
-                color: '#FDB45C',
+                value: 1,
+                color: '#37DB79',
                 highlight: '#FFC870',
-                label: 'Yellow'
+                label: 'Passed'
             }
         ];
 
@@ -69,6 +69,8 @@
 
             //Boolean - Whether we animate scaling the Doughnut from the centre
             animateScale : false,
+
+            showLegend: false
 
           };
 

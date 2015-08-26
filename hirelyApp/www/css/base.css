@@ -299,6 +299,10 @@ select {
   -moz-transition-delay: 2s;
   -o-transition-delay: 2s;
 }
+.form-layout {
+  padding: 20px;
+  border: 1px solid #eee;
+}
 /* ======= Homepage Headline Background & Slideshow ======= */
 .bg-slider-wrapper {
   content: "";
@@ -571,7 +575,7 @@ select {
 }
 /* ======= Footer ======= */
 .footer {
-  background: #ff3100;
+  background: #363636;
   color: #fff;
   padding: 15px 0;
 }
@@ -594,7 +598,7 @@ select {
   color: #801900;
 }
 .footer .footer-col .title {
-  color: #661400;
+  color: #cc2700;
   font-weight: normal;
   font-size: 18px;
 }
@@ -653,7 +657,7 @@ select {
 }
 .search .search-form .form-control {
   font-size: 18px;
-  color: #999999;
+  color: #444444;
 }
 .search .search-form .form-group {
   display: inline-block;
@@ -1471,6 +1475,15 @@ select {
   /*Sidebar Menu v1*/
   /*Sidebar Sub Navigation*/
 }
+.profile h1,
+.profile h2,
+.profile h3,
+.profile h4,
+.profile h5 {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
 .profile .profile-body {
   padding: 20px;
   background: #f7f7f7;
@@ -1488,9 +1501,10 @@ select {
 .profile .sidebar-nav-v1 li a:hover {
   text-decoration: none;
 }
-.profile .sidebar-nav-v1 > li.active,
-.profile .sidebar-nav-v1 > li.active:hover {
-  background: #717984;
+.profile .sidebar-nav-v1 > li a.active,
+.profile .sidebar-nav-v1 > li a.active:hover {
+  background: #999999;
+  color: #fff;
 }
 .profile .sidebar-nav-v1 > li.active,
 .profile .sidebar-nav-v1 > li.active:hover,
@@ -1519,7 +1533,7 @@ select {
   color: #72c02c;
 }
 .profile li a {
-  color: #555555;
+  color: #363636;
   font-size: 13px;
 }
 .profile .list-group i {
@@ -1536,13 +1550,18 @@ select {
 .profile .service-block-v3 {
   padding: 20px;
   color: #fff;
+  height: 300px;
 }
-.profile .service-block-v3 .profile-card-info {
-  margin-top: -20px;
+.profile .service-block-v3 .profile-stat-info {
+  text-align: center;
+}
+.profile .service-block-v3 .profile-stat-trait {
+  text-align: center;
+  padding-top: 20px;
 }
 .profile .service-block-v3 i {
   float: left;
-  font-size: 75px;
+  font-size: 50px;
   margin: 0 20px 20px 0;
 }
 .profile .service-block-v3 h3 {
@@ -1551,262 +1570,63 @@ select {
 .profile .service-block-v3 small {
   display: block;
 }
-/* ======= Blog Section ======= */
-.blog {
-  padding-top: 60px;
-}
-.blog .title {
-  margin-bottom: 30px;
-  margin-top: 0;
-  font-size: 28px;
-}
-.blog .meta {
-  font-size: 13px;
-  color: #999999;
-  margin-bottom: 15px;
-}
-.blog .meta li {
-  margin-right: 0;
-}
-.blog .meta .post-author:before {
-  content: "/";
-  display: inline-block;
-  padding-right: 10px;
-}
-.blog .meta .post-author a {
-  color: #999999;
-}
-.blog .meta .post-author a:hover {
-  color: #ff3100;
-}
-.blog .meta .post-comments-link {
-  float: right;
-}
-.blog .meta .post-comments-link .fa {
-  margin-right: 5px;
-}
-.blog-sidebar .widget {
-  margin-bottom: 60px;
-}
-.blog-sidebar .widget .title {
-  font-size: 22px;
-  margin-bottom: 15px;
-  margin-top: 0;
-  font-weight: normal;
-  color: #666666;
-}
-.blog-sidebar .widget ul li {
+.profile .progress {
   margin-bottom: 10px;
-  font-size: 15px;
 }
-.blog-sidebar .widget ul li .count {
-  color: #999999;
+.profile .progress-xxs {
+  height: 3px;
 }
-.blog-sidebar .widget.recent-posts .date {
-  color: #999999;
-  font-size: 12px;
+.profile .service-in small {
+  display: inline;
 }
-.blog-sidebar .widget.social a .fa {
-  font-size: 32px;
-  color: #999999;
-}
-.blog-sidebar .widget.social a:hover .fa {
-  color: #ff3100;
-}
-.blog-sidebar .search-blog-form .form-group {
-  display: inline-block;
-  margin-bottom: 0;
-  vertical-align: middle;
-  max-width: 168px;
-}
-.blog-sidebar .search-blog-form .form-control {
-  height: 38px;
-}
-.blog-sidebar .search-blog-form .btn {
-  padding: 6px 12px;
-}
-.blog-sidebar .search-blog-form .btn .fa {
-  margin-right: 0;
-}
-.post {
-  margin-bottom: 60px;
-}
-.post .content .post-title {
-  font-size: 22px;
-}
-.post .content .post-title a {
-  color: #444444;
-}
-.post .content .post-title a:hover {
-  color: #801900;
-}
-.post .content .post-entry p {
-  color: #666666;
-}
-.post .content .post-entry .read-more .fa {
-  margin-left: 5px;
-  position: relative;
-  top: 1px;
-}
-.blog-entry .title {
-  margin-bottom: 15px;
-}
-.blog-entry .meta {
-  margin-bottom: 15px;
-}
-.blog-entry .post-thumb {
-  margin-bottom: 30px;
-}
-.blog-entry .custom-list-style {
-  margin-bottom: 30px;
-}
-.blog-entry .custom-list-style li {
-  list-style: none;
-  margin-bottom: 5px;
-}
-.blog-entry .custom-list-style li .fa {
-  margin-right: 5px;
-  color: #ff3100;
-}
-.blog-entry p {
-  margin-bottom: 30px;
-  line-height: 1.5;
-}
-.blog-entry .post-nav {
-  margin-bottom: 30px;
-}
-.blog-entry .post-nav .nav-next {
-  float: right;
-}
-.custom-quote {
-  border-color: #ff5a33;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: normal;
-}
-.custom-quote p {
-  color: #666666;
-  line-height: 1.6;
-}
-.custom-quote .fa {
-  color: #ff3100;
-  margin-right: 10px;
-}
-.custom-quote .source {
-  font-family: 'Lato', arial, sans-serif;
-}
-.custom-quote .source .name {
-  color: #444444;
-}
-.custom-quote .source .title {
-  font-size: 13px;
-  color: #999999;
-}
-/* ======= Contact ======= */
-.contact-main {
-  padding-top: 80px;
-}
-.contact-main .title {
-  margin-top: 0;
-  margin-bottom: 30px;
-  font-size: 28px;
-}
-.contact-main .intro {
-  margin-bottom: 30px;
-  color: #999999;
-}
-.contact-main .item {
-  margin-bottom: 60px;
-}
-.contact-main .item .item-inner {
-  margin: 30px;
-  padding: 30px 10px;
-  background: #f5f5f5;
-  min-height: 300px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
-  border-radius: 4px;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
-}
-.contact-main .item .icon {
-  position: relative;
-  width: 90px;
-  height: 90px;
-  border: 2px solid #ff3100;
-  background: #fff;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
-  border-radius: 50%;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
-  display: table;
-  margin: 0 auto;
-  -webkit-transition: -webkit-transform ease-out 0.2s, background 0.3s;
-  -moz-transition: -moz-transform ease-out 0.2s, background 0.3s;
-  transition: transform ease-out 0.2s, background 0.3s;
-  margin-bottom: 30px;
-}
-.contact-main .item .icon:hover {
-  background: #ff3100;
-  color: #fff;
-}
-.contact-main .item .icon:hover .fa,
-.contact-main .item .icon:hover .pe-icon {
-  color: #fff;
-  -webkit-transform: scale(0.93);
-  -moz-transform: scale(0.93);
-  -ms-transform: scale(0.93);
-  -o-transform: scale(0.93);
-}
-.contact-main .item .icon .fa,
-.contact-main .item .icon .pe-icon {
-  color: #ff3100;
-  font-size: 48px;
-  display: table-cell;
+.profile-pic {
   text-align: center;
-  vertical-align: middle;
 }
-.contact-main .item .details {
-  font-size: 18px;
+.profile-pic img {
+  height: 250px;
+  width: 250px;
 }
-.contact-main .item .details .day {
-  font-size: 13px;
-  color: #999999;
+.profile-pic a {
+  left: 50%;
+  bottom: 50%;
+  margin-left: -70px;
+  text-align: center;
+  position: absolute;
+  margin-bottom: 60px;
 }
-.contact-form-section {
-  padding-bottom: 80px;
+/* User Profile Wizard */
+.user-profile {
+  /* we will style the span as the circled number */
+  /* active buttons turn light green-blue*/
 }
-.contact-form-section .title {
-  margin-bottom: 15px;
-  margin-top: 0;
-  font-size: 18px;
+.user-profile .page-header {
+  background: #cccccc;
+  padding-top: 20px;
 }
-.contact-form-section .intro {
-  max-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 30px;
-  color: #666666;
+.user-profile #status-buttons a {
+  color: #444444;
+  display: inline-block;
+  font-size: 12px;
+  margin-right: 10px;
+  text-align: center;
+  text-transform: uppercase;
 }
-.contact-form-section .form-control {
-  font-size: 16px;
-  color: #999999;
+.user-profile #status-buttons a:hover {
+  text-decoration: none;
 }
-#map {
-  height: 420px;
-  margin-bottom: 0;
-  font-size: 13px;
+.user-profile #status-buttons span {
+  background: #999999;
+  color: #f5f5f5;
+  display: block;
+  height: 30px;
+  margin: 0 auto 10px;
+  padding-top: 5px;
+  width: 30px;
+  border-radius: 50%;
 }
-#map,
-#map *,
-#map *:before,
-#map *:after {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
+.user-profile #status-buttons a.active span {
+  background: #024a68;
+}
+.user-profile #status-buttons a.active {
+  color: #ff3100;
 }
