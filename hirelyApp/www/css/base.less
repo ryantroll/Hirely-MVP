@@ -17,20 +17,20 @@ html, body {
 
 .wrapper {
     min-height: 100%;
-    margin-bottom: -296px; /* equal to footer height */
+
     &:after {
         content: "";
         display: block;
-        height: 296px; /* must be the same height as footer */
+
     }
 }
 
 .footer {
-    height: 296px; /* must be the same height as footer */   
+
 }
 
 h1, h2, h3, h4, h5, h6  {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-weight: bold;
 }
 
@@ -55,12 +55,16 @@ a {
 
 .btn, a.btn {
     .transition (all 0.4s ease-in-out);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     padding: 8px 16px;
     .fa {
         color: #fff;
         margin-right: 5px;
     }
+
+}
+.btn:focus{
+  color: #fff;
 }
 
 a.btn-cta-primary, .btn-cta-primary { 
@@ -93,6 +97,21 @@ a.btn-cta-secondary,  .btn-cta-secondary {
     }
     
 }
+
+a.btn-cta, .btn-cta {
+  background: @color;
+  border: 2px solid @color;
+  color: #fff;
+  text-transform: uppercase;
+  margin-left: 15px;
+  &:hover {
+    background: darken(@color, 10%);
+    border: 2px solid darken(@color, 10%);
+    color: #fff;
+  }
+}
+
+
 
 a.btn-cta-blue, .btn-cta-blue {
   background: @blue;
@@ -381,7 +400,7 @@ select {
         a {
             .transition (none);
             &:hover {
-                color: @color;            
+                color: @color;
             }
         }
         .logo-title {
@@ -457,7 +476,7 @@ select {
                         padding: 6px 12px;
                         color: #fff;
                         font-weight: 300;
-                        font-family:'Montserrat', sans-serif;
+                        font-family:'Open Sans', sans-serif;
                         margin-top: 2px;
                         background:@color;
                         &:hover {
@@ -960,6 +979,31 @@ select {
      
 }
 
+/* ======= Get Started Section ======= */
+.getStarted{
+  border: solid 2px @grey;
+  color: @text-color;
+  a{
+    margin: 20px 0;
+  }
+  .side-left{
+
+    left: 0;
+    background: #FFF;
+    outline: 1px solid #FFF;
+  }
+  .side-right{
+
+    right: 0;
+    background: lighten(@blue, 5%);
+    color: #fff;
+    outline: 1px solid lighten(@blue, 5%);
+  }
+  h5{
+    font-weight: normal;
+  }
+}
+
 /* ======= Press Section ======= */
 .press {
      background: @smoky-white;
@@ -997,12 +1041,17 @@ select {
  
 /* ======= Why Section ======= */
 .why {
-    padding: 80px 0;
+    padding: 40px 0;
     .title {
         font-weight: bold;
         margin-top:0;
         margin-bottom: 15px;
         font-size: 28px;
+        text-transform: uppercase;
+    }
+    img{
+      display: block;
+      margin: auto;
     }
     .intro {
         font-size: 18px;
@@ -1010,112 +1059,37 @@ select {
         color: @grey;
         margin-bottom: 30px;
     }
-    
-    .benefits {
-        padding: 60px 0;
-        .item {
-            margin-bottom: 60px;
-            .transition (all 0.4s ease-in-out);
-            .title {
-                margin-bottom: 15px;
-                font-size: 18px;
-                color: @color;
-            }
-            .desc {
-                color: @text-color-secondary;
-            }
-            .icon {
-                float: left;
-                .fa, .pe-icon {
-                    font-size: 58px;
-                    color: lighten(@grey, 10%);
-                    margin-top: 5px;
-                }
-                .pe-icon {
-                    font-size: 72px;
-                }
-            }
-            &:hover {
-                .icon {
-                    .fa, .pe-icon {
-                        color: @grey;
-                    }                 
-                }
-            }
-            &.last {
-                margin-bottom: 60px;
-            }
-        }
-    }
-    
-    .testimonials {
-        padding: 60px 0;
-        .item {
-            margin-bottom: 60px;
-            &.last {
-                margin-bottom: 0;
-            }
-            .quote-box {
-                background: @smoky-white;
-                padding: 30px;
-                padding-bottom: 15px;
-                .border-radius(4px);
-                position: relative;
-                margin-bottom: 30px;
-                .fa {
-                    color: lighten(@color, 15%);
-                    font-size: 18px;
-                    position: absolute;
-                    right: 30px;
-                    bottom: 30px;
-                }
-                &:after {
-                    content: "";
-                    display: block;
-                    width: 0; 
-                    height: 0; 
-                    border-left: 20px solid transparent;
-                    border-right: 20px solid transparent;               
-                    border-top: 20px solid @smoky-white;
-                    position: absolute;
-                    bottom: -20px;
-                    margin-left: -20px;
-                    left: 50%;
-                }
-            }
-            .quote {
-                border: none;
-                padding: 0;
-                font-size: 16px;
-                color: @text-color-secondary;
-                margin-bottom: 15px;
-            }
-            
-            .details {
-                font-size: 13px;
-                .name {
-                    display: block;
-                    font-weight: normal;
-                    font-family: 'Montserrat', sans-serif;
-                }
-                .title {
-                    display: block;
-                    color: lighten(@grey, 10%);
-                    margin-bottom: 0;
-                    font-weight: normal;
-                    font-size: 13px;
-                }
-            }
-            
-            .people {
-                .user-pic {
-                    max-width: 122px;
-                    max-height: 122px;
-                    .reset-box-sizing(content-box);
-                }
-            }
-        }   
-    }
+  .services{
+    text-align: center;
+    .service-icon{
+      margin-bottom: 30px;
+      width: 145px;
+      height: 145px;
+      margin: auto;
+      border-radius: 50%;
+      border: 10px solid #ececec;
+      margin-bottom: 20px;
+      position: relative;
+      -webkit-transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
+      i{
+        height: 63px;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: block;
+
+      }
+
+  }
+
+     p{
+
+     }
+   }
 
 }
 
@@ -1353,7 +1327,7 @@ select {
                 top: -25px;
             }
             .number {
-                font-family: 'Montserrat', sans-serif;
+                font-family: 'Open Sans', sans-serif;
                 font-size: 60px;
             }
             .unit {
