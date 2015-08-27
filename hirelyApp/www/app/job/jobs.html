@@ -7,7 +7,7 @@
 
 <!-- CSS Page Style -->
 <link href="css/blog_masonry_3col.css" rel="stylesheet">
-
+<link href="css/styles.css" rel="stylesheet">
 <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700'
     rel='stylesheet' type='text/css'>
     
@@ -98,26 +98,25 @@
  
 <div class="container">
 <div class="row">
-    Show Map: <input type="checkbox" text="Show / Hide Map" ng-model="map.show">
+    Show Map: <input type="checkbox" text="Show / Hide Map" ng-model="map.show" >
 </div>
 <div class="row" ng-if="map.show">
     <div ng-controller="mapController">
-    <ui-gmap-google-map center="map.center" options="options" zoom="map.zoom">
-      <ui-gmap-markers 
-        models="marker.id" 
-        coords="marker.coords" 
-        events="marker.events" 
-        options="marker.options"
-        icon="marker.options.icon"
-        idkey="marker.id">
-    </ui-gmap-markers>
+     <ui-gmap-google-map
+                center='map.center'
+                zoom='map.zoom'
+                draggable="map.draggable"
+                options="options">
+            <ui-gmap-marker
+                    coords="marker.coords"
+                    options="marker.options"
+                    idkey="marker.id">
+            </ui-gmap-marker>
       </ui-gmap-google-map>
   </div>
 </div>
 </div>
 </div>
-
-<!-- End Tab v1 -->
 
 <!-- JS Global Compulsory -->
 
