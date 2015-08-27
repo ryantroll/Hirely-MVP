@@ -113,25 +113,26 @@ angular.module('hirelyApp',
  });
 })  
 
-.controller("mapController", function($scope, $http, $firebaseArray, uiGmapGoogleMapApi) {
+.controller("mapController", function($scope, $http, $firebaseArray, uiGmapGoogleMapApi, GeocodeService) {
   
   // Define variables for our Map object
 
  var areaZoom  = 11;
  var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobOpenings';
  var fireRef = new Firebase(firebaseUrl);
-
-
+ var geocodeService = GeocodeService;
+ 
+ $scope.details = geocodeService.getPlace();
   uiGmapGoogleMapApi.then(function(maps) {
     
         // for the map
         $scope.map = {
             center: {
-                latitude: 38.9047,
-                longitude: -77.0164
+                latitude: $scope.details.geometry.location.G,
+                longitude: $scope.details.geometry.location.K
             },
             draggable: true,
-            zoom: 15
+            zoom: 11
         };
        // map options
         $scope.options = {
@@ -145,8 +146,8 @@ angular.module('hirelyApp',
         $scope.marker = {
             id: 0,
             coords: {
-                latitude:  38.9047,
-                longitude: -77.0164
+                latitude:  $scope.details.geometry.location.G,
+                longitude: $scope.details.geometry.location.K
             },
             options: {
                 draggable: false,
@@ -156,23 +157,7 @@ angular.module('hirelyApp',
             }
         };
 
-        navigator.geolocation.getCurrentPosition(function(pos) {
-        $scope.map.center = {
-         latitude: pos.coords.latitude,
-         longitude: pos.coords.longitude
-        };
-        $scope.$apply();
-      });
-
-
-       navigator.geolocation.getCurrentPosition(function(pos) {
-        $scope.marker.coords = {
-         latitude: pos.coords.latitude,
-         longitude: pos.coords.longitude
-        };
-        $scope.$apply();
-      });
-
+       
 
     });
 
