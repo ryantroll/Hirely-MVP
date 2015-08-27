@@ -121,6 +121,7 @@ angular.module('hirelyApp',
  var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobOpenings';
  var fireRef = new Firebase(firebaseUrl);
 
+
   uiGmapGoogleMapApi.then(function(maps) {
     
         // for the map
@@ -148,13 +149,30 @@ angular.module('hirelyApp',
                 longitude: -77.0164
             },
             options: {
-                icon: 'img/marker.jpg',
                 draggable: false,
                 title: 'test',
                 animation: 1 // 1: BOUNCE, 2: DROP
                 
             }
         };
+
+        navigator.geolocation.getCurrentPosition(function(pos) {
+        $scope.map.center = {
+         latitude: pos.coords.latitude,
+         longitude: pos.coords.longitude
+        };
+        $scope.$apply();
+      });
+
+
+       navigator.geolocation.getCurrentPosition(function(pos) {
+        $scope.marker.coords = {
+         latitude: pos.coords.latitude,
+         longitude: pos.coords.longitude
+        };
+        $scope.$apply();
+      });
+
 
     });
 
