@@ -117,12 +117,12 @@ angular.module('hirelyApp',
   
   // Define variables for our Map object
 
- var areaZoom  = 11;
  var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobOpenings';
  var fireRef = new Firebase(firebaseUrl);
  var geocodeService = GeocodeService;
  
  $scope.details = geocodeService.getPlace();
+
   uiGmapGoogleMapApi.then(function(maps) {
     
         // for the map
@@ -132,7 +132,7 @@ angular.module('hirelyApp',
                 longitude: $scope.details.geometry.location.K
             },
             draggable: true,
-            zoom: 11
+            zoom: 15
         };
        // map options
         $scope.options = {
@@ -157,7 +157,6 @@ angular.module('hirelyApp',
             }
         };
 
-       
 
     });
 
