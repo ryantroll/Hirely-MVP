@@ -400,13 +400,17 @@ select {
         a {
             .transition (none);
             &:hover {
-                color: @color;
+                color: @blue;
             }
+          &:focus {
+            color: @color;
+          }
         }
         .logo-title {
             vertical-align: middle;
             line-height: 1.6;
         }
+
     }
     
     .main-nav {

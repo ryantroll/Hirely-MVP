@@ -1,35 +1,38 @@
-<div class="form-group">
-    <figure class="profile-pic ">
-        <img class="img-circle" src="{{user.profileImageUrl}}">
-        <a class="btn btn-primary" href="#">Change Picture</a>
-    </figure>
-</div>
-<div class="form-group">
-    <label for="firstName">First Name</label>
-    <input type="text" class="form-control" name="firstName" ng-model="user.firstName" required>
-</div>
-<div class="form-group">
-    <label for="name">Last Name</label>
-    <input type="text" class="form-control" name="lastName" ng-model="user.lastName" required>
-</div>
-
-
-<div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" class="form-control" name="email" ng-model="user.email" required>
-</div>
-<div class="form-group">
-    <label for="phone">Phone</label>
-    <input type="text" class="form-control" name="phone" mask="(999) 999-9999" clean="true"  ng-model="user.phone">
-</div>
-<div class="form-group">
-    <label for="phone">Bio (max 150 characters)</label>
-    <textarea class="form-control" name="bio" ng-model="user.bio" ng-maxlength="150"></textarea>
-</div>
-<div class="form-group row">
-    <div class="col-xs-6 col-xs-offset-3">
-        <a ui-sref="app.candidateProfile.experience" class="btn btn-block btn-primary">
-            Next <span class="glyphicon glyphicon-circle-arrow-right"></span>
-        </a>
+<form class="form-layout" name="candidateForm" id="user-profile-form" ng-submit="submitProfile()">
+    <div class="form-group">
+        <figure class="profile-pic ">
+            <img class="img-circle" src="{{user.profileImageUrl}}">
+            <a class="btn btn-primary" href="#">Change Picture</a>
+        </figure>
     </div>
-</div>
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" name="firstName" ng-model="user.firstName" required>
+    </div>
+    <div class="form-group">
+        <label for="name">Last Name</label>
+        <input type="text" class="form-control" name="lastName" ng-model="user.lastName" required>
+    </div>
+
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" name="email" ng-model="user.email" required>
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="text" class="form-control" name="phone" mask="(999) 999-9999" clean="true"  ng-model="user.phone">
+    </div>
+    <div class="form-group">
+        <label for="phone">Bio (max 150 characters)</label>
+        <textarea class="form-control" name="personalStatement" ng-model="user.personalStatement" ng-minlength="0" ng-maxlength="150"></textarea>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <button type="submit" class="btn btn-block btn-primary" ng-disabled="!candidateForm.$valid">
+                <i class="fa fa-circle-arrow-right"></i>Next
+            </button>
+
+        </div>
+    </div>
+</form>

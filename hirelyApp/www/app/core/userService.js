@@ -30,7 +30,7 @@
 
 
         this.getCurrentUser = function getCurrentUser() {
-            return currentUser;
+           return currentUser;
         };
 
         this.getIsLoggedIn =  function getIsLoggedIn(){
@@ -78,6 +78,13 @@
 
             var ref = fbutil.ref('users', key);
             ref.set(user)
+        }
+
+        this.saveUser = function saveUser(user){
+            var ref = new Firebase(FBURL + "/users/" + currentUserId);
+            ref.update(user);
+
+
         }
 
         this.createUserfromThirdParty = function createUserfromThirdParty(provider, authData) {

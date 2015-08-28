@@ -426,6 +426,9 @@ select {
   -o-transition: none;
 }
 .header h1.logo a:hover {
+  color: #024a68;
+}
+.header h1.logo a:focus {
   color: #ff3100;
 }
 .header h1.logo .logo-title {

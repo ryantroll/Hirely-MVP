@@ -15,12 +15,17 @@
         var vm = this;
         $scope.user = userService.getCurrentUser();
 
+
         //listen for changes to current user
         $scope.$on('currentUserChanged', function (event, args) {
             $scope.user = args.message;
 
 
         });
+
+        $scope.saveUser = function() {
+           userService.saveUser($scope.user)
+        }
     }
 })()
 ;

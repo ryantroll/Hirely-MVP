@@ -78,7 +78,7 @@ angular.module('hirelyApp',
           .state('app.candidate.profile.basics', {
               url: '/basics',
               templateUrl: "app/candidate/candidate-profile-basics.html",
-              //controller: 'CandidateProfileCtrl',
+              controller: 'CandidateProfileBasicsCtrl',
               authRequired: true
           })
           .state('app.candidate.profile.availability', {
