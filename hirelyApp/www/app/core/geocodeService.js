@@ -40,6 +40,12 @@
 
         function setPlace(place)
         {
+            if(place && place.geometry.location.G)
+            {
+                place.geometry.location.lat = place.geometry.location.G;
+                place.geometry.location.lng = place.geometry.location.K;
+            }
+
             currentPlace = place;
         }
 
