@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('hirelyApp',
+var myApp = angular.module('hirelyApp',
     [   
         'uiGmapgoogle-maps',
         'ui.router',
@@ -104,62 +104,134 @@ angular.module('hirelyApp',
       $urlRouterProvider.otherwise('/app/home');
     })
 
- .config(function(uiGmapGoogleMapApiProvider) {
-   
-   uiGmapGoogleMapApiProvider.configure({
+myApp.config(function(uiGmapGoogleMapApiProvider) {
+  uiGmapGoogleMapApiProvider.configure({
     key: '711561845732-pg1q3d3cn30f4jk07bmqno9qeio7unmg.apps.googleusercontent.com',
     v: '3.17',
     libraries: 'weather,geometry,visualization'
- });
-})  
+  });
+});
 
-.controller("mapController", function($scope, $http, $firebaseArray, uiGmapGoogleMapApi, GeocodeService) {
-  
-  // Define variables for our Map object
-
- var firebaseUrl= 'https://shining-torch-5144.firebaseio.com/jobOpenings';
- var fireRef = new Firebase(firebaseUrl);
- var geocodeService = GeocodeService;
- 
- $scope.details = geocodeService.getPlace();
-
-  uiGmapGoogleMapApi.then(function(maps) {
+myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogleMapApi, uiGmapIsReady) {
+    var url = 'https://shining-torch-5144.firebaseio.com/jobOpenings';
+    var fireRef = new Firebase(url);
     
-        // for the map
-        $scope.map = {
-            center: {
-                latitude: $scope.details.geometry.location.G,
-                longitude: $scope.details.geometry.location.K
-            },
-            draggable: true,
-            zoom: 15
-        };
-       // map options
-        $scope.options = {
-            scrollwheel: true,
-            panControl: true,
-            rotateControl: true,
-            scaleControl: true,
-            streetViewControl: true
-        };
-       // map marker
-        $scope.marker = {
+    $scope.mapmarkers = $firebaseArray(fireRef);
+
+    uiGmapGoogleMapApi
+    .then(function(maps){
+    $scope.googlemap = {};
+    $scope.map = {
+      center: {
+        latitude: $scope.details.geometry.location.G,
+        longitude: $scope.details.geometry.location.K
+      },
+      zoom: 14,
+      pan: 1,
+      options: $scope.mapOptions,
+      control: {},
+      events: {
+        tilesloaded: function (maps, eventName, args) {
+        },
+        dragend: function (maps, eventName, args) {
+        },
+        zoom_changed: function (maps, eventName, args) {
+        }
+      }
+    };
+    });
+    
+    $scope.windowOptions = {
+        show: false
+    };
+
+    $scope.onClick = function(data) {
+        $scope.windowOptions.show = !$scope.windowOptions.show;
+        console.log('$scope.windowOptions.show: ', $scope.windowOptions.show);
+        console.log('This is a ' + data);
+        alert('This is a ' + data);
+    };
+
+    $scope.closeClick = function() {
+        $scope.windowOptions.show = false;
+    };
+
+        $scope.title = "Window Title!";
+    
+    uiGmapIsReady.promise()                                    // if no value is put in promise() it defaults to promise(1)
+    .then(function(instances) {
+        console.log(instances[0].map);                        // get the current map
+    })
+    .then(function(){
+        $scope.addMarkerClickFunction($scope.markers);
+    });
+    
+    $scope.markers = [
+        {
             id: 0,
             coords: {
-                latitude:  $scope.details.geometry.location.G,
-                longitude: $scope.details.geometry.location.K
-            },
-            options: {
+                latitude: 38.9071923,
+                longitude: -77.03687070000001,
                 draggable: false,
-                title: 'test',
                 animation: 1 // 1: BOUNCE, 2: DROP
-                
-            }
-        };
+            },
+            data: 'restaurant'
+        },
+        {
+            id: 1,
+            coords: {
+                latitude: 38.8799697,
+                longitude: -77.1067698,
+                draggable: false,
+                animation: 1 // 1: BOUNCE, 2: DROP
+            },
+            data: 'house'
+        },
+        {
+            id: 2,
+            coords: {
+                latitude: 38.704282,
+                longitude: -77.2277603,
+                draggable: false,
+                animation: 1 // 1: BOUNCE, 2: DROP
+            },
+            data: 'hotel'
+        }
+       
+          
+    ];
+    
+    $scope.addMarkerClickFunction = function(markersArray){
+        angular.forEach(markersArray, function(value, key) {
+            value.onClick = function(){
+                    $scope.onClick(value.data);
+                };
+        });
+    };  
 
-
-    });
-
-
+    
+  $scope.MapOptions = {
+        minZoom : 3,
+        zoomControl : false,
+        draggable : true,
+        navigationControl : false,
+        mapTypeControl : false,
+        scaleControl : false,
+        streetViewControl : false,
+        disableDoubleClickZoom : false,
+        keyboardShortcuts : true,
+        styles : [{
+          featureType : "poi",
+          elementType : "labels",
+          stylers : [{
+            visibility : "off"
+          }]
+        }, {
+          featureType : "transit",
+          elementType : "all",
+          stylers : [{
+            visibility : "off"
+          }]
+        }],
+    };
 });
- 

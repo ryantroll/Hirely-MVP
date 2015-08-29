@@ -36,7 +36,7 @@ div.stars {
 input.star { display: none; }
 
 label.star {
-  float: right;
+  float: left;
   padding: 5px;
   font-size: 18px;
   color: #444;
@@ -62,105 +62,85 @@ label.star:before {
   content: '\f006';
   font-family: FontAwesome;
 }
+IMG.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
+  P.blocktext {
+    margin-left: 175px;
+    margin-right: 0px;
+    width: 50em
+}  
+body {
+    background-color: #FAFAFA;
+}
+div.absolute1 {
+    position: absolute;
+    border: 200px;
+    padding: 15px;
+    top: 250px;
+    left: 0;
+    width: 400px;
+    height: 50px;
+    border: 3px;
+}
+div.absolute2 {
+    position: absolute;
+    border: 200px;
+    padding: 15px;
+    top: 480px;
+    right: 450px;
+    width: 300px;
+    height: 200px;
+    border: 3px;
+}
+li {
+    overflow: hidden;
+}
+.buttons, .owners {
+    float: left;
+}
+.text {
+    overflow: hidden;
+    color: red;
+    padding-left: 4px;
+}
+#comments_block {
+   overflow-y: scroll;
+   overflow-x: hidden;
+   width: 1000px;
+   height: 1560px;
+}
+.angular-google-map-container { 
+  width: 1000px;
+  height: 1560px;
+}
 </style>
 <div ng-app="hirelyApp" ng-controller="JobDetailCtrl" ><!--=== Job Selection ===-->
 <div ng-repeat="job in jobDetails | orderBy:'orderBy'| filter:jobUID | limitTo:1" >
 
 <body>
  <div class="wrapper"><!--=== Content Part ===-->
+<div class="container content">
+  <img class="displayed" src="{{job.Image}}" alt="" width="1140" height="500">
+ <div class="absolute2 "><blockquote style="border: opx solid #666; padding: 0px; background-color: #303030; "><p class="white"><h3><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</i></font><li class="fa fa-clock-o"><font color="white">{{job.Shifts}}</font></h3></li></div></blockquote></div>
+
     <!--=== Job Description ===-->
+    
     <div class="job-description">
         <div class="container content">
-            <div class="title-box-v2">
-                <h1>{{job.Job_Title}}</h1>
-                <p></p>
-            </div>
             <div class="row">
                 <!-- Left Inner -->
                 <div class="col-md-7">
                     <div class="left-inner">
-                        <img class="img-responsive" src="{{job.Image}}" alt="" width="450" height="333">
-                        <h3>{{job.Company}}</h3>
-                        <a href="#"><i class="position-top fa fa-print"></i></a>
-                         <div class="overflow-h">
-                            <p class="hex">{{job.Location}}</p>
-                            <div>                      
-                            </div>
-                            <div>
-                            </div>
+                      <div class="title-box-v2">
+                            <h1>{{job.Job_Title}}</h1>
                         </div>
-
-                        <hr>
-
-                        <h2>About the Job</h2>
-                        <p>This job was a great job for the pay and benefits when compared to waiting table and working fast food. I also preferred working for the vs other stores like . The biggest problem was unreasonable expectations from management. Even as one of there top employees you feel taken advantage of and over worked. Dealing with the customers was the other issue.</p>
-
-                        <hr>
-
-                        <h2>Wage</h2>
-                        <p>Add Wage+ or Max</p>
                         <div class="overflow-h">
-                            <div>
-                                <ul class="list-inline">    
-                                    <li></li>
-                                    <li></li>
-                                    <li><i class="fa fa-dollar sign"></i></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li><i class="fa fa-clock-o"></i></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <ul class="list-inline">
-                                    <li>{{job.Wage}}</li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li>{{job.Shifts}}</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <hr>
-
-                        <h2>Perks and Benefits</h2>
-                        <p>Vestibulum justo est, pharetra fermentum justo in, tincidunt mollis turpis. Duis imperdiet non justo euismod semper. Nullam laoreet est sit amet felis tristique laoreet. Duis interdum laoreet enim, at adipiscing velit viverra id.</p>
-                        <ul class="list-unstyled">
-                            <li><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</li>
-                            <li><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations from management</li>
-                            <li><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</li>
-                        </ul>
-
-                        <hr>
-
-                        <h2>Responsibility</h2>
-                        <p>A Wal-Mart cashier is responsible for effectively executing and adhering to the “Basic Beliefs” of the founder, Sam Walton.</p>
-                        <ul class="list-unstyled">
-                            <li><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</li>
-                            <li><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations from management</li>
-                            <li><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</li>
-                        </ul>
-
-                        <hr>
-
-                    </div>
-                </div>
-                <!-- End Left Inner -->
-
-                <!-- Right Inner -->
-                <div class="col-md-5">
-                    <div class="right-inner">
-                        <h3>About the Hiring Manager</h3>
-                        <img src="{{job.HM_Photo}}" alt="">
-                        <div class="overflow-h">
-                            <span class="font-s">{{job.Hiring_Manager}}</span>
-                            <p class="color-green">Position: <span class="hex">Manager, Accounter</span></p>
-                            <div class="stars">
+                         <ul class="list-inline">    
+                            <li><h3>{{job.Company}}</h3></li>
+                            <li><div class="stars">
                               <form action="">
                                 <input class="star star-5" id="star-5" type="radio" name="star"/>
                                 <label class="star star-5" for="star-5"></label>
@@ -174,8 +154,85 @@ label.star:before {
                                 <label class="star star-1" for="star-1"></label>
                               </form>
                             </div>
-
+                        </li>
+                        </ul>
                         </div>
+
+                        <a href="#"><i class="position-top fa fa-print"></i></a>
+                         <div class="overflow-h">
+                            <p class="hex">{{job.Location}}</p>
+                            <div>                      
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h4>About the Position</h4>
+                        <p>This job was a great job for the pay and benefits when compared to waiting table and working fast food. I also preferred working for the vs other stores like . The biggest problem was unreasonable expectations from management. Even as one of there top employees you feel taken advantage of and over worked. Dealing with the customers was the other issue.</p>
+
+                        <hr>
+
+                        <h5>Total Compensation</h5>
+                        <div class="overflow-h">
+                            <div>
+                                <ul class="list-inline">    
+                                    <li><p class="blocktext">Wage: Hourly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Commission: No</span></P></li>
+                                    <li><p class="blocktext">Tips: Yes</p></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h5>Perks and Benefits</h5>
+                        <ul class="list-unstyled">
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</p></li>
+                        </ul>
+
+                        <hr>
+
+                        <h5>Typical Task</h5>
+                        <p>A Wal-Mart cashier is responsible for effectively executing and adhering to the “Basic Beliefs” of the founder, Sam Walton.</p>
+                        <ul class="list-unstyled">
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</p></li>
+
+    
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</p></li>
+
+
+
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations</p></li>
+                            <li><p class="blocktext"><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</p></li>
+                        </ul>
+
+                        </ul>
+
+                        <hr>
+                        <h5>Availablity</h5>
+
+
+                    </div>
+                </div>
+                <!-- End Left Inner -->
+               
+
+                <!-- Right Inner -->
+                <div class="col-md-5">
+                
+                 <hr>
+                    <div class="right-inner">
+                        <h5>About the Hiring Manager</h5>
+                        <img src="{{job.HM_Photo}}" alt="">
+                        
                         <div ng-controller="JobDetailCtrl">  
                         <ul class="list-unstyled save-job">
                             <li><i class="fa fa-refresh fa-spin"></i><a>Responds in 48 hours</a></li>
@@ -211,7 +268,7 @@ label.star:before {
 
                         <hr>
 
-                        <h3>Latest Employee Recommendations</h3>
+                        <h5>Latest Employee Recommendations</h5>
                         <div class="people-say margin-bottom-20">
                             <img src="assets/img/testimonials/img2.jpg" alt="">
                             <div class="overflow-h">
@@ -252,6 +309,9 @@ label.star:before {
   </body><!--/End Body-->
 </div>
 </div><!--=== /End Job Selection ===-->
+
+
+
 <!-- JS Global Compulsory -->
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-migrate.min.js"></script>
@@ -279,5 +339,5 @@ label.star:before {
     <script src="assets/plugins/placeholder-IE-fixes.js"></script>
 <![endif]-->
 
-</body>
+
 </html>

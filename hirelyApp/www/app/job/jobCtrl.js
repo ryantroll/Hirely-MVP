@@ -16,7 +16,7 @@
    
 
         $scope.jobOpenings = $firebaseArray(fireRef);
-		$scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
+		$scope.split_jobs = [['job1', 'job2', 'job3']];
 
         $scope.details = geocodeService.getPlace();
         $scope.jobdetails = $scope.jobOpenings;
