@@ -27,115 +27,35 @@
     rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/page_job_inner1.css">
+    <link href="css/blog_masonry_3col.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet"  type="text/css" />
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">    
+    <link rel="stylesheet" href="css/jobdetails.css">
 </head>
-<style>
-div.stars {
-  width: 140px;
-  display: inline-block;
-}
-input.star { display: none; }
 
-label.star {
-  float: left;
-  padding: 5px;
-  font-size: 18px;
-  color: #444;
-  transition: all .2s;
-}
-
-input.star:checked ~ label.star:before {
-  content: '\f005';
-  color: #FD4;
-  transition: all .25s;
-}
-
-input.star-5:checked ~ label.star:before {
-  color: #FE7;
-  text-shadow: 0 0 20px #952;
-}
-
-input.star-1:checked ~ label.star:before { color: #F62; }
-
-label.star:hover { transform: rotate(-15deg) scale(1.3); }
-
-label.star:before {
-  content: '\f006';
-  font-family: FontAwesome;
-}
-IMG.displayed {
-    display: block;
-    margin-left: auto;
-    margin-right: auto 
-}
-  P.blocktext {
-    margin-left: 175px;
-    margin-right: 0px;
-    width: 50em
-}  
-body {
-    background-color: #FAFAFA;
-}
-div.absolute1 {
-    position: absolute;
-    border: 200px;
-    padding: 15px;
-    top: 250px;
-    left: 0;
-    width: 400px;
-    height: 50px;
-    border: 3px;
-}
-div.absolute2 {
-    position: absolute;
-    border: 200px;
-    padding: 15px;
-    top: 480px;
-    right: 450px;
-    width: 300px;
-    height: 200px;
-    border: 3px;
-}
-li {
-    overflow: hidden;
-}
-.buttons, .owners {
-    float: left;
-}
-.text {
-    overflow: hidden;
-    color: red;
-    padding-left: 4px;
-}
-#comments_block {
-   overflow-y: scroll;
-   overflow-x: hidden;
-   width: 1000px;
-   height: 1560px;
-}
-.angular-google-map-container { 
-  width: 1000px;
-  height: 1560px;
-}
-</style>
 <div ng-app="hirelyApp" ng-controller="JobDetailCtrl" ><!--=== Job Selection ===-->
 <div ng-repeat="job in jobDetails | orderBy:'orderBy'| filter:jobUID | limitTo:1" >
 
 <body>
  <div class="wrapper"><!--=== Content Part ===-->
 <div class="container content">
-  <img class="displayed" src="{{job.Image}}" alt="" width="1140" height="500">
- <div class="absolute2 "><blockquote style="border: opx solid #666; padding: 0px; background-color: #303030; "><p class="white"><h3><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</i></font><li class="fa fa-clock-o"><font color="white">{{job.Shifts}}</font></h3></li></div></blockquote></div>
-
     <!--=== Job Description ===-->
     
     <div class="job-description">
+    <div class="item-box">
+    <img class="displayed" src="{{job.Image}}" alt="" width="1140" height="500">
+     <div class="absolute2 "><box><blockquote style="border: opx solid #666; padding: 0px; background-color: #303030; "><p class="white"><h3><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</i></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="red"><i class="fa fa-clock-o"></i></font><font color="white">{{job.Shifts}}</font></h3></div></blockquote></box></div>
         <div class="container content">
             <div class="row">
                 <!-- Left Inner -->
                 <div class="col-md-7">
                     <div class="left-inner">
                       <div class="title-box-v2">
-                            <h1>{{job.Job_Title}}</h1>
+                         <ul class="list-inline">  
+                            <li><h1>{{job.Job_Title}}</h1></li>  
+                            <li><font color="red"><h4><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Now Hiring&nbsp;!!</label></h4></font></li>   
+                        </ul>
                         </div>
                         <div class="overflow-h">
                          <ul class="list-inline">    
@@ -157,8 +77,6 @@ li {
                         </li>
                         </ul>
                         </div>
-
-                        <a href="#"><i class="position-top fa fa-print"></i></a>
                          <div class="overflow-h">
                             <p class="hex">{{job.Location}}</p>
                             <div>                      
@@ -178,8 +96,8 @@ li {
                         <div class="overflow-h">
                             <div>
                                 <ul class="list-inline">    
-                                    <li><p class="blocktext">Wage: Hourly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Commission: No</span></P></li>
-                                    <li><p class="blocktext">Tips: Yes</p></li>
+                                    <li><p class="blocktext">Wage:&nbsp;&nbsp;Hourly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Commission:&nbsp;&nbsp;No</span></P></li>
+                                    <li><p class="blocktext">Tips:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes</p></li>
                                 </ul>
                             </div>
                         </div>
@@ -226,47 +144,32 @@ li {
                
 
                 <!-- Right Inner -->
-                <div class="col-md-5">
-                
-                 <hr>
+                <div class="col-md-4">
+              
                     <div class="right-inner">
-                        <h5>About the Hiring Manager</h5>
-                        <img src="{{job.HM_Photo}}" alt="">
-                        
-                        <div ng-controller="JobDetailCtrl">  
-                        <ul class="list-unstyled save-job">
-                            <li><i class="fa fa-refresh fa-spin"></i><a>Responds in 48 hours</a></li>
-                            <li><i class="fa fa-shield"></i><a>Member since 2015</a></li>
-                        </ul>
                         <div class="container">
-                        <div class="row">
-                           Click here to view all my Job Listings: <input type="checkbox" text="Show / Hide Map" ng-model="map.show">
-                        </div>
-
-                        <div class="row" ng-if="map.show">
-                            <div style="height:310px;width:430px;border:0px solid #ccc;font:16px/26px Georgia, Garamond, Serif; overflow:auto;">
-                            <div ng-repeat="job in jobDetails | orderBy:'orderBy' | filter:job.Hiring_Manager" ng-if="jobUID != job.UID" >  
-                            <h5><input type="radio" value="{{job.UID}}"njobid="jobUID" job="favorite"'' ng-init="jobUID='{{job.UID}}'" ng-model='jobUID' ng-Click='setJobResults(jobUID)'></i>{{job.Job_Title}} @ {{job.Company}}</a></h5>
-                               <ul class="list-inline grid-boxes-news">
-                                 <li><span>{{job.Wage}} - <i class="fa fa-clock-o"> - {{job.Shifts}}</i></span></li> 
-                                 <li>|</li>
-                                 <li>{{job.Location}}</li>
-                               </ul>           
-                             <hr>  
-                           </div>
-                        </div>
+                        <div class="people-say margin-bottom-20"> 
+                         <div class="overflow-h">
+                         <ul class="list-unstyled save-job">
+                            <li><button type="button" style="width:250px;height:30px;background-color:red" ><a href="#" ><font color="white">Apply Now</font></a></button></li>
+                         </ul>
                        </div>
                        </div>
-                       </div>
-
+                       </div> 
+                  \
                         <hr>
-
-                        <ul class="list-unstyled save-job">
-                            <li><i class="fa fa-download"></i> <a href="#">Save job</a></li>
-                            <li><i class="fa fa-plus"></i> <a href="#">Follow us</a></li>
-                        </ul>
-
-                        <hr>
+                        <div class="people-say margin-bottom-20">
+                        <h5>About the Hiring Manager</h5>
+                            <ul class="list-unstyled save-job">
+                                <li><i class="fa fa-refresh fa-spin"></i><a>Responds in 48 hours</a></li>
+                                <li><i class="fa fa-shield"></i><a>Member since 2015</a></li>
+                            </ul>
+                        </div>
+                           <hr>
+                           <div class="people-say margin-bottom-20">
+                             <img src="{{job.HM_Photo}}" alt="">
+                        </div> 
+                           <hr>
 
                         <h5>Latest Employee Recommendations</h5>
                         <div class="people-say margin-bottom-20">
@@ -298,7 +201,7 @@ li {
 
                         <hr>
 
-                        <button type="button" class="btn-u btn-block"><a href="#">Apply with Resume</a></button>
+                       
                     </div>
                 </div>
                 <!-- End Right Inner -->

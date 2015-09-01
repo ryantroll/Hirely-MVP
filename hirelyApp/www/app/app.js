@@ -115,11 +115,14 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
 myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogleMapApi, uiGmapIsReady) {
     var url = 'https://shining-torch-5144.firebaseio.com/jobOpenings';
     var fireRef = new Firebase(url);
+    var Lat =null;
+    var Lon =null;
+   $scope.mapmarkers = $firebaseArray(fireRef);
     
-    $scope.mapmarkers = $firebaseArray(fireRef);
 
     uiGmapGoogleMapApi
     .then(function(maps){
+
     $scope.googlemap = {};
     $scope.map = {
       center: {
@@ -170,8 +173,8 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogl
         {
             id: 0,
             coords: {
-                latitude: 38.9071923,
-                longitude: -77.03687070000001,
+                latitude: $scope.mapmarkers.Lat,
+                longitude: $scope.mapmarkers.Lon,
                 draggable: false,
                 animation: 1 // 1: BOUNCE, 2: DROP
             },
@@ -212,12 +215,12 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogl
     
   $scope.MapOptions = {
         minZoom : 3,
-        zoomControl : false,
+        zoomControl : true,
         draggable : true,
-        navigationControl : false,
-        mapTypeControl : false,
-        scaleControl : false,
-        streetViewControl : false,
+        navigationControl : true,
+        mapTypeControl : true,
+        scaleControl : true,
+        streetViewControl : true,
         disableDoubleClickZoom : false,
         keyboardShortcuts : true,
         styles : [{
