@@ -32,10 +32,10 @@ li {
 #comments_block {
    overflow-y: scroll;
    overflow-x: hidden;
-   width: 1000px;
+   width: 970px;
    height: 1560px;
 }
 .angular-google-map-container { 
-  width: 1000px;
+  width: 500px;
   height: 1560px;
 }

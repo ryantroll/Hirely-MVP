@@ -13,20 +13,20 @@
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">    
 <link href="css/jobresults.css" rel="stylesheet">
 </head>
-<!--=== Job Img ===-->
+
+<body>
+<div class="wrapper"><!--=== Content Part ===-->
 <div style="width:100%;"> <!-- Main Div -->
 {{details.formatted_address}}  {{details.geometry.location.lat}} {{details.geometry.location.lng}}
 
 <div class="collapse navbar-collapse navbar-responsive-collapse">
-  <div class="menu-container">
-    <div class="job-img margin-bottom-30">
+
          <div class="container text-center">
                <h2>Let Hirely help you find the Job you Need ...</h2>
         </div>
   <hr>
   <div class="grid-boxes-qoute bg-color-blue">
       <div class="grid-boxes-caption grid-boxes-quote">
-        <div class="job-img-inputs">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-4 md-margin-bottom-10">
@@ -47,71 +47,65 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             <input class="form-control" id="searchText" ng-model="searchText" googleplace placeholder="What Type of Job are you seeking??..." >
+                    </div>
                   </div>
-                 </div>
                </div>
-        </div>
+           </div>
       </div>
-  </div>
   </div>
 <!--=== End Job Img ===-->
 <hr>
 <!--=== Content Part ===-->
 
-<div class="container text-left" style="float:left; width:50%;">  
-
+<div class="container text-left" style="float:left; width:70%;">  
+<section>
 <div id="comments_block">
   <div class="container text-left" ng-app="hirelyApp" ng-controller="JobCtrl" > 
     <div ng-repeat="job in split_jobs" class="row">
      <div class="col-md-5" ng-repeat="job in jobOpenings | orderBy:'orderBy'| filter:selected  | filter:results | filter:searchText " >
      <div class="nf-item branding coffee spacing">
       <div class="item-box">
-      <a ng-Click='setJobResults(job.UID)' href="#"><img class="item-container" src="{{job.Image}}" alt="" width="450" height="350"></a>
-       <div class="absolute1"><blockquote style="border: opx solid #666; padding: 0px; background-color: #303030; ">
-       <h3><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">{{job.Job_Title}}</font></a></h3><h4><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">@ {{job.Company}}</font></h4></div>
-            <div class="absolute2 "><p class="white"><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</i></font><li class="fa fa-clock-o"><font color="white">{{job.Shifts}}</font></li></div></blockquote>
-        </div><!--//people-->
-        <div class="item-mask">
-          <div class="item-caption">
-            <hr>
-            <span style="padding-left:20px"></span>
-         </div>
-       </div>
-    </div>
-  </div>  
+          <a ng-Click='setJobResults(job.UID)' href="#"><img class="item-container" src="{{job.Image}}" alt="" width="450" height="350"></a>
+           <div class="absolute1"><blockquote style="border: opx solid #666; padding: 0px; background-color: #303030; ">
+           <h3><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">{{job.Job_Title}}</font></a></h3>
+           <h4><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">@ {{job.Company}}</font></a></h4></div>
+                <div class="absolute2 "><p class="white"><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</font></i></p><font color="red"><i class="fa fa-clock-o"></font></i><font color="white">{{job.Shifts}}</font></i></div></blockquote></div>
+      </div><!--//people-->
+     <div class="item-mask">
+     <div class="item-caption">
+     <hr>
+    <span style="padding-left:0px"></span>
+  </div>
+  </div>
+  </div>
+</div>  
 </div> 
 </div><!--=== End Content Part ===-->
-</div>
-</div>
-</div>
+
+</section>
 </div>
 
-<div style="float:right; width:50%; ">
-<div class="container">
-   
+
+<div style="float:left; width:30%; ">
+<section>
 <body ng-app="hirelyApp">
-    <div class="angular-google-map-container" ng-controller="MainCtrl" >              
+    <div class="angular-google-map-container" ng-controller="MainCtrl">      {{job.Lat}} {{job.Lon}}
        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" control="googlemap">
-
-            <ui-gmap-window coords="MapOptions.markers.selected.coords" show="windowOptions.show" options="windowOptions" closeClick="closeClick()">
+           <ui-gmap-window coords="MapOptions.markers.selected.coords" show="windowOptions.show" options="windowOptions" options="marker.options"closeClick="closeClick()">
             </ui-gmap-window>
-            <ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'" click="'onClick'" events="markers.events"></ui-gmap-markers>
-           <ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'" events="markers.events" ng-repeat="job in mapmarkers" >
-             {{job.Lat}} {{job.Lon}}
-    
-   
-            </ui-gmap-markers>
+            <ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'" click="'onClick'" events="markers.events" options="marker.options"></ui-gmap-markers>
         </ui-gmap-google-map>
     </div>
 </body>
+</section>  
 </div>
 </div>
 </div>
 
-
+           
 </div>
 <!-- JS Global Compulsory -->
-
+</body>
 <script async defer src="https://maps.googleapis.com/maps/api/js?signed_in=true&callback=initMap"></script>
 <script src="js/jquery-migrate.min.js"></script>
 <!-- JS Implementing Plugins -->

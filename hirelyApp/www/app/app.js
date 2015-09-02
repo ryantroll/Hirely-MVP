@@ -112,11 +112,10 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
   });
 });
 
-myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogleMapApi, uiGmapIsReady) {
+myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $http, uiGmapGoogleMapApi, uiGmapIsReady) {
     var url = 'https://shining-torch-5144.firebaseio.com/jobOpenings';
     var fireRef = new Firebase(url);
-    var Lat =null;
-    var Lon =null;
+    
    $scope.mapmarkers = $firebaseArray(fireRef);
     
 
@@ -131,6 +130,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogl
       },
       zoom: 14,
       pan: 1,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
       options: $scope.mapOptions,
       control: {},
       events: {
@@ -168,16 +168,14 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogl
     .then(function(){
         $scope.addMarkerClickFunction($scope.markers);
     });
-    
+
     $scope.markers = [
-        {
+         {
             id: 0,
             coords: {
-                latitude: $scope.mapmarkers.Lat,
-                longitude: $scope.mapmarkers.Lon,
-                draggable: false,
-                animation: 1 // 1: BOUNCE, 2: DROP
-            },
+                latitude: 38.9071923,
+                longitude: -77.03687070000001,
+                },
             data: 'restaurant'
         },
         {
@@ -185,9 +183,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogl
             coords: {
                 latitude: 38.8799697,
                 longitude: -77.1067698,
-                draggable: false,
-                animation: 1 // 1: BOUNCE, 2: DROP
-            },
+                },
             data: 'house'
         },
         {
@@ -195,9 +191,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogl
             coords: {
                 latitude: 38.704282,
                 longitude: -77.2277603,
-                draggable: false,
-                animation: 1 // 1: BOUNCE, 2: DROP
-            },
+                },
             data: 'hotel'
         }
        
@@ -222,7 +216,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, uiGmapGoogl
         scaleControl : true,
         streetViewControl : true,
         disableDoubleClickZoom : false,
-        keyboardShortcuts : true,
+        keyboardShortcuts : false,
         styles : [{
           featureType : "poi",
           elementType : "labels",
