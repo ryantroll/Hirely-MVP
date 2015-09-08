@@ -115,7 +115,8 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
 myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $http, uiGmapGoogleMapApi, uiGmapIsReady) {
     var url = 'https://shining-torch-5144.firebaseio.com/jobOpenings';
     var fireRef = new Firebase(url);
-    
+    var maper;  // Google map object
+
    $scope.mapmarkers = $firebaseArray(fireRef);
     
 
@@ -151,8 +152,8 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $
     $scope.onClick = function(data) {
         $scope.windowOptions.show = !$scope.windowOptions.show;
         console.log('$scope.windowOptions.show: ', $scope.windowOptions.show);
-        console.log('This is a ' + data);
-        alert('This is a ' + data);
+        console.log(data);
+        alert(data);
     };
 
     $scope.closeClick = function() {
@@ -165,6 +166,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $
     .then(function(instances) {
         console.log(instances[0].map);                        // get the current map
     })
+  
     .then(function(){
         $scope.addMarkerClickFunction($scope.markers);
     });
@@ -173,18 +175,18 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $
          {
             id: 0,
             coords: {
-                latitude: 38.9071923,
-                longitude: -77.03687070000001,
+                latitude: 38.910586,
+                longitude: -77.021683,
                 },
-            data: 'restaurant'
+            data: 'Compass Coffee'
         },
         {
             id: 1,
             coords: {
-                latitude: 38.8799697,
-                longitude: -77.1067698,
+                latitude: 38.912109,
+                longitude: -77.032374,
                 },
-            data: 'house'
+            data: 'Barcelona Wine Bar'
         },
         {
             id: 2,
@@ -193,11 +195,139 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $
                 longitude: -77.2277603,
                 },
             data: 'hotel'
+        },
+       {
+            id: 3,
+            coords: {
+                latitude: 38.910908,
+                longitude: -77.032568,
+                },
+            data: 'The Bike Rack'
+        },
+        {
+            id: 4,
+            coords: {
+                latitude: 38.897013,
+                longitude: -77.02234,
+                },
+            data: 'Poste Modern Brasserie'
+        },
+        {
+            id: 5,
+            coords: {
+                latitude: 38.905423,
+                longitude: -77.059664,
+                },
+            data: 'Sprinkles Cupcakes'
+        },
+        {
+            id: 6,
+            coords: {
+                latitude: 38.909291,
+                longitude: -77.033443,
+                },
+            data: 'Wholefoods'
+        },
+        {
+            id: 7,
+            coords: {
+                latitude: 38.897844,
+                longitude: -77.033285,
+                },
+            data: 'Garrison & Sisson, Inc'
+        },
+        {
+            id: 8,
+            coords: {
+                latitude: 38.902917,
+                longitude: -77.037824,
+                },
+            data: 'BCG Attorney Search'
+        }, 
+        {
+            id: 9,
+            coords: {
+                latitude: 38.891613,
+                longitude: -77.001231,
+                },
+            data: 'Karson Butler Events'
+        }, 
+        {
+            id: 10,
+            coords: {
+                latitude: 38.895273,
+                longitude: -77.015736,
+                },
+            data: 'DCHR'
+        },
+        {
+            id: 11,
+            coords: {
+                latitude: 38.895273,
+                longitude: -77.015736,
+                },
+            data: 'DCHR'
+        },
+        {
+            id: 12,
+            coords: {
+                latitude: 38.896921,
+                longitude: -77.010342,
+                },
+            data: 'Roll Call, Inc.'
+        },
+        {
+            id: 13,
+            coords: {
+                latitude: 38.912109,
+                longitude: -77.032374,
+                },
+            data: 'Barcelona Wine Bar'
+        },
+        {
+            id: 14,
+            coords: {
+                latitude: 38.912109,
+                longitude: -77.032374,
+                },
+            data: 'Barcelona Wine Bar'
+        },
+        {
+            id: 15,
+            coords: {
+                latitude: 38.910586,
+                longitude: -77.021683,
+                },
+            data: 'Compass Coffee'
+        },
+        {
+            id: 16,
+            coords: {
+                latitude: 38.905423,
+                longitude: -77.059664,
+                },
+            data: 'Sprinkles Cupcakes'
+        },
+        {
+            id: 17,
+            coords: {
+                latitude: 38.895273,
+                longitude: -77.015736
+                },
+            data: 'DCHR'
+        },
+       {
+            id: 18,
+            coords: {
+                latitude: $scope.details.geometry.location.G,
+                longitude: $scope.details.geometry.location.K,
+                },
+            data: 'Job Location Search Area!'
         }
-       
           
     ];
-    
+
+
     $scope.addMarkerClickFunction = function(markersArray){
         angular.forEach(markersArray, function(value, key) {
             value.onClick = function(){
@@ -205,6 +335,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $
                 };
         });
     };  
+
 
     
   $scope.MapOptions = {
@@ -217,6 +348,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $
         streetViewControl : true,
         disableDoubleClickZoom : false,
         keyboardShortcuts : false,
+        icon: "img/bluedot.png",
         styles : [{
           featureType : "poi",
           elementType : "labels",
