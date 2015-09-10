@@ -1,0 +1,93 @@
+{
+    "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69": {
+            "name": "Compass Coffee",
+            "description": "Compass Coffee",
+            "address": {
+                "street1": "1535 7th St NW",
+                "street2": "",
+                "city": "Washington",
+                "state": "DC",
+                "zipCode": "20001",
+                "formattedAddress": "1535 7th St NW, Washington, DC 20001, United States",
+                "placeId": "ChIJ9Y6D4_G3t4kR6GDgjWIRHJw"
+
+            },
+            "hiringManagers": {
+                "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
+            },
+            "parentBusiness":  "72AF835D-131D-4741-83D9-B2D3DBD69E4F"
+
+        },
+    
+         "5E65284E-7E2C-4914-9E21-174EA118B277": {
+            "name": "Peets on 17th St",
+            "description": "Peets on 17th St",
+            "address": {
+                "street1": "1101 17th St NW",
+                "street2": "",
+                "city": "Washington",
+                "state": "DC",
+                "zipCode": "20036",
+                "formattedAddress": "1101 17th St NW, Washington, DC 20036, United States",
+                "placeId": "ChIJhyUrIb-3t4kRAngGGygVRq4"
+            },
+            "hiringManagers": {
+                "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
+            },
+            "parentBusiness":  "57B133E7-A732-41D3-82EA-8C733ED2A13F"
+        },
+        "D514E8B6-4CB7-4D52-90CD-CF68D0140B09": {
+            "name": "Peets on 13th St",
+            "description": "Peets on 13th St",
+            "address": {
+                "street1": "601 13th St NW",
+                "street2": "",
+                "city": "Washington",
+                "state": "DC",
+                "zipCode": "20005",
+                "formattedAddress": "601 13th St NW, Washington, DC 20005, United States",
+                "placeId": "ChIJUd4gHpe3t4kRvcGd66YOB6c"
+
+            },
+            "hiringManagers": {
+                "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
+            },
+            "parentBusiness": "57B133E7-A732-41D3-82EA-8C733ED2A13F"
+
+        },
+    "8CC0EE4A-5FC0-44F1-A55F-B46352BC73D4": {
+            "name": "Northside Social Arlington",
+            "description": "Northside Social Arlington",
+            "address": {
+                "street1": "3211 Wilson Blvd",
+                "street2": "",
+                "city": "Arlington",
+                "state": "VA",
+                "zipCode": "22201",
+                "formattedAddress": "3211 Wilson Blvd, Arlington, VA 22201, United States",
+                "placeId": "ChIJKedCmoO2t4kRdvWsWIt5E4I"
+            },
+            "hiringManagers": {
+                "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
+            },
+            "parentBusiness": "3DFF61CA-727D-40AA-AACD-06F4D557CC5B"
+        },
+    "BDEF087A-6472-4F02-ADCE-01C13D75E57F": {
+            "name": "Quartermaine #3242",
+            "description": "Quartermaine #3242",
+            "address": {
+                "street1": "10400 Old Georgetown Rd",
+                "street2": "",
+                "city": "Bethesda",
+                "state": "MD",
+                "zipCode": "20814",
+                "formattedAddress": "10400 Old Georgetown Rd, Bethesda, MD 20814, United States",
+                "placeId": "ChIJQ23iFXPMt4kR-jONIZwu060"
+            },
+            "hiringManagers": {
+                "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
+            },
+            "parentBusiness": "C8BF59C8-D7C3-41BA-81C9-F6425FEA56C9"
+        }
+
+}

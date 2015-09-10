@@ -1,0 +1,144 @@
+{
+    "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69":     {
+        "886BFB24-7D0C-47E0-839F-DDD2CFFBDA44": {
+            "title": "Barista",
+            "description": "Awesome Barista's wanted",
+            "taskDescription": "blah",
+            "status": "Active",
+            "postDate": "9/8/2015",
+            "createDate": "9/8/2015",
+            "modifiedDate": "9/8/2015",
+            "wage": {
+                "amount": 12.00,
+                "frequency": "hr"
+            },
+            "benefits": {
+                "medical": true,
+                "dental": true
+            },
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F"
+        },
+        "4B185139-57A6-4CD2-96CD-11DD7FE40C87": {
+            "title": "Barista Manager",
+            "description": "Awesome Barista's wanted",
+            "taskDescription": "blah",
+            "status": "Active",
+            "postDate": "9/8/2015",
+            "createDate": "9/8/2015",
+            "modifiedDate": "9/8/2015",
+            "wage": {
+                "amount": 20.00,
+                "frequency": "hr"
+            },
+            "benefits": {
+                "medical": true,
+                "dental": true
+            },
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F"
+        }
+    },
+    "5E65284E-7E2C-4914-9E21-174EA118B277": {
+        "BCF4053D-A9AB-4A2B-BEAC-3DFE8C8239BE": {
+            "title": "Coffee Enthusiast",
+            "description": "Awesome Barista's wanted",
+            "taskDescription": "blah",
+            "status": "Active",
+            "postDate": "9/8/2015",
+            "createDate": "9/8/2015",
+            "modifiedDate": "9/8/2015",
+            "wage": {
+                "amount": 12.00,
+                "frequency": "hr"
+            },
+            "benefits": {
+                "medical": true,
+                "dental": true
+            },
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F"
+        }
+    },
+    "8CC0EE4A-5FC0-44F1-A55F-B46352BC73D4": {
+        "244301C7-F368-4BCC-B7A8-9C47B46254BB": {
+            "title": "Talented Barista",
+            "description": "Awesome Barista's wanted",
+            "taskDescription": "blah",
+            "status": "Active",
+            "postDate": "9/8/2015",
+            "createDate": "9/8/2015",
+            "modifiedDate": "9/8/2015",
+            "wage": {
+                "amount": 15.00,
+                "frequency": "hr"
+            },
+            "benefits": {
+                "medical": true,
+                "dental": true
+            },
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F"
+        }
+    },
+    "BDEF087A-6472-4F02-ADCE-01C13D75E57F": {
+        "3940C206-3AED-4602-9732-8F279DB6AAD9": {
+            "title": "Barista",
+            "description": "Awesome Barista's wanted",
+            "taskDescription": "blah",
+            "status": "Active",
+            "postDate": "9/8/2015",
+            "createDate": "9/8/2015",
+            "modifiedDate": "9/8/2015",
+            "wage": {
+                "amount": 11.00,
+                "frequency": "hr"
+            },
+            "benefits": {
+                "medical": true,
+                "dental": true
+            },
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F"
+        }
+    },
+    "D514E8B6-4CB7-4D52-90CD-CF68D0140B09": {
+        "EE32FD94-4F19-4102-8FE4-8C08184DB220": {
+            "title": "Barista",
+            "description": "Awesome Barista's wanted",
+            "taskDescription": "blah",
+            "status": "Active",
+            "postDate": "9/8/2015",
+            "createDate": "9/8/2015",
+            "modifiedDate": "9/8/2015",
+            "wage": {
+                "amount": 15.00,
+                "frequency": "hr"
+            },
+            "benefits": {
+                "medical": true,
+                "dental": true
+            },
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F"
+        }
+    }
+}
