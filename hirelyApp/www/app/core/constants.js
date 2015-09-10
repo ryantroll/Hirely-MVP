@@ -11,8 +11,14 @@
         .constant('version', '0.6')
 
         // where to redirect users if they need to authenticate (see module.routeSecurity)
-        .constant('loginRedirectPath', 'app.home')
+        .constant('loginRedirectPath', 'appFS.home')
 
         // your Firebase URL goes here
         .constant('FBURL', 'https://shining-torch-5144.firebaseio.com')
+
+        .constant('GOOGLEMAPSURL', 'https://maps.google.com/maps/api/geocode/json?latlng={POSITION}&sensor=false')
+
+        .constant('filePickerKey', 'AALU2i7ySUuUi8XUDHq8wz')
+
+        .constant('candidateStatus', {1: 'Active', 2: 'Employed', 3: 'Inactive'})
 })();

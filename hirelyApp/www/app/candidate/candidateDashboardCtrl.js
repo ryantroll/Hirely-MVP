@@ -10,6 +10,26 @@
     function CandidateDashboardCtrl($scope, $stateParams) {
 
         var vm = this;
+        $scope.uiGridOptions  = {
+            data: 'recentApps',
+            columnDefs: [{
+                field: 'company'
+            }, {
+                field: 'position'
+            }, {
+                field: 'application date'
+            },
+                {
+                    field: 'current status'
+                }
+            ]
+        };
+
+        $scope.recentApps = [];
+
+        if($scope.user.Applications){
+            $scope.recentApps = $scope.user.Applications;
+        }
 
         // Chart.js Data
         $scope.data = [

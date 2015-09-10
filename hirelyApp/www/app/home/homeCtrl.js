@@ -10,13 +10,18 @@
         $scope.options = {
             types: '(regions)'
         };
-
         $scope.details = '';
 
+        var place = geocodeService.getPlace();
+        if(place){
+
+            $scope.results = place.formatted_address;
+            $scope.details = place;
+        }
 
         $scope.getResults = function() {
             geocodeService.setPlace($scope.details);
-            $state.go('app.job')
+            $state.go('appFS.job')
 
         }
 

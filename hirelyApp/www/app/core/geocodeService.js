@@ -6,10 +6,10 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .factory('GeocodeService', ['$q', '$http', GeocodeService]);
+        .factory('GeocodeService', ['$q', '$http', 'GOOGLEMAPSURL', GeocodeService]);
 
-    function GeocodeService($q, $http) {
-        var MAPS_ENDPOINT = 'http://maps.google.com/maps/api/geocode/json?latlng={POSITION}&sensor=false';
+    function GeocodeService($q, $http, GOOGLEMAPSURL) {
+        var MAPS_ENDPOINT = GOOGLEMAPSURL;
         var currentPlace = null;
 
         var service =  {

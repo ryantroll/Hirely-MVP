@@ -1,0 +1,50 @@
+<div class="layered-content">
+    <form class="form-layout" name="candidateForm" id="user-profile-form" ng-submit="submitProfile()">
+        <div class="form-group">
+            <figure class="profile-pic ">
+                <img class="img-circle" src="{{currentUser.profileImageUrl && currentUser.profileImageUrl || 'img/avatar.jpg' }}">
+                <button type="button" class="btn btn-blue btn-cta-blue" ng-click="pickFile()" >Change Picture</button>
+            </figure>
+        </div>
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" name="firstName" ng-model="user.firstName" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Last Name</label>
+            <input type="text" class="form-control" name="lasttName" ng-model="user.lastName" required>
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" name="email" ng-model="user.email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" class="form-control" name="phone" mask="(999) 999-9999" clean="true"  ng-model="user.phone">
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" class="form-control" ng-autocomplete details="details" ng-model="user.location"  options="options" required/>
+        </div>
+        <div class="form-group">
+            <label for="phone">Bio (max 150 characters)</label>
+            <textarea class="form-control" name="personalStatement" ng-model="user.personalStatement" ng-minlength="0" ng-maxlength="150"></textarea>
+        </div>
+        <div class="form-group checkbox">
+            <label>
+                <input type="checkbox" ng-model="candidate.authorizedInUS"> Authorized to work In US?
+            </label>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-6 col-xs-offset-3">
+                <button type="submit" class="btn btn-block btn-blue btn-cta-blue" ng-disabled="!candidateForm.$valid">
+                    <i class="fa fa-circle-arrow-right"></i>Next
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>

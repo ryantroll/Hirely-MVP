@@ -1,9 +1,6 @@
-
-    <!-- ******PROMO****** -->
+<!-- ******PROMO****** -->
 <section id="promo" class="promo section">
-
     <div class="fixed-container">
-
         <div class="search" ng-controller="HomeCtrl">
             <div class="container text-center">
                 <h1 class="title">Opportunity Awaits</h1>
@@ -12,7 +9,7 @@
                          <input type="text" id="search" ng-model="selected" typeahead="job as job.Lay_Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" typeahead-on-select="onSelect($Code)"class="form-control" ng-init="" placeholder="What's your next gig?">
                      </div>-->
                     <div class="form-group">
-                        <input type="text" id="Autocomplete" class="form-control" ng-autocomplete="results" details="details" ng-model="results"  options="options" on-Place-Changed="getResults()" required placeholder="Where's your next gig?"/>
+                        <input type="text" id="Autocomplete" class="form-control" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where's your next gig?"/>
                     </div>
                     <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
                         <span class="btn-search-inner"></span>
@@ -20,7 +17,6 @@
                 </form><!--//search-form-->
             </div><!--//contianer-->
         </div><!--//search-->
-
     </div>
     <div class="bg-slider-wrapper">
         <div id="bg-slider" class="flexslider bg-slider" flexslider>
@@ -34,26 +30,23 @@
     </div><!--//bg-slider-wrapper-->
 </section><!--//promo-->
 
-
-<!-- *****getStarted****** -->
-    <!-- ******WHY****** -->
+   <!-- ******WHY****** -->
     <section id="why" class="why section">
         <div class="container">
             <h2 class="title text-center">We totally get it</h2>
             <p class="intro text-center">We are disrupting the way local hourly talent and small businesses connect.</p>
-            <img  src="img/hirely_protos.png">
+            <img class="img-responsive"  src="img/hirely_protos.png">
             <div class="row services">
 
-                <!-- FIRST FOCUS BOXES -->
                 <div class="col-lg-4 col-sm-4 focus-box red wow fadeInLeft animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
                     <div class="service-icon">
                         <i class="fa fa-list fa-4x"></i>
                     </div>
                     <h5 class="red-border-bottom">Informative Listings</h5>
-                    <p> <!-- FOCUS DESCRIPTION -->
-                        Detailed job cards show you the information that's most important. Hirely ensures jobs are active and informative.                   </p>
+                    <p>
+                        Detailed job cards show you the information that's most important. Hirely ensures jobs are active and informative.
+                    </p>
                 </div>
-                <!-- / END FIRST FOCUS BOX. Other boxes has same format -->
 
                 <div class="col-lg-4 col-sm-4 focus-box green wow fadeInLeft animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
                     <div class="service-icon">

@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="App Files" pattern="file[Hirely-MVP]:hirelyApp/www/app//*||file[Hirely-MVP]:hirelyApp/src/css//*" />
+</component>

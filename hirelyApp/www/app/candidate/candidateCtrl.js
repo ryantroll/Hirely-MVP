@@ -1,9 +1,7 @@
 /**
  * Created by labrina.loving on 8/26/2015.
- */
-/**
- * Created by labrina.loving on 8/16/2015.
- */
+ **/
+
 (function () {
     'use strict';
 
@@ -13,7 +11,9 @@
     function CandidateCtrl($scope, $stateParams, UserService) {
         var userService = UserService;
         var vm = this;
+
         $scope.user = userService.getCurrentUser();
+
 
 
         //listen for changes to current user
@@ -22,10 +22,6 @@
 
 
         });
-
-        $scope.saveUser = function() {
-           userService.saveUser($scope.user)
-        }
     }
 })()
 ;

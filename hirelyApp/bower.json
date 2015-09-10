@@ -1,7 +1,29 @@
 {
-  "name": "HelloIonic",
-  "private": "true",
+  "name": "hirelyMVP",
+  "dependencies": {
+    "angular": "~1.4.5",
+    "angular-animate": "~1.4.5",
+    "angular-bootstrap": "~0.13.3",
+    "angular-google-maps": "~2.1.6",
+    "angular-ui-grid": "~3.0.5",
+    "angular-ui-router": "~0.2.15",
+    "angularfire": "~1.1.2",
+    "animate.css": "~3.4.0",
+    "bootstrap": "~3.3.5",
+    "bootstrap-hover-dropdown": "~2.1.3",
+    "chart.js": "~0.1.0",
+    "components-font-awesome": "~4.4.0",
+    "firebase": "~2.2.9",
+    "flexslider": "~2.5.0",
+    "font-awesome": "~4.4.0",
+    "isMobile": "~0.3.9",
+    "jquery": "~2.1.4",
+    "lodash": "~3.10.1",
+    "ngMask": "angular-mask#~3.0.12",
+    "tc-angular-chartjs": "~1.0.12",
+    "wow": "wowjs#~1.1.2"
+  },
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.0.1"
+    "ment.io": "~0.9.23"
   }
 }

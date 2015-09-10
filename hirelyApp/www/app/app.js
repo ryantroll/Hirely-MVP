@@ -6,6 +6,7 @@ var myApp = angular.module('hirelyApp',
         'ui.router',
         'ui.bootstrap',
         'ui.grid',
+        'uiGmapgoogle-maps',
         'firebase',
         'ngMask',
         'tc.chartjs',
@@ -20,215 +21,168 @@ var myApp = angular.module('hirelyApp',
     ])
 
 
+
     .config(function($stateProvider, $urlRouterProvider) {
 
-      $stateProvider
+        $stateProvider
 
-          .state('app', {
-              url: "/app",
-              abstract: true,
-              templateUrl: "app/layout/master.html"
-          })
-          .state('app.home', {
-              url: '/home',
-              parent: 'app',
-              templateUrl: 'app/home/home.html',
-              controller: 'HomeCtrl'
-          })
-          .state('app.login', {
-              url: '/login',
-              templateUrl: 'app/account/login.html',
-              controller: 'LoginCtrl'
-          })
-          .state('app.job', {
-              url: '/job',
-              templateUrl: 'app/job/jobs.html',
-              controller: 'JobCtrl'
-          })
-          .state('app.jobdetails', {
-              url: '/jobdetails',
-              templateUrl: 'app/jobdetails/jobDetails.html',
-              controller: 'JobCtrl'
-          })
-          .state('app.register', {
-              url: '/register',
-              templateUrl: 'app/account/register.html',
-              controller: 'RegisterCtrl'
-          })
-          .state('app.candidate', {
-              url: '/candidate',
-              abstract: true,
-              templateUrl: 'app/candidate/candidate.html',
-              authRequired: true,
-              controller: 'CandidateCtrl'
-          })
-          .state('app.candidate.dashboard', {
-              url: '/dashboard',
-              templateUrl: 'app/candidate/candidate-dashboard.html',
-              controller: 'CandidateDashboardCtrl',
-              authRequired: true
-          })
-          .state('app.candidate.profile', {
-              abstract: true,
-              url: '/profile',
-              templateUrl: 'app/candidate/candidate-profile.html',
-              authRequired: true
-             // controller: 'CandidateProfileCtrl'
-          })
-          .state('app.candidate.profile.basics', {
-              url: '/basics',
-              templateUrl: "app/candidate/candidate-profile-basics.html",
-              controller: 'CandidateProfileBasicsCtrl',
-              authRequired: true
-          })
-          .state('app.candidate.profile.availability', {
-              url: '/Availability',
-              templateUrl: 'app/candidate/candidate-profile-availability.html',
-              //controller: 'CandidateProfileCtrl',
-              authRequired: true
-          })
-          .state('app.candidate.profile.experience', {
-              url: '/Experience',
-              templateUrl: 'app/candidate/candidate-profile-experience.html',
-             // controller: 'CandidateProfileCtrl',
-              authRequired: true
-          })
-          .state('app.candidate.profile.personality', {
-              url: '/candidateProfileEducation',
-              templateUrl: 'app/candidate/candidate-profile-education.html',
-             //  controller: 'CandidateProfileCtrl',
-              authRequired: true
-          })
+            .state('app', {
+                url: "/app",
+                abstract: true,
+                templateProvider: function($templateCache){
+                    return $templateCache.get('app/layout/master.html');
+                }
+            })
+            .state('appFS', {
+                url: "/appFS",
+                abstract: true,
+                templateProvider: function($templateCache){
 
-      // if none of the above states are matched, use this as the fallback
-      $urlRouterProvider.otherwise('/app/home');
-    })
+                    return $templateCache.get('app/layout/master-fullscreen.html');
+                }
+            })
+            .state('appFS.home', {
+                url: '/home',
+                parent: 'appFS',
 
-myApp.config(function(uiGmapGoogleMapApiProvider) {
-  uiGmapGoogleMapApiProvider.configure({
-    key: '711561845732-pg1q3d3cn30f4jk07bmqno9qeio7unmg.apps.googleusercontent.com',
-    v: '3.17',
-    libraries: 'weather,geometry,visualization'
-  });
-});
+                templateProvider: function($templateCache){
+                    return $templateCache.get('app/home/home.html');
+                },
+                controller: 'HomeCtrl'
+            })
+            .state('app.login', {
+                url: '/login',
 
-myApp.controller('MainCtrl', function($scope, $firebaseArray, $firebaseObject, $http, uiGmapGoogleMapApi, uiGmapIsReady) {
-    var url = 'https://shining-torch-5144.firebaseio.com/jobOpenings';
-    var fireRef = new Firebase(url);
-    
-   $scope.mapmarkers = $firebaseArray(fireRef);
-    
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/account/login.html');
+                },
+                controller: 'LoginCtrl'
+            })
+            .state('appFS.job', {
+                url: '/job',
+                parent: 'appFS',
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/job/job-search.html');
+                },
+                controller: 'JobSearchCtrl'
+            })
+            .state('app.jobdetails', {
+                url: '/jobdetails',
 
-    uiGmapGoogleMapApi
-    .then(function(maps){
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/jobdetails/jobDetails.html');
+                },
+                controller: 'JobCtrl'
+            })
+            .state('app.register', {
+                url: '/register',
 
-    $scope.googlemap = {};
-    $scope.map = {
-      center: {
-        latitude: $scope.details.geometry.location.G,
-        longitude: $scope.details.geometry.location.K
-      },
-      zoom: 14,
-      pan: 1,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      options: $scope.mapOptions,
-      control: {},
-      events: {
-        tilesloaded: function (maps, eventName, args) {
-        },
-        dragend: function (maps, eventName, args) {
-        },
-        zoom_changed: function (maps, eventName, args) {
-        }
-      }
-    };
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/account/register.html');
+                },
+                controller: 'RegisterCtrl'
+            })
+            .state('app.candidate', {
+                url: '/candidate',
+                abstract: true,
+
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/candidate/candidate.html');
+                },
+                authRequired: true,
+                controller: 'CandidateCtrl'
+            })
+            .state('app.candidate.dashboard', {
+                url: '/dashboard',
+
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/candidate/candidate-dashboard.html');
+                },
+                controller: 'CandidateDashboardCtrl',
+                authRequired: true
+            })
+            .state('app.candidate.profile', {
+                abstract: true,
+                url: '/profile',
+
+                templateProvider: function ($templateCache) {
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/candidate/profile/candidate-profile.html');
+
+                },
+                controller: 'CandidateProfileCtrl',
+                authRequired: true,
+                resolve: {
+                    profile: function ($q, CandidateService, UserService) {
+                        //retrieve profile before loading
+                        var user = UserService.getCurrentUser();
+                        return CandidateService.getProfile(user.providerId).then(function(profile) {
+
+                           return profile;
+                        }, function(err) {
+                            deferred.reject(err);
+                        });
+
+                    }
+                }
+            })
+            .state('app.candidate.profile.basics', {
+                url: '/basics',
+
+                templateProvider: function($templateCache){
+
+                    return $templateCache.get('app/candidate/profile/candidate-profile-basics.html');
+                },
+                controller: 'CandidateProfileBasicsCtrl',
+                authRequired: true
+            })
+            .state('app.candidate.profile.availability', {
+                url: '/Availability',
+
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/candidate/profile/candidate-profile-availability.html');
+                },
+                controller: 'CandidateProfileAvailabilityCtrl',
+                authRequired: true
+            })
+            .state('app.candidate.profile.experience', {
+                url: '/Experience',
+
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/candidate/profile/candidate-profile-experience.html');
+                },
+                // controller: 'CandidateProfileCtrl',
+                authRequired: true
+            })
+            .state('app.candidate.profile.personality', {
+                url: '/candidateProfileEducation',
+
+                templateProvider: function($templateCache){
+                    // simplified, expecting that the cache is filled
+                    // there should be some checking... and async $http loading if not found
+                    return $templateCache.get('app/candidate/profile/candidate-profile-education.html');
+                },
+                //  controller: 'CandidateProfileCtrl',
+                authRequired: true
+            })
+
+        // if none of the above states are matched, use this as the fallback
+        $urlRouterProvider.otherwise('/appFS/home');
     });
-    
-    $scope.windowOptions = {
-        show: false
-    };
-
-    $scope.onClick = function(data) {
-        $scope.windowOptions.show = !$scope.windowOptions.show;
-        console.log('$scope.windowOptions.show: ', $scope.windowOptions.show);
-        console.log('This is a ' + data);
-        alert('This is a ' + data);
-    };
-
-    $scope.closeClick = function() {
-        $scope.windowOptions.show = false;
-    };
-
-        $scope.title = "Window Title!";
-    
-    uiGmapIsReady.promise()                                    // if no value is put in promise() it defaults to promise(1)
-    .then(function(instances) {
-        console.log(instances[0].map);                        // get the current map
-    })
-    .then(function(){
-        $scope.addMarkerClickFunction($scope.markers);
-    });
-
-    $scope.markers = [
-         {
-            id: 0,
-            coords: {
-                latitude: 38.9071923,
-                longitude: -77.03687070000001,
-                },
-            data: 'restaurant'
-        },
-        {
-            id: 1,
-            coords: {
-                latitude: 38.8799697,
-                longitude: -77.1067698,
-                },
-            data: 'house'
-        },
-        {
-            id: 2,
-            coords: {
-                latitude: 38.704282,
-                longitude: -77.2277603,
-                },
-            data: 'hotel'
-        }
-       
-          
-    ];
-    
-    $scope.addMarkerClickFunction = function(markersArray){
-        angular.forEach(markersArray, function(value, key) {
-            value.onClick = function(){
-                    $scope.onClick(value.data);
-                };
-        });
-    };  
-
-    
-  $scope.MapOptions = {
-        minZoom : 3,
-        zoomControl : true,
-        draggable : true,
-        navigationControl : true,
-        mapTypeControl : true,
-        scaleControl : true,
-        streetViewControl : true,
-        disableDoubleClickZoom : false,
-        keyboardShortcuts : false,
-        styles : [{
-          featureType : "poi",
-          elementType : "labels",
-          stylers : [{
-            visibility : "off"
-          }]
-        }, {
-          featureType : "transit",
-          elementType : "all",
-          stylers : [{
-            visibility : "off"
-          }]
-        }],
-    };
-});

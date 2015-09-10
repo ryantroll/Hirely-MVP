@@ -1,0 +1,119 @@
+<div class="layered-content schedule col-md-12 col-xs-12">
+    <div class="row">
+        <div class="col-md-3 col-md-offset-3 col-xs-offset-3 col-xs-3">Morning</div>
+        <div class="col-md-3 col-xs-3">Afternoon</div>
+        <div class="col-md-3 col-xs-3">Evening</div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-xs-3">Monday</div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='monAM' type='checkbox' ng-model="schedule.monday.morning">
+            <label class='tgl-btn tgl-btn-morning' for='monAM'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='monAF' type='checkbox' ng-model="schedule.monday.afternoon">
+            <label class='tgl-btn tgl-btn-afternoon' for='monAF'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='monPM' type='checkbox' ng-model="schedule.monday.evening">
+            <label class='tgl-btn tgl-btn-evening' for='monPM'></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-xs-3">Tuesday</div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='tuesAM' type='checkbox' ng-model="schedule.tuesday.morning">
+            <label class='tgl-btn tgl-btn-morning' for='tuesAM'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='tuesAF' type='checkbox' ng-model="schedule.tuesday.afternoon">
+            <label class='tgl-btn tgl-btn-afternoon' for='tuesAF'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='tuesPM' type='checkbox' ng-model="schedule.tuesday.evening">
+            <label class='tgl-btn tgl-btn-evening' for='tuesPM'></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-xs-3">Wednesday</div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='wedAM' type='checkbox' ng-model="schedule.wednesday.morning">
+            <label class='tgl-btn tgl-btn-morning' for='wedAM'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='wedAF' type='checkbox' ng-model="schedule.wednesday.afternoon">
+            <label class='tgl-btn tgl-btn-afternoon' for='wedAF'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='wedPM' type='checkbox' ng-model="schedule.wednesday.evening">
+            <label class='tgl-btn tgl-btn-evening' for='wedPM'></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-xs-3">Thursday</div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='thurAM' type='checkbox' ng-model="schedule.thursday.morning">
+            <label class='tgl-btn tgl-btn-morning' for='thurAM'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='thurAF' type='checkbox' ng-model="schedule.thursday.afternoon">
+            <label class='tgl-btn tgl-btn-afternoon' for='thurAF'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='thurPM' type='checkbox' ng-model="schedule.thursday.evening">
+            <label class='tgl-btn tgl-btn-evening' for='thurPM'></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-xs-3">Friday</div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='friAM' type='checkbox' ng-model="schedule.friday.morning">
+            <label class='tgl-btn tgl-btn-morning' for='friAM'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='friAF' type='checkbox' ng-model="schedule.friday.afternoon">
+            <label class='tgl-btn tgl-btn-afternoon' for='friAF'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='friPM' type='checkbox' ng-model="schedule.friday.evening">
+            <label class='tgl-btn tgl-btn-evening' for='friPM'></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-xs-3">Saturday</div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='satAM' type='checkbox' ng-model="schedule.saturday.morning">
+            <label class='tgl-btn tgl-btn-morning' for='satAM'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='satAF' type='checkbox' ng-model="schedule.saturday.afternoon">
+            <label class='tgl-btn tgl-btn-afternoon' for='satAF'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='satPM' type='checkbox' ng-model="schedule.saturday.evening">
+            <label class='tgl-btn tgl-btn-evening' for='satPM'></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-xs-3">Sunday</div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='sunAM' type='checkbox' ng-model="schedule.sunday.morning">
+            <label class='tgl-btn tgl-btn-morning' for='sunAM'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='sunAF' type='checkbox' ng-model="schedule.sunday.afternoon">
+            <label class='tgl-btn tgl-btn-afternoon' for='sunAF'></label>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <input class='tgl tgl-flip' id='sunPM' type='checkbox' ng-model="schedule.sunday.evening">
+            <label class='tgl-btn tgl-btn-evening' for='sunPM'></label>
+        </div>
+    </div>
+    <div class="col-xs-6 col-xs-offset-3 margin-top-40">
+        <button type="submit" class="btn btn-block btn-blue btn-cta-blue" ng-click="saveSchedule()">
+            <i class="fa fa-circle-arrow-right"></i>Complete
+        </button>
+
+    </div>
+
+</div>
