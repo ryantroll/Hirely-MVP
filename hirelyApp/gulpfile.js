@@ -143,7 +143,7 @@ gulp.task('wiredep', function() {
         .src(config.index)
         .pipe(wiredep(options))
         .pipe(inject(gulp.src(config.js, {read: false}), {relative: true}))
-        .pipe(gulp.dest('./src'));
+        .pipe(gulp.dest('./www'));
 });
 
 gulp.task('inject', ['wiredep', 'styles'], function() {
@@ -152,10 +152,10 @@ gulp.task('inject', ['wiredep', 'styles'], function() {
     return gulp
         .src(config.index)
         .pipe(inject(gulp.src(config.cssFolder, {read: false}), {relative: true}))
-        .pipe(gulp.dest('./src'));
+        .pipe(gulp.dest('./www'));
 });
 
-gulp.task('optimize', ['inject'], function() {
+gulp.task('optimize', ['inject','images', 'fonts'], function() {
     log('Optimizing the javascript, css, html');
 
     var assets = useref.assets();

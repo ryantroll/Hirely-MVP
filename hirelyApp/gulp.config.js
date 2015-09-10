@@ -1,6 +1,6 @@
 module.exports = function() {
-    var client = './src/';
-    var cssFolder = './src/css/';
+    var client = './www/';
+    var cssFolder = './www/css/';
     var clientApp = client + 'app/';
     var temp = clientApp + 'core';
     var config = {
@@ -8,7 +8,7 @@ module.exports = function() {
          * Files paths
          */
         alljs: [
-            './src/**/*.js',
+            './www/**/*.js',
             './*.js'
         ],
         bower: {
