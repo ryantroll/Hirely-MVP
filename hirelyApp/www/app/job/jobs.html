@@ -1,108 +1,90 @@
 <html ng-app="hirelyMap">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta charset="utf-8" />
+<title></title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
 
-    <!-- CSS Page Style -->
-    <link href="css/blog_masonry_3col.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700'rel='stylesheet' type='text/css'>
-    <link href="css/style.css" rel="stylesheet"  type="text/css" />
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link href="css/jobresults.css" rel="stylesheet">
+<!-- CSS Page Style -->
+<link rel="stylesheet" href="css/styles.css" >
+<link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700'rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="css/style.css"  type="text/css" />
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">    
+<link rel="stylesheet" href="css/jobresults.css" >
+<link rel="stylesheet" href="css/page_job_inner1.css">
 </head>
+<style>
 
+</style>
 <body>
-<div class="wrapper"><!--=== Content Part ===-->
-    <div style="width:100%;"> <!-- Main Div -->
-        {{details.formatted_address}}  {{details.geometry.location.lat}} {{details.geometry.location.lng}}
+<div class="container-fluid" >
+<div class="row" >
+<div class="col-sm-5" id="comments_block">
+<h2>Let Hirely help you find the Job you Need ...</h2>
+{{details.formatted_address}}  {{details.geometry.location.lat}} {{details.geometry.location.lng}}
+ <hr>
+<form class="form-horizontal" >
+  <div class="form-group">
+      <div class="col-sm-4 md-margin-bottom-10">
+          <div class="input-group" ng-controller="JobSearchCtrl">
+              <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+              <input type="text" id="search" ng-model="selected" typeahead="job as job.Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" class="form-control" ng-init="" placeholder="Find your next gig"> 
+          </div>
+      </div>
+      <div class="col-sm-4 md-margin-bottom-10">
+          <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+              <input type="text" id="Autocomplete" class="form-control" ng-autocomplete="results" details="details" ng-model="results"  options="options" on-Place-Changed="getResults()" required placeholder="Search Jobs in other Cities!!"/>
+          </div>
+      </div>
+      <div class="col-sm-4 md-margin-bottom-10">
+          <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-search"></i></span>
+              <input class="form-control" id="searchText" ng-model="searchText" googleplace placeholder="What Type of Job are you seeking??..." >
+          </div>
+      </div>
+  </div>  
 
-        <div class="collapse navbar-collapse navbar-responsive-collapse">
-
-            <div class="container text-center">
-                <h2>Let Hirely help you find the Job you Need ...</h2>
+  <hr>
+          <!-- Left Inner -->
+  <div class="col-xs-6">
+            <div class="container text-left" ng-app="hirelyApp" ng-controller="JobCtrl" > 
+              <div ng-repeat="job in split_jobs" class="row">
+               <div class="col-sm-5 md-margin-bottom-10" ng-repeat="job in jobOpenings | orderBy:'orderBy'| filter:selected  | filter:results | filter:searchText" >
+               <div class="nf-item branding coffee spacing">
+                 <div class="item-box">
+                    <a ng-Click='setJobResults(job.UID)' href="#"><img class="item-container" src="{{job.Image}}" alt="" width="450" height="350"></a>
+                     <div class="absolute1"><blockquote style="border: opx solid #666; padding: 0px; background-color: #303030; ">
+                     <h3><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">{{job.Job_Title}}</font></a></h3>
+                     <h4><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">@ {{job.Company}}</font></a></h4></div>
+                          <div class="absolute2 "><p class="white"><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</font></i></p><font color="red"><i class="fa fa-clock-o"></font></i><font color="white">{{job.Shifts}}</font></i></div></blockquote></div>
+                 </div><!--//people-->
+                 <div class="item-mask">
+                 <div class="item-caption">
+                  <hr>
+                    <span style="padding-left:0px"></span>
+                 </div>
+                 </div>
+              </div>
             </div>
-            <hr>
-            <div class="grid-boxes-qoute bg-color-blue">
-                <div class="grid-boxes-caption grid-boxes-quote">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-4 md-margin-bottom-10">
-                                <div class="form-group" ng-controller="JobSearchCtrl">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                                        <input type="text" id="search" ng-model="selected" typeahead="job as job.Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" class="form-control" ng-init="" placeholder="Find your next gig">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 md-margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                                    <input type="text" id="Autocomplete" class="form-control" ng-autocomplete="results" details="details" ng-model="results"  options="options" on-Place-Changed="getResults()" required placeholder="Search Jobs in other Cities!!"/>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 md-margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input class="form-control" id="searchText" ng-model="searchText" googleplace placeholder="What Type of Job are you seeking??..." >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--=== End Job Img ===-->
-            <hr>
-            <!--=== Content Part ===-->
+        </div> 
+      </div><!--=== End Content Part ===-->
+ </form> 
+</div><!--/col-5-->
 
-            <div class="container text-left" style="float:left; width:70%;">
-                <section>
-                    <div id="comments_block">
-                        <div class="container text-left" ng-app="hirelyApp" ng-controller="JobCtrl" >
-                            <div ng-repeat="job in split_jobs" class="row">
-                                <div class="col-md-5" ng-repeat="job in jobOpenings | orderBy:'orderBy'| filter:selected  | filter:results | filter:searchText " >
-                                    <div class="nf-item branding coffee spacing">
-                                        <div class="item-box">
-                                            <a ng-Click='setJobResults(job.UID)' href="#"><img class="item-container" src="{{job.Image}}" alt="" width="450" height="350"></a>
-                                            <div class="absolute1"><blockquote style="border: opx solid #666; padding: 0px; background-color: #303030; ">
-                                                <h3><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">{{job.Job_Title}}</font></a></h3>
-                                                <h4><a ng-Click='setJobResults(job.UID)' href="#"><font color="white">@ {{job.Company}}</font></a></h4></div>
-                                            <div class="absolute2 "><p class="white"><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</font></i></p><font color="red"><i class="fa fa-clock-o"></font></i><font color="white">{{job.Shifts}}</font></i></div></blockquote></div>
-                                    </div><!--//people-->
-                                    <div class="item-mask">
-                                        <div class="item-caption">
-                                            <hr>
-                                            <span style="padding-left:0px"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!--=== End Content Part ===-->
+<!-- Right Inner -->
+<div class="col-sm-6 map">
+    <div class="google-map-canvas" id="map-canvas" ng-controller="MainCtrl">   
+       <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" control="googlemap">
+           <ui-gmap-window coords="MapOptions.markers.selected.coords" show="windowOptions.show" options="windowOptions" options="marker.options"closeClick="closeClick()">
+            </ui-gmap-window>
+            <ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'" click="'onClick'" events="markers.events" options="marker.options"></ui-gmap-markers>
 
-                </section>
-            </div>
-
-
-            <div style="float:left; width:30%; ">
-                <section>
-                    <body ng-app="hirelyApp">
-                    <div class="angular-google-map-container" ng-controller="MainCtrl">      {{job.Lat}} {{job.Lon}}
-                        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" control="googlemap">
-                            <ui-gmap-window coords="MapOptions.markers.selected.coords" show="windowOptions.show" options="windowOptions" options="marker.options"closeClick="closeClick()">
-                            </ui-gmap-window>
-                            <ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'" click="'onClick'" events="markers.events" options="marker.options"></ui-gmap-markers>
-                        </ui-gmap-google-map>
-                    </div>
-                    </body>
-                </section>
-            </div>
-        </div>
+        </ui-gmap-google-map>
     </div>
+ </div>
 
-
+ </div>
 </div>
 <!-- JS Global Compulsory -->
 </body>

@@ -1,6 +1,4 @@
-<<<<<<< Updated upstream:hirelyApp/www/app/jobdetails/jobDetails.html
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -34,110 +32,26 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">    
     <link rel="stylesheet" href="css/jobdetails.css">
 </head>
+<style>
+#content {
+    background-color: #F8F8F8;
+    width: 655px;
+    height: 155px;
+    padding: 25px 30px 25px 30px;
+    position: absolute;
+    bottom: 60px;
+    top: 150px;
+    left: 0px;
+}
 
+}
+</style>
 <div ng-app="hirelyApp" ng-controller="JobDetailCtrl" ><!--=== Job Selection ===-->
 <div ng-repeat="job in jobDetails | orderBy:'orderBy'| filter:jobUID | limitTo:1" >
 
 <body>
 <div class="wrapper"><!--=== Content Part ===-->
 <div class="container content">
-=======
-<style>
-div.stars {
-  width: 140px;
-  display: inline-block;
-}
-input.star { display: none; }
-
-label.star {
-  float: left;
-  padding: 5px;
-  font-size: 18px;
-  color: #444;
-  transition: all .2s;
-}
-
-input.star:checked ~ label.star:before {
-  content: '\f005';
-  color: #FD4;
-  transition: all .25s;
-}
-
-input.star-5:checked ~ label.star:before {
-  color: #FE7;
-  text-shadow: 0 0 20px #952;
-}
-
-input.star-1:checked ~ label.star:before { color: #F62; }
-
-label.star:hover { transform: rotate(-15deg) scale(1.3); }
-
-label.star:before {
-  content: '\f006';
-  font-family: FontAwesome;
-}
-IMG.displayed {
-    display: block;
-    margin-left: auto;
-    margin-right: auto 
-}
-  P.blocktext {
-    margin-left: 175px;
-    margin-right: 0px;
-    width: 50em
-}  
-body {
-    background-color: #FAFAFA;
-}
-div.absolute1 {
-    position: absolute;
-    border: 200px;
-    padding: 15px;
-    top: 250px;
-    left: 0;
-    width: 400px;
-    height: 50px;
-    border: 3px;
-}
-div.absolute2 {
-    position: absolute;
-    border: 200px;
-    padding: 15px;
-    top: 480px;
-    right: 450px;
-    width: 300px;
-    height: 200px;
-    border: 3px;
-}
-li {
-    overflow: hidden;
-}
-.buttons, .owners {
-    float: left;
-}
-.text {
-    overflow: hidden;
-    color: red;
-    padding-left: 4px;
-}
-#comments_block {
-   overflow-y: scroll;
-   overflow-x: hidden;
-   width: 1000px;
-   height: 1560px;
-}
-.angular-google-map-container { 
-  width: 1000px;
-  height: 1560px;
-}
-</style>
-
- <div class="wrapper"><!--=== Content Part ===-->
-<div class="container content">
-  <img class="displayed" src="{{job.Image}}" alt="" width="1140" height="500">
- <div class="absolute2 " style="border: 10px solid #666; padding: 0px; background-color: #303030; "><p class="white"><h3><i class="fa fa-dollar-sign"><font color="white">{{job.Wage}}</i></font><li class="fa fa-clock-o"><font color="white">{{job.Shifts}}</font></h3></li></div></blockquote></div>
-
->>>>>>> Stashed changes:hirelyApp/src/app/jobdetails/jobDetails.html
     <!--=== Job Description ===-->
     
     <div class="job-description">
@@ -151,13 +65,13 @@ li {
                     <div class="left-inner">
                       <div class="title-box-v2">
                          <ul class="list-inline">  
-                            <li><h1>{{job.Job_Title}}</h1></li>  
+                            <li><h2>{{job.Job_Title}}</h2></li>  
                             <li><font color="red"><h4><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Now Hiring&nbsp;!!</label></h4></font></li>   
                         </ul>
                         </div>
                         <div class="overflow-h">
                          <ul class="list-inline">    
-                            <li><h3>{{job.Company}}</h3></li>
+                            <li><h4>{{job.Company}}</h4></li>
                             <li><div class="stars">
                               <form action="">
                                 <input class="star star-5" id="star-5" type="radio" name="star"/>
@@ -182,16 +96,15 @@ li {
                             <div>
                             </div>
                         </div>
-
-                        <hr>
-
+                        <hr> 
+                        <div id="content">
                         <h4>About the Position</h4>
                         <p>This job was a great job for the pay and benefits when compared to waiting table and working fast food. I also preferred working for the vs other stores like . The biggest problem was unreasonable expectations from management. Even as one of there top employees you feel taken advantage of and over worked. Dealing with the customers was the other issue.</p>
-
                         <hr>
+                       
 
-                        <h5>Total Compensation</h5>
                         <div class="overflow-h">
+                        <h5>Total Compensation</h5>
                             <div>
                                 <ul class="list-inline">    
                                     <li><p class="blocktext">Wage:&nbsp;&nbsp;Hourly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Commission:&nbsp;&nbsp;No</span></P></li>
@@ -199,19 +112,22 @@ li {
                                 </ul>
                             </div>
                         </div>
-
                         <hr>
-
+                  
+                        <div class="overflow-h">
                         <h5>Perks and Benefits</h5>
+                        <div>
                         <ul class="list-unstyled">
                             <li><p class="blocktext"><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li>
                             <li><p class="blocktext"><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations</p></li>
                             <li><p class="blocktext"><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</p></li>
                         </ul>
-
+                        </div>
+                        </div>
                         <hr>
-
-                        <h5>Typical Task</h5>
+                        <div class="overflow-h">
+                        <h5>Typical Task</h5>  
+                        <div>
                         <p>A Wal-Mart cashier is responsible for effectively executing and adhering to the “Basic Beliefs” of the founder, Sam Walton.</p>
                         <ul class="list-unstyled">
                             <li><p class="blocktext"><i class="fa fa-check color-green"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li>
@@ -229,17 +145,19 @@ li {
                             <li><p class="blocktext"><i class="fa fa-check color-green"></i> The biggest problem was unreasonable expectations</p></li>
                             <li><p class="blocktext"><i class="fa fa-check color-green"></i> Dealing with the customers was the other issue</p></li>
                         </ul>
-
-                        </ul>
-
+                        </div>
+                        </div>
                         <hr>
-                        <h5>Availablity</h5>
-
+                        <div class="overflow-h">
+                          <h5>Availablity</h5>  
+                        <div>
+                         </div>
 
                     </div>
-                </div>
+                    </div>
+                    </div>
+    </div>
                 <!-- End Left Inner -->
-               
 
                 <!-- Right Inner -->
                 <div class="col-md-4">
@@ -248,29 +166,36 @@ li {
                         <div class="container">
                         <div class="people-say margin-bottom-20"> 
                          <div class="overflow-h">
+                             <ul class="list-unstyled save-job">
+                                <li><h1><i class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-heartbeat"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-map-marker"></i></h1></li>
+                                <li><h5>Hrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Benefits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miles</h5></li>
+                            </ul>
                          <ul class="list-unstyled save-job">
-                            <li><button type="button" style="width:250px;height:30px;background-color:red" ><a href="#" ><font color="white">Apply Now</font></a></button></li>
+                            <li><button type="button" style="width:290px;height:40px;background-color:red" ><a href="#" ><font color="white">Apply Now</font></a></button></li>
                          </ul>
                        </div>
                        </div>
                        </div> 
-                  \
+               
+                        <hr>
+                        
+                        <div class="people-say margin-bottom-20">
+                            <ul class="list-unstyled save-job">
+                                <li><h1><i class="fa fa-clock-o"></i></h1><a>Responds Rate:  90%</a></li>
+                                <li><a>Response Time:  24 Hours</a></li>
+                            </ul>
+                        </div> 
                         <hr>
                         <div class="people-say margin-bottom-20">
-                        <h5>About the Hiring Manager</h5>
-                            <ul class="list-unstyled save-job">
-                                <li><i class="fa fa-refresh fa-spin"></i><a>Responds in 48 hours</a></li>
-                                <li><i class="fa fa-shield"></i><a>Member since 2015</a></li>
-                            </ul>
-                        </div>
-                           <hr>
-                           <div class="people-say margin-bottom-20">
-                             <img src="{{job.HM_Photo}}" alt="">
+                         <h5>About the Hiring Manager</h5>
+                         <img class="displayed" src="{{job.HM_Photo}}" alt="" width="300" height="200">
+                            <div class="overflow-h">
+                            </div>
                         </div> 
-                           <hr>
-
-                        <h5>Latest Employee Recommendations</h5>
-                        <div class="people-say margin-bottom-20">
+                        <hr>
+                           
+                         <div class="people-say margin-bottom-20">
+                         <h5>Latest Employee Recommendations</h5>
                             <img src="assets/img/testimonials/img2.jpg" alt="">
                             <div class="overflow-h">
                                 <span>{{job.Employee1}}</span>
@@ -299,7 +224,6 @@ li {
 
                         <hr>
 
-                       
                     </div>
                 </div>
                 <!-- End Right Inner -->
@@ -307,4 +231,35 @@ li {
          </div>
        </div><!--=== End Job Description ===-->
     </div><!--/End Wrapepr-->
+  </body><!--/End Body-->
+</div>
+</div><!--=== /End Job Selection ===-->
+
+
+<!-- JS Global Compulsory -->
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-migrate.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- JS Implementing Plugins -->
+<script src="js/back-to-top.js"></script>
+<script src="js/smoothScroll.js"></script>
+<script src="js/circles.js"></script>
+<!-- JS Customization -->
+<script src="js/custom.js"></script>
+<script src="js/ng-map.min.js"></script>
+<!-- JS Page Level -->
+<script src="js/bapp.js"></script>
+<script src="js/circles-master.js"></script>
+<script src="js/style-switcher-rtl.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        App.init();
+        CirclesMaster.initCirclesMaster1();
+    });
+</script>
+<!--[if lt IE 9]>
+    <script src="assets/plugins/respond.js"></script>
+    <script src="assets/plugins/html5shiv.js"></script>
+    <script src="assets/plugins/placeholder-IE-fixes.js"></script>
+<![endif]-->
 
