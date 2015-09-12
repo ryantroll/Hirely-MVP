@@ -217,8 +217,8 @@
        {
             id: 18,
             coords: {
-                latitude: $scope.details.geometry.location.G,
-                longitude: $scope.details.geometry.location.K,
+                latitude: $scope.details.geometry.location.lat,
+                longitude: $scope.details.geometry.location.lng
                 },
             data: 'Job Location Search Area!'
         }
