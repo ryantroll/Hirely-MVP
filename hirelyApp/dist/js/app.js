@@ -2276,9 +2276,10 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
             types: '(regions)'
         };
         $scope.details = '';
-        $scope.candidate = {};
+        $scope.candidate = {authorizedInUS: false};
 
-        if($scope.profile){
+        if($scope.profile && $scope.profile.candidate){
+
             $scope.candidate = $scope.profile.candidate;
         }
 

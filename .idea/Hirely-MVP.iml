@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/hirelyApp/node_modules/grunt-contrib-jshint/node_modules/jshint/src/platforms" />
       <excludeFolder url="file://$MODULE_DIR$/hirelyApp/node_modules/gulp-jshint/node_modules/jshint/src/platforms" />
-      <excludeFolder url="file://$MODULE_DIR$/hirelyApp/platforms" />
+      <excludeFolder url="file://$MODULE_DIR$/hirelyApp/client/platforms" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1,6 +1,6 @@
 module.exports = function() {
-    var client = './www/';
-    var cssFolder = './www/css/';
+    var client = './client/www/';
+    var cssFolder = './client/www/css/';
     var clientApp = client + 'app/';
     var temp = clientApp + 'core';
     var config = {
@@ -14,12 +14,12 @@ module.exports = function() {
         bower: {
             json: require('./bower.json'),
             directory: './lib/',
-            ignorePath: '../..'
+            ignorePath: ''
         },
         build: './dist/',
         client: client,
         cssFolder: cssFolder,
-        fonts: './lib//font-awesome/fonts/**/*.*',
+        fonts: './lib/font-awesome/fonts/**/*.*',
         htmltemplates: clientApp + '**/*.html',
 
         images: client + 'img/**/*.*',

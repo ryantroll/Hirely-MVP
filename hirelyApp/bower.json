@@ -24,9 +24,7 @@
     "ngMask": "angular-mask#~3.0.12",
     "rsvp.js": "rsvp#~3.1.0",
     "tc-angular-chartjs": "~1.0.12",
-    "wow": "wowjs#~1.1.2"
-  },
-  "devDependencies": {
+    "wow": "wowjs#~1.1.2",
     "ment.io": "~0.9.23"
   }
 }

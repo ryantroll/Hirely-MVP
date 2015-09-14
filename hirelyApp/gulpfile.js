@@ -8,23 +8,23 @@ var watch = require('gulp-watch');
 var $ = require('gulp-load-plugins')({lazy: true});
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+  sass: ['./client/scss/**/*.scss']
 };
 
 
 gulp.task('default', ['sass']);
 
 gulp.task('sass', function(done) {
-  gulp.src('./scss/ionic.app.scss')
+  gulp.src('./client/scss/ionic.app.scss')
     .pipe(sass({
       errLogToConsole: true
     }))
-    .pipe(gulp.dest('./www/css/'))
+    .pipe(gulp.dest('./client/www/css/'))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
     .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./www/css/'))
+    .pipe(gulp.dest('./client/www/css/'))
     .on('end', done);
 });
 
@@ -97,7 +97,7 @@ gulp.task('clean-fonts', function(done) {
 });
 
 gulp.task('clean-images', function(done) {
-    clean(config.build + 'images/**/*.*', done);
+    clean(config.build + 'img/**/*.*', done);
 });
 
 gulp.task('clean-styles', function(done) {
@@ -143,16 +143,16 @@ gulp.task('wiredep', function() {
         .src(config.index)
         .pipe(wiredep(options))
         .pipe(inject(gulp.src(config.js, {read: false}), {relative: true}))
-        .pipe(gulp.dest('./www'));
+        .pipe(gulp.dest('./client/www'));
 });
 
-gulp.task('inject', ['wiredep', 'styles'], function() {
+gulp.task('inject', ['wiredep', 'styles', 'fonts', 'images'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
     return gulp
         .src(config.index)
         .pipe(inject(gulp.src(config.cssFolder, {read: false}), {relative: true}))
-        .pipe(gulp.dest('./www'));
+        .pipe(gulp.dest('./client/www'));
 });
 
 gulp.task('optimize', ['inject','images', 'fonts'], function() {
