@@ -5,6 +5,7 @@
     "angular-animate": "~1.4.5",
     "angular-bootstrap": "~0.13.3",
     "angular-google-maps": "~2.1.6",
+    "angular-slider": "venturocket-angular-slider#~0.3.2",
     "angular-ui-grid": "~3.0.5",
     "angular-ui-router": "~0.2.15",
     "angularfire": "~1.1.2",
@@ -21,10 +22,11 @@
     "isMobile": "~0.3.9",
     "jquery": "~2.1.4",
     "lodash": "~3.10.1",
+    "ment.io": "~0.9.23",
+    "ng-currency": "~0.8.7",
     "ngMask": "angular-mask#~3.0.12",
     "rsvp.js": "rsvp#~3.1.0",
     "tc-angular-chartjs": "~1.0.12",
-    "wow": "wowjs#~1.1.2",
-    "ment.io": "~0.9.23"
+    "wow": "wowjs#~1.1.2"
   }
 }

@@ -216,6 +216,15 @@ new WOW().init();
     angular.module('hirelyApp.account', []);
 })();
 /**
+ * Created by labrina.loving on 8/8/2015.
+ */
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.core', []);
+})();
+
+/**
  * Created by labrina.loving on 8/16/2015.
  */
 
@@ -223,15 +232,6 @@ new WOW().init();
     'use strict';
 
     angular.module('hirelyApp.candidate', []);
-})();
-
-/**
- * Created by labrina.loving on 8/8/2015.
- */
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.core', []);
 })();
 
 /**
@@ -295,7 +295,9 @@ var myApp = angular.module('hirelyApp',
         'uiGmapgoogle-maps',
         'firebase',
         'ngMask',
+        'ng-currency',
         'tc.chartjs',
+        'vr.directives.slider',
         'hirelyApp.layout',
         'hirelyApp.home',
         'hirelyApp.shared',
@@ -603,130 +605,6 @@ var myApp = angular.module('hirelyApp',
 
 
 })();
-
-/**
- * Created by labrina.loving on 8/26/2015.
- **/
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
-
-
-    function CandidateCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
-        var vm = this;
-
-        $scope.user = userService.getCurrentUser();
-
-
-
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.user = args.message;
-
-
-        });
-    }
-})()
-;
-
-
-/**
- * Created by labrina.loving on 8/16/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
-
-
-    function CandidateDashboardCtrl($scope, $stateParams) {
-
-        var vm = this;
-        $scope.uiGridOptions  = {
-            data: 'recentApps',
-            columnDefs: [{
-                field: 'company'
-            }, {
-                field: 'position'
-            }, {
-                field: 'application date'
-            },
-                {
-                    field: 'current status'
-                }
-            ]
-        };
-
-        $scope.recentApps = [];
-
-        if($scope.user.Applications){
-            $scope.recentApps = $scope.user.Applications;
-        }
-
-        // Chart.js Data
-        $scope.data = [
-            {
-                value: 5,
-                color:'#FFA540',
-                highlight: '#BF7C30',
-                label: 'Review'
-            },
-            {
-                value: 2,
-                color: '#38A2D0',
-                highlight: '#5AD3D1',
-                label: 'Interview Scheduled '
-            },
-            {
-                value: 1,
-                color: '#37DB79',
-                highlight: '#FFC870',
-                label: 'Passed'
-            }
-        ];
-
-        // Chart.js Options
-        $scope.options =  {
-
-            // Sets the chart to be responsive
-            responsive: true,
-
-            //Boolean - Whether we should show a stroke on each segment
-            segmentShowStroke : true,
-
-            //String - The colour of each segment stroke
-            segmentStrokeColor : '#fff',
-
-            //Number - The width of each segment stroke
-            segmentStrokeWidth : 2,
-
-            //Number - The percentage of the chart that we cut out of the middle
-            percentageInnerCutout : 50, // This is 0 for Pie charts
-
-            //Number - Amount of animation steps
-            animationSteps : 100,
-
-            //String - Animation easing effect
-            animationEasing : 'easeOutBounce',
-
-            //Boolean - Whether we animate the rotation of the Doughnut
-            animateRotate : true,
-
-            //Boolean - Whether we animate scaling the Doughnut from the centre
-            animateScale : false,
-
-            showLegend: false
-
-          };
-
-
-
-    }
-})()
-;
 
 /**
  * Created by labrina.loving on 8/8/2015.
@@ -1159,6 +1037,53 @@ angular.module('hirelyApp.core')
     }]);
 
 /**
+ * Created by labrina.loving on 9/15/2015.
+ */
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.core')
+        .service('OccupationService', ['$q','FBURL', '$firebaseObject', 'fbutil', OccupationService]);
+
+    function OccupationService($q, FBURL, $firebaseObject, fbutil, OccupationService) {
+
+        this.getOccupations = function getOccupations(){
+
+            var occupationRef =  new Firebase(FBURL + "/onetOccupation");
+            var deferred = $q.defer();
+            occupationRef.once("value", function (snapshot) {
+                    var occupations = [];
+                    snapshot.forEach(function(item, key) {
+                        var itemVal = item.val();
+                        var occupation = {
+                            id: '',
+                            title: '',
+                            socCode: ''
+                        }
+                        occupation.id = key;
+                        occupation.title = itemVal.title;
+                        occupation.socCode = itemVal.onetsocCode;
+                        occupations.push(occupation);
+
+
+                    });
+                    deferred.resolve(occupations);
+
+                }, function (err) {
+                    deferred.reject(snapshot);
+                }
+            );
+            return deferred.promise;
+
+        };
+
+
+    };
+})();
+
+
+/**
  * Created by labrina.loving on 9/10/2015.
  */
 
@@ -1179,9 +1104,13 @@ angular.module('hirelyApp.core')
             this.employmentTypes = {};
             this.photo = '';
             this.positionId = '';
-        }
+            this.status = '';
+            this.siteId = '';
+            this.occupationId = '';
+            this.postDate = '';
+        };
 
-        this.getOpenPositions = function getOpenPositions(){
+        this.getOpenPositionsForLocation = function getOpenPositionsForLocation(locationId){
             var ref = new Firebase(FBURL);
             var deferred = $q.defer();
             var positions = new Firebase.util.NormalizedCollection(
@@ -1193,9 +1122,16 @@ angular.module('hirelyApp.core')
             );
 
             // specify the fields for each path
-            positions = positions.select({key: 'position.$value', alias: 'position'}, 'businessSite.parentBusiness', 'business.name', 'business.photos');
+            positions = positions.select({key: 'position.$value', alias: 'position'}, {key: 'businessSite.$value', alias: 'businessSite'}, 'businessSite.parentBusiness', 'business.name', 'business.photos');
 
+            positions =  positions.filter(
+                function(data, key, priority)
+                {
+                    var isActive  =  key == locationId && data.businessSite.currentlyHiring == true;
+                    return isActive;
 
+                }
+            );
 
 
 
@@ -1204,15 +1140,19 @@ angular.module('hirelyApp.core')
             positionsRef.once('value', function(snap) {
                     var positions = snap.val();
                     var availPositions = [];
-                    angular.forEach(positions, function(site) {
+                    angular.forEach(positions, function(site, siteKey) {
                         if(site.position) {
-                            angular.forEach(site.position, function (positionObj) {
+                            angular.forEach(site.position, function (positionObj, positionKey) {
                                 var position = new positionModel();
-
+                                position.positionId = positionKey;
+                                position.site = siteKey;
+                                position.occupationId = positionObj.occupation;
+                                position.postDate = positionObj.postDate;
                                 position.companyName = site.name;
                                 position.title = positionObj.title;
                                 position.wage = positionObj.wage;
                                 position.employmentTypes = positionObj.employmentTypes;
+                                position.status = positionObj.status;
                                 var defaultPhoto = _.matcher({main: "true"});
                                 var photo =  _.filter(site.photos, defaultPhoto);
                                 if(photo){
@@ -1234,8 +1174,8 @@ angular.module('hirelyApp.core')
 
             return deferred.promise;
 
-        }
-    }
+        };
+    };
 })();
 
 
@@ -1299,9 +1239,9 @@ angular.module("hirelyApp").run(["$templateCache", function($templateCache) {$te
 $templateCache.put("app/account/register.html","<div class=modal-signup><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true ng-click=vm.CloseModal()>&times;</button><h4 id=signupModalLabel class=\"modal-title text-center\">Want to Join hirely? Sign up now.</h4><p class=\"intro text-center\">It only takes 3 minutes!</p><p></p></div><div class=modal-body><div class=\"social-login text-center\"><ul class=\"list-unstyled social-login\"><li><button class=\"facebook-btn btn\" type=button ng-click=vm.FbRegister()><i class=\"fa fa-facebook\"></i>Sign up with Facebook</button></li><li><button class=\"twitter-btn btn\" type=button><i class=\"fa fa-twitter\"></i>Sign up with Twitter</button></li><li><button class=\"google-btn btn\" type=button ng-click=vm.GoogleRegister()><i class=\"fa fa-google-plus\"></i>Sign up with Google</button></li></ul></div><div class=divider><span>Or</span></div><div class=login-form-container><form name=loginForm class=login-form ng-submit=vm.registerNewUser()><div class=\"form-group firstName\"><label class=sr-only for=signupfirstName>First Name</label> <input id=signupfirstName name=signupfirstName type=text class=\"form-control login-email\" required placeholder=\"First Name\" ng-model=user.firstName><div role=alert><span class=error ng-show=\"loginForm.signupfirstName.$error.required && !loginForm.signupfirstName.$pristine\">First Name is required</span></div></div><div class=\"form-group lastName\"><label class=sr-only for=signuplastName>last Name</label> <input id=signuplastName name=signuplastName type=text class=\"form-control login-email\" required placeholder=\"Last Name\" ng-model=user.lastName><div role=alert><span class=error ng-show=\"loginForm.signuplastName.$error.required && !loginForm.signuplastName.$pristine\">Last Name is required</span></div></div><div class=\"form-group email\"><label class=sr-only for=signupEmail>Your email</label> <input id=signupEmail name=signupEmail type=email class=\"form-control login-email\" required placeholder=\"Your email\" ng-model=user.email><div role=alert><span class=error ng-show=\"loginForm.signupEmail.$error.required && !loginForm.signupEmail.$pristine\">Email is required</span> <span class=error ng-show=loginForm.signupEmail.$error.email>Invalid email format</span></div></div><div class=\"form-group password\"><label class=sr-only for=signupPassword>Your password</label> <input id=signupPassword name=signupPassword type=password class=\"form-control login-password\" ng-minlength=6 ng-maxlength=12 required placeholder=Password ng-model=user.password><div role=alert><span class=error ng-show=\"loginForm.signupPassword.$error.required && !loginForm.signupPassword.$pristine\">Password is required</span> <span class=error ng-show=\"loginForm.signupPassword.$error.minlength || loginForm.signupPassword.$error.maxlength\">Password should be between 6 and 12 characters</span></div></div><button type=submit class=\"btn btn-block btn-cta-primary\" ng-disabled=!loginForm.$valid>Sign up</button><p class=note>By signing up, you agree to our terms of services and privacy policy.</p></form></div></div><div class=modal-footer><p>Already have an account? <a class=login-link id=login-link href=#>Log in</a></p></div></div>");
 $templateCache.put("app/candidate/candidate-dashboard.html","<div ng-controller=CandidateDashboardCtrl><div class=layered-content><div class=row><div class=col-sm-6><div class=\"service-block-v3 service-block-u\"><i class=\"fa fa-user fa-3x\"></i><div class=profile-card-info><h3>{{user.firstName}}</h3><small>Bethesda, MD USA</small></div><div><canvas tc-chartjs-doughnut chart-options=options chart-data=data></canvas></div><div class=\"clearfix profile-stat-info\"><h4><span class=counter>17</span><span>Jobs Applied</span></h4></div></div></div><div class=col-sm-6><div class=\"service-block-v3 service-block-blue\"><i class=\"fa fa-gears\"></i><h5>You are a</h5><h3>Visionary/Analyzer</h3><div class=\"clearfix margin-bottom-10\"></div><div class=\"row margin-bottom-10\"><div class=\"col-xs-6 service-in\"><div class=panel-body><span>Top Skills</span> <small>HTML/CSS</small> <small>92%</small><div class=\"progress progress-u progress-xxs\"><div style=\"width: 92%\" aria-valuemax=100 aria-valuemin=0 aria-valuenow=92 role=progressbar class=\"progress-bar progress-bar-u\"></div></div><small>.Net</small> <small>85%</small><div class=\"progress progress-u progress-xxs\"><div style=\"width: 85%\" aria-valuemax=100 aria-valuemin=0 aria-valuenow=77 role=progressbar class=\"progress-bar progress-bar-u\"></div></div><small>Javascript</small> <small>77%</small><div class=\"progress progress-u progress-xxs\"><div style=\"width: 77%\" aria-valuemax=100 aria-valuemin=0 aria-valuenow=85 role=progressbar class=\"progress-bar progress-bar-u\"></div></div></div></div><div class=\"col-xs-6 service-in\"><div class=panel-body><span>Top Traits</span> <small>Visionary</small> <small>78%</small><div class=\"progress progress-u progress-xxs\"><div style=\"width: 78%\" aria-valuemax=100 aria-valuemin=0 aria-valuenow=92 role=progressbar class=\"progress-bar progress-bar-u\"></div></div><small>Analyzer</small> <small>72%</small><div class=\"progress progress-u progress-xxs\"><div style=\"width: 72%\" aria-valuemax=100 aria-valuemin=0 aria-valuenow=77 role=progressbar class=\"progress-bar progress-bar-u\"></div></div><small>Mentor</small> <small>72%</small><div class=\"progress progress-u progress-xxs\"><div style=\"width: 72%\" aria-valuemax=100 aria-valuemin=0 aria-valuenow=85 role=progressbar class=\"progress-bar progress-bar-u\"></div></div></div></div></div><div class=\"clearfix profile-stat-trait\"><h4><span class=counter>150</span><span>Companies are looking for you</span></h4></div></div></div></div></div><hr><div class=\"panel space-4\"><div class=panel-header><i class=\"fa fa-files-o\"></i> Recent Applications</div><div class=panel-body><div id=gridRecentApps ui-grid=uiGridOptions class=grid></div></div></div></div>");
 $templateCache.put("app/candidate/candidate.html","<div class=\"row profile\"><div class=\"col-md-3 md-margin-bottom-40\"><div class=profile-pic><img class=img-circle src=\"{{currentUser.profileImageUrl && currentUser.profileImageUrl || \'img/avatar.jpg\' }}\" alt={{user.displayName}}></div><ul class=\"list-group sidebar-nav-v1 margin-bottom-40\" id=sidebar-nav-1><li class=list-group-item><a ui-sref-active=active ui-sref=app.candidate.dashboard><i class=\"fa fa-bar-chart-o\"></i> Dashboard</a></li><li class=list-group-item><a ui-sref-active=active ui-sref=app.candidate.profile.basics><i class=\"fa fa-user\"></i> Profile</a></li><li class=list-group-item><a ui-sref-active=active href=page_profile_users.html><i class=\"fa fa-files-o\"></i> Applications</a></li><li class=list-group-item><a ui-sref-active=active href=page_profile_projects.html><i class=\"fa fa-heart-o\"></i> Favorites</a></li><li class=list-group-item><a ui-sref-active=active href=page_profile_comments.html><i class=\"fa fa-gears\"></i> My Personality</a></li><li class=list-group-item><a ui-sref-active=active href=page_profile_history.html><i class=\"fa fa-cog\"></i> Settings</a></li></ul></div><div class=col-md-9><div class=\"candidate-content row\" ui-view></div></div></div>");
-$templateCache.put("app/home/home.html","<section id=promo class=\"promo section\"><div class=fixed-container><div class=search ng-controller=HomeCtrl><div class=\"container text-center\"><h1 class=title>Opportunity Awaits</h1><form class=search-form ng-submit=getResults()><div class=form-group><input type=text id=Autocomplete class=form-control ng-autocomplete details=details ng-model=results options=options required placeholder=\"Where\'s your next gig?\"></div><button type=submit class=\"btn btn-cta btn-cta-primary btn-search\"><span class=btn-search-inner></span></button></form></div></div></div><div class=bg-slider-wrapper><div id=bg-slider class=\"flexslider bg-slider\" flexslider><ul class=slides><li class=\"slide slide-1\"></li><li class=\"slide slide-2\"></li><li class=\"slide slide-3\"></li><li class=\"slide slide-4\"></li></ul></div></div></section><section id=why class=\"why section\"><div class=container><h2 class=\"title text-center\">We totally get it</h2><p class=\"intro text-center\">We are disrupting the way local hourly talent and small businesses connect.</p><img class=img-responsive src=img/hirely_protos.png><div class=\"row services\"><div class=\"col-lg-4 col-sm-4 focus-box red wow fadeInLeft animated\" data-wow-offset=30 data-wow-duration=1.5s data-wow-delay=0.15s><div class=service-icon><i class=\"fa fa-list fa-4x\"></i></div><h5 class=red-border-bottom>Informative Listings</h5><p>Detailed job cards show you the information that\'s most important. Hirely ensures jobs are active and informative.</p></div><div class=\"col-lg-4 col-sm-4 focus-box green wow fadeInLeft animated\" data-wow-offset=30 data-wow-duration=1.5s data-wow-delay=0.15s><div class=service-icon><i class=\"fa fa-user fa-4x\"></i></div><h5 class=green-border-bottom>Applicant Cards</h5><p>You\'re more than a resume. Applicant cards let you showcase who you are and easily apply to jobs.</p></div><div class=\"col-lg-4 col-sm-4 focus-box blue wow fadeInRight animated\" data-wow-offset=30 data-wow-duration=1.5s data-wow-delay=0.15s><div class=service-icon><i class=\"fa fa-search fa-4x\"></i></div><h5 class=blue-border-bottom>Intelligent Search</h5><p>Time is of the essence when you are looking for a job. Our technology works hard to find you to the right opportunities.</p></div></div></div></section>");
-$templateCache.put("app/job/job-search.html","<style>\r\n    .content{\r\n        background: #fff;\r\n    }\r\n\r\n    .angular-google-map-container {\r\n       height: 1560px;\r\n        overflow: hidden;\r\n    }\r\n    body{\r\n        overflow: hidden;\r\n    }\r\n\r\n\r\n</style><div class=\"job-search row grid-space-10\" ng-controller=JobSearchCtrl><div class=\"col-md-7 col-sm-12 search-results\"><div class=row><div class=\"col-sm-6 col-md-4 job-item\" ng-repeat=\"position in positions\"><div class=\"image-box style-2 margin-bottom-20 shadow bordered light-gray-bg text-center\"><div class=job-image><img src={{position.photo}} class=img-responsive alt> <a class=panel-overlay-job-image><div><sup>$</sup> <span class=wage>{{position.wage.amount}}/{{position.wage.frequency}}</span></div></a></div><div class=body><div class=job-info><div class=company-info><h4>{{position.title}}</h4><h6>FT/PT</h6></div><div class=company-info><h5>{{position.companyName}}</h5><h6>0.3 miles</h6></div></div><div class=separator></div><div class=\"row job-action\"><div class=\"col-xs-4 col-md-4\"><a><i class=\"fa fa-heart-o fa-lg\"></i></a></div><div class=\"col-xs-4 col-md-4\"><a><i class=\"fa fa-share-square-o fa-lg\"></i></a></div><div class=\"col-xs-4 col-md-4\"><a><i class=\"fa fa-close fa-lg\"></i></a></div></div><div></div></div></div></div></div></div><div class=\"col-md-5 col-sm-12 search-results-map\"><div class=angular-google-map-container><ui-gmap-google-map center=map.center zoom=map.zoom draggable=true options=map.options events=map.events control=googlemap><ui-gmap-window coords=MapOptions.markers.selected.coords show=windowOptions.show options=windowOptions closeclick=closeClick()></ui-gmap-window><ui-gmap-markers models=markers idkey=markers.id coords=\"\'coords\'\" click=\"\'onClick\'\" events=markers.events options=marker.options></ui-gmap-markers></ui-gmap-google-map></div></div></div>");
+$templateCache.put("app/job/job-search.html","<style>\r\n    .content{\r\n        background: #fff;\r\n    }\r\n\r\n    .angular-google-map-container {\r\n       height: 860px;\r\n\r\n    }\r\n\r\n    body{\r\n        overflow: hidden;\r\n    }\r\n    slider {\r\n        display: inline-block;\r\n        position: relative;\r\n        height: 7px;\r\n        width: 100%;\r\n        margin: 25px 0px 25px 5px;\r\n        vertical-align: middle;\r\n    }\r\n    slider span {\r\n        white-space: nowrap;\r\n        position: absolute;\r\n        display: inline-block;\r\n    }\r\n    slider span.base {\r\n        width: 100%;\r\n        height: 100%;\r\n        padding: 0;\r\n    }\r\n    slider span.bar {\r\n        width: 100%;\r\n        height: 100%;\r\n        z-index: 0;\r\n        -webkit-border-radius: 1em/1em;\r\n        border-radius: 1em/1em;\r\n        background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #c0c0c0), color-stop(1, #8d8d8d));\r\n        background: -webkit-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);\r\n        background: -moz-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);\r\n        background: -o-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);\r\n        background: -ms-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);\r\n        background: linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);\r\n        -webkit-box-shadow: inset 2px 2px 5px;\r\n        box-shadow: inset 2px 2px 5px;\r\n    }\r\n    slider span.bar.selection {\r\n        width: 0%;\r\n        z-index: 1;\r\n        background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #13b6ff), color-stop(1, #00a8f3));\r\n        background: -webkit-linear-gradient(top, #13b6ff 0, #00a8f3 100%);\r\n        background: -moz-linear-gradient(top, #13b6ff 0, #00a8f3 100%);\r\n        background: -o-linear-gradient(top, #13b6ff 0, #00a8f3 100%);\r\n        background: -ms-linear-gradient(top, #13b6ff 0, #00a8f3 100%);\r\n        background: linear-gradient(top, #13b6ff 0, #00a8f3 100%);\r\n        -webkit-box-shadow: none;\r\n        box-shadow: none;\r\n    }\r\n    slider span.pointer {\r\n        cursor: pointer;\r\n        width: 20px;\r\n        height: 20px;\r\n        top: -8px;\r\n        background-color: #fff;\r\n        border: 1px solid #000;\r\n        z-index: 2;\r\n        -webkit-border-radius: 1em/1em;\r\n        border-radius: 1em/1em;\r\n    }\r\n    slider span.pointer:after {\r\n        content: \'\';\r\n        background-color: #808080;\r\n        width: 8px;\r\n        height: 8px;\r\n        position: absolute;\r\n        top: 6px;\r\n        left: 6px;\r\n        -webkit-border-radius: 1em/1em;\r\n        border-radius: 1em/1em;\r\n    }\r\n    slider span.pointer:hover:after {\r\n        background-color: #000;\r\n    }\r\n    slider span.pointer.active:after {\r\n        background-color: #f00;\r\n    }\r\n    slider span.bubble {\r\n        cursor: default;\r\n        top: -28px;\r\n        padding: 1px 3px 1px 3px;\r\n        font-size: 12px;\r\n\r\n    }\r\n    slider span.bubble.selection {\r\n        top: 15px;\r\n    }\r\n    slider span.bubble.limit {\r\n        color: #808080;\r\n    }\r\n\r\n\r\n\r\n</style><div class=container-fluid><div class=row><div class=\"col-md-3 col-sm-3 job-filter\"><accordion><accordion-group is-open=status.open><accordion-heading>Showing {{positions.length}} jobs <i class=\"pull-right glyphicon\" ng-class=\"{\'glyphicon-chevron-down\': status.open, \'glyphicon-chevron-up\': !status.open}\"></i></accordion-heading><section><div class=form-group><label>Location</label> <input type=text id=Autocomplete class=form-control ng-autocomplete details=details ng-model=results options=options required placeholder=\"Where\'s your next gig?\"></div></section><section><label>Distance</label><slider floor=0 ceiling=100 step=5 precision=0 ng-model=filter.distance></slider></section><section><div class=form-group><label>Occupation</label> <input type=text id=txtOccupation ng-model=filter.occupation typeahead=\"occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:15\" class=form-control placeholder=Occupation></div></section><section class=form-group><label>Wage</label><div class=form-inline><input type=text ng-model=filter.minWage ng-currency min=0 max=1000 ng-required=true class=form-control> <span class=\"grid-20 in-between\">to</span> <input type=text ng-model=filter.maxWage ng-currency min=0 max=1000 ng-required=true class=form-control></div></section></accordion-group></accordion></div></div><div class=\"job-search row\"><div class=\"col-md-7 col-sm-12 search-results\"><div class=row><div class=\"col-sm-6 col-md-4 job-item\" ng-repeat=\"position in positions\"><div class=\"image-box style-2 margin-bottom-20 shadow bordered light-gray-bg text-center\"><div class=job-image><img src={{position.photoUrl}} class=img-responsive alt> <a class=panel-overlay-job-image><div><sup>$</sup> <span class=wage>{{position.wage.amount}}/{{position.wage.frequency}}</span></div></a></div><div class=body><div class=job-info><div class=company-info><h4>{{position.title}}</h4><h6>FT/PT</h6></div><div class=company-info><h5>{{position.companyName}}</h5><h6>{{position.distance | number:2}} miles</h6></div></div><div class=separator></div><div class=\"row job-action\"><div class=\"col-xs-4 col-md-4\"><a><i class=\"fa fa-heart-o fa-lg\"></i></a></div><div class=\"col-xs-4 col-md-4\"><a><i class=\"fa fa-share-square-o fa-lg\"></i></a></div><div class=\"col-xs-4 col-md-4\"><a><i class=\"fa fa-close fa-lg\"></i></a></div></div><div></div></div></div></div></div></div><div class=\"col-md-5 col-sm-12 search-results-map\"><div class=angular-google-map-container><ui-gmap-google-map center=map.center zoom=map.zoom draggable=true options=map.options events=map.events control=googlemap><ui-gmap-window coords=MapOptions.markers.selected.coords show=windowOptions.show options=windowOptions closeclick=closeClick()></ui-gmap-window><ui-gmap-markers models=mapmarkers coords=\"\'coords\'\"></ui-gmap-markers></ui-gmap-google-map></div></div></div></div>");
 $templateCache.put("app/job/jobs.html","<html ng-app=hirelyMap><head><meta charset=utf-8><title></title><meta name=viewport content=\"initial-scale=1.0, user-scalable=no\"><link rel=stylesheet href=css/styles.css><link href=\"//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700\" rel=stylesheet type=text/css><link rel=stylesheet href=css/style.css type=text/css><link rel=stylesheet href=http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css><link rel=stylesheet href=css/jobresults.css><link rel=stylesheet href=css/page_job_inner1.css></head><style>\n\n</style><body><div class=container-fluid><div class=row><div class=col-sm-5 id=comments_block><h2>Let Hirely help you find the Job you Need ...</h2>{{details.formatted_address}} {{details.geometry.location.lat}} {{details.geometry.location.lng}}<hr><form class=form-horizontal><div class=form-group><div class=\"col-sm-4 md-margin-bottom-10\"><div class=input-group ng-controller=JobSearchCtrl><span class=input-group-addon><i class=\"fa fa-tag\"></i></span> <input type=text id=search ng-model=selected typeahead=\"job as job.Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15\" class=form-control ng-init placeholder=\"Find your next gig\"></div></div><div class=\"col-sm-4 md-margin-bottom-10\"><div class=input-group><span class=input-group-addon><i class=\"fa fa-map-marker\"></i></span> <input type=text id=Autocomplete class=form-control ng-autocomplete=results details=details ng-model=results options=options on-place-changed=getResults() required placeholder=\"Search Jobs in other Cities!!\"></div></div><div class=\"col-sm-4 md-margin-bottom-10\"><div class=input-group><span class=input-group-addon><i class=\"fa fa-search\"></i></span> <input class=form-control id=searchText ng-model=searchText googleplace placeholder=\"What Type of Job are you seeking??...\"></div></div></div><hr><div class=col-xs-6><div class=\"container text-left\" ng-app=hirelyApp ng-controller=JobCtrl><div ng-repeat=\"job in split_jobs\" class=row><div class=\"col-sm-5 md-margin-bottom-10\" ng-repeat=\"job in jobOpenings | orderBy:\'orderBy\'| filter:selected | filter:results | filter:searchText\"><div class=\"nf-item branding coffee spacing\"><div class=item-box><a ng-click=setJobResults(job.UID) href=#><img class=item-container src={{job.Image}} alt width=450 height=350></a><div class=absolute1><blockquote style=\"border: opx solid #666; padding: 0px; background-color: #303030;\"><h3><a ng-click=setJobResults(job.UID) href=#><font color=white>{{job.Job_Title}}</font></a></h3><h4><a ng-click=setJobResults(job.UID) href=#><font color=white>@ {{job.Company}}</font></a></h4></blockquote></div><div class=absolute2><p class=white><i class=\"fa fa-dollar-sign\"><font color=white>{{job.Wage}}</font></i></p><font color=red><i class=\"fa fa-clock-o\"></i></font><font color=white>{{job.Shifts}}</font></div></div></div><div class=item-mask><div class=item-caption><hr><span style=padding-left:0px></span></div></div></div></div></div></div></form></div><div class=\"col-sm-6 map\"><div class=google-map-canvas id=map-canvas ng-controller=MainCtrl><ui-gmap-google-map center=map.center zoom=map.zoom draggable=true options=map.options events=map.events control=googlemap><ui-gmap-window coords=MapOptions.markers.selected.coords show=windowOptions.show options=windowOptions closeclick=closeClick()></ui-gmap-window><ui-gmap-markers models=markers idkey=markers.id coords=\"\'coords\'\" click=\"\'onClick\'\" events=markers.events options=marker.options></ui-gmap-markers></ui-gmap-google-map></div></div></div></div></body><script async defer src=\"https://maps.googleapis.com/maps/api/js?signed_in=true&callback=initMap\"></script><script src=js/jquery-migrate.min.js></script><script src=js/back-to-top.js></script><script src=js/smoothScroll.js></script><script src=js/jquery.masonry.min.js></script><script src=js/custom.js></script><script src=js/ng-map.min.js></script><script src=js/blog-masonry.js></script><script type=text/javascript src=\"https://maps.googleapis.com/maps/api/js?libraries=weather,geometry,visualization,places\">\n</script><script src=js/bapp.js></script><script type=text/javascript>\n    jQuery(document).ready(function() {\n        App.init();\n    });\n</script><script src=https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js></script><script src=https://cdn.firebase.com/js/client/2.2.4/firebase.js></script><script src=https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js></script><script src=https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-animate.js></script><script src=https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-resource.js></script><script src=https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-route.js></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js.bootstrap.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/js/material.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/js/ripples.js></script></html>");
+$templateCache.put("app/home/home.html","<section id=promo class=\"promo section\"><div class=fixed-container><div class=search ng-controller=HomeCtrl><div class=\"container text-center\"><h1 class=title>Opportunity Awaits</h1><form class=search-form ng-submit=getResults()><div class=form-group><input type=text id=Autocomplete class=form-control ng-autocomplete details=details ng-model=results options=options required placeholder=\"Where\'s your next gig?\"></div><button type=submit class=\"btn btn-cta btn-cta-primary btn-search\"><span class=btn-search-inner></span></button></form></div></div></div><div class=bg-slider-wrapper><div id=bg-slider class=\"flexslider bg-slider\" flexslider><ul class=slides><li class=\"slide slide-1\"></li><li class=\"slide slide-2\"></li><li class=\"slide slide-3\"></li><li class=\"slide slide-4\"></li></ul></div></div></section><section id=why class=\"why section\"><div class=container><h2 class=\"title text-center\">We totally get it</h2><p class=\"intro text-center\">We are disrupting the way local hourly talent and small businesses connect.</p><img class=img-responsive src=img/hirely_protos.png><div class=\"row services\"><div class=\"col-lg-4 col-sm-4 focus-box red wow fadeInLeft animated\" data-wow-offset=30 data-wow-duration=1.5s data-wow-delay=0.15s><div class=service-icon><i class=\"fa fa-list fa-4x\"></i></div><h5 class=red-border-bottom>Informative Listings</h5><p>Detailed job cards show you the information that\'s most important. Hirely ensures jobs are active and informative.</p></div><div class=\"col-lg-4 col-sm-4 focus-box green wow fadeInLeft animated\" data-wow-offset=30 data-wow-duration=1.5s data-wow-delay=0.15s><div class=service-icon><i class=\"fa fa-user fa-4x\"></i></div><h5 class=green-border-bottom>Applicant Cards</h5><p>You\'re more than a resume. Applicant cards let you showcase who you are and easily apply to jobs.</p></div><div class=\"col-lg-4 col-sm-4 focus-box blue wow fadeInRight animated\" data-wow-offset=30 data-wow-duration=1.5s data-wow-delay=0.15s><div class=service-icon><i class=\"fa fa-search fa-4x\"></i></div><h5 class=blue-border-bottom>Intelligent Search</h5><p>Time is of the essence when you are looking for a job. Our technology works hard to find you to the right opportunities.</p></div></div></div></section>");
 $templateCache.put("app/jobdetails/jobDetails.html","<head><meta charset=UTF-8><title></title><title>Jobs Description 1 | Unify - Responsive Website Template</title><meta charset=utf-8><meta name=viewport content=\"width=device-width, initial-scale=1.0\"><meta name=description content><meta name=author content><link rel=\"shortcut icon\" href=favicon.ico><link rel=stylesheet type=text/css href=\"//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin\"><link rel=stylesheet href=css/animate.css><link rel=stylesheet href=css/line-icons.css><link href=\"//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700\" rel=stylesheet type=text/css><link rel=stylesheet href=//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css><link rel=stylesheet href=css/page_job_inner1.css><link href=css/blog_masonry_3col.css rel=stylesheet><link href=css/styles.css rel=stylesheet><link href=css/style.css rel=stylesheet type=text/css><link rel=stylesheet href=http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css><link rel=stylesheet href=css/jobdetails.css></head><style>\n#content {\n    background-color: #F8F8F8;\n    width: 655px;\n    height: 155px;\n    padding: 25px 30px 25px 30px;\n    position: absolute;\n    bottom: 60px;\n    top: 150px;\n    left: 0px;\n}\n\n}\n</style><div ng-app=hirelyApp ng-controller=JobDetailCtrl><div ng-repeat=\"job in jobDetails | orderBy:\'orderBy\'| filter:jobUID | limitTo:1\"><body><div class=wrapper><div class=\"container content\"><div class=job-description><div class=item-box><img class=displayed src={{job.Image}} alt width=1140 height=500><div class=absolute2><box><blockquote style=\"border: opx solid #666; padding: 0px; background-color: #303030;\"><p class=white></p><h3><i class=\"fa fa-dollar-sign\"><font color=white>{{job.Wage}}</font></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=red><i class=\"fa fa-clock-o\"></i></font><font color=white>{{job.Shifts}}</font></h3></blockquote></box></div></div><div class=\"container content\"><div class=row><div class=col-md-7><div class=left-inner><div class=title-box-v2><ul class=list-inline><li><h2>{{job.Job_Title}}</h2></li><li><font color=red><h4><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Now Hiring&nbsp;!!</label></h4></font></li></ul></div><div class=overflow-h><ul class=list-inline><li><h4>{{job.Company}}</h4></li><li><div class=stars><form action><input class=\"star star-5\" id=star-5 type=radio name=star> <label class=\"star star-5\" for=star-5></label> <input class=\"star star-4\" id=star-4 type=radio name=star> <label class=\"star star-4\" for=star-4></label> <input class=\"star star-3\" id=star-3 type=radio name=star> <label class=\"star star-3\" for=star-3></label> <input class=\"star star-2\" id=star-2 type=radio name=star> <label class=\"star star-2\" for=star-2></label> <input class=\"star star-1\" id=star-1 type=radio name=star> <label class=\"star star-1\" for=star-1></label></form></div></li></ul></div><div class=overflow-h><p class=hex>{{job.Location}}</p><div></div><div></div></div><hr><div id=content><h4>About the Position</h4><p>This job was a great job for the pay and benefits when compared to waiting table and working fast food. I also preferred working for the vs other stores like . The biggest problem was unreasonable expectations from management. Even as one of there top employees you feel taken advantage of and over worked. Dealing with the customers was the other issue.</p><hr><div class=overflow-h><h5>Total Compensation</h5><div><ul class=list-inline><li><p class=blocktext>Wage:&nbsp;&nbsp;Hourly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Commission:&nbsp;&nbsp;No</p></li><li><p class=blocktext>Tips:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes</p></li></ul></div></div><hr><div class=overflow-h><h5>Perks and Benefits</h5><div><ul class=list-unstyled><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> The biggest problem was unreasonable expectations</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Dealing with the customers was the other issue</p></li></ul></div></div><hr><div class=overflow-h><h5>Typical Task</h5><div><p>A Wal-Mart cashier is responsible for effectively executing and adhering to the “Basic Beliefs” of the founder, Sam Walton.</p><ul class=list-unstyled><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> The biggest problem was unreasonable expectations</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Dealing with the customers was the other issue</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> The biggest problem was unreasonable expectations</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Dealing with the customers was the other issue</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Nullam laoreet est sit amet felis tristique laoreet</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> The biggest problem was unreasonable expectations</p></li><li><p class=blocktext><i class=\"fa fa-check color-green\"></i> Dealing with the customers was the other issue</p></li></ul></div></div><hr><div class=overflow-h><h5>Availablity</h5><div></div></div></div></div></div><div class=col-md-4><div class=right-inner><div class=container><div class=\"people-say margin-bottom-20\"><div class=overflow-h><ul class=\"list-unstyled save-job\"><li><h1><i class=\"fa fa-clock-o\"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class=\"fa fa-heartbeat\"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class=\"fa fa-map-marker\"></i></h1></li><li><h5>Hrs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Benefits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miles</h5></li></ul><ul class=\"list-unstyled save-job\"><li><button type=button style=width:290px;height:40px;background-color:red><a href=#><font color=white>Apply Now</font></a></button></li></ul></div></div></div><hr><div class=\"people-say margin-bottom-20\"><ul class=\"list-unstyled save-job\"><li><h1><i class=\"fa fa-clock-o\"></i></h1><a>Responds Rate: 90%</a></li><li><a>Response Time: 24 Hours</a></li></ul></div><hr><div class=\"people-say margin-bottom-20\"><h5>About the Hiring Manager</h5><img class=displayed src={{job.HM_Photo}} alt width=300 height=200><div class=overflow-h></div></div><hr><div class=\"people-say margin-bottom-20\"><h5>Latest Employee Recommendations</h5><img src=assets/img/testimonials/img2.jpg alt><div class=overflow-h><span>{{job.Employee1}}</span> <small class=\"hex pull-right\">5 - hours ago</small><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius hendrerit nisl id condimentum.</p></div></div><div class=\"people-say margin-bottom-20\"><img src=assets/img/testimonials/user.jpg alt><div class=overflow-h><span>{{job.Employee2}}</span> <small class=\"hex pull-right\">2 - days ago</small><p>Vestibulum justo est, pharetra fermentum justo in, tincidunt mollis turpis. Duis imperdiet non justo euismod semper.</p></div></div><div class=people-say><img src=assets/img/testimonials/img3.jpg alt><div class=overflow-h><span>{{job.Employee3}}</span> <small class=\"hex pull-right\">3 - days ago</small><p>A Wal-Mart cashier is responsible for effectively executing and adhering to the “Basic Beliefs” of the founder.</p></div></div><hr></div></div></div></div></div></div></div></body></div></div><script src=js/jquery.min.js></script><script src=js/jquery-migrate.min.js></script><script src=js/bootstrap.min.js></script><script src=js/back-to-top.js></script><script src=js/smoothScroll.js></script><script src=js/circles.js></script><script src=js/custom.js></script><script src=js/ng-map.min.js></script><script src=js/bapp.js></script><script src=js/circles-master.js></script><script src=js/style-switcher-rtl.js></script><script type=text/javascript>\n    jQuery(document).ready(function() {\n        App.init();\n        CirclesMaster.initCirclesMaster1();\n    });\n</script>");
 $templateCache.put("app/layout/footer.html","<footer class=footer><div class=bottom-bar><div class=container><div class=row><small class=\"copyright col-md-6 col-sm-6 col-xs-12\">Copyright @ 2015 All Rights Reserved | Privacy Policy</small><ul class=\"social col-md-6 col-sm-6 col-xs-12 list-inline\"><li><a href=https://twitter.com/hellohirely><i class=\"fa fa-twitter\"></i></a></li><li><a href=https://www.facebook.com/pages/Hirely><i class=\"fa fa-facebook\"></i></a></li><li><a href><i class=\"fa fa-envelope\"></i></a></li></ul></div></div></div></footer>");
 $templateCache.put("app/layout/header.html","<header id=header class=header><div class=container ng-controller=\"HeaderCtrl as vm\"><h1 class=\"logo pull-left\"><a ui-sref=appFS.home><span class=logo-title>hirely</span></a></h1><nav id=main-nav class=\"main-nav navbar-right\" role=navigation><div class=navbar-header><button class=navbar-toggle type=button data-toggle=collapse data-target=#navbar-collapse><span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span></button></div><div class=\"navbar-collapse collapse\" id=navbar-collapse><ul class=\"nav navbar-nav\"><li class=nav-item><a href=#>Start Hiring</a></li><li class=\"dropdown dropdown-user\" ng-show=currentUser><a href=javascript:; class=dropdown-toggle data-toggle=dropdown data-hover=dropdown data-close-others=true><div class=sign-in-divider></div><img alt class=img-circle src=\"{{currentUser.profileImageUrl && currentUser.profileImageUrl || \'img/avatar.jpg\' }}\"> <span class=\"username username-hide-on-mobile\">Hi <span ng-bind=currentUser.firstName></span></span>! <i class=\"fa fa-angle-down\"></i></a><ul class=\"dropdown-menu dropdown-menu-default\"><li><a ui-sref=app.candidate.dashboard><i class=\"fa fa-user\"></i> My Profile</a></li><li><a href=#><i class=\"fa fa-files-o\"></i> Applications</a></li><li><a href=#><i class=\"fa fa-heart\"></i> Favorites</a></li><li><a href ng-click=vm.logout()><i class=\"fa fa-lock\"></i> Log Out</a></li></ul></li><li class=nav-item ng-show=!currentUser><a ng-click=vm.login()><div class=sign-in-divider></div>Log in</a></li><li class=\"nav-item nav-item-cta last\" ng-show=!currentUser><button type=button class=\"btn btn-blue btn-cta-blue\" ng-click=vm.register()>Get Started</button></li></ul></div></nav></div></header>");
@@ -1374,7 +1314,7 @@ $templateCache.put("app/candidate/profile/candidate-profile.html","<div class=\"
                 }
             );
             return deferred.promise;
-        }
+        };
 
 
         this.getUserByEmail = function getUserByEmail(email) {
@@ -1478,9 +1418,133 @@ $templateCache.put("app/candidate/profile/candidate-profile.html","<div class=\"
 
             return fbUser;
 
-        }
+        };
     }
 })();
+
+/**
+ * Created by labrina.loving on 8/26/2015.
+ **/
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
+
+
+    function CandidateCtrl($scope, $stateParams, UserService) {
+        var userService = UserService;
+        var vm = this;
+
+        $scope.user = userService.getCurrentUser();
+
+
+
+        //listen for changes to current user
+        $scope.$on('currentUserChanged', function (event, args) {
+            $scope.user = args.message;
+
+
+        });
+    }
+})()
+;
+
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
+
+
+    function CandidateDashboardCtrl($scope, $stateParams) {
+
+        var vm = this;
+        $scope.uiGridOptions  = {
+            data: 'recentApps',
+            columnDefs: [{
+                field: 'company'
+            }, {
+                field: 'position'
+            }, {
+                field: 'application date'
+            },
+                {
+                    field: 'current status'
+                }
+            ]
+        };
+
+        $scope.recentApps = [];
+
+        if($scope.user.Applications){
+            $scope.recentApps = $scope.user.Applications;
+        }
+
+        // Chart.js Data
+        $scope.data = [
+            {
+                value: 5,
+                color:'#FFA540',
+                highlight: '#BF7C30',
+                label: 'Review'
+            },
+            {
+                value: 2,
+                color: '#38A2D0',
+                highlight: '#5AD3D1',
+                label: 'Interview Scheduled '
+            },
+            {
+                value: 1,
+                color: '#37DB79',
+                highlight: '#FFC870',
+                label: 'Passed'
+            }
+        ];
+
+        // Chart.js Options
+        $scope.options =  {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke : true,
+
+            //String - The colour of each segment stroke
+            segmentStrokeColor : '#fff',
+
+            //Number - The width of each segment stroke
+            segmentStrokeWidth : 2,
+
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout : 50, // This is 0 for Pie charts
+
+            //Number - Amount of animation steps
+            animationSteps : 100,
+
+            //String - Animation easing effect
+            animationEasing : 'easeOutBounce',
+
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate : true,
+
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale : false,
+
+            showLegend: false
+
+          };
+
+
+
+    }
+})()
+;
 
 (function () {
     'use strict';
@@ -1687,21 +1751,115 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, GeocodeServ
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'PositionService', 'GeocodeService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
+        'PositionService', 'GeocodeService', 'OccupationService','uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, uiGmapGoogleMapApi, uiGmapIsReady) {
-      var positionService = PositionService
-      $scope.positions = "";
-      $scope.mapmarkers = "";
+  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, OccupationService, uiGmapGoogleMapApi, uiGmapIsReady) {
+      var positionService = PositionService;
+      var occupationService = OccupationService;
+      var geocodeService = GeocodeService;
+
+      $scope.positions = [];
+
+      $scope.filter = {
+          distance: 20,
+          minWage: 0,
+          maxWage: 100,
+          occupation: '',
+          location: ''
+      };
       $scope.details = GeocodeService.getPlace();
+      $scope.mapmarkers = [];
+      $scope.occupations = [];
 
-      positionService.getOpenPositions().then(function(positions) {
-          $scope.positions = positions;
 
-      }, function(err) {
 
+
+      var getOccupations = function(){
+          occupationService.getOccupations().then(function(occupations) {
+             $scope.occupations = occupations;
+          }, function(err) {
+
+          });
+      };
+
+      var createMarker = function(id, lat, lng) {
+          var marker = {
+
+                  coords:{
+                      latitude: '',
+                      longitude: '',
+                  }
+
+          };
+          var idkey = "id";
+          marker[idkey] = id;
+          marker.coords.latitude = lat;
+          marker.coords.longitude = lng;
+        return marker;
+      };
+
+      var initialize = function(){
+          getOccupations();
+
+      };
+
+      var createPosition = function(openPosition, distance){
+          var position = {
+              title: '',
+              companyName: '',
+              positionId: '',
+              siteId: '',
+              wage: {
+                  amount: '',
+                  frequency: ''
+              },
+              distance: '',
+              employmentTypes: '',
+              occupationId: '',
+              postDate: '',
+              photoUrl: ''
+          };
+          position.companyName = openPosition.companyName;
+          position.distance = distance/1.60934;
+          position.employmentTypes = openPosition.employmentTypes;
+          position.status = openPosition.status;
+          position.title = openPosition.title;
+          position.wage = openPosition.wage;
+          position.employmentTypes = openPosition.employmentTypes;
+          position.siteId = openPosition.siteId;
+          position.positionId = openPosition.positionId;
+          position.occupationId = openPosition.occupationId;
+          position.postDate = openPosition.postDate;
+          position.photoUrl = openPosition.photo;
+          return position;
+      }
+
+      //TODO:  move this to a seperate service
+      var firebaseRef = new Firebase("https://shining-torch-5144.firebaseio.com/businessSiteLocation");
+      var geoFire = new GeoFire(firebaseRef);
+      var geoQuery = geoFire.query({
+          center: [$scope.details.geometry.location.lat, $scope.details.geometry.location.lng],
+          radius:  $scope.filter.distance * 1.60934
       });
+
+
+      var onKeyEnteredRegistration = geoQuery.on("key_entered", function(key, location, distance) {
+          positionService.getOpenPositionsForLocation(key).then(function(positions) {
+              angular.forEach(positions, function(openPosition) {
+                  if(openPosition.status == 'Active') {
+                      $scope.positions.push(createPosition(openPosition, distance));
+                      $scope.mapmarkers.push(createMarker(key, location[0], location[1]));
+                  }
+
+              });
+          }, function(err) {
+
+          });
+
+          //get active jobs at each location
+      });
+
 
       uiGmapGoogleMapApi
           .then(function(maps){
@@ -1711,7 +1869,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, GeocodeServ
                       latitude: $scope.details.geometry.location.lat,
                       longitude: $scope.details.geometry.location.lng
                   },
-                  zoom: 14,
+                  zoom: 10,
                   pan: 1,
                   options: $scope.mapOptions,
                   control: {},
@@ -1741,7 +1899,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, GeocodeServ
           $scope.windowOptions.show = false;
       };
 
-      $scope.title = "Window Title!";
+
 
       uiGmapIsReady.promise()                                    // if no value is put in promise() it defaults to promise(1)
           .then(function(instances) {
@@ -1751,40 +1909,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, GeocodeServ
               $scope.addMarkerClickFunction($scope.markers);
           });
 
-      $scope.markers = [
-          {
-              id: 0,
-              coords: {
-                  latitude: 38.9071923,
-                  longitude: -77.03687070000001,
-                  draggable: false,
-                  animation: 1 // 1: BOUNCE, 2: DROP
-              },
-              data: 'restaurant'
-          },
-          {
-              id: 1,
-              coords: {
-                  latitude: 38.8799697,
-                  longitude: -77.1067698,
-                  draggable: false,
-                  animation: 1 // 1: BOUNCE, 2: DROP
-              },
-              data: 'house'
-          },
-          {
-              id: 2,
-              coords: {
-                  latitude: 38.704282,
-                  longitude: -77.2277603,
-                  draggable: false,
-                  animation: 1 // 1: BOUNCE, 2: DROP
-              },
-              data: 'hotel'
-          }
 
-
-      ];
 
       $scope.addMarkerClickFunction = function(markersArray){
           angular.forEach(markersArray, function(value, key) {
@@ -1802,7 +1927,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, GeocodeServ
           navigationControl : false,
           mapTypeControl : false,
           scaleControl : false,
-          streetViewControl : false,
+          streetViewControl : true,
           disableDoubleClickZoom : false,
           keyboardShortcuts : true,
           styles : [{
@@ -1819,6 +1944,7 @@ myApp.controller('MainCtrl', function($scope, $firebaseArray, $http, GeocodeServ
               }]
           }],
       };
+      initialize();
 }
 
  })();

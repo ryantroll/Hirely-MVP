@@ -4,76 +4,209 @@
     }
 
     .angular-google-map-container {
-       height: 1560px;
-        overflow: hidden;
+       height: 860px;
+
     }
+
     body{
         overflow: hidden;
     }
+    slider {
+        display: inline-block;
+        position: relative;
+        height: 7px;
+        width: 100%;
+        margin: 25px 0px 25px 5px;
+        vertical-align: middle;
+    }
+    slider span {
+        white-space: nowrap;
+        position: absolute;
+        display: inline-block;
+    }
+    slider span.base {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+    }
+    slider span.bar {
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        -webkit-border-radius: 1em/1em;
+        border-radius: 1em/1em;
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #c0c0c0), color-stop(1, #8d8d8d));
+        background: -webkit-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);
+        background: -moz-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);
+        background: -o-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);
+        background: -ms-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);
+        background: linear-gradient(top, #c0c0c0 0, #8d8d8d 100%);
+        -webkit-box-shadow: inset 2px 2px 5px;
+        box-shadow: inset 2px 2px 5px;
+    }
+    slider span.bar.selection {
+        width: 0%;
+        z-index: 1;
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #13b6ff), color-stop(1, #00a8f3));
+        background: -webkit-linear-gradient(top, #13b6ff 0, #00a8f3 100%);
+        background: -moz-linear-gradient(top, #13b6ff 0, #00a8f3 100%);
+        background: -o-linear-gradient(top, #13b6ff 0, #00a8f3 100%);
+        background: -ms-linear-gradient(top, #13b6ff 0, #00a8f3 100%);
+        background: linear-gradient(top, #13b6ff 0, #00a8f3 100%);
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    slider span.pointer {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        top: -8px;
+        background-color: #fff;
+        border: 1px solid #000;
+        z-index: 2;
+        -webkit-border-radius: 1em/1em;
+        border-radius: 1em/1em;
+    }
+    slider span.pointer:after {
+        content: '';
+        background-color: #808080;
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        -webkit-border-radius: 1em/1em;
+        border-radius: 1em/1em;
+    }
+    slider span.pointer:hover:after {
+        background-color: #000;
+    }
+    slider span.pointer.active:after {
+        background-color: #f00;
+    }
+    slider span.bubble {
+        cursor: default;
+        top: -28px;
+        padding: 1px 3px 1px 3px;
+        font-size: 12px;
+
+    }
+    slider span.bubble.selection {
+        top: 15px;
+    }
+    slider span.bubble.limit {
+        color: #808080;
+    }
+
 
 
 </style>
 
-<div class="job-search row grid-space-10" ng-controller="JobSearchCtrl">
-    <div class="col-md-7 col-sm-12 search-results">
-        <div class="row" >
-            <div class="col-sm-6 col-md-4 job-item" ng-repeat="position in positions">
-                <div class="image-box style-2 margin-bottom-20 shadow bordered light-gray-bg text-center">
-                    <div class="job-image">
-                        <img src="{{position.photo}}" class="img-responsive" alt="">
-                        <a class="panel-overlay-job-image">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-sm-3 job-filter">
+            <accordion>
+                <accordion-group is-open="status.open">
+                    <accordion-heading>
+                        Showing {{positions.length}} jobs <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-up': !status.open}"></i>
+                    </accordion-heading>
+                    <section>
+                       <div class="form-group">
+                           <label>Location</label>
+                           <input type="text" id="Autocomplete" class="form-control" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where's your next gig?"/>
+                       </div>
+
+                   </section>
+
+                    <section>
+                        <label>Distance</label>
+
+                        <slider floor="0" ceiling="100" step="5" precision="0" ng-model="filter.distance"></slider>
+
+                    </section>
+                    <section>
+                        <div class="form-group">
+                            <label>Occupation</label>
+                            <input type="text" id="txtOccupation" ng-model="filter.occupation" typeahead="occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:15" class="form-control"  placeholder="Occupation">
+                        </div>
+
+                    </section>
+                    <section class="form-group">
+                        <label>Wage</label>
+                        <div class="form-inline">
+                            <input type="text" ng-model="filter.minWage" ng-currency min="0" max="1000" ng-required="true" class="form-control" />
+                            <span class="grid-20 in-between">to</span>
+                            <input type="text" ng-model="filter.maxWage" ng-currency min="0" max="1000" ng-required="true" class="form-control" />
+                        </div>
+
+                    </section>
+                </accordion-group>
+            </accordion>
+        </div>
+
+
+
+    </div>
+    <div class="job-search row">
+        <div class="col-md-7 col-sm-12 search-results">
+            <div class="row" >
+                <div class="col-sm-6 col-md-4 job-item" ng-repeat="position in positions">
+                    <div class="image-box style-2 margin-bottom-20 shadow bordered light-gray-bg text-center">
+                        <div class="job-image">
+                            <img src="{{position.photoUrl}}" class="img-responsive" alt="">
+                            <a class="panel-overlay-job-image">
+                                <div>
+                                    <sup >$</sup>
+                                    <span class="wage">{{position.wage.amount}}/{{position.wage.frequency}}</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="body">
+                            <div class="job-info">
+                                <div class="company-info">
+                                    <h4>{{position.title}}</h4><h6>FT/PT</h6>
+                                </div>
+
+                                <div class="company-info">
+                                    <h5>{{position.companyName}}</h5><h6>{{position.distance | number:2}} miles</h6>
+                                </div>
+                            </div>
+                            <div class="separator"></div>
+                            <div class="row job-action">
+                                <div class="col-xs-4 col-md-4">
+                                    <a>
+                                        <i class="fa fa-heart-o fa-lg"></i>
+                                    </a>
+                                </div>
+                                <div class="col-xs-4 col-md-4">
+                                    <a>
+                                        <i class="fa fa-share-square-o fa-lg"></i>
+                                    </a>
+                                </div>
+                                <div class="col-xs-4 col-md-4">
+                                    <a>
+                                        <i class="fa fa-close fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
                             <div>
-                                <sup >$</sup>
-                                <span class="wage">{{position.wage.amount}}/{{position.wage.frequency}}</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="body">
-                        <div class="job-info">
-                            <div class="company-info">
-                                <h4>{{position.title}}</h4><h6>FT/PT</h6>
-                            </div>
 
-                            <div class="company-info">
-                                <h5>{{position.companyName}}</h5><h6>0.3 miles</h6>
                             </div>
-                        </div>
-                        <div class="separator"></div>
-                        <div class="row job-action">
-                            <div class="col-xs-4 col-md-4">
-                                <a>
-                                    <i class="fa fa-heart-o fa-lg"></i>
-                                </a>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <a>
-                                    <i class="fa fa-share-square-o fa-lg"></i>
-                                </a>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <a>
-                                    <i class="fa fa-close fa-lg"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5 col-sm-12 search-results-map">
+        <div class="col-md-5 col-sm-12 search-results-map">
             <div class="angular-google-map-container">
                 <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" control="googlemap">
                     <ui-gmap-window coords="MapOptions.markers.selected.coords" show="windowOptions.show" options="windowOptions" options="marker.options"closeClick="closeClick()">
                     </ui-gmap-window>
-                    <ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'" click="'onClick'" events="markers.events" options="marker.options"></ui-gmap-markers>
+                    <ui-gmap-markers models="mapmarkers"  coords="'coords'"></ui-gmap-markers>
                 </ui-gmap-google-map>
             </div>
         </div>
 
-
-
+    </div>
 </div>

@@ -58,7 +58,7 @@
                 }
             );
             return deferred.promise;
-        }
+        };
 
 
         this.getUserByEmail = function getUserByEmail(email) {
@@ -162,6 +162,6 @@
 
             return fbUser;
 
-        }
+        };
     }
 })();

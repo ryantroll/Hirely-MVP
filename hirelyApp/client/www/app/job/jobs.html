@@ -48,7 +48,7 @@
   <hr>
           <!-- Left Inner -->
   <div class="col-xs-6">
-            <div class="container text-left" ng-app="hirelyApp" ng-controller="JobCtrl" > 
+            <div class="container text-left" ng-app="hirelyApp" ng-controller="JobCtrl" >
               <div ng-repeat="job in split_jobs" class="row">
                <div class="col-sm-5 md-margin-bottom-10" ng-repeat="job in jobOpenings | orderBy:'orderBy'| filter:selected  | filter:results | filter:searchText" >
                <div class="nf-item branding coffee spacing">

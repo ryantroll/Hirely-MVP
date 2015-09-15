@@ -19,9 +19,13 @@
             this.employmentTypes = {};
             this.photo = '';
             this.positionId = '';
-        }
+            this.status = '';
+            this.siteId = '';
+            this.occupationId = '';
+            this.postDate = '';
+        };
 
-        this.getOpenPositions = function getOpenPositions(){
+        this.getOpenPositionsForLocation = function getOpenPositionsForLocation(locationId){
             var ref = new Firebase(FBURL);
             var deferred = $q.defer();
             var positions = new Firebase.util.NormalizedCollection(
@@ -33,9 +37,16 @@
             );
 
             // specify the fields for each path
-            positions = positions.select({key: 'position.$value', alias: 'position'}, 'businessSite.parentBusiness', 'business.name', 'business.photos');
+            positions = positions.select({key: 'position.$value', alias: 'position'}, {key: 'businessSite.$value', alias: 'businessSite'}, 'businessSite.parentBusiness', 'business.name', 'business.photos');
 
+            positions =  positions.filter(
+                function(data, key, priority)
+                {
+                    var isActive  =  key == locationId && data.businessSite.currentlyHiring == true;
+                    return isActive;
 
+                }
+            );
 
 
 
@@ -44,15 +55,19 @@
             positionsRef.once('value', function(snap) {
                     var positions = snap.val();
                     var availPositions = [];
-                    angular.forEach(positions, function(site) {
+                    angular.forEach(positions, function(site, siteKey) {
                         if(site.position) {
-                            angular.forEach(site.position, function (positionObj) {
+                            angular.forEach(site.position, function (positionObj, positionKey) {
                                 var position = new positionModel();
-
+                                position.positionId = positionKey;
+                                position.site = siteKey;
+                                position.occupationId = positionObj.occupation;
+                                position.postDate = positionObj.postDate;
                                 position.companyName = site.name;
                                 position.title = positionObj.title;
                                 position.wage = positionObj.wage;
                                 position.employmentTypes = positionObj.employmentTypes;
+                                position.status = positionObj.status;
                                 var defaultPhoto = _.matcher({main: "true"});
                                 var photo =  _.filter(site.photos, defaultPhoto);
                                 if(photo){
@@ -74,8 +89,8 @@
 
             return deferred.promise;
 
-        }
-    }
+        };
+    };
 })();
 
 
