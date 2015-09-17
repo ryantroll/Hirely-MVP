@@ -5,55 +5,8 @@
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-<<<<<<< HEAD
-        'PositionService', 'GeocodeService', 'JobdetailsService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
-
-
-  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, JobdetailsService, uiGmapGoogleMapApi, uiGmapIsReady) {
-      var jobdetailsService = JobdetailsService;
-      $scope.setJobResults = function(jobUID) {
-             jobdetailsService.setJob(jobUID);
-            $state.go('app.jobdetails')
-
-        }
-        
-      var positionService = PositionService
-      $scope.positions = "";
-      $scope.mapmarkers = "";
-      $scope.details = GeocodeService.getPlace();
-
-      positionService.getOpenPositions().then(function(positions) {
-          $scope.positions = positions;
-
-      }, function(err) {
-
-      });
-
-      uiGmapGoogleMapApi
-          .then(function(maps){
-              $scope.googlemap = {};
-              $scope.map = {
-                  center: {
-                      latitude: $scope.details.geometry.location.lat,
-                      longitude: $scope.details.geometry.location.lng
-                  },
-                  zoom: 14,
-                  pan: 1,
-                  options: $scope.mapOptions,
-                  control: {},
-                  events: {
-                      tilesloaded: function (maps, eventName, args) {
-                      },
-                      dragend: function (maps, eventName, args) {
-                      },
-                      zoom_changed: function (maps, eventName, args) {
-                      }
-                  }
-              };
-          });
-=======
         'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
->>>>>>> origin/master
+
 
 
   function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService, uiGmapGoogleMapApi, uiGmapIsReady) {
