@@ -5,10 +5,17 @@
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'PositionService', 'GeocodeService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
+        'PositionService', 'GeocodeService', 'JobdetailsService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, JobdetailsService, uiGmapGoogleMapApi, uiGmapIsReady) {
+      var jobdetailsService = JobdetailsService;
+      $scope.setJobResults = function(jobUID) {
+             jobdetailsService.setJob(jobUID);
+            $state.go('app.jobdetails')
+
+        }
+        
       var positionService = PositionService
       $scope.positions = "";
       $scope.mapmarkers = "";

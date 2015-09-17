@@ -13,14 +13,13 @@
 
 
 </style>
-
 <div class="job-search row grid-space-10" ng-controller="JobSearchCtrl">
     <div class="col-md-7 col-sm-12 search-results">
         <div class="row" >
             <div class="col-sm-6 col-md-4 job-item" ng-repeat="position in positions">
                 <div class="image-box style-2 margin-bottom-20 shadow bordered light-gray-bg text-center">
                     <div class="job-image">
-                        <img src="{{position.photo}}" class="img-responsive" alt="">
+                       <img src="{{position.photo}}" class="img-responsive" alt="">
                         <a class="panel-overlay-job-image">
                             <div>
                                 <sup >$</sup>
@@ -31,11 +30,11 @@
                     <div class="body">
                         <div class="job-info">
                             <div class="company-info">
-                                <h4>{{position.title}}</h4><h6>FT/PT</h6>
+                             <a ng-Click='setJobResults(position.occupation)' href="#"><h4>{{position.title}}</h4><h6>FT/PT</h6></a>
                             </div>
 
                             <div class="company-info">
-                                <h5>{{position.companyName}}</h5><h6>0.3 miles</h6>
+                               <h5>{{position.companyName}}</h5><h6>0.3 miles</h6>
                             </div>
                         </div>
                         <div class="separator"></div>
