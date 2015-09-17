@@ -11,7 +11,7 @@ var myApp = angular.module('hirelyApp',
         'ngMask',
         'ng-currency',
         'tc.chartjs',
-        'vr.directives.slider',
+        'rzModule',
         'hirelyApp.layout',
         'hirelyApp.home',
         'hirelyApp.shared',
@@ -63,7 +63,7 @@ var myApp = angular.module('hirelyApp',
                 controller: 'LoginCtrl'
             })
             .state('appFS.job', {
-                url: '/job',
+                url: '/job?placeId&distance&occupationId&wage',
                 parent: 'appFS',
                 templateProvider: function($templateCache){
                     // simplified, expecting that the cache is filled

@@ -20,5 +20,9 @@
 
         .constant('filePickerKey', 'AALU2i7ySUuUi8XUDHq8wz')
 
+        .constant('GOOGLEMAPSSERVERKEY', 'AIzaSyDoM7YVRZsYdeoJ3XezTX-l_eCgFz2EqfM')
+
+        .constant('GOOGLEPLACESURL', 'https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACEID}&key={KEY}')
+
         .constant('candidateStatus', {1: 'Active', 2: 'Employed', 3: 'Inactive'})
 })();
