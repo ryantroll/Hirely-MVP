@@ -19,7 +19,7 @@ module.exports = function() {
         build: './dist/',
         client: client,
         cssFolder: cssFolder,
-        fonts: './lib/font-awesome/fonts/**/*.*',
+        fonts: ['./lib/font-awesome/fonts/**/*.*', './lib/bootstrap/fonts/**/*.*'],
         htmltemplates: clientApp + '**/*.html',
 
         images: client + 'img/**/*.*',

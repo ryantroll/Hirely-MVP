@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="../../lib/bootstrap/dist/css/bootstrap.css"/>
     <!-- bower:css -->
     <link rel="stylesheet" href="../../lib/angular-ui-grid/ui-grid.css" />
+    <link rel="stylesheet" href="../../lib/angularjs-slider/dist/rzslider.css" />
     <link rel="stylesheet" href="../../lib/animate.css/animate.css" />
     <link rel="stylesheet" href="../../lib/components-font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="../../lib/flexslider/flexslider.css" />
@@ -55,6 +56,7 @@
     <script src="../../lib/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="../../lib/firebase/firebase.js"></script>
     <script src="../../lib/angularfire/dist/angularfire.js"></script>
+    <script src="../../lib/angularjs-slider/rzslider.js"></script>
     <script src="../../lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../../lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
     <script src="../../lib/chart.js/Chart.js"></script>
@@ -63,12 +65,13 @@
     <script src="../../lib/rsvp/rsvp.js"></script>
     <script src="../../lib/geofire/dist/geofire.js"></script>
     <script src="../../lib/isMobile/isMobile.js"></script>
+    <script src="../../lib/ment.io/dist/mentio.js"></script>
+    <script src="../../lib/ng-currency/dist/ng-currency.min.js"></script>
     <script src="../../lib/ngMask/dist/ngMask.js"></script>
     <script src="../../lib/rsvp.js/rsvp.js"></script>
     <script src="../../lib/Chart.js/Chart.js"></script>
     <script src="../../lib/tc-angular-chartjs/dist/tc-angular-chartjs.min.js"></script>
     <script src="../../lib/wow/dist/wow.js"></script>
-    <script src="../../lib/ment.io/dist/mentio.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -92,21 +95,12 @@
          <script src="app/account/registerCtrl.js"></script>
          <script src="app/candidate/candidateCtrl.js"></script>
          <script src="app/candidate/candidateDashboardCtrl.js"></script>
-         <script src="app/core/authService.js"></script>
-         <script src="app/core/broadcastService.js"></script>
-         <script src="app/core/candidateService.js"></script>
          <script src="app/core/config.js"></script>
          <script src="app/core/constants.js"></script>
-         <script src="app/core/filePickerService.js"></script>
          <script src="app/core/firebase.utils.js"></script>
-         <script src="app/core/geocodeService.js"></script>
-         <script src="app/core/jobdetailsService.js"></script>
-         <script src="app/core/ngCloak-directive.js"></script>
-         <script src="app/core/positionService.js"></script>
          <script src="app/core/security.js"></script>
          <script src="app/core/states.js"></script>
          <script src="app/core/templates.js"></script>
-         <script src="app/core/userService.js"></script>
          <script src="app/home/homeCtrl.js"></script>
          <script src="app/job/jobSearchCtrl.js"></script>
          <script src="app/jobdetails/jobDetailCtrl.js"></script>
@@ -120,6 +114,17 @@
          <script src="app/candidate/profile/candidateProfileAvailabilityCtrl.js"></script>
          <script src="app/candidate/profile/candidateProfileBasicsCtrl.js"></script>
          <script src="app/candidate/profile/candidateProfileCtrl.js"></script>
+         <script src="app/core/directives/ngCloak-directive.js"></script>
+         <script src="app/core/filters/jobSearchFilter.js"></script>
+         <script src="app/core/services/authService.js"></script>
+         <script src="app/core/services/broadcastService.js"></script>
+         <script src="app/core/services/candidateService.js"></script>
+         <script src="app/core/services/filePickerService.js"></script>
+         <script src="app/core/services/geocodeService.js"></script>
+         <script src="app/core/services/jobdetailsService.js"></script>
+         <script src="app/core/services/occupationService.js"></script>
+         <script src="app/core/services/positionService.js"></script>
+         <script src="app/core/services/userService.js"></script>
          <!-- endinject -->
     <!-- endbuild -->
 

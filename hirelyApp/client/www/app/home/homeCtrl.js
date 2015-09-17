@@ -21,7 +21,7 @@
 
         $scope.getResults = function() {
             geocodeService.setPlace($scope.details);
-            $state.go('appFS.job')
+            $state.go('appFS.job', {placeId: $scope.details.place_id})
 
         }
 

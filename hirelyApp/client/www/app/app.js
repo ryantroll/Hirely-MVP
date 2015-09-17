@@ -9,7 +9,9 @@ var myApp = angular.module('hirelyApp',
         'uiGmapgoogle-maps',
         'firebase',
         'ngMask',
+        'ng-currency',
         'tc.chartjs',
+        'rzModule',
         'hirelyApp.layout',
         'hirelyApp.home',
         'hirelyApp.shared',
@@ -61,7 +63,7 @@ var myApp = angular.module('hirelyApp',
                 controller: 'LoginCtrl'
             })
             .state('appFS.job', {
-                url: '/job',
+                url: '/job?placeId&distance&occupationId&wage',
                 parent: 'appFS',
                 templateProvider: function($templateCache){
                     // simplified, expecting that the cache is filled

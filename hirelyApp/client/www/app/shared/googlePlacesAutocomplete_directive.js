@@ -67,7 +67,9 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
                             scope.details = result;
 
                             controller.$setViewValue(element.val());
+
                         });
+                        scope.onPlaceChanged({details: result});
                     }
                     else {
                         if (watchEnter) {

@@ -798,3 +798,26 @@ h5 + .separator {
 .job-search .body .company-info h6 {
   float: right;
 }
+.panel-body {
+  position: absolute;
+  border: 1px solid #dddddd;
+  background: #fff;
+  width: 94%;
+  z-index: 1000;
+}
+/* Slider */
+rzslider {
+  margin: 40px 0 30px 0;
+}
+rzslider span.rz-pointer {
+  background: #00769f;
+  top: -8px;
+  height: 20px;
+  width: 20px;
+}
+rzslider span.rz-pointer:after {
+  top: 6px;
+  left: 6px;
+  height: 7px;
+  width: 7px;
+}
