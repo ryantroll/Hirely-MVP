@@ -8,6 +8,7 @@
         'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
 
 
+
   function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService, uiGmapGoogleMapApi, uiGmapIsReady) {
       var positionService = PositionService;
       var occupationService = OccupationService;
