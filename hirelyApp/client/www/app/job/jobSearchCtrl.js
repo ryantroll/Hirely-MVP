@@ -59,7 +59,7 @@
                           positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId).then(function (site) {
                               $scope.mapmarkers.push(createMarker(key, location[0], location[1], site));
                               angular.forEach(site.positions, function (openPosition) {
-                                  $scope.positions.push(createPosition(openPosition, distance, site.businessName, site.siteId, site.photoUrl));
+                                  $scope.positions.push(createPosition(openPosition, distance, site.siteId, site.photoUrl));
 
                               });
                           }, function (err) {
@@ -156,7 +156,7 @@
         return marker;
       };
 
-      var createPosition = function(openPosition, distance, companyName, siteId, photoUrl){
+      var createPosition = function(openPosition, distance, siteId, photoUrl){
           var position = {
               title: '',
               companyName: '',
@@ -172,7 +172,7 @@
               postDate: '',
               photoUrl: ''
           };
-          position.companyName = companyName;
+          position.companyName = openPosition.companyName;
           position.distance = distance/1.60934;
           position.employmentTypes = openPosition.employmentTypes;
           position.status = openPosition.status;

@@ -84,7 +84,7 @@
                                 {
                                     var position = new positionModel();
                                     position.positionId = positionKey;
-
+                                    position.companyName = siteObj.name;
                                     position.occupationId = positionObj.occupation;
                                     position.postDate = positionObj.postDate;
                                     position.title = positionObj.title;
