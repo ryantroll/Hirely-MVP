@@ -42,7 +42,7 @@
 
 </head>
 
-<body  data-ng-app="hirelyApp" class="home-page">
+<body  data-ng-app="hirelyApp">
     <div ui-view ></div>
     <!-- build:js js/lib.js-->
     <!-- bower:js -->
@@ -78,7 +78,6 @@
     <!-- build:js js/app.js-->
     <!-- inject:js -->
          <script src="js/animations.js"></script>
-         <script src="js/dynamic-map-height.js"></script>
          <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
          <script src="js/main.js"></script>
          <script src="js/underscore-min.js"></script>
@@ -100,7 +99,6 @@
          <script src="app/core/firebase.utils.js"></script>
          <script src="app/core/security.js"></script>
          <script src="app/core/states.js"></script>
-         <script src="app/core/templates.js"></script>
          <script src="app/home/homeCtrl.js"></script>
          <script src="app/job/jobSearchCtrl.js"></script>
          <script src="app/jobdetails/jobDetailCtrl.js"></script>
@@ -126,6 +124,8 @@
          <script src="app/core/services/positionService.js"></script>
          <script src="app/core/services/userService.js"></script>
          <!-- endinject -->
+    <!-- inject:templates:js -->
+    <!-- endinject -->
     <!-- endbuild -->
 
     <script type="text/javascript" src="//api.filepicker.io/v2/filepicker.js"></script>

@@ -70,6 +70,7 @@ gulp.task('clean-styles', function(done) {
 });
 
 gulp.task('less-watcher', function() {
+    log('Monitoring ' + config.less );
     watch([config.less], ['styles']);
 });
 
@@ -132,7 +133,7 @@ gulp.task('templates-watcher', function() {
     gulp.watch(config.templates, ['template-cache']);
 });
 
-gulp.task('default', ['templates-watcher']);
+gulp.task('default', ['less-watcher']);
 
 gulp.task('wiredep', function() {
     log('Wire up the bower css js and our app js into the html');
@@ -155,18 +156,23 @@ gulp.task('inject', ['wiredep', 'styles', 'fonts', 'images'], function() {
         .pipe(gulp.dest('./client/www'));
 });
 
-gulp.task('optimize', ['inject','images', 'fonts'], function() {
+gulp.task('optimize', ['inject','images', 'fonts', 'template-cache'], function() {
     log('Optimizing the javascript, css, html');
 
     var assets = useref.assets();
+    var templateCache = config.temp + config.templateCache.file;
 
     return gulp
         .src(config.index)
         .pipe($.plumber())
+        .pipe($.inject(gulp.src(templateCache, {read: false}), {
+            relative: true,
+            starttag: '<!-- inject:templates:js -->'
+        }))
         .pipe(assets)
         .pipe(assets.restore())
-        .pipe(useref())
-        .pipe(gulp.dest(config.build));
+            .pipe(useref())
+            .pipe(gulp.dest(config.build));
 });
 
 gulp.task('serve-build', ['optimize'], function() {

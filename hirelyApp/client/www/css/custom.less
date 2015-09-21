@@ -29,7 +29,6 @@
   margin-top: 40px;
 }
 
-
 /* User Profile section */
 .profile {
   .profile-pic {
@@ -455,6 +454,19 @@ h3+.separator, h4+.separator, h5+.separator {
   background-color: @light-grey;
 }
 
+/* Job Filter */
+.job-filter{
+
+  .panel-body{
+    position: absolute;
+    border: 1px solid #dddddd;
+    background: #fff;
+    width: 94%;
+    z-index: 1000;
+
+  }
+}
+
 /*Job Search Results */
 .job-search
 {
@@ -573,14 +585,7 @@ h3+.separator, h4+.separator, h5+.separator {
     }
   }
 }
-.panel-body{
-  position: absolute;
-  border: 1px solid #dddddd;
-  background: #fff;
-  width: 94%;
-  z-index: 1000;
 
-}
 
 /* Slider */
 rzslider{
@@ -597,5 +602,39 @@ rzslider{
     height: 7px;
     width: 7px;
 
+  }
+}
+.map-window-site{
+  width: 306px;
+  z-index: 100;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid white;
+  .map-window-site-container{
+    background-color: rgba(237,237,237,1.0);
+    .map-window-site-img{
+      float: left;
+      width: 74px;
+      height: 74px;
+    }
+    .map-window-site-body{
+      float: left;
+      padding-top: 6px;
+
+      width: calc(70%);
+      h1{
+        font-size: 14px;
+        margin: 0 0 0px 5px;
+        display: inline-block;
+        color:@color;
+        font-weight: 700;
+      }
+      h3{
+        font-size: 12px;
+        margin: 0 0 0px 5px;
+        display: inline-block;
+        color:@color;
+
+      }
+    }
   }
 }

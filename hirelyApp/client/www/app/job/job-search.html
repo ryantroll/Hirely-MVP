@@ -13,35 +13,12 @@
     }
 
 </style>
-
-<div class="job-search row grid-space-10" ng-controller="JobSearchCtrl">
-    <div class="col-md-7 col-sm-12 search-results">
-        <div class="row" >
-            <div class="col-sm-6 col-md-4 job-item" ng-repeat="position in positions">
-                <div class="image-box style-2 margin-bottom-20 shadow bordered light-gray-bg text-center">
-                    <div class="job-image">
-                       <img src="{{position.photo}}" class="img-responsive" alt="">
-                        <a class="panel-overlay-job-image">
-                            <div>
-                                <sup >$</sup>
-                                <span class="wage">{{position.wage.amount}}/{{position.wage.frequency}}</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="body">
-                        <div class="job-info">
-                            <div class="company-info">
-                             <a ng-Click='setJobResults(position.occupation)' href="#"><h4>{{position.title}}</h4><h6>FT/PT</h6></a>
-                            </div>
-
-                            <div class="company-info">
-                               <h5>{{position.companyName}}</h5><h6>0.3 miles</h6>
-                            </div>
-
-
+<script>
+    $('html, body').animate({ scrollTop: 0 }, 0);
+</script>
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row job-filter">
         <div class="col-md-3 col-sm-3 job-filter">
             <accordion>
                 <accordion-group is-open="status.open">
@@ -145,12 +122,23 @@
         <div class="col-md-5 col-sm-12 search-results-map">
             <div class="angular-google-map-container">
                 <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" control="googlemap">
-                    <ui-gmap-window coords="mapOptions.markers.selected.coords" show="windowOptions.show" options="windowOptions" options="marker.options"closeClick="closeClick()">
-                    </ui-gmap-window>
-                    <ui-gmap-markers models="mapmarkers"  coords="'coords'"></ui-gmap-markers>
+                    <ui-gmap-markers models="mapmarkers"  coords="'coords'" click="onClick()">
+                            <ui-gmap-windows show="show">
+                                <div class="map-window-site" ng-non-bindable>
+                                    <a class="map-window-site-container">
+                                        <img class="map-window-site-img" src="{{businessSite.photoUrl}}"/>
+                                        <div class="map-window-site-body">
+                                            <h1>{{businessSite.companyName}}</h1>
+                                            <h3>{{businessSite.address.formattedAddress}}</h3>
+                                            <h3>{{businessSite.positions.length}} open position(s)</h3>
+                                        </div>
+
+                                    </a>
+                                </div>
+                            </ui-gmap-windows>
+                    </ui-gmap-markers>
                 </ui-gmap-google-map>
             </div>
         </div>
-
     </div>
 </div>

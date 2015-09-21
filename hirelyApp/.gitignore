@@ -6,3 +6,4 @@ platforms/
 plugins/
 dist/
 lib/
+tmp/

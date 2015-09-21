@@ -56,10 +56,10 @@
 
 
                       var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
-                          positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId).then(function (positions) {
-                              angular.forEach(positions, function (openPosition) {
-                                  $scope.positions.push(createPosition(openPosition, distance));
-                                  $scope.mapmarkers.push(createMarker(key, location[0], location[1]));
+                          positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId).then(function (site) {
+                              $scope.mapmarkers.push(createMarker(key, location[0], location[1], site));
+                              angular.forEach(site.positions, function (openPosition) {
+                                  $scope.positions.push(createPosition(openPosition, distance, site.businessName, site.siteId, site.photoUrl));
 
                               });
                           }, function (err) {
@@ -125,82 +125,38 @@
                   };
               });
 
-          $scope.windowOptions = {
-              show: false
-          };
-
-          $scope.onClick = function(data) {
-              $scope.windowOptions.show = !$scope.windowOptions.show;
-
-          };
-
-          $scope.closeClick = function() {
-              $scope.windowOptions.show = false;
-          };
 
 
-
-          uiGmapIsReady.promise()                                    // if no value is put in promise() it defaults to promise(1)
-              .then(function(instances) {
-                  console.log(instances[0].map);                        // get the current map
-              })
-              .then(function(){
-                  $scope.addMarkerClickFunction($scope.markers);
-              });
-
-
-
-          $scope.addMarkerClickFunction = function(markersArray){
-              angular.forEach(markersArray, function(value, key) {
-                  value.onClick = function(){
-                      $scope.onClick(value.data);
-                  };
-              });
-          };
 
 
           $scope.mapOptions = {
-              minZoom : 3,
-              zoomControl : false,
-              draggable : true,
-              navigationControl : false,
-              mapTypeControl : false,
-              scaleControl : false,
-              streetViewControl : true,
-              disableDoubleClickZoom : false,
-              keyboardShortcuts : true,
-              styles : [{
-                  featureType : "poi",
-                  elementType : "labels",
-                  stylers : [{
-                      visibility : "off"
-                  }]
-              }, {
-                  featureType : "transit",
-                  elementType : "all",
-                  stylers : [{
-                      visibility : "off"
-                  }]
-              }],
+              scrollwheel: false
           };
       }
-      var createMarker = function(id, lat, lng) {
+      var createMarker = function(id, lat, lng, site) {
           var marker = {
 
                   coords:{
                       latitude: '',
                       longitude: '',
-                  }
+                  },
+              businessSite: '',
+              show: false
 
           };
           var idkey = "id";
           marker[idkey] = id;
           marker.coords.latitude = lat;
           marker.coords.longitude = lng;
+          marker.businessSite = site;
+          marker.onClick = function() {
+
+              marker.show = !marker.show;
+          };
         return marker;
       };
 
-      var createPosition = function(openPosition, distance){
+      var createPosition = function(openPosition, distance, companyName, siteId, photoUrl){
           var position = {
               title: '',
               companyName: '',
@@ -216,18 +172,17 @@
               postDate: '',
               photoUrl: ''
           };
-          position.companyName = openPosition.companyName;
+          position.companyName = companyName;
           position.distance = distance/1.60934;
           position.employmentTypes = openPosition.employmentTypes;
           position.status = openPosition.status;
           position.title = openPosition.title;
           position.wage = openPosition.wage;
-          position.employmentTypes = openPosition.employmentTypes;
-          position.siteId = openPosition.siteId;
+          position.siteId = siteId;
           position.positionId = openPosition.positionId;
           position.occupationId = openPosition.occupationId;
           position.postDate = openPosition.postDate;
-          position.photoUrl = openPosition.photo;
+          position.photoUrl = photoUrl;
           return position;
       }
 

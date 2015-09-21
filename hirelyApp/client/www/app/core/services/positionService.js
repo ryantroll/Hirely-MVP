@@ -24,6 +24,14 @@
             this.occupationId = '';
             this.postDate = '';
         };
+        function businessSiteModel(){
+            this.siteId = '';
+            this.companyName = '';
+            this.siteName = '';
+            this.address = '';
+            this.photoUrl = '';
+            this.positions = [];
+        }
 
         this.getOpenPositionsForLocation = function getOpenPositionsForLocation(locationId, minWage, occupationId){
             var ref = new Firebase(FBURL);
@@ -53,11 +61,21 @@
             var positionsRef = positions.ref();
             // run it and see what we get
             positionsRef.once('value', function(snap) {
-                    var positions = snap.val();
-                    var availPositions = [];
-                    angular.forEach(positions, function(site, siteKey) {
-                        if(site.position) {
-                            angular.forEach(site.position, function (positionObj, positionKey) {
+                    var sites = snap.val();
+                    var site = new businessSiteModel();
+                    angular.forEach(sites, function(siteObj, siteKey) {
+
+                        site.siteId = siteKey;
+                        site.companyName = siteObj.name;
+                        site.siteName = siteObj.businessSite.name;
+                        site.address = siteObj.businessSite.address;
+                        var defaultPhoto = _.matcher({main: "true"});
+                        var photo =  _.filter(siteObj.photos, defaultPhoto);
+                        if(photo){
+                            site.photoUrl = photo[0].source;
+                        }
+                        if(siteObj.position) {
+                            angular.forEach(siteObj.position, function (positionObj, positionKey) {
                                 //check if position meets criteria
                                 var meetsOcc = ((!occupationId) || occupationId == positionObj.occupation);
                                 var meetsWage = ((!minWage) || positionObj.wage.amount >= minWage);
@@ -66,29 +84,21 @@
                                 {
                                     var position = new positionModel();
                                     position.positionId = positionKey;
-                                    position.siteId = siteKey;
+
                                     position.occupationId = positionObj.occupation;
                                     position.postDate = positionObj.postDate;
-                                    position.companyName = site.name;
                                     position.title = positionObj.title;
                                     position.wage = positionObj.wage;
                                     position.employmentTypes = positionObj.employmentTypes;
                                     position.status = positionObj.status;
-                                    var defaultPhoto = _.matcher({main: "true"});
-                                    var photo =  _.filter(site.photos, defaultPhoto);
-                                    if(photo){
-                                        position.photo = photo[0].source;
-                                    }
-
-
-                                    availPositions.push(position);
+                                    site.positions.push(position);
                                 }
 
                             });
                         }
 
                     });
-                    deferred.resolve(availPositions);
+                    deferred.resolve(site);
 
                 }, function (err) {
                     deferred.reject(snap);

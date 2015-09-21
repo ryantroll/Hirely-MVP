@@ -689,6 +689,14 @@ h5 + .separator {
   clear: both;
   background-color: #cccccc;
 }
+/* Job Filter */
+.job-filter .panel-body {
+  position: absolute;
+  border: 1px solid #dddddd;
+  background: #fff;
+  width: 94%;
+  z-index: 1000;
+}
 /*Job Search Results */
 .job-search {
   padding: 20px;
@@ -798,13 +806,6 @@ h5 + .separator {
 .job-search .body .company-info h6 {
   float: right;
 }
-.panel-body {
-  position: absolute;
-  border: 1px solid #dddddd;
-  background: #fff;
-  width: 94%;
-  z-index: 1000;
-}
 /* Slider */
 rzslider {
   margin: 40px 0 30px 0;
@@ -820,4 +821,36 @@ rzslider span.rz-pointer:after {
   left: 6px;
   height: 7px;
   width: 7px;
+}
+.map-window-site {
+  width: 306px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid white;
+}
+.map-window-site .map-window-site-container {
+  background-color: #ededed;
+}
+.map-window-site .map-window-site-container .map-window-site-img {
+  float: left;
+  width: 74px;
+  height: 74px;
+}
+.map-window-site .map-window-site-container .map-window-site-body {
+  float: left;
+  padding-top: 6px;
+  width: calc(70%);
+}
+.map-window-site .map-window-site-container .map-window-site-body h1 {
+  font-size: 14px;
+  margin: 0 0 0px 5px;
+  display: inline-block;
+  color: #ff3100;
+  font-weight: 700;
+}
+.map-window-site .map-window-site-container .map-window-site-body h3 {
+  font-size: 12px;
+  margin: 0 0 0px 5px;
+  display: inline-block;
+  color: #ff3100;
 }

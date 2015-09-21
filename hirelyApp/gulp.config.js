@@ -2,7 +2,7 @@ module.exports = function() {
     var client = './client/www/';
     var cssFolder = './client/www/css/';
     var clientApp = client + 'app/';
-    var temp = clientApp + 'core';
+    var temp = './tmp/';
     var config = {
         /**
          * Files paths
@@ -29,7 +29,7 @@ module.exports = function() {
             clientApp + '**/*.module.js',
             clientApp + '**/*.js'
         ],
-        less: client + 'css/style.less',
+        less: cssFolder + '*.less',
         templates: clientApp + '**/*.html',
         temp: temp,
         /**
@@ -38,7 +38,7 @@ module.exports = function() {
         templateCache: {
             file: 'templates.js',
             options: {
-                module: 'hirelyApp',
+                module: 'hirelyApp.core',
                 standAlone: false,
                 root: 'app/'
             }

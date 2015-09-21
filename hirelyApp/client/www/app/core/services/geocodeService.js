@@ -42,21 +42,16 @@
         }
 
         function getPlacebyPlaceId(placeId){
-            var url = placesEndPoint.replace('{PLACEID}', placeId)
-                .replace('{KEY}', googleMapsKey);
+
             var deferred = $q.defer();
-            var place = '';
 
-            $http.get(url, {cache: true}).success(function(response) {
-                if(response.status == 'OK'){
-                    place = response.result;
-                    deferred.resolve(place);
-                }
-                else{
-                    deferred.reject;
-                }
-            }).error(deferred.reject);
-
+            $http.get('/api/googleplace'+ placeId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
             return deferred.promise;
         }
 
