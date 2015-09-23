@@ -17,7 +17,7 @@
     $('html, body').animate({ scrollTop: 0 }, 0);
 </script>
 
-<div class="container-fluid">
+<div class="container-fluid" ng-controller="JobSearchCtrl">
     <div class="row job-filter">
         <div class="col-md-3 col-sm-3 job-filter">
             <accordion>
@@ -79,20 +79,23 @@
                             <a class="panel-overlay-job-image">
                                 <div>
                                     <sup >$</sup>
-                                    <span class="wage">{{position.wage.amount}}/{{position.wage.frequency}}</span>
+                                    <span class="wage">{{position.wage}}</span>
                                 </div>
                             </a>
                         </div>
                         <div class="body">
-                            <div class="job-info">
-                                <div class="company-info">
-                                    <h4>{{position.title}}</h4><h6>FT/PT</h6>
-                                </div>
+                            <a ui-sref="app.jobdetails({siteId: position.siteId, positionId: position.positionId, placeId: placeId})">
+                                <div class="job-info">
+                                    <div class="company-info">
+                                        <h4>{{position.title}}</h4><h6>FT/PT</h6>
+                                    </div>
 
-                                <div class="company-info">
-                                    <h5>{{position.companyName}}</h5><h6>{{position.distance | number:2}} miles</h6>
+                                    <div class="company-info">
+                                        <h5>{{position.companyName}}</h5><h6>{{position.distance | number:2}} mi</h6>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
+
                             <div class="separator"></div>
                             <div class="row job-action">
                                 <div class="col-xs-4 col-md-4">
@@ -126,7 +129,7 @@
                             <ui-gmap-windows show="show">
                                 <div class="map-window-site" ng-non-bindable>
                                     <a class="map-window-site-container">
-                                        <img class="map-window-site-img" src="{{businessSite.photoUrl}}"/>
+                                        <img class="map-window-site-img" src="{{photoUrl}}"/>
                                         <div class="map-window-site-body">
                                             <h1>{{businessSite.companyName}}</h1>
                                             <h3>{{businessSite.address.formattedAddress}}</h3>

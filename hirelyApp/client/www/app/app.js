@@ -12,6 +12,7 @@ var myApp = angular.module('hirelyApp',
         'ng-currency',
         'tc.chartjs',
         'rzModule',
+        'angular-flexslider',
         'hirelyApp.layout',
         'hirelyApp.home',
         'hirelyApp.shared',
@@ -33,15 +34,10 @@ var myApp = angular.module('hirelyApp',
                 abstract: true,
                 templateUrl: 'app/layout/master.html'
             })
-            .state('appFS', {
-                url: "/appFS",
-                abstract: true,
-                templateUrl: 'app/layout/master-fullscreen.html'
 
-            })
-            .state('appFS.home', {
+            .state('app.home', {
                 url: '/home',
-                parent: 'appFS',
+                parent: 'app',
                 templateUrl: 'app/home/home.html',
 
                 controller: 'HomeCtrl'
@@ -51,16 +47,14 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/account/login.html',
                 controller: 'LoginCtrl'
             })
-            .state('appFS.job', {
+            .state('app.job', {
                 url: '/job?placeId&distance&occupationId&wage',
-                parent: 'appFS',
+                parent: 'app',
                 templateUrl: 'app/job/job-search.html',
-                controller: 'JobSearchCtrl'
             })
             .state('app.jobdetails', {
-                url: '/jobdetails',
+                url: '/jobdetails?siteId&positionId&placeId',
                 templateUrl: 'app/jobdetails/jobDetails.html',
-                controller: 'JobCtrl'
             })
             .state('app.register', {
                 url: '/register',
@@ -126,5 +120,5 @@ var myApp = angular.module('hirelyApp',
             })
 
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/appFS/home');
+        $urlRouterProvider.otherwise('/app/home');
     });

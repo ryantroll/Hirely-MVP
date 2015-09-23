@@ -1,23 +1,11 @@
-<script>
-    $('html, body').animate({ scrollTop: 0 }, 0);
-</script>
+
 <div class="wrapper" ng-controller="MasterCtrl as vm">
    <div header></div>
-    <div class="content">
-        <div class="container content">
-            <div class="row">
-                <div class="col-md-12" ui-view>
-                    <!--main content-->
-                </div>
+    <div ui-view>
 
-            </div>
-        </div>
+        <!--main content-->
+
     </div>
 </div>
-
-
-
-
-
 
 <div footer></div>

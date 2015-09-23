@@ -24,7 +24,7 @@ routes = require('./routes')(app);
 
 switch (environment){
     case 'production':
-        console.log('** PRODUCTION ON AZURE **');
+        console.log('** PRODUCTION ON Modulus **');
         console.log('serving from ' + './dist/');
 
         app.use('/', express.static('./dist/'));

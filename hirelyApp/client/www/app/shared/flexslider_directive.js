@@ -4,14 +4,13 @@
 angular.module("hirelyApp.shared").directive('flexslider', function () {
 
     return {
+        restrict: 'A',
+        scope: {
+            options: '=?'
+        },
         link: function (scope, element, attrs) {
 
-            $('#bg-slider').flexslider({
-                animation: "fade",
-                directionNav: false, //remove the default direction-nav - https://github.com/woothemes/FlexSlider/wiki/FlexSlider-Properties
-                controlNav: false, //remove the default control-nav
-                slideshowSpeed: 10000
-            });
+            $(element[0]).flexslider(scope.options);
         }
     }
 });
