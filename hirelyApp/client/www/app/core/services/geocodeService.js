@@ -25,7 +25,6 @@
             var url = mapsEndPoint.replace('{POSITION}', latitude + ',' + longitude);
             var deferred = $q.defer();
 
-
             $http.get(url, {cache: true}).success(function(response) {
                 // hacky
                 var place;

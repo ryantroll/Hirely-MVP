@@ -6,9 +6,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('CandidateService', ['$q','FBURL', '$firebaseObject', 'fbutil', CandidateService]);
+        .service('CandidateService', ['$q','$http','FBURL', '$firebaseObject', 'fbutil', CandidateService]);
 
-    function CandidateService($q, FBURL, $firebaseObject, fbutil, CandidateService) {
+    function CandidateService($q, $http, FBURL, $firebaseObject, fbutil, CandidateService) {
         var self = this;
         var profile;
 
@@ -30,11 +30,14 @@
                 ref.child('users'),
                 ref.child('candidates'),
                 ref.child('candidate-experience'),
-                ref.child('candidate-availability')
+                ref.child('candidate-availability'),
+                ref.child('candidate-personality')
             );
 
             // specify the fields for each path
-            profile = profile.select({key: 'candidates.$value', alias: 'candidate'},{key: 'candidate-availability.$value', alias: 'availability'} );
+            profile = profile.select({key: 'candidates.$value', alias: 'candidate'},
+                {key: 'candidate-availability.$value', alias: 'availability'},
+                {key: 'candidate-personality.$value', alias: 'personality'});
 
 
             // apply a client-side filter to the data (only return users where key === 'user1'
@@ -59,13 +62,88 @@
 
         this.saveCandidate = function saveCandidate(candidate, key) {
             var ref = fbutil.ref('candidates', key);
-            ref.set(candidate)
+            ref.set(candidate);
         };
 
         this.saveAvailability = function saveAvailability(availability, key) {
             var ref = fbutil.ref('candidate-availability', key);
-            ref.set(availability)
+            ref.set(availability);
         };
+
+        this.savePersonality = function savePersonality(personality, key){
+            var ref = fbutil.ref('candidate-personality', key);
+            ref.set(personality);
+        }
+
+        this.createTraitifyAssessment = function createTraitifyAssessment(){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessment')
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessmentResults = function getAssessmentResults(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentResults'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessmentSlides = function getAssessmentSlides(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentSlides'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessmentCareerMatches = function getAssessmentCareerMatches(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentCareerMatches'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessment = function getAssessment(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentData'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
 
 
     }

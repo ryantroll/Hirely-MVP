@@ -85,7 +85,7 @@ var myApp = angular.module('hirelyApp',
                     profile: function ($q, CandidateService, UserService) {
                         //retrieve profile before loading
                         var user = UserService.getCurrentUser();
-                        return CandidateService.getProfile(user.providerId).then(function(profile) {
+                        return CandidateService.getProfile(user.userId).then(function(profile) {
 
                            return profile;
                         }, function(err) {
@@ -116,6 +116,7 @@ var myApp = angular.module('hirelyApp',
             .state('app.candidate.profile.personality', {
                 url: '/candidateProfileEducation',
                 templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
+                controller: 'CandidateProfilePersonalityCtrl',
                 authRequired: true
             })
 
