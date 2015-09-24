@@ -154,7 +154,7 @@
           marker.coords.latitude = lat;
           marker.coords.longitude = lng;
           marker.businessSite = site;
-          var defaultPhoto = _.matcher({main: "true"});
+          var defaultPhoto = _.matcher({main: "true", size: "m"});
           var photo =  _.filter(site.photos, defaultPhoto);
           if(photo){
               marker.photoUrl = photo[0].source;

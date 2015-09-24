@@ -24,7 +24,9 @@
             var today=new Date();
             $scope.position = positionObj;
             $scope.wageFormatted = positionObj.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.compensation.wage) : getnoMaxWageDisplay(positionObj.compensation.wage);
-            angular.forEach(positionObj.business.photos, function(photoObj, photoKey) {
+            var largePhoto = _.matcher({size: "l"});
+            var photos =  _.filter(positionObj.business.photos, largePhoto);
+            angular.forEach(photos, function(photoObj, photoKey) {
 
                 $scope.photos.push(photoObj.source);
             });

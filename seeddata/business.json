@@ -1,83 +1,129 @@
 {
+    "3DFF61CA-727D-40AA-AACD-06F4D557CC5B" : {
+        "description" : "Hangout with comfy sofas, java, sandwiches & baked goods with an intimate, 2nd-floor wine bar.",
+        "name" : "Northside Social Coffee & Wine",
+        "photos" : {
+            "1" : {
+                "main" : "true",
+                "source" : "img/jobs/northsidesocial_m.png",
+                "size": "m"
+            },
+            "2" : {
+                "main" : "true",
+                "source" : "img/jobs/northsidesocial_l.png",
+                "size": "l"
+            },
 
-    "72AF835D-131D-4741-83D9-B2D3DBD69E4F": {
-        "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69": {
-            "address": {
-                "street1": "1535 7th St NW",
-                "street2": "",
-                "city": "Washington",
-                "state": "DC",
-                "zipCode": "20001",
-                "formattedAddress": "1535 7th St NW, Washington, DC 20001, United States",
-                "placeId": "ChIJ9Y6D4_G3t4kR6GDgjWIRHJw",
-                "hiringManagers": {
-                    "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
-                }
+            "3" : {
+                "main" : "false",
+                "source" : "img/jobs/northsidesocial2_l.png",
+                "size": "l"
+            },
+            "4" : {
+                "main" : "false",
+                "source" : "img/jobs/northsidesocial2_m.png",
+                "size": "m"
             }
 
         }
     },
-    "57B133E7-A732-41D3-82EA-8C733ED2A13F": {
-        "5E65284E-7E2C-4914-9E21-174EA118B277": {
-            "address": {
-                "street1": "1101 17th St NW",
-                "street2": "",
-                "city": "Washington",
-                "state": "DC",
-                "zipCode": "20036",
-                "formattedAddress": "1101 17th St NW, Washington, DC 20036, United States",
-                "placeId": "ChIJhyUrIb-3t4kRAngGGygVRq4",
-                "hiringManagers": {
-                    "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
-                }
+    "57B133E7-A732-41D3-82EA-8C733ED2A13F" : {
+        "description" : "Berkeley-born chain featuring signature coffee, tea & blended drinks alongside baked goods.",
+        "name" : "Peet's Coffee & Teas",
+        "photos" : {
+            "1" : {
+                "main" : "true",
+                "source" : "img/jobs/peets_m.png",
+                "size": "m"
+            },
+            "2" : {
+                "main" : "true",
+                "source" : "img/jobs/peets_l.png",
+                "size": "l"
+            },
+
+            "3" : {
+                "main" : "false",
+                "source" : "img/jobs/peets2_l.png",
+                "size": "l"
+            },
+            "4" : {
+                "main" : "false",
+                "source" : "img/jobs/peets2_m.png",
+                "size": "m"
             }
-
-        },
-         "D514E8B6-4CB7-4D52-90CD-CF68D0140B09": {
-            "address": {
-                "street1": "601 13th St NW",
-                "street2": "",
-                "city": "Washington",
-                "state": "DC",
-                "zipCode": "20005",
-                "formattedAddress": "601 13th St NW, Washington, DC 20005, United States",
-                "placeId": "ChIJUd4gHpe3t4kRvcGd66YOB6c",
-                "hiringManagers": {
-                    "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
-                }
-            }
-
-        }
-
-    },
-    "3DFF61CA-727D-40AA-AACD-06F4D557CC5B": {
-          "7C51DD73-3492-4E1D-A8E7-C6030A86916A": {
-            "address": {
-                "street1": "3211 Wilson Blvd",
-                "street2": "",
-                "city": "Arlington",
-                "state": "VA",
-                "zipCode": "22201",
-                "formattedAddress": "3211 Wilson Blvd, Arlington, VA 22201, United States",
-                "placeId": "ChIJKedCmoO2t4kRdvWsWIt5E4I",
-                "hiringManagers": {
-                    "53cd5e2e-9623-4fd3-996c-cc90949432ac": true
-                }
-            }
-
         }
     },
-    "C8BF59C8-D7C3-41BA-81C9-F6425FEA56C9": {
-        "name": "Quartermaine Coffee Roaster",
-        "description": "Mellow option for locally roasted blends",
-        "photos": {
-            "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69": {
-                "source": "img/jobs/quartermaineexterior.png",
-                "main": "true"
+    "72AF835D-131D-4741-83D9-B2D3DBD69E4F" : {
+        "description" : "An airy, modern, industrial cafe & roaster offering artisanal brews, pastries, sandwiches & more.",
+        "name" : "Compass Coffee",
+        "photos" : {
+            "1" : {
+                "main" : "true",
+                "source" : "img/jobs/compass1_m.png",
+                "size": "m"
+            },
+            "2" : {
+                "main" : "true",
+                "source" : "img/jobs/compass1_l.png",
+                "size": "l"
+            },
+            "3" : {
+                "main" : "true",
+                "source" : "img/jobs/compass2_m.png",
+                "size": "m"
+            },
+            "4" : {
+                "main" : "true",
+                "source" : "img/jobs/compass2_l.png",
+                "size": "l"
+            },
+            "5" : {
+                "main" : "true",
+                "source" : "img/jobs/compass3_m.png",
+                "size": "m"
+            },
+            "6" : {
+                "main" : "true",
+                "source" : "img/jobs/compass3_l.png",
+                "size": "l"
+            },
+            "7" : {
+                "main" : "true",
+                "source" : "img/jobs/compass4_m.png",
+                "size": "m"
+            },
+            "8" : {
+                "main" : "true",
+                "source" : "img/jobs/compass4_l.png",
+                "size": "l"
             }
-
+        }
+    },
+    "C8BF59C8-D7C3-41BA-81C9-F6425FEA56C9" : {
+        "description" : "Mellow option for locally roasted blends",
+        "name" : "Quartermaine Coffee Roaster",
+        "photos" : {
+            "1" : {
+                "main" : "true",
+                "source" : "img/jobs/quartermaine1_m.png",
+                "size": "m"
+            },
+            "2" : {
+                "main" : "true",
+                "source" : "img/jobs/quartermaine1_l.png",
+                "size": "l"
+            },
+            "3" : {
+                "main" : "true",
+                "source" : "img/jobs/quartermaine2_m.png",
+                "size": "m"
+            },
+            "4" : {
+                "main" : "true",
+                "source" : "img/jobs/quartermaine2_l.png",
+                "size": "l"
+            }
         }
     }
-
-    
 }

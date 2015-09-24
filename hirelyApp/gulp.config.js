@@ -25,7 +25,7 @@ module.exports = function() {
         build: './dist/',
         client: client,
         cssFolder: cssFolder,
-        fonts: ['./lib/font-awesome/fonts/**/*.*', './lib/bootstrap/fonts/**/*.*'],
+        fonts: ['./lib/font-awesome/fonts/**/*.*', './lib/bootstrap/fonts/**/*.*', cssFolder + 'flaticon/fonts/**/*.*', './lib/flexslider/fonts/**/*.*'],
         htmltemplates: clientApp + '**/*.html',
 
         images: client + 'img/**/*.*',
