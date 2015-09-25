@@ -5,24 +5,55 @@
  (function () {
     'use strict';
 
-    angular.module('hirelyApp.jobdetails').controller('JobDetailCtrl', ['$scope', '$state', '$stateParams', '$firebaseArray', 'JobdetailsService', JobDetailCtrl ]);
+    angular.module('hirelyApp.jobdetails').controller('JobDetailCtrl', ['$scope', '$state', '$stateParams','PositionService', 'GeocodeService', JobDetailCtrl ]);
 
-    function JobDetailCtrl ($scope, $state, $stateParams, $firebaseArray, JobdetailsService) {
+    function JobDetailCtrl ($scope, $state, $stateParams, PositionService, GeocodeService) {
 
-    	var url = 'https://shining-torch-5144.firebaseio.com/jobOpenings';
-        var fireRef = new Firebase(url);
-        var jobdetailsService = JobdetailsService;
+        var positionService = PositionService;
+        var geocodeService = GeocodeService;
+        var params = $stateParams;
+        var siteId = $stateParams.siteId;
+        var positionId = $stateParams.positionId;
+        var placeId = $stateParams.placeId;
+        $scope.position = '';
+        $scope.wageFormatted = '';
+        $scope.distance = '';
+        $scope.photos = [];
 
-        $scope.jobDetails = $firebaseArray(fireRef);
-        $scope.jobUID = jobdetailsService.getJob();
+        positionService.getPositionbyId(siteId, positionId).then(function (positionObj) {
+            var today=new Date();
+            $scope.position = positionObj;
+            $scope.wageFormatted = positionObj.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.compensation.wage) : getnoMaxWageDisplay(positionObj.compensation.wage);
+            var largePhoto = _.matcher({size: "l"});
+            var photos =  _.filter(positionObj.business.photos, largePhoto);
+            angular.forEach(photos, function(photoObj, photoKey) {
 
-        $scope.setJobResults = function(jobUID) {
-             jobdetailsService.setJob(jobUID);
-            $state.go('app.jobdetails')
+                $scope.photos.push(photoObj.source);
+            });
 
+           geocodeService.calculateDistancetoSite(siteId, placeId).then(function (distance) {
+               $scope.distance = distance;
+           }, function (err) {
+                //TODO:  add error handling
+            });
+
+        }, function (err) {
+            //TODO:  add error handling
+        });
+
+        var getMaxWageDisplay = function(wage)
+        {
+
+            return  numeral(wage.minAmount).format('$0.00') + '-' + numeral(wage.maxAmount).format('$0.00');
         }
 
+        var getnoMaxWageDisplay = function(wage)
+        {
+
+            return  numeral(wage.minAmount).format('$0.00') + '+';
         }
+
+    }
 
 
 })();

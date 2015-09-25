@@ -47,7 +47,7 @@
         $scope.submitProfile = function() {
 
             userService.saveUser($scope.user);
-            candidateService.saveCandidate($scope.candidate, $scope.user.providerId);
+            candidateService.saveCandidate($scope.candidate, $scope.user.userId);
             $state.go('app.candidate.profile.experience');
         }
     }

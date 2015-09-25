@@ -9,13 +9,23 @@
     angular.module('hirelyApp.core')
         .service('PositionService', ['$q','FBURL', '$firebaseObject', 'fbutil', PositionService]);
 
-    function PositionService($q, FBURL, $firebaseObject, fbutil, CandidateService) {
+    function PositionService($q, FBURL, $firebaseObject, fbutil) {
         var self = this;
         var profile;
+        function businessSiteModel(){
+            this.siteId = '';
+            this.companyName = '';
+            this.siteName = '';
+            this.address = '';
+            this.photos = [];
+            this.positions = [];
+        }
         function positionModel(){
             this.companyName = '';
             this.title = '';
-            this.wage  ={};
+            this.compensation  ={};
+            this.benefits = {};
+            this.availability = {};
             this.employmentTypes = {};
             this.photo = '';
             this.positionId = '';
@@ -23,15 +33,9 @@
             this.siteId = '';
             this.occupationId = '';
             this.postDate = '';
+            this.site = new businessSiteModel();
         };
-        function businessSiteModel(){
-            this.siteId = '';
-            this.companyName = '';
-            this.siteName = '';
-            this.address = '';
-            this.photoUrl = '';
-            this.positions = [];
-        }
+
 
         this.getOpenPositionsForLocation = function getOpenPositionsForLocation(locationId, minWage, occupationId){
             var ref = new Firebase(FBURL);
@@ -40,8 +44,6 @@
                 ref.child('businessSite'),
                 ref.child('position'),
                 [ref.child('business'), 'business', 'businessSite.parentBusiness']
-
-
             );
 
             // specify the fields for each path
@@ -69,16 +71,13 @@
                         site.companyName = siteObj.name;
                         site.siteName = siteObj.businessSite.name;
                         site.address = siteObj.businessSite.address;
-                        var defaultPhoto = _.matcher({main: "true"});
-                        var photo =  _.filter(siteObj.photos, defaultPhoto);
-                        if(photo){
-                            site.photoUrl = photo[0].source;
-                        }
+                        site.photos = siteObj.photos;
+
                         if(siteObj.position) {
                             angular.forEach(siteObj.position, function (positionObj, positionKey) {
                                 //check if position meets criteria
                                 var meetsOcc = ((!occupationId) || occupationId == positionObj.occupation);
-                                var meetsWage = ((!minWage) || positionObj.wage.amount >= minWage);
+                                var meetsWage = ((!minWage) || positionObj.compensation.wage.minAmount >= minWage);
                                 var meetsActive = positionObj.status == 'Active'
                                 if(meetsOcc & meetsWage & meetsActive)
                                 {
@@ -88,9 +87,11 @@
                                     position.occupationId = positionObj.occupation;
                                     position.postDate = positionObj.postDate;
                                     position.title = positionObj.title;
-                                    position.wage = positionObj.wage;
+                                    position.compensation = positionObj.compensation;
                                     position.employmentTypes = positionObj.employmentTypes;
                                     position.status = positionObj.status;
+                                    position.benefits = positionObj.benefits;
+                                    position.availability = positionObj.availability;
                                     site.positions.push(position);
                                 }
 
@@ -108,6 +109,38 @@
             return deferred.promise;
 
         };
+
+        this.getPositionbyId = function(siteId, positionId){
+            var fb = new Firebase(FBURL);
+            var businessSite ='';
+            var business = '';
+            var hiringMgr = '';
+            var position = '';
+            var deferred = $q.defer();
+
+
+            fb.child('position/' + siteId+ '/' + positionId).once('value', function(positionSnap) {
+                position = positionSnap.val();
+                fb.child('businessSite/' + siteId).once('value', function(businessSiteSnap) {
+                    businessSite = businessSiteSnap.val();
+                    position = positionSnap.val();
+                    fb.child('business/' + businessSite.parentBusiness).once('value', function(businessSnap) {
+                        business = businessSnap.val();
+                        fb.child('users/' + position.mainHiringMgr).once('value', function(usersSnap) {
+                          hiringMgr = usersSnap.val();
+                            position.business = business;
+                            position.businessSite = businessSite;
+                            position.hiringMgr = hiringMgr;
+                            deferred.resolve(position);
+                        });
+
+                    });
+
+                });
+            });
+            return deferred.promise;
+
+        }
     };
 })();
 

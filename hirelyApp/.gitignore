@@ -7,3 +7,4 @@ plugins/
 dist/
 lib/
 tmp/
+deploy/

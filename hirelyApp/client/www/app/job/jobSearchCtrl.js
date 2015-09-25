@@ -13,7 +13,6 @@
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
-      var params = $stateParams;
 
       $scope.positions = [];
 
@@ -36,11 +35,12 @@
       $scope.map = '';
       $scope.mapOptions = '';
       $scope.occupations = [];
+      $scope.placeId = $stateParams.placeId;
 
 
       var getJobs = function() {
 
-          geocodeService.getPlacebyPlaceId(params.placeId)
+          geocodeService.getPlacebyPlaceId($scope.placeId)
               .then(function (place) {
                   if (place) {
                      initializeMap();
@@ -56,12 +56,16 @@
 
 
                       var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
-                          positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId).then(function (site) {
-                              $scope.mapmarkers.push(createMarker(key, location[0], location[1], site));
-                              angular.forEach(site.positions, function (openPosition) {
-                                  $scope.positions.push(createPosition(openPosition, distance, site.siteId, site.photoUrl));
+                          positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId)
+                              .then(function (site) {
+                            if(site.positions && site.positions.length > 0){
+                                $scope.mapmarkers.push(createMarker(key, location[0], location[1], site));
+                                angular.forEach(site.positions, function (openPosition) {
+                                    $scope.positions.push(createPosition(openPosition, distance, site.siteId, site.photos));
 
-                              });
+                                });
+                            }
+
                           }, function (err) {
 
                           });
@@ -141,6 +145,7 @@
                       longitude: '',
                   },
               businessSite: '',
+              photoUrl: '',
               show: false
 
           };
@@ -149,6 +154,11 @@
           marker.coords.latitude = lat;
           marker.coords.longitude = lng;
           marker.businessSite = site;
+          var defaultPhoto = _.matcher({main: "true", size: "m"});
+          var photo =  _.filter(site.photos, defaultPhoto);
+          if(photo){
+              marker.photoUrl = photo[0].source;
+          }
           marker.onClick = function() {
 
               marker.show = !marker.show;
@@ -156,7 +166,7 @@
         return marker;
       };
 
-      var createPosition = function(openPosition, distance, siteId, photoUrl){
+      var createPosition = function(openPosition, distance, siteId, photos){
           var position = {
               title: '',
               companyName: '',
@@ -177,17 +187,29 @@
           position.employmentTypes = openPosition.employmentTypes;
           position.status = openPosition.status;
           position.title = openPosition.title;
-          position.wage = openPosition.wage;
+          position.wage = openPosition.compensation.wage.maxAmount ? getMaxWageDisplay(openPosition.compensation.wage) : getnoMaxWageDisplay(openPosition.compensation.wage);
           position.siteId = siteId;
           position.positionId = openPosition.positionId;
           position.occupationId = openPosition.occupationId;
           position.postDate = openPosition.postDate;
-          position.photoUrl = photoUrl;
+          var defaultPhoto = _.matcher({main: "true"});
+          var photo =  _.filter(photos, defaultPhoto);
+          if(photo){
+             position.photoUrl = photo[0].source;
+          }
+
           return position;
       }
 
-      var getJobsbyDistance = function(event, ui){
+      var getMaxWageDisplay = function(wage)
+      {
+          return  wage.minAmount + '-' + wage.maxAmount + ' /' + wage.frequency;
+      }
 
+      var getnoMaxWageDisplay = function(wage)
+      {
+
+          return  wage.minAmount + '+' + ' /' + wage.frequency;
       }
 
       $scope.getJobsbyLocation = function(details){
@@ -203,7 +225,7 @@
       }
 
       $scope.searchJobs = function(){
-          $state.go('appFS.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
+          $state.go('app.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
       }
 
       var initialize = function(){

@@ -6,6 +6,9 @@ var config = require('./gulp.config')();
 var del = require('del');
 var watch = require('gulp-watch');
 var $ = require('gulp-load-plugins')({lazy: true});
+var port = process.env.PORT || config.defaultPort;
+var args = require('yargs').argv;
+var browserSync = require('browser-sync');
 
 var paths = {
   sass: ['./client/scss/**/*.scss']
@@ -174,10 +177,87 @@ gulp.task('optimize', ['inject','images', 'fonts', 'template-cache'], function()
             .pipe(useref())
             .pipe(gulp.dest(config.build));
 });
-
 gulp.task('serve-build', ['optimize'], function() {
     serve(false /* isDev */);
 });
+
+gulp.task('serve-dev', ['inject'], function() {
+    serve(true /* isDev */);
+});
+
+////////////
+
+function serve(isDev) {
+    var nodeOptions = {
+        script: config.nodeServer,
+        delayTime: 1,
+        env: {
+            'PORT': port,
+            'NODE_ENV': isDev ? 'dev' : 'build'
+        },
+        watch: [config.server]
+    };
+
+    return $.nodemon(nodeOptions)
+        .on('restart', function(ev) {
+            log('*** nodemon restarted');
+            log('files changed on restart:\n' + ev);
+            setTimeout(function() {
+                browserSync.notify('reloading now ...');
+                browserSync.reload({stream: false});
+            }, config.browserReloadDelay);
+        })
+        .on('start', function() {
+            log('*** nodemon started');
+            startBrowserSync(isDev);
+        })
+        .on('crash', function() {
+            log('*** nodemon crashed: script crashed for some reason');
+        })
+        .on('exit', function() {
+            log('*** nodemon exited cleanly');
+        });
+}
+
+function changeEvent(event) {
+    var srcPattern = new RegExp('/.*(?=/' + config.source + ')/');
+    log('File ' + event.path.replace(srcPattern, '') + ' ' + event.type);
+}
+
+function startBrowserSync() {
+    if (args.nosync || browserSync.active) {
+        return;
+    }
+
+    log('Starting browser-sync on port ' + port);
+
+    gulp.watch([config.less], ['styles'])
+        .on('change', function(event) { changeEvent(event); });
+
+    var options = {
+        proxy: 'localhost:' + port,
+        port: 3000,
+        files: [
+            config.client + '**/*.*',
+            '!' + config.less,
+            config.temp + '**/*.css'
+        ],
+        ghostMode: {
+            clicks: true,
+            location: false,
+            forms: true,
+            scroll: true
+        },
+        injectChanges: true,
+        logFileChanges: true,
+        logLevel: 'debug',
+        logPrefix: 'gulp-patterns',
+        notify: true,
+        reloadDelay: 0 //1000
+    };
+
+    browserSync(options);
+}
 
 function clean(path, done) {
     log('Cleaning: ' + $.util.colors.blue(path));

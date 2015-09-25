@@ -26,6 +26,7 @@
             this.providerId = '';
             this.createdOn = '';
             this.lastModifiedOn = '';
+            this.userId = '';
            }
 
 
@@ -39,6 +40,7 @@
 
         this.setCurrentUser = function setCurrentUser(user, userId){
             currentUser = user;
+            currentUser.userId = userId;
             currentUserId = userId;
         };
 

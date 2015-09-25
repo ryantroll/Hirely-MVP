@@ -1,7 +1,7 @@
 <header id="header" class="header">
     <div class="container" ng-controller="HeaderCtrl as vm">
         <h1 class="logo pull-left">
-            <a ui-sref="appFS.home">
+            <a ui-sref="app.home">
                 <span class="logo-title">hirely</span>
             </a>
         </h1><!--//logo-->
@@ -19,7 +19,7 @@
                     <li class="dropdown dropdown-user" ng-show="currentUser">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <div class="sign-in-divider"></div>
-                            <img alt="" class="img-circle" src="{{currentUser.profileImageUrl && currentUser.profileImageUrl || 'img/avatar.jpg' }}">
+                            <img alt="" class="img-circle" src="{{currentUser.profileImageUrl || 'img/avatar.jpg' }}">
 						<span class="username username-hide-on-mobile">
 						Hi <span ng-bind="currentUser.firstName"> </span>
                             </span>!

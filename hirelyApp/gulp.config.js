@@ -3,6 +3,7 @@ module.exports = function() {
     var cssFolder = './client/www/css/';
     var clientApp = client + 'app/';
     var temp = './tmp/';
+    var server = './server/';
     var config = {
         /**
          * Files paths
@@ -16,10 +17,15 @@ module.exports = function() {
             directory: './lib/',
             ignorePath: ''
         },
+        /**
+         * Node settings
+         */
+        defaultPort: 7200,
+        nodeServer: './server/server.js',
         build: './dist/',
         client: client,
         cssFolder: cssFolder,
-        fonts: ['./lib/font-awesome/fonts/**/*.*', './lib/bootstrap/fonts/**/*.*'],
+        fonts: ['./lib/font-awesome/fonts/**/*.*', './lib/bootstrap/fonts/**/*.*', cssFolder + 'flaticon/fonts/**/*.*', './lib/flexslider/fonts/**/*.*'],
         htmltemplates: clientApp + '**/*.html',
 
         images: client + 'img/**/*.*',
@@ -31,6 +37,7 @@ module.exports = function() {
         ],
         less: cssFolder + '*.less',
         templates: clientApp + '**/*.html',
+        server: server,
         temp: temp,
         /**
          * template cache

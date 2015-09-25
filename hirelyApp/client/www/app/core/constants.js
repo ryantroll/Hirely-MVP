@@ -11,7 +11,7 @@
         .constant('version', '0.6')
 
         // where to redirect users if they need to authenticate (see module.routeSecurity)
-        .constant('loginRedirectPath', 'appFS.home')
+        .constant('loginRedirectPath', 'app.home')
 
         // your Firebase URL goes here
         .constant('FBURL', 'https://shining-torch-5144.firebaseio.com')
