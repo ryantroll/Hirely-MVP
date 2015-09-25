@@ -1,0 +1,283 @@
+<div class="modal-signup">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.CloseModal()">&times;</button>
+        <h1 id="signupModalLabel" class="modal-title text-center">Hirely</h1>
+        <h3 id="signupModalLabel" class="modal-title text-center">Opportunity Awaits</h3>
+        <p></p>
+    </div>
+      <div class="modal-body" style="overflow: auto;">             
+        <div class="divider"><span></span></div>
+        <div class="login-form-container">
+           <div class="panel-group" id="accordion">
+            <div class="panel panel-default" id="panel1">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                  Lets start with you!
+               </a>
+              </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+              <div class="panel-body"> 
+            <form name="loginForm" class="login-form" ng-submit="vm.registerNewUser()">
+                <div class="form-group firstName">
+                    <label class="sr-only" for="signupfirstName">First Name</label>
+                    <input id="signupfirstName" name="signupfirstName" type="text" class="form-control login-email" required placeholder="First Name" ng-model="manager.firstName">
+                    <div role="alert">
+                          <span class="error" ng-show="loginForm.signupfirstName.$error.required && !loginForm.signupfirstName.$pristine">
+                            First Name is required</span>
+                    </div>
+                 </div><!--//form-group-->
+                <div class="form-group lastName">
+                    <label class="sr-only" for="signuplastName">Last Name</label>
+                    <input id="signuplastName" name="signuplastName" type="text" class="form-control login-email" required placeholder="Last Name" ng-model="manager.lastName">
+                    <div role="alert">
+                          <span class="error" ng-show="loginForm.signuplastName.$error.required && !loginForm.signuplastName.$pristine">
+                            Last Name is required</span>
+                    </div>
+                </div><!--//form-group-->
+                <div class="form-group email">
+                    <label class="sr-only" for="signupEmail">Work Email</label>
+                    <input id="signupEmail" name="signupEmail" type="email" class="form-control login-email" required placeholder="Work Email" ng-model="manager.email">
+                    <div role="alert">
+                      <span class="error" ng-show="loginForm.signupEmail.$error.required && !loginForm.signupEmail.$pristine">
+                        Email is required</span>
+                      <span class="error" ng-show="loginForm.signupEmail.$error.email">
+                        Invalid email format</span>
+                    </div>
+                </div><!--//form-group-->
+                <div class="form-group password">
+                    <label class="sr-only" for="signupPassword">Your Password</label>
+                    <input id="signupPassword" name="signupPassword" type="password" class="form-control login-password" ng-minlength="6" ng-maxlength="12"
+                           required placeholder="Password" ng-model="manager.password">
+                    <div role="alert">
+                      <span class="error" ng-show="loginForm.signupPassword.$error.required  && !loginForm.signupPassword.$pristine">
+                        Password is required</span>
+                      <span class="error" ng-show="loginForm.signupPassword.$error.minlength || loginForm.signupPassword.$error.maxlength">
+                        Password should be between 6 and 12 characters</span>
+                    </div>
+                </div><!--//form-group-->
+                </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default" id="panel2">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                        Tell us about the Business!
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                      <div class="panel-body">
+                   <div class="form-group businessName">
+                    <label class="sr-only" for="signupbusinessName">Business Name</label>
+                     <input id="autocomplete" placeholder="Enter Business Name" type="text" id="signupbusinessName" name="signupbusinessName" class="form-control login-email" required placeholder="Business Name" ng-model="manager.businessName"></input>
+                    <div role="alert">
+                      <span class="error" ng-show="loginForm.signupbusinessName.$error.required && !loginForm.signupbusinessName.$pristine">
+                       Business Name is required</span>
+                    </div>
+                   </div><!--//form-group-->
+                  <table>
+                   <tr>
+                   <div class="form-group Address">
+                      <input class="slimField" id="street_number" required placeholder="Address"></input>
+                      <input id="route" required placeholder="Street" style="width: 320px"></input>
+                   </div><!--//form-group-->
+                    </tr>
+                    <tr>
+                    <div class="form-group City/State/Zip">
+                      <input class="slimField" id="locality" required placeholder="City"></input>
+                      <input class="slimField" id="administrative_area_level_1" required placeholder="State" style="width: 50px"></input> 
+                      <input class="slimField" id="postal_code" required placeholder="Zip code"></input> 
+                    </div><!--//form-group-->
+                    </tr>
+                    <tr>  
+                    <div class="form-group Country">           
+                      <input class="slimField" id="country" required placeholder="Country"></input> 
+                    </div><!--//form-group--> 
+                   </tr>
+                   <tr>
+                    <div class="form-group LAT/LONG">                  
+                      <input class="slimField" id="latitude" required placeholder="Lat"></input>       
+                      <input class="slimField" id="longitude" required placeholder="Long"></input>
+                    </div><!--//form-group--> 
+                 </tr>
+                </table> 
+                <div class="form-group webAddress">
+                <input id="signupwebAddress" name="signupwebAddress" type="webAddress" style="width: 400px" required placeholder="Web Address" ng-model="manager.webaddress">
+                <div role="alert">
+                  <span class="error" ng-show="loginForm.signupwebAddress.$error.required  && !loginForm.signupwebAddress.$pristine">
+                    Web Address is required</span>
+                </div>
+                </div><!--//form-group-->
+                <script>
+                // This example displays an address form, using the autocomplete feature
+                // of the Google Places API to help users fill in the information.
+
+                $("#autocomplete").on('focus', function () {
+                    geolocate();
+                });
+
+                var placeSearch, autocomplete;
+                var componentForm = {
+                    street_number: 'short_name',
+                    route: 'long_name',
+                    locality: 'long_name',
+                    administrative_area_level_1: 'short_name',
+                    country: 'long_name',
+                    postal_code: 'short_name'
+                };
+
+                function initialize() {
+                    // Create the autocomplete object, restricting the search
+                    // to geographical location types.
+                    autocomplete = new google.maps.places.Autocomplete(
+                    /** @type {HTMLInputElement} */ (document.getElementById('autocomplete')), {
+                        types: ['establishment']
+                    });
+                    // When the user selects an address from the dropdown,
+                    // populate the address fields in the form.
+                    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                        fillInAddress();
+                    });
+                }
+
+                // [START region_fillform]
+                function fillInAddress() {
+                    // Get the place details from the autocomplete object.
+                    var place = autocomplete.getPlace();
+
+                    document.getElementById("latitude").value = place.geometry.location.lat();
+                    document.getElementById("longitude").value = place.geometry.location.lng();
+                    document.getElementById("open_store_hours0").value = place.opening_hours.periods[0].open.time;
+                    document.getElementById("closed_store_hours0").value = place.opening_hours.periods[0].close.time;
+                    document.getElementById("open_store_hours1").value = place.opening_hours.periods[1].open.time;
+                    document.getElementById("closed_store_hours1").value = place.opening_hours.periods[1].close.time;
+                    document.getElementById("open_store_hours2").value = place.opening_hours.periods[2].open.time;
+                    document.getElementById("closed_store_hours2").value = place.opening_hours.periods[2].close.time;
+                    document.getElementById("open_store_hours3").value = place.opening_hours.periods[3].open.time;
+                    document.getElementById("closed_store_hours3").value = place.opening_hours.periods[3].close.time;
+                    document.getElementById("open_store_hours4").value = place.opening_hours.periods[4].open.time;
+                    document.getElementById("closed_store_hours4").value = place.opening_hours.periods[4].close.time;
+                    document.getElementById("open_store_hours5").value = place.opening_hours.periods[5].open.time;
+                    document.getElementById("closed_store_hours5").value = place.opening_hours.periods[5].close.time;
+                    document.getElementById("open_store_hours6").value = place.opening_hours.periods[6].open.time;
+                    document.getElementById("closed_store_hours6").value = place.opening_hours.periods[6].close.time;
+
+                    for (var component in componentForm) {
+                        document.getElementById(component).value = '';
+                        document.getElementById(component).disabled = false;
+                    }
+
+                    // Get each component of the address from the place details
+                    // and fill the corresponding field on the form.
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+                        if (componentForm[addressType]) {
+                            var val = place.address_components[i][componentForm[addressType]];
+                            document.getElementById(addressType).value = val;
+                        }
+                    }
+                }
+                // [END region_fillform]
+
+                // [START region_geolocation]
+                // Bias the autocomplete object to the user's geographical location,
+                // as supplied by the browser's 'navigator.geolocation' object.
+                function geolocate() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var geolocation = new google.maps.LatLng(
+                            position.coords.latitude, position.coords.longitude);
+
+                            var latitude = position.coords.latitude;
+                            var longitude = position.coords.longitude;
+                            document.getElementById("latitude").value = latitude;
+                            document.getElementById("longitude").value = longitude;
+                           
+                            autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
+                        });
+                    }
+
+                }
+
+                initialize();
+                // [END region_geolocation]
+                
+                </script>
+               
+                </div>
+                </div>
+              </div>
+              <div class="panel panel-default" id="panel3">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                    When are you open?
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                  <div class="panel-body">
+
+                <label><h4>Store Hours</h4></label>  
+                <div class="form-group Store_Hours" >
+                  <table>
+                   <tr>  
+                    <label style="width: 100px">Sunday: </label>
+                    <input class="slimField" id="open_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours0" ></input>  
+                    <input class="slimField" id="closed_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours0" ></input> 
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Monday: </label>
+                    <input class="slimField" id="open_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours1" ></input>  
+                    <input class="slimField" id="closed_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours1" ></input>
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Tuesday: </label>
+                    <input class="slimField" id="open_store_hours2" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours2" ></input>  
+                    <input class="slimField" id="closed_store_hours2" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours2" ></input>
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Wednesday: </label> 
+                    <input class="slimField" id="open_store_hours3" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours3" ></input>  
+                    <input class="slimField" id="closed_store_hours3" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours3" ></input>
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Thursday: </label>  
+                    <input class="slimField" id="open_store_hours4" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours4" ></input>  
+                    <input class="slimField" id="closed_store_hours4" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours4" ></input>  
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Friday: </label>
+                    <input class="slimField" id="open_store_hours5" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours5" ></input>  
+                    <input class="slimField" id="closed_store_hours5" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours5" ></input>
+                    </div> 
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Saturday: </label>  
+                    <input class="slimField" id="open_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours6" ></input>  
+                    <input class="slimField" id="closed_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours6" ></input>
+                  </tr>
+                 </table> 
+                    <div role="alert">
+                      <span class="error" ng-show="loginForm.signupstoreHours.$error.required && !loginForm.signupstoreHours.$pristine">
+                       Store Hours are required</span>
+                    </div>
+                </div><!--//form-group-->
+              
+                <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="!loginForm.$valid">Create</button>
+                <p class="note">By signing up, you agree to our terms of services and privacy policy.</p>
+              
+                </div>
+                </div>
+              </div>
+            </div>
+         </form>
+        </div><!--//login-form-container-->
+    </div><!--//modal-body-->
+    <div class="modal-footer">
+        <p>Already have an account? <a class="login-link" id="login-link" href="#">Log in</a></p>
+    </div><!--//modal-footer-->
+</div><!--//modal-content-->

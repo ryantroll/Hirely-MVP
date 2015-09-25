@@ -44,6 +44,15 @@
             });
         };
 
+        vm.hmregister = function(){
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'app/manager/hmregister.html',
+                controller: 'HMRegisterCtrl as vm',
+                
+            });
+        };
+
         vm.logout = function(){
             authService.logout();
         };
