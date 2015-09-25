@@ -36,25 +36,20 @@
 
         }
 
-        $scope.createDashboard = function() {
-         
+        vm.createDashboard = function() {
             $state.go('app.busDashboard');
 
         }
-
-
 
         vm.FbRegister = function () {
             registerThirdPartyUser('facebook')
         }
 
         vm.GoogleRegister = function () {
-
             registerThirdPartyUser('google')
         }
 
         vm.TwitterRegister = function () {
-
             registerThirdPartyUser('twitter')
         }
 

@@ -81,26 +81,26 @@
                   <table>
                    <tr>
                    <div class="form-group Address">
-                      <input class="slimField" id="street_number" required placeholder="Address"></input>
+                      <input class="slimField" id="street_number" required placeholder="Address" ng-model="manager.businessAddress"></input>
                       <input id="route" required placeholder="Street" style="width: 320px"></input>
                    </div><!--//form-group-->
                     </tr>
                     <tr>
                     <div class="form-group City/State/Zip">
-                      <input class="slimField" id="locality" required placeholder="City"></input>
-                      <input class="slimField" id="administrative_area_level_1" required placeholder="State" style="width: 50px"></input> 
-                      <input class="slimField" id="postal_code" required placeholder="Zip code"></input> 
+                      <input class="slimField" id="locality" required placeholder="City" ng-model="manager.businessCity"></input>
+                      <input class="slimField" id="administrative_area_level_1" required placeholder="State" style="width: 50px" ng-model="manager.businessState"></input> 
+                      <input class="slimField" id="postal_code" required placeholder="Zip code" ng-model="manager.businessZip"></input> 
                     </div><!--//form-group-->
                     </tr>
                     <tr>  
                     <div class="form-group Country">           
-                      <input class="slimField" id="country" required placeholder="Country"></input> 
+                      <input class="slimField" id="country" required placeholder="Country" ng-model="manager.businessCountry"></input> 
                     </div><!--//form-group--> 
                    </tr>
                    <tr>
                     <div class="form-group LAT/LONG">                  
-                      <input class="slimField" id="latitude" required placeholder="Lat"></input>       
-                      <input class="slimField" id="longitude" required placeholder="Long"></input>
+                      <input class="slimField" id="latitude" required placeholder="Lat" ng-model="manager.businessLat"></input>       
+                      <input class="slimField" id="longitude" required placeholder="Long" ng-model="manager.businessLong"></input>
                     </div><!--//form-group--> 
                  </tr>
                 </table> 
@@ -226,39 +226,39 @@
                   <table>
                    <tr>  
                     <label style="width: 100px">Sunday: </label>
-                    <input class="slimField" id="open_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours0" ></input>  
-                    <input class="slimField" id="closed_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours0" ></input> 
+                    <input class="slimField" id="open_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours0" ng-model="manager.businessOHours0"></input>  
+                    <input class="slimField" id="closed_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours0" ng-model="manager.businessCHours0"></input> 
                    </tr>
                    <tr>
                     <label style="width: 100px">Monday: </label>
-                    <input class="slimField" id="open_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours1" ></input>  
-                    <input class="slimField" id="closed_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours1" ></input>
+                    <input class="slimField" id="open_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours1" ng-model="manager.businessOHours1"></input>  
+                    <input class="slimField" id="closed_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours1" ng-model="manager.businessCHours1"></input>
                    </tr>
                    <tr>
                     <label style="width: 100px">Tuesday: </label>
-                    <input class="slimField" id="open_store_hours2" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours2" ></input>  
-                    <input class="slimField" id="closed_store_hours2" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours2" ></input>
+                    <input class="slimField" id="open_store_hours2" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours2" ng-model="manager.businessOHours2"></input>  
+                    <input class="slimField" id="closed_store_hours2" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours2" ng-model="manager.businessCHours2"></input>
                    </tr>
                    <tr>
                     <label style="width: 100px">Wednesday: </label> 
-                    <input class="slimField" id="open_store_hours3" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours3" ></input>  
-                    <input class="slimField" id="closed_store_hours3" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours3" ></input>
+                    <input class="slimField" id="open_store_hours3" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours3" ng-model="manager.businessOHours3"></input>  
+                    <input class="slimField" id="closed_store_hours3" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours3" ng-model="manager.businessCHours3"></input>
                    </tr>
                    <tr>
                     <label style="width: 100px">Thursday: </label>  
-                    <input class="slimField" id="open_store_hours4" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours4" ></input>  
-                    <input class="slimField" id="closed_store_hours4" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours4" ></input>  
+                    <input class="slimField" id="open_store_hours4" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours4" ng-model="manager.businessOHours4"></input>  
+                    <input class="slimField" id="closed_store_hours4" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours4" ng-model="manager.businessCHours4"></input>  
                    </tr>
                    <tr>
                     <label style="width: 100px">Friday: </label>
-                    <input class="slimField" id="open_store_hours5" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours5" ></input>  
-                    <input class="slimField" id="closed_store_hours5" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours5" ></input>
+                    <input class="slimField" id="open_store_hours5" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours5" ng-model="manager.businessOHours5"></input>  
+                    <input class="slimField" id="closed_store_hours5" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours5" ng-model="manager.businessCHours5"></input>
                     </div> 
                    </tr>
                    <tr>
                     <label style="width: 100px">Saturday: </label>  
-                    <input class="slimField" id="open_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours6" ></input>  
-                    <input class="slimField" id="closed_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours6" ></input>
+                    <input class="slimField" id="open_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours6" ng-model="manager.businessOHours6"></input>  
+                    <input class="slimField" id="closed_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="signupstoreHours6" ng-model="manager.businessCHours6"></input>
                   </tr>
                  </table> 
                     <div role="alert">
@@ -267,7 +267,7 @@
                     </div>
                 </div><!--//form-group-->
               
-                <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="!loginForm.$valid">Create</button>
+                <button type="submit" class="btn btn-block btn-cta-primary" ng-click="vm.createDashboard()">Create</button>
                 <p class="note">By signing up, you agree to our terms of services and privacy policy.</p>
               
                 </div>
