@@ -27,6 +27,7 @@
             this.benefits = {};
             this.availability = {};
             this.employmentTypes = {};
+            this.workHours = {};
             this.photo = '';
             this.positionId = '';
             this.status = '';
@@ -89,6 +90,7 @@
                                     position.title = positionObj.title;
                                     position.compensation = positionObj.compensation;
                                     position.employmentTypes = positionObj.employmentTypes;
+                                    position.workHours = positionObj.workHours;
                                     position.status = positionObj.status;
                                     position.benefits = positionObj.benefits;
                                     position.availability = positionObj.availability;

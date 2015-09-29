@@ -1,37 +1,96 @@
 
-    <div class="user-experience">
+    <div class="user-experience" ng-controller="CandidateProfileExperienceCtrl">
         <div class="panel layered-content">
-            <div class="panel-heading">
-                <i class="fa fa-briefcase"></i> Experience
+            <div class="panel-heading overflow-h">
+                <h2 class="panel-title heading-sm pull-left"> <i class="fa fa-briefcase"></i> Experience</h2>
             </div>
             <div class="panel-body">
                 <ul class="timeline-v2 timeline-me">
-                    <li>
-                        <time datetime="" class="cbp_tmtime"><span>Mobile Design</span> <span>2012 - Current</span></time>
+                    <li ng-repeat="experience in experiences | orderBy: '-startDate'">
+                        <time datetime="" class="cbp_tmtime"><span>{{experience.occupation.title}}</span> <span>{{experience.startDate | date: "MM/yy"}} - {{experience.endDate ? (experience.endDate | date: "MM/yy") : "Current"}}</span></time>
                         <i class="cbp_tmicon rounded-x hidden-xs"></i>
                         <div class="cbp_tmlabel">
-                            <h2>BFC NYC Partners</h2>
-                            <h3>Washington, DC</h3>
+                            <h2>{{experience.company.name}}</h2>
+                            <div >
+                                <div class="pull-left">
+                                    <h3>{{experience.location.name}}</h3>
+                                </div>
+                               <div class="edit-buttons pull-right"><a ng-href="" ng-click="editExperience(experience.$id)"><i class="fa fa-pencil-square"></i><span>Edit</span></a><a ng-href="" ng-click="deleteExperience(experience.$id)"><i class="fa fa-times-circle"></i><span>Remove</span></a></div>
+
+                            </div>
+
                         </div>
+
                     </li>
-                    <li>
-                        <time datetime="" class="cbp_tmtime"><span>Web Designer</span> <span>2007 - 2012</span></time>
-                        <i class="cbp_tmicon rounded-x hidden-xs"></i>
-                        <div class="cbp_tmlabel">
-                            <h2>Freelance</h2>
-                            <h3>Bethesda, MD</h3>
-                        </div>
-                    </li>
-                    <li>
-                        <time datetime="" class="cbp_tmtime"><span>Photodesigner</span> <span>2003 - 2007</span></time>
-                        <i class="cbp_tmicon rounded-x hidden-xs"></i>
-                        <div class="cbp_tmlabel">
-                            <h2>Toren Condo</h2>
-                            <h3>Rockville, MD</h3>
-                        </div>
-                    </li>
+
                 </ul>
 
+            </div>
+            <div class="margin-top-20 margin-bottom-20" ng-show="!addExperience">
+                <button class="btn btn-cta-blue" ng-click="showExperience()"><i class="fa fa-plus-circle"></i>Add Experience</button>
+            </div>
+            <div class="add-experience padding-20" ng-show="addExperience" ng-submit="saveExperience()">
+                <form name="experienceForm" id="add-experience">
+                    <input type="hidden" id="experienceId" ng-model="experience.id">
+                    <div class="form-group">
+                        <label for="experienceTitle">Job Title</label>
+                        <input type="text" required id="experienceTitle" name="experienceTitle" ng-model="experience.occupation" typeahead="occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:25" class="form-control"  placeholder="Job Title ">
+                        <div role="alert">
+                              <span class="error" ng-show="experienceForm.experienceTitle.$error.required && !experienceForm.experienceTitle.$pristine">
+                               Job Title is required</span>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="experienceCompany">Company</label>
+                        <input type="text" id="experienceCompany" name="experienceCompany" class="form-control" ng-autocomplete details="companyDetails" ng-model="companyResults" on-place-changed="companySet()"  options="companyOptions" required placeholder="Company"/>
+                        <div role="alert">
+                              <span class="error" ng-show="experienceForm.experienceCompany.$error.required && !experienceForm.experienceCompany.$pristine">
+                               Company name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="experienceLocation">Location</label>
+                        <input type="text" id="experienceLocation" name="experienceLocation" class="form-control" ng-autocomplete details="locationDetails" ng-model="locationResults"  on-place-changed="locationSet()" options="locationOptions" required placeholder="Location" />
+                        <div role="alert">
+                              <span class="error" ng-show="experienceForm.experienceLocation.$error.required && !experienceForm.experienceLocation.$pristine">
+                               Job Location is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentlyWorking">Employment Dates</label>
+                        <div class="checkbox">
+                            <label>
+                                <input id="currentlyWorking" type="checkbox" ng-model="experience.currentlyWorking"> Currently Working There?
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input id="experienceFromDate" type="month" name="experienceFromDate" ng-model="startDate"
+                                   placeholder="yyyy-MM" max="2015-10" required />
+                        </div>
+                        <span>To</span>
+                        <div class="form-group">
+                            <input id="experienceToDate" type="month" name="experienceToDate" ng-model="endDate"
+                                   placeholder="yyyy-MM" max="2015-10" ng-required="!experience.currentlyWorking" ng-disabled="experience.currentlyWorking" />
+                        </div>
+                        <div role="alert">
+                              <span class="error" ng-show="experiencForm.experienceFromDate.$error.required && !experienceForm.experienceFromDate.$pristine">
+                               Employment Start Date is required</span>
+                        </div>
+                        <div role="alert">
+                              <span class="error" ng-show="experiencForm.experienceToDate.$error.required && !experienceForm.experienceToDate.$pristine">
+                               Employment End Date is required</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group margin-top-40">
+
+                        <button type="submit" class="btn btn-cta-blue" ng-disabled="!experienceForm.$valid">Save</button>
+                        <button type="button" ng-click="cancelExperience()" class="btn btn-cta-blue">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="panel layered-content">

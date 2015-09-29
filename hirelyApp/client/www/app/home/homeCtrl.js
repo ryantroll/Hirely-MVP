@@ -7,8 +7,8 @@
         var geocodeService = GeocodeService;
         $scope.flexSliderOptions = {
             animation: "fade",
-            directionNav: false, //remove the default direction-nav - https://github.com/woothemes/FlexSlider/wiki/FlexSlider-Properties
-            controlNav: false, //remove the default control-nav
+            directionNav: false,
+            controlNav: false,
             slideshowSpeed: 10000
         };
 

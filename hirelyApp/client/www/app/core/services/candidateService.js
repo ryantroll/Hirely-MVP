@@ -6,12 +6,13 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('CandidateService', ['$q','$http','FBURL', '$firebaseObject', 'fbutil', CandidateService]);
+        .service('CandidateService', ['$q','$http','FBURL', '$firebaseObject', 'fbutil', '$firebaseArray', CandidateService]);
 
-    function CandidateService($q, $http, FBURL, $firebaseObject, fbutil, CandidateService) {
+    function CandidateService($q, $http, FBURL, $firebaseObject, fbutil, $firebaseArray, CandidateService) {
         var self = this;
-        var profile;
-
+        var profile = '';
+        var candidateExperience = [];
+        var candidateEducation = [];
 
         function candidateModel(){
             this.authorizedInUS = '';
@@ -29,16 +30,15 @@
             var profile = new Firebase.util.NormalizedCollection(
                 ref.child('users'),
                 ref.child('candidates'),
-                ref.child('candidate-experience'),
                 ref.child('candidate-availability'),
                 ref.child('candidate-personality')
+
             );
 
             // specify the fields for each path
             profile = profile.select({key: 'candidates.$value', alias: 'candidate'},
                 {key: 'candidate-availability.$value', alias: 'availability'},
-                {key: 'candidate-personality.$value', alias: 'personality'});
-
+                {key: 'candidate-personality.$value', alias: 'personality'}),
 
             // apply a client-side filter to the data (only return users where key === 'user1'
             profile = profile.filter(
@@ -143,6 +143,11 @@
                 });
             return deferred.promise;
 
+        }
+
+        this.getExperience = function getExperience(userId){
+            var ref = fbutil.ref('candidate-experience', userId);
+            return $firebaseArray(ref);
         }
 
 

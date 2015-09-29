@@ -1,438 +1,459 @@
 {
-    "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69":     {
-        "886BFB24-7D0C-47E0-839F-DDD2CFFBDA44": {
-            "title": "Barista",
-            "description": "Awesome Barista's wanted",
-            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
-            "status": "Active",
-            "postDate": "9/8/2015",
-            "createDate": "9/8/2015",
-            "modifiedDate": "9/8/2015",
-            "siteId": "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69",
-            "mainHiringMgr": "78f6f701-e8ea-464e-b064-029d339c9021",
-            "compensation": {
-                "wage": {
-                    "minAmount": 12.00,
-                    "maxAmount": 15.00,
-                    "frequency": "hr"
-                },
-                "commission": false,
-                "tips": true
-            },
-            "benefits": {
-                "medical": true,
-                "dental": true,
-                "vision": true,
-                "life": false,
-                "stock": false,
-                "retirement": true,
-                "discounts": true,
-                "flexibleSchedule": true
-            },
-            "employmentTypes": {
-                "fullTime": true,
-                "partTime": true
-            },
-            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
-            "availability": {
-                "sunday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "monday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "tuesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "wednesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "thursday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "friday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "saturday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                }
-            }
-        },
-        "4B185139-57A6-4CD2-96CD-11DD7FE40C87": {
-            "title": "Barista Manager",
-            "description": "Awesome Barista's wanted",
-            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
-            "status": "Active",
-            "postDate": "9/8/2015",
-            "createDate": "9/8/2015",
-            "modifiedDate": "9/8/2015",
-            "siteId": "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69",
-            "mainHiringMgr": "78f6f701-e8ea-464e-b064-029d339c9021",
-            "compensation": {
-                "wage": {
-                    "minAmount": 15.00,
-                    "maxAmount": 20.00,
-                    "frequency": "hr"
-                },
-                "commission": false,
-                "tips": true
-            },
-            "benefits": {
-                "medical": true,
-                "dental": true
-            },
-            "employmentTypes": {
-                "fullTime": true,
-                "partTime": true
-            },
-            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
-            "availability": {
-                "sunday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "monday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "tuesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "wednesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "thursday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "friday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "saturday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                }
-            }
-        }
-    },
     "5E65284E-7E2C-4914-9E21-174EA118B277": {
         "BCF4053D-A9AB-4A2B-BEAC-3DFE8C8239BE": {
-            "title": "Coffee Enthusiast",
-            "description": "Awesome Barista's wanted",
-            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
-            "status": "Active",
-            "postDate": "9/8/2015",
-            "createDate": "9/8/2015",
-            "modifiedDate": "9/8/2015",
-            "siteId": "5E65284E-7E2C-4914-9E21-174EA118B277",
-            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
-            "compensation": {
-                "wage": {
-                    "minAmount": 11.00,
-                    "maxAmount": null,
-                    "frequency": "hr"
+            "workHours": {
+                "min": 20,
+                "max": null
+            },
+            "availability": {
+                "friday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
                 },
-                "commission": false,
-                "tips": true
+                "monday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "saturday": {
+                    "afternoon": true,
+                    "evening": false,
+                    "morning": true
+                },
+                "sunday": {
+                    "afternoon": true,
+                    "evening": false,
+                    "morning": true
+                },
+                "thursday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "tuesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "wednesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                }
             },
             "benefits": {
-                "medical": true,
                 "dental": true,
-                "vision": true,
-                "life": false,
-                "stock": false,
-                "retirement": true,
                 "discounts": true,
-                "flexibleSchedule": true
+                "flexibleSchedule": true,
+                "life": false,
+                "medical": true,
+                "retirement": true,
+                "stock": false,
+                "vision": true
             },
+            "compensation": {
+                "commission": false,
+                "tips": true,
+                "wage": {
+                    "frequency": "hr",
+                    "minAmount": 11
+                }
+            },
+            "createDate": "9/8/2015",
+            "description": "Awesome Barista's wanted",
             "employmentTypes": {
                 "fullTime": true,
                 "partTime": true
             },
+            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
+            "modifiedDate": "9/8/2015",
             "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
-            "availability": {
-                "sunday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "monday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "tuesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "wednesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "thursday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "friday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "saturday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                }
-            }
+            "postDate": "9/8/2015",
+            "siteId": "5E65284E-7E2C-4914-9E21-174EA118B277",
+            "status": "Active",
+            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
+            "title": "Coffee Enthusiast"
         }
     },
     "8CC0EE4A-5FC0-44F1-A55F-B46352BC73D4": {
         "244301C7-F368-4BCC-B7A8-9C47B46254BB": {
-            "title": "Talented Barista",
-            "description": "Awesome Barista's wanted",
-            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
-            "status": "Active",
-            "postDate": "9/8/2015",
-            "createDate": "9/8/2015",
-            "modifiedDate": "9/8/2015",
-            "siteId": "8CC0EE4A-5FC0-44F1-A55F-B46352BC73D4",
-            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
-            "compensation": {
-                "wage": {
-                    "minAmount": 10.00,
-                    "maxAmount": null,
-                    "frequency": "hr"
+            "workHours": {
+                "min": 20,
+                "max": 40
+            },
+            "availability": {
+                "friday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
                 },
-                "commission": false,
-                "tips": true
+                "monday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "saturday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "sunday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "thursday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "tuesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "wednesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                }
             },
             "benefits": {
-                "medical": true,
                 "dental": true,
-                "vision": false,
-                "life": false,
-                "stock": false,
-                "retirement": true,
                 "discounts": true,
-                "flexibleSchedule": false
+                "flexibleSchedule": false,
+                "life": false,
+                "medical": true,
+                "retirement": true,
+                "stock": false,
+                "vision": false
             },
+            "compensation": {
+                "commission": false,
+                "tips": true,
+                "wage": {
+                    "frequency": "hr",
+                    "minAmount": 10
+                }
+            },
+            "createDate": "9/8/2015",
+            "description": "Awesome Barista's wanted",
             "employmentTypes": {
                 "fullTime": true,
                 "partTime": true
             },
+            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
+            "modifiedDate": "9/8/2015",
             "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
+            "postDate": "9/8/2015",
+            "siteId": "8CC0EE4A-5FC0-44F1-A55F-B46352BC73D4",
+            "status": "Active",
+            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
+            "title": "Talented Barista"
+        }
+    },
+    "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69": {
+        "4B185139-57A6-4CD2-96CD-11DD7FE40C87": {
+            "workHours": {
+                "min": 40,
+                "max": null
+            },
             "availability": {
-                "sunday": {
-                    "morning": true,
+                "friday": {
                     "afternoon": false,
-                    "evening": false
+                    "evening": false,
+                    "morning": true
                 },
                 "monday": {
-                    "morning": true,
                     "afternoon": false,
-                    "evening": false
-                },
-                "tuesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "wednesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "thursday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "friday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
+                    "evening": false,
+                    "morning": true
                 },
                 "saturday": {
-                    "morning": true,
                     "afternoon": false,
-                    "evening": false
+                    "evening": false,
+                    "morning": true
+                },
+                "sunday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "thursday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "tuesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "wednesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
                 }
-            }
+            },
+            "benefits": {
+                "dental": true,
+                "medical": true
+            },
+            "compensation": {
+                "commission": false,
+                "tips": true,
+                "wage": {
+                    "frequency": "hr",
+                    "maxAmount": 20,
+                    "minAmount": 15
+                }
+            },
+            "createDate": "9/8/2015",
+            "description": "Awesome Barista's wanted",
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "mainHiringMgr": "78f6f701-e8ea-464e-b064-029d339c9021",
+            "modifiedDate": "9/8/2015",
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
+            "postDate": "9/8/2015",
+            "siteId": "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69",
+            "status": "Active",
+            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
+            "title": "Barista Manager"
+        },
+        "886BFB24-7D0C-47E0-839F-DDD2CFFBDA44": {
+              "workHours": {
+                    "min": 20,
+                    "max": null
+                },
+            "availability": {
+                "friday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "monday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "saturday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "sunday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "thursday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "tuesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "wednesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                }
+            },
+            "benefits": {
+                "dental": true,
+                "discounts": true,
+                "flexibleSchedule": true,
+                "life": false,
+                "medical": true,
+                "retirement": true,
+                "stock": false,
+                "vision": true
+            },
+            "compensation": {
+                "commission": false,
+                "tips": true,
+                "wage": {
+                    "frequency": "hr",
+                    "maxAmount": 15,
+                    "minAmount": 12
+                }
+            },
+            "createDate": "9/8/2015",
+            "description": "Awesome Barista's wanted",
+            "employmentTypes": {
+                "fullTime": true,
+                "partTime": true
+            },
+            "mainHiringMgr": "78f6f701-e8ea-464e-b064-029d339c9021",
+            "modifiedDate": "9/8/2015",
+            "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
+            "postDate": "9/8/2015",
+            "siteId": "AE45DF9E-E3C9-4635-B7B5-0D7973E67B69",
+            "status": "Active",
+            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
+            "title": "Barista"
         }
     },
     "BDEF087A-6472-4F02-ADCE-01C13D75E57F": {
         "3940C206-3AED-4602-9732-8F279DB6AAD9": {
-            "title": "Barista",
-            "description": "Awesome Barista's wanted",
-            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
-            "status": "Active",
-            "postDate": "9/8/2015",
-            "createDate": "9/8/2015",
-            "modifiedDate": "9/8/2015",
-            "siteId": "BDEF087A-6472-4F02-ADCE-01C13D75E57F",
-            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
-            "compensation": {
-                "wage": {
-                    "minAmount": 11.00,
-                    "maxAmount": 15.00,
-                    "frequency": "hr"
+            "workHours": {
+                "min": 20,
+                "max": 30
+            },
+            "availability": {
+                "friday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
                 },
-                "commission": false,
-                "tips": true
+                "monday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "saturday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "sunday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "thursday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "tuesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "wednesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                }
             },
             "benefits": {
-                "medical": true,
                 "dental": true,
-                "vision": true,
-                "life": true,
-                "stock": true,
-                "retirement": true,
                 "discounts": true,
-                "flexibleSchedule": true
+                "flexibleSchedule": true,
+                "life": true,
+                "medical": true,
+                "retirement": true,
+                "stock": true,
+                "vision": true
             },
+            "compensation": {
+                "commission": false,
+                "tips": true,
+                "wage": {
+                    "frequency": "hr",
+                    "maxAmount": 15,
+                    "minAmount": 11
+                }
+            },
+            "createDate": "9/8/2015",
+            "description": "Awesome Barista's wanted",
             "employmentTypes": {
                 "fullTime": true,
                 "partTime": true
             },
+            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
+            "modifiedDate": "9/8/2015",
             "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
-            "availability": {
-                "sunday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "monday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "tuesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "wednesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "thursday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "friday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "saturday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                }
-            }
+            "postDate": "9/8/2015",
+            "siteId": "BDEF087A-6472-4F02-ADCE-01C13D75E57F",
+            "status": "Active",
+            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
+            "title": "Barista"
         }
     },
     "D514E8B6-4CB7-4D52-90CD-CF68D0140B09": {
         "EE32FD94-4F19-4102-8FE4-8C08184DB220": {
-            "title": "Barista",
-            "description": "Awesome Barista's wanted",
-            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
-            "status": "Active",
-            "postDate": "9/8/2015",
-            "createDate": "9/8/2015",
-            "modifiedDate": "9/8/2015",
-            "siteId": "D514E8B6-4CB7-4D52-90CD-CF68D0140B09",
-            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
-            "compensation": {
-                "wage": {
-                    "minAmount": 12.00,
-                    "maxAmount": null,
-                    "frequency": "hr"
+            "workHours": {
+                "min": 35,
+                "max": null
+            },
+            "availability": {
+                "friday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
                 },
-                "commission": false,
-                "tips": true
+                "monday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "saturday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "sunday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "thursday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "tuesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                },
+                "wednesday": {
+                    "afternoon": false,
+                    "evening": false,
+                    "morning": true
+                }
             },
             "benefits": {
-                "medical": true,
                 "dental": true,
-                "vision": true,
-                "life": false,
-                "stock": false,
-                "retirement": true,
                 "discounts": true,
-                "flexibleSchedule": true
+                "flexibleSchedule": true,
+                "life": false,
+                "medical": true,
+                "retirement": true,
+                "stock": false,
+                "vision": true
             },
+            "compensation": {
+                "commission": false,
+                "tips": true,
+                "wage": {
+                    "frequency": "hr",
+                    "minAmount": 12
+                }
+            },
+            "createDate": "9/8/2015",
+            "description": "Awesome Barista's wanted",
             "employmentTypes": {
                 "fullTime": true,
                 "partTime": true
             },
+            "mainHiringMgr": "fe141d46-2305-49cd-b3d7-f542d0f6008b",
+            "modifiedDate": "9/8/2015",
             "occupation": "FB11DB54-2135-4B61-92D1-7F45A5C8BC9F",
-            "availability": {
-                "sunday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "monday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "tuesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "wednesday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "thursday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "friday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                },
-                "saturday": {
-                    "morning": true,
-                    "afternoon": false,
-                    "evening": false
-                }
-            }
+            "postDate": "9/8/2015",
+            "siteId": "D514E8B6-4CB7-4D52-90CD-CF68D0140B09",
+            "status": "Active",
+            "taskDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur",
+            "title": "Barista"
         }
     }
 }

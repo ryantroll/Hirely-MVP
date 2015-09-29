@@ -17,6 +17,7 @@
         var placeId = $stateParams.placeId;
         $scope.position = '';
         $scope.wageFormatted = '';
+        $scope.hoursFormatted = '';
         $scope.distance = '';
         $scope.photos = [];
 
@@ -24,6 +25,7 @@
             var today=new Date();
             $scope.position = positionObj;
             $scope.wageFormatted = positionObj.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.compensation.wage) : getnoMaxWageDisplay(positionObj.compensation.wage);
+            $scope.hoursFormatted = positionObj.workHours.max ? positionObj.workHours.min + '-' + positionObj.workHours.max : positionObj.workHours.min + '+'
             var largePhoto = _.matcher({size: "l"});
             var photos =  _.filter(positionObj.business.photos, largePhoto);
             angular.forEach(photos, function(photoObj, photoKey) {

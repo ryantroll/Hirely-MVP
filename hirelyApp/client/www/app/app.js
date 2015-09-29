@@ -117,7 +117,6 @@ var myApp = angular.module('hirelyApp',
             .state('app.candidate.profile.availability', {
                 url: '/Availability',
                 templateUrl: 'app/candidate/profile/candidate-profile-availability.html',
-                controller: 'CandidateProfileAvailabilityCtrl',
                 authRequired: true
             })
             .state('app.candidate.profile.experience', {
@@ -126,9 +125,8 @@ var myApp = angular.module('hirelyApp',
                 authRequired: true
             })
             .state('app.candidate.profile.personality', {
-                url: '/candidateProfileEducation',
+                url: '/Personality',
                 templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
-                controller: 'CandidateProfilePersonalityCtrl',
                 authRequired: true
             })
 
