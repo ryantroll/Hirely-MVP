@@ -4,66 +4,62 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', 'GeocodeService',  HMRegisterCtrl ]);
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', 'BusinessService', 'GeocodeService',  HMRegisterCtrl ]);
 
-    function HMRegisterCtrl($scope, $stateParams, $modalInstance, AuthService, UserService, GeocodeService) {
+    function HMRegisterCtrl($scope, $stateParams, $modalInstance, AuthService, UserService, BusinessService, GeocodeService) {
 
         var vm = this;
         var authService = AuthService;
         var userService = UserService;
+        var businessService = BusinessService;
         var geocodeService = GeocodeService;
 
         $scope.error = '';
         $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-
-        vm.FbRegister = function () {var geocodeService = GeocodeService;
-
+        $scope.business = {name: '', description: '', address: '', street: '', city: '', state: '', zip: '', country: '', lat: '', lon: '', webaddress: '', OHours0: '', CHours0: '', OHours1: '', CHours1: '', OHours2: '', CHours2: '', OHours3: '', CHours3: '', OHours4: '', CHours4: '', OHours5: '', CHours5: '', OHours6: '', CHours6: ''}
+       
         $scope.results = '';
-        $scope.options = {
-            types: 'address'
-        };
+        $scope.options = {types: 'address'};
         $scope.hmdetails = '';
 
         var place = geocodeService.getPlace();
         if(place){
-
             $scope.results = place.formatted_address;
             $scope.hmdetails = place;
         }
+
+
+        vm.FbRegister = function () {var geocodeService = GeocodeService;
 
         $scope.getResults = function() {
             geocodeService.setPlace($scope.hmdetails);
 
         }
 
-        vm.createDashboard = function() {
-            $state.go('app.busDashboard');
-
-        }
-
         vm.FbRegister = function () {
-            registerThirdPartyUser('facebook')
+            registerThirdPartyHM('facebook')
         }
 
         vm.GoogleRegister = function () {
-            registerThirdPartyUser('google')
+            registerThirdPartyHM('google')
         }
 
         vm.TwitterRegister = function () {
-            registerThirdPartyUser('twitter')
+            registerThirdPartyHM('twitter')
         }
 
-        vm.registerNewUser = function() {
-            registerPasswordUser($scope.manager)
+        vm.registerNewHMBUS = function() {
+            registerPasswordHM($scope.manager, $scope.business)
+            $state.go('app.busDashboard');
         }
-
+       
         vm.CloseModal = function (){
             $modalInstance.close();
         }
 
         //this function registers hiring manager in 3rd party and
         //and then creates Firebase db
-        function registerThirdPartyUser(provider, scope) {
+        function registerThirdPartyHM(provider, scope) {
             authService.thirdPartyLogin(provider, scope)
                 .then(function(user) {
                     userService.createUserfromThirdParty(provider, user)
@@ -78,15 +74,16 @@
                 })
         }
 
-        function registerPasswordUser(registeredUser){
+        function registerPasswordHM(registeredUser, newbusinessObj){
             //register new hiring manager
             authService.registerNewUser(registeredUser.email, registeredUser.password)
-                .then(function(user) {
-                    userService.createRegisteredNewUser(registeredUser, user.uid)
+                .then(function(manager) {
+                    userService.createRegisteredNewUser(registeredUser, manager.uid)
                         .then(function(newUser){
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
-                                    userService.setCurrentUser(newUser, user.uid);
+                                    userService.setCurrentUser(newUser, manager.uid);
+                                    businessService.createNewBusiness(newbusinessObj);
                                     $modalInstance.close();
                                 }, function(err) {
                                     alert(err)
