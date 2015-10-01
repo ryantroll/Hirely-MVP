@@ -8,85 +8,39 @@
     }
 
 </style>
+
 <script>
     $('html, body').animate({ scrollTop: 0 }, 0);
 </script>
 
+  
 <div class="container-fluid" ng-controller="HMRegisterCtrl">
-    <div class="row job-filter">
-        <div class="col-md-3 col-sm-3 job-filter">
-            <accordion>
-                <accordion-group is-open="status.open">
-                    <accordion-heading>
-                        Showing {{positions.length}} jobs <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-up': !status.open}"></i>
-                    </accordion-heading>
-                    <section>
-                       <div class="form-group">
-                           <label>Location</label>
-                           <input type="text" id="Autocomplete" class="form-control" on-place-changed="getJobsbyLocation(details)" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where's your next gig?"/>
-                       </div>
-
-                   </section>
-
-                    <section>
-                        <label>Distance</label>
-                        <rzslider
-                                rz-slider-floor="0"
-                                rz-slider-ceil="100"
-                                rz-slider-model="filter.distance"
-                                rz-slider-translate="translate"
-                                rz-slider-tpl-url="rzSliderTpl.html"
-                                rz-slider-on-end="searchJobs()"
-                               ></rzslider>
-
-                    </section>
-                    <section>
-                        <div class="form-group">
-                            <label>Occupation</label>
-                            <input type="text" id="txtOccupation" ng-model="filter.occupation" typeahead-on-select="getJobsbyOccupation($item, $model, $label)" typeahead="occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:15" class="form-control"  placeholder="Occupation">
-                        </div>
-
-                    </section>
-                    <section class="form-group">
-                        <label>Wage</label>
-                        <div class="form-inline">
-                            <span class="grid-20 in-between">At least   </span>
-                            <input type="text" ng-model="filter.minWage" ng-currency min="0" max="1000" ng-required="true" ng-blur="searchJobs()" class="form-control" />
-                            <span class="grid-20 in-between">  /hr</span>
-
-                        </div>
-
-                    </section>
-                </accordion-group>
-            </accordion>
+     <div class="container text-Left">
+               <h2>Company Name ...</h2>
         </div>
-
-
-
-    </div>
     <div class="job-search row">
         <div class="col-md-7 col-sm-12 search-results">
             <div class="row" >
-                <div class="col-sm-6 col-md-4 job-item" ng-repeat="position in positions | orderBy : 'distance'">
+                <div class="col-sm-6 col-md-4 job-item" ng-repeat="company in companies">
                     <div class="image-box style-2 margin-bottom-20 shadow bordered light-gray-bg text-center">
                         <div class="job-image img-responsive">
-                            <img src="{{position.photoUrl}}" class="img-responsive" alt="">
+                            <img src="{{company.photos.source}}" class="img-responsive" alt="">
                             <a class="panel-overlay-job-image">
                                 <div>
                                     <sup >$</sup>
-                                    <span class="wage">{{position.wage}}</span>
+                                    <span class="wage">{{}}</span>
                                 </div>
                             </a>
                         </div>
                         <div class="body">
-                            <a ui-sref="app.jobdetails({siteId: position.siteId, positionId: position.positionId, placeId: placeId})">
+                            <a ui-sref="app.hmPostion({})">
                                 <div class="job-info">
                                     <div class="company-info">
-                                        <h4>{{position.title}}</h4><h6>FT/PT</h6>
+                                        <h4>{{company.name}}</h4><h6>FT/PT</h6>
                                     </div>
 
                                     <div class="company-info">
-                                        <h5>{{position.companyName}}</h5><h6>{{position.distance | number:2}} mi</h6>
+                                        <h5>{{company.name}}</h5><h6>{{company.decription}}</h6>
                                     </div>
                                 </div>
                             </a>
