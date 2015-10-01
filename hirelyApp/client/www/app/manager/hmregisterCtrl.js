@@ -13,10 +13,13 @@
         var userService = UserService;
         var businessService = BusinessService;
         var geocodeService = GeocodeService;
-
+        
+        $scope.paOptions = {
+            updateModel : true
+        };
         $scope.error = '';
         $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-        $scope.business = {name: '', description: '', street_number: '', route: '', locality: '', administrative_area_level_1: '', 
+        $scope.business = {name: '', description: '', status: '', street_number: '', route: '', locality: '', administrative_area_level_1: '', 
         postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
         closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
         open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
@@ -30,7 +33,6 @@
             $modalInstance.close();
         }
 
-       
         function registerPasswordHM(registeredUser, newbusinessObj){
             //register new hiring manager
             authService.registerNewUser(registeredUser.email, registeredUser.password)
@@ -54,8 +56,6 @@
                 })
 
         }
-      
-
 
   }
 
