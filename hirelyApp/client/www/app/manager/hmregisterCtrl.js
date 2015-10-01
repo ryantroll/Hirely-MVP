@@ -4,20 +4,15 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams', '$modal', '$modalInstance', '$firebaseArray', '$state', '$http',
-        'FBURL', 'PositionService', 'OccupationService', 'AuthService', 'UserService', 'BusinessService', 'GeocodeService',  HMRegisterCtrl ]);
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$modalInstance', '$firebaseArray', '$state', '$http', 'FBURL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
    
 
-    function HMRegisterCtrl($scope, $stateParams, $modal, $modalInstance, $firebaseArray, $state, $http,
-        FBURL, PositionService, OccupationService, AuthService, UserService, BusinessService, GeocodeService) {
+    function HMRegisterCtrl($scope,  $modalInstance, $firebaseArray, $state, $http, FBURL, AuthService, UserService, BusinessService) {
 
         var vm = this;
         var authService = AuthService;
         var userService = UserService;
         var businessService = BusinessService;
-        var positionService = PositionService;
-        var occupationService = OccupationService;
-        var geocodeService = GeocodeService;
         
         var businessRef = new Firebase(FBURL + '/business');
 
@@ -41,14 +36,6 @@
         closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
       
         $scope.positions = [];
-
-        $scope.filter = {
-          distance: ($stateParams.distance) ? $stateParams.distance : 20,
-          minWage: ($stateParams.wage) ? $stateParams.wage : 0,
-          occupationId: ($stateParams.occupationId) ? $stateParams.occupationId : '',
-          occupation: ''
-
-       };
 
        $scope.occupation = '';
 
@@ -78,7 +65,6 @@
                                     userService.setCurrentUser(newUser, manager.uid);
                                     businessService.createNewBusiness(newbusinessObj, manager.uid);
                                     $modalInstance.close();
-                                    $state.go('app.busDashboard');
                                 }, function(err) {
                                     alert(err)
                                 });
@@ -88,7 +74,7 @@
                 }, function(err) {
                     alert(err)
                 })
-
+         $state.go('app.busDashboard');
         }
 
 

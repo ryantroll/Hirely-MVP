@@ -48,7 +48,7 @@
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: 'app/manager/hmRegister.html',
-                controller: 'HMRegisterCtrl',
+                controller: 'HMRegisterCtrl as vm',
                 
             });
         };
