@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', 'BusinessService', 'GeocodeService',  HMRegisterCtrl ]);
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams',  '$modalInstance', '$state', 'AuthService', 'UserService', 'BusinessService', 'GeocodeService',  HMRegisterCtrl ]);
 
-    function HMRegisterCtrl($scope, $stateParams, $modalInstance, AuthService, UserService, BusinessService, GeocodeService) {
+    function HMRegisterCtrl($scope, $stateParams, $modalInstance, $state, AuthService, UserService, BusinessService, GeocodeService) {
 
         var vm = this;
         var authService = AuthService;
@@ -16,64 +16,21 @@
 
         $scope.error = '';
         $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-        $scope.business = {name: '', description: '', address: '', street: '', city: '', state: '', zip: '', country: '', lat: '', lon: '', webaddress: '', OHours0: '', CHours0: '', OHours1: '', CHours1: '', OHours2: '', CHours2: '', OHours3: '', CHours3: '', OHours4: '', CHours4: '', OHours5: '', CHours5: '', OHours6: '', CHours6: ''}
-       
-        $scope.results = '';
-        $scope.options = {types: 'address'};
-        $scope.hmdetails = '';
-
-        var place = geocodeService.getPlace();
-        if(place){
-            $scope.results = place.formatted_address;
-            $scope.hmdetails = place;
-        }
-
-
-        vm.FbRegister = function () {var geocodeService = GeocodeService;
-
-        $scope.getResults = function() {
-            geocodeService.setPlace($scope.hmdetails);
-
-        }
-
-        vm.FbRegister = function () {
-            registerThirdPartyHM('facebook')
-        }
-
-        vm.GoogleRegister = function () {
-            registerThirdPartyHM('google')
-        }
-
-        vm.TwitterRegister = function () {
-            registerThirdPartyHM('twitter')
-        }
-
+        $scope.business = {name: '', description: '', street_number: '', route: '', locality: '', administrative_area_level_1: '', 
+        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
+        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
+        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
+        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
+      
         vm.registerNewHMBUS = function() {
             registerPasswordHM($scope.manager, $scope.business)
-            $state.go('app.busDashboard');
         }
        
         vm.CloseModal = function (){
             $modalInstance.close();
         }
 
-        //this function registers hiring manager in 3rd party and
-        //and then creates Firebase db
-        function registerThirdPartyHM(provider, scope) {
-            authService.thirdPartyLogin(provider, scope)
-                .then(function(user) {
-                    userService.createUserfromThirdParty(provider, user)
-                        .then(function(fbUser){
-                            userService.setCurrentUser(fbUser, provider.uid);
-                            $modalInstance.close();
-                        }, function(err) {
-                            alert(err)
-                        });
-                }, function(err) {
-                    alert(err)
-                })
-        }
-
+       
         function registerPasswordHM(registeredUser, newbusinessObj){
             //register new hiring manager
             authService.registerNewUser(registeredUser.email, registeredUser.password)
@@ -85,6 +42,7 @@
                                     userService.setCurrentUser(newUser, manager.uid);
                                     businessService.createNewBusiness(newbusinessObj);
                                     $modalInstance.close();
+                                    $state.go('app.busDashboard');
                                 }, function(err) {
                                     alert(err)
                                 });
@@ -96,9 +54,7 @@
                 })
 
         }
-
-
-    }
+      
 
 
   }
