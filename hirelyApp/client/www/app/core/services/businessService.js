@@ -26,8 +26,8 @@
             this.description = '';
             this.name = '';
             this.photos = [];
-      
         }
+
        function addressObjModel(company){
             this.city = company.locality;
             this.formattedAddress = company.street_number;
@@ -62,6 +62,7 @@
             this.name = '';
             this.parentBusiness = '';
             this.workHours = ''; 
+         
         }
 
         this.createNewBusiness = function createNewBusiness(company){
@@ -73,7 +74,7 @@
             business.description = company.description;
             business.name = company.name;
             business.photos = '';
-            businessRef.push(business);
+            businessRef.set(business);
             busId =  businessRef.key();
            
             var businessSite = new companyObjModel();
@@ -86,7 +87,7 @@
             businessSite.name = company.name;
             businessSite.parentBusiness = busId;
             businessSite.workHours = new daysObjModel(company);
-            businessSiteRef.push(businessSite);
+            businessSiteRef.set(businessSite);
             siteId =  businessSiteRef.key();
 
             geoFire.set(siteId, [38.6294021, -77.2796177]).then(function() {
