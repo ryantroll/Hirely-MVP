@@ -7,9 +7,9 @@
     'use strict';
 
     angular.module('hirelyApp.manager')
-        .service('BusinessService', ['$rootScope', '$q','FBURL', '$firebaseObject', 'fbutil', BusinessService]);
+        .service('BusinessService', ['$q','FBURL', '$firebaseObject', 'fbutil', BusinessService]);
 
-     function BusinessService($rootScope, $q, FBURL, $firebaseObject, fbutil, BusinessService) {
+     function BusinessService( $q, FBURL, $firebaseObject, fbutil, BusinessService) {
         var self = this;
         var bpostref = new Firebase(FBURL + '/business');
         var businessRef = bpostref.push();
@@ -65,7 +65,7 @@
          
         }
 
-        this.createNewBusiness = function createNewBusiness(company){
+        this.createNewBusiness = function createNewBusiness(company, userId){
             var deferred = $q.defer();
             var business = new businessSiteModel(); 
 
@@ -82,7 +82,7 @@
             businessSite.address = new addressObjModel(company);
             businessSite.currentlyHiring = 'true';
             businessSite.description = company.description;
-            businessSite.hiringManagers = '';
+            businessSite.hiringManagers = userId;
             businessSite.webaddress = company.webaddress;
             businessSite.name = company.name;
             businessSite.parentBusiness = busId;

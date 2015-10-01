@@ -4,11 +4,11 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams', '$modalInstance', '$state', '$http',
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams', '$modal', '$modalInstance', '$firebaseArray', '$state', '$http',
         'FBURL', 'PositionService', 'OccupationService', 'AuthService', 'UserService', 'BusinessService', 'GeocodeService',  HMRegisterCtrl ]);
    
 
-    function HMRegisterCtrl($scope, $stateParams, $modalInstance, $state, $http,
+    function HMRegisterCtrl($scope, $stateParams, $modal, $modalInstance, $firebaseArray, $state, $http,
         FBURL, PositionService, OccupationService, AuthService, UserService, BusinessService, GeocodeService) {
 
         var vm = this;
@@ -19,11 +19,15 @@
         var occupationService = OccupationService;
         var geocodeService = GeocodeService;
         
-        var businessRef = new new Firebase(FBURL + '/business');
+        var businessRef = new Firebase(FBURL + '/business');
 
         $scope.companies = $firebaseArray(businessRef);
         $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
-        
+         
+        $scope.photos = [];
+
+        var photos = $scope.companies.photos;
+           
         $scope.paOptions = {
             updateModel : true
         };
@@ -72,7 +76,7 @@
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
                                     userService.setCurrentUser(newUser, manager.uid);
-                                    businessService.createNewBusiness(newbusinessObj);
+                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
                                     $modalInstance.close();
                                     $state.go('app.busDashboard');
                                 }, function(err) {
