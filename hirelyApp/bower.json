@@ -25,7 +25,7 @@
     "jquery": "~2.1.4",
     "lodash": "~3.10.1",
     "ment.io": "~0.9.23",
-    "ng-currency": "~0.8.7",
+    "ng-currency": "~0.8.9",
     "ngMask": "angular-mask#~3.0.12",
     "numeral": "~1.5.3",
     "rsvp.js": "rsvp#~3.1.0",

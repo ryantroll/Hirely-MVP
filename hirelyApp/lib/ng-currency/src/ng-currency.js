@@ -2,9 +2,14 @@
  * ng-currency
  * http://alaguirre.com/
 
- * Version: 0.8.7 - 2015-06-11
+ * Version: 0.8.9 - 2015-09-21
  * License: MIT
  */
+
+/*commonjs support*/
+if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
+      module.exports = 'ng-currency';
+}
 
 angular.module('ng-currency', [])
     .directive('ngCurrency', ['$filter', '$locale', function ($filter, $locale) {
@@ -18,9 +23,9 @@ angular.module('ng-currency', [])
                 fraction: '=fraction'
             },
             link: function (scope, element, attrs, ngModel) {
-                
+
                 if (attrs.ngCurrency === 'false') return;
-                
+
                 var fract = (typeof scope.fraction !== 'undefined')?scope.fraction:2;
 
                 function decimalRex(dChar) {
@@ -37,7 +42,7 @@ angular.module('ng-currency', [])
                     var cleared = null;
 
                     // Replace negative pattern to minus sign (-)
-                    var neg_dummy = $filter('currency')("-1", currencySymbol(), scope.fraction);
+                    var neg_dummy = $filter('currency')("-1", getCurrencySymbol(), scope.fraction);
                     var neg_idx = neg_dummy.indexOf("1");
                     var neg_str = neg_dummy.substring(0,neg_idx);
                     value = value.replace(neg_str, "-");
@@ -56,7 +61,7 @@ angular.module('ng-currency', [])
                     return cleared;
                 }
 
-                function currencySymbol() {
+                function getCurrencySymbol() {
                     if (angular.isDefined(scope.currencySymbol)) {
                         return scope.currencySymbol;
                     } else {
@@ -94,7 +99,7 @@ angular.module('ng-currency', [])
                 });
 
                 ngModel.$formatters.unshift(function (value) {
-                    return $filter('currency')(value, currencySymbol(), scope.fraction);
+                    return $filter('currency')(value, getCurrencySymbol(), scope.fraction);
                 });
 
                 ngModel.$validators.min = function(cVal) {
