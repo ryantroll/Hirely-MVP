@@ -7,6 +7,10 @@
   margin-top: 5px;
 }
 
+.logo{
+  padding-left: 20px;
+  padding-top: 10px;
+}
 .grid{
   height: 50px;
 }
@@ -52,7 +56,14 @@
   *border-right-width: 2px;
   *border-bottom-width: 2px;
 }
+@media (max-width: 567px){
+  .search-form {
+    .form-group{
+      width: 240px !important;
+    }
 
+  }
+}
 
 .pac-container {
 z-index: 99999999;
@@ -315,6 +326,7 @@ h3+.separator, h4+.separator, h5+.separator {
        font-size: 1.5em;
      }
    }
+
 
    @media screen and (max-width: 47.2em) {
      .timeline-v2:before {

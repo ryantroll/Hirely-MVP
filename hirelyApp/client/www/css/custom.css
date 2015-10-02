@@ -267,6 +267,10 @@
   padding-bottom: 20px;
   margin-top: 5px;
 }
+.logo {
+  padding-left: 20px;
+  padding-top: 10px;
+}
 .grid {
   height: 50px;
 }
@@ -301,6 +305,11 @@
   background-clip: padding-box;
   *border-right-width: 2px;
   *border-bottom-width: 2px;
+}
+@media (max-width: 567px) {
+  .search-form .form-group {
+    width: 240px !important;
+  }
 }
 .pac-container {
   z-index: 99999999;
@@ -414,7 +423,7 @@ h5 + .separator {
 }
 .candidate .profile .status-buttons a .nav-number {
   color: #FFF;
-  background: #002063;
+  background: #183152;
   display: block;
   height: 50px;
   margin: 0 auto 10px;
@@ -709,7 +718,7 @@ h5 + .separator {
   -webkit-transform: rotateY(0);
   transform: rotateY(0);
   left: 0;
-  background: #3162a2;
+  background: #375d81;
 }
 .candidate .profile .tgl-btn {
   margin: auto;
@@ -827,7 +836,7 @@ h5 + .separator {
   color: #999999;
 }
 .job-search .job-item .job-action a {
-  color: #002063;
+  color: #183152;
   text-decoration: none;
 }
 .job-search .shadow-narrow:after,
@@ -884,7 +893,7 @@ rzslider {
   margin: 40px 0 30px 0;
 }
 rzslider span.rz-pointer {
-  background: #3162a2;
+  background: #375d81;
   top: -8px;
   height: 20px;
   width: 20px;
@@ -1010,7 +1019,7 @@ rzslider span.rz-pointer:after {
   border-radius: 20px;
 }
 .job-details .job-schedule .schedule-circle-yes {
-  background-color: #3162a2;
+  background-color: #375d81;
 }
 .job-details .job-schedule .schedule-circle-no {
   background-color: #fff;

@@ -384,34 +384,6 @@ select {
     width: 100%;
 
   }
-   .img-logo{
-       height: 46px;
-       width: 46px;
-       float: left;
-       margin-right: 5px;
-     }
-
-    h1.logo {
-        margin-top: 0;
-        margin-bottom: 0;
-        font-weight: bold;
-        font-size: 28px;
-        max-height: 50px;
-        a {
-            .transition (none);
-            &:hover {
-                color: @blue;
-            }
-          &:focus {
-            color: @color;
-          }
-        }
-        .logo-title {
-            vertical-align: middle;
-            line-height: 1.6;
-        }
-
-    }
 
     .main-nav {
         .navbar-toggle {
@@ -680,8 +652,9 @@ select {
     }
     .search-form {
         .form-control {
-            font-size: 18px;
+            font-size: 16px;
             color: @text-color;
+            width: inherit;
         }
         .form-group {
             display: inline-block;
@@ -945,7 +918,7 @@ select {
          padding-bottom: 45px;
          color: #fff;
          .title {
-             font-size: 60px;
+             font-size: 48px;
              margin-top: 0;
              margin-bottom: 15px;
              .text-shadow(0 1px 1px rgba(0,0,0,.6));

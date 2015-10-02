@@ -118,16 +118,16 @@ a.btn-cta:hover,
 }
 a.btn-cta-blue,
 .btn-cta-blue {
-  background: #002063;
-  border: 2px solid #002063;
+  background: #183152;
+  border: 2px solid #183152;
   color: #fff;
   text-transform: uppercase;
   margin-left: 15px;
 }
 a.btn-cta-blue:hover,
 .btn-cta-blue:hover {
-  background: #001030;
-  border: 2px solid #001030;
+  background: #0c192b;
+  border: 2px solid #0c192b;
   color: #fff;
 }
 .form-control {
@@ -374,35 +374,6 @@ select {
 .header .container {
   width: 100%;
 }
-.header .img-logo {
-  height: 46px;
-  width: 46px;
-  float: left;
-  margin-right: 5px;
-}
-.header h1.logo {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-weight: bold;
-  font-size: 28px;
-  max-height: 50px;
-}
-.header h1.logo a {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -ms-transition: none;
-  -o-transition: none;
-}
-.header h1.logo a:hover {
-  color: #002063;
-}
-.header h1.logo a:focus {
-  color: #e42f0c;
-}
-.header h1.logo .logo-title {
-  vertical-align: middle;
-  line-height: 1.6;
-}
 .header .main-nav .navbar-toggle {
   margin-right: 0;
   background: #b42509;
@@ -631,8 +602,9 @@ select {
   font-size: 18px;
 }
 .search .search-form .form-control {
-  font-size: 18px;
+  font-size: 16px;
   color: #444444;
+  width: inherit;
 }
 .search .search-form .form-group {
   display: inline-block;
@@ -955,7 +927,7 @@ select {
   color: #fff;
 }
 .promo .search .title {
-  font-size: 60px;
+  font-size: 48px;
   margin-top: 0;
   margin-bottom: 15px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
@@ -1007,9 +979,9 @@ select {
 }
 .getStarted .side-right {
   right: 0;
-  background: #00287d;
+  background: #1e3d66;
   color: #fff;
-  outline: 1px solid #00287d;
+  outline: 1px solid #1e3d66;
 }
 .getStarted h5 {
   font-weight: normal;
@@ -1436,133 +1408,7 @@ select {
   background: #e42f0c;
 }
 .profile .service-block-blue {
-  background: #002063;
-}
-.profile .service-block-v3 {
-  padding: 20px;
-  color: #fff;
-  height: 300px;
-}
-.profile .service-block-v3 .profile-stat-info {
-  text-align: center;
-}
-.profile .service-block-v3 .profile-stat-trait {
-  text-align: center;
-  padding-top: 20px;
-}
-.profile .service-block-v3 i {
-  float: left;
-  font-size: 50px;
-  margin: 0 20px 20px 0;
-}
-.profile .service-block-v3 h3 {
-  margin-bottom: 0px;
-}
-.profile .service-block-v3 small {
-  display: block;
-}
-.profile .progress {
-  margin-bottom: 10px;
-}
-.profile .progress-xxs {
-  height: 3px;
-}
-.profile .service-in small {
-  display: inline;
-}
-xt-transform: none;
-  color: #531104;
-  font-weight: normal;
-  font-size: 12px;
-  font-family: 'Open Sans', Arial, sans-serif;
-}
-/* ======= Profile Section ======= */
-.profile {
-  /*Sidebar Menu v1*/
-  /*Sidebar Sub Navigation*/
-}
-.profile h1,
-.profile h2,
-.profile h3,
-.profile h4,
-.profile h5 {
-  margin-top: 0px;
-  margin-bottom: 10px;
-  font-weight: normal;
-}
-.profile .profile-body {
-  padding: 20px;
-  background: #f5f5f5;
-}
-.profile .profile-body .panel-header {
-  background-color: #fff;
-  color: #565a5c;
-  font-size: 16px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  border-bottom: solid 3px #f7f7f7;
-  position: relative;
-  margin: 0;
-  padding: 20px;
-}
-.profile .profile-img {
-  margin-bottom: 20px;
-}
-.profile .sidebar-nav-v1 li {
-  padding: 0;
-}
-.profile .sidebar-nav-v1 li a {
-  display: block;
-  padding: 8px 30px 8px 10px;
-}
-.profile .sidebar-nav-v1 li a:hover {
-  text-decoration: none;
-}
-.profile .sidebar-nav-v1 > li a.active,
-.profile .sidebar-nav-v1 > li a.active:hover {
-  background: #999999;
-  color: #fff;
-}
-.profile .sidebar-nav-v1 > li.active,
-.profile .sidebar-nav-v1 > li.active:hover,
-.profile .sidebar-nav-v1 > li.active:focus {
-  border-color: #ddd;
-}
-.profile .sidebar-nav-v1 > li.active > a {
-  color: #fff;
-}
-.profile .sidebar-nav-v1 li ul {
-  padding: 0;
-  list-style: none;
-}
-.profile .sidebar-nav-v1 li ul,
-.profile .sidebar-nav-v1 li.active ul a {
-  background: #f8f8f8;
-}
-.profile .sidebar-nav-v1 li ul a {
-  color: #555;
-  font-size: 12px;
-  border-top: solid 1px #ddd;
-  padding: 6px 30px 6px 17px;
-}
-.profile .sidebar-nav-v1 ul li:hover a,
-.profile .sidebar-nav-v1 ul li.active a {
-  color: #72c02c;
-}
-.profile li a {
-  color: #363636;
-  font-size: 13px;
-}
-.profile .list-group i {
-  min-width: 20px;
-  margin-right: 5px;
-  text-align: center;
-}
-.profile .service-block-u {
-  background: #e42f0c;
-}
-.profile .service-block-blue {
-  background: #002063;
+  background: #183152;
 }
 .profile .service-block-v3 {
   padding: 20px;
