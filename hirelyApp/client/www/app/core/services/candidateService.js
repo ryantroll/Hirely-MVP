@@ -49,6 +49,8 @@
             // run it and see what we get
             profileRef.once('value', function(snap) {
                     var profile = snap.val();
+                    var ref = fbutil.ref('candidate-experience', userId);
+                    profile.experience =  $firebaseArray(ref);
                     deferred.resolve(profile);
 
                 }, function (err) {
@@ -148,6 +150,12 @@
         this.getExperience = function getExperience(userId){
             var ref = fbutil.ref('candidate-experience', userId);
             return $firebaseArray(ref);
+        }
+
+        this.savePositiontoFavorites = function savePositiontoFavorites(userId, positionId){
+            var ref = fbutil.ref('candidate-favorites', userId);
+            ref.child(positionId).set(true);
+
         }
 
 

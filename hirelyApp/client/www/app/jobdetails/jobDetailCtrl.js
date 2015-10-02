@@ -24,10 +24,10 @@
         positionService.getPositionbyId(siteId, positionId).then(function (positionObj) {
             var today=new Date();
             $scope.position = positionObj;
-            $scope.wageFormatted = positionObj.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.compensation.wage) : getnoMaxWageDisplay(positionObj.compensation.wage);
-            $scope.hoursFormatted = positionObj.workHours.max ? positionObj.workHours.min + '-' + positionObj.workHours.max : positionObj.workHours.min + '+'
+            $scope.wageFormatted = positionObj.position.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.position.compensation.wage) : getnoMaxWageDisplay(positionObj.position.compensation.wage);
+            $scope.hoursFormatted =positionObj.position.workHours.max ? positionObj.position.workHours.min + '-' + positionObj.position.workHours.max : positionObj.position.workHours.min + '+'
             var largePhoto = _.matcher({size: "l"});
-            var photos =  _.filter(positionObj.business.photos, largePhoto);
+            var photos =  _.filter(positionObj.businessPhotos, largePhoto);
             angular.forEach(photos, function(photoObj, photoKey) {
 
                 $scope.photos.push(photoObj.source);

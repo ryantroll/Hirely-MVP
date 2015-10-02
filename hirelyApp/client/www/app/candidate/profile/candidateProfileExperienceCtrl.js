@@ -179,7 +179,9 @@
         }
         var initialize = function(){
             getOccupations();
-            getExperience();
+            if($scope.profile && $scope.profile.experience){
+                $scope.experiences = $scope.profile.experience;
+            }
 
         };
 
