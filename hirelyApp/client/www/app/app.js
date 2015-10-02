@@ -36,7 +36,6 @@ var myApp = angular.module('hirelyApp',
                 abstract: true,
                 templateUrl: 'app/layout/master.html'
             })
-
             .state('app.home', {
                 url: '/home',
                 parent: 'app',
@@ -65,15 +64,24 @@ var myApp = angular.module('hirelyApp',
             })
              .state('app.hmregister', {
                 url: '/hmregister',
-                templateUrl: 'app/manager/hmregister.html',
+                templateUrl: 'app/manager/hmRegister.html',
                 controller: 'HMRegisterCtrl'
             })
             .state('app.busDashboard', {
                 url: '/busDashboard',
-                templateUrl: 'app/manager/businessDashboard.html',
+                templateUrl: 'app/manager/hmDashboard.html',
                 controller: 'HMRegisterCtrl'
             })
-
+            .state('app.hmPosition', {
+                url: '/hmPosition',
+                templateUrl: 'app/manager/hmPosition.html',
+                controller: 'HMRegisterCtrl'
+            })
+            .state('app.hmHiring', {
+                url: '/hmHiring',
+                templateUrl: 'app/manager/hmHiring.html',
+                controller: 'HMRegisterCtrl'
+            })
             .state('app.candidate', {
                 url: '/candidate',
                 abstract: true,

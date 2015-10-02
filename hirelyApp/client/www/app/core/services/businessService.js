@@ -6,131 +6,98 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.core')
-        .service('BusinessService', ['$rootScope', '$q', 'FBURL', '$firebaseObject', 'fbutil', BusinessService]);
+    angular.module('hirelyApp.manager')
+        .service('BusinessService', ['$q','FBURL', '$firebaseObject', 'fbutil', BusinessService]);
 
-     function BusinessService($rootScope, $q, FBURL, $firebaseObject, fbutil, BusinessService) {
+     function BusinessService( $q, FBURL, $firebaseObject, fbutil, BusinessService) {
         var self = this;
-        var postref = new Firebase(FBURL + "/business");
-        var newPostRef = postref.push();
+        var bpostref = new Firebase(FBURL + '/business');
+        var businessRef = bpostref.push();
+        var rootRef = new Firebase(FBURL + '/businessSite');
+        var businessSiteRef = rootRef.push();
+        var busId = '';
+        var siteId = '';
+        var firebaseRef = new Firebase(FBURL + '/businessSiteLocation');
+        var geoFire = new GeoFire(firebaseRef);
 
         function businessSiteModel(){
-            this.active = 'true';
+            this.active = '';
+            this.type = '';
             this.description = '';
             this.name = '';
             this.photos = [];
-            this.siteId = '';
-            this.companyName = '';
-            this.siteName = '';
-            this.address = '';
-            this.photos = [];
-      
         }
 
-        function companyObjModel(businessObj){
-            this.active = 'true';
-            this.address.city = '';
-            this.address.formattedAddress = '';
-            this.address.placeId = '';
-            this.address.state = '';
-            this.address.street1 = '';
-            this.address.street2 = '';
-            this.address.zipCode = '';
-            this.currentlyHiring = 'true';
+       function addressObjModel(company){
+            this.city = company.locality;
+            this.formattedAddress = company.street_number;
+            this.placeId = busId;
+            this.state = company.administrative_area_level_1;
+            this.street1 = company.route;
+            this.street2 = '';
+            this.zipCode = company.postal_code;
+        }
+
+        function hoursObjModel(companyo, companyc){
+            this.startTime = companyo;
+            this.endTime = companyc;
+        }
+        function daysObjModel(company){
+            this.sunday = new hoursObjModel(company.open_store_hours0, company.closed_store_hours0);
+            this.monday = new hoursObjModel(company.open_store_hours1, company.closed_store_hours1);
+            this.tuesday = new hoursObjModel(company.open_store_hours2, company.closed_store_hours2);
+            this.wednesday = new hoursObjModel(company.open_store_hours3, company.closed_store_hours3);
+            this.thursday = new hoursObjModel(company.open_store_hours4, company.closed_store_hours4);
+            this.friday  = new hoursObjModel(company.open_store_hours5, company.closed_store_hours5);
+            this.saturday = new hoursObjModel(company.open_store_hours6, company.closed_store_hours6);
+        }
+        
+        function companyObjModel(){
+            this.active = '';
+            this.address = '';
+            this.currentlyHiring = '';
             this.description = '';
             this.hiringManagers = '';
             this.webaddress = '';
             this.name = '';
-            this.parentBusiness = 'siteId';
-            this.siteId = '';
-            this.workHours.sunday.startTime = '';
-            this.workHours.sunday.endTime = '';
-            this.workHours.monday.startTime = '';
-            this.workHours.monday.endTime = '';
-            this.workHours.tuesday.startTime = '';
-            this.workHours.tuesday.endTime = '';
-            this.workHours.wednesday.startTime = '';
-            this.workHours.wednesday.endTime = '';
-            this.workHours.thursday.startTime = '';
-            this.workHours.thursday.endTime = '';
-            this.workHours.friday.startTime = '';
-            this.workHours.friday.endTime = '';
-            this.workHours.saturday.startTime = '';
-            this.workHours.saturday.endTime = '';
+            this.parentBusiness = '';
+            this.workHours = ''; 
+         
         }
 
-        function businessSiteLocationObjModel(siteLocation, siteId){
-            this.siteId = '';
-            this.latitude = '';
-            this.longitude = '';
-        }
-
-
-        function createNewBusiness(businessObj){
-            var ref = new Firebase(FBURL);
+        this.createNewBusiness = function createNewBusiness(company, userId){
             var deferred = $q.defer();
-            var businessRef = business.ref();
-            // run it and see what we get
-            businessRef.once('value', function(snap) {
-                    var businesses = snap.val();
-                    var business = new businessSiteModel();        
-                    var meetsActive = usiness.active == 'Active'
+            var business = new businessSiteModel(); 
 
-                    if(meetsActive){
-                        business.description = siteObj.businessSite.description;
-                        businessname = siteObj.businessSite.name;
-                        business.photos = siteObj.photos;
-                        business.push(business);
-                        newPostRef.setValue(business);
-                        business.siteId = newPostRef.getKey();
+            business.active = 'true';
+            business.type = company.status;
+            business.description = company.description;
+            business.name = company.name;
+            business.photos = '';
+            businessRef.set(business);
+            busId =  businessRef.key();
+           
+            var businessSite = new companyObjModel();
+            businessSite.active = 'true';
+            businessSite.address = new addressObjModel(company);
+            businessSite.currentlyHiring = 'true';
+            businessSite.description = company.description;
+            businessSite.hiringManagers = userId;
+            businessSite.webaddress = company.webaddress;
+            businessSite.name = company.name;
+            businessSite.parentBusiness = busId;
+            businessSite.workHours = new daysObjModel(company);
+            businessSiteRef.set(businessSite);
+            siteId =  businessSiteRef.key();
 
-                                //check if position meets criteria
-                                var meetsActive = positionObj.status == 'Active'
-                                if(meetsActive)
-                                {
-                                    var businessSite = new companyObjModel();
-                                    businessSite.active = 'true';
-                                    businessSite.address.city = 'businessObj.city';
-                                    businessSite.address.formattedAddress = 'businessObj.address';
-                                    businessSite.address.placeId = '';
-                                    businessSite.address.state = 'businessObj.state';
-                                    businessSite.address.street1 = 'businessObj.address';
-                                    businessSite.address.street2 = 'businessObj.street';
-                                    businessSite.address.zipCode = 'businessObj.zip';
-                                    businessSite.currentlyHiring = 'true';
-                                    businessSite.description = '';
-                                    businessSite.hiringManagers = '';
-                                    businessSite.webaddress = 'businessObj.webaddress';
-                                    businessSite.name = 'businessObj.name';
-                                    businessSite.parentBusiness = 'site.siteId';
-                                    businessSite.workHours.sunday.startTime = 'businessObj.OHours0';
-                                    businessSite.workHours.sunday.endTime = 'businessObj.CHours0';
-                                    businessSite.workHours.monday.startTime = 'businessObj.OHours1';
-                                    businessSite.workHours.monday.endTime = 'businessObj.CHours1';
-                                    businessSite.workHours.tuesday.startTime = 'businessObj.OHours2';
-                                    businessSite.workHours.tuesday.endTime = 'businessObj.CHours2';
-                                    businessSite.workHours.wednesday.startTime = 'businessObj.OHours3';
-                                    businessSite.workHours.wednesday.endTime = 'businessObj.CHours3';
-                                    businessSite.workHours.thursday.startTime = 'businessObj.OHours4';
-                                    businessSite.workHours.thursday.endTime = 'businessObj.CHours4';
-                                    businessSite.workHours.friday.startTime = 'businessObj.OHours5';
-                                    businessSite.workHours.friday.endTime = 'businessObj.CHours5';
-                                    businessSite.workHours.saturday.startTime = 'businessObj.OHours6';
-                                    businessSite.workHours.saturday.endTime = 'businessObj.CHours6';
-                                    businessSite.push(businessSite);
-                                    businessSite.siteId = newPostRef.getKey();
-                                }
-                            } deferred.resolve(site);
-                           
-
-                    }), function (err) {
-                    deferred.reject(snap);
-                   
-                }
-            return deferred.promise;
-          
-       }
+            geoFire.set(siteId, [38.6294021, -77.2796177]).then(function() {
+              console.log("Provided key has been added to GeoFire");
+            }, function(error) {
+              console.log("Error: " + error);
+            });  
+        }
     };
+
 })();
 
 

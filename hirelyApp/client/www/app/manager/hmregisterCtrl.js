@@ -1,77 +1,57 @@
 /**
- * Created by labrina.loving on 8/10/2015.
+ * Created by mike.baker on 9/29/2015.
  */
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', 'BusinessService', 'GeocodeService',  HMRegisterCtrl ]);
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$modalInstance', '$firebaseArray', '$state', '$http', 'FBURL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
+   
 
-    function HMRegisterCtrl($scope, $stateParams, $modalInstance, AuthService, UserService, BusinessService, GeocodeService) {
+    function HMRegisterCtrl($scope,  $modalInstance, $firebaseArray, $state, $http, FBURL, AuthService, UserService, BusinessService) {
 
         var vm = this;
         var authService = AuthService;
         var userService = UserService;
         var businessService = BusinessService;
-        var geocodeService = GeocodeService;
+        
+        var businessRef = new Firebase(FBURL + '/business');
+
+        $scope.companies = $firebaseArray(businessRef);
+        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
+         
+        $scope.photos = [];
+
+        var photos = $scope.companies.photos;
+           
+        $scope.paOptions = {
+            updateModel : true
+        };
 
         $scope.error = '';
         $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-        $scope.business = {name: '', description: '', address: '', street: '', city: '', state: '', zip: '', country: '', lat: '', lon: '', webaddress: '', OHours0: '', CHours0: '', OHours1: '', CHours1: '', OHours2: '', CHours2: '', OHours3: '', CHours3: '', OHours4: '', CHours4: '', OHours5: '', CHours5: '', OHours6: '', CHours6: ''}
-       
-        $scope.results = '';
-        $scope.options = {types: 'address'};
-        $scope.hmdetails = '';
+        $scope.business = {name: '', description: '', status: '', street_number: '', route: '', locality: '', administrative_area_level_1: '', 
+        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
+        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
+        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
+        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
+      
+        $scope.positions = [];
 
-        var place = geocodeService.getPlace();
-        if(place){
-            $scope.results = place.formatted_address;
-            $scope.hmdetails = place;
-        }
+       $scope.occupation = '';
 
+       $scope.options = {
+          types: '(regions)'
+       };
 
-        vm.FbRegister = function () {var geocodeService = GeocodeService;
-
-        $scope.getResults = function() {
-            geocodeService.setPlace($scope.hmdetails);
-
-        }
-
-        vm.FbRegister = function () {
-            registerThirdPartyHM('facebook')
-        }
-
-        vm.GoogleRegister = function () {
-            registerThirdPartyHM('google')
-        }
-
-        vm.TwitterRegister = function () {
-            registerThirdPartyHM('twitter')
-        }
-
+       $scope.results = '';
+       $scope.details = '';
+    
         vm.registerNewHMBUS = function() {
             registerPasswordHM($scope.manager, $scope.business)
-            $state.go('app.busDashboard');
         }
        
         vm.CloseModal = function (){
             $modalInstance.close();
-        }
-
-        //this function registers hiring manager in 3rd party and
-        //and then creates Firebase db
-        function registerThirdPartyHM(provider, scope) {
-            authService.thirdPartyLogin(provider, scope)
-                .then(function(user) {
-                    userService.createUserfromThirdParty(provider, user)
-                        .then(function(fbUser){
-                            userService.setCurrentUser(fbUser, provider.uid);
-                            $modalInstance.close();
-                        }, function(err) {
-                            alert(err)
-                        });
-                }, function(err) {
-                    alert(err)
-                })
         }
 
         function registerPasswordHM(registeredUser, newbusinessObj){
@@ -83,7 +63,7 @@
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
                                     userService.setCurrentUser(newUser, manager.uid);
-                                    businessService.createNewBusiness(newbusinessObj);
+                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
                                     $modalInstance.close();
                                 }, function(err) {
                                     alert(err)
@@ -94,13 +74,11 @@
                 }, function(err) {
                     alert(err)
                 })
-
+         $state.go('app.busDashboard');
         }
 
 
-    }
+}
 
-
-  }
 
 })();

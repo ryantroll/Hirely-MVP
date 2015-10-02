@@ -47,7 +47,7 @@
         vm.hmregister = function(){
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: 'app/manager/hmregister.html',
+                templateUrl: 'app/manager/hmRegister.html',
                 controller: 'HMRegisterCtrl as vm',
                 
             });
