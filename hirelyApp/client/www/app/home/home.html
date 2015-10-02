@@ -4,12 +4,10 @@
         <div class="search" ng-controller="HomeCtrl">
             <div class="container text-center">
                 <h1 class="title">Opportunity Awaits</h1>
-                <form class="search-form" ng-submit="getResults()">
-                    <!-- ****** Not for BETA ******  <div class="form-group">
-                         <input type="text" id="search" ng-model="selected" typeahead="job as job.Lay_Title for job in jobs | filter:{Lay_Title:$viewValue} | limitTo:15" typeahead-on-select="onSelect($Code)"class="form-control" ng-init="" placeholder="What's your next gig?">
-                     </div>-->
-                    <div class="form-group">
-                        <input type="text" id="Autocomplete" class="form-control" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where's your next gig?"/>
+                <form class="search-form form-inline" ng-submit="getResults()">
+                     <div class="form-group">
+                        <input type="text" id="Autocomplete" class="form-control" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where would you like to work?"/>
+
                     </div>
                     <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
                         <span class="btn-search-inner"></span>
@@ -33,8 +31,8 @@
    <!-- ******WHY****** -->
     <section id="why" class="why section">
         <div class="container">
-            <h2 class="title text-center">We totally get it</h2>
-            <p class="intro text-center">We are disrupting the way local hourly talent and small businesses connect.</p>
+            <h2 class="title text-center">Landing a job shouldn't be a job</h2>
+            <p class="intro text-center">Hirely is the best way to find opportunities that fit you.</p>
             <img class="img-responsive"  src="img/hirely_protos.png">
             <div class="row services">
 

@@ -5,14 +5,16 @@
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
+        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
 
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady) {
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
+      var userService = UserService;
+      var candidateService = CandidateService;
 
       $scope.positions = [];
 
@@ -57,14 +59,15 @@
 
                       var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
                           positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId)
-                              .then(function (site) {
-                            if(site.positions && site.positions.length > 0){
-                                $scope.mapmarkers.push(createMarker(key, location[0], location[1], site));
-                                angular.forEach(site.positions, function (openPosition) {
-                                    $scope.positions.push(createPosition(openPosition, distance, site.siteId, site.photos));
+                              .then(function (positions) {
+                                  if(positions)
+                                  {
+                                      angular.forEach(positions, function (openPosition, id) {
+                                          $scope.positions.push(createPosition(openPosition, distance, id));
+                                          $scope.mapmarkers.push(createMarker(id, location[0], location[1], openPosition.businessSite));
+                                      });
+                                  }
 
-                                });
-                            }
 
                           }, function (err) {
 
@@ -118,6 +121,13 @@
                       pan: 1,
                       options: $scope.mapOptions,
                       control: {},
+                      clusterOptions:  {
+                          title: 'Hi I am a Cluster!',
+                          gridSize: 20,
+                          ignoreHidden: true,
+                          minimumClusterSize: 1,
+                          zoomOnClick: false
+                      },
                       events: {
                           tilesloaded: function (maps, eventName, args) {
                           },
@@ -154,19 +164,11 @@
           marker.coords.latitude = lat;
           marker.coords.longitude = lng;
           marker.businessSite = site;
-          var defaultPhoto = _.matcher({main: "true", size: "m"});
-          var photo =  _.filter(site.photos, defaultPhoto);
-          if(photo){
-              marker.photoUrl = photo[0].source;
-          }
-          marker.onClick = function() {
 
-              marker.show = !marker.show;
-          };
         return marker;
       };
 
-      var createPosition = function(openPosition, distance, siteId, photos){
+      var createPosition = function(openPosition, distance, positionId){
           var position = {
               title: '',
               companyName: '',
@@ -182,18 +184,18 @@
               postDate: '',
               photoUrl: ''
           };
-          position.companyName = openPosition.companyName;
+          position.companyName = openPosition.business.name;
           position.distance = distance/1.60934;
-          position.employmentTypes = openPosition.employmentTypes;
-          position.status = openPosition.status;
-          position.title = openPosition.title;
-          position.wage = openPosition.compensation.wage.maxAmount ? getMaxWageDisplay(openPosition.compensation.wage) : getnoMaxWageDisplay(openPosition.compensation.wage);
-          position.siteId = siteId;
-          position.positionId = openPosition.positionId;
-          position.occupationId = openPosition.occupationId;
+          position.employmentTypes = openPosition.position.employmentTypes;
+          position.status = openPosition.position.status;
+          position.title = openPosition.position.title;
+          position.wage = openPosition.position.compensation.wage.maxAmount ? getMaxWageDisplay(openPosition.position.compensation.wage) : getnoMaxWageDisplay(openPosition.position.compensation.wage);
+          position.siteId = openPosition.siteId;
+          position.positionId = positionId;
+          position.occupationId = openPosition.position.occupation;
           position.postDate = openPosition.postDate;
           var defaultPhoto = _.matcher({main: "true"});
-          var photo =  _.filter(photos, defaultPhoto);
+          var photo =  _.filter(openPosition.businessPhotos, defaultPhoto);
           if(photo){
              position.photoUrl = photo[0].source;
           }
@@ -226,6 +228,12 @@
 
       $scope.searchJobs = function(){
           $state.go('app.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
+      }
+
+      $scope.addToFavorites = function(positionId){
+         var user = userService.getCurrentUser();
+         candidateService.savePositiontoFavorites(user.userId, positionId);
+          Notification.success('Job Added to Favorites');
       }
 
       var initialize = function(){

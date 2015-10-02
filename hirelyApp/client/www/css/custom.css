@@ -267,6 +267,10 @@
   padding-bottom: 20px;
   margin-top: 5px;
 }
+.logo {
+  padding-left: 20px;
+  padding-top: 10px;
+}
 .grid {
   height: 50px;
 }
@@ -296,17 +300,16 @@
   border-color: rgba(0, 0, 0, 0.2);
   border-style: solid;
   border-width: 1px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
   background-clip: padding-box;
   *border-right-width: 2px;
   *border-bottom-width: 2px;
+}
+@media (max-width: 567px) {
+  .search-form .form-group {
+    width: 240px !important;
+  }
 }
 .pac-container {
   z-index: 99999999;
@@ -328,8 +331,6 @@
   background-color: #fff;
 }
 .bordered {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
   border: 1px solid #cccccc;
 }
@@ -422,7 +423,7 @@ h5 + .separator {
 }
 .candidate .profile .status-buttons a .nav-number {
   color: #FFF;
-  background: #00436a;
+  background: #183152;
   display: block;
   height: 50px;
   margin: 0 auto 10px;
@@ -717,7 +718,7 @@ h5 + .separator {
   -webkit-transform: rotateY(0);
   transform: rotateY(0);
   left: 0;
-  background: #3162a2;
+  background: #375d81;
 }
 .candidate .profile .tgl-btn {
   margin: auto;
@@ -835,7 +836,7 @@ h5 + .separator {
   color: #999999;
 }
 .job-search .job-item .job-action a {
-  color: #00436a;
+  color: #183152;
   text-decoration: none;
 }
 .job-search .shadow-narrow:after,
@@ -852,7 +853,6 @@ h5 + .separator {
   z-index: 1;
   border-radius: 10%;
   -webkit-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
 .job-search .body a {
@@ -893,7 +893,7 @@ rzslider {
   margin: 40px 0 30px 0;
 }
 rzslider span.rz-pointer {
-  background: #3162a2;
+  background: #375d81;
   top: -8px;
   height: 20px;
   width: 20px;
@@ -1019,7 +1019,7 @@ rzslider span.rz-pointer:after {
   border-radius: 20px;
 }
 .job-details .job-schedule .schedule-circle-yes {
-  background-color: #3162a2;
+  background-color: #375d81;
 }
 .job-details .job-schedule .schedule-circle-no {
   background-color: #fff;

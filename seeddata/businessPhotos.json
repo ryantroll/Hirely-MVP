@@ -1,0 +1,114 @@
+{
+    "3DFF61CA-727D-40AA-AACD-06F4D557CC5B": {
+        "808F6FEA-54C2-456F-BA04-0AC4190C9D83": {
+
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/northsidesocial_m.png"
+        },
+        "53ADEADC-AEFF-4FA8-A3D6-EDF996436A02": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/northsidesocial_l.png"
+        },
+        "0861F90B-7D1A-431D-B465-9A0E9DE5DFF6": {
+            "main": "false",
+            "size": "l",
+            "source": "img/jobs/northsidesocial2_l.png"
+        },
+        "4F889696-2AE2-4AC2-9FF4-DDAF797896B2": {
+            "main": "false",
+            "size": "m",
+            "source": "img/jobs/northsidesocial2_m.png"
+        }
+    },
+    "57B133E7-A732-41D3-82EA-8C733ED2A13F": {
+        "EA64637A-D233-4081-983F-85317DED050C": {
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/peets_m.png"
+        },
+        "D61FF823-E486-453E-9736-5A44B9A7E012": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/peets_l.png"
+        },
+        "7A45469F-81D5-4621-8667-2C4CF0C3B96D": {
+            "main": "false",
+            "size": "l",
+            "source": "img/jobs/peets3_l.png"
+        },
+        "571245D1-2DEE-4DEA-85F7-67BDAD1F0E8C": {
+            "main": "false",
+            "size": "m",
+            "source": "img/jobs/peets3_m.png"
+        }
+
+    },
+    "72AF835D-131D-4741-83D9-B2D3DBD69E4F": {
+        "80F67023-39AA-471F-A754-FA6F060992EA": {
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/compass1_m.png"
+        },
+        "BB236F0A-8580-4B0A-95EA-02E11D2ED96D": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/compass1_l.png"
+        },
+        "A36AF5CE-1FF9-4F3F-A125-D51C5802841B": {
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/compass2_m.png"
+        },
+        "A36AF5CE-1FF9-4F3F-A125-D51C5802841B": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/compass2_l.png"
+        },
+        "CAC84B59-C470-47F1-91C2-72323AD1767D": {
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/compass3_m.png"
+        },
+        "D969107-78ED-4362-8036-48C0AF67B189": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/compass3_l.png"
+        },
+        "6FC97CA7-D607-4C07-A56E-369DFAD091E9": {
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/compass4_m.png"
+        },
+        "CCCA1816-26D0-42EB-91CA-565634560633": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/compass4_l.png"
+        }
+    },
+    "C8BF59C8-D7C3-41BA-81C9-F6425FEA56C9": {
+        "D8F26749-314B-4D56-A0A4-A2F322606150": {
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/quartermaine1_m.png"
+        },
+        "104B82B5-D997-4DE7-8CFB-BE080E525D94": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/quartermaine1_l.png"
+        },
+        "D993DFC1-E7A8-4EE8-993A-82A29465F3DD": {
+
+            "main": "true",
+            "size": "m",
+            "source": "img/jobs/quartermaine2_m.png"
+        },
+        "BA54E391-77B8-4122-BD3C-97BEA4B48DE1": {
+            "main": "true",
+            "size": "l",
+            "source": "img/jobs/quartermaine2_l.png"
+
+        }
+    }
+    }
