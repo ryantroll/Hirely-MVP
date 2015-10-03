@@ -26,6 +26,19 @@
 
         };
 
+        vm.GoogleLogin = function(){
+            authService.thirdPartyLogin('google')
+                .then(function(data){
+                    $modalInstance.close();
+
+                }, function(err) {
+
+                    $scope.error = errMessage(err);
+                }
+            );
+
+        };
+
         vm.PasswordLogin = function() {
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(function(auth){

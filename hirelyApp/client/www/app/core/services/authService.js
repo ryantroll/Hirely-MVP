@@ -22,14 +22,22 @@
 
         // Handle third party login providers
         // returns a promise
-        function thirdPartyLogin(provider, scope) {
+        function thirdPartyLogin(provider) {
 
             var deferred = $q.defer();
-            firebaseRef.$authWithOAuthPopup(provider, scope)
+            firebaseRef.$authWithOAuthPopup(provider)
                 .then(function(user) {
                    deferred.resolve(user);
                 }, function(err) {
-                  deferred.reject(err);
+                    if (err.code === "TRANSPORT_UNAVAILABLE") {
+                        // fall-back to browser redirects, and pick up the session
+                        // automatically when we come back to the origin page
+                        ref.authWithOAuthRedirect.then(function(user) {
+                            deferred.resolve(user);
+                        }, function(err) {
+                            deferred.reject(err);
+                            });
+                    }
                 });
 
 

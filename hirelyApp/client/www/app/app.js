@@ -91,7 +91,6 @@ var myApp = angular.module('hirelyApp',
             .state('app.candidate.dashboard', {
                 url: '/dashboard',
                 templateUrl: 'app/candidate/candidate-dashboard.html',
-
                 controller: 'CandidateDashboardCtrl',
                 authRequired: true
             })
