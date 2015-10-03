@@ -5,6 +5,16 @@
 
     function HomeCtrl ($scope, $state, $stateParams, GeocodeService) {
         var geocodeService = GeocodeService;
+        $scope.bannerSlides = [];
+
+        var initialize = function(){
+
+            $scope.bannerSlides.push('img/banners/barista_male.jpg');
+            $scope.bannerSlides.push('img/banners/bartender.jpg');
+            $scope.bannerSlides.push('img/banners/restaurant.jpg');
+            $scope.bannerSlides.push('img/banners/barber.jpg');
+            $scope.bannerSlides.push('img/banners/barista_female.jpg');
+        }
         $scope.flexSliderOptions = {
             animation: "fade",
             directionNav: false,
@@ -30,6 +40,7 @@
             $state.go('app.job', {placeId: $scope.details.place_id})
 
         }
+        initialize();
 
     }
 })();
