@@ -846,20 +846,66 @@ select {
 /* ======= Promo Section ======= */
 .promo {
   position: relative;
-  min-height: 720px;
+  min-height: 620px;
   /* ======= Search Section ======= */
 }
 .promo .promo-container {
   position: absolute;
 }
-.promo .flexslider {
-  height: 720px;
+.promo .bg-slider-wrapper {
+  content: "";
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 620px;
+  background: #fff;
 }
-.promo .flexslider .slides img {
-  height: 720px;
+.promo .bg-slider-wrapper .flexslider {
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  background-clip: padding-box;
+}
+.promo .bg-slider-wrapper .flexslider .slide {
+  display: block;
+  height: 620px;
+}
+.promo .bg-slider-wrapper .flexslider .slide.slide-1 {
+  background: #ffffff url('../img/banners/barista_male.jpg') no-repeat 50% top;
+  background-size: cover;
+}
+.promo .bg-slider-wrapper .flexslider .slide.slide-2 {
+  background: #ffffff url('../img/banners/barber.jpg') no-repeat 50% top;
+  background-size: cover;
+}
+.promo .bg-slider-wrapper .flexslider .slide.slide-3 {
+  background: #ffffff url('../img/banners/bartender.jpg') no-repeat 50% top;
+  background-size: cover;
+}
+.promo .bg-slider-wrapper .flexslider .slide.slide-4 {
+  background: #ffffff url('../img/banners/restaurant.jpg') no-repeat 50% top;
+  background-size: cover;
+}
+.promo .bg-slider-wrapper .flexslider .slide.slide-5 {
+  background: #ffffff url('../img/banners/barista_female.jpg') no-repeat 50% top;
+  background-size: cover;
+}
+.promo .bg-slider-wrapper .flexslider .flex-control-nav {
+  z-index: 20;
+  bottom: 45px;
+  position: relative;
+}
+.promo .bg-slider-wrapper .flexslider .flex-control-nav li a {
+  background: rgba(255, 255, 255, 0.3);
+}
+.promo .bg-slider-wrapper .flexslider .flex-control-nav li a.flex-active {
+  background: rgba(255, 255, 255, 0.8);
 }
 .promo .search-container {
   position: relative;
+  width: 100%;
   padding-top: 320px;
   text-align: center;
   z-index: 100;
@@ -877,6 +923,9 @@ select {
   width: 400px;
   font-size: 18px;
 }
+.promo .search-middle .search-form .form-group {
+  display: inline-block;
+}
 .promo .search-middle .search-form .form-control {
   font-size: 16px;
   color: #444;
@@ -886,6 +935,7 @@ select {
   width: 80px;
   height: 40px;
   padding: 0 15px;
+  margin-left: 5px;
 }
 .promo .search-middle .search-form .btn-search-inner {
   background: url(../img/icon-search.png) no-repeat center center;
@@ -893,6 +943,15 @@ select {
   width: 20px;
   height: 38px;
   display: inline-block;
+}
+@media (max-width: 567px) {
+  .promo .search-middle .btn-search {
+    margin-left: 20px;
+  }
+  .promo .search-middle #Autocomplete {
+    width: 250px;
+    font-size: 16px;
+  }
 }
 .promo .search {
   padding: 80px 0;

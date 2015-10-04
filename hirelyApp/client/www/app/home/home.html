@@ -1,25 +1,28 @@
 
 <!-- ******PROMO****** -->
 <section id="promo" class="promo section">
-    <div class="promo-container">
-        <flex-slider flex-slide="s in bannerSlides" control-nav="false" direction-nav="false" slide-show-speed="1000" randomize="true" animation-loop="false">
-            <li>
-                <img ng-src="{{s}}">
-            </li>
-        </flex-slider>
-    </div>
+    <div class="bg-slider-wrapper">
+        <div id="bg-slider" class="flexslider bg-slider" flexslider options="flexSliderOptions">
+            <ul class="slides">
+                <li class="slide slide-1"></li>
+                <li class="slide slide-2"></li>
+                <li class="slide slide-3"></li>
+                <li class="slide slide-4"></li>
+                <li class="slide slide-5"></li>
+            </ul>
+        </div>
+    </div><!--//bg-slider-wrapper-->
 
-    <div class="search-container container">
+    <div class="search-container">
         <div class="search-middle">
             <h2>Opportunity Awaits</h2>
             <form class="search-form form-inline" ng-submit="getResults()">
                 <div class="form-group">
                     <input type="text" id="Autocomplete" class="form-control" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where would you like to work?"/>
-                    <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
-                        <span class="btn-search-inner"></span>
-                    </button>
                 </div>
-
+                <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
+                    <span class="btn-search-inner"></span>
+                </button>
             </form><!--//search-form-->
         </div>
     </div>

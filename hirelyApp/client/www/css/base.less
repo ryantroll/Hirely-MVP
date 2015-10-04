@@ -782,23 +782,65 @@ select {
 
 .promo {
     position: relative;
-     min-height: 720px;
-
+  min-height: 620px;
 
   .promo-container{
     position: absolute;
   }
-  .flexslider {
-    height: 720px;
-
+  .bg-slider-wrapper {
+    content: "";
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 620px;
+    background: #fff;
   }
-
-  .flexslider .slides img {
-
-    height: 720px;
+  .bg-slider-wrapper .flexslider {
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    background-clip: padding-box;
+  }
+  .bg-slider-wrapper .flexslider .slide {
+    display: block;
+    height: 620px;
+  }
+  .bg-slider-wrapper .flexslider .slide.slide-1 {
+    background: #ffffff url('../img/banners/barista_male.jpg') no-repeat 50% top;
+    background-size: cover;
+  }
+  .bg-slider-wrapper .flexslider .slide.slide-2 {
+    background: #ffffff url('../img/banners/barber.jpg') no-repeat 50% top;
+    background-size: cover;
+  }
+  .bg-slider-wrapper .flexslider .slide.slide-3 {
+    background: #ffffff url('../img/banners/bartender.jpg') no-repeat 50% top;
+    background-size: cover;
+  }
+  .bg-slider-wrapper .flexslider .slide.slide-4 {
+    background: #ffffff url('../img/banners/restaurant.jpg') no-repeat 50% top;
+    background-size: cover;
+  }
+  .bg-slider-wrapper .flexslider .slide.slide-5 {
+    background: #ffffff url('../img/banners/barista_female.jpg') no-repeat 50% top;
+    background-size: cover;
+  }
+  .bg-slider-wrapper .flexslider .flex-control-nav {
+    z-index: 20;
+    bottom: 45px;
+    position: relative;
+  }
+  .bg-slider-wrapper .flexslider .flex-control-nav li a {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  .bg-slider-wrapper .flexslider .flex-control-nav li a.flex-active {
+    background: rgba(255, 255, 255, 0.8);
   }
   .search-container{
     position: relative;
+    width: 100%;
     padding-top: 320px;
     text-align: center;
     z-index: 100;
@@ -820,6 +862,9 @@ select {
       font-size: 18px;
     }
     .search-form {
+      .form-group{
+        display: inline-block;
+      }
       .form-control {
         font-size: 16px;
         color: @text-color;
@@ -830,6 +875,7 @@ select {
         width: 80px;
         height: 40px;
         padding: 0 15px;
+        margin-left: 5px;
       }
       .btn-search-inner
       {
@@ -838,6 +884,17 @@ select {
         width: 20px;
         height: 38px;
         display: inline-block;
+      }
+    }
+    @media (max-width: 567px){
+
+      .btn-search {
+        margin-left: 20px;
+      }
+
+      #Autocomplete{
+        width: 250px;
+        font-size: 16px;
       }
     }
   }
