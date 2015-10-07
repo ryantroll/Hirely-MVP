@@ -4,7 +4,7 @@
 /* ======= Base ======= */
 
 body {
-    font-family: 'Open Sans', Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: @text-color;
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
@@ -30,7 +30,7 @@ html, body {
 }
 
 h1, h2, h3, h4, h5, h6  {
-    font-family: 'Open Sans', Arial, sans-serif;
+    font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: bold;
 }
 
@@ -39,7 +39,9 @@ p {
     font-size: 16px;
 }
 
-
+.btn{
+  border-radius: 0;
+}
 a {
     color: @color;
     .transition (all 0.4s ease-in-out);
@@ -55,7 +57,7 @@ a {
 
 .btn, a.btn {
     .transition (all 0.4s ease-in-out);
-    font-family: 'Open Sans', Arial, sans-serif;
+    font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 8px 16px;
     .fa {
         color: #fff;
@@ -103,7 +105,7 @@ a.btn-cta, .btn-cta {
   border: 2px solid @color;
   color: #fff;
   text-transform: uppercase;
-  margin-left: 15px;
+  font-weight: bold;
   &:hover {
     background: darken(@color, 5%);
     border: 2px solid darken(@color, 5%);
@@ -371,7 +373,7 @@ select {
                     color: @text-color-secondary !important;
                     font-weight: 400;
                     text-transform:uppercase;
-                    font-family: 'Open Sans', Arial, sans-serif !important;
+                    font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif !important;
                     font-size: 14px;
                     line-height: 20px;
                     padding: 10px 15px;
@@ -400,7 +402,7 @@ select {
                         padding: 6px 12px;
                         color: #fff;
                         font-weight: 300;
-                        font-family:'Open Sans', Arial, sans-serif;
+                        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
                         margin-top: 2px;
                         background:@color;
                         &:hover {
@@ -411,7 +413,8 @@ select {
                     }
                 }
                 a {
-                    color: @text-color-secondary;
+                    color: @text-color;
+                    font-weight: bold;
                     .transition (none);
                     &:hover {
                         color: @color;
@@ -547,7 +550,7 @@ select {
 
 
     .bottom-bar {
-        background: @text-color;
+        background: lighten(@darker-grey, 5%);
         color: lighten(@grey, 10%);
         font-size: 14px;
         padding: 10px 0;
@@ -794,7 +797,6 @@ select {
     top: 0;
     left: 0;
     height: 620px;
-    background: #fff;
   }
   .bg-slider-wrapper .flexslider {
     margin: 0;
@@ -808,23 +810,39 @@ select {
     height: 620px;
   }
   .bg-slider-wrapper .flexslider .slide.slide-1 {
-    background: #ffffff url('../img/banners/barista_male.jpg') no-repeat 50% top;
+    background: linear-gradient(
+            rgba(0,0,0, 0.35),
+            rgba(0,0,0, 0.35)
+    ), url('../img/banners/barista_male.jpg')  no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-2 {
-    background: #ffffff url('../img/banners/barber.jpg') no-repeat 50% top;
+    background:   linear-gradient(
+            rgba(0,0,0, 0.45),
+            rgba(0,0,0, 0.45)
+    ),  url('../img/banners/barber.jpg')  no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-3 {
-    background: #ffffff url('../img/banners/bartender.jpg') no-repeat 50% top;
+    background:linear-gradient(
+            rgba(0,0,0, 0.45),
+            rgba(0,0,0, 0.45)
+    ),   url('../img/banners/bartender.jpg');
+
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-4 {
-    background: #ffffff url('../img/banners/restaurant.jpg') no-repeat 50% top;
+    background: linear-gradient(
+            rgba(0,0,0, 0.45),
+            rgba(0,0,0, 0.45)
+    ),  url('../img/banners/restaurant.jpg')  no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-5 {
-    background: #ffffff url('../img/banners/barista_female.jpg') no-repeat 50% top;
+    background: linear-gradient(
+            rgba(0,0,0, 0.45),
+            rgba(0,0,0, 0.45)
+    ),  url('../img/banners/barista_female.jpg')  no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .flex-control-nav {
@@ -841,7 +859,7 @@ select {
   .search-container{
     position: relative;
     width: 100%;
-    padding-top: 320px;
+    padding-top: 280px;
     text-align: center;
     z-index: 100;
 
@@ -857,8 +875,11 @@ select {
       text-transform: uppercase;
       color: #fff;
     }
+    h4{
+      color: #fff;
+    }
     #Autocomplete{
-      width: 400px;
+      width: 100%;
       font-size: 18px;
     }
     .search-form {
@@ -871,32 +892,9 @@ select {
         width: inherit;
       }
 
-      .btn-search{
-        width: 80px;
-        height: 40px;
-        padding: 0 15px;
-        margin-left: 5px;
-      }
-      .btn-search-inner
-      {
-        background: url(../img/icon-search.png) no-repeat center center;
-        background-size: 16px;
-        width: 20px;
-        height: 38px;
-        display: inline-block;
-      }
-    }
-    @media (max-width: 567px){
 
-      .btn-search {
-        margin-left: 20px;
-      }
-
-      #Autocomplete{
-        width: 250px;
-        font-size: 16px;
-      }
     }
+
   }
 
   /* ======= Search Section ======= */

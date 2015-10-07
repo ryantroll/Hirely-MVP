@@ -27,12 +27,8 @@
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: 'app/account/login.html',
-                controller: 'LoginCtrl as vm',
-                resolve: {
-                    items: function () {
+                controller: 'LoginCtrl as vm'
 
-                    }
-                }
             });
         };
 

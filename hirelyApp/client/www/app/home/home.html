@@ -16,13 +16,21 @@
     <div class="search-container">
         <div class="search-middle">
             <h2>Opportunity Awaits</h2>
+            <h4>The easiest way to find hourly jobs with great local businesses</h4>
             <form class="search-form form-inline" ng-submit="getResults()">
-                <div class="form-group">
-                    <input type="text" id="Autocomplete" class="form-control" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where would you like to work?"/>
+                <div class="row search-row">
+                    <div class="col-md-7 col-sm-7 col-md-offset-1  col-sm-offset-1 col-xs-7 col-xs-offset-1 search-col">
+                        <i class="fa fa-map-marker"></i>
+                        <input type="text" id="Autocomplete" class="form-control search-location" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where would you like to work?"/>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 search-col">
+                        <button type="submit" class="btn btn-cta btn-cta-primary btn-block btn-search">
+                            <i class="fa fa-search search-icon"></i>
+                            <strong>Find Jobs</strong>
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
-                    <span class="btn-search-inner"></span>
-                </button>
+
             </form><!--//search-form-->
         </div>
     </div>
@@ -36,7 +44,7 @@
             <img class="img-responsive"  src="img/hirely_protos.png">
             <div class="row services">
 
-                <div class="col-lg-4 col-sm-4 focus-box red wow fadeInLeft animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
+                <div class="col-lg-4 col-sm-4">
                     <div class="service-icon">
                         <i class="fa fa-list fa-5x"></i>
                     </div>
@@ -46,7 +54,7 @@
                     </p>
                 </div>
 
-                <div class="col-lg-4 col-sm-4 focus-box green wow fadeInLeft animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
+                <div class="col-lg-4 col-sm-4">
                     <div class="service-icon">
                         <i class="fa fa-user fa-5x"></i>
                     </div>
@@ -55,7 +63,7 @@
                         You're more than a resume.  Applicant cards let you showcase who you are and easily apply to jobs. </p>
                 </div>
 
-                <div class="col-lg-4 col-sm-4 focus-box blue wow fadeInRight animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
+                <div class="col-lg-4 col-sm-4">
                     <div class="service-icon">
                         <i class="fa fa-search fa-5x"></i>
                     </div>
