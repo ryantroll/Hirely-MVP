@@ -47,6 +47,10 @@
 
         this.setIsLoggedIn = function setIsLoggedIn(aisLoggedIn){
             isLoggedIn = aisLoggedIn;
+            if(!isLoggedIn){
+                currentUser = '';
+                currentUserId = '';
+            }
 
         };
 
@@ -102,6 +106,7 @@
 
                     break;
                 case 'google':
+                    user = createGoogleUser(authData);
             }
 
             //check if user previously exists
@@ -161,6 +166,25 @@
             fbUser.email = fbAuthData.facebook.email;
             fbUser.provider = fbAuthData.provider;
             fbUser.providerId = fbAuthData.uid;
+            fbUser.createdOn = timestamp;
+            fbUser.lastModifiedOn = timestamp;
+
+            return fbUser;
+
+        };
+
+        function createGoogleUser(googleAuthData)
+        {
+            var timestamp = Firebase.ServerValue.TIMESTAMP;
+            var fbUser = new userModel();
+
+            fbUser.fullName = googleAuthData.google.displayName;
+            fbUser.firstName = googleAuthData.google.cachedUserProfile.given_name;
+            fbUser.lastName = googleAuthData.google.cachedUserProfile.family_name;
+            fbUser.profileImageUrl =  googleAuthData.google.profileImageURL;
+            fbUser.email = googleAuthData.google.email ? googleAuthData.google.email: '';
+            fbUser.provider = googleAuthData.provider;
+            fbUser.providerId = googleAuthData.auth.uid;
             fbUser.createdOn = timestamp;
             fbUser.lastModifiedOn = timestamp;
 

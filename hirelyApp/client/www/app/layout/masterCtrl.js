@@ -66,7 +66,7 @@
             else
             {
                 $scope.userService.setIsLoggedIn(false);
-                $scope.userService.setCurrentUser(null)
+
             }
         });
 

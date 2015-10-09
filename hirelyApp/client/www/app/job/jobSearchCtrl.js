@@ -5,9 +5,15 @@
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
+        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$modal', JobSearchCtrl]);
 
+<<<<<<< HEAD
   function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService, UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady) {
+=======
+
+
+  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $modal) {
+>>>>>>> origin/master
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
@@ -229,9 +235,23 @@
       }
 
       $scope.addToFavorites = function(positionId){
-         var user = userService.getCurrentUser();
-         candidateService.savePositiontoFavorites(user.userId, positionId);
-          Notification.success('Job Added to Favorites');
+          //user must be logged in to add to favorties
+          if(userService.getIsLoggedIn())
+          {
+              var user = userService.getCurrentUser();
+              candidateService.savePositiontoFavorites(user.userId, positionId);
+              Notification.success('Job Added to Favorites');
+          }
+          else
+          {
+              var modalInstance = $modal.open({
+                  animation: true,
+                  templateUrl: 'app/account/register.html',
+                  controller: 'RegisterCtrl as vm'
+
+              });
+          }
+
       }
 
       var initialize = function(){

@@ -5,6 +5,7 @@
 
     function HomeCtrl ($scope, $state, $stateParams, GeocodeService) {
         var geocodeService = GeocodeService;
+
         $scope.flexSliderOptions = {
             animation: "fade",
             directionNav: false,
@@ -30,6 +31,7 @@
             $state.go('app.job', {placeId: $scope.details.place_id})
 
         }
+
 
     }
 })();

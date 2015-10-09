@@ -10,7 +10,6 @@ var myApp = angular.module('hirelyApp',
         'firebase',
         'ngMask',
         'ng-currency',
-        'tc.chartjs',
         'rzModule',
         'angular-flexslider',
         'ui-notification',
@@ -98,7 +97,6 @@ var myApp = angular.module('hirelyApp',
             .state('app.candidate.dashboard', {
                 url: '/dashboard',
                 templateUrl: 'app/candidate/candidate-dashboard.html',
-
                 controller: 'CandidateDashboardCtrl',
                 authRequired: true
             })

@@ -28,6 +28,7 @@
                 });
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+                    AuthService.AuthRef().$onAuth(check);
                     if (toState.authRequired && !UserService.getIsLoggedIn()){
                         // User isn’t authenticated
                         $state.transitionTo(loginRedirectPath);
