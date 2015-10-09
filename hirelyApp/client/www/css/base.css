@@ -659,7 +659,7 @@ select {
 .modal-login .modal-body .modal-backdrop,
 .modal-signup .modal-body .modal-backdrop,
 .modal-resetpass .modal-body .modal-backdrop {
-  z-index: 100000;
+  z-index: 1000000;
 }
 .modal-login .modal-footer,
 .modal-signup .modal-footer,

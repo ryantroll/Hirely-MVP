@@ -23,6 +23,7 @@ var myApp = angular.module('hirelyApp',
         'hirelyApp.account',
         'hirelyApp.candidate',
         'hirelyApp.manager'
+        
     ])
 
 
@@ -67,15 +68,20 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/manager/hmRegister.html',
                 controller: 'HMRegisterCtrl'
             })
-            .state('app.busDashboard', {
-                url: '/busDashboard',
-                templateUrl: 'app/manager/hmDashboard.html',
-                controller: 'HMRegisterCtrl'
+            .state('app.hmBusSite', {
+                url: '/hmBusSite',
+                templateUrl: 'app/manager/company/hmBusSite.html',
+                controller: 'HMCompanyCtrl'
+            })
+            .state('app.hmDashboard', {
+                url: '/hmDashboard',
+                templateUrl: 'app/manager/company/hmDashboard.html',
+                controller: 'HMCompanyCtrl'
             })
             .state('app.hmPosition', {
                 url: '/hmPosition',
-                templateUrl: 'app/manager/hmPosition.html',
-                controller: 'HMRegisterCtrl'
+                templateUrl: 'app/manager/company/hmPosition.html',
+                controller: 'HMCompanyCtrl'
             })
             .state('app.hmHiring', {
                 url: '/hmHiring',

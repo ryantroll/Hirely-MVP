@@ -12,7 +12,7 @@
         var authService = AuthService;
         var userService = UserService;
         $scope.error = '';
-        $scope.user = {email: '', password: '', firstName: '', lastName: ''}
+        $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
         vm.FbRegister = function () {
 

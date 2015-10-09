@@ -1,0 +1,259 @@
+<div class="modal-signup">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.CloseModal()">&times;</button>
+        <h1 id="signupModalLabel" class="modal-title text-center">Hirely</h1>
+        <h3 id="signupModalLabel" class="modal-title text-center">Opportunity Awaits</h3>
+        <p></p>
+    </div>
+      <div class="modal-body">             
+        <div class="divider"><span></span></div>
+        <div class="login-form-container">
+
+
+            <form name="loginForm" class="login-form" ng-submit="createNewPosition()">
+            <div class="bs-example">
+            <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Tell us what you are Hiring for:</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+               <input type="hidden" id="jobId" ng-model="job.id">
+                <div class="form-group">
+                    <input type="text" required id="jobTitle" name="jobTitle" typeahead="occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:25" class="form-control"  placeholder="Job Title " ng-model="job.occupation">
+                <div role="alert">
+                  <span class="error" ng-show="experienceForm.experienceTitle.$error.required && !experienceForm.experienceTitle.$pristine">
+                   Job Title is required</span>
+                </div>
+               </div><!--//form-group-->
+             
+                <div class="form-group">
+                    <input id="signupStreetName" name="signupStreetName" type="text" class="form-control login-email" required placeholder="Do you have a peferred street name for this job?" ng-model="job.LayName">
+                </div><!--//form-group-->
+
+                
+                <div class="form-group ">
+                    <label><h4>What's most important?</h4></label>
+                    <div>
+                    <form><h5>
+                      <input type="radio" ng-model="job.Feature" name="feature" value="Availablity" checked> Availablity
+                      <br>
+                      <input type="radio" ng-model="job.Feature" name="feature" value="Experience/Skills"> Experience/Skills
+                       <br>
+                      <input type="radio" ng-model="job.Feature" name="feature" value="Personality"> Personality
+                    </h5></form>
+                    </div>
+                </div><!--//form-group-->
+
+                  </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Enter any minimum Availabily requirements.</a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body"> 
+
+
+            <div class="layered-content job col-md-12 col-xs-12" ng-controller="HMCompanyCtrl">
+                <div class="row">
+                    <div class="col-md-3 col-md-offset-3 col-xs-offset-3 col-xs-3">Morning</div>
+                    <div class="col-md-3 col-xs-3">Afternoon</div>
+                    <div class="col-md-3 col-xs-3">Evening</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">Monday</div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='monAM' type='checkbox' ng-model="job.mon_morning">
+                        <label class='tgl-btn tgl-btn-morning' for='monAM'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='monAF' type='checkbox' ng-model="job.mon_afternoon">
+                        <label class='tgl-btn tgl-btn-afternoon' for='monAF'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='monPM' type='checkbox' ng-model="job.mon_evening">
+                        <label class='tgl-btn tgl-btn-evening' for='monPM'></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">Tuesday</div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='tuesAM' type='checkbox' ng-model="job.tues_morning">
+                        <label class='tgl-btn tgl-btn-morning' for='tuesAM'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='tuesAF' type='checkbox' ng-model="job.tues_afternoon">
+                        <label class='tgl-btn tgl-btn-afternoon' for='tuesAF'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='tuesPM' type='checkbox' ng-model="job.tues_evening">
+                        <label class='tgl-btn tgl-btn-evening' for='tuesPM'></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">Wednesday</div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='wedAM' type='checkbox' ng-model="job.wed_morning">
+                        <label class='tgl-btn tgl-btn-morning' for='wedAM'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='wedAF' type='checkbox' ng-model="job.wed_afternoon">
+                        <label class='tgl-btn tgl-btn-afternoon' for='wedAF'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='wedPM' type='checkbox' ng-model="job.wed_evening">
+                        <label class='tgl-btn tgl-btn-evening' for='wedPM'></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">Thursday</div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='thurAM' type='checkbox' ng-model="job.thurs_morning">
+                        <label class='tgl-btn tgl-btn-morning' for='thurAM'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='thurAF' type='checkbox' ng-model="job.thurs_afternoon">
+                        <label class='tgl-btn tgl-btn-afternoon' for='thurAF'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='thurPM' type='checkbox' ng-model="job.thurs_evening">
+                        <label class='tgl-btn tgl-btn-evening' for='thurPM'></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">Friday</div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='friAM' type='checkbox' ng-model="job.fri_morning">
+                        <label class='tgl-btn tgl-btn-morning' for='friAM'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='friAF' type='checkbox' ng-model="job.fri_afternoon">
+                        <label class='tgl-btn tgl-btn-afternoon' for='friAF'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='friPM' type='checkbox' ng-model="job.fri_evening">
+                        <label class='tgl-btn tgl-btn-evening' for='friPM'></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">Saturday</div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='satAM' type='checkbox' ng-model="job.sat_morning">
+                        <label class='tgl-btn tgl-btn-morning' for='satAM'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='satAF' type='checkbox' ng-model="job.sat_afternoon">
+                        <label class='tgl-btn tgl-btn-afternoon' for='satAF'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='satPM' type='checkbox' ng-model="job.sat_evening">
+                        <label class='tgl-btn tgl-btn-evening' for='satPM'></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">Sunday</div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='sunAM' type='checkbox' ng-model="job.sun_morning">
+                        <label class='tgl-btn tgl-btn-morning' for='sunAM'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='sunAF' type='checkbox' ng-model="job.sun_afternoon">
+                        <label class='tgl-btn tgl-btn-afternoon' for='sunAF'></label>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <input class='tgl tgl-flip' id='sunPM' type='checkbox' ng-model="job.sun_evening">
+                        <label class='tgl-btn tgl-btn-evening' for='sunPM'></label>
+                    </div>
+                </div>
+               </div>
+           </div>
+               <div>
+             <label style="width: 90px"></label>    
+            <input class="slimField" id="MinHours" required placeholder="Min Hours" id="MinHours" name="MinHours" ng-model="job.MinHours" pa-options="paOptions"></input> <label style="width: 50px"></label> 
+            <input class="slimField" id="MaxHours" required placeholder="Max Hours" id="MaxHours" name="MaxHours" ng-model="job.MaxHours" pa-options="paOptions"></input>
+            </div>
+            <hr> </div>
+               </div>
+               <div class="panel panel-default">
+               <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Tell us about what you're offering:</a>
+                </h4>
+
+              </div>
+              <div id="collapseThree" class="panel-collapse collapse">
+                  <div class="panel-body">
+                  <div>
+                     <label style="width: 90px"></label>    
+                    <input class="slimField" id="MinSalary" required placeholder="Enter Min Salary" id="MinSalary" name="MinSalary" ng-model="job.MinSalary" pa-options="paOptions"></input><label style="width: 50px"></label> 
+                    <input class="slimField" id="MaxSalary" required placeholder="Enter Max Salary" id="MaxSalary" name="MaxSalary" ng-model="job.MaxSalary" pa-options="paOptions"></input>
+                  </div>
+
+                <label><h4>Benefits:</h4></label>  
+                <div class="form-group Store_Hours" >
+                  <div class="row">
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='monAM' type='checkbox' ng-model="job.medical">
+                        <label class='tgl-btn tgl-btn-morning' for='monAM'>Health</label>
+                    </div>
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='monAF' type='checkbox' ng-model="job.vision">
+                        <label class='tgl-btn tgl-btn-afternoon' for='monAF'>Vision</label>
+                    </div>
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='monPM' type='checkbox' ng-model="job.discounts">
+                        <label class='tgl-btn tgl-btn-evening' for='monPM'>Discounts</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='tuesAM' type='checkbox' ng-model="job.dental">
+                        <label class='tgl-btn tgl-btn-morning' for='tuesAM'>Dental</label>
+                    </div>
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='tuesAF' type='checkbox' ng-model="job.life">
+                        <label class='tgl-btn tgl-btn-afternoon' for='tuesAF'>Life</label>
+                    </div>
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='tuesPM' type='checkbox' ng-model="job.stock">
+                        <label class='tgl-btn tgl-btn-evening' for='tuesPM'>401k</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='wedAM' type='checkbox' ng-model="job.flexibleSchedule">
+                        <label class='tgl-btn tgl-btn-morning' for='wedAM'>Flex Schedule</label>
+                    </div>
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='wedAF' type='checkbox' ng-model="job.retirement">
+                        <label class='tgl-btn tgl-btn-afternoon' for='wedAF'>Retirement</label>
+                    </div>
+                    <div class="col-md-4 col-xs-4">
+                        <input class='tgl tgl-flip' id='wedPM' type='checkbox'>
+                        <label class='tgl-btn tgl-btn-evening' for='wedPM'>+New</label>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+           </div>
+           </div>
+
+                <button type="submit" class="btn btn-block btn-cta-primary">Create</button>
+                <p class="note">By signing up, you agree to our terms of services and privacy policy.</p>
+                
+         </form>
+        </div><!--//login-form-container-->
+    </div><!--//modal-body-->
+    <div class="modal-footer">
+        <p>Already have an account? <a class="login-link" id="login-link" href="#">Log in</a></p>
+    </div><!--//modal-footer-->
+</div><!--//modal-content-->
