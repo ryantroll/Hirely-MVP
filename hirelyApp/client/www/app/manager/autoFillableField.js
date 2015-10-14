@@ -22,4 +22,4 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
   }
 ]);
 }
-})();
+)();

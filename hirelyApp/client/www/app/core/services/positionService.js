@@ -90,6 +90,8 @@
             return deferred.promise;
 
         }
+
+        this.applyforPosition
     };
 })();
 

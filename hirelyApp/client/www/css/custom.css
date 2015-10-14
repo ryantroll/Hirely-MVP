@@ -247,14 +247,10 @@
   }
   .wrapper {
     min-height: 100%;
-    margin-bottom: 100px;
-    /* equal to footer height */
   }
   .wrapper:after {
     content: "";
     display: block;
-    height: 100px;
-    /* must be the same height as footer */
   }
   .footer {
     height: 100px;
@@ -291,7 +287,7 @@
   position: relative;
 }
 .search-form .search-row .search-col i {
-  color: #999;
+  color: #999999;
   font-size: 18px;
   left: 8px;
   position: absolute;
@@ -312,6 +308,15 @@
   font-size: 16px;
   height: 48px;
   border-radius: 0 3px 3px 0!important;
+}
+@media (max-width: 640px) {
+  .search-form .search-row .search-col .btn-search {
+    width: 60%;
+    text-align: center;
+  }
+  .search-form .search-row .search-col .btn-search strong {
+    display: none;
+  }
 }
 .search-form .search-row .search-col .form-control {
   box-shadow: none!important;
@@ -336,14 +341,8 @@
   border-color: rgba(0, 0, 0, 0.2);
   border-style: solid;
   border-width: 1px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
   background-clip: padding-box;
   *border-right-width: 2px;
   *border-bottom-width: 2px;
@@ -373,10 +372,8 @@
   background-color: #fff;
 }
 .bordered {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
 }
 .padding-20 {
   padding: 20px;
@@ -410,7 +407,7 @@ h5 + .separator {
   -webkit-backface-visibility: hidden;
   -webkit-transform: translateZ(0) scale(1, 1);
   clear: both;
-  background-color: #ccc;
+  background-color: #cccccc;
 }
 /* ======= Hiring Manager Section(homepage) ======= */
 .hiring-manager {
@@ -418,7 +415,7 @@ h5 + .separator {
   margin-top: 20px;
   padding: 20px 0;
   color: #fff;
-  background: #466EAB;
+  background: #466eab;
 }
 .hiring-manager .hiring-intro h1,
 .hiring-manager .hiring-intro h2,
@@ -440,28 +437,41 @@ h5 + .separator {
 /* ======= Call to action(homepage) ======= */
 .call-to-action {
   height: 600px;
+  background: -webkit-linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(/img/banners/future_employee.jpg) no-repeat 50% top;
   background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(/img/banners/future_employee.jpg) no-repeat 50% top;
   background-size: cover;
 }
 .call-to-action .cta-container {
   color: white;
-  padding-top: 150px;
+  font-size: 16px;
+  padding-top: 60px;
 }
 .call-to-action .cta-container .main-header {
-  margin-top: 100px;
-  font-size: 48px;
-  font-weight: 700;
-  display: block;
+  font-size: 32px;
+  font-weight: bold;
 }
 .call-to-action .cta-container .join-header {
-  font-size: 20px;
+  padding-bottom: 20px;
 }
-.call-to-action .cta-container .signup input {
-  width: 400px;
+.call-to-action .cta-container .cta-col {
+  padding: 0;
 }
-.call-to-action .cta-container button {
-  font-size: 18px;
-  font-weight: bold;
+.call-to-action .cta-container .form-control {
+  box-shadow: none!important;
+  border: 0;
+  height: 48px;
+  margin-bottom: 0;
+  border-radius: 3px 0 0 3px;
+  padding-left: 20px;
+  border-right: solid 1px #ddd!important;
+}
+.call-to-action .cta-container .btn-cta-blue {
+  display: block;
+  border: 0;
+  margin: 0;
+  font-size: 16px;
+  height: 48px;
+  border-radius: 0 3px 3px 0!important;
 }
 /* ======= Profile Section ======= */
 .profile {
@@ -507,7 +517,7 @@ h5 + .separator {
 }
 .profile .sidebar-nav-v1 > li a.active,
 .profile .sidebar-nav-v1 > li a.active:hover {
-  background: #999;
+  background: #999999;
   color: #fff;
 }
 .profile .sidebar-nav-v1 > li.active,
@@ -546,10 +556,10 @@ h5 + .separator {
   text-align: center;
 }
 .profile .service-block-u {
-  background: #E42F0C;
+  background: #e42f0c;
 }
 .profile .service-block-blue {
-  background: #065D91;
+  background: #065d91;
 }
 .profile .service-block-v3 {
   padding: 20px;
@@ -630,7 +640,7 @@ h5 + .separator {
   padding: 20px;
 }
 .candidate .profile .status-buttons a {
-  color: #465B6D;
+  color: #465b6d;
   display: inline-block;
   font-size: 14px;
   margin-right: 10px;
@@ -644,7 +654,7 @@ h5 + .separator {
 }
 .candidate .profile .status-buttons a .nav-number {
   color: #FFF;
-  background: #065D91;
+  background: #065d91;
   display: block;
   height: 50px;
   margin: 0 auto 10px;
@@ -654,10 +664,10 @@ h5 + .separator {
   box-shadow: 1px 1px 1px black;
 }
 .candidate .profile .status-buttons a.active .nav-number {
-  background: #E42F0C;
+  background: #e42f0c;
 }
 .candidate .profile .status-buttons a.active {
-  color: #E42F0C;
+  color: #e42f0c;
 }
 .candidate .profile .user-experience {
   /*Timeline v2
@@ -710,18 +720,18 @@ h5 + .separator {
   position: relative;
 }
 .candidate .profile .user-experience .timeline-v2 > li .cbp_tmtime span:first-child {
-  color: #465B6D;
+  color: #465b6d;
   font-size: 14px;
   line-height: 1.5;
 }
 .candidate .profile .user-experience .timeline-v2 > li .cbp_tmtime span:last-child {
-  color: #A6AAA9;
+  color: #a6aaa9;
   font-size: 14px;
   font-weight: normal;
   color: #999;
 }
 .candidate .profile .user-experience .timeline-v2 > li .cbp_tmlabel {
-  color: #465B6D;
+  color: #465b6d;
   line-height: 1.4;
   clear: both;
   position: relative;
@@ -753,7 +763,7 @@ h5 + .separator {
   width: 10px;
   height: 10px;
   position: absolute;
-  background: #E42F0C;
+  background: #e42f0c;
   margin: 0 0 0 -17px;
   box-shadow: 0 0 0 4px #f3f3f3;
   -webkit-font-smoothing: antialiased;
@@ -902,7 +912,7 @@ h5 + .separator {
   content: "\f185";
   font-family: FontAwesome;
   margin: auto;
-  background: #E42F0C;
+  background: #e42f0c;
   -webkit-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
   width: 30px;
@@ -916,7 +926,7 @@ h5 + .separator {
   border-radius: 50% !important;
 }
 .candidate .profile .tgl-flip + .tgl-btn:before {
-  background: #ccc;
+  background: #cccccc;
   width: 30px;
   height: 30px;
   font-size: 14px;
@@ -939,7 +949,7 @@ h5 + .separator {
   -webkit-transform: rotateY(0);
   transform: rotateY(0);
   left: 0;
-  background: #2A92D0;
+  background: #2a92d0;
 }
 .candidate .profile .tgl-btn {
   margin: auto;
@@ -1054,10 +1064,10 @@ h5 + .separator {
   margin-right: 20px;
   padding-bottom: 10px;
   text-align: center;
-  color: #465B6D;
+  color: #465b6d;
 }
 .job-search .job-item .job-action a {
-  color: #5F87BF;
+  color: #5f87bf;
   text-decoration: none;
 }
 .job-search .shadow-narrow:after,
@@ -1074,11 +1084,10 @@ h5 + .separator {
   z-index: 1;
   border-radius: 10%;
   -webkit-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
 .job-search .body a {
-  color: #465B6D;
+  color: #465b6d;
 }
 .job-search .body a:hover {
   color: #5a758c;
@@ -1115,7 +1124,7 @@ rzslider {
   margin: 40px 0 30px 0;
 }
 rzslider span.rz-pointer {
-  background: #2A92D0;
+  background: #2a92d0;
   top: -8px;
   height: 20px;
   width: 20px;
@@ -1149,17 +1158,17 @@ rzslider span.rz-pointer:after {
   font-size: 14px;
   margin: 0 0 0px 5px;
   display: inline-block;
-  color: #E42F0C;
+  color: #e42f0c;
   font-weight: 700;
 }
 .map-window-site .map-window-site-container .map-window-site-body h3 {
   font-size: 12px;
   margin: 0 0 0px 5px;
   display: inline-block;
-  color: #E42F0C;
+  color: #e42f0c;
 }
 .job-details {
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
 }
 .job-details .job-img {
   min-height: 400px;
@@ -1187,7 +1196,7 @@ rzslider span.rz-pointer:after {
   z-index: 1001;
 }
 .job-details .job-info .job-benefits .job-info {
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   background: #fff;
   text-align: center;
   padding-top: 10px;
@@ -1203,11 +1212,11 @@ rzslider span.rz-pointer:after {
 .job-details .job-info .job-description .job-detail-row {
   margin: 40px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #cccccc;
 }
 .job-details .job-detail-right {
   background-color: #fff;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   margin-top: 20px;
   margin-bottom: 20px;
   padding-top: 10px;
@@ -1241,7 +1250,7 @@ rzslider span.rz-pointer:after {
   border-radius: 20px;
 }
 .job-details .job-schedule .schedule-circle-yes {
-  background-color: #2A92D0;
+  background-color: #2a92d0;
 }
 .job-details .job-schedule .schedule-circle-no {
   background-color: #fff;

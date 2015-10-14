@@ -8,12 +8,8 @@
         'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$modal', JobSearchCtrl]);
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService, UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady) {
-
-
 
   function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $modal) {
-
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
@@ -264,5 +260,5 @@
       //initialize controller
       initialize();
 }
-}
+
  })();
