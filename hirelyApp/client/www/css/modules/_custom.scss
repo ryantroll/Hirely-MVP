@@ -1,6 +1,3 @@
-@import "theme-default.less";
-@import "responsive.less";
-
 .content{
   padding-top: 20px;
   padding-bottom: 20px;
@@ -9,7 +6,8 @@
 
 .logo{
   padding-left: 20px;
-  padding-top: 10px;
+  padding-top: 6px;
+  display: inline-block;
 }
 .grid{
   height: 50px;
@@ -80,7 +78,7 @@ z-index: 99999999;
 }
 
 .light-gray-bg.shadow, .light-gray-bg.shadow-narrow {
-  background-color: @smoky-white;
+  background-color: $smoky-white;
 }
 .shadow, .shadow-narrow {
   position: relative;
@@ -90,7 +88,7 @@ z-index: 99999999;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  border: 1px solid @light-grey;
+  border: 1px solid $light-grey;
 }
 
 .padding-20{
@@ -123,7 +121,7 @@ h3+.separator, h4+.separator, h5+.separator {
   -webkit-backface-visibility: hidden;
   -webkit-transform: translateZ(0)scale(1,1);
   clear: both;
-  background-color: @light-grey;
+  background-color: $light-grey;
 }
 
 /* ======= Hiring Manager Section(homepage) ======= */
@@ -131,7 +129,7 @@ h3+.separator, h4+.separator, h5+.separator {
   position: relative;
   margin-top: 20px;
   padding: 20px 0;
-  background: @smoky-white;
+  background: $smoky-white;
   .hiring-intro{
     h1, h2, h3, h4, h5{
       text-align: center;
@@ -150,33 +148,98 @@ h3+.separator, h4+.separator, h5+.separator {
 /* ======= Call to action(homepage) ======= */
 .call-to-action{
 
-  height: 600px;
-  background-image: url(/img/banners/future_employee.jpg);
-  background-size: cover;
-  .cta-container{
-    color: white;
 
-    padding-top: 150px;
-    .main-header{
-      margin-top: 100px;
-      font-size: 48px;
-      font-weight: 700;
+  background: rgba(255,255,255,1);
+  color: #034358;
+  h1{
+    font-weight: 300;
+    text-align: center;
+    margin: 0px;
+  }
+  p{
+    font-weight: 300;
+    text-align: center;
+    color: #034358 !important;
+  }
+  .btn-wrapper{
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+  }
+  .btn{
+    max-width: 320px;
+    width: 100%;
+    margin: 0 auto;
+    float: none;
+    font-size:18px;
+  }
+
+  br{
+    display: non;
+  }
+
+  @media (min-width: $screen-lg-min) {
+    padding: 90px 0px;
+
+    h1{
+      font-size: 38px;
+      margin-bottom: 15px;
+    }
+    p{
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+    br{
       display: block;
     }
-    .join-header{
+  }
+
+  @media (min-width: $screen-md-min) and  (max-width: $screen-md-max){
+    padding: 80px 0px;
+
+    h1{
+      font-size: 38px;
+      margin-bottom: 15px;
+    }
+    p{
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+    br{
+      display: block;
+    }
+  }
+
+  @media (min-width: $screen-sm-min) and  (max-width: $screen-sm-max){
+    padding: 50px 0px;
+
+    h1{
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+    p{
       font-size: 20px;
+      margin-bottom: 15px;
+    }
+    br{
+      display: block;
+    }
+  }
 
-    }
-    .signup{
-      input{
-        width: 400px;
-      }
-    }
-    button{
-      font-size: 18px;
-      font-weight: bold;
-    }
+  @media (max-width: $screen-xs-max){
+    padding: 50px 0px;
 
+    h1{
+      font-size: 26px;
+      margin-bottom: 15px;
+    }
+    p{
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    br{
+      display: none;
+    }
   }
 }
 /* ======= Profile Section ======= */
@@ -189,7 +252,7 @@ h3+.separator, h4+.separator, h5+.separator {
   }
   .profile-body{
     padding: 20px;
-    background: @smoky-white;
+    background: $smoky-white;
     .panel-header{
       background-color: #fff;
       color: #565a5c;
@@ -225,7 +288,7 @@ h3+.separator, h4+.separator, h5+.separator {
 
   .sidebar-nav-v1 > li a.active,
   .sidebar-nav-v1 > li a.active:hover {
-    background: @grey;
+    background: $grey;
     color: #fff;
   }
 
@@ -263,7 +326,7 @@ h3+.separator, h4+.separator, h5+.separator {
   }
 
   li a{
-    color: @darker-grey;
+    color: $darker-grey;
     font-size: 13px;
   }
   .list-group i {
@@ -273,11 +336,11 @@ h3+.separator, h4+.separator, h5+.separator {
   }
   .service-block-u
   {
-    background: @color;
+    background: $color;
   }
   .service-block-blue
   {
-    background: @blue;
+    background: $blue;
   }
   .service-block-v3 {
     padding: 20px;
@@ -326,7 +389,7 @@ h3+.separator, h4+.separator, h5+.separator {
 }
 /* Candidate section */
 .candidate{
-  background: @smoky-white;
+  background: $smoky-white;
   .profile {
 
     .profile-pic {
@@ -359,7 +422,7 @@ h3+.separator, h4+.separator, h5+.separator {
     }
 
     .candidate-content {
-      background: darken(@smoky-white, 3%);
+      background: darken($smoky-white, 3%);
       border: 1px solid #dce0e0;
       padding: 20px;
 
@@ -381,7 +444,7 @@ h3+.separator, h4+.separator, h5+.separator {
 
     .status-buttons{
       a  {
-        color: @text-color;
+        color: $text-color;
         display:inline-block;
         font-size:14px;
         margin-right:10px;
@@ -389,10 +452,10 @@ h3+.separator, h4+.separator, h5+.separator {
         text-transform:uppercase;
         font-weight: bold;
       }
-      a:hover         { text-decoration:none; color: darken(@color, 5%)}
+      a:hover         { text-decoration:none; color: darken($color, 5%)}
       a .nav-number            {
         color:#FFF;
-        background:@blue;
+        background:$blue;
         display:block;
         height:50px;
         margin:0 auto 10px;
@@ -401,8 +464,8 @@ h3+.separator, h4+.separator, h5+.separator {
         border-radius:50%;
         box-shadow: 1px 1px 1px black
       }
-      a.active .nav-number   { background: @color}
-      a.active{color: @color;}
+      a.active .nav-number   { background: $color}
+      a.active{color: $color;}
 
     }
 
@@ -449,13 +512,13 @@ h3+.separator, h4+.separator, h5+.separator {
    }
 
    .timeline-v2 > li .cbp_tmtime span:first-child {
-     color: @text-color;
+     color: $text-color;
      font-size: 14px;
      line-height: 1.5;
    }
 
    .timeline-v2 > li .cbp_tmtime span:last-child {
-     color: @text-color-secondary;
+     color: $text-color-secondary;
      font-size: 14px;
      font-weight: normal;
      color: #999;
@@ -464,7 +527,7 @@ h3+.separator, h4+.separator, h5+.separator {
 
    /* Right content */
    .timeline-v2 > li .cbp_tmlabel {
-     color: @text-color;
+     color: $text-color;
      line-height: 1.4;
      clear: both;
      position: relative;
@@ -516,7 +579,7 @@ h3+.separator, h4+.separator, h5+.separator {
      width: 10px;
      height: 10px;
      position: absolute;
-     background: @color;
+     background: $color;
      margin: 0 0 0 -17px;
      box-shadow: 0 0 0 4px #f3f3f3;
      -webkit-font-smoothing: antialiased;
@@ -582,7 +645,7 @@ h3+.separator, h4+.separator, h5+.separator {
 
    form{
      padding: 20px;
-     background: @smoky-white;
+     background: $smoky-white;
    }
 
  }
@@ -670,7 +733,7 @@ h3+.separator, h4+.separator, h5+.separator {
       content: "\f185";
       font-family: FontAwesome;
       margin: auto;
-      background: @color;
+      background: $color;
       -webkit-transform: rotateY(-180deg);
       transform: rotateY(-180deg);
       width: 30px;
@@ -684,7 +747,7 @@ h3+.separator, h4+.separator, h5+.separator {
       border-radius: 50% !important;
     }
     .tgl-flip + .tgl-btn:before {
-      background: @light-grey;
+      background: $light-grey;
       width: 30px;
       height: 30px;
       font-size: 14px;
@@ -707,7 +770,7 @@ h3+.separator, h4+.separator, h5+.separator {
       -webkit-transform: rotateY(0);
       transform: rotateY(0);
       left: 0;
-      background: @light-blue;
+      background: $light-blue;
     }
     .tgl-btn {
       margin: auto;
@@ -841,9 +904,9 @@ h3+.separator, h4+.separator, h5+.separator {
       margin-right: 20px;
       padding-bottom: 10px;
       text-align: center;
-      color: @grey;
+      color: $grey;
       a{
-        color: @blue;
+        color: $blue;
         text-decoration: none;
       }
 
@@ -870,10 +933,10 @@ h3+.separator, h4+.separator, h5+.separator {
   }
   .body{
     a{
-      color: @text-color;
+      color: $text-color;
     }
     a:hover{
-      color: lighten(@text-color, 10%);
+      color: lighten($text-color, 10%);
     }
 
     .job-info{
@@ -908,7 +971,7 @@ h3+.separator, h4+.separator, h5+.separator {
 rzslider{
   margin: 40px 0 30px 0;
   span.rz-pointer {
-    background: @light-blue;
+    background: $light-blue;
     top: -8px;
     height: 20px;
     width: 20px;
@@ -942,14 +1005,14 @@ rzslider{
         font-size: 14px;
         margin: 0 0 0px 5px;
         display: inline-block;
-        color:@color;
+        color:$color;
         font-weight: 700;
       }
       h3{
         font-size: 12px;
         margin: 0 0 0px 5px;
         display: inline-block;
-        color:@color;
+        color:$color;
 
       }
     }
@@ -957,7 +1020,7 @@ rzslider{
 }
 
 .job-details{
-  border: 1px solid @light-grey;
+  border: 1px solid $light-grey;
   .job-img{
     min-height: 400px;
     .bg-slider-wrapper{
@@ -968,7 +1031,7 @@ rzslider{
     padding-left: 40px;
   }
   .job-info {
-    background-color: @smoky-white;
+    background-color: $smoky-white;
     .job-benefits{
       margin-top: -160px;
       width: 340px;
@@ -982,7 +1045,7 @@ rzslider{
         z-index: 1001;
       }
       .job-info{
-        border: 1px solid @light-grey;
+        border: 1px solid $light-grey;
         background: #fff;
         text-align: center;
         padding-top: 10px;
@@ -1001,14 +1064,14 @@ rzslider{
       .job-detail-row {
         margin: 40px;
         padding-bottom: 20px;
-        border-bottom: 1px solid @light-grey;
+        border-bottom: 1px solid $light-grey;
       }
 
     }
   }
   .job-detail-right{
     background-color: #fff;
-    border: 1px solid @light-grey;
+    border: 1px solid $light-grey;
     margin-top: 20px;
     margin-bottom: 20px;
     padding-top: 10px;
@@ -1052,7 +1115,7 @@ rzslider{
     }
     .schedule-circle-yes {
 
-      background-color: @light-blue;
+      background-color: $light-blue;
 
     }
     .schedule-circle-no {
@@ -1061,4 +1124,36 @@ rzslider{
     }
   }
 
+}
+
+@media(max-width: 768px){
+  #header .container{
+    text-align: center;
+    position: relative;
+  }
+  .main-nav{
+    display: none !important;
+  }
+  .logo{
+    float: none !important;
+    padding-left: 0px !important;
+  }
+  .lines-button{
+    display:inline-block;
+    position: absolute;
+    left:18px;
+    top:50%;
+    margin-top: -22px;
+    outline: none;
+  }
+}
+
+@media(min-width: 768px){
+  .main-nav{
+    display: block !important;
+    float: right !important;
+  }
+  .lines-button{
+    display: none;
+  }
 }

@@ -28,6 +28,10 @@
     "ngMask": "angular-mask#~3.0.12",
     "numeral": "~1.5.3",
     "rsvp.js": "rsvp#~3.1.0",
-    "wow": "wowjs#~1.1.2"
+    "slideout.js": "~0.1.9",
+    "wow": "wowjs#~1.1.2",
+    "pixeden-stroke-7-icon": "~1.2.3",
+    "ui-select": "angular-ui-select#~0.13.2",
+    "angular-sanitize": "~1.4.7"
   }
 }

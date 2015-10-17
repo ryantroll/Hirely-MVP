@@ -1,6 +1,6 @@
 
 <!-- ******PROMO****** -->
-<section id="promo" class="promo section">
+<section id="promo" class="promo section section-frist">
     <div class="bg-slider-wrapper">
         <div id="bg-slider" class="flexslider bg-slider" flexslider options="flexSliderOptions">
             <ul class="slides">
@@ -13,149 +13,132 @@
         </div>
     </div><!--//bg-slider-wrapper-->
 
-    <div class="search-container">
-        <div class="search-middle">
-            <h2>Opportunity Awaits</h2>
-            <form class="search-form form-inline" ng-submit="getResults()">
-                <div class="form-group">
-                    <input type="text" id="Autocomplete" class="form-control" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where would you like to work?"/>
-                </div>
-                <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
-                    <span class="btn-search-inner"></span>
-                </button>
-            </form><!--//search-form-->
-        </div>
+    <div class="opac"></div>
+
+    <div class="search-container animated fadeInUp">
+        <h2>Opportunity Awaits</h2>
+        <h5>The easiest way to find hourly jobs <br class="display-xs">with great local businesses</h5>
+        <form class="search-form form-inline" ng-submit="getResults()">
+            <div class="form-group">
+                <input type="text" id="Autocomplete" class="form-control txt-seach" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where would you like to work?"/>
+            </div>
+            <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
+                <span class="btn-search-inner"></span>
+            </button>
+        </form><!--//search-form-->
     </div>
 </section><!--//promo-->
 
-   <!-- ******WHY****** -->
-    <section id="why" class="why section">
-        <div class="container">
-            <h2 class="title text-center">Landing a job shouldn't be a job</h2>
-            <p class="intro text-center">Hirely is the best way to find opportunities that fit you.</p>
-            <img class="img-responsive"  src="img/hirely_protos.png">
-            <div class="row services">
+<!-- ******WHY****** -->
+<section id="why" class="why section">
+    <div class="container">
+        <h2 class="title text-center">Landing a job <br class="title-br">shouldn't be a job</h2>
+        <p class="intro text-center">Hirely is the best way to<br class="intro-br">find opportunities that fit you.</p>
+        <img class="img-responsive"  src="img/hirely_protos.png">
+        <div class="row services">
 
-                <div class="col-lg-4 col-sm-4 focus-box red wow fadeInLeft animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
-                    <div class="service-icon">
-                        <i class="fa fa-list fa-5x"></i>
-                    </div>
-                    <h5 class="red-border-bottom">Informative Listings</h5>
-                    <p>
-                        Detailed job cards show you the information that's most important. Hirely ensures jobs are active and informative.
-                    </p>
+            <div class="col-lg-4 col-sm-4 focus-box red wow service-box" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
+                <div class="service-icon hirely-circle-icon-wrap hirely-icon-effect-circle">
+                    <i class="hirely-circle-icon fa fa-list fa-5x"></i>
                 </div>
-
-                <div class="col-lg-4 col-sm-4 focus-box green wow fadeInLeft animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
-                    <div class="service-icon">
-                        <i class="fa fa-user fa-5x"></i>
-                    </div>
-                    <h5 class="green-border-bottom">Applicant Cards</h5>
-                    <p>
-                        You're more than a resume.  Applicant cards let you showcase who you are and easily apply to jobs. </p>
-                </div>
-
-                <div class="col-lg-4 col-sm-4 focus-box blue wow fadeInRight animated" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
-                    <div class="service-icon">
-                        <i class="fa fa-search fa-5x"></i>
-                    </div>
-                    <h5 class="blue-border-bottom">Intelligent Search</h5>
-                    <p>
-                        Time is of the essence when you are looking for a job. Our technology works hard to find you to the right opportunities.
-                    </p>
-                </div>
-
-
-            </div><!--//row-->
-        </div><!--//container-->
-    </section><!--//why-->
-<section id="hiring" class="hiring-manager section">
-    <div class="hiring-intro">
-        <h2>Hirely focuses on recruiting</h2>
-        <h4>so you can focus on business</h4>
-    </div>
-
-    <div class="row margin-top-40">
-        <div class="col-md-4">
-            <div class="row">
-                <div class="col-md-6 pull-right">
-                    <h4>Posting is free</h4>
-                    <p>
-                        Job boards suck, we don't.  That's why posting and opportunity and receiving candidates will always be 100% free.
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 pull-right">
-                    <h4>Intelligent Matching</h4>
-                    <p>
-                       We know your priorities vary and so do we.  Organize candidates based on experience, personality, and availability.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <img src="/img/Candidate_half.png" class="img-responsive">
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-            <div class="col-md-6">
-                <h4>Applicant Cards</h4>
+                <h5 class="red-border-bottom">Informative Listings</h5>
                 <p>
-                    No more half-baked resumes or useless applications.  Applicant cards have the information you need to evaluate candidates quickly.
+                    Detailed job cards show you the information that's most important. Hirely ensures jobs are active and informative.
                 </p>
             </div>
-        </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>Connect & Hire</h4>
-                    <p>
-                        Add candidates to your short list, connect with them on Hirely and get on with your business.
-                    </p>
+
+            <div class="col-lg-4 col-sm-4 focus-box green wow service-box" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
+                <div class="hirely-circle-icon-wrap hirely-icon-effect-circle">
+                    <i class="hirely-circle-icon fa fa-user"></i>
+                </div>
+                <h5 class="green-border-bottom">Applicant Cards</h5>
+                <p>
+                    You're more than a resume.  Applicant cards let you showcase who you are and easily apply to jobs. </p>
+            </div>
+
+            <div class="col-lg-4 col-sm-4 focus-box blue wow service-box" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
+                <div class="service-icon hirely-circle-icon-wrap hirely-icon-effect-circle">
+                    <i class="hirely-circle-icon fa fa-search fa-5x"></i>
+                </div>
+                <h5 class="blue-border-bottom">Intelligent Search</h5>
+                <p>
+                    Time is of the essence when you are looking for a job. Our technology works hard to find you to the right opportunities.
+                </p>
+            </div>
+
+
+        </div><!--//row-->
+    </div><!--//container-->
+</section><!--//why-->
+<section id="hiring" class="hiring-manager section">
+    <div class="container">
+        <h2 class="title">Hirely focuses on recruiting</h2>
+        <h4 class="subtitle">so you can focus on business</h4>
+
+        <div class="row margin-top-40">
+            <div class="col-sm-6 col-md-4 offering-wrapper left">
+                <div class="row">
+                    <div class="offering left">
+                        <h4>Posting is free</h4>
+                        <p>
+                            Job boards suck, we don't.  That's why posting and opportunity and receiving candidates will always be 100% free.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offering left">
+                        <h4>Intelligent Matching</h4>
+                        <p>
+                            We know your priorities vary and so do we.  Organize candidates based on experience, personality, and availability.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6 margin-top-40">
-                 <button class="btn btn-cta">Start Hiring</button>
+            <div class="col-md-4 device">
+                <div class="btn-wrapper">
+                    <button class="btn btn-cta hiring-manager-btn" ng-style="hmButtonWidth">Start Hiring</button>
                 </div>
+                <img ng-src="/img/Candidate_half.png" class="img-responsive hm-device">
+            </div>
+            <div class="col-sm-6 col-md-4 offering-wrapper right">
+                <div class="row">
+                    <div class="offering right">
+                        <h4>Applicant Cards</h4>
+                        <p>
+                            No more half-baked resumes or useless applications.  Applicant cards have the information you need to evaluate candidates quickly.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offering right">
+                        <h4>Connect & Hire</h4>
+                        <p>
+                            Add candidates to your short list, connect with them on Hirely and get on with your business.
+                        </p>
+                    </div>
+                </div>
+
             </div>
 
         </div>
-
+        <div class="row">
+            <div class="bottom-btn-wrapper">
+                <button class="btn btn-cta hiring-manager-btn">Start Hiring</button>
+            </div>
+        </div>
     </div>
-
 </section>
 <section id="callToAction" class="call-to-action">
 
-    <div class="cta-container container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-10">
-              <span class="main-header">
-               Think Smart, Work Local
-              </span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        <span class="join-header">Hirely is rethinking how people connect to create opportunity.   </span>
-                        <span class="join-header">  Join us and we'll let you know when we're in your hood.</span>
-                    </div>
-                </div>
-                <div class="row margin-top-40">
-                    <h3>Sign up now for our closed beta</h3>
-                    <form class="form-inline signup">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="exampleInputName2" placeholder="Email">
-                        </div>
+    <div class="container">
 
-                        <button type="submit" class="btn btn-cta btn-cta-blue">Notify Me!</button>
-                    </form>
-                </div>
-            </div>
+        <h1>Think Smart, Work Local</h1>
+
+        <p>Hirely is empowering the hourly workforce and rethinking how<br>people connect with local opportunity. </p>
+
+        <div class="btn-wrapper">
+            <button class="btn btn-cta">Join Hirely</button>
         </div>
-
     </div>
 
 </section>

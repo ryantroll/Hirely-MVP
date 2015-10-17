@@ -35,7 +35,7 @@ module.exports = function() {
             clientApp + '**/*.module.js',
             clientApp + '**/*.js'
         ],
-        less: cssFolder + '*.less',
+        sass: cssFolder + '**/*.scss',
         templates: clientApp + '**/*.html',
         server: server,
         temp: temp,

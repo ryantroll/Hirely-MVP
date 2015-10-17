@@ -3,7 +3,7 @@
 
     angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService) {
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window) {
         var geocodeService = GeocodeService;
 
         $scope.flexSliderOptions = {
@@ -30,8 +30,6 @@
             geocodeService.setPlace($scope.details);
             $state.go('app.job', {placeId: $scope.details.place_id})
 
-        }
-
-
+        };
     }
 })();

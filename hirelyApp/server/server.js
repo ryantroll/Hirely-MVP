@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var errorHandler = require('./utils/errorHandler')();
 var logger = require('morgan');
-var port = process.env.PORT || 7200;
+var tinylr  = require('tiny-lr');
+var port =  process.env.LR_PORT || process.env.PORT || 7200;
 var routes;
 
 var environment = process.env.NODE_ENV;
@@ -38,11 +39,12 @@ switch (environment){
     default:
         console.log('** DEV **');
         console.log('serving from ' + './src/client/ and ./');
-        app.use('/', express.static('./client/www/'));
-        app.use('/', express.static('./'));
+        //app.use(tinylr.middleware({ app: app }));
+        app.use('/', express.static(__dirname +'/../client/www/')); //ded
+        app.use('/', express.static(__dirname + '/../'));
+
         break;
 }
-
 app.listen(port, function() {
     console.log('Express server listening on port ' + port);
     console.log('env = ' + app.get('env') +

@@ -1,6 +1,3 @@
-@import "mixins.less";
-@import "theme-default.less";
-
 /* Extra small devices (phones, less than 768px) */
 @media (max-width: 767px) { 
     
@@ -292,12 +289,7 @@
 
     .wrapper {
         min-height: 100%;
-        margin-bottom: 100px; /* equal to footer height */
-        &:after {
-            content: "";
-            display: block;
-            height: 100px; /* must be the same height as footer */
-        }
+
     }
 
     .footer {
