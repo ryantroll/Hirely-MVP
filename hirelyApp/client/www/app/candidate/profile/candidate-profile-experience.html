@@ -33,8 +33,15 @@
                 <form name="experienceForm" id="add-experience">
                     <input type="hidden" id="experienceId" ng-model="experience.id">
                     <div class="form-group">
-                        <label for="experienceTitle">Job Title</label>
-                        <input type="text" required id="experienceTitle" name="experienceTitle" ng-model="experience.occupation" typeahead="occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:25" class="form-control"  placeholder="Job Title ">
+                        <label>Job Title</label>
+                        <div class="form-group">
+                        <input type="text" ng-model="selectedOccupation" placeholder="Occupation" uib-typeahead="occupation as occupation.title for occupation in searchOnetOccupations($viewValue)" class="form-control txt-search" typeahead-loading="loadingOccupations" typeahead-no-results="noOccupationResults">
+                        <div class="spinner" ng-show="loadingOccupations">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                        </div>
+                        <i class="fa fa-exclamation-triangle" ng-show="noOccupationResults"></i>
+                    </div>
                         <div role="alert">
                               <span class="error" ng-show="experienceForm.experienceTitle.$error.required && !experienceForm.experienceTitle.$pristine">
                                Job Title is required</span>
@@ -49,15 +56,22 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="experienceLocation">Location</label>
-                        <input type="text" id="experienceLocation" name="experienceLocation" class="form-control" ng-autocomplete details="locationDetails" ng-model="locationResults"  on-place-changed="locationSet()" options="locationOptions" required placeholder="Location" />
+                        <label>Location</label>
+                        <div class="form-group">
+                            <input type="text" ng-model="selectedLocation" placeholder="Location" uib-typeahead="location as location.address for location in searchLocations($viewValue)" class="form-control txt-search" typeahead-loading="loadingLocations" typeahead-no-results="noResults">
+                            <div class="spinner" ng-show="loadingLocations">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
+                            </div>
+                            <i class="fa fa-exclamation-triangle" ng-show="noResults"></i>
+                        </div>
                         <div role="alert">
                               <span class="error" ng-show="experienceForm.experienceLocation.$error.required && !experienceForm.experienceLocation.$pristine">
                                Job Location is required</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="experienceLocation">How many years did you work at this job?</label>
+                        <label>How many years did you work at this job?</label>
                         <div class="btn-group">
                             <label class="btn btn-primary" ng-model="experience.jobLength" btn-radio="0"> < 1</label>
                             <label class="btn btn-primary" ng-model="experience.jobLength" btn-radio="'1'">1</label>
@@ -119,8 +133,16 @@
                 <form name="educationForm" id="add-education">
                     <input type="hidden" id="educationId" ng-model="education.id">
                     <div class="form-group">
-                        <label for="educationTitle">Job Title</label>
-                        <input type="text" required id="educationTitle" name="educationTitle" ng-model="education.occupation" typeahead="occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:25" class="form-control"  placeholder="Job Title ">
+                        <label>Job Title</label>
+                        <!--<input type="text" required id="educationTitle" name="educationTitle" ng-model="education.occupation" typeahead="occupation as occupation.title for occupation in occupations | filter:$viewValue | limitTo:25" class="form-control"  placeholder="Job Title ">-->
+                        <div class="form-group">
+                            <input type="text" ng-model="selectedOccupation" placeholder="Occupation" uib-typeahead="occupation as occupation.title for occupation in searchOnetOccupations($viewValue)" class="form-control txt-search" typeahead-loading="loadingOccupations" typeahead-no-results="noOccupationResults">
+                            <div class="spinner" ng-show="loadingOcczupations">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
+                            </div>
+                            <i class="fa fa-exclamation-triangle" ng-show="noOccupationResults"></i>
+                        </div>
                         <div role="alert">
                               <span class="error" ng-show="educationForm.educationTitle.$error.required && !educationForm.educationTitle.$pristine">
                                Job Title is required</span>

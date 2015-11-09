@@ -63,7 +63,7 @@ gulp.task('watch', function() {
 });
 
 
-gulp.task('default', ['js', 'sass']);
+gulp.task('default', ['js', 'sass', 'watch']);
 
 
 

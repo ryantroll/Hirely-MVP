@@ -8,6 +8,14 @@ var cors = require('cors');
 var errorHandler = require('./utils/errorHandler')();
 var logger = require('morgan');
 var tinylr  = require('tiny-lr');
+
+var config = require('./config');
+
+/** MongoDB **/
+var mongoose = require('mongoose');
+var connectMongo = require('connect-mongo');
+mongoose.connect(config.mongoUri);
+
 var port =  process.env.LR_PORT || process.env.PORT || 7200;
 var routes;
 
@@ -21,7 +29,6 @@ app.use(errorHandler.init);
 
 
 routes = require('./routes')(app);
-
 
 switch (environment){
     case 'production':

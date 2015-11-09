@@ -5,6 +5,7 @@ var myApp = angular.module('hirelyApp',
         'uiGmapgoogle-maps',
         'ui.router',
         'ui.bootstrap',
+        'ui.bootstrap.typeahead',
         'ui.grid',
         'uiGmapgoogle-maps',
         'firebase',
@@ -21,7 +22,9 @@ var myApp = angular.module('hirelyApp',
         'hirelyApp.core',
         'hirelyApp.account',
         'hirelyApp.candidate',
-        'hirelyApp.manager'
+        'hirelyApp.manager',
+        'ngSanitize',
+        'angucomplete-alt'
     ])
 
 

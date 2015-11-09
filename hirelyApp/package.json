@@ -10,12 +10,16 @@
   "dependencies": {
     "body-parser": "^1.14.0",
     "cache-manager": "^1.1.0",
+    "connect-mongo": "^0.8.2",
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "googlemaps": "^1.0.1",
+    "googleplaces": "^0.6.0",
     "gulp": "^3.9.0",
     "method-override": "^2.3.5",
+    "mongoose": "^4.2.4",
     "morgan": "^1.6.1",
+    "node-geocoder": "^3.4.1",
     "traitify": "^2.2.0"
   },
   "devDependencies": {

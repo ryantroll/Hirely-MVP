@@ -8,12 +8,13 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.candidate').controller('CandidateProfileExperienceCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'OccupationService', CandidateProfileExperienceCtrl ]);
+    angular.module('hirelyApp.candidate').controller('CandidateProfileExperienceCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'OccupationService', 'GeocodeService', '$timeout', CandidateProfileExperienceCtrl ]);
 
 
-    function CandidateProfileExperienceCtrl($scope, $state,$stateParams, CandidateService, OccupationService) {
+    function CandidateProfileExperienceCtrl($scope, $state,$stateParams, CandidateService, OccupationService, GeocodeService, $timeout) {
         var occupationService = OccupationService;
         var candidateService = CandidateService;
+        var geocodeService = GeocodeService;
         function experienceModel(){
             this.company = {
                 place: '',
@@ -148,14 +149,14 @@
 
         }
 
-        var getOccupations = function(){
-            occupationService.getOccupations().then(function(occupations) {
-                $scope.occupations = occupations;
-
-            }, function(err) {
-
-            });
-        };
+        //var getOccupations = function(){
+        //    occupationService.getOccupations().then(function(occupations) {
+        //        $scope.occupations = occupations;
+        //
+        //    }, function(err) {
+        //
+        //    });
+        //};
 
         var getExperience = function() {
               $scope.experiences = candidateService.getExperience($scope.user.userId);
@@ -178,11 +179,55 @@
 
         }
         var initialize = function(){
-            getOccupations();
+            //getOccupations();
             if($scope.profile && $scope.profile.experience){
                 $scope.experiences = $scope.profile.experience;
             }
 
+        };
+
+
+        //*** LOCATION SEARCH ***//
+
+        var locations = [];
+        $scope.selectedLocation = undefined;
+
+
+        $scope.searchLocations = function(query){
+            if(!!query && query.trim() != ''){
+                return geocodeService.getCityBySearchQuery(query).then(function(data){
+                    locations = [];
+                    if(data.statusCode == 200){
+                        data.results.predictions.forEach(function(prediction){
+                            locations.push({address: prediction.description, placeId: prediction.id});
+                        });
+                        return locations;
+                    } else {
+                        return {};
+                    }
+                });
+            }
+        };
+
+
+        var occupations = [];
+        $scope.selectedOccupation = null;
+        $scope.searchOnetOccupations = function(query){
+            if(!!query && query.trim() != ''){
+                return occupationService.getOccupations(query).then(function(data){
+                    occupations = [];
+                    if(data.statusCode == 200){
+                        data.results.forEach(function(occ){
+                            occupations.push({code: occ.code, title: occ.title});
+                        });
+                        return occupations;
+                    } else {
+                        return {};
+                    }
+                });
+            } else {
+                return {}
+            }
         };
 
         initialize();

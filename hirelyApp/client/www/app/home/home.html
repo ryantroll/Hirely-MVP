@@ -15,14 +15,20 @@
 
     <div class="opac"></div>
 
-    <div class="search-container animated fadeInUp">
+    <div class="search-container">
         <h2>Opportunity Awaits</h2>
         <h5>The easiest way to find hourly jobs <br class="display-xs">with great local businesses</h5>
         <form class="search-form form-inline" ng-submit="getResults()">
             <div class="form-group">
-                <input type="text" id="Autocomplete" class="form-control txt-seach" ng-autocomplete details="details" ng-model="results"  options="options" required placeholder="Where would you like to work?"/>
+                <input type="text" ng-model="selectedLocation" placeholder="Where would you like to work?" uib-typeahead="location as location.address for location in searchLocations($viewValue)" class="form-control txt-search" typeahead-loading="loadingLocations" typeahead-no-results="noResults">
+                <div class="spinner" ng-show="loadingLocations">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
+                <i class="fa fa-exclamation-triangle" ng-show="noResults"></i>
             </div>
-            <button type="submit" class="btn btn-cta btn-cta-primary btn-search">
+
+            <button type="submit" class="btn btn-cta btn-cta-primary btn-search hvr-bounce-to-right">
                 <span class="btn-search-inner"></span>
             </button>
         </form><!--//search-form-->

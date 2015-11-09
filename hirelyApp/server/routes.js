@@ -5,17 +5,27 @@ module.exports = function(app) {
     var cacheManager = require('cache-manager');
     var memoryCache = cacheManager.caching({store: 'memory', max: 100, ttl: 0/*seconds*/});
     var traitify = require('traitify');
-    config = require('./config')();
+    var places = require('./services/places');
+    var apiUtil = require('./utils/api-response');
+
+    var config = require('./config');
+
+    var onetTitlesService = require('./services/onet-titles');
+
     traitify.setHost(config.traitify.host);
     traitify.setVersion(config.traitify.version);
     traitify.setSecretKey(config.traitify.secretKey);
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
+    app.get('/api/search/cities/:addressQuery', getAddressFomQuery);
+    app.get('/api/search/locations/:locationQuery', getLocationFomQuery);
     app.get('/api/assessment', createTraitifyAssessmentId);
     app.get('/api/assessmentData:assessmentId', getAssessment);
     app.get('/api/assessmentResults:assessmentId', getAssessmentResults);
     app.get('/api/assessmentSlides:assessmentId', getAssessmentSlides);
     app.get('/api/assessmentCareerMatches:assessmentId', getCareerMatches);
+
+    app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
 
     function getGooglePlacebyId(req, res) {
         var placeId = req.params.placeId;
@@ -26,7 +36,29 @@ module.exports = function(app) {
             res.send(result);
 
         });
+    }
 
+    function getAddressFomQuery(req, res){
+        var searchQuery = req.params.addressQuery;
+        places.citiesAutoComplete(searchQuery, function(err, result){
+            if(err){
+                res.json(apiUtil.generateResponse(500, err, null));
+            } else {
+                res.json(apiUtil.generateResponse(200, "cities retrieved", result));
+            }
+        });
+    }
+
+
+    function getLocationFomQuery(req, res){
+        var searchQuery = req.params.locationQuery;
+        places.locationAutoComplete(searchQuery, function(err, result){
+            if(err){
+                res.json(apiUtil.generateResponse(500, err, null));
+            } else {
+                res.json(apiUtil.generateResponse(200, "locations retrieved", result));
+            }
+        });
     }
 
     function getPlace(placeId, cb){
@@ -45,9 +77,20 @@ module.exports = function(app) {
         var placeParams = {"placeid": placeId};
 
         gmAPI.placeDetails(placeParams, function(err, result){
-
            cb(err, result.result);
 
+        });
+    }
+
+
+    function searchOnetTitles(req, res){
+        var titleName = req.params.titleName;
+        onetTitlesService.searchTitles(titleName, function (err, results) {
+            if(err){
+                res.json(apiUtil.generateResponse(500, err, null));
+            } else {
+                res.json(apiUtil.generateResponse(200, "Title Names Retrieved", results));
+            }
         });
     }
 

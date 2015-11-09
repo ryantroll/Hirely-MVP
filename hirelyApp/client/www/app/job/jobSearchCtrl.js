@@ -5,11 +5,11 @@
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
+        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout' ,JobSearchCtrl]);
 
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
@@ -98,16 +98,19 @@
       }
 
 
-      var getOccupations = function(){
-          occupationService.getOccupations().then(function(occupations) {
-             $scope.occupations = occupations;
-              if($stateParams.occupationId){
-                  $scope.filter.occupation = _.findWhere(occupations, {id: $stateParams.occupationId})
-              }
-          }, function(err) {
+      //var getOccupations = function(){
+      //    occupationService.getOccupations().then(function(occupations) {
+      //       $scope.occupations = occupations;
+      //        if($stateParams.occupationId){
+      //            $scope.filter.occupation = _.findWhere(occupations, {id: $stateParams.occupationId})
+      //        }
+      //    }, function(err) {
+      //
+      //    });
+      //};
 
-          });
-      };
+
+
       var initializeMap = function(){
           uiGmapGoogleMapApi
               .then(function(maps){
@@ -212,34 +215,76 @@
       {
 
           return  wage.minAmount + '+' + ' /' + wage.frequency;
-      }
+      };
 
       $scope.getJobsbyLocation = function(details){
           $scope.details = details;
           $scope.searchJobs();
-      }
+      };
 
       $scope.getJobsbyOccupation = function(item, model, label){
          $scope.filter.occupationId = item.id;
           $scope.filter.occupation = item;
           $scope.searchJobs();
 
-      }
+      };
 
       $scope.searchJobs = function(){
           $state.go('app.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
-      }
+      };
 
       $scope.addToFavorites = function(positionId){
          var user = userService.getCurrentUser();
          candidateService.savePositiontoFavorites(user.userId, positionId);
           Notification.success('Job Added to Favorites');
-      }
+      };
 
       var initialize = function(){
           getJobs();
-          getOccupations();
+          //getOccupations();
 
+      };
+
+
+
+
+      var locations = [];
+      $scope.selectedLocation = undefined;
+
+
+      $scope.searchLocations = function(query){
+          if(!!query && query.trim() != ''){
+              return geocodeService.getCityBySearchQuery(query).then(function(data){
+                  locations = [];
+                  if(data.statusCode == 200){
+                      data.results.predictions.forEach(function(prediction){
+                          locations.push({address: prediction.description, placeId: prediction.id});
+                      });
+                      return locations;
+                  } else {
+                      return {};
+                  }
+              });
+          }
+      };
+      var occupations = [];
+      $scope.selectedOccupation = null;
+      $scope.searchOnetOccupations = function(query){
+          if(!!query && query.trim() != ''){
+              return occupationService.getOccupations(query).then(function(data){
+                  occupations = [];
+                  if(data.statusCode == 200){
+                      data.results.forEach(function(occ){
+                          occupations.push({code: occ.code, title: occ.title});
+                      });
+                      return occupations;
+                  } else {
+                      return {};
+                  }
+              });
+          } else {
+              return {}
+          }
       };
 
 

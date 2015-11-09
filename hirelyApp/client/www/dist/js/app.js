@@ -5,6 +5,7 @@ var myApp = angular.module('hirelyApp',
         'uiGmapgoogle-maps',
         'ui.router',
         'ui.bootstrap',
+        'ui.bootstrap.typeahead',
         'ui.grid',
         'uiGmapgoogle-maps',
         'firebase',
@@ -21,7 +22,9 @@ var myApp = angular.module('hirelyApp',
         'hirelyApp.core',
         'hirelyApp.account',
         'hirelyApp.candidate',
-        'hirelyApp.manager'
+        'hirelyApp.manager',
+        'ngSanitize',
+        'angucomplete-alt'
     ])
 
 
@@ -140,6 +143,140 @@ var myApp = angular.module('hirelyApp',
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/app/home');
     });
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.candidate', []);
+})();
+
+/**
+ * Created by labrina.loving on 8/26/2015.
+ **/
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
+
+
+    function CandidateCtrl($scope, $stateParams, UserService) {
+        var userService = UserService;
+        var vm = this;
+
+        $scope.user = userService.getCurrentUser();
+
+
+
+        //listen for changes to current user
+        $scope.$on('currentUserChanged', function (event, args) {
+            $scope.user = args.message;
+
+
+        });
+    }
+})()
+;
+
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
+
+
+    function CandidateDashboardCtrl($scope, $stateParams) {
+
+        var vm = this;
+        $scope.uiGridOptions  = {
+            data: 'recentApps',
+            columnDefs: [{
+                field: 'company'
+            }, {
+                field: 'position'
+            }, {
+                field: 'application date'
+            },
+                {
+                    field: 'current status'
+                }
+            ]
+        };
+
+        $scope.recentApps = [];
+
+        if($scope.user.Applications){
+            $scope.recentApps = $scope.user.Applications;
+        }
+
+        // Chart.js Data
+        $scope.data = [
+            {
+                value: 5,
+                color:'#FFA540',
+                highlight: '#BF7C30',
+                label: 'Review'
+            },
+            {
+                value: 2,
+                color: '#38A2D0',
+                highlight: '#5AD3D1',
+                label: 'Interview Scheduled '
+            },
+            {
+                value: 1,
+                color: '#37DB79',
+                highlight: '#FFC870',
+                label: 'Passed'
+            }
+        ];
+
+        // Chart.js Options
+        $scope.options =  {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke : true,
+
+            //String - The colour of each segment stroke
+            segmentStrokeColor : '#fff',
+
+            //Number - The width of each segment stroke
+            segmentStrokeWidth : 2,
+
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout : 50, // This is 0 for Pie charts
+
+            //Number - Amount of animation steps
+            animationSteps : 100,
+
+            //String - Animation easing effect
+            animationEasing : 'easeOutBounce',
+
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate : true,
+
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale : false,
+
+            showLegend: false
+
+          };
+
+
+
+    }
+})()
+;
 
 /**
  * Created by labrina.loving on 8/8/2015.
@@ -294,138 +431,311 @@ var myApp = angular.module('hirelyApp',
 })();
 
 /**
- * Created by labrina.loving on 8/16/2015.
+ * Created by mike.baker on 8/10/2015.
  */
 
 (function() {
     'use strict';
 
-    angular.module('hirelyApp.candidate', []);
+    angular.module('hirelyApp.job', []);
 })();
 
-/**
- * Created by labrina.loving on 8/26/2015.
- **/
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
-
-
-    function CandidateCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
-        var vm = this;
-
-        $scope.user = userService.getCurrentUser();
-
-
-
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.user = args.message;
-
-
-        });
-    }
-})()
-;
-
 
 /**
- * Created by labrina.loving on 8/16/2015.
+ * Created by mike.baker on 8/9/2015.
  */
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
+    angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
+        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout' ,JobSearchCtrl]);
 
 
-    function CandidateDashboardCtrl($scope, $stateParams) {
 
-        var vm = this;
-        $scope.uiGridOptions  = {
-            data: 'recentApps',
-            columnDefs: [{
-                field: 'company'
-            }, {
-                field: 'position'
-            }, {
-                field: 'application date'
-            },
-                {
-                    field: 'current status'
-                }
-            ]
-        };
+  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
+      var positionService = PositionService;
+      var occupationService = OccupationService;
+      var geocodeService = GeocodeService;
+      var userService = UserService;
+      var candidateService = CandidateService;
 
-        $scope.recentApps = [];
+      $scope.positions = [];
 
-        if($scope.user.Applications){
-            $scope.recentApps = $scope.user.Applications;
-        }
+      $scope.filter = {
+          distance: ($stateParams.distance) ? $stateParams.distance : 20,
+          minWage: ($stateParams.wage) ? $stateParams.wage : 0,
+          occupationId: ($stateParams.occupationId) ? $stateParams.occupationId : '',
+          occupation: ''
 
-        // Chart.js Data
-        $scope.data = [
-            {
-                value: 5,
-                color:'#FFA540',
-                highlight: '#BF7C30',
-                label: 'Review'
-            },
-            {
-                value: 2,
-                color: '#38A2D0',
-                highlight: '#5AD3D1',
-                label: 'Interview Scheduled '
-            },
-            {
-                value: 1,
-                color: '#37DB79',
-                highlight: '#FFC870',
-                label: 'Passed'
-            }
-        ];
+      };
 
-        // Chart.js Options
-        $scope.options =  {
+      $scope.occupation = '';
 
-            // Sets the chart to be responsive
-            responsive: true,
+      $scope.options = {
+          types: '(regions)'
+      };
+      $scope.results = '';
+      $scope.details = '';
+      $scope.mapmarkers = [];
+      $scope.map = '';
+      $scope.mapOptions = '';
+      $scope.occupations = [];
+      $scope.placeId = $stateParams.placeId;
 
-            //Boolean - Whether we should show a stroke on each segment
-            segmentShowStroke : true,
 
-            //String - The colour of each segment stroke
-            segmentStrokeColor : '#fff',
+      var getJobs = function() {
 
-            //Number - The width of each segment stroke
-            segmentStrokeWidth : 2,
+          geocodeService.getPlacebyPlaceId($scope.placeId)
+              .then(function (place) {
+                  if (place) {
+                     initializeMap();
+                      $scope.results = place.formatted_address;
+                      $scope.details = place;
+                      //TODO:  move this to a seperate service
+                      var firebaseRef = new Firebase(FBURL + '/businessSiteLocation');
+                      var geoFire = new GeoFire(firebaseRef);
+                      var geoQuery = geoFire.query({
+                          center: [$scope.details.geometry.location.lat, $scope.details.geometry.location.lng],
+                          radius: $scope.filter.distance * 1.60934
+                      });
 
-            //Number - The percentage of the chart that we cut out of the middle
-            percentageInnerCutout : 50, // This is 0 for Pie charts
 
-            //Number - Amount of animation steps
-            animationSteps : 100,
+                      var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
+                          positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId)
+                              .then(function (positions) {
+                                  if(positions)
+                                  {
+                                      angular.forEach(positions, function (openPosition, id) {
+                                          $scope.positions.push(createPosition(openPosition, distance, id));
+                                          $scope.mapmarkers.push(createMarker(id, location[0], location[1], openPosition.businessSite));
+                                      });
+                                  }
 
-            //String - Animation easing effect
-            animationEasing : 'easeOutBounce',
 
-            //Boolean - Whether we animate the rotation of the Doughnut
-            animateRotate : true,
+                          }, function (err) {
 
-            //Boolean - Whether we animate scaling the Doughnut from the centre
-            animateScale : false,
+                          });
+                      });
 
-            showLegend: false
+                      var onKeyExitedRegistration = geoQuery.on("key_exited", function (key, location, distance) {
+                          //remove items from position arrray and remove markers
+                          var positions = $scope.positions;
+                          var markers = $scope.mapmarkers;
+                          $scope.positions = _.reject(positions,
+                              function (position) {
+                                  return position.siteId == key;
+                              }
+                          );
+
+                          $scope.mapmarkers = _.reject(markers,
+                              function (marker) {
+                                  return marker["id"] == key;
+                              }
+                          );
+                      });
+                  }
+
+              }, function (err) {
+                  //TODO:  add error handling
+              });
+      }
+
+
+      //var getOccupations = function(){
+      //    occupationService.getOccupations().then(function(occupations) {
+      //       $scope.occupations = occupations;
+      //        if($stateParams.occupationId){
+      //            $scope.filter.occupation = _.findWhere(occupations, {id: $stateParams.occupationId})
+      //        }
+      //    }, function(err) {
+      //
+      //    });
+      //};
+
+
+
+      var initializeMap = function(){
+          uiGmapGoogleMapApi
+              .then(function(maps){
+                  $scope.googlemap = {};
+                  $scope.map = {
+                      center: {
+                          latitude: $scope.details.geometry.location.lat,
+                          longitude: $scope.details.geometry.location.lng
+                      },
+                      zoom: 10,
+                      pan: 1,
+                      options: $scope.mapOptions,
+                      control: {},
+                      clusterOptions:  {
+                          title: 'Hi I am a Cluster!',
+                          gridSize: 20,
+                          ignoreHidden: true,
+                          minimumClusterSize: 1,
+                          zoomOnClick: false
+                      },
+                      events: {
+                          tilesloaded: function (maps, eventName, args) {
+                          },
+                          dragend: function (maps, eventName, args) {
+                          },
+                          zoom_changed: function (maps, eventName, args) {
+                          }
+                      }
+                  };
+              });
+
+
+
+
+
+          $scope.mapOptions = {
+              scrollwheel: false
+          };
+      }
+      var createMarker = function(id, lat, lng, site) {
+          var marker = {
+
+                  coords:{
+                      latitude: '',
+                      longitude: '',
+                  },
+              businessSite: '',
+              photoUrl: '',
+              show: false
 
           };
+          var idkey = "id";
+          marker[idkey] = id;
+          marker.coords.latitude = lat;
+          marker.coords.longitude = lng;
+          marker.businessSite = site;
+
+        return marker;
+      };
+
+      var createPosition = function(openPosition, distance, positionId){
+          var position = {
+              title: '',
+              companyName: '',
+              positionId: '',
+              siteId: '',
+              wage: {
+                  amount: '',
+                  frequency: ''
+              },
+              distance: '',
+              employmentTypes: '',
+              occupationId: '',
+              postDate: '',
+              photoUrl: ''
+          };
+          position.companyName = openPosition.business.name;
+          position.distance = distance/1.60934;
+          position.employmentTypes = openPosition.position.employmentTypes;
+          position.status = openPosition.position.status;
+          position.title = openPosition.position.title;
+          position.wage = openPosition.position.compensation.wage.maxAmount ? getMaxWageDisplay(openPosition.position.compensation.wage) : getnoMaxWageDisplay(openPosition.position.compensation.wage);
+          position.siteId = openPosition.siteId;
+          position.positionId = positionId;
+          position.occupationId = openPosition.position.occupation;
+          position.postDate = openPosition.postDate;
+          var defaultPhoto = _.matcher({main: "true"});
+          var photo =  _.filter(openPosition.businessPhotos, defaultPhoto);
+          if(photo){
+             position.photoUrl = photo[0].source;
+          }
+
+          return position;
+      }
+
+      var getMaxWageDisplay = function(wage)
+      {
+          return  wage.minAmount + '-' + wage.maxAmount + ' /' + wage.frequency;
+      }
+
+      var getnoMaxWageDisplay = function(wage)
+      {
+
+          return  wage.minAmount + '+' + ' /' + wage.frequency;
+      };
+
+      $scope.getJobsbyLocation = function(details){
+          $scope.details = details;
+          $scope.searchJobs();
+      };
+
+      $scope.getJobsbyOccupation = function(item, model, label){
+         $scope.filter.occupationId = item.id;
+          $scope.filter.occupation = item;
+          $scope.searchJobs();
+
+      };
+
+      $scope.searchJobs = function(){
+          $state.go('app.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
+      };
+
+      $scope.addToFavorites = function(positionId){
+         var user = userService.getCurrentUser();
+         candidateService.savePositiontoFavorites(user.userId, positionId);
+          Notification.success('Job Added to Favorites');
+      };
+
+      var initialize = function(){
+          getJobs();
+          //getOccupations();
+
+      };
 
 
 
-    }
-})()
-;
+
+      var locations = [];
+      $scope.selectedLocation = undefined;
+
+
+      $scope.searchLocations = function(query){
+          if(!!query && query.trim() != ''){
+              return geocodeService.getCityBySearchQuery(query).then(function(data){
+                  locations = [];
+                  if(data.statusCode == 200){
+                      data.results.predictions.forEach(function(prediction){
+                          locations.push({address: prediction.description, placeId: prediction.id});
+                      });
+                      return locations;
+                  } else {
+                      return {};
+                  }
+              });
+          }
+      };
+      var occupations = [];
+      $scope.selectedOccupation = null;
+      $scope.searchOnetOccupations = function(query){
+          if(!!query && query.trim() != ''){
+              return occupationService.getOccupations(query).then(function(data){
+                  occupations = [];
+                  if(data.statusCode == 200){
+                      data.results.forEach(function(occ){
+                          occupations.push({code: occ.code, title: occ.title});
+                      });
+                      return occupations;
+                  } else {
+                      return {};
+                  }
+              });
+          } else {
+              return {}
+          }
+      };
+
+
+      //initialize controller
+      initialize();
+}
+
+ })();
 
 /**
  * Created by labrina.loving on 9/7/2015.
@@ -630,9 +940,9 @@ angular.module('hirelyApp.core')
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout' ,HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window) {
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout) {
         var geocodeService = GeocodeService;
 
         $scope.flexSliderOptions = {
@@ -642,288 +952,135 @@ angular.module('hirelyApp.core')
             slideshowSpeed: 10000
         };
 
-        $scope.results = '';
-        $scope.options = {
-            types: '(regions)'
+        angular.element('.search-container').addClass('animated fadeInUp');
+
+        angular.element('.search-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+            angular.element('.search-container').removeClass('animated fadeInUp');
+        });
+
+
+        var locations = [];
+        $scope.selectedLocation = undefined;
+
+
+        $scope.searchLocations = function(query){
+            if(!!query && query.trim() != ''){
+                return geocodeService.getCityBySearchQuery(query).then(function(data){
+                    locations = [];
+                    if(data.statusCode == 200){
+                        data.results.predictions.forEach(function(prediction){
+                            locations.push({address: prediction.description, placeId: prediction.id});
+                        });
+                        return locations;
+                    } else {
+                        return {};
+                    }
+                });
+            }
         };
-        $scope.details = '';
 
-        var place = geocodeService.getPlace();
-        if(place){
 
-            $scope.results = place.formatted_address;
-            $scope.details = place;
-        }
-
+            //var place = geocodeService.getPlace();
+        //if(place){
+        //
+        //    $scope.results = place.formatted_address;
+        //    $scope.details = place;
+        //}
+        //
         $scope.getResults = function() {
-            geocodeService.setPlace($scope.details);
-            $state.go('app.job', {placeId: $scope.details.place_id})
+            if(!!$scope.selectedLocation){
+                geocodeService.setPlace($scope.selectedLocation);
+                $state.go('app.job', {placeId: $scope.selectedLocation.placeId});
+            }
+            else {
+                console.log('no!');
+                angular.element('.search-container').addClass('animated shake');
+                angular.element('.search-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                    angular.element('.search-container').removeClass('animated shake');
+                });
+            }
 
         };
+
+
+
+
     }
 })();
 
 /**
- * Created by mike.baker on 8/10/2015.
+ * Created by mike.baker on 8/17/2015.
+ */
+
+ (function () {
+    'use strict';
+
+    angular.module('hirelyApp.jobdetails').controller('JobDetailCtrl', ['$scope', '$state', '$stateParams','PositionService', 'GeocodeService', JobDetailCtrl ]);
+
+    function JobDetailCtrl ($scope, $state, $stateParams, PositionService, GeocodeService) {
+
+        var positionService = PositionService;
+        var geocodeService = GeocodeService;
+        var params = $stateParams;
+        var siteId = $stateParams.siteId;
+        var positionId = $stateParams.positionId;
+        var placeId = $stateParams.placeId;
+        $scope.position = '';
+        $scope.wageFormatted = '';
+        $scope.hoursFormatted = '';
+        $scope.distance = '';
+        $scope.photos = [];
+
+        positionService.getPositionbyId(siteId, positionId).then(function (positionObj) {
+            var today=new Date();
+            $scope.position = positionObj;
+            $scope.wageFormatted = positionObj.position.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.position.compensation.wage) : getnoMaxWageDisplay(positionObj.position.compensation.wage);
+            $scope.hoursFormatted =positionObj.position.workHours.max ? positionObj.position.workHours.min + '-' + positionObj.position.workHours.max : positionObj.position.workHours.min + '+'
+            var largePhoto = _.matcher({size: "l"});
+            var photos =  _.filter(positionObj.businessPhotos, largePhoto);
+            angular.forEach(photos, function(photoObj, photoKey) {
+
+                $scope.photos.push(photoObj.source);
+            });
+
+           geocodeService.calculateDistancetoSite(siteId, placeId).then(function (distance) {
+               $scope.distance = distance;
+           }, function (err) {
+                //TODO:  add error handling
+            });
+
+        }, function (err) {
+            //TODO:  add error handling
+        });
+
+        var getMaxWageDisplay = function(wage)
+        {
+
+            return  numeral(wage.minAmount).format('$0.00') + '-' + numeral(wage.maxAmount).format('$0.00');
+        }
+
+        var getnoMaxWageDisplay = function(wage)
+        {
+
+            return  numeral(wage.minAmount).format('$0.00') + '+';
+        }
+
+    }
+
+
+})();
+
+ 
+/**
+ * Created by mike.baker on 8/17/2015.
  */
 
 (function() {
     'use strict';
 
-    angular.module('hirelyApp.job', []);
+    angular.module('hirelyApp.jobdetails', []);
 })();
 
-
-/**
- * Created by mike.baker on 8/9/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobSearchCtrl]);
-
-
-
-  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady) {
-      var positionService = PositionService;
-      var occupationService = OccupationService;
-      var geocodeService = GeocodeService;
-      var userService = UserService;
-      var candidateService = CandidateService;
-
-      $scope.positions = [];
-
-      $scope.filter = {
-          distance: ($stateParams.distance) ? $stateParams.distance : 20,
-          minWage: ($stateParams.wage) ? $stateParams.wage : 0,
-          occupationId: ($stateParams.occupationId) ? $stateParams.occupationId : '',
-          occupation: ''
-
-      };
-
-      $scope.occupation = '';
-
-      $scope.options = {
-          types: '(regions)'
-      };
-      $scope.results = '';
-      $scope.details = '';
-      $scope.mapmarkers = [];
-      $scope.map = '';
-      $scope.mapOptions = '';
-      $scope.occupations = [];
-      $scope.placeId = $stateParams.placeId;
-
-
-      var getJobs = function() {
-
-          geocodeService.getPlacebyPlaceId($scope.placeId)
-              .then(function (place) {
-                  if (place) {
-                     initializeMap();
-                      $scope.results = place.formatted_address;
-                      $scope.details = place;
-                      //TODO:  move this to a seperate service
-                      var firebaseRef = new Firebase(FBURL + '/businessSiteLocation');
-                      var geoFire = new GeoFire(firebaseRef);
-                      var geoQuery = geoFire.query({
-                          center: [$scope.details.geometry.location.lat, $scope.details.geometry.location.lng],
-                          radius: $scope.filter.distance * 1.60934
-                      });
-
-
-                      var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
-                          positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId)
-                              .then(function (positions) {
-                                  if(positions)
-                                  {
-                                      angular.forEach(positions, function (openPosition, id) {
-                                          $scope.positions.push(createPosition(openPosition, distance, id));
-                                          $scope.mapmarkers.push(createMarker(id, location[0], location[1], openPosition.businessSite));
-                                      });
-                                  }
-
-
-                          }, function (err) {
-
-                          });
-                      });
-
-                      var onKeyExitedRegistration = geoQuery.on("key_exited", function (key, location, distance) {
-                          //remove items from position arrray and remove markers
-                          var positions = $scope.positions;
-                          var markers = $scope.mapmarkers;
-                          $scope.positions = _.reject(positions,
-                              function (position) {
-                                  return position.siteId == key;
-                              }
-                          );
-
-                          $scope.mapmarkers = _.reject(markers,
-                              function (marker) {
-                                  return marker["id"] == key;
-                              }
-                          );
-                      });
-                  }
-
-              }, function (err) {
-                  //TODO:  add error handling
-              });
-      }
-
-
-      var getOccupations = function(){
-          occupationService.getOccupations().then(function(occupations) {
-             $scope.occupations = occupations;
-              if($stateParams.occupationId){
-                  $scope.filter.occupation = _.findWhere(occupations, {id: $stateParams.occupationId})
-              }
-          }, function(err) {
-
-          });
-      };
-      var initializeMap = function(){
-          uiGmapGoogleMapApi
-              .then(function(maps){
-                  $scope.googlemap = {};
-                  $scope.map = {
-                      center: {
-                          latitude: $scope.details.geometry.location.lat,
-                          longitude: $scope.details.geometry.location.lng
-                      },
-                      zoom: 10,
-                      pan: 1,
-                      options: $scope.mapOptions,
-                      control: {},
-                      clusterOptions:  {
-                          title: 'Hi I am a Cluster!',
-                          gridSize: 20,
-                          ignoreHidden: true,
-                          minimumClusterSize: 1,
-                          zoomOnClick: false
-                      },
-                      events: {
-                          tilesloaded: function (maps, eventName, args) {
-                          },
-                          dragend: function (maps, eventName, args) {
-                          },
-                          zoom_changed: function (maps, eventName, args) {
-                          }
-                      }
-                  };
-              });
-
-
-
-
-
-          $scope.mapOptions = {
-              scrollwheel: false
-          };
-      }
-      var createMarker = function(id, lat, lng, site) {
-          var marker = {
-
-                  coords:{
-                      latitude: '',
-                      longitude: '',
-                  },
-              businessSite: '',
-              photoUrl: '',
-              show: false
-
-          };
-          var idkey = "id";
-          marker[idkey] = id;
-          marker.coords.latitude = lat;
-          marker.coords.longitude = lng;
-          marker.businessSite = site;
-
-        return marker;
-      };
-
-      var createPosition = function(openPosition, distance, positionId){
-          var position = {
-              title: '',
-              companyName: '',
-              positionId: '',
-              siteId: '',
-              wage: {
-                  amount: '',
-                  frequency: ''
-              },
-              distance: '',
-              employmentTypes: '',
-              occupationId: '',
-              postDate: '',
-              photoUrl: ''
-          };
-          position.companyName = openPosition.business.name;
-          position.distance = distance/1.60934;
-          position.employmentTypes = openPosition.position.employmentTypes;
-          position.status = openPosition.position.status;
-          position.title = openPosition.position.title;
-          position.wage = openPosition.position.compensation.wage.maxAmount ? getMaxWageDisplay(openPosition.position.compensation.wage) : getnoMaxWageDisplay(openPosition.position.compensation.wage);
-          position.siteId = openPosition.siteId;
-          position.positionId = positionId;
-          position.occupationId = openPosition.position.occupation;
-          position.postDate = openPosition.postDate;
-          var defaultPhoto = _.matcher({main: "true"});
-          var photo =  _.filter(openPosition.businessPhotos, defaultPhoto);
-          if(photo){
-             position.photoUrl = photo[0].source;
-          }
-
-          return position;
-      }
-
-      var getMaxWageDisplay = function(wage)
-      {
-          return  wage.minAmount + '-' + wage.maxAmount + ' /' + wage.frequency;
-      }
-
-      var getnoMaxWageDisplay = function(wage)
-      {
-
-          return  wage.minAmount + '+' + ' /' + wage.frequency;
-      }
-
-      $scope.getJobsbyLocation = function(details){
-          $scope.details = details;
-          $scope.searchJobs();
-      }
-
-      $scope.getJobsbyOccupation = function(item, model, label){
-         $scope.filter.occupationId = item.id;
-          $scope.filter.occupation = item;
-          $scope.searchJobs();
-
-      }
-
-      $scope.searchJobs = function(){
-          $state.go('app.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
-      }
-
-      $scope.addToFavorites = function(positionId){
-         var user = userService.getCurrentUser();
-         candidateService.savePositiontoFavorites(user.userId, positionId);
-          Notification.success('Job Added to Favorites');
-      }
-
-      var initialize = function(){
-          getJobs();
-          getOccupations();
-
-      };
-
-
-      //initialize controller
-      initialize();
-}
-
- })();
 
 /**
  * Created by labrina.loving on 8/6/2015.
@@ -1506,80 +1663,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 })();
 
 /**
- * Created by mike.baker on 8/17/2015.
- */
-
- (function () {
-    'use strict';
-
-    angular.module('hirelyApp.jobdetails').controller('JobDetailCtrl', ['$scope', '$state', '$stateParams','PositionService', 'GeocodeService', JobDetailCtrl ]);
-
-    function JobDetailCtrl ($scope, $state, $stateParams, PositionService, GeocodeService) {
-
-        var positionService = PositionService;
-        var geocodeService = GeocodeService;
-        var params = $stateParams;
-        var siteId = $stateParams.siteId;
-        var positionId = $stateParams.positionId;
-        var placeId = $stateParams.placeId;
-        $scope.position = '';
-        $scope.wageFormatted = '';
-        $scope.hoursFormatted = '';
-        $scope.distance = '';
-        $scope.photos = [];
-
-        positionService.getPositionbyId(siteId, positionId).then(function (positionObj) {
-            var today=new Date();
-            $scope.position = positionObj;
-            $scope.wageFormatted = positionObj.position.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.position.compensation.wage) : getnoMaxWageDisplay(positionObj.position.compensation.wage);
-            $scope.hoursFormatted =positionObj.position.workHours.max ? positionObj.position.workHours.min + '-' + positionObj.position.workHours.max : positionObj.position.workHours.min + '+'
-            var largePhoto = _.matcher({size: "l"});
-            var photos =  _.filter(positionObj.businessPhotos, largePhoto);
-            angular.forEach(photos, function(photoObj, photoKey) {
-
-                $scope.photos.push(photoObj.source);
-            });
-
-           geocodeService.calculateDistancetoSite(siteId, placeId).then(function (distance) {
-               $scope.distance = distance;
-           }, function (err) {
-                //TODO:  add error handling
-            });
-
-        }, function (err) {
-            //TODO:  add error handling
-        });
-
-        var getMaxWageDisplay = function(wage)
-        {
-
-            return  numeral(wage.minAmount).format('$0.00') + '-' + numeral(wage.maxAmount).format('$0.00');
-        }
-
-        var getnoMaxWageDisplay = function(wage)
-        {
-
-            return  numeral(wage.minAmount).format('$0.00') + '+';
-        }
-
-    }
-
-
-})();
-
- 
-/**
- * Created by mike.baker on 8/17/2015.
- */
-
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.jobdetails', []);
-})();
-
-
-/**
  * Created by labrina.loving on 9/6/2015.
  */
 
@@ -1738,12 +1821,13 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.candidate').controller('CandidateProfileExperienceCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'OccupationService', CandidateProfileExperienceCtrl ]);
+    angular.module('hirelyApp.candidate').controller('CandidateProfileExperienceCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'OccupationService', 'GeocodeService', '$timeout', CandidateProfileExperienceCtrl ]);
 
 
-    function CandidateProfileExperienceCtrl($scope, $state,$stateParams, CandidateService, OccupationService) {
+    function CandidateProfileExperienceCtrl($scope, $state,$stateParams, CandidateService, OccupationService, GeocodeService, $timeout) {
         var occupationService = OccupationService;
         var candidateService = CandidateService;
+        var geocodeService = GeocodeService;
         function experienceModel(){
             this.company = {
                 place: '',
@@ -1878,14 +1962,14 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
         }
 
-        var getOccupations = function(){
-            occupationService.getOccupations().then(function(occupations) {
-                $scope.occupations = occupations;
-
-            }, function(err) {
-
-            });
-        };
+        //var getOccupations = function(){
+        //    occupationService.getOccupations().then(function(occupations) {
+        //        $scope.occupations = occupations;
+        //
+        //    }, function(err) {
+        //
+        //    });
+        //};
 
         var getExperience = function() {
               $scope.experiences = candidateService.getExperience($scope.user.userId);
@@ -1908,11 +1992,55 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
         }
         var initialize = function(){
-            getOccupations();
+            //getOccupations();
             if($scope.profile && $scope.profile.experience){
                 $scope.experiences = $scope.profile.experience;
             }
 
+        };
+
+
+        //*** LOCATION SEARCH ***//
+
+        var locations = [];
+        $scope.selectedLocation = undefined;
+
+
+        $scope.searchLocations = function(query){
+            if(!!query && query.trim() != ''){
+                return geocodeService.getCityBySearchQuery(query).then(function(data){
+                    locations = [];
+                    if(data.statusCode == 200){
+                        data.results.predictions.forEach(function(prediction){
+                            locations.push({address: prediction.description, placeId: prediction.id});
+                        });
+                        return locations;
+                    } else {
+                        return {};
+                    }
+                });
+            }
+        };
+
+
+        var occupations = [];
+        $scope.selectedOccupation = null;
+        $scope.searchOnetOccupations = function(query){
+            if(!!query && query.trim() != ''){
+                return occupationService.getOccupations(query).then(function(data){
+                    occupations = [];
+                    if(data.statusCode == 200){
+                        data.results.forEach(function(occ){
+                            occupations.push({code: occ.code, title: occ.title});
+                        });
+                        return occupations;
+                    } else {
+                        return {};
+                    }
+                });
+            } else {
+                return {}
+            }
         };
 
         initialize();
@@ -2477,7 +2605,9 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
             getPlacebyPlaceId : getPlacebyPlaceId,
             getPlace: getPlace,
             setPlace: setPlace,
-            calculateDistancetoSite: calculateDistancetoSite
+            calculateDistancetoSite: calculateDistancetoSite,
+            getCityBySearchQuery: getCityBySearchQuery,
+            getLocationBySearchQuery: getLocationBySearchQuery
         };
         return service;
 
@@ -2543,6 +2673,38 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         }
 
 
+        function getCityBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/cities/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+
+        function getLocationBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/locations/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
 
 
     }
@@ -2593,42 +2755,54 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('OccupationService', ['$q','FBURL', '$firebaseObject', 'fbutil', OccupationService]);
+        .service('OccupationService', ['$q', '$http', OccupationService]);
 
-    function OccupationService($q, FBURL, $firebaseObject, fbutil, OccupationService) {
+    function OccupationService($q, $http) {
 
-        this.getOccupations = function getOccupations(){
+        //this.getOccupations = function getOccupations(){
+        //
+        //    var occupationRef =  new Firebase(FBURL + "/onetOccupation");
+        //    var deferred = $q.defer();
+        //    occupationRef.once("value", function (snapshot) {
+        //            var occupations = [];
+        //            snapshot.forEach(function(item) {
+        //                var itemVal = item.val();
+        //                var key = item.key();
+        //                var occupation = {
+        //                    id: '',
+        //                    title: '',
+        //                    socCode: ''
+        //                }
+        //                occupation.id = key;
+        //                occupation.title = itemVal.title;
+        //                occupation.socCode = itemVal.onetsocCode;
+        //                occupations.push(occupation);
+        //
+        //
+        //            });
+        //            deferred.resolve(occupations);
+        //
+        //        }, function (err) {
+        //            deferred.reject(snapshot);
+        //        }
+        //    );
+        //    return deferred.promise;
+        //
+        //};
 
-            var occupationRef =  new Firebase(FBURL + "/onetOccupation");
+        this.getOccupations = function getOccupations(query){
             var deferred = $q.defer();
-            occupationRef.once("value", function (snapshot) {
-                    var occupations = [];
-                    snapshot.forEach(function(item) {
-                        var itemVal = item.val();
-                        var key = item.key();
-                        var occupation = {
-                            id: '',
-                            title: '',
-                            socCode: ''
-                        }
-                        occupation.id = key;
-                        occupation.title = itemVal.title;
-                        occupation.socCode = itemVal.onetsocCode;
-                        occupations.push(occupation);
 
+            $http.get('/api/onet/titles/search/'+ query)
+              .success(function(data) {
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
 
-                    });
-                    deferred.resolve(occupations);
-
-                }, function (err) {
-                    deferred.reject(snapshot);
-                }
-            );
             return deferred.promise;
-
-        };
-
-
+        }
     };
 })();
 

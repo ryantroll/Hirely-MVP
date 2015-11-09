@@ -17,7 +17,9 @@
             getPlacebyPlaceId : getPlacebyPlaceId,
             getPlace: getPlace,
             setPlace: setPlace,
-            calculateDistancetoSite: calculateDistancetoSite
+            calculateDistancetoSite: calculateDistancetoSite,
+            getCityBySearchQuery: getCityBySearchQuery,
+            getLocationBySearchQuery: getLocationBySearchQuery
         };
         return service;
 
@@ -83,6 +85,38 @@
         }
 
 
+        function getCityBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/cities/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+
+        function getLocationBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/locations/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
 
 
     }
