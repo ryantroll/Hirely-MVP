@@ -23,8 +23,7 @@ var myApp = angular.module('hirelyApp',
         'hirelyApp.account',
         'hirelyApp.candidate',
         'hirelyApp.manager',
-        'ngSanitize',
-        'angucomplete-alt'
+        'ngSanitize'
     ])
 
 
