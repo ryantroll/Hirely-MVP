@@ -9,32 +9,63 @@ var $ = require('gulp-load-plugins')({lazy: true});
 var port = process.env.PORT || config.defaultPort;
 var args = require('yargs').argv;
 var browserSync = require('browser-sync');
+var sass = require('gulp-sass');
+var autoprefixer = require('gulp-autoprefixer');
+var rename = require('gulp-rename');
+var sourcemaps = require('gulp-sourcemaps');
+var concat = require('gulp-concat');
 
-var paths = {
-  sass: ['./client/scss/**/*.scss']
-};
+var livereload = require('gulp-livereload');
+var lr = require('tiny-lr');
+var server = lr();
 
 
-gulp.task('default', ['sass']);
-
-gulp.task('sass', function(done) {
-  gulp.src('./client/scss/ionic.app.scss')
-    .pipe(sass({
-      errLogToConsole: true
-    }))
-    .pipe(gulp.dest('./client/www/css/'))
-    .pipe(minifyCss({
-      keepSpecialComments: 0
-    }))
-    .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./client/www/css/'))
-    .on('end', done);
+// Sass task:
+// source: hirely.scss inside css folder
+// output: single css file on 'hirely.out.css'
+// other properties: sourcemaps, autoprefixer, rename
+gulp.task('sass', function() {
+    gulp.src(['./client/www/css/hirely.scss'])
+      .pipe($.plumber())
+      .pipe(sourcemaps.init())
+      .pipe(sass(sass().on('error', sass.logError)))
+      .pipe(autoprefixer({
+          browsers: ['last 10 versions'],
+          cascade: false
+      }))
+      //.pipe(minifyCss())
+      .pipe(sourcemaps.write())
+      //.pipe(rename('hirely.min.css'))
+      .pipe(rename('hirely.out.css'))
+      .pipe(gulp.dest('client/www/dist/css'))
+      .pipe(livereload(server));
 });
 
+gulp.task('js', function() {
+    gulp.src('client/www/app/**/*.js')
+      .pipe( concat('app.js'))
+      .pipe( gulp.dest('client/www/dist/js'))
+      .pipe( livereload( server ));
+});
 
 gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+
+    //server.listen(35729, function (err) {
+    //    if (err) {
+    //        return console.log(err);
+    //    }
+    //    gulp.watch(['client/www/app/**/*.js'], ['js']);
+    //    gulp.watch(config.sass, ['sass']);
+    //    });
+
+    gulp.watch(['client/www/app/**/*.js'], ['js']);
+    gulp.watch(config.sass, ['sass']);
 });
+
+
+gulp.task('default', ['js', 'sass', 'watch']);
+
+
 
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()
@@ -56,27 +87,11 @@ gulp.task('git-check', function(done) {
   done();
 });
 
-gulp.task('styles', function() {
-    log('Compiling Less --> CSS');
-
-    return gulp
-        .src(config.less)
-        .pipe($.plumber())
-        .pipe($.less())
-        .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
-        .pipe(gulp.dest(config.cssFolder));
-});
 
 gulp.task('clean-styles', function(done) {
     var files = config.cssFolder  + 'style.css';
     clean(files, done);
 });
-
-gulp.task('less-watcher', function() {
-    log('Monitoring ' + config.less );
-    watch([config.less], ['styles']);
-});
-
 
 gulp.task('fonts', ['clean-fonts'], function() {
     log('Copying fonts');
@@ -135,8 +150,6 @@ gulp.task('template-cache', [], function() {
 gulp.task('templates-watcher', function() {
     gulp.watch(config.templates, ['template-cache']);
 });
-
-gulp.task('default', ['less-watcher']);
 
 gulp.task('wiredep', function() {
     log('Wire up the bower css js and our app js into the html');

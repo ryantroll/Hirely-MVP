@@ -5,6 +5,7 @@ var myApp = angular.module('hirelyApp',
         'uiGmapgoogle-maps',
         'ui.router',
         'ui.bootstrap',
+        'ui.bootstrap.typeahead',
         'ui.grid',
         'uiGmapgoogle-maps',
         'firebase',
@@ -21,8 +22,9 @@ var myApp = angular.module('hirelyApp',
         'hirelyApp.core',
         'hirelyApp.account',
         'hirelyApp.candidate',
-        'hirelyApp.manager'
-        
+        'hirelyApp.manager',
+        'ngSanitize',
+        'angucomplete-alt'
     ])
 
 
@@ -67,20 +69,15 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/manager/hmRegister.html',
                 controller: 'HMRegisterCtrl'
             })
-            .state('app.hmBusSite', {
-                url: '/hmBusSite',
-                templateUrl: 'app/manager/company/hmBusSite.html',
-                controller: 'HMCompanyCtrl'
-            })
-            .state('app.hmDashboard', {
-                url: '/hmDashboard',
-                templateUrl: 'app/manager/company/hmDashboard.html',
-                controller: 'HMCompanyCtrl'
+            .state('app.busDashboard', {
+                url: '/busDashboard',
+                templateUrl: 'app/manager/hmDashboard.html',
+                controller: 'HMRegisterCtrl'
             })
             .state('app.hmPosition', {
                 url: '/hmPosition',
-                templateUrl: 'app/manager/company/hmPosition.html',
-                controller: 'HMCompanyCtrl'
+                templateUrl: 'app/manager/hmPosition.html',
+                controller: 'HMRegisterCtrl'
             })
             .state('app.hmHiring', {
                 url: '/hmHiring',

@@ -52,7 +52,5 @@
         vm.CloseModal = function (){
             $modalInstance.close();
         };
-
-
     }
 })();

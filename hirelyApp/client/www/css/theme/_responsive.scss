@@ -1,6 +1,3 @@
-@import "mixins.less";
-@import "theme-default.less";
-
 /* Extra small devices (phones, less than 768px) */
 @media (max-width: 767px) { 
     
@@ -293,11 +290,14 @@
     .wrapper {
         min-height: 100%;
 
+<<<<<<< HEAD:hirelyApp/client/www/css/responsive.less
         &:after {
             content: "";
             display: block;
 
         }
+=======
+>>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_responsive.scss
     }
 
     .footer {

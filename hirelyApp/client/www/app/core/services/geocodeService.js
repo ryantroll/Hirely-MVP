@@ -6,9 +6,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .factory('GeocodeService', ['$q', '$http', 'GOOGLEMAPSURL', 'FBURL', GeocodeService]);
+        .factory('GeocodeService', ['$q', '$http', 'GOOGLEMAPSURL', 'FIREBASE_URL', GeocodeService]);
 
-    function GeocodeService($q, $http, GOOGLEMAPSURL, FBURL) {
+    function GeocodeService($q, $http, GOOGLEMAPSURL, FIREBASE_URL) {
         var mapsEndPoint = GOOGLEMAPSURL;
         var currentPlace = null;
 
@@ -17,7 +17,9 @@
             getPlacebyPlaceId : getPlacebyPlaceId,
             getPlace: getPlace,
             setPlace: setPlace,
-            calculateDistancetoSite: calculateDistancetoSite
+            calculateDistancetoSite: calculateDistancetoSite,
+            getCityBySearchQuery: getCityBySearchQuery,
+            getLocationBySearchQuery: getLocationBySearchQuery
         };
         return service;
 
@@ -64,7 +66,7 @@
 
         function calculateDistancetoSite(siteId, placeId){
             var deferred = $q.defer();
-            var firebaseRef = new Firebase(FBURL + '/businessSiteLocation');
+            var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
             var geoFire = new GeoFire(firebaseRef);
             geoFire.get(siteId).then(function(siteLocation) {
                 var place = getPlacebyPlaceId((placeId)).then(function(place) {
@@ -83,6 +85,38 @@
         }
 
 
+        function getCityBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/cities/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+
+        function getLocationBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/locations/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
 
 
     }
