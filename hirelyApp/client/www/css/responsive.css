@@ -247,14 +247,10 @@
   }
   .wrapper {
     min-height: 100%;
-    margin-bottom: 100px;
-    /* equal to footer height */
   }
   .wrapper:after {
     content: "";
     display: block;
-    height: 100px;
-    /* must be the same height as footer */
   }
   .footer {
     height: 100px;

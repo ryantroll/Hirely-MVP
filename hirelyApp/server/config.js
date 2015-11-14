@@ -8,7 +8,9 @@ module.exports = function() {
             host: "api-sandbox.traitify.com",
             version: "v1",
             secretKey: "bv8sstle4nsl3imb17ra0c158d"
-        }
+        },
+        firebase: "https://shining-torch-5144.firebaseio.com/" //TOODO:  add support for different environments
+
     };
     return config;
 };

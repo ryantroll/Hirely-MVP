@@ -247,14 +247,10 @@
   }
   .wrapper {
     min-height: 100%;
-    margin-bottom: 100px;
-    /* equal to footer height */
   }
   .wrapper:after {
     content: "";
     display: block;
-    height: 100px;
-    /* must be the same height as footer */
   }
   .footer {
     height: 100px;
@@ -280,8 +276,53 @@
 .grid-heading i {
   margin-right: 5px;
 }
-.search-form .btn-search {
-  margin-left: 0px;
+.search-form .search-row {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+}
+.search-form .search-row .search-col {
+  padding: 0;
+  position: relative;
+}
+.search-form .search-row .search-col i {
+  color: #999999;
+  font-size: 18px;
+  left: 8px;
+  position: absolute;
+  top: 16px;
+  padding-left: 5px;
+}
+.search-form .search-row .search-col .search-location {
+  border-radius: 3px 0 0 3px;
+  padding-left: 40px;
+  border-right: solid 1px #ddd!important;
+}
+.search-form .search-row .search-col .search-icon {
+  color: #fff;
+}
+.search-form .search-row .search-col .btn-search {
+  border: 0;
+  margin: 0;
+  font-size: 16px;
+  height: 48px;
+  border-radius: 0 3px 3px 0!important;
+}
+@media (max-width: 640px) {
+  .search-form .search-row .search-col .btn-search {
+    width: 60%;
+    text-align: center;
+  }
+  .search-form .search-row .search-col .btn-search strong {
+    display: none;
+  }
+}
+.search-form .search-row .search-col .form-control {
+  box-shadow: none!important;
+  border: 0;
+  height: 48px;
+  margin-bottom: 0;
 }
 .ui-autocomplete {
   position: absolute;
@@ -373,7 +414,8 @@ h5 + .separator {
   position: relative;
   margin-top: 20px;
   padding: 20px 0;
-  background: #f5f5f5;
+  color: #fff;
+  background: #466eab;
 }
 .hiring-manager .hiring-intro h1,
 .hiring-manager .hiring-intro h2,
@@ -381,6 +423,7 @@ h5 + .separator {
 .hiring-manager .hiring-intro h4,
 .hiring-manager .hiring-intro h5 {
   text-align: center;
+  color: #fff;
 }
 .hiring-manager img {
   margin: auto;
@@ -388,31 +431,47 @@ h5 + .separator {
 .hiring-manager .btn-cta {
   font-size: 18px;
 }
+.hiring-manager p {
+  color: #f5f5f5 !important;
+}
 /* ======= Call to action(homepage) ======= */
 .call-to-action {
   height: 600px;
-  background-image: url(/img/banners/future_employee.jpg);
+  background: -webkit-linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(/img/banners/future_employee.jpg) no-repeat 50% top;
+  background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(/img/banners/future_employee.jpg) no-repeat 50% top;
   background-size: cover;
 }
 .call-to-action .cta-container {
   color: white;
-  padding-top: 150px;
+  font-size: 16px;
+  padding-top: 60px;
 }
 .call-to-action .cta-container .main-header {
-  margin-top: 100px;
-  font-size: 48px;
-  font-weight: 700;
-  display: block;
+  font-size: 32px;
+  font-weight: bold;
 }
 .call-to-action .cta-container .join-header {
-  font-size: 20px;
+  padding-bottom: 20px;
 }
-.call-to-action .cta-container .signup input {
-  width: 400px;
+.call-to-action .cta-container .cta-col {
+  padding: 0;
 }
-.call-to-action .cta-container button {
-  font-size: 18px;
-  font-weight: bold;
+.call-to-action .cta-container .form-control {
+  box-shadow: none!important;
+  border: 0;
+  height: 48px;
+  margin-bottom: 0;
+  border-radius: 3px 0 0 3px;
+  padding-left: 20px;
+  border-right: solid 1px #ddd!important;
+}
+.call-to-action .cta-container .btn-cta-blue {
+  display: block;
+  border: 0;
+  margin: 0;
+  font-size: 16px;
+  height: 48px;
+  border-radius: 0 3px 3px 0!important;
 }
 /* ======= Profile Section ======= */
 .profile {
@@ -500,7 +559,7 @@ h5 + .separator {
   background: #e42f0c;
 }
 .profile .service-block-blue {
-  background: #034358;
+  background: #065d91;
 }
 .profile .service-block-v3 {
   padding: 20px;
@@ -581,7 +640,7 @@ h5 + .separator {
   padding: 20px;
 }
 .candidate .profile .status-buttons a {
-  color: #444444;
+  color: #465b6d;
   display: inline-block;
   font-size: 14px;
   margin-right: 10px;
@@ -595,7 +654,7 @@ h5 + .separator {
 }
 .candidate .profile .status-buttons a .nav-number {
   color: #FFF;
-  background: #034358;
+  background: #065d91;
   display: block;
   height: 50px;
   margin: 0 auto 10px;
@@ -661,18 +720,18 @@ h5 + .separator {
   position: relative;
 }
 .candidate .profile .user-experience .timeline-v2 > li .cbp_tmtime span:first-child {
-  color: #444444;
+  color: #465b6d;
   font-size: 14px;
   line-height: 1.5;
 }
 .candidate .profile .user-experience .timeline-v2 > li .cbp_tmtime span:last-child {
-  color: #666666;
+  color: #a6aaa9;
   font-size: 14px;
   font-weight: normal;
   color: #999;
 }
 .candidate .profile .user-experience .timeline-v2 > li .cbp_tmlabel {
-  color: #444444;
+  color: #465b6d;
   line-height: 1.4;
   clear: both;
   position: relative;
@@ -890,7 +949,7 @@ h5 + .separator {
   -webkit-transform: rotateY(0);
   transform: rotateY(0);
   left: 0;
-  background: #297e9a;
+  background: #2a92d0;
 }
 .candidate .profile .tgl-btn {
   margin: auto;
@@ -1005,10 +1064,10 @@ h5 + .separator {
   margin-right: 20px;
   padding-bottom: 10px;
   text-align: center;
-  color: #999999;
+  color: #465b6d;
 }
 .job-search .job-item .job-action a {
-  color: #034358;
+  color: #5f87bf;
   text-decoration: none;
 }
 .job-search .shadow-narrow:after,
@@ -1028,10 +1087,10 @@ h5 + .separator {
   transition: all 0.3s ease-in-out;
 }
 .job-search .body a {
-  color: #444444;
+  color: #465b6d;
 }
 .job-search .body a:hover {
-  color: #5e5e5e;
+  color: #5a758c;
 }
 .job-search .body .job-info {
   margin-left: 20px;
@@ -1065,7 +1124,7 @@ rzslider {
   margin: 40px 0 30px 0;
 }
 rzslider span.rz-pointer {
-  background: #297e9a;
+  background: #2a92d0;
   top: -8px;
   height: 20px;
   width: 20px;
@@ -1191,7 +1250,7 @@ rzslider span.rz-pointer:after {
   border-radius: 20px;
 }
 .job-details .job-schedule .schedule-circle-yes {
-  background-color: #297e9a;
+  background-color: #2a92d0;
 }
 .job-details .job-schedule .schedule-circle-no {
   background-color: #fff;

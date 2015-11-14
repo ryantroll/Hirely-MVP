@@ -23,8 +23,52 @@
 }
 
 .search-form{
-  .btn-search{
-      margin-left: 0px;
+  .search-row{
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    .search-col{
+      padding: 0;
+      position: relative;
+      i{
+        color: @grey;
+        font-size: 18px;
+        left: 8px;
+        position: absolute;
+        top: 16px;
+        padding-left: 5px;
+      }
+      .search-location{
+        border-radius: 3px 0 0 3px;
+        padding-left: 40px;
+        border-right: solid 1px #ddd!important;
+      }
+      .search-icon{
+        color: #fff;
+      }
+
+      .btn-search{
+        border: 0;
+        margin: 0;
+        font-size: 16px;
+        height: 48px;
+        border-radius: 0 3px 3px 0!important;
+        @media (max-width: 640px) {
+         width: 60%;
+          text-align: center;
+          strong {
+            display: none;
+          }
+        }
+      }
+      .form-control{
+        box-shadow: none!important;
+        border: 0;
+        height: 48px;
+        margin-bottom: 0;
+      }
+    }
   }
 }
 .ui-autocomplete {
@@ -131,11 +175,14 @@ h3+.separator, h4+.separator, h5+.separator {
   position: relative;
   margin-top: 20px;
   padding: 20px 0;
-  background: @smoky-white;
+  color: #fff;
+  background: @secondary-color;
   .hiring-intro{
     h1, h2, h3, h4, h5{
       text-align: center;
+      color: #fff;
     }
+
   }
 
   img{
@@ -145,38 +192,55 @@ h3+.separator, h4+.separator, h5+.separator {
   .btn-cta{
     font-size: 18px;
   }
+
+  p{
+    color: @smoky-white !important;
+  }
 }
 
 /* ======= Call to action(homepage) ======= */
 .call-to-action{
 
   height: 600px;
-  background-image: url(/img/banners/future_employee.jpg);
+  background: linear-gradient(
+          rgba(0,0,0, 0.45),
+          rgba(0,0,0, 0.45)
+  ),  url(/img/banners/future_employee.jpg)  no-repeat 50% top;
+
   background-size: cover;
   .cta-container{
     color: white;
+    font-size: 16px;
+    padding-top: 60px;
 
-    padding-top: 150px;
     .main-header{
-      margin-top: 100px;
-      font-size: 48px;
-      font-weight: 700;
-      display: block;
-    }
-    .join-header{
-      font-size: 20px;
-
-    }
-    .signup{
-      input{
-        width: 400px;
-      }
-    }
-    button{
-      font-size: 18px;
+      font-size: 32px;
       font-weight: bold;
     }
+    .join-header{
+      padding-bottom: 20px;
+    }
+    .cta-col{
+      padding: 0;
+    }
+    .form-control{
+      box-shadow: none!important;
+      border: 0;
+      height: 48px;
+      margin-bottom: 0;
+      border-radius: 3px 0 0 3px;
+      padding-left: 20px;
+      border-right: solid 1px #ddd!important;
+    }
 
+    .btn-cta-blue{
+      display: block;
+      border: 0;
+      margin: 0;
+      font-size: 16px;
+      height: 48px;
+      border-radius: 0 3px 3px 0!important;
+    }
   }
 }
 /* ======= Profile Section ======= */
@@ -841,9 +905,9 @@ h3+.separator, h4+.separator, h5+.separator {
       margin-right: 20px;
       padding-bottom: 10px;
       text-align: center;
-      color: @grey;
+      color: @text-color;
       a{
-        color: @blue;
+        color: @complimentary-color;
         text-decoration: none;
       }
 

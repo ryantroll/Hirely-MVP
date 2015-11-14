@@ -19,6 +19,7 @@
             this.lastName = '';
             this.fullName = '';
             this.email = '';
+            this.userType = '';
             this.profileImageUrl = '';
             this.personalStatement = '';
             this.location = '';
@@ -140,11 +141,12 @@
             user.firstName = userData.firstName;
             user.lastName = userData.lastName;
             user.email = userData.email;
+            user.userType = userData.userType;
             user.provider = 'password';
             user.providerId = providerId;
             user.createdOn = timestamp;
             user.lastModifiedOn = timestamp;
-
+            user.userId = providerId;
             self.createUserinFirebase(user, providerId)
 
 

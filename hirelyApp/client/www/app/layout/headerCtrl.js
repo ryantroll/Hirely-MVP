@@ -10,6 +10,7 @@
 
         //region Scope variables
         $scope.currentUser = $scope.$parent.currentUser;
+
         //endregion
 
         var vm = this;
@@ -19,7 +20,7 @@
         $scope.$on('currentUserChanged', function (event, args) {
             $scope.currentUser = args.message;
         });
-
+      
 
         //region Controller Functions
         vm.login = function() {
@@ -27,12 +28,8 @@
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: 'app/account/login.html',
-                controller: 'LoginCtrl as vm',
-                resolve: {
-                    items: function () {
+                controller: 'LoginCtrl as vm'
 
-                    }
-                }
             });
         };
 
@@ -52,6 +49,7 @@
                 
             });
         };
+
 
         vm.logout = function(){
             authService.logout();

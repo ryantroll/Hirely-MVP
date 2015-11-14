@@ -12,10 +12,16 @@
     "cache-manager": "^1.1.0",
     "cors": "^2.7.1",
     "express": "^4.13.3",
+    "firebase": "^2.3.1",
+    "firebase-queue": "^1.2.1",
+    "firebase-util": "^0.2.5",
     "googlemaps": "^1.0.1",
     "gulp": "^3.9.0",
+    "lodash": "^3.10.1",
     "method-override": "^2.3.5",
     "morgan": "^1.6.1",
+    "promise": "^7.0.4",
+    "q": "^1.4.1",
     "traitify": "^2.2.0"
   },
   "devDependencies": {
