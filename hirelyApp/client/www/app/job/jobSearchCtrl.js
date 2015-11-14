@@ -5,11 +5,11 @@
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'FBURL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout' ,JobSearchCtrl]);
+        'FIREBASE_URL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout' ,JobSearchCtrl]);
 
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, FBURL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
+  function JobSearchCtrl($scope, $http, $state, $stateParams, FIREBASE_URL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
@@ -49,7 +49,7 @@
                       $scope.results = place.formatted_address;
                       $scope.details = place;
                       //TODO:  move this to a seperate service
-                      var firebaseRef = new Firebase(FBURL + '/businessSiteLocation');
+                      var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
                       var geoFire = new GeoFire(firebaseRef);
                       var geoQuery = geoFire.query({
                           center: [$scope.details.geometry.location.lat, $scope.details.geometry.location.lng],

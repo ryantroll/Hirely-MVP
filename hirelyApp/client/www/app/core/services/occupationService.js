@@ -12,7 +12,7 @@
 
         //this.getOccupations = function getOccupations(){
         //
-        //    var occupationRef =  new Firebase(FBURL + "/onetOccupation");
+        //    var occupationRef =  new Firebase(FIREBASE_URL + "/onetOccupation");
         //    var deferred = $q.defer();
         //    occupationRef.once("value", function (snapshot) {
         //            var occupations = [];

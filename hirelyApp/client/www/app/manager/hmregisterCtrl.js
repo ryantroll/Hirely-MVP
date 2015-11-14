@@ -4,18 +4,18 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FBURL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
    
 
-    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FBURL, AuthService, UserService, BusinessService) {
+    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
 
         var vm = this;
         var authService = AuthService;
         var userService = UserService;
         var businessService = BusinessService;
         var managerId = '';
-        var businessRef = new Firebase(FBURL + '/businessSite');
-        var photoRef = new Firebase(FBURL + '/businessPhotos');
+        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
+        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
        
         $scope.companies = $firebaseArray(businessRef);
         $scope.picturesRef = $firebaseArray(photoRef);

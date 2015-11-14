@@ -7,17 +7,17 @@
     'use strict';
 
     angular.module('hirelyApp.manager')
-        .service('BusinessService', ['$q','FBURL', '$firebaseObject', 'fbutil', BusinessService]);
+        .service('BusinessService', ['$q','FIREBASE_URL', '$firebaseObject', 'fbutil', BusinessService]);
 
-     function BusinessService( $q, FBURL, $firebaseObject, fbutil, BusinessService) {
+     function BusinessService( $q, FIREBASE_URL, $firebaseObject, fbutil, BusinessService) {
         var self = this;
-        var bpostref = new Firebase(FBURL + '/business');
+        var bpostref = new Firebase(FIREBASE_URL + '/business');
         var businessRef = bpostref.push();
-        var rootRef = new Firebase(FBURL + '/businessSite');
+        var rootRef = new Firebase(FIREBASE_URL + '/businessSite');
         var businessSiteRef = rootRef.push();
         var busId = '';
         var siteId = '';
-        var firebaseRef = new Firebase(FBURL + '/businessSiteLocation');
+        var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
         var geoFire = new GeoFire(firebaseRef);
 
         function businessSiteModel(){

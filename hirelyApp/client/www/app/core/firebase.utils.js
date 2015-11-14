@@ -4,7 +4,7 @@
 
 // a simple wrapper on Firebase and AngularFire to simplify deps and keep things DRY
 angular.module('hirelyApp.core')
-    .factory('fbutil', ['$window', 'FBURL', '$q', function($window, FBURL, $q) {
+    .factory('fbutil', ['$window', 'FIREBASE_URL', '$q', function($window, FIREBASE_URL, $q) {
 
 
         var utils = {
@@ -56,7 +56,7 @@ angular.module('hirelyApp.core')
          * @return a Firebase instance
          */
         function firebaseRef(path) {
-            var ref = new $window.Firebase(FBURL);
+            var ref = new $window.Firebase(FIREBASE_URL);
             var args = Array.prototype.slice.call(arguments);
             if( args.length ) {
                 ref = ref.child(pathRef(args));

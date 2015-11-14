@@ -40,7 +40,6 @@
             }
         };
 
-
             //var place = geocodeService.getPlace();
         //if(place){
         //
@@ -62,7 +61,6 @@
             }
 
         };
-
 
 
 

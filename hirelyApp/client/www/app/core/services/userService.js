@@ -5,11 +5,11 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('UserService', ['$rootScope', '$q','FBURL', '$firebaseObject', 'fbutil', UserService]);
+        .service('UserService', ['$rootScope', '$q','FIREBASE_URL', '$firebaseObject', 'fbutil', UserService]);
 
-    function UserService($rootScope, $q, FBURL, $firebaseObject, fbutil, UserService) {
+    function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, UserService) {
         var self = this;
-        var ref = new Firebase(FBURL + "/users");
+        var ref = new Firebase(FIREBASE_URL + "/users");
         var currentUser;
         var currentUserId;
         var isLoggedIn = false;
@@ -17,16 +17,12 @@
         function userModel(){
             this.firstName = '';
             this.lastName = '';
-            this.fullName = '';
             this.email = '';
             this.profileImageUrl = '';
             this.personalStatement = '';
-            this.location = '';
             this.provider =  '';
-            this.providerId = '';
             this.createdOn = '';
             this.lastModifiedOn = '';
-            this.userId = '';
            }
 
 
@@ -54,7 +50,7 @@
         };
 
         this.getUserByKey = function getUserByKey(key){
-            var userRef =  new Firebase(FBURL + "/users" + '/' + key);
+            var userRef =  new Firebase(FIREBASE_URL + "/users" + '/' + key);
             var deferred = $q.defer();
             userRef.once("value", function (snapshot) {
                     deferred.resolve(snapshot);

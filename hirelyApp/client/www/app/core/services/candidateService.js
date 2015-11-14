@@ -6,9 +6,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('CandidateService', ['$q','$http','FBURL', '$firebaseObject', 'fbutil', '$firebaseArray', CandidateService]);
+        .service('CandidateService', ['$q','$http','FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseArray', CandidateService]);
 
-    function CandidateService($q, $http, FBURL, $firebaseObject, fbutil, $firebaseArray, CandidateService) {
+    function CandidateService($q, $http, FIREBASE_URL, $firebaseObject, fbutil, $firebaseArray, CandidateService) {
         var self = this;
         var profile = '';
         var candidateExperience = [];
@@ -25,7 +25,7 @@
 
 
         this.getProfile = function getProfile(userId){
-            var ref = new Firebase(FBURL);
+            var ref = new Firebase(FIREBASE_URL);
             var deferred = $q.defer();
             var profile = new Firebase.util.NormalizedCollection(
                 ref.child('users'),

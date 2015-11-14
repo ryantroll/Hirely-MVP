@@ -6,9 +6,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .factory('GeocodeService', ['$q', '$http', 'GOOGLEMAPSURL', 'FBURL', GeocodeService]);
+        .factory('GeocodeService', ['$q', '$http', 'GOOGLEMAPSURL', 'FIREBASE_URL', GeocodeService]);
 
-    function GeocodeService($q, $http, GOOGLEMAPSURL, FBURL) {
+    function GeocodeService($q, $http, GOOGLEMAPSURL, FIREBASE_URL) {
         var mapsEndPoint = GOOGLEMAPSURL;
         var currentPlace = null;
 
@@ -66,7 +66,7 @@
 
         function calculateDistancetoSite(siteId, placeId){
             var deferred = $q.defer();
-            var firebaseRef = new Firebase(FBURL + '/businessSiteLocation');
+            var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
             var geoFire = new GeoFire(firebaseRef);
             geoFire.get(siteId).then(function(siteLocation) {
                 var place = getPlacebyPlaceId((placeId)).then(function(place) {

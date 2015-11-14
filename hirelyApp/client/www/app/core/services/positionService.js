@@ -7,14 +7,14 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('PositionService', ['$q','FBURL', '$firebaseObject', 'fbutil', PositionService]);
+        .service('PositionService', ['$q','FIREBASE_URL', '$firebaseObject', 'fbutil', PositionService]);
 
-    function PositionService($q, FBURL, $firebaseObject, fbutil) {
+    function PositionService($q, FIREBASE_URL, $firebaseObject, fbutil) {
         var self = this;
         var profile;
 
         this.getOpenPositionsForLocation = function getOpenPositionsForLocation(locationId, minWage, occupationId){
-            var ref = new Firebase(FBURL);
+            var ref = new Firebase(FIREBASE_URL);
             var deferred = $q.defer();
             var positions = new Firebase.util.NormalizedCollection(
                 ref.child('position'),
@@ -54,7 +54,7 @@
         };
 
         this.getPositionbyId = function(siteId, positionId){
-            var ref = new Firebase(FBURL);
+            var ref = new Firebase(FIREBASE_URL);
             var deferred = $q.defer();
             var positions = new Firebase.util.NormalizedCollection(
                 ref.child('position'),
