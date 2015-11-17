@@ -20,7 +20,7 @@
         var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
         var geoFire = new GeoFire(firebaseRef);
 
-        function businessSiteModel(){
+        function businessSiteModel(active, type, description, name, photos){
             this.active = '';
             this.type = '';
             this.description = '';

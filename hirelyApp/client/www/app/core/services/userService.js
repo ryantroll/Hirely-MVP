@@ -9,21 +9,24 @@
 
     function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, UserService) {
         var self = this;
-        var ref = new Firebase(FIREBASE_URL + "/users");
+        var ref = new Firebase("/users");
         var currentUser;
         var currentUserId;
         var isLoggedIn = false;
 
-        function userModel(){
-            this.firstName = '';
-            this.lastName = '';
-            this.email = '';
-            this.userType = '';
-            this.profileImageUrl = '';
-            this.personalStatement = '';
-            this.provider =  '';
-            this.createdOn = '';
-            this.lastModifiedOn = '';
+        function userModel(firstName, lastName, email, userType,
+                           profileImageUrl, personalStatement,
+                           provider, createdOn, lastModifiedOn){
+
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
+            this.userType = userType;
+            this.profileImageUrl = profileImageUrl;
+            this.personalStatement = personalStatement;
+            this.provider =  provider;
+            this.createdOn = createdOn;
+            this.lastModifiedOn = lastModifiedOn;
            }
 
 
@@ -106,7 +109,6 @@
             }
 
             //check if user previously exists
-            var userExists = false;
             this.getUserByKey(authData.uid)
                 .then(function(snapshot) {
                     var exists = (snapshot.val() != null);
@@ -129,21 +131,25 @@
         this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
 
             var deferred = $q.defer();
-            var user;
+
 
             var timestamp = Firebase.ServerValue.TIMESTAMP;
-            user = new userModel();
-            user.fullName = userData.firstName + ' ' + userData.lastName;
-            user.firstName = userData.firstName;
-            user.lastName = userData.lastName;
-            user.email = userData.email;
-            user.userType = userData.userType;
-            user.provider = 'password';
-            user.providerId = providerId;
-            user.createdOn = timestamp;
-            user.lastModifiedOn = timestamp;
-            user.userId = providerId;
-            self.createUserinFirebase(user, providerId)
+
+            var firstName = userData.firstName;
+            var lastName = userData.lastName;
+            var email = userData.email;
+            var userType = userData.userType;
+            var profileImageUrl = userData.profileImageUrl;
+            var provider = 'password';
+            var createdOn = timestamp;
+            var lastModifiedOn = timestamp;
+            var personalStatement = userData.personalStatement;
+
+            var user = new userModel(firstName, lastName, email, userType,
+              profileImageUrl, personalStatement,
+              provider, createdOn, lastModifiedOn);
+
+            self.createUserinFirebase(user, providerId);
 
 
             deferred.resolve(user);
@@ -156,36 +162,62 @@
         function createFacebookUser(fbAuthData)
         {
             var timestamp = Firebase.ServerValue.TIMESTAMP;
-            var fbUser = new userModel();
-            fbUser.fullName = fbAuthData.facebook.displayName;
-            fbUser.profileImageUrl =  "http://graph.facebook.com/" + fbAuthData.facebook.id  + "/picture?width=300&height=300";
-            fbUser.email = fbAuthData.facebook.email;
-            fbUser.provider = fbAuthData.provider;
-            fbUser.providerId = fbAuthData.uid;
-            fbUser.createdOn = timestamp;
-            fbUser.lastModifiedOn = timestamp;
+            var firstName = fbAuthData.facebook.cachedUserProfile.first_name;
+            var lastName = fbAuthData.facebook.cachedUserProfile.last_name;
+            var email = fbAuthData.facebook.email;
+            var userType = '';
+            var profileImageUrl = "http://graph.facebook.com/" + fbAuthData.facebook.id  + "/picture?width=300&height=300";
+            var provider = fbAuthData.provider;
+            var createdOn = timestamp;
+            var lastModifiedOn = timestamp;
+            var personalStatement = '';
 
-            return fbUser;
+            var user = new userModel(firstName, lastName, email, userType,
+              profileImageUrl, personalStatement,
+              provider, createdOn, lastModifiedOn);
+
+
+            return user;
 
         };
 
         function createGoogleUser(googleAuthData)
         {
             var timestamp = Firebase.ServerValue.TIMESTAMP;
-            var fbUser = new userModel();
+            var firstName = googleAuthData.google.cachedUserProfile.given_name;
+            var lastName = googleAuthData.google.cachedUserProfile.family_name;
+            var email = googleAuthData.google.email;
+            var userType = '';
+            var profileImageUrl =  googleAuthData.google.profileImageURL;
+            var provider = fbAuthData.provider;
+            var createdOn = timestamp;
+            var lastModifiedOn = timestamp;
+            var personalStatement = '';
 
-            fbUser.fullName = googleAuthData.google.displayName;
-            fbUser.firstName = googleAuthData.google.cachedUserProfile.given_name;
-            fbUser.lastName = googleAuthData.google.cachedUserProfile.family_name;
-            fbUser.profileImageUrl =  googleAuthData.google.profileImageURL;
-            fbUser.email = googleAuthData.google.email ? googleAuthData.google.email: '';
-            fbUser.provider = googleAuthData.provider;
-            fbUser.providerId = googleAuthData.auth.uid;
-            fbUser.createdOn = timestamp;
-            fbUser.lastModifiedOn = timestamp;
+            var user = new userModel(firstName, lastName, email, userType,
+              profileImageUrl, personalStatement,
+              provider, createdOn, lastModifiedOn);
 
-            return fbUser;
 
+            return user;
+
+        };
+
+
+        function registerNewUser(email, password) {
+
+            var deferred = $q.defer();
+            firebaseRef.$createUser({
+                email: email,
+                password : password})
+              .then(function(user) {
+                  deferred.resolve(user);
+              }, function(err) {
+                  deferred.reject(err);
+              });
+
+
+            return deferred.promise;
         };
     }
 })();

@@ -76,8 +76,6 @@
                 }
             );
 
-
-
             var positionsRef = positions.ref().child(positionId);
 
             positionsRef.once('value', function(positionSnap) {

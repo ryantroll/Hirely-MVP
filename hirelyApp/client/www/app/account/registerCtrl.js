@@ -56,7 +56,7 @@
 
         function registerPasswordUser(registeredUser){
             //register new user
-            authService.registerNewUser(registeredUser.email, registeredUser.password)
+            userService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(user) {
                     userService.createRegisteredNewUser(registeredUser, user.uid)
                         .then(function(newUser){

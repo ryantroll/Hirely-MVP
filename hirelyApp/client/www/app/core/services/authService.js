@@ -69,21 +69,7 @@
             firebaseRef.$unauth();
         }
 
-        function registerNewUser(email, password) {
 
-            var deferred = $q.defer();
-            firebaseRef.$createUser({
-                    email: email,
-                    password : password})
-                .then(function(user) {
-                    deferred.resolve(user);
-                }, function(err) {
-                    deferred.reject(err);
-                });
-
-
-            return deferred.promise;
-        };
 
         function AuthRef(){
             return firebaseRef;
