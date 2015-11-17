@@ -14,7 +14,7 @@
         .constant('loginRedirectPath', 'app.home')
 
         // your Firebase URL goes here
-        .constant('FIREBASE_URL', 'https://shining-torch-5144.firebaseio.com')
+        .constant('FIREBASE_URL', 'https://hirely-dev.firebaseio.com')
 
         .constant('GOOGLEMAPSURL', 'https://maps.google.com/maps/api/geocode/json?latlng={POSITION}&sensor=false')
 

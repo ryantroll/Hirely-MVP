@@ -11,90 +11,53 @@
 
      function BusinessService( $q, FIREBASE_URL, $firebaseObject, fbutil, BusinessService) {
         var self = this;
-        var bpostref = new Firebase(FIREBASE_URL + '/business');
-        var businessRef = bpostref.push();
-        var rootRef = new Firebase(FIREBASE_URL + '/businessSite');
-        var businessSiteRef = rootRef.push();
-        var busId = '';
-        var siteId = '';
-        var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
-        var geoFire = new GeoFire(firebaseRef);
+        var buesinessRef = new Firebase(FIREBASE_URL + '/business');
+        var businessRefPush = buesinessRef.push();
 
-        function businessSiteModel(active, type, description, name, photos){
-            this.active = '';
-            this.type = '';
-            this.description = '';
-            this.name = '';
-            this.photos = [];
-        }
 
-       function addressObjModel(company){
-            this.city = company.locality;
-            this.formattedAddress = company.street_number;
-            this.placeId = busId;
-            this.state = company.administrative_area_level_1;
-            this.street1 = company.route;
-            this.street2 = '';
-            this.zipCode = company.postal_code;
+       //internal constructor
+        function businessModel(name, description, type, active, placeId, website, photos, children, parent, jobs, address){
+            this.name = name;
+            this.description = description;
+            this.type = type;
+            this.active = active;
+            this.placeId = placeId;
+            this.website = website;
+            this.photos = photos;
+            this.children = children;
+            this.parent = parent;
+            this.jobs = jobs;
+            this.address = address;
+
         }
 
-        function hoursObjModel(companyo, companyc){
-            this.startTime = companyo;
-            this.endTime = companyc;
-        }
-        function daysObjModel(company){
-            this.sunday = new hoursObjModel(company.open_store_hours0, company.closed_store_hours0);
-            this.monday = new hoursObjModel(company.open_store_hours1, company.closed_store_hours1);
-            this.tuesday = new hoursObjModel(company.open_store_hours2, company.closed_store_hours2);
-            this.wednesday = new hoursObjModel(company.open_store_hours3, company.closed_store_hours3);
-            this.thursday = new hoursObjModel(company.open_store_hours4, company.closed_store_hours4);
-            this.friday  = new hoursObjModel(company.open_store_hours5, company.closed_store_hours5);
-            this.saturday = new hoursObjModel(company.open_store_hours6, company.closed_store_hours6);
-        }
-        
-        function companyObjModel(){
-            this.active = '';
-            this.address = '';
-            this.currentlyHiring = '';
-            this.description = '';
-            this.hiringManagers = '';
-            this.webaddress = '';
-            this.name = '';
-            this.parentBusiness = '';
-            this.workHours = ''; 
-         
-        }
+        var onComplete = function (error) {
+          if(error){
+            console.log(error + 'storing failed');
+          } else {
+            console.log('YAY YAY YAY');
+          }
+        };
 
+        //exported to be used in Controller as: BusinessService.createNewBusiness(xx,xx)
         this.createNewBusiness = function createNewBusiness(company, userId){
-            var deferred = $q.defer();
-            var business = new businessSiteModel(); 
+          
 
-            business.active = 'true';
-            business.type = company.status;
-            business.description = company.description;
-            business.name = company.name;
-            business.photos = '';
-            businessRef.set(business);
-            busId =  businessRef.key();
-           
-            var businessSite = new companyObjModel();
-            businessSite.active = 'true';
-            businessSite.address = new addressObjModel(company);
-            businessSite.currentlyHiring = 'true';
-            businessSite.description = company.description;
-            businessSite.hiringManagers = userId;
-            businessSite.webaddress = company.webaddress;
-            businessSite.name = company.name;
-            businessSite.parentBusiness = busId;
-            businessSite.workHours = new daysObjModel(company);
-            businessSiteRef.set(businessSite);
-            siteId =  businessSiteRef.key();
+            var business = new businessModel(
+              company.name,
+              company.description,
+              company.type,
+              company.active,
+              company.placeId,
+              company.website,
+              company.photos,
+              company.children,
+              company.parent,
+              company.jobs,
+              company.address
+            );
 
-            geoFire.set(siteId, [38.6294021, -77.2796177]).then(function() {
-              console.log("Provided key has been added to GeoFire");
-            }, function(error) {
-              console.log("Error: " + error);
-            });  
+            businessRefPush.set(business, onComplete);
         }
     };
 

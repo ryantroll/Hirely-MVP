@@ -294,140 +294,6 @@ var myApp = angular.module('hirelyApp',
 })();
 
 /**
- * Created by labrina.loving on 8/16/2015.
- */
-
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.candidate', []);
-})();
-
-/**
- * Created by labrina.loving on 8/26/2015.
- **/
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
-
-
-    function CandidateCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
-        var vm = this;
-
-        $scope.user = userService.getCurrentUser();
-
-
-
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.user = args.message;
-
-
-        });
-    }
-})()
-;
-
-
-/**
- * Created by labrina.loving on 8/16/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
-
-
-    function CandidateDashboardCtrl($scope, $stateParams) {
-
-        var vm = this;
-        $scope.uiGridOptions  = {
-            data: 'recentApps',
-            columnDefs: [{
-                field: 'company'
-            }, {
-                field: 'position'
-            }, {
-                field: 'application date'
-            },
-                {
-                    field: 'current status'
-                }
-            ]
-        };
-
-        $scope.recentApps = [];
-
-        if($scope.user.Applications){
-            $scope.recentApps = $scope.user.Applications;
-        }
-
-        // Chart.js Data
-        $scope.data = [
-            {
-                value: 5,
-                color:'#FFA540',
-                highlight: '#BF7C30',
-                label: 'Review'
-            },
-            {
-                value: 2,
-                color: '#38A2D0',
-                highlight: '#5AD3D1',
-                label: 'Interview Scheduled '
-            },
-            {
-                value: 1,
-                color: '#37DB79',
-                highlight: '#FFC870',
-                label: 'Passed'
-            }
-        ];
-
-        // Chart.js Options
-        $scope.options =  {
-
-            // Sets the chart to be responsive
-            responsive: true,
-
-            //Boolean - Whether we should show a stroke on each segment
-            segmentShowStroke : true,
-
-            //String - The colour of each segment stroke
-            segmentStrokeColor : '#fff',
-
-            //Number - The width of each segment stroke
-            segmentStrokeWidth : 2,
-
-            //Number - The percentage of the chart that we cut out of the middle
-            percentageInnerCutout : 50, // This is 0 for Pie charts
-
-            //Number - Amount of animation steps
-            animationSteps : 100,
-
-            //String - Animation easing effect
-            animationEasing : 'easeOutBounce',
-
-            //Boolean - Whether we animate the rotation of the Doughnut
-            animateRotate : true,
-
-            //Boolean - Whether we animate scaling the Doughnut from the centre
-            animateScale : false,
-
-            showLegend: false
-
-          };
-
-
-
-    }
-})()
-;
-
-/**
  * Created by labrina.loving on 9/7/2015.
  */
 (function() {
@@ -471,7 +337,7 @@ var myApp = angular.module('hirelyApp',
         .constant('loginRedirectPath', 'app.home')
 
         // your Firebase URL goes here
-        .constant('FIREBASE_URL', 'https://shining-torch-5144.firebaseio.com')
+        .constant('FIREBASE_URL', 'https://hirely-dev.firebaseio.com')
 
         .constant('GOOGLEMAPSURL', 'https://maps.google.com/maps/api/geocode/json?latlng={POSITION}&sensor=false')
 
@@ -617,6 +483,140 @@ angular.module('hirelyApp.core')
  */
 
 /**
+ * Created by labrina.loving on 8/16/2015.
+ */
+
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.candidate', []);
+})();
+
+/**
+ * Created by labrina.loving on 8/26/2015.
+ **/
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
+
+
+    function CandidateCtrl($scope, $stateParams, UserService) {
+        var userService = UserService;
+        var vm = this;
+
+        $scope.user = userService.getCurrentUser();
+
+
+
+        //listen for changes to current user
+        $scope.$on('currentUserChanged', function (event, args) {
+            $scope.user = args.message;
+
+
+        });
+    }
+})()
+;
+
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
+
+
+    function CandidateDashboardCtrl($scope, $stateParams) {
+
+        var vm = this;
+        $scope.uiGridOptions  = {
+            data: 'recentApps',
+            columnDefs: [{
+                field: 'company'
+            }, {
+                field: 'position'
+            }, {
+                field: 'application date'
+            },
+                {
+                    field: 'current status'
+                }
+            ]
+        };
+
+        $scope.recentApps = [];
+
+        if($scope.user.Applications){
+            $scope.recentApps = $scope.user.Applications;
+        }
+
+        // Chart.js Data
+        $scope.data = [
+            {
+                value: 5,
+                color:'#FFA540',
+                highlight: '#BF7C30',
+                label: 'Review'
+            },
+            {
+                value: 2,
+                color: '#38A2D0',
+                highlight: '#5AD3D1',
+                label: 'Interview Scheduled '
+            },
+            {
+                value: 1,
+                color: '#37DB79',
+                highlight: '#FFC870',
+                label: 'Passed'
+            }
+        ];
+
+        // Chart.js Options
+        $scope.options =  {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke : true,
+
+            //String - The colour of each segment stroke
+            segmentStrokeColor : '#fff',
+
+            //Number - The width of each segment stroke
+            segmentStrokeWidth : 2,
+
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout : 50, // This is 0 for Pie charts
+
+            //Number - Amount of animation steps
+            animationSteps : 100,
+
+            //String - Animation easing effect
+            animationEasing : 'easeOutBounce',
+
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate : true,
+
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale : false,
+
+            showLegend: false
+
+          };
+
+
+
+    }
+})()
+;
+
+/**
  * Created by labrina.loving on 8/5/2015.
  */
 
@@ -630,9 +630,11 @@ angular.module('hirelyApp.core')
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout' ,HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout) {
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService) {
+
+
         var geocodeService = GeocodeService;
 
         $scope.flexSliderOptions = {
@@ -691,8 +693,16 @@ angular.module('hirelyApp.core')
 
         };
 
+        /**********************************************************************************
+         *
+         *  TESTING AREA - STAY AWAY!!
+         *
+        **********************************************************************************/
 
-
+        $scope.company = {
+            name: 'Hani Hanna'
+        };
+        BusinessService.createNewBusiness($scope.company, 123123123);
     }
 })();
 
@@ -1645,477 +1655,6 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
     angular.module('hirelyApp.manager', []);
 })();
 /**
- * Created by labrina.loving on 9/6/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateProfileAvailabilityCtrl', ['$scope','$state','$stateParams', 'CandidateService', CandidateProfileAvailabilityCtrl ]);
-
-
-    function CandidateProfileAvailabilityCtrl($scope, $state,$stateParams, CandidateService) {
-        var candidateService = CandidateService;
-        var schedule ={
-            "sunday": {
-                "morning": "false",
-                "afternoon": "false",
-                "evening": "false"
-            },
-            "monday": {
-                "morning": "false",
-                "afternoon": "false",
-                "evening": "false"
-            },
-            "tuesday": {
-                "morning": "false",
-                "afternoon": "false",
-                "evening": "false"
-            },
-            "wednesday": {
-                "morning": "false",
-                "afternoon": "false",
-                "evening": "false"
-            },
-            "thursday": {
-                "morning": "false",
-                "afternoon": "false",
-                "evening": "false"
-            },
-            "friday": {
-                "morning": "false",
-                "afternoon": "false",
-                "evening": "false"
-            },
-            "saturday": {
-                "morning": "false",
-                "afternoon": "false",
-                "evening": "false"
-            }
-        }
-
-        $scope.schedule = schedule;
-
-        if($scope.profile && $scope.profile.availability){
-            $scope.schedule = $scope.profile.availability;
-        }
-        $scope.saveSchedule = function() {
-            candidateService.saveAvailability($scope.schedule, $scope.user.providerId);
-            $state.go('app.candidate.dashboard');
-        }
-
-
-    }
-})()
-;
-
-
-
-
-/**
- * Created by labrina.loving on 8/28/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateProfileBasicsCtrl', ['$scope','$state','$stateParams', 'FilePickerService', 'filePickerKey','UserService', 'CandidateService', CandidateProfileBasicsCtrl ]);
-
-
-    function CandidateProfileBasicsCtrl($scope, $state,$stateParams, FilePickerService, filePickerKey, UserService, CandidateService) {
-        var userService = UserService;
-        var filePickerService = FilePickerService;
-        var candidateService = CandidateService;
-
-        var vm = this;
-        $scope.results = '';
-        $scope.options = {
-            types: '(regions)'
-        };
-        $scope.details = '';
-        $scope.candidate = {authorizedInUS: false};
-
-        if($scope.profile && $scope.profile.candidate){
-
-            $scope.candidate = $scope.profile.candidate;
-        }
-
-        filePickerService.setKey(filePickerKey);
-        $scope.pickFile = function pickFile(){
-            filePickerService.pick(
-                {
-                    mimetype: 'image/*',
-                    services: ['CONVERT', 'COMPUTER', 'FACEBOOK', 'DROPBOX', 'GOOGLE_DRIVE', 'INSTAGRAM', 'WEBCAM'],
-                    conversions: ['crop', 'rotate', 'filter']
-                },
-
-                onSuccess
-            );
-        };
-
-        function onSuccess(Blob){
-            $scope.user.profileImageUrl = Blob.url;
-            $scope.$apply();
-        };
-
-        $scope.submitProfile = function() {
-
-            userService.saveUser($scope.user);
-            candidateService.saveCandidate($scope.candidate, $scope.user.userId);
-            $state.go('app.candidate.profile.experience');
-        }
-    }
-})()
-;
-
-
-
-/**
- * Created by labrina.loving on 9/6/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateProfileCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'profile', CandidateProfileCtrl ]);
-
-
-    function CandidateProfileCtrl($scope, $state,$stateParams,CandidateService, profile) {
-
-        var candidateService = CandidateService;
-
-        $scope.profile = profile;
-
-
-    }
-})()
-;
-
-
-
-
-/**
- * Created by labrina.loving on 9/28/2015.
- */
-/**
- * Created by labrina.loving on 9/6/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateProfileExperienceCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'OccupationService', 'GeocodeService', '$timeout', CandidateProfileExperienceCtrl ]);
-
-
-    function CandidateProfileExperienceCtrl($scope, $state,$stateParams, CandidateService, OccupationService, GeocodeService, $timeout) {
-        var occupationService = OccupationService;
-        var candidateService = CandidateService;
-        var geocodeService = GeocodeService;
-        function experienceModel(){
-            this.company = {
-                place: '',
-                name: '',
-                result: '',
-            }
-            this.occupation = '';
-            this.location = {
-                place: '',
-                name: ''
-            };
-            this.startDate = '';
-            this.endDate = '';
-            this.currentlyWorking = false;
-        }
-
-        $scope.occupation = '';
-        $scope.experience = {
-        };
-
-        $scope.startDate = '';
-        $scope.endDate = ''
-        $scope.experiences = [];
-        $scope.occupations = [];
-
-        $scope.companyDetails = '';
-        $scope.companyResults = '';
-        $scope.companyOptions = {
-            types:  'establishment'
-        };
-
-        $scope.locationDetails = '';
-        $scope.locationResults = '';
-        $scope.locationOptions = {
-            types: '(regions)'
-        };
-
-        $scope.addExperience = false;
-
-
-        $scope.showExperience = function(){
-            $scope.addExperience = true;
-            $scope.experience = new experienceModel();
-        };
-
-        $scope.cancelExperience = function(){
-            clearExperience();
-
-        };
-
-        $scope.saveExperience = function(){
-            $scope.experience.startDate = $scope.startDate.toJSON();
-            if($scope.endDate){
-                $scope.experience.endDate = $scope.endDate.toJSON();
-            }
-
-            if($scope.companyResults && !$scope.experience.company.name)
-            {
-                $scope.experience.company.name = $scope.companyResults;
-            }
-
-            if($scope.experience.$id)
-            {
-                $scope.experiences.$save($scope.experience).then(function(ref){
-                    clearExperience();
-
-                });
-            }
-            else{
-                $scope.experiences.$add($scope.experience);
-                clearExperience();
-            }
-
-
-        }
-
-        $scope.companySet = function(){
-
-            if($scope.companyResults && $scope.companyDetails)
-            {
-                $scope.experience.company.place = $scope.companyDetails.id;
-                $scope.experience.company.result = $scope.companyResults;
-                $scope.experience.company.name = $scope.companyDetails.name;
-                $scope.experience.location.place = $scope.companyDetails.id;
-                var address = $scope.companyDetails.address_components;
-
-                $scope.experience.location.name = address[2].long_name + ', ' + address[3].short_name + ', ' + address[4].long_name;
-                $scope.locationResults =  $scope.experience.location.name;
-                $scope.$apply();
-            }
-
-        }
-
-        $scope.locationSet = function(){
-
-            if($scope.locationResults && $scope.locationDetails)
-            {
-                $scope.experience.location.place = $scope.locationDetails.id;
-                $scope.experience.location.name = $scope.locationResults;
-
-                $scope.$apply();
-            }
-
-        }
-        $scope.editExperience = function(key){
-            $scope.experience = $scope.experiences.$getRecord(key);
-
-            $scope.startDate = new Date($scope.experience.startDate);
-            if($scope.experience.endDate){
-                $scope.endDate = new Date($scope.experience.endDate);
-            }
-
-
-            $scope.companyResults = $scope.experience.company.result;
-
-            $scope.locationResults = $scope.experience.location.name;
-            $scope.addExperience = true;
-
-        }
-
-
-
-        $scope.deleteExperience = function(key){
-            var item = $scope.experiences.$getRecord(key);
-            if(item)
-            {
-                $scope.experiences.$remove(item).then(function(ref) {
-
-                });
-            }
-
-
-        }
-
-        //var getOccupations = function(){
-        //    occupationService.getOccupations().then(function(occupations) {
-        //        $scope.occupations = occupations;
-        //
-        //    }, function(err) {
-        //
-        //    });
-        //};
-
-        var getExperience = function() {
-              $scope.experiences = candidateService.getExperience($scope.user.userId);
-
-        }
-
-        var clearExperience = function(){
-            $scope.experienceForm.$setPristine();
-            $scope.experience = new experienceModel();
-            $scope.addExperience = false;
-            $scope.startDate = '';
-            $scope.endDate = ''
-
-            $scope.companyDetails = '';
-            $scope.companyResults = '';
-
-
-            $scope.locationDetails = '';
-            $scope.locationResults = '';
-
-        }
-        var initialize = function(){
-            //getOccupations();
-            if($scope.profile && $scope.profile.experience){
-                $scope.experiences = $scope.profile.experience;
-            }
-
-        };
-
-
-        //*** LOCATION SEARCH ***//
-
-        var locations = [];
-        $scope.selectedLocation = undefined;
-
-
-        $scope.searchLocations = function(query){
-            if(!!query && query.trim() != ''){
-                return geocodeService.getCityBySearchQuery(query).then(function(data){
-                    locations = [];
-                    if(data.statusCode == 200){
-                        data.results.predictions.forEach(function(prediction){
-                            locations.push({address: prediction.description, placeId: prediction.id});
-                        });
-                        return locations;
-                    } else {
-                        return {};
-                    }
-                });
-            }
-        };
-
-
-        var occupations = [];
-        $scope.selectedOccupation = null;
-        $scope.searchOnetOccupations = function(query){
-            if(!!query && query.trim() != ''){
-                return occupationService.getOccupations(query).then(function(data){
-                    occupations = [];
-                    if(data.statusCode == 200){
-                        data.results.forEach(function(occ){
-                            occupations.push({code: occ.code, title: occ.title});
-                        });
-                        return occupations;
-                    } else {
-                        return {};
-                    }
-                });
-            } else {
-                return {}
-            }
-        };
-
-        initialize();
-
-    }
-})()
-;
-
-/**
- * Created by labrina.loving on 9/23/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateProfilePersonalityCtrl', ['$scope','$state','$stateParams', 'CandidateService', CandidateProfilePersonalityCtrl ]);
-
-
-    function CandidateProfilePersonalityCtrl($scope, $state,$stateParams, CandidateService) {
-        var candidateService = CandidateService;
-        $scope.personality = {
-            results: '',
-            slides: '',
-            careerMatches: ''
-        };
-        var retrieveAssessment = function(){
-            var assessmentId = $scope.personality.results.id;
-            Traitify.setPublicKey("cbt6fmp5dfq4t2iqa8r28b7bp2"); // Example Public Key
-            Traitify.setHost("api-sandbox.traitify.com"); // Example host url (Defaults to api.traitify.com)
-            Traitify.setVersion("v1"); // Example Version
-            var results = Traitify.ui.load("results", assessmentId, ".results");
-            var personalityTypes = Traitify.ui.load("personalityTypes", assessmentId, ".personality-types");
-            var personalityTraits = Traitify.ui.load("personalityTraits", assessmentId, ".personality-traits");
-
-        }
-
-        var initializeAssessment = function(){
-            candidateService.createTraitifyAssessment().then(function(assessmentObj) {
-                var assessment = assessmentObj;
-                Traitify.setPublicKey("cbt6fmp5dfq4t2iqa8r28b7bp2"); // Example Public Key
-                Traitify.setHost("api-sandbox.traitify.com"); // Example host url (Defaults to api.traitify.com)
-                Traitify.setVersion("v1"); // Example Version
-                var assessmentId = assessmentObj.id; // Example Assessment id
-
-                var traitify = Traitify.ui.load(assessmentId, ".slide-deck", {
-                    results: {target: ".results"},
-                    personalityTypes: {target: ".personality-types"},
-                    personalityTraits: {target: ".personality-traits"}
-                });
-                traitify.results.onInitialize(function(results){
-                    candidateService.getAssessmentResults(assessmentId)
-                        .then(function(resultsObj) {
-                            $scope.personality.results = resultsObj;
-                            candidateService.getAssessmentSlides(assessmentId)
-                                .then(function(slidesObj) {
-                                    $scope.personality.slides = slidesObj;
-                                    candidateService.getAssessmentCareerMatches(assessmentId)
-                                        .then(function(careerMatchesObj) {
-                                            $scope.personality.careerMatches = careerMatchesObj;
-                                            candidateService.savePersonality($scope.personality, $scope.user.userId);
-                                        }, function(err) {
-
-                                        });
-                                }, function(err) {
-
-                                });
-                        }, function(err) {
-
-                        });
-
-
-
-                });
-
-            }, function(err) {
-
-            });
-
-        }
-
-        if($scope.profile && $scope.profile.personality){
-
-            $scope.personality = $scope.profile.personality;
-            retrieveAssessment();
-        }
-        else{
-            initializeAssessment();
-        }
-    }
-})()
-;
-
-
-/**
  * Created by labrina.loving on 8/9/2015.
  */
 angular.module('hirelyApp.core')
@@ -2282,90 +1821,53 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
      function BusinessService( $q, FIREBASE_URL, $firebaseObject, fbutil, BusinessService) {
         var self = this;
-        var bpostref = new Firebase(FIREBASE_URL + '/business');
-        var businessRef = bpostref.push();
-        var rootRef = new Firebase(FIREBASE_URL + '/businessSite');
-        var businessSiteRef = rootRef.push();
-        var busId = '';
-        var siteId = '';
-        var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
-        var geoFire = new GeoFire(firebaseRef);
+        var buesinessRef = new Firebase(FIREBASE_URL + '/business');
+        var businessRefPush = buesinessRef.push();
 
-        function businessSiteModel(active, type, description, name, photos){
-            this.active = '';
-            this.type = '';
-            this.description = '';
-            this.name = '';
-            this.photos = [];
-        }
 
-       function addressObjModel(company){
-            this.city = company.locality;
-            this.formattedAddress = company.street_number;
-            this.placeId = busId;
-            this.state = company.administrative_area_level_1;
-            this.street1 = company.route;
-            this.street2 = '';
-            this.zipCode = company.postal_code;
+       //internal constructor
+        function businessModel(name, description, type, active, placeId, website, photos, children, parent, jobs, address){
+            this.name = name;
+            this.description = description;
+            this.type = type;
+            this.active = active;
+            this.placeId = placeId;
+            this.website = website;
+            this.photos = photos;
+            this.children = children;
+            this.parent = parent;
+            this.jobs = jobs;
+            this.address = address;
+
         }
 
-        function hoursObjModel(companyo, companyc){
-            this.startTime = companyo;
-            this.endTime = companyc;
-        }
-        function daysObjModel(company){
-            this.sunday = new hoursObjModel(company.open_store_hours0, company.closed_store_hours0);
-            this.monday = new hoursObjModel(company.open_store_hours1, company.closed_store_hours1);
-            this.tuesday = new hoursObjModel(company.open_store_hours2, company.closed_store_hours2);
-            this.wednesday = new hoursObjModel(company.open_store_hours3, company.closed_store_hours3);
-            this.thursday = new hoursObjModel(company.open_store_hours4, company.closed_store_hours4);
-            this.friday  = new hoursObjModel(company.open_store_hours5, company.closed_store_hours5);
-            this.saturday = new hoursObjModel(company.open_store_hours6, company.closed_store_hours6);
-        }
-        
-        function companyObjModel(){
-            this.active = '';
-            this.address = '';
-            this.currentlyHiring = '';
-            this.description = '';
-            this.hiringManagers = '';
-            this.webaddress = '';
-            this.name = '';
-            this.parentBusiness = '';
-            this.workHours = ''; 
-         
-        }
+        var onComplete = function (error) {
+          if(error){
+            console.log(error + 'storing failed');
+          } else {
+            console.log('YAY YAY YAY');
+          }
+        };
 
+        //exported to be used in Controller as: BusinessService.createNewBusiness(xx,xx)
         this.createNewBusiness = function createNewBusiness(company, userId){
-            var deferred = $q.defer();
-            var business = new businessSiteModel(); 
+          
 
-            business.active = 'true';
-            business.type = company.status;
-            business.description = company.description;
-            business.name = company.name;
-            business.photos = '';
-            businessRef.set(business);
-            busId =  businessRef.key();
-           
-            var businessSite = new companyObjModel();
-            businessSite.active = 'true';
-            businessSite.address = new addressObjModel(company);
-            businessSite.currentlyHiring = 'true';
-            businessSite.description = company.description;
-            businessSite.hiringManagers = userId;
-            businessSite.webaddress = company.webaddress;
-            businessSite.name = company.name;
-            businessSite.parentBusiness = busId;
-            businessSite.workHours = new daysObjModel(company);
-            businessSiteRef.set(businessSite);
-            siteId =  businessSiteRef.key();
+            var business = new businessModel(
+              company.name,
+              company.description,
+              company.type,
+              company.active,
+              company.placeId,
+              company.website,
+              company.photos,
+              company.children,
+              company.parent,
+              company.jobs,
+              company.address
+            );
 
-            geoFire.set(siteId, [38.6294021, -77.2796177]).then(function() {
-              console.log("Provided key has been added to GeoFire");
-            }, function(error) {
-              console.log("Error: " + error);
-            });  
+            businessRefPush.set(business, onComplete);
         }
     };
 
@@ -3094,6 +2596,477 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         };
     }
 })();
+
+/**
+ * Created by labrina.loving on 9/6/2015.
+ */
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateProfileAvailabilityCtrl', ['$scope','$state','$stateParams', 'CandidateService', CandidateProfileAvailabilityCtrl ]);
+
+
+    function CandidateProfileAvailabilityCtrl($scope, $state,$stateParams, CandidateService) {
+        var candidateService = CandidateService;
+        var schedule ={
+            "sunday": {
+                "morning": "false",
+                "afternoon": "false",
+                "evening": "false"
+            },
+            "monday": {
+                "morning": "false",
+                "afternoon": "false",
+                "evening": "false"
+            },
+            "tuesday": {
+                "morning": "false",
+                "afternoon": "false",
+                "evening": "false"
+            },
+            "wednesday": {
+                "morning": "false",
+                "afternoon": "false",
+                "evening": "false"
+            },
+            "thursday": {
+                "morning": "false",
+                "afternoon": "false",
+                "evening": "false"
+            },
+            "friday": {
+                "morning": "false",
+                "afternoon": "false",
+                "evening": "false"
+            },
+            "saturday": {
+                "morning": "false",
+                "afternoon": "false",
+                "evening": "false"
+            }
+        }
+
+        $scope.schedule = schedule;
+
+        if($scope.profile && $scope.profile.availability){
+            $scope.schedule = $scope.profile.availability;
+        }
+        $scope.saveSchedule = function() {
+            candidateService.saveAvailability($scope.schedule, $scope.user.providerId);
+            $state.go('app.candidate.dashboard');
+        }
+
+
+    }
+})()
+;
+
+
+
+
+/**
+ * Created by labrina.loving on 8/28/2015.
+ */
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateProfileBasicsCtrl', ['$scope','$state','$stateParams', 'FilePickerService', 'filePickerKey','UserService', 'CandidateService', CandidateProfileBasicsCtrl ]);
+
+
+    function CandidateProfileBasicsCtrl($scope, $state,$stateParams, FilePickerService, filePickerKey, UserService, CandidateService) {
+        var userService = UserService;
+        var filePickerService = FilePickerService;
+        var candidateService = CandidateService;
+
+        var vm = this;
+        $scope.results = '';
+        $scope.options = {
+            types: '(regions)'
+        };
+        $scope.details = '';
+        $scope.candidate = {authorizedInUS: false};
+
+        if($scope.profile && $scope.profile.candidate){
+
+            $scope.candidate = $scope.profile.candidate;
+        }
+
+        filePickerService.setKey(filePickerKey);
+        $scope.pickFile = function pickFile(){
+            filePickerService.pick(
+                {
+                    mimetype: 'image/*',
+                    services: ['CONVERT', 'COMPUTER', 'FACEBOOK', 'DROPBOX', 'GOOGLE_DRIVE', 'INSTAGRAM', 'WEBCAM'],
+                    conversions: ['crop', 'rotate', 'filter']
+                },
+
+                onSuccess
+            );
+        };
+
+        function onSuccess(Blob){
+            $scope.user.profileImageUrl = Blob.url;
+            $scope.$apply();
+        };
+
+        $scope.submitProfile = function() {
+
+            userService.saveUser($scope.user);
+            candidateService.saveCandidate($scope.candidate, $scope.user.userId);
+            $state.go('app.candidate.profile.experience');
+        }
+    }
+})()
+;
+
+
+
+/**
+ * Created by labrina.loving on 9/6/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateProfileCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'profile', CandidateProfileCtrl ]);
+
+
+    function CandidateProfileCtrl($scope, $state,$stateParams,CandidateService, profile) {
+
+        var candidateService = CandidateService;
+
+        $scope.profile = profile;
+
+
+    }
+})()
+;
+
+
+
+
+/**
+ * Created by labrina.loving on 9/28/2015.
+ */
+/**
+ * Created by labrina.loving on 9/6/2015.
+ */
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateProfileExperienceCtrl', ['$scope','$state','$stateParams', 'CandidateService', 'OccupationService', 'GeocodeService', '$timeout', CandidateProfileExperienceCtrl ]);
+
+
+    function CandidateProfileExperienceCtrl($scope, $state,$stateParams, CandidateService, OccupationService, GeocodeService, $timeout) {
+        var occupationService = OccupationService;
+        var candidateService = CandidateService;
+        var geocodeService = GeocodeService;
+        function experienceModel(){
+            this.company = {
+                place: '',
+                name: '',
+                result: '',
+            }
+            this.occupation = '';
+            this.location = {
+                place: '',
+                name: ''
+            };
+            this.startDate = '';
+            this.endDate = '';
+            this.currentlyWorking = false;
+        }
+
+        $scope.occupation = '';
+        $scope.experience = {
+        };
+
+        $scope.startDate = '';
+        $scope.endDate = ''
+        $scope.experiences = [];
+        $scope.occupations = [];
+
+        $scope.companyDetails = '';
+        $scope.companyResults = '';
+        $scope.companyOptions = {
+            types:  'establishment'
+        };
+
+        $scope.locationDetails = '';
+        $scope.locationResults = '';
+        $scope.locationOptions = {
+            types: '(regions)'
+        };
+
+        $scope.addExperience = false;
+
+
+        $scope.showExperience = function(){
+            $scope.addExperience = true;
+            $scope.experience = new experienceModel();
+        };
+
+        $scope.cancelExperience = function(){
+            clearExperience();
+
+        };
+
+        $scope.saveExperience = function(){
+            $scope.experience.startDate = $scope.startDate.toJSON();
+            if($scope.endDate){
+                $scope.experience.endDate = $scope.endDate.toJSON();
+            }
+
+            if($scope.companyResults && !$scope.experience.company.name)
+            {
+                $scope.experience.company.name = $scope.companyResults;
+            }
+
+            if($scope.experience.$id)
+            {
+                $scope.experiences.$save($scope.experience).then(function(ref){
+                    clearExperience();
+
+                });
+            }
+            else{
+                $scope.experiences.$add($scope.experience);
+                clearExperience();
+            }
+
+
+        }
+
+        $scope.companySet = function(){
+
+            if($scope.companyResults && $scope.companyDetails)
+            {
+                $scope.experience.company.place = $scope.companyDetails.id;
+                $scope.experience.company.result = $scope.companyResults;
+                $scope.experience.company.name = $scope.companyDetails.name;
+                $scope.experience.location.place = $scope.companyDetails.id;
+                var address = $scope.companyDetails.address_components;
+
+                $scope.experience.location.name = address[2].long_name + ', ' + address[3].short_name + ', ' + address[4].long_name;
+                $scope.locationResults =  $scope.experience.location.name;
+                $scope.$apply();
+            }
+
+        }
+
+        $scope.locationSet = function(){
+
+            if($scope.locationResults && $scope.locationDetails)
+            {
+                $scope.experience.location.place = $scope.locationDetails.id;
+                $scope.experience.location.name = $scope.locationResults;
+
+                $scope.$apply();
+            }
+
+        }
+        $scope.editExperience = function(key){
+            $scope.experience = $scope.experiences.$getRecord(key);
+
+            $scope.startDate = new Date($scope.experience.startDate);
+            if($scope.experience.endDate){
+                $scope.endDate = new Date($scope.experience.endDate);
+            }
+
+
+            $scope.companyResults = $scope.experience.company.result;
+
+            $scope.locationResults = $scope.experience.location.name;
+            $scope.addExperience = true;
+
+        }
+
+
+
+        $scope.deleteExperience = function(key){
+            var item = $scope.experiences.$getRecord(key);
+            if(item)
+            {
+                $scope.experiences.$remove(item).then(function(ref) {
+
+                });
+            }
+
+
+        }
+
+        //var getOccupations = function(){
+        //    occupationService.getOccupations().then(function(occupations) {
+        //        $scope.occupations = occupations;
+        //
+        //    }, function(err) {
+        //
+        //    });
+        //};
+
+        var getExperience = function() {
+              $scope.experiences = candidateService.getExperience($scope.user.userId);
+
+        }
+
+        var clearExperience = function(){
+            $scope.experienceForm.$setPristine();
+            $scope.experience = new experienceModel();
+            $scope.addExperience = false;
+            $scope.startDate = '';
+            $scope.endDate = ''
+
+            $scope.companyDetails = '';
+            $scope.companyResults = '';
+
+
+            $scope.locationDetails = '';
+            $scope.locationResults = '';
+
+        }
+        var initialize = function(){
+            //getOccupations();
+            if($scope.profile && $scope.profile.experience){
+                $scope.experiences = $scope.profile.experience;
+            }
+
+        };
+
+
+        //*** LOCATION SEARCH ***//
+
+        var locations = [];
+        $scope.selectedLocation = undefined;
+
+
+        $scope.searchLocations = function(query){
+            if(!!query && query.trim() != ''){
+                return geocodeService.getCityBySearchQuery(query).then(function(data){
+                    locations = [];
+                    if(data.statusCode == 200){
+                        data.results.predictions.forEach(function(prediction){
+                            locations.push({address: prediction.description, placeId: prediction.id});
+                        });
+                        return locations;
+                    } else {
+                        return {};
+                    }
+                });
+            }
+        };
+
+
+        var occupations = [];
+        $scope.selectedOccupation = null;
+        $scope.searchOnetOccupations = function(query){
+            if(!!query && query.trim() != ''){
+                return occupationService.getOccupations(query).then(function(data){
+                    occupations = [];
+                    if(data.statusCode == 200){
+                        data.results.forEach(function(occ){
+                            occupations.push({code: occ.code, title: occ.title});
+                        });
+                        return occupations;
+                    } else {
+                        return {};
+                    }
+                });
+            } else {
+                return {}
+            }
+        };
+
+        initialize();
+
+    }
+})()
+;
+
+/**
+ * Created by labrina.loving on 9/23/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateProfilePersonalityCtrl', ['$scope','$state','$stateParams', 'CandidateService', CandidateProfilePersonalityCtrl ]);
+
+
+    function CandidateProfilePersonalityCtrl($scope, $state,$stateParams, CandidateService) {
+        var candidateService = CandidateService;
+        $scope.personality = {
+            results: '',
+            slides: '',
+            careerMatches: ''
+        };
+        var retrieveAssessment = function(){
+            var assessmentId = $scope.personality.results.id;
+            Traitify.setPublicKey("cbt6fmp5dfq4t2iqa8r28b7bp2"); // Example Public Key
+            Traitify.setHost("api-sandbox.traitify.com"); // Example host url (Defaults to api.traitify.com)
+            Traitify.setVersion("v1"); // Example Version
+            var results = Traitify.ui.load("results", assessmentId, ".results");
+            var personalityTypes = Traitify.ui.load("personalityTypes", assessmentId, ".personality-types");
+            var personalityTraits = Traitify.ui.load("personalityTraits", assessmentId, ".personality-traits");
+
+        }
+
+        var initializeAssessment = function(){
+            candidateService.createTraitifyAssessment().then(function(assessmentObj) {
+                var assessment = assessmentObj;
+                Traitify.setPublicKey("cbt6fmp5dfq4t2iqa8r28b7bp2"); // Example Public Key
+                Traitify.setHost("api-sandbox.traitify.com"); // Example host url (Defaults to api.traitify.com)
+                Traitify.setVersion("v1"); // Example Version
+                var assessmentId = assessmentObj.id; // Example Assessment id
+
+                var traitify = Traitify.ui.load(assessmentId, ".slide-deck", {
+                    results: {target: ".results"},
+                    personalityTypes: {target: ".personality-types"},
+                    personalityTraits: {target: ".personality-traits"}
+                });
+                traitify.results.onInitialize(function(results){
+                    candidateService.getAssessmentResults(assessmentId)
+                        .then(function(resultsObj) {
+                            $scope.personality.results = resultsObj;
+                            candidateService.getAssessmentSlides(assessmentId)
+                                .then(function(slidesObj) {
+                                    $scope.personality.slides = slidesObj;
+                                    candidateService.getAssessmentCareerMatches(assessmentId)
+                                        .then(function(careerMatchesObj) {
+                                            $scope.personality.careerMatches = careerMatchesObj;
+                                            candidateService.savePersonality($scope.personality, $scope.user.userId);
+                                        }, function(err) {
+
+                                        });
+                                }, function(err) {
+
+                                });
+                        }, function(err) {
+
+                        });
+
+
+
+                });
+
+            }, function(err) {
+
+            });
+
+        }
+
+        if($scope.profile && $scope.profile.personality){
+
+            $scope.personality = $scope.profile.personality;
+            retrieveAssessment();
+        }
+        else{
+            initializeAssessment();
+        }
+    }
+})()
+;
+
 
  /**
  * Created by labrina.loving on 8/10/2015.

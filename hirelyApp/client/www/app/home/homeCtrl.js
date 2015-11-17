@@ -1,9 +1,11 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout' ,HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout) {
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService) {
+
+
         var geocodeService = GeocodeService;
 
         $scope.flexSliderOptions = {
@@ -62,7 +64,15 @@
 
         };
 
+        /**********************************************************************************
+         *
+         *  TESTING AREA - STAY AWAY!!
+         *
+        **********************************************************************************/
 
-
+        $scope.company = {
+            name: 'Hani Hanna'
+        };
+        BusinessService.createNewBusiness($scope.company, 123123123);
     }
 })();
