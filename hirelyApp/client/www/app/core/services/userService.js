@@ -204,7 +204,7 @@
         };
 
 
-        function registerNewUser(email, password) {
+        this.registerNewUser = function(email, password) {
 
             var deferred = $q.defer();
             firebaseRef.$createUser({
