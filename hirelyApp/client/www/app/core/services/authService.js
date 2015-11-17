@@ -14,7 +14,6 @@
         var service =  {
             thirdPartyLogin: thirdPartyLogin,
             AuthRef: AuthRef,
-            registerNewUser: registerNewUser,
             passwordLogin: passwordLogin,
             logout: logout
         };

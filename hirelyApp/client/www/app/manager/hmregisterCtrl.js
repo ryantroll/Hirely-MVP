@@ -72,7 +72,7 @@
 
         function registerPasswordHM(registeredUser, newbusinessObj){
             //register new hiring manager
-            authService.registerNewUser(registeredUser.email, registeredUser.password)
+            userService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(manager) {
                     userService.createRegisteredNewUser(registeredUser, manager.uid)
                         .then(function(newUser){

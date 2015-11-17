@@ -1,29 +1,24 @@
 /* ======= Base ======= */
 
 body {
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: @text-color;
-=======
-    font-family: 'Open Sans', Arial, sans-serif;
-    color: $text-color;
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: 'Open Sans', Arial, sans-serif;
+  color: $text-color;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html, body {
-    height: 100%;
+  height: 100%;
 }
 
 .wrapper {
   min-height: 100%;
-
+  margin-bottom: 100px; /* equal to footer height */
   &:after {
     content: "";
     display: block;
-
+    height: 100px; /* must be the same height as footer */
   }
 }
 
@@ -32,44 +27,37 @@ html, body {
 }
 
 h1, h2, h3, h4, h5, h6  {
-    font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: bold;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-weight: bold;
 }
 
 p {
-    color: $text-color;
-    font-size: 16px;
+  color: $text-color;
+  font-size: 16px;
 }
 
-.btn{
-  border-radius: 0;
-}
+
 a {
-    color: $color;
-    @include transition(all 0.4s ease-in-out);
-    &:hover {
-        text-decoration: none;
-        color: darken($color, 15%);
-    }
-    &:focus {
-        text-decoration: none;
-    }
+  color: $color;
+  @include transition(all 0.4s ease-in-out);
+  &:hover {
+    text-decoration: none;
+    color: darken($color, 15%);
+  }
+  &:focus {
+    text-decoration: none;
+  }
 }
 
 
 .btn, a.btn {
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-    .transition (all 0.4s ease-in-out);
-    font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif;
-=======
-    @include transition(all 0.4s ease-in-out);
-    font-family: 'Open Sans', Arial, sans-serif;
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
-    padding: 8px 16px;
-    .fa {
-        color: #fff;
-        margin-right: 5px;
-    }
+  @include transition(all 0.4s ease-in-out);
+  font-family: 'Open Sans', Arial, sans-serif;
+  padding: 8px 16px;
+  .fa {
+    color: #fff;
+    margin-right: 5px;
+  }
 
 }
 .btn:focus{
@@ -77,33 +65,33 @@ a {
 }
 
 a.btn-cta-primary, .btn-cta-primary {
-    background: $color;
-    border: 2px solid $color;
+  background: $color;
+  border: 2px solid $color;
+  color: #fff;
+  text-transform: uppercase;
+  &:hover {
+    background: darken($color, 10%);
+    border: 2px solid darken($color, 10%);
     color: #fff;
-    text-transform: uppercase;
-    &:hover {
-        background: darken($color, 10%);
-        border: 2px solid darken($color, 10%);
-        color: #fff;
-    }
+  }
 }
 
 a.btn-cta-secondary,  .btn-cta-secondary {
-    background: #fff;
-    border: 2px solid $color;
+  background: #fff;
+  border: 2px solid $color;
+  color: $color;
+  .fa {
+    margin-left: 5px;
     color: $color;
+  }
+  &:hover {
+    background: #fff;
+    border: 2px solid darken($color, 10%);
+    color: darken($color, 10%);
     .fa {
-        margin-left: 5px;
-        color: $color;
+      color: darken($color, 10%);
     }
-    &:hover {
-        background: #fff;
-        border: 2px solid darken($color, 10%);
-        color: darken($color, 10%);
-        .fa {
-            color: darken($color, 10%);
-        }
-    }
+  }
 
 }
 
@@ -112,7 +100,7 @@ a.btn-cta, .btn-cta {
   border: 2px solid $color;
   color: #fff;
   text-transform: uppercase;
-  font-weight: bold;
+  margin-left: 15px;
   &:hover {
     background: darken($color, 5%);
     border: 2px solid darken($color, 5%);
@@ -135,42 +123,42 @@ a.btn-cta-blue, .btn-cta-blue {
   }
 }
 .form-control {
-   @include box-shadow(none);
-    height: 40px;
-    border-color: lighten($light-grey, 5%);
-    &:focus {
-        border-color: $color;
-        @include box-shadow(none);
-    }
+  @include box-shadow(none);
+  height: 40px;
+  border-color: lighten($light-grey, 5%);
+  &:focus {
+    border-color: $color;
+    @include box-shadow(none);
+  }
 }
 
 
 blockquote {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .text-highlight {
-    color: darken($color, 30%);
+  color: darken($color, 30%);
 }
 
 #topcontrol {
-    background: lighten($color, 10%);
-    color: #fff;
-    text-align: center;
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    border: none;
-    @include border-radius(2px);
-    @include transition(all 0.4s ease-in-out);
-    &:hover {
-        background: $color;
-    }
-    .fa {
-        position: relative;
-        top: 3px;
-        font-size: 25px;
-    }
+  background: lighten($color, 10%);
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border: none;
+  @include border-radius(2px);
+  @include transition(all 0.4s ease-in-out);
+  &:hover {
+    background: $color;
+  }
+  .fa {
+    position: relative;
+    top: 3px;
+    font-size: 25px;
+  }
 }
 
 input[type="text"],
@@ -180,21 +168,21 @@ input[type="submit"],
 input[type="button"],
 textarea,
 select {
-    appearance: none;  /* for mobile safari */
-    -webkit-appearance: none;
+  appearance: none;  /* for mobile safari */
+  -webkit-appearance: none;
 }
 
 ::-webkit-input-placeholder { /* WebKit browsers */
-    color: $light-grey;
+  color: $light-grey;
 }
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: $light-grey;
+  color: $light-grey;
 }
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: $light-grey;
+  color: $light-grey;
 }
 :-ms-input-placeholder { /* Internet Explorer 10+ */
-    color: $light-grey;
+  color: $light-grey;
 }
 
 .delayp1 {
@@ -326,482 +314,471 @@ select {
 /* ======= Header ======= */
 
 .header {
-    padding: 15px 0;
-    background: #fff;
-    z-index: 888;
-    @include box-shadow(0 0 4px rgba(0,0,0,0.5));
-    &.navbar-fixed-top {
-        border: none;
-        .main-nav .navbar-collapse {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
+  padding: 15px 0;
+  background: #fff;
+  z-index: 888;
+  @include box-shadow(0 0 4px rgba(0,0,0,0.5));
+  &.navbar-fixed-top {
+    border: none;
+    .main-nav .navbar-collapse {
+      padding-left: 15px;
+      padding-right: 15px;
     }
+  }
   .container{
     width: 100%;
 
   }
 
-    .main-nav {
-        .navbar-toggle {
-            margin-right: 0;
-            background: darken($color, 10%);
-            color: #fff !important;
-            @include border-radius(4px);
-            &:focus {
-                outline: none;
-            }
-            &:hover {
-                background: $color;
+  .main-nav {
+    .navbar-toggle {
+      margin-right: 0;
+      background: darken($color, 10%);
+      color: #fff !important;
+      @include border-radius(4px);
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        background: $color;
 
-            }
-            .icon-bar {
-                background-color: #fff;
-            }
+      }
+      .icon-bar {
+        background-color: #fff;
+      }
 
-        }
+    }
 
-        .nav {
-          .sign-in-divider {
-            float: left;
-            height: 20px;
-            width: 1px;
-            background: #e5e5e5;
-            margin: 0px 32px 0 0;
+    .nav {
+      .sign-in-divider {
+        float: left;
+        height: 20px;
+        width: 1px;
+        background: #e5e5e5;
+        margin: 0px 32px 0 0;
+      }
+
+      .nav-item {
+        font-weight: normal;
+        text-transform: uppercase;
+        font-size: 14px;
+        margin-right: 10px;
+        .btn-link {
+          background: none;
+          color: $text-color-secondary !important;
+          font-weight: 400;
+          text-transform:uppercase;
+          font-family: 'Open Sans', Arial, sans-serif !important;
+          font-size: 14px;
+          line-height: 20px;
+          padding: 10px 15px;
+          border: none;
+          text-decoration:none;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          &:focus {
+            outline: none;
           }
-
-            .nav-item {
-                font-weight: normal;
-                text-transform: uppercase;
-                font-size: 14px;
-                margin-right: 10px;
-                .btn-link {
-                    background: none;
-                    color: $text-color-secondary !important;
-                    font-weight: 400;
-                    text-transform:uppercase;
-                    font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-                    font-size: 14px;
-                    line-height: 20px;
-                    padding: 10px 15px;
-                    border: none;
-                    text-decoration:none;
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale;
-                    &:focus {
-                        outline: none;
-                    }
-                    &:hover {
-                        color: $color !important;
-                    }
-                }
-
-                &.active {
-                    a {
-                        color: darken($color, 10%);
-                        background: none;
-                        font-weight: bold;
-                    }
-                }
-                &.nav-item-cta {
-                    .btn-cta-primary {
-                        @include transition(all 0.4s ease-in-out);
-                        padding: 6px 12px;
-                        color: #fff;
-                        font-weight: 300;
-                        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                        margin-top: 2px;
-                        background:$color;
-                        &:hover {
-                            background: darken($color, 10%);
-                            border: 2px solid darken($color, 10%);
-                            color: #fff;
-                        }
-                    }
-                }
-                a {
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-                    color: @text-color;
-                    font-weight: bold;
-                    .transition (none);
-=======
-                    color: $text-color-secondary;
-                    @include transition(none);
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
-                    &:hover {
-                        color: $color;
-                        background: none;
-                    }
-                    &:focus {
-                        outline: none;
-                        background: none;
-                    }
-                    &:active {
-                        outline: none;
-                        background: none;
-                    }
-                }
-                &.active {
-                    color: $color;
-                }
-                &.last {
-                    margin-right: 0;
-                }
-
-
-            }
-
-            .open {
-                &>a {
-                    background: none;
-                }
-              i{
-                padding-right: 10px;
-              }
-            }
-            .dropdown-menu {
-                @include border-radius(4px);
-                border: 1px solid $smoky-white;
-                border-top: 3px solid $color;
-                margin: 0;
-                text-transform: none;
-                min-width: 180px;
-
-                a {
-                    border-bottom: 1px dotted $smoky-white;
-                    padding: 8px 20px;
-                    color: $text-color;
-                    @include opacity(1);
-
-                    &:hover {
-                        background: #fff;
-                        color: $color;
-                    }
-                }
-
-                &:before {
-                    content: "";
-                    display: block;
-                    width: 0;
-                    height: 0;
-                    border-left: 10px solid transparent;
-                    border-right: 10px solid transparent;
-                    border-bottom: 10px solid $color;
-                    position: absolute;
-                    right: 30px;
-                    top: -10px;
-                }
-
-            }
-
+          &:hover {
+            color: $color !important;
+          }
         }
-    }
-    .img-circle{
-      float: left;
-      margin-top: -8px;
-      margin-right: 7px;
-      height: 38px;
-      display: inline-block;
-      width: 38px;
-      vertical-align: top;
-      border: 2px solid #666666;
+
+        &.active {
+          a {
+            color: darken($color, 10%);
+            background: none;
+            font-weight: bold;
+          }
+        }
+        &.nav-item-cta {
+          .btn-cta-primary {
+            @include transition(all 0.4s ease-in-out);
+            padding: 6px 12px;
+            color: #fff;
+            font-weight: 300;
+            font-family:'Open Sans', Arial, sans-serif;
+            margin-top: 2px;
+            background:$color;
+            &:hover {
+              background: darken($color, 10%);
+              border: 2px solid darken($color, 10%);
+              color: #fff;
+            }
+          }
+        }
+        a {
+          color: $text-color-secondary;
+          @include transition(none);
+          &:hover {
+            color: $color;
+            background: none;
+          }
+          &:focus {
+            outline: none;
+            background: none;
+          }
+          &:active {
+            outline: none;
+            background: none;
+          }
+        }
+        &.active {
+          color: $color;
+        }
+        &.last {
+          margin-right: 0;
+        }
+
+
+      }
+
+      .open {
+        &>a {
+          background: none;
+        }
+        i{
+          padding-right: 10px;
+        }
+      }
+      .dropdown-menu {
+        @include border-radius(4px);
+        border: 1px solid $smoky-white;
+        border-top: 3px solid $color;
+        margin: 0;
+        text-transform: none;
+        min-width: 180px;
+
+        a {
+          border-bottom: 1px dotted $smoky-white;
+          padding: 8px 20px;
+          color: $text-color;
+          @include opacity(1);
+
+          &:hover {
+            background: #fff;
+            color: $color;
+          }
+        }
+
+        &:before {
+          content: "";
+          display: block;
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid $color;
+          position: absolute;
+          right: 30px;
+          top: -10px;
+        }
+
+      }
 
     }
+  }
+  .img-circle{
+    float: left;
+    margin-top: -8px;
+    margin-right: 7px;
+    height: 38px;
+    display: inline-block;
+    width: 38px;
+    vertical-align: top;
+    border: 2px solid #666666;
+
+  }
 }
 
 /* ======= Footer ======= */
 
 .footer {
-    background: $darker-grey;
-    color: #fff;
-    padding: 15px 0;
+  background: $darker-grey;
+  color: #fff;
+  padding: 15px 0;
 
-    .footer-col {
-        &.about {
-            .more {
-                .fa {
-                    margin-left: 5px;
-                    position: relative;
-                    top: 1px;
-                }
-            }
+  .footer-col {
+    &.about {
+      .more {
+        .fa {
+          margin-left: 5px;
+          position: relative;
+          top: 1px;
         }
-        &.links {
-            .fa {
-                margin-right: 5px;
-            }
-            li {
-                margin-bottom: 10px;
-            }
-        }
-        &.contact {
-            p {
-                color: darken($color, 25%);
-            }
-            .fa {
-                margin-right: 10px;
-                color: darken($color, 25%);
-            }
-        }
+      }
+    }
+    &.links {
+      .fa {
+        margin-right: 5px;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+    }
+    &.contact {
+      p {
+        color: darken($color, 25%);
+      }
+      .fa {
+        margin-right: 10px;
+        color: darken($color, 25%);
+      }
+    }
 
-        .title {
-            color: darken($color, 10%);
-            font-weight: normal;
-            font-size: 18px;
-        }
-        p {
-            color: #fff;
-        }
+    .title {
+      color: darken($color, 10%);
+      font-weight: normal;
+      font-size: 18px;
+    }
+    p {
+      color: #fff;
+    }
+    a {
+      color: darken($color, 25%);
+      &:hover {
+        color: darken($color, 40%);
+      }
+    }
+  }
+
+
+  .bottom-bar {
+    background: $text-color;
+    color: lighten($grey, 10%);
+    font-size: 14px;
+    padding: 10px 0;
+    margin-top: 30px;
+    .copyright {
+      line-height: 1.6;
+    }
+
+    .social {
+      margin-bottom: 0;
+      text-align: right;
+      li {
+        margin-left: 10px;
+        float: right;
+        text-align: right;
         a {
-            color: darken($color, 25%);
-            &:hover {
-                color: darken($color, 40%);
+          .fa {
+            color: lighten($grey, 10%);
+            font-size: 20px;
+          }
+          &:hover {
+            .fa {
+              color: $color;
             }
+          }
         }
+      }
     }
-
-
-    .bottom-bar {
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-        background: lighten(@darker-grey, 5%);
-        color: lighten(@grey, 10%);
-=======
-        background: $text-color;
-        color: lighten($grey, 10%);
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
-        font-size: 14px;
-        padding: 10px 0;
-        margin-top: 30px;
-        .copyright {
-            line-height: 1.6;
-        }
-
-        .social {
-            margin-bottom: 0;
-            text-align: right;
-            li {
-                margin-left: 10px;
-                float: right;
-                text-align: right;
-                a {
-                    .fa {
-                        color: lighten($grey, 10%);
-                        font-size: 20px;
-                    }
-                    &:hover {
-                        .fa {
-                            color: $color;
-                        }
-                    }
-                }
-            }
-        }
-    }
+  }
 
 }
 
 
 /* ======= Modal ======= */
 &.modal-login, &.modal-signup, &.modal-resetpass {
-        .modal-dialog {
-            width: 460px;
-            margin: 30px auto;
-        }
-        .modal-header {
-            border: none;
-            padding: 15px;
-            .modal-title {
-                margin-top: 15px;
-                margin-bottom: 15px;
-            }
-        }
-        .modal-body {
-            padding: 30px;
-            padding-top: 0;
-            .intro {
-                color: $text-color-secondary;
-                margin-bottom: 30px;
-             z-index: 20;   
-          }
-          .modal-backdrop{
-              z-index: 100000;
-          }
-        }
-        .modal-footer {
-            padding: 30px;
-            background: $smoky-white;
-            @include border-radiuses(0, 4px, 4px, 0);
-            text-align: center;
-
-            p {
-                color: $text-color-secondary;
-                font-size: 14px;
-                margin-bottom: 0;
-            }
-
-        }
-        .form-group {
-            position: relative;
-            &.email {
-                &:before {
-                    content: "\f007";
-                    font-family: FontAwesome;
-                    font-style: normal;
-                    font-weight: normal;
-                    line-height: 1;
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale;
-                    position: absolute;
-                    left: 10px;
-                    top: 12px;
-                    color: $grey;
-                }
-            }
-            &.password {
-                &:before {
-                    content: "\f023";
-                    font-family: FontAwesome;
-                    font-style: normal;
-                    font-weight: normal;
-                    line-height: 1;
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale;
-                    position: absolute;
-                    left: 10px;
-                    top: 12px;
-                    color: $grey;
-                }
-            }
-        }
-        .form-control {
-            font-size: 16px;
-            padding-left: 30px;
-        }
-        .social-login {
-
-            li {
-                margin-bottom: 10px;
-                .btn {
-                    color: #fff;
-                    &:hover {
-                        color: #fff;
-                    }
-                }
-                .btn .fa{
-                    font-size: 18px;
-                    position: relative;
-                    top: 2px;
-                    margin-right: 10px;
-                }
-            }
-            margin-bottom: 15px;
-        }
-        .twitter-btn {
-            background: $twitter;
-            &:hover {
-                background: darken($twitter, 10%);
-            }
-        }
-        .facebook-btn {
-            background: $facebook;
-             &:hover {
-                background: darken($facebook, 10%);
-            }
-        }
-        .google-btn {
-            background: $google;
-             &:hover {
-                background: darken($google, 10%);
-            }
-        }
-        .forgot-password {
-            font-size: 13px;
-            margin-top: 10px;
-            a {
-                color: $grey;
-                &:hover {
-                    text-decoration: underline;
-                    color: $color;
-                }
-            }
-        }
-        .divider {
-            text-align: center;
-            position: relative;
-            margin-bottom: 30px;
-            color: $grey;
-            text-transform: uppercase;
-            span {
-                background: #fff;
-                display: inline-block;
-                padding: 0 10px;
-                position: relative;
-            }
-            &:before {
-                content: "";
-                position: absolute;
-                left: 0;
-                top: 12px;
-                background: lighten($grey, 30%);
-                height: 1px;
-                width: 100%;
-            }
-
-        }
-        .note {
-            color: $grey;
-            font-size: 13px;
-            margin-bottom: 30px;
-        }
-        .btn+.note {
-            margin: 15px 0;
-        }
-        .remember  {
-            label {
-                font-size: 14px;
-                color: $text-color-secondary;
-            }
-
-        }
+  .modal-dialog {
+    width: 460px;
+    margin: 30px auto;
+  }
+  .modal-header {
+    border: none;
+    padding: 15px;
+    .modal-title {
+      margin-top: 15px;
+      margin-bottom: 15px;
     }
+  }
+  .modal-body {
+    padding: 30px;
+    padding-top: 0;
+    .intro {
+      color: $text-color-secondary;
+      margin-bottom: 30px;
+      z-index: 20;
+    }
+    .modal-backdrop{
+      z-index: 100000;
+    }
+  }
+  .modal-footer {
+    padding: 30px;
+    background: $smoky-white;
+    @include border-radiuses(0, 4px, 4px, 0);
+    text-align: center;
+
+    p {
+      color: $text-color-secondary;
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+
+  }
+  .form-group {
+    position: relative;
+    &.email {
+      &:before {
+        content: "\f007";
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        position: absolute;
+        left: 10px;
+        top: 12px;
+        color: $grey;
+      }
+    }
+    &.password {
+      &:before {
+        content: "\f023";
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        position: absolute;
+        left: 10px;
+        top: 12px;
+        color: $grey;
+      }
+    }
+  }
+  .form-control {
+    font-size: 16px;
+    padding-left: 30px;
+  }
+  .social-login {
+
+    li {
+      margin-bottom: 10px;
+      .btn {
+        color: #fff;
+        &:hover {
+          color: #fff;
+        }
+      }
+      .btn .fa{
+        font-size: 18px;
+        position: relative;
+        top: 2px;
+        margin-right: 10px;
+      }
+    }
+    margin-bottom: 15px;
+  }
+  .twitter-btn {
+    background: $twitter;
+    &:hover {
+      background: darken($twitter, 10%);
+    }
+  }
+  .facebook-btn {
+    background: $facebook;
+    &:hover {
+      background: darken($facebook, 10%);
+    }
+  }
+  .google-btn {
+    background: $google;
+    &:hover {
+      background: darken($google, 10%);
+    }
+  }
+  .forgot-password {
+    font-size: 13px;
+    margin-top: 10px;
+    a {
+      color: $grey;
+      &:hover {
+        text-decoration: underline;
+        color: $color;
+      }
+    }
+  }
+  .divider {
+    text-align: center;
+    position: relative;
+    margin-bottom: 30px;
+    color: $grey;
+    text-transform: uppercase;
+    span {
+      background: #fff;
+      display: inline-block;
+      padding: 0 10px;
+      position: relative;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      background: lighten($grey, 30%);
+      height: 1px;
+      width: 100%;
+    }
+
+  }
+  .note {
+    color: $grey;
+    font-size: 13px;
+    margin-bottom: 30px;
+  }
+  .btn+.note {
+    margin: 15px 0;
+  }
+  .remember  {
+    label {
+      font-size: 14px;
+      color: $text-color-secondary;
+    }
+
+  }
+}
 
 
 
 /* ======= Pagination ======= */
 .pagination {
-    margin-bottom: 60px;
-    li {
-        a {
-            @include border-radius(50%);
-            border: none;
-            margin-right: 5px;
-            color: $color;
-            &:hover {
-                color: darken($color, 25%);
-            }
-        }
+  margin-bottom: 60px;
+  li {
+    a {
+      @include border-radius(50%);
+      border: none;
+      margin-right: 5px;
+      color: $color;
+      &:hover {
+        color: darken($color, 25%);
+      }
     }
+  }
 }
 
 .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
-    background-color: $color;
-    border:none;
+  background-color: $color;
+  border:none;
 }
 
 .pagination>li>a:hover, .pagination>li>span:hover, .pagination>li>a:focus, .pagination>li>span:focus  {
-    background-color: lighten($color, 30%);
-    border:none;
+  background-color: lighten($color, 30%);
+  border:none;
 }
 
 .pagination>li:first-child>a, .pagination>li:first-child>span, .pagination>li:last-child>a, .pagination>li:last-child>span {
-    @include border-radius(50%);
-    background:none;
+  @include border-radius(50%);
+  background:none;
 }
 
 /* ======= Promo Section ======= */
 
 .promo {
-    position: relative;
+  position: relative;
   min-height: 620px;
 
   .promo-container{
@@ -812,12 +789,8 @@ select {
     width: 100%;
     top: 0;
     left: 0;
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-    height: 620px;
-=======
     height: 100%;
     background: #fff;
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
   }
   .bg-slider-wrapper .flexslider {
     margin: 0;
@@ -839,39 +812,23 @@ select {
     height:100%;
   }
   .bg-slider-wrapper .flexslider .slide.slide-1 {
-    background: linear-gradient(
-            rgba(0,0,0, 0.35),
-            rgba(0,0,0, 0.35)
-    ), url('../img/banners/barista_male.jpg')  no-repeat 50% top;
+    background: #ffffff url('../img/banners/barista_male.jpg') no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-2 {
-    background:   linear-gradient(
-            rgba(0,0,0, 0.45),
-            rgba(0,0,0, 0.45)
-    ),  url('../img/banners/barber.jpg')  no-repeat 50% top;
+    background: #ffffff url('../img/banners/barber.jpg') no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-3 {
-    background:linear-gradient(
-            rgba(0,0,0, 0.45),
-            rgba(0,0,0, 0.45)
-    ),   url('../img/banners/bartender.jpg');
-
+    background: #ffffff url('../img/banners/bartender.jpg') no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-4 {
-    background: linear-gradient(
-            rgba(0,0,0, 0.45),
-            rgba(0,0,0, 0.45)
-    ),  url('../img/banners/restaurant.jpg')  no-repeat 50% top;
+    background: #ffffff url('../img/banners/restaurant.jpg') no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .slide.slide-5 {
-    background: linear-gradient(
-            rgba(0,0,0, 0.45),
-            rgba(0,0,0, 0.45)
-    ),  url('../img/banners/barista_female.jpg')  no-repeat 50% top;
+    background: #ffffff url('../img/banners/barista_female.jpg') no-repeat 50% top;
     background-size: cover;
   }
   .bg-slider-wrapper .flexslider .flex-control-nav {
@@ -889,11 +846,6 @@ select {
     display: table-cell;
     vertical-align: middle;
     position: relative;
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-    width: 100%;
-    padding-top: 280px;
-=======
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
     text-align: center;
     z-index: 100;
 
@@ -902,14 +854,6 @@ select {
       text-transform: uppercase;
       color: #fff;
     }
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-    h4{
-      color: #fff;
-    }
-    #Autocomplete{
-      width: 100%;
-      font-size: 18px;
-=======
     h5{
       color: #fff;
       font-weight: 300;
@@ -917,7 +861,6 @@ select {
     }
     .btn-cta{
       border: none !important;
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
     }
     .search-form {
       .form-group{
@@ -929,9 +872,6 @@ select {
         width: inherit;
       }
 
-<<<<<<< HEAD:hirelyApp/client/www/css/base.less
-
-=======
       .btn-search{
         width: 80px;
         height: 40px;
@@ -976,59 +916,59 @@ select {
       font-size: 20px;
     }
     @media (min-width: $screen-lg-min){
-        h2{
-          font-size:60px;
-          margin: 0px 0px 15px 0px !important;
-        }
-        h5{
-          font-size: 30px;
-          margin: 0px 0px 35px 0px !important;
-        }
-        .txt-search{
-          width:625px !important;
-          height: 60px;
-          font-size: 22px !important;
-          font-weight: 300 !important;
-        }
+      h2{
+        font-size:60px;
+        margin: 0px 0px 15px 0px !important;
+      }
+      h5{
+        font-size: 30px;
+        margin: 0px 0px 35px 0px !important;
+      }
+      .txt-search{
+        width:625px !important;
+        height: 60px;
+        font-size: 22px !important;
+        font-weight: 300 !important;
+      }
+      ul.dropdown-menu{
+        width:625px !important;
+      }
+      .btn-search{
+        height: 60px !important;
+        width: 110px !important;
+      }
+      .btn-search-inner{
+        background-size: 26px !important;
+        width: 26px !important;
+        height: 38px !important;
+      }
+      .search-form {
         ul.dropdown-menu{
-          width:625px !important;
-        }
-        .btn-search{
-          height: 60px !important;
-          width: 110px !important;
-        }
-        .btn-search-inner{
-          background-size: 26px !important;
-          width: 26px !important;
-          height: 38px !important;
-        }
-        .search-form {
-          ul.dropdown-menu{
-            a{
-              font-size: 18px;
-              padding: 6px 12px;
-            }
+          a{
+            font-size: 18px;
+            padding: 6px 12px;
           }
+        }
 
-          .spinner{
-            position: absolute;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-            top:50%;
-            margin-top: -12px;
-          }
-          .fa{
-            color: #FFA51F;
-            position: absolute;
-            right: 10px;
-            width: 25px;
-            height: 25px;
-            top:50%;
-            margin-top: -12px;
-            font-size: 24px;
-          }
+        .spinner{
+          position: absolute;
+          right: 10px;
+          width: 24px;
+          height: 24px;
+          top:50%;
+          margin-top: -12px;
         }
+        .fa{
+          color: #FFA51F;
+          position: absolute;
+          right: 10px;
+          width: 25px;
+          height: 25px;
+          top:50%;
+          margin-top: -12px;
+          font-size: 24px;
+        }
+      }
     }
 
     @media (min-width: $screen-md-min) and  (max-width: $screen-md-max){
@@ -1104,7 +1044,6 @@ select {
       br.display-xs{
         display: block;
       }
->>>>>>> ui-homepage:hirelyApp/client/www/css/theme/_base.scss
     }
 
   }
@@ -1481,6 +1420,5 @@ select {
       }
     }
   }
-  
-}
 
+}

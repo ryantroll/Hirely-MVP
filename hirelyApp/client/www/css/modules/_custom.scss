@@ -21,52 +21,8 @@
 }
 
 .search-form{
-  .search-row{
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
-    .search-col{
-      padding: 0;
-      position: relative;
-      i{
-        color: @grey;
-        font-size: 18px;
-        left: 8px;
-        position: absolute;
-        top: 16px;
-        padding-left: 5px;
-      }
-      .search-location{
-        border-radius: 3px 0 0 3px;
-        padding-left: 40px;
-        border-right: solid 1px #ddd!important;
-      }
-      .search-icon{
-        color: #fff;
-      }
-
-      .btn-search{
-        border: 0;
-        margin: 0;
-        font-size: 16px;
-        height: 48px;
-        border-radius: 0 3px 3px 0!important;
-        @media (max-width: 640px) {
-         width: 60%;
-          text-align: center;
-          strong {
-            display: none;
-          }
-        }
-      }
-      .form-control{
-        box-shadow: none!important;
-        border: 0;
-        height: 48px;
-        margin-bottom: 0;
-      }
-    }
+  .btn-search{
+    margin-left: 0px;
   }
 }
 .ui-autocomplete {
@@ -108,7 +64,7 @@
 }
 
 .pac-container {
-z-index: 99999999;
+  z-index: 99999999;
 }
 
 .margin-top-40
@@ -173,18 +129,11 @@ h3+.separator, h4+.separator, h5+.separator {
   position: relative;
   margin-top: 20px;
   padding: 20px 0;
-<<<<<<< HEAD:hirelyApp/client/www/css/custom.less
-  color: #fff;
-  background: @secondary-color;
-=======
   background: $smoky-white;
->>>>>>> ui-homepage:hirelyApp/client/www/css/modules/_custom.scss
   .hiring-intro{
     h1, h2, h3, h4, h5{
       text-align: center;
-      color: #fff;
     }
-
   }
 
   img{
@@ -194,47 +143,11 @@ h3+.separator, h4+.separator, h5+.separator {
   .btn-cta{
     font-size: 18px;
   }
-
-  p{
-    color: @smoky-white !important;
-  }
 }
 
 /* ======= Call to action(homepage) ======= */
 .call-to-action{
 
-<<<<<<< HEAD:hirelyApp/client/www/css/custom.less
-  height: 600px;
-  background: linear-gradient(
-          rgba(0,0,0, 0.45),
-          rgba(0,0,0, 0.45)
-  ),  url(/img/banners/future_employee.jpg)  no-repeat 50% top;
-
-  background-size: cover;
-  .cta-container{
-    color: white;
-    font-size: 16px;
-    padding-top: 60px;
-
-    .main-header{
-      font-size: 32px;
-      font-weight: bold;
-    }
-    .join-header{
-      padding-bottom: 20px;
-    }
-    .cta-col{
-      padding: 0;
-    }
-    .form-control{
-      box-shadow: none!important;
-      border: 0;
-      height: 48px;
-      margin-bottom: 0;
-      border-radius: 3px 0 0 3px;
-      padding-left: 20px;
-      border-right: solid 1px #ddd!important;
-=======
 
   background: rgba(255,255,255,1);
   color: #034358;
@@ -310,19 +223,9 @@ h3+.separator, h4+.separator, h5+.separator {
     }
     br{
       display: block;
->>>>>>> ui-homepage:hirelyApp/client/www/css/modules/_custom.scss
     }
   }
 
-<<<<<<< HEAD:hirelyApp/client/www/css/custom.less
-    .btn-cta-blue{
-      display: block;
-      border: 0;
-      margin: 0;
-      font-size: 16px;
-      height: 48px;
-      border-radius: 0 3px 3px 0!important;
-=======
   @media (max-width: $screen-xs-max){
     padding: 50px 0px;
 
@@ -336,7 +239,6 @@ h3+.separator, h4+.separator, h5+.separator {
     }
     br{
       display: none;
->>>>>>> ui-homepage:hirelyApp/client/www/css/modules/_custom.scss
     }
   }
 }
@@ -530,7 +432,7 @@ h3+.separator, h4+.separator, h5+.separator {
         border-bottom: 1px solid #dce0e0;
 
       }
-      
+
       .form-group{
         position: relative;
         .spinner{
@@ -591,186 +493,186 @@ h3+.separator, h4+.separator, h5+.separator {
 
 
     /* Candidate Experience*/
- .user-experience {
-   /*Timeline v2
-------------------------------------*/
-   .timeline-v2 {
-     list-style: none;
-     position: relative;
-   }
+    .user-experience {
+      /*Timeline v2
+   ------------------------------------*/
+      .timeline-v2 {
+        list-style: none;
+        position: relative;
+      }
 
-   /* The line */
-   .timeline-v2 > li {
-     position: relative;
-     padding-bottom: 40px;
-   }
+      /* The line */
+      .timeline-v2 > li {
+        position: relative;
+        padding-bottom: 40px;
+      }
 
-   .timeline-v2:before {
-     top: 0;
-     bottom: 0;
-     left: 34%;
-     width: 5px;
-     content: '';
-     background: #f3f3f3;
-     position: absolute;
-     margin-left: -11px;
-   }
+      .timeline-v2:before {
+        top: 0;
+        bottom: 0;
+        left: 34%;
+        width: 5px;
+        content: '';
+        background: #f3f3f3;
+        position: absolute;
+        margin-left: -11px;
+      }
 
-   /* The date/time */
-   .timeline-v2 > li .cbp_tmtime {
-     width: 40%;
-     display: block;
-     position: absolute;
-     padding-right: 80px;
-   }
+      /* The date/time */
+      .timeline-v2 > li .cbp_tmtime {
+        width: 40%;
+        display: block;
+        position: absolute;
+        padding-right: 80px;
+      }
 
-   .timeline-v2 > li .cbp_tmtime span {
-     top: 9px;
-     display: block;
-     text-align: left;
-     position: relative;
-   }
+      .timeline-v2 > li .cbp_tmtime span {
+        top: 9px;
+        display: block;
+        text-align: left;
+        position: relative;
+      }
 
-   .timeline-v2 > li .cbp_tmtime span:first-child {
-     color: $text-color;
-     font-size: 14px;
-     line-height: 1.5;
-   }
+      .timeline-v2 > li .cbp_tmtime span:first-child {
+        color: $text-color;
+        font-size: 14px;
+        line-height: 1.5;
+      }
 
-   .timeline-v2 > li .cbp_tmtime span:last-child {
-     color: $text-color-secondary;
-     font-size: 14px;
-     font-weight: normal;
-     color: #999;
+      .timeline-v2 > li .cbp_tmtime span:last-child {
+        color: $text-color-secondary;
+        font-size: 14px;
+        font-weight: normal;
+        color: #999;
 
-   }
+      }
 
-   /* Right content */
-   .timeline-v2 > li .cbp_tmlabel {
-     color: $text-color;
-     line-height: 1.4;
-     clear: both;
-     position: relative;
-     /*border-radius: 5px;*/
-     margin: 0 0 40px 35%;
-   }
+      /* Right content */
+      .timeline-v2 > li .cbp_tmlabel {
+        color: $text-color;
+        line-height: 1.4;
+        clear: both;
+        position: relative;
+        /*border-radius: 5px;*/
+        margin: 0 0 40px 35%;
+      }
 
-   /*
-   .timeline-v2 > li .cbp_tmlabel img.big-thumb {
-       width: 100%;
-   }
-   */
+      /*
+      .timeline-v2 > li .cbp_tmlabel img.big-thumb {
+          width: 100%;
+      }
+      */
 
-   .timeline-v2 > li .cbp_tmlabel li {
-     padding: 0;
-   }
+      .timeline-v2 > li .cbp_tmlabel li {
+        padding: 0;
+      }
 
-   /*
-   .timeline-v2 > li .cbp_tmlabel img.small-thumb {
-       width: 111px;
-       height: auto;
-   }
-   */
+      /*
+      .timeline-v2 > li .cbp_tmlabel img.small-thumb {
+          width: 111px;
+          height: auto;
+      }
+      */
 
-   .timeline-v2 > li .cbp_tmlabel h2 {
-     margin-top: 0px;
-     font-size: 17px;
-     padding: 0 0 5px;
-     margin-bottom: 10px;
-     text-transform: capitalize;
+      .timeline-v2 > li .cbp_tmlabel h2 {
+        margin-top: 0px;
+        font-size: 17px;
+        padding: 0 0 5px;
+        margin-bottom: 10px;
+        text-transform: capitalize;
 
-   }
+      }
 
-   .timeline-v2 > li .cbp_tmlabel h3 {
-     margin-top: 0px;
-     font-size: 14px;
-     padding: 0 0 5px;
-     margin-bottom: 10px;
+      .timeline-v2 > li .cbp_tmlabel h3 {
+        margin-top: 0px;
+        font-size: 14px;
+        padding: 0 0 5px;
+        margin-bottom: 10px;
 
-   }
-   .timeline-v2 > li .cbp_tmlabel .text-left {
-     float: left;
-   }
+      }
+      .timeline-v2 > li .cbp_tmlabel .text-left {
+        float: left;
+      }
 
-   /* The icons */
-   .timeline-v2 > li .cbp_tmicon {
-     top: 22px;
-     left: 31%;
-     width: 10px;
-     height: 10px;
-     position: absolute;
-     background: $color;
-     margin: 0 0 0 -17px;
-     box-shadow: 0 0 0 4px #f3f3f3;
-     -webkit-font-smoothing: antialiased;
-     border-radius: 50% !important;
-   }
+      /* The icons */
+      .timeline-v2 > li .cbp_tmicon {
+        top: 22px;
+        left: 31%;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        background: $color;
+        margin: 0 0 0 -17px;
+        box-shadow: 0 0 0 4px #f3f3f3;
+        -webkit-font-smoothing: antialiased;
+        border-radius: 50% !important;
+      }
 
-   /* Example Media Queries */
-   @media screen and (max-width: 65.375em) {
+      /* Example Media Queries */
+      @media screen and (max-width: 65.375em) {
 
-     .timeline-v2 > li .cbp_tmtime span:last-child {
-       font-size: 1.5em;
-     }
-   }
+        .timeline-v2 > li .cbp_tmtime span:last-child {
+          font-size: 1.5em;
+        }
+      }
 
 
-   @media screen and (max-width: 47.2em) {
-     .timeline-v2:before {
-       display: none;
-     }
+      @media screen and (max-width: 47.2em) {
+        .timeline-v2:before {
+          display: none;
+        }
 
-     .timeline-v2 > li .cbp_tmtime {
-       width: 100%;
-       position: relative;
-       padding: 0 0 20px 0;
-     }
+        .timeline-v2 > li .cbp_tmtime {
+          width: 100%;
+          position: relative;
+          padding: 0 0 20px 0;
+        }
 
-     .timeline-v2 > li .cbp_tmtime span {
-       text-align: left;
-     }
+        .timeline-v2 > li .cbp_tmtime span {
+          text-align: left;
+        }
 
-     .timeline-v2 > li .cbp_tmlabel {
-       padding: 1em;
-       font-weight: 400;
-       margin: 0 0 30px 0;
-     }
+        .timeline-v2 > li .cbp_tmlabel {
+          padding: 1em;
+          font-weight: 400;
+          margin: 0 0 30px 0;
+        }
 
-     .timeline-v2 > li .cbp_tmlabel:after {
-       left: 20px;
-       top: -20px;
-       right: auto;
-       border-bottom-color: #f3f3f3;
-       border-right-color: transparent;
-     }
+        .timeline-v2 > li .cbp_tmlabel:after {
+          left: 20px;
+          top: -20px;
+          right: auto;
+          border-bottom-color: #f3f3f3;
+          border-right-color: transparent;
+        }
 
-     .timeline-v2 > li .cbp_tmicon {
-       left: auto;
-       float: right;
-       position: relative;
-       margin: -55px 5px 0 0px;
-     }
-   }
-   .edit-buttons {
+        .timeline-v2 > li .cbp_tmicon {
+          left: auto;
+          float: right;
+          position: relative;
+          margin: -55px 5px 0 0px;
+        }
+      }
+      .edit-buttons {
 
-     a {
-       padding: 0 10px;
-       font-size: 14px;
-       span {
-         padding: 0 10px 0 5px;
+        a {
+          padding: 0 10px;
+          font-size: 14px;
+          span {
+            padding: 0 10px 0 5px;
 
-       }
-     }
-   }
+          }
+        }
+      }
 
-   form{
-     padding: 20px;
-     background: $smoky-white;
-   }
+      form{
+        padding: 20px;
+        background: $smoky-white;
+      }
 
- }
+    }
 
-  /*Candidate Avaialbility */
+    /*Candidate Avaialbility */
 
     .schedule {
       padding: 40px;
@@ -931,13 +833,13 @@ h3+.separator, h4+.separator, h5+.separator {
 /*Candidate Personality */
 .personality{
   .results, .personality-traits{
-   margin: 20px;
+    margin: 20px;
   }
 
   .personality-types{
     margin:20px;
 
-}
+  }
   .personality-traits{
     margin: 0;
   }
@@ -1040,21 +942,15 @@ h3+.separator, h4+.separator, h5+.separator {
 
       }
 
-  }
+    }
     .job-action{
       margin-left: 20px;
       margin-right: 20px;
       padding-bottom: 10px;
       text-align: center;
-<<<<<<< HEAD:hirelyApp/client/www/css/custom.less
-      color: @text-color;
-      a{
-        color: @complimentary-color;
-=======
       color: $grey;
       a{
         color: $blue;
->>>>>>> ui-homepage:hirelyApp/client/www/css/modules/_custom.scss
         text-decoration: none;
       }
 

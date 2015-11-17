@@ -9,7 +9,7 @@
 
     function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, UserService) {
         var self = this;
-        var ref = new Firebase("/users");
+        var ref = new Firebase(FIREBASE_URL+"/users");
         var currentUser;
         var currentUserId;
         var isLoggedIn = false;
@@ -204,7 +204,7 @@
         };
 
 
-        this.registerNewUser = function createRegisteredNewUser(email, password) {
+        this.registerNewUser = function registerNewUser(email, password) {
 
             var deferred = $q.defer();
             firebaseRef.$createUser({
