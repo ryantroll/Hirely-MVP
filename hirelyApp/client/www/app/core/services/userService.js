@@ -16,7 +16,7 @@
 
         function userModel(firstName, lastName, email, userType,
                            profileImageUrl, personalStatement,
-                           provider, createdOn, lastModifiedOn){
+                           provider, createdOn, lastModifiedOn, address){
 
             this.firstName = firstName;
             this.lastName = lastName;
@@ -27,6 +27,7 @@
             this.provider =  provider;
             this.createdOn = createdOn;
             this.lastModifiedOn = lastModifiedOn;
+            this.address = address;
            }
 
 
@@ -144,10 +145,11 @@
             var createdOn = timestamp;
             var lastModifiedOn = timestamp;
             var personalStatement = userData.personalStatement;
+            var address = userData.address;
 
             var user = new userModel(firstName, lastName, email, userType,
               profileImageUrl, personalStatement,
-              provider, createdOn, lastModifiedOn);
+              provider, createdOn, lastModifiedOn, address);
 
             self.createUserinFirebase(user, providerId);
 
@@ -171,10 +173,11 @@
             var createdOn = timestamp;
             var lastModifiedOn = timestamp;
             var personalStatement = '';
+            var address = fbAuthData.facebook.address;
 
             var user = new userModel(firstName, lastName, email, userType,
               profileImageUrl, personalStatement,
-              provider, createdOn, lastModifiedOn);
+              provider, createdOn, lastModifiedOn, address);
 
 
             return user;
@@ -193,10 +196,11 @@
             var createdOn = timestamp;
             var lastModifiedOn = timestamp;
             var personalStatement = '';
+            var address = googleAuthData.google.address;
 
             var user = new userModel(firstName, lastName, email, userType,
               profileImageUrl, personalStatement,
-              provider, createdOn, lastModifiedOn);
+              provider, createdOn, lastModifiedOn, address);
 
 
             return user;

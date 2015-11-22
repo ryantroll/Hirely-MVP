@@ -1,0 +1,22 @@
+<body>
+<form id="register" >
+<div id="first_name">
+<label>First Name : </label>
+<input ng-model="user.firstname" type="text">
+</div>
+<div id="last_name">
+<label>Last Name : </label>
+<input ng-model="user.lastname" type="text">
+</div>
+<div id="email">
+<label>Email : </label>
+<input ng-model="user.email" type="email">
+</div>
+<div id="pass">
+<label>Password : </label>
+<input ng-model="user.password" type="test">
+</div>
+<button ng-model="registerBtn" ng-disabled="!user.firstname" ng-click="print_registeriaion_info()">Continue</button>
+</form>
+</body>
+

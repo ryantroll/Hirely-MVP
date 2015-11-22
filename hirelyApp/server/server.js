@@ -14,7 +14,7 @@ var config = require('./config');
 /** MongoDB **/
 var mongoose = require('mongoose');
 var connectMongo = require('connect-mongo');
-mongoose.connect(config.mongoUri);
+//mongoose.connect(config.mongoUri);
 
 var port =  process.env.LR_PORT || process.env.PORT || 7200;
 var routes;

@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,'JobService',HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService) {
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService , JobService) {
 
 
         var geocodeService = GeocodeService;
@@ -69,10 +69,30 @@
          *  TESTING AREA - STAY AWAY!!
          *
         **********************************************************************************/
-
+/*
         $scope.company = {
-            name: 'Hani Hanna'
+            name: 'Hani Hanna',
+            description: 'Resturant',
+            type: '0',
+            active: 'true',
+            placeId: 'Gsghsddf215584sdfd',
+            website: 'www.hanna.com',
+            photos: {url:'http://www.hanna.com/images/hani.jpg',main:'true',order:'0'},
+            children: {},
+            parent: {},
+            jobs: {},
+            address: {google_place_id:'ggadfsf255sdf', latitude:'34.8167',longitude:'36.1167',formatted_address:'safita-alakba',postal_code:'043'}
         };
-        BusinessService.createNewBusiness($scope.company, 123123123);
+        BusinessService.createNewBusiness($scope.company, 123123123);*/
+
+        $scope.job = {
+            businessId: {1234:'true'},
+            hiringMgr: {123123132:'true'},
+            contact: {email:'hani.hanna@develoopers.com.au',phone:'77445855',website:'www.hanna.com'},
+            applicants: {65555:'true'},
+            workingHrs: {0:{open:'10',close:'00'},1:{open:'10',close:'00'},2:{open:'10',close:'00'},3:{open:'10',close:'00'},4:{open:'10',close:'00'},5:{open:'10',close:'00'},6:{open:'12',close:'00'}}
+        };
+
+        JobService.createNewJob($scope.job, 1010);
     }
 })();
