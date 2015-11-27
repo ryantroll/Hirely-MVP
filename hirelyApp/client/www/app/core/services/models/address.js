@@ -7,11 +7,13 @@
  * */
 
 Address = Model({
-  initialize: function (formattedAddress, zipCode, unit, street, city, state, longitude, latitude){
+  initialize: function (formattedAddress, zipCode, unit, street, city, state, lng, lat){
     this.formattedAddress = formattedAddress;
     this.zipCode = zipCode;
     this.street = street;
     this.city = city;
     this.state = state;
+    this.lng = lng;
+    this.lat = lat;
   }
 });

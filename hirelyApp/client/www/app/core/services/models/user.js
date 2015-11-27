@@ -13,7 +13,7 @@ User = Model({
 
   initialize: function (userName, firstName, lastName, email, userType,
                         profileImageUrl, personalStatement,
-                        provider, createdOn, lastModifiedOn, address) {
+                        provider, createdOn, lastModifiedOn) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -23,7 +23,6 @@ User = Model({
     this.provider = provider;
     this.createdOn = createdOn;
     this.lastModifiedOn = lastModifiedOn;
-    this.address = address;
   },
 
   toString: function(){
