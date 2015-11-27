@@ -85,14 +85,14 @@
         };
         BusinessService.createNewBusiness($scope.company, 123123123);*/
 
-        $scope.job = {
-            businessId: {1234:'true'},
-            hiringMgr: {123123132:'true'},
-            contact: {email:'hani.hanna@develoopers.com.au',phone:'77445855',website:'www.hanna.com'},
-            applicants: {65555:'true'},
-            workingHrs: {0:{open:'10',close:'00'},1:{open:'10',close:'00'},2:{open:'10',close:'00'},3:{open:'10',close:'00'},4:{open:'10',close:'00'},5:{open:'10',close:'00'},6:{open:'12',close:'00'}}
-        };
+        //$scope.job = {
+        //    businessId: {1234:'true'},
+        //    hiringMgr: {123123132:'true'},
+        //    contact: {email:'hani.hanna@develoopers.com.au',phone:'77445855',website:'www.hanna.com'},
+        //    applicants: {65555:'true'},
+        //    workingHrs: {0:{open:'10',close:'00'},1:{open:'10',close:'00'},2:{open:'10',close:'00'},3:{open:'10',close:'00'},4:{open:'10',close:'00'},5:{open:'10',close:'00'},6:{open:'12',close:'00'}}
+        //};
 
-        JobService.createNewJob($scope.job, 1010);
+        //JobService.createNewJob($scope.job, 1010);
     }
 })();

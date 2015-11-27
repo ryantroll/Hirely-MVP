@@ -120,7 +120,7 @@
                           latitude: $scope.details.geometry.location.lat,
                           longitude: $scope.details.geometry.location.lng
                       },
-                      zoom: 10,
+                      zoom: 100,
                       pan: 1,
                       options: $scope.mapOptions,
                       control: {},

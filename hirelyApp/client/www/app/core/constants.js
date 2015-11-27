@@ -25,4 +25,6 @@
         .constant('GOOGLEPLACESURL', 'https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACEID}&key={KEY}')
 
         .constant('candidateStatus', {1: 'Active', 2: 'Employed', 3: 'Inactive'})
+
+        .constant('RESPONSE', {success: {code: '1', status: 'ok'}, error: {code: '0', status: 'error'}})
 })();

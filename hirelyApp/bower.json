@@ -36,6 +36,7 @@
     "angular-typeahead": "~0.2.4",
     "angucomplete-alt": "~2.0.3",
     "angular-loading-bar": "~0.8.0",
-    "hover": "Hover#~2.0.2"
+    "hover": "Hover#~2.0.2",
+    "angular-multi-step-form": "~1.2.4"
   }
 }

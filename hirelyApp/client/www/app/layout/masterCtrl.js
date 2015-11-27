@@ -49,30 +49,30 @@
         });
 
         // any time auth status updates, add the user data to scope
-        $scope.authRef.$onAuth(function(authData) {
-            if(authData)
-            {
-                if(!$scope.currentUser) {
-                    //try to retrieve user
-                    $scope.userService.getUserByKey(authData.uid)
-                        .then(function (snapshot) {
-                            var exists = (snapshot.val() != null);
-                            if (exists) {
-                                $scope.userService.setCurrentUser(snapshot.val(), snapshot.key());
-                                $scope.userService.setIsLoggedIn(true);
-                            }
-
-                        }, function (err) {
-
-                        });
-                }
-            }
-            else
-            {
-                $scope.userService.setIsLoggedIn(false);
-
-            }
-        });
+        //$scope.authRef.$onAuth(function(authData) {
+        //    if(authData)
+        //    {
+        //        if(!$scope.currentUser) {
+        //            //try to retrieve user
+        //            $scope.userService.getUserByKey(authData.uid)
+        //                .then(function (snapshot) {
+        //                    var exists = (snapshot.val() != null);
+        //                    if (exists) {
+        //                        $scope.userService.setCurrentUser(snapshot.val(), snapshot.key());
+        //                        $scope.userService.setIsLoggedIn(true);
+        //                    }
+        //
+        //                }, function (err) {
+        //
+        //                });
+        //        }
+        //    }
+        //    else
+        //    {
+        //        $scope.userService.setIsLoggedIn(false);
+        //
+        //    }
+        //});
 
         //watch for user auth changes, if changed broadcast to pages
         $scope.$watch('userService.getCurrentUser()', function (newVal) {

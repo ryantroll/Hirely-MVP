@@ -1,147 +1,152 @@
 'use strict';
 
 var myApp = angular.module('hirelyApp',
-    [   
-        'uiGmapgoogle-maps',
-        'ui.router',
-        'ui.bootstrap',
-        'ui.bootstrap.typeahead',
-        'ui.grid',
-        'uiGmapgoogle-maps',
-        'firebase',
-        'ngMask',
-        'ng-currency',
-        'rzModule',
-        'angular-flexslider',
-        'ui-notification',
-        'hirelyApp.layout',
-        'hirelyApp.home',
-        'hirelyApp.shared',
-        'hirelyApp.job',
-        'hirelyApp.jobdetails',
-        'hirelyApp.core',
-        'hirelyApp.account',
-        'hirelyApp.candidate',
-        'hirelyApp.manager',
-        'ngSanitize'
-    ])
+  [
+    'uiGmapgoogle-maps',
+    'ui.router',
+    'ui.bootstrap',
+    'ui.bootstrap.typeahead',
+    'ui.grid',
+    'uiGmapgoogle-maps',
+    'firebase',
+    'ngMask',
+    'ng-currency',
+    'rzModule',
+    'angular-flexslider',
+    'ui-notification',
+    'hirelyApp.layout',
+    'hirelyApp.home',
+    'hirelyApp.shared',
+    'hirelyApp.job',
+    'hirelyApp.jobdetails',
+    'hirelyApp.core',
+    'hirelyApp.account',
+    'hirelyApp.candidate',
+    'hirelyApp.manager',
+    'ngSanitize',
+    'multiStepForm'
+  ])
 
 
+  .config(function ($stateProvider, $urlRouterProvider) {
 
-    .config(function($stateProvider, $urlRouterProvider) {
+    $stateProvider
 
-        $stateProvider
+      .state('app', {
+        url: "/app",
+        abstract: true,
+        templateUrl: 'app/layout/master.html'
+      })
+      .state('app.home', {
+        url: '/home',
+        parent: 'app',
+        templateUrl: 'app/home/home.html',
 
-            .state('app', {
-                url: "/app",
-                abstract: true,
-                templateUrl: 'app/layout/master.html'
-            })
-            .state('app.home', {
-                url: '/home',
-                parent: 'app',
-                templateUrl: 'app/home/home.html',
+        controller: 'HomeCtrl'
+      })
+      .state('app.login', {
+        url: '/login',
+        templateUrl: 'app/account/login.html',
+        controller: 'LoginCtrl'
+      })
+      .state('app.job', {
+        url: '/job?placeId&distance&occupationId&wage',
+        parent: 'app',
+        templateUrl: 'app/job/job-search.html',
+      })
+      .state('app.jobdetails', {
+        url: '/jobdetails?siteId&positionId&placeId',
+        templateUrl: 'app/jobdetails/jobDetails.html',
+      })
+      .state('app.register', {
+        url: '/register',
+        templateUrl: 'app/account/register.html',
+        controller: 'RegisterCtrl'
+      })
+      .state('app.hmregister', {
+        url: '/hmregister',
+        templateUrl: 'app/manager/hmRegister.html',
+        controller: 'HMRegisterCtrl'
+      })
+      .state('app.busDashboard', {
+        url: '/busDashboard',
+        templateUrl: 'app/manager/hmDashboard.html',
+        controller: 'HMRegisterCtrl'
+      })
+      .state('app.hmPosition', {
+        url: '/hmPosition',
+        templateUrl: 'app/manager/hmPosition.html',
+        controller: 'HMRegisterCtrl'
+      })
+      .state('app.hmHiring', {
+        url: '/hmHiring',
+        templateUrl: 'app/manager/hmHiring.html',
+        controller: 'HMRegisterCtrl'
+      })
+      .state('app.candidate', {
+        url: '/candidate',
+        abstract: true,
+        templateUrl: 'app/candidate/candidate.html',
+        authRequired: true,
+        controller: 'CandidateCtrl'
+      })
+      .state('app.candidate.dashboard', {
+        url: '/dashboard',
+        templateUrl: 'app/candidate/candidate-dashboard.html',
+        controller: 'CandidateDashboardCtrl',
+        authRequired: true
+      })
+      .state('app.candidate.profile', {
+        abstract: true,
+        url: '/profile',
+        templateUrl: 'app/candidate/profile/candidate-profile.html',
+        controller: 'CandidateProfileCtrl',
+        authRequired: true,
+        resolve: {
+          profile: function ($q, CandidateService, UserService) {
+            //retrieve profile before loading
+            var user = UserService.getCurrentUser();
+            return CandidateService.getProfile(user.userId).then(function (profile) {
 
-                controller: 'HomeCtrl'
-            })
-            .state('app.login', {
-                url: '/login',
-                templateUrl: 'app/account/login.html',
-                controller: 'LoginCtrl'
-            })
-            .state('app.job', {
-                url: '/job?placeId&distance&occupationId&wage',
-                parent: 'app',
-                templateUrl: 'app/job/job-search.html',
-            })
-            .state('app.jobdetails', {
-                url: '/jobdetails?siteId&positionId&placeId',
-                templateUrl: 'app/jobdetails/jobDetails.html',
-            })
-            .state('app.register', {
-                url: '/register',
-                templateUrl: 'app/account/register.html',
-                controller: 'RegisterCtrl'
-            })
-             .state('app.hmregister', {
-                url: '/hmregister',
-                templateUrl: 'app/manager/hmRegister.html',
-                controller: 'HMRegisterCtrl'
-            })
-            .state('app.busDashboard', {
-                url: '/busDashboard',
-                templateUrl: 'app/manager/hmDashboard.html',
-                controller: 'HMRegisterCtrl'
-            })
-            .state('app.hmPosition', {
-                url: '/hmPosition',
-                templateUrl: 'app/manager/hmPosition.html',
-                controller: 'HMRegisterCtrl'
-            })
-            .state('app.hmHiring', {
-                url: '/hmHiring',
-                templateUrl: 'app/manager/hmHiring.html',
-                controller: 'HMRegisterCtrl'
-            })
-            .state('app.candidate', {
-                url: '/candidate',
-                abstract: true,
-                templateUrl: 'app/candidate/candidate.html',
-                authRequired: true,
-                controller: 'CandidateCtrl'
-            })
-            .state('app.candidate.dashboard', {
-                url: '/dashboard',
-                templateUrl: 'app/candidate/candidate-dashboard.html',
-                controller: 'CandidateDashboardCtrl',
-                authRequired: true
-            })
-            .state('app.candidate.profile', {
-                abstract: true,
-                url: '/profile',
-                templateUrl: 'app/candidate/profile/candidate-profile.html',
-                controller: 'CandidateProfileCtrl',
-                authRequired: true,
-                resolve: {
-                    profile: function ($q, CandidateService, UserService) {
-                        //retrieve profile before loading
-                        var user = UserService.getCurrentUser();
-                        return CandidateService.getProfile(user.userId).then(function(profile) {
+              return profile;
+            }, function (err) {
+              deferred.reject(err);
+            });
 
-                           return profile;
-                        }, function(err) {
-                            deferred.reject(err);
-                        });
+          }
+        }
+      })
+      .state('app.candidate.profile.basics', {
+        url: '/basics',
+        templateUrl: 'app/candidate/profile/candidate-profile-basics.html',
 
-                    }
-                }
-            })
-            .state('app.candidate.profile.basics', {
-                url: '/basics',
-                templateUrl: 'app/candidate/profile/candidate-profile-basics.html',
+        controller: 'CandidateProfileBasicsCtrl',
+        authRequired: true
+      })
+      .state('app.candidate.profile.availability', {
+        url: '/Availability',
+        templateUrl: 'app/candidate/profile/candidate-profile-availability.html',
+        authRequired: true
+      })
+      .state('app.candidate.profile.experience', {
+        url: '/Experience',
+        templateUrl: 'app/candidate/profile/candidate-profile-experience.html',
+        authRequired: true
+      })
+      .state('app.candidate.profile.personality', {
+        url: '/Personality',
+        templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
+        authRequired: true
+      })
+      .state('app.application', {
+        url: '/:jobId/apply',
+        templateUrl: 'app/application/job-application.html',
+        controller: 'JobApplicationController'
+      })
 
-                controller: 'CandidateProfileBasicsCtrl',
-                authRequired: true
-            })
-            .state('app.candidate.profile.availability', {
-                url: '/Availability',
-                templateUrl: 'app/candidate/profile/candidate-profile-availability.html',
-                authRequired: true
-            })
-            .state('app.candidate.profile.experience', {
-                url: '/Experience',
-                templateUrl: 'app/candidate/profile/candidate-profile-experience.html',
-                authRequired: true
-            })
-            .state('app.candidate.profile.personality', {
-                url: '/Personality',
-                templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
-                authRequired: true
-            })
-
-        // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/app/home');
-    });
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/home');
+  });
 
 /**
  * Created by labrina.loving on 8/8/2015.
@@ -294,6 +299,346 @@ var myApp = angular.module('hirelyApp',
 })();
 
 /**
+ * Created by labrina.loving on 8/16/2015.
+ */
+
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.candidate', []);
+})();
+
+/**
+ * Created by labrina.loving on 8/26/2015.
+ **/
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
+
+
+    function CandidateCtrl($scope, $stateParams, UserService) {
+        var userService = UserService;
+        var vm = this;
+
+        $scope.user = userService.getCurrentUser();
+
+
+
+        //listen for changes to current user
+        $scope.$on('currentUserChanged', function (event, args) {
+            $scope.user = args.message;
+
+
+        });
+    }
+})()
+;
+
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
+
+
+    function CandidateDashboardCtrl($scope, $stateParams) {
+
+        var vm = this;
+        $scope.uiGridOptions  = {
+            data: 'recentApps',
+            columnDefs: [{
+                field: 'company'
+            }, {
+                field: 'position'
+            }, {
+                field: 'application date'
+            },
+                {
+                    field: 'current status'
+                }
+            ]
+        };
+
+        $scope.recentApps = [];
+
+        if($scope.user.Applications){
+            $scope.recentApps = $scope.user.Applications;
+        }
+
+        // Chart.js Data
+        $scope.data = [
+            {
+                value: 5,
+                color:'#FFA540',
+                highlight: '#BF7C30',
+                label: 'Review'
+            },
+            {
+                value: 2,
+                color: '#38A2D0',
+                highlight: '#5AD3D1',
+                label: 'Interview Scheduled '
+            },
+            {
+                value: 1,
+                color: '#37DB79',
+                highlight: '#FFC870',
+                label: 'Passed'
+            }
+        ];
+
+        // Chart.js Options
+        $scope.options =  {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke : true,
+
+            //String - The colour of each segment stroke
+            segmentStrokeColor : '#fff',
+
+            //Number - The width of each segment stroke
+            segmentStrokeWidth : 2,
+
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout : 50, // This is 0 for Pie charts
+
+            //Number - Amount of animation steps
+            animationSteps : 100,
+
+            //String - Animation easing effect
+            animationEasing : 'easeOutBounce',
+
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate : true,
+
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale : false,
+
+            showLegend: false
+
+          };
+
+
+
+    }
+})()
+;
+
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobApplicationController]);
+
+
+  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady) {
+
+    // test jobs
+    var testJobOne = {
+      position: "Barista",
+      city: "Washington DC",
+      lng: "-77.0576414",
+      lat: "38.9340854",
+      business: "Starbucks",
+      photoUrl: "http://assets.inhabitat.com/wp-content/blogs.dir/1/files/2013/12/starbucks-canal-street-NOLA-store-6.jpg"
+    };
+
+    var testJobTwo = {
+      position: "Cashier",
+      city: "Boca Raton, Fl",
+      lng: "-80.1692048",
+      lat: "26.3503604",
+      business: "McDonald's",
+      photoUrl: "http://retaildesignblog.net/wp-content/uploads/2011/08/McDonald-s-flagship-restaurant-by-SHH-London.jpg"
+    };
+
+    var jobInfo = {};
+
+
+    // test Job IDs
+    var currentJob = $stateParams.jobId;
+    switch (currentJob) {
+      case "122122":
+        $scope.jobInfo = testJobOne;
+        break;
+      case "130130":
+        $scope.jobInfo = testJobTwo;
+        break;
+    }
+
+
+    /***
+     *
+     * Map stuff:
+     *
+     *
+     *
+     ***/
+
+
+    $scope.mapOptions = {
+      styles: hirelyCustomMap,
+      disableDefaultUI: true
+    };
+
+
+    uiGmapGoogleMapApi
+      .then(function (maps) {
+        console.log('redy');
+        $scope.googlemap = {};
+        $scope.map = {
+          center: {
+            latitude: $scope.jobInfo.lat,
+            longitude: $scope.jobInfo.lng
+          },
+          zoom: 10,
+          pan: 1,
+          options: $scope.mapOptions,
+          control: {},
+          clusterOptions: {
+            title: 'hirely',
+            gridSize: 20,
+            ignoreHidden: true,
+            minimumClusterSize: 1,
+            zoomOnClick: false
+          }
+          //events: {
+          //  tilesloaded: function (maps, eventName, args) {
+          //  },
+          //  dragend: function (maps, eventName, args) {
+          //  },
+          //  zoom_changed: function (maps, eventName, args) {
+          //  }
+          //}
+        };
+      });
+
+
+    //form steps
+    $scope.steps = [
+      {
+        templateUrl: '/app/application/steps/step-one.tpl.html',
+        title: 'Get the source',
+        hasForm: true
+      },
+      {
+        templateUrl: '/app/application/steps/step-TWO.tpl.html',
+        title: 'Add it to your app',
+        isolatedScope: true,
+        controller: 'StepTwoController',
+        hasForm: true
+      },
+      {
+        templateUrl: '/angular-multi-step-form/examples/1/step3.html',
+        title: 'Create your multi step forms / wizzards'
+      },
+      {
+        templateUrl: '/angular-multi-step-form/examples/1/step4.html',
+        title: 'Read the docs'
+      }
+    ];
+
+
+
+
+    //navigation animation & init
+    angular.element(document).ready(function () {
+      var steps = $('.steps');
+
+      // Timer for delay, must same as CSS!
+      var stepsTimer = 200,
+        stepsTimerL = 400;
+
+      // remove mini between current
+      steps.addClass('is-mini');
+      steps.each(function (i) {
+        var self = $(this);
+        if (self.hasClass('is-current')) {
+          self.removeClass('is-mini');
+          self.prev().removeClass('is-mini');
+          self.next().removeClass('is-mini');
+        }
+      });
+
+      // Bounce Animation
+      steps.addClass('is-circle-entering');
+
+      // Delay for BounceIn
+      setTimeout(function () {
+        steps.each(function (i) {
+          var self = $(this),
+            timer = (stepsTimer * 2) * i;
+          setTimeout(function () {
+            // Line Flow
+            self.addClass('is-line-entering');
+            if (self.hasClass('is-current')) {
+              // Title FadeIn
+              steps.addClass('is-title-entering');
+            }
+          }, timer);
+        });
+      }, stepsTimer);
+
+    });
+
+    $scope.xpItems = [];
+    $scope.addJobXp = function () {
+      console.log($scope.company);
+      $scope.xpItems.push(
+        {
+          company: $scope.company,
+          position: $scope.position,
+          description: $scope.description
+        }
+      )
+    }
+
+  }
+})();
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
+
+
+  function StepTwoController($scope, $stateParams) {
+
+
+
+    $scope.xpItems = [];
+    $scope.addJobXp = function () {
+      console.log($scope.company);
+      $scope.xpItems.push(
+        {
+          company: $scope.company,
+          position: $scope.position,
+          description: $scope.description
+        }
+      )
+    }
+
+  }
+})();
+/**
  * Created by labrina.loving on 9/7/2015.
  */
 (function() {
@@ -348,6 +693,8 @@ var myApp = angular.module('hirelyApp',
         .constant('GOOGLEPLACESURL', 'https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACEID}&key={KEY}')
 
         .constant('candidateStatus', {1: 'Active', 2: 'Employed', 3: 'Inactive'})
+
+        .constant('RESPONSE', {success: {code: '1', status: 'ok'}, error: {code: '0', status: 'error'}})
 })();
 /**
  * Created by labrina.loving on 8/8/2015.
@@ -483,140 +830,6 @@ angular.module('hirelyApp.core')
  */
 
 /**
- * Created by labrina.loving on 8/16/2015.
- */
-
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.candidate', []);
-})();
-
-/**
- * Created by labrina.loving on 8/26/2015.
- **/
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
-
-
-    function CandidateCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
-        var vm = this;
-
-        $scope.user = userService.getCurrentUser();
-
-
-
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.user = args.message;
-
-
-        });
-    }
-})()
-;
-
-
-/**
- * Created by labrina.loving on 8/16/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
-
-
-    function CandidateDashboardCtrl($scope, $stateParams) {
-
-        var vm = this;
-        $scope.uiGridOptions  = {
-            data: 'recentApps',
-            columnDefs: [{
-                field: 'company'
-            }, {
-                field: 'position'
-            }, {
-                field: 'application date'
-            },
-                {
-                    field: 'current status'
-                }
-            ]
-        };
-
-        $scope.recentApps = [];
-
-        if($scope.user.Applications){
-            $scope.recentApps = $scope.user.Applications;
-        }
-
-        // Chart.js Data
-        $scope.data = [
-            {
-                value: 5,
-                color:'#FFA540',
-                highlight: '#BF7C30',
-                label: 'Review'
-            },
-            {
-                value: 2,
-                color: '#38A2D0',
-                highlight: '#5AD3D1',
-                label: 'Interview Scheduled '
-            },
-            {
-                value: 1,
-                color: '#37DB79',
-                highlight: '#FFC870',
-                label: 'Passed'
-            }
-        ];
-
-        // Chart.js Options
-        $scope.options =  {
-
-            // Sets the chart to be responsive
-            responsive: true,
-
-            //Boolean - Whether we should show a stroke on each segment
-            segmentShowStroke : true,
-
-            //String - The colour of each segment stroke
-            segmentStrokeColor : '#fff',
-
-            //Number - The width of each segment stroke
-            segmentStrokeWidth : 2,
-
-            //Number - The percentage of the chart that we cut out of the middle
-            percentageInnerCutout : 50, // This is 0 for Pie charts
-
-            //Number - Amount of animation steps
-            animationSteps : 100,
-
-            //String - Animation easing effect
-            animationEasing : 'easeOutBounce',
-
-            //Boolean - Whether we animate the rotation of the Doughnut
-            animateRotate : true,
-
-            //Boolean - Whether we animate scaling the Doughnut from the centre
-            animateScale : false,
-
-            showLegend: false
-
-          };
-
-
-
-    }
-})()
-;
-
-/**
  * Created by labrina.loving on 8/5/2015.
  */
 
@@ -630,9 +843,9 @@ angular.module('hirelyApp.core')
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,'JobService',HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService) {
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService , JobService) {
 
 
         var geocodeService = GeocodeService;
@@ -698,11 +911,31 @@ angular.module('hirelyApp.core')
          *  TESTING AREA - STAY AWAY!!
          *
         **********************************************************************************/
-
+/*
         $scope.company = {
-            name: 'Hani Hanna'
+            name: 'Hani Hanna',
+            description: 'Resturant',
+            type: '0',
+            active: 'true',
+            placeId: 'Gsghsddf215584sdfd',
+            website: 'www.hanna.com',
+            photos: {url:'http://www.hanna.com/images/hani.jpg',main:'true',order:'0'},
+            children: {},
+            parent: {},
+            jobs: {},
+            address: {google_place_id:'ggadfsf255sdf', latitude:'34.8167',longitude:'36.1167',formatted_address:'safita-alakba',postal_code:'043'}
         };
-        BusinessService.createNewBusiness($scope.company, 123123123);
+        BusinessService.createNewBusiness($scope.company, 123123123);*/
+
+        //$scope.job = {
+        //    businessId: {1234:'true'},
+        //    hiringMgr: {123123132:'true'},
+        //    contact: {email:'hani.hanna@develoopers.com.au',phone:'77445855',website:'www.hanna.com'},
+        //    applicants: {65555:'true'},
+        //    workingHrs: {0:{open:'10',close:'00'},1:{open:'10',close:'00'},2:{open:'10',close:'00'},3:{open:'10',close:'00'},4:{open:'10',close:'00'},5:{open:'10',close:'00'},6:{open:'12',close:'00'}}
+        //};
+
+        //JobService.createNewJob($scope.job, 1010);
     }
 })();
 
@@ -839,7 +1072,7 @@ angular.module('hirelyApp.core')
                           latitude: $scope.details.geometry.location.lat,
                           longitude: $scope.details.geometry.location.lng
                       },
-                      zoom: 10,
+                      zoom: 100,
                       pan: 1,
                       options: $scope.mapOptions,
                       control: {},
@@ -1243,30 +1476,30 @@ angular.module("hirelyApp.layout").directive("header", function() {
         });
 
         // any time auth status updates, add the user data to scope
-        $scope.authRef.$onAuth(function(authData) {
-            if(authData)
-            {
-                if(!$scope.currentUser) {
-                    //try to retrieve user
-                    $scope.userService.getUserByKey(authData.uid)
-                        .then(function (snapshot) {
-                            var exists = (snapshot.val() != null);
-                            if (exists) {
-                                $scope.userService.setCurrentUser(snapshot.val(), snapshot.key());
-                                $scope.userService.setIsLoggedIn(true);
-                            }
-
-                        }, function (err) {
-
-                        });
-                }
-            }
-            else
-            {
-                $scope.userService.setIsLoggedIn(false);
-
-            }
-        });
+        //$scope.authRef.$onAuth(function(authData) {
+        //    if(authData)
+        //    {
+        //        if(!$scope.currentUser) {
+        //            //try to retrieve user
+        //            $scope.userService.getUserByKey(authData.uid)
+        //                .then(function (snapshot) {
+        //                    var exists = (snapshot.val() != null);
+        //                    if (exists) {
+        //                        $scope.userService.setCurrentUser(snapshot.val(), snapshot.key());
+        //                        $scope.userService.setIsLoggedIn(true);
+        //                    }
+        //
+        //                }, function (err) {
+        //
+        //                });
+        //        }
+        //    }
+        //    else
+        //    {
+        //        $scope.userService.setIsLoggedIn(false);
+        //
+        //    }
+        //});
 
         //watch for user auth changes, if changed broadcast to pages
         $scope.$watch('userService.getCurrentUser()', function (newVal) {
@@ -1345,6 +1578,141 @@ angular.module("hirelyApp.layout").directive("header", function() {
             authService.logout();
         };
     };
+})();
+ /**
+ * Created by labrina.loving on 8/10/2015.
+ */
+(function () {
+    'use strict';
+
+angular.module('hirelyApp.manager').directive('autoFillableField', [
+  '$timeout',
+  function($timeout) {
+    return {
+      require: '?ngModel',
+      restrict: 'A',
+      link: function(scope, element, attrs, ngModel) {
+
+        $timeout(function() {
+          if (ngModel.$viewValue !== element.val()) {
+            ngModel.$setViewValue(element.val());
+          }
+        }, 50);
+      }
+    };
+  }
+]);
+}
+)();
+/**
+ * Created by mike.baker on 9/29/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
+   
+
+    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
+
+        var vm = this;
+        var authService = AuthService;
+        var userService = UserService;
+        var businessService = BusinessService;
+        var managerId = '';
+        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
+        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
+       
+        $scope.companies = $firebaseArray(businessRef);
+        $scope.picturesRef = $firebaseArray(photoRef);
+        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
+    
+        $scope.street_number = '';
+        $scope.route = '';
+        $scope.locality = '';
+        $scope.administrative_area_level_1 = '';
+        $scope.postal_code = '';
+        $scope.country = '';
+        $scope.latitude = '';
+        $scope.longitude = '';
+        $scope.open_store_hours0 = '';
+        $scope.closed_store_hours0 = '';
+        $scope.open_store_hours1 = '';
+        $scope.closed_store_hours1 = '';
+        $scope.open_store_hours2 = '';
+        $scope.closed_store_hours2 = '';
+        $scope.open_store_hours3 = '';
+        $scope.closed_store_hours3 = '';
+        $scope.open_store_hours4 = '';
+        $scope.closed_store_hours4 = '';
+        $scope.open_store_hours5 = '';
+        $scope.closed_store_hours5 = '';
+        $scope.open_store_hours6 = '';
+        $scope.closed_store_hours6 = '';
+        $scope.error = '';
+
+        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
+        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
+        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
+        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
+        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
+        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
+
+
+
+
+       $scope.options = {
+          types: '(regions)'
+       };
+
+       $scope.results = '';
+       $scope.details = '';
+    
+        vm.registerNewHMBUS = function() {
+            registerPasswordHM($scope.manager, $scope.business)
+        }
+       
+        vm.CloseModal = function (){
+            $modalInstance.close();
+        }
+
+        function registerPasswordHM(registeredUser, newbusinessObj){
+            //register new hiring manager
+            userService.registerNewUser(registeredUser.email, registeredUser.password)
+                .then(function(manager) {
+                    userService.createRegisteredNewUser(registeredUser, manager.uid)
+                        .then(function(newUser){
+                            authService.passwordLogin(registeredUser.email, registeredUser.password)
+                                .then(function(auth){
+                                    managerId = manager.uid;
+                                    userService.setCurrentUser(newUser, manager.uid);
+                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
+                                    $modalInstance.close();
+                                }, function(err) {
+                                    alert(err)
+                                });
+                        }, function(err) {
+                            alert(err)
+                        });
+                }, function(err) {
+                    alert(err)
+                })
+      $state.go('app.busDashboard');
+        }
+
+
+}
+
+
+})();
+
+/**
+ * Created by mike.baker on 9/8/2015.
+ */
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.manager', []);
 })();
     /**
  * Created by labrina.loving on 8/6/2015.
@@ -1517,1084 +1885,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
     'use strict';
 
     angular.module('hirelyApp.shared', []);
-})();
-
- /**
- * Created by labrina.loving on 8/10/2015.
- */
-(function () {
-    'use strict';
-
-angular.module('hirelyApp.manager').directive('autoFillableField', [
-  '$timeout',
-  function($timeout) {
-    return {
-      require: '?ngModel',
-      restrict: 'A',
-      link: function(scope, element, attrs, ngModel) {
-
-        $timeout(function() {
-          if (ngModel.$viewValue !== element.val()) {
-            ngModel.$setViewValue(element.val());
-          }
-        }, 50);
-      }
-    };
-  }
-]);
-}
-)();
-/**
- * Created by mike.baker on 9/29/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
-   
-
-    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
-
-        var vm = this;
-        var authService = AuthService;
-        var userService = UserService;
-        var businessService = BusinessService;
-        var managerId = '';
-        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
-        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
-       
-        $scope.companies = $firebaseArray(businessRef);
-        $scope.picturesRef = $firebaseArray(photoRef);
-        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
-    
-        $scope.street_number = '';
-        $scope.route = '';
-        $scope.locality = '';
-        $scope.administrative_area_level_1 = '';
-        $scope.postal_code = '';
-        $scope.country = '';
-        $scope.latitude = '';
-        $scope.longitude = '';
-        $scope.open_store_hours0 = '';
-        $scope.closed_store_hours0 = '';
-        $scope.open_store_hours1 = '';
-        $scope.closed_store_hours1 = '';
-        $scope.open_store_hours2 = '';
-        $scope.closed_store_hours2 = '';
-        $scope.open_store_hours3 = '';
-        $scope.closed_store_hours3 = '';
-        $scope.open_store_hours4 = '';
-        $scope.closed_store_hours4 = '';
-        $scope.open_store_hours5 = '';
-        $scope.closed_store_hours5 = '';
-        $scope.open_store_hours6 = '';
-        $scope.closed_store_hours6 = '';
-        $scope.error = '';
-
-        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
-        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
-        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
-        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
-        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
-
-
-
-
-       $scope.options = {
-          types: '(regions)'
-       };
-
-       $scope.results = '';
-       $scope.details = '';
-    
-        vm.registerNewHMBUS = function() {
-            registerPasswordHM($scope.manager, $scope.business)
-        }
-       
-        vm.CloseModal = function (){
-            $modalInstance.close();
-        }
-
-        function registerPasswordHM(registeredUser, newbusinessObj){
-            //register new hiring manager
-            userService.registerNewUser(registeredUser.email, registeredUser.password)
-                .then(function(manager) {
-                    userService.createRegisteredNewUser(registeredUser, manager.uid)
-                        .then(function(newUser){
-                            authService.passwordLogin(registeredUser.email, registeredUser.password)
-                                .then(function(auth){
-                                    managerId = manager.uid;
-                                    userService.setCurrentUser(newUser, manager.uid);
-                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
-                                    $modalInstance.close();
-                                }, function(err) {
-                                    alert(err)
-                                });
-                        }, function(err) {
-                            alert(err)
-                        });
-                }, function(err) {
-                    alert(err)
-                })
-      $state.go('app.busDashboard');
-        }
-
-
-}
-
-
-})();
-
-/**
- * Created by mike.baker on 9/8/2015.
- */
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.manager', []);
-})();
-/**
- * Created by labrina.loving on 8/9/2015.
- */
-angular.module('hirelyApp.core')
-    .config(['$provide', function($provide) {
-        // adapt ng-cloak to wait for auth before it does its magic
-        $provide.decorator('ngCloakDirective', ['$delegate', 'Auth',
-            function($delegate, Auth) {
-                var directive = $delegate[0];
-                // make a copy of the old directive
-                var _compile = directive.compile;
-                directive.compile = function(element, attr) {
-                    Auth.$waitForAuth().then(function() {
-                        // after auth, run the original ng-cloak directive
-                        _compile.call(directive, element, attr);
-                    });
-                };
-                // return the modified directive
-                return $delegate;
-            }]);
-    }]);
-
-/**
- * Created by labrina.loving on 9/16/2015.
- */
-angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
-    return function (items, occupation, minWage) {
-        var filtered = [];
-       for (var i = 0; i < items.length; i++) {
-            var occupationMatched = true;
-            var wageMatched = true;
-            var item = items[i];
-            if(occupation){
-                occupationMatched = occupation.id === item.occupationId;
-            }
-
-           wageMatched = item.wage.amount >= minWage;
-           if(wageMatched && occupationMatched)
-           {
-               filtered.push(item);
-           }
-
-        }
-        return filtered;
-    };
-});
-
-/**
- * Created by labrina.loving on 8/8/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .factory('AuthService', ['$firebaseAuth', 'fbutil', '$q', AuthService]);
-
-    function AuthService($firebaseAuth, fbutil, $q) {
-        var self = this;
-        var firebaseRef = $firebaseAuth(fbutil.ref());
-        var authData = '';
-        var service =  {
-            thirdPartyLogin: thirdPartyLogin,
-            AuthRef: AuthRef,
-            passwordLogin: passwordLogin,
-            logout: logout
-        };
-        return service;
-
-        // Handle third party login providers
-        // returns a promise
-        function thirdPartyLogin(provider) {
-
-            var deferred = $q.defer();
-            firebaseRef.$authWithOAuthPopup(provider)
-                .then(function(user) {
-                   deferred.resolve(user);
-                }, function(err) {
-                    if (err.code === "TRANSPORT_UNAVAILABLE") {
-                        // fall-back to browser redirects, and pick up the session
-                        // automatically when we come back to the origin page
-                        ref.authWithOAuthRedirect.then(function(user) {
-                            deferred.resolve(user);
-                        }, function(err) {
-                            deferred.reject(err);
-                            });
-                    }
-                });
-
-
-          return deferred.promise;
-        };
-
-        function passwordLogin(email, password) {
-
-            var deferred = $q.defer();
-            firebaseRef.$authWithPassword({
-                email    : email,
-                password : password
-                })
-                .then(function(user) {
-                    deferred.resolve(user);
-                }, function(err) {
-                    deferred.reject(err);
-                });
-
-
-            return deferred.promise;
-        };
-
-        function AuthRef(){
-            return firebaseRef;
-        }
-
-        function logout(){
-            firebaseRef.$unauth();
-        }
-
-
-
-        function AuthRef(){
-            return firebaseRef;
-        }
-
-
-
-
-    }
-})();
-/**
- * Created by labrina.loving on 9/6/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .factory('BroadcastService', ['$rootScope', BroadcastService]);
-
-    function BroadcastService($rootScope) {
-        var self = this;
-
-        var service =  {
-            send: send
-        };
-        return service;
-
-        function send(msg, data){
-            $rootScope.$broadcast(msg, data);
-        }
-
-
-
-
-    }
-})();
-/**
- * Created by mike.baker on 9/25/2015.
- */
-
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.manager')
-        .service('BusinessService', ['$q','FIREBASE_URL', '$firebaseObject', 'fbutil', BusinessService]);
-
-     function BusinessService( $q, FIREBASE_URL, $firebaseObject, fbutil, BusinessService) {
-        var self = this;
-        var buesinessRef = new Firebase(FIREBASE_URL + '/business');
-        var businessRefPush = buesinessRef.push();
-
-
-       //internal constructor
-        function businessModel(name, description, type, active, placeId, website, photos, children, parent, jobs, address){
-            this.name = name;
-            this.description = description;
-            this.type = type;
-            this.active = active;
-            this.placeId = placeId;
-            this.website = website;
-            this.photos = photos;
-            this.children = children;
-            this.parent = parent;
-            this.jobs = jobs;
-            this.address = address;
-
-        }
-
-        var onComplete = function (error) {
-          if(error){
-            console.log(error + 'storing failed');
-          } else {
-            console.log('YAY YAY YAY');
-          }
-        };
-
-        //exported to be used in Controller as: BusinessService.createNewBusiness(xx,xx)
-        this.createNewBusiness = function createNewBusiness(company, userId){
-          
-
-            var business = new businessModel(
-              company.name,
-              company.description,
-              company.type,
-              company.active,
-              company.placeId,
-              company.website,
-              company.photos,
-              company.children,
-              company.parent,
-              company.jobs,
-              company.address
-            );
-
-            businessRefPush.set(business, onComplete);
-        }
-    };
-
-})();
-
-
-
-/**
- * Created by labrina.loving on 9/4/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .service('CandidateService', ['$q','$http','FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseArray', CandidateService]);
-
-    function CandidateService($q, $http, FIREBASE_URL, $firebaseObject, fbutil, $firebaseArray, CandidateService) {
-        var self = this;
-        var profile = '';
-        var candidateExperience = [];
-        var candidateEducation = [];
-
-        function candidateModel(){
-            this.authorizedInUS = '';
-            this.status = '';
-            this.experience ={};
-            this.education = {};
-            this.personality = {};
-            this.availability = {};
-        }
-
-
-        this.getProfile = function getProfile(userId){
-            var ref = new Firebase(FIREBASE_URL);
-            var deferred = $q.defer();
-            var profile = new Firebase.util.NormalizedCollection(
-                ref.child('users'),
-                ref.child('candidates'),
-                ref.child('candidate-availability'),
-                ref.child('candidate-personality')
-
-            );
-
-            // specify the fields for each path
-            profile = profile.select({key: 'candidates.$value', alias: 'candidate'},
-                {key: 'candidate-availability.$value', alias: 'availability'},
-                {key: 'candidate-personality.$value', alias: 'personality'}),
-
-            // apply a client-side filter to the data (only return users where key === 'user1'
-            profile = profile.filter(
-                function(data, key, priority) { return key === userId; }
-            );
-
-            var profileRef = profile.ref().child(userId);
-            // run it and see what we get
-            profileRef.once('value', function(snap) {
-                    var profile = snap.val();
-                    var ref = fbutil.ref('candidate-experience', userId);
-                    profile.experience =  $firebaseArray(ref);
-                    deferred.resolve(profile);
-
-                }, function (err) {
-                    deferred.reject(snap);
-                }
-            );
-
-            return deferred.promise;
-
-        }
-
-        this.saveCandidate = function saveCandidate(candidate, key) {
-            var ref = fbutil.ref('candidates', key);
-            ref.set(candidate);
-        };
-
-        this.saveAvailability = function saveAvailability(availability, key) {
-            var ref = fbutil.ref('candidate-availability', key);
-            ref.set(availability);
-        };
-
-        this.savePersonality = function savePersonality(personality, key){
-            var ref = fbutil.ref('candidate-personality', key);
-            ref.set(personality);
-        }
-
-        this.createTraitifyAssessment = function createTraitifyAssessment(){
-            var deferred = $q.defer();
-
-            $http.get('/api/assessment')
-                .success(function(data) {
-                    deferred.resolve(data);
-                })
-                .error(function(data) {
-                    console.log('Error: ' + data);
-                });
-            return deferred.promise;
-
-        }
-
-        this.getAssessmentResults = function getAssessmentResults(assessmentId){
-            var deferred = $q.defer();
-
-            $http.get('/api/assessmentResults'+ assessmentId)
-                .success(function(data) {
-                    deferred.resolve(data);
-                })
-                .error(function(data) {
-                    console.log('Error: ' + data);
-                });
-            return deferred.promise;
-
-        }
-
-        this.getAssessmentSlides = function getAssessmentSlides(assessmentId){
-            var deferred = $q.defer();
-
-            $http.get('/api/assessmentSlides'+ assessmentId)
-                .success(function(data) {
-                    deferred.resolve(data);
-                })
-                .error(function(data) {
-                    console.log('Error: ' + data);
-                });
-            return deferred.promise;
-
-        }
-
-        this.getAssessmentCareerMatches = function getAssessmentCareerMatches(assessmentId){
-            var deferred = $q.defer();
-
-            $http.get('/api/assessmentCareerMatches'+ assessmentId)
-                .success(function(data) {
-                    deferred.resolve(data);
-                })
-                .error(function(data) {
-                    console.log('Error: ' + data);
-                });
-            return deferred.promise;
-
-        }
-
-        this.getAssessment = function getAssessment(assessmentId){
-            var deferred = $q.defer();
-
-            $http.get('/api/assessmentData'+ assessmentId)
-                .success(function(data) {
-                    deferred.resolve(data);
-                })
-                .error(function(data) {
-                    console.log('Error: ' + data);
-                });
-            return deferred.promise;
-
-        }
-
-        this.getExperience = function getExperience(userId){
-            var ref = fbutil.ref('candidate-experience', userId);
-            return $firebaseArray(ref);
-        }
-
-        this.savePositiontoFavorites = function savePositiontoFavorites(userId, positionId){
-            var ref = fbutil.ref('candidate-favorites', userId);
-            ref.child(positionId).set(true);
-
-        }
-
-
-    }
-})();
-
-
-/**
- * Created by labrina.loving on 9/4/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .service('FilePickerService', ['$window', FilePickerService]);
-
-    function FilePickerService($window) {
-        return $window.filepicker;
-    }
-
-})();
-/**
- * Created by labrina.loving on 8/14/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .factory('GeocodeService', ['$q', '$http', 'GOOGLEMAPSURL', 'FIREBASE_URL', GeocodeService]);
-
-    function GeocodeService($q, $http, GOOGLEMAPSURL, FIREBASE_URL) {
-        var mapsEndPoint = GOOGLEMAPSURL;
-        var currentPlace = null;
-
-        var service =  {
-            getPlacebyLatLong : getPlacebyLatLong,
-            getPlacebyPlaceId : getPlacebyPlaceId,
-            getPlace: getPlace,
-            setPlace: setPlace,
-            calculateDistancetoSite: calculateDistancetoSite,
-            getCityBySearchQuery: getCityBySearchQuery,
-            getLocationBySearchQuery: getLocationBySearchQuery
-        };
-        return service;
-
-        function getPlacebyLatLong(latitude, longitude){
-            var url = mapsEndPoint.replace('{POSITION}', latitude + ',' + longitude);
-            var deferred = $q.defer();
-
-            $http.get(url, {cache: true}).success(function(response) {
-                // hacky
-                var place;
-                angular.forEach(response.results, function(result) {
-                    if(result.types[0] === 'postal_code') {
-                        place = result;
-                    }
-                });
-                deferred.resolve(place);
-            }).error(deferred.reject);
-
-            return deferred.promise;
-        }
-
-        function getPlacebyPlaceId(placeId){
-
-            var deferred = $q.defer();
-
-            $http.get('/api/googleplace'+ placeId)
-                .success(function(data) {
-                    currentPlace = data;
-                    deferred.resolve(data);
-                })
-                .error(function(data) {
-                    console.log('Error: ' + data);
-                });
-            return deferred.promise;
-        }
-
-        function getPlace(){
-            return currentPlace;
-        }
-
-        function setPlace(place){
-            currentPlace = place;
-        }
-
-        function calculateDistancetoSite(siteId, placeId){
-            var deferred = $q.defer();
-            var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
-            var geoFire = new GeoFire(firebaseRef);
-            geoFire.get(siteId).then(function(siteLocation) {
-                var place = getPlacebyPlaceId((placeId)).then(function(place) {
-                    var currentPlaceLocation = [place.geometry.location.lat, place.geometry.location.lng];
-                    var distance = GeoFire.distance(currentPlaceLocation, siteLocation) * 0.621371;
-                    deferred.resolve(distance);
-
-                }, function(error) {
-                    console.log("Error: " + error);
-                });
-
-            }, function(error) {
-                console.log("Error: " + error);
-            });
-            return deferred.promise;
-        }
-
-
-        function getCityBySearchQuery(query){
-            var deferred = $q.defer();
-
-            $http.get('/api/search/cities/'+ query)
-              .success(function(data) {
-                  console.log(data);
-                  currentPlace = data;
-                  deferred.resolve(data);
-              })
-              .error(function(data) {
-                  console.log('Error: ' + data);
-              });
-
-            return deferred.promise;
-        }
-
-
-        function getLocationBySearchQuery(query){
-            var deferred = $q.defer();
-
-            $http.get('/api/search/locations/'+ query)
-              .success(function(data) {
-                  console.log(data);
-                  currentPlace = data;
-                  deferred.resolve(data);
-              })
-              .error(function(data) {
-                  console.log('Error: ' + data);
-              });
-
-            return deferred.promise;
-        }
-
-
-    }
-
-
-})();
-
-/**
- * Created by mike.baker on 8/19/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .factory('JobdetailsService', ['$q', '$http', JobdetailsService]);
-
-    function JobdetailsService($q, $http) {
-  
-        var currentJob = '';
-        var selected = '';
-        var service =  {
-            getJob: getJob,
-            setJob: setJob
-        };
-        return service;
-
-        function setJob(selected)
-        {
-            currentJob = selected;
-        }
-
-        function getJob()
-        {
-            return currentJob;
-        }
-
-    }
-
-
-})();
-
-/**
- * Created by labrina.loving on 9/15/2015.
- */
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .service('OccupationService', ['$q', '$http', OccupationService]);
-
-    function OccupationService($q, $http) {
-
-        //this.getOccupations = function getOccupations(){
-        //
-        //    var occupationRef =  new Firebase(FIREBASE_URL + "/onetOccupation");
-        //    var deferred = $q.defer();
-        //    occupationRef.once("value", function (snapshot) {
-        //            var occupations = [];
-        //            snapshot.forEach(function(item) {
-        //                var itemVal = item.val();
-        //                var key = item.key();
-        //                var occupation = {
-        //                    id: '',
-        //                    title: '',
-        //                    socCode: ''
-        //                }
-        //                occupation.id = key;
-        //                occupation.title = itemVal.title;
-        //                occupation.socCode = itemVal.onetsocCode;
-        //                occupations.push(occupation);
-        //
-        //
-        //            });
-        //            deferred.resolve(occupations);
-        //
-        //        }, function (err) {
-        //            deferred.reject(snapshot);
-        //        }
-        //    );
-        //    return deferred.promise;
-        //
-        //};
-
-        this.getOccupations = function getOccupations(query){
-            var deferred = $q.defer();
-
-            $http.get('/api/onet/titles/search/'+ query)
-              .success(function(data) {
-                  deferred.resolve(data);
-              })
-              .error(function(data) {
-                  console.log('Error: ' + data);
-              });
-
-            return deferred.promise;
-        }
-    };
-})();
-
-
-/**
- * Created by labrina.loving on 9/10/2015.
- */
-
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .service('PositionService', ['$q','FIREBASE_URL', '$firebaseObject', 'fbutil', PositionService]);
-
-    function PositionService($q, FIREBASE_URL, $firebaseObject, fbutil) {
-        var self = this;
-        var profile;
-
-        this.getOpenPositionsForLocation = function getOpenPositionsForLocation(locationId, minWage, occupationId){
-            var ref = new Firebase(FIREBASE_URL);
-            var deferred = $q.defer();
-            var positions = new Firebase.util.NormalizedCollection(
-                ref.child('position'),
-                [ref.child('businessSite'), 'businessSite', 'position.siteId'],
-                [ref.child('business'), 'business', 'position.businessId'],
-                [ref.child('businessPhotos'), 'businessPhotos', 'position.businessId']
-            );
-
-            // specify the fields for each path
-            positions = positions.select('position.siteId', 'position.businessId', {key: 'position.$value', alias: 'position'}, {key: 'businessSite.$value', alias: 'businessSite'},  {key: 'business.$value', alias: 'business'},  {key: 'businessPhotos.$value', alias: 'businessPhotos'});
-
-            positions =  positions.filter(
-                function(data, key, priority)
-                {
-                    var locationMatched = false;
-                    var occupationMatched = false;
-                    var wageMatched = false;
-                    locationMatched = data.siteId == locationId;
-                    occupationMatched = (occupationId) ? data.position.occupation == occupationId : true;
-                    wageMatched = (minWage) ? data.position.compensation.wage.minAmount >= minWage : true;
-                    return locationMatched && occupationMatched && wageMatched;
-                }
-            );
-
-
-
-            var positionsRef = positions.ref();
-            positionsRef.once('value', function(positionSnap) {
-                   deferred.resolve(positionSnap.val());
-                }, function (err) {
-                    deferred.reject(err);
-                }
-            );
-
-            return deferred.promise;
-
-        };
-
-        this.getPositionbyId = function(siteId, positionId){
-            var ref = new Firebase(FIREBASE_URL);
-            var deferred = $q.defer();
-            var positions = new Firebase.util.NormalizedCollection(
-                ref.child('position'),
-                [ref.child('businessSite'), 'businessSite', 'position.siteId'],
-                [ref.child('business'), 'business', 'position.businessId'],
-                [ref.child('businessPhotos'), 'businessPhotos', 'position.businessId'],
-                [ref.child('users'), 'users', 'position.mainHiringMgr']
-
-            );
-
-            // specify the fields for each path
-            positions = positions.select('position.siteId', 'position.businessId', 'position.mainHiringMgr', {key: 'position.$value', alias: 'position'}, {key: 'businessSite.$value', alias: 'businessSite'},  {key: 'business.$value', alias: 'business'},
-                {key: 'users.$value', alias: 'hiringMgr'},{key: 'businessPhotos.$value', alias: 'businessPhotos'});
-
-            positions =  positions.filter(
-                function(data, key, priority)
-                {
-                   return key == positionId;
-                }
-            );
-
-            var positionsRef = positions.ref().child(positionId);
-
-            positionsRef.once('value', function(positionSnap) {
-                    deferred.resolve(positionSnap.val());
-                }, function (err) {
-                    deferred.reject(err);
-                }
-            );
-
-            return deferred.promise;
-
-        }
-
-        this.applyforPosition
-    };
-})();
-
-
-
-/**
- * Created by labrina.loving on 8/10/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.core')
-        .service('UserService', ['$rootScope', '$q','FIREBASE_URL', '$firebaseObject', 'fbutil', UserService]);
-
-    function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, UserService) {
-        var self = this;
-        var ref = new Firebase(FIREBASE_URL+"/users");
-        var currentUser;
-        var currentUserId;
-        var isLoggedIn = false;
-
-        function userModel(firstName, lastName, email, userType,
-                           profileImageUrl, personalStatement,
-                           provider, createdOn, lastModifiedOn){
-
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.email = email;
-            this.userType = userType;
-            this.profileImageUrl = profileImageUrl;
-            this.personalStatement = personalStatement;
-            this.provider =  provider;
-            this.createdOn = createdOn;
-            this.lastModifiedOn = lastModifiedOn;
-           }
-
-
-        this.getCurrentUser = function getCurrentUser() {
-           return currentUser;
-        };
-
-        this.getIsLoggedIn =  function getIsLoggedIn(){
-            return isLoggedIn;
-        };
-
-        this.setCurrentUser = function setCurrentUser(user, userId){
-            currentUser = user;
-            currentUser.userId = userId;
-            currentUserId = userId;
-        };
-
-        this.setIsLoggedIn = function setIsLoggedIn(aisLoggedIn){
-            isLoggedIn = aisLoggedIn;
-            if(!isLoggedIn){
-                currentUser = '';
-                currentUserId = '';
-            }
-
-        };
-
-        this.getUserByKey = function getUserByKey(key){
-            var userRef =  new Firebase(FIREBASE_URL + "/users" + '/' + key);
-            var deferred = $q.defer();
-            userRef.once("value", function (snapshot) {
-                    deferred.resolve(snapshot);
-
-                }, function (err) {
-                    deferred.reject(snapshot);
-                }
-            );
-            return deferred.promise;
-        };
-
-
-        this.getUserByEmail = function getUserByEmail(email) {
-
-            var deferred = $q.defer();
-            ref.orderByChild("email").equalTo(email).once("value", function (snapshot) {
-                    deferred.resolve(snapshot);
-
-                }, function (err) {
-                    deferred.reject(snapshot);
-                }
-            );
-            return deferred.promise;
-        };
-
-        this.createUserinFirebase = function createUserInFireBase(user, key) {
-
-            var ref = fbutil.ref('users', key);
-            ref.set(user)
-        }
-
-        this.saveUser = function saveUser(user){
-            var ref = new Firebase(FBURL + "/users/" + currentUserId);
-            ref.update(user);
-            currentUser = user;
-        }
-
-        this.createUserfromThirdParty = function createUserfromThirdParty(provider, authData) {
-            var deferred = $q.defer();
-            var user;
-
-            //get proper user for provider
-            switch(provider) {
-                case 'facebook':
-                    user = createFacebookUser(authData);
-                    break;
-                case 'twitter':
-
-                    break;
-                case 'google':
-                    user = createGoogleUser(authData);
-            }
-
-            //check if user previously exists
-            this.getUserByKey(authData.uid)
-                .then(function(snapshot) {
-                    var exists = (snapshot.val() != null);
-                    if(!exists)
-                    {
-                        self.createUserinFirebase(user, authData.uid)
-
-                    }
-                    deferred.resolve(user);
-                }, function(err) {
-                    deferred.reject(err);
-                });
-
-            return deferred.promise;
-
-        };
-
-
-
-        this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
-
-            var deferred = $q.defer();
-
-
-            var timestamp = Firebase.ServerValue.TIMESTAMP;
-
-            var firstName = userData.firstName;
-            var lastName = userData.lastName;
-            var email = userData.email;
-            var userType = userData.userType;
-            var profileImageUrl = userData.profileImageUrl;
-            var provider = 'password';
-            var createdOn = timestamp;
-            var lastModifiedOn = timestamp;
-            var personalStatement = userData.personalStatement;
-
-            var user = new userModel(firstName, lastName, email, userType,
-              profileImageUrl, personalStatement,
-              provider, createdOn, lastModifiedOn);
-
-            self.createUserinFirebase(user, providerId);
-
-
-            deferred.resolve(user);
-            return deferred.promise;
-
-        };
-
-
-
-        function createFacebookUser(fbAuthData)
-        {
-            var timestamp = Firebase.ServerValue.TIMESTAMP;
-            var firstName = fbAuthData.facebook.cachedUserProfile.first_name;
-            var lastName = fbAuthData.facebook.cachedUserProfile.last_name;
-            var email = fbAuthData.facebook.email;
-            var userType = '';
-            var profileImageUrl = "http://graph.facebook.com/" + fbAuthData.facebook.id  + "/picture?width=300&height=300";
-            var provider = fbAuthData.provider;
-            var createdOn = timestamp;
-            var lastModifiedOn = timestamp;
-            var personalStatement = '';
-
-            var user = new userModel(firstName, lastName, email, userType,
-              profileImageUrl, personalStatement,
-              provider, createdOn, lastModifiedOn);
-
-
-            return user;
-
-        };
-
-        function createGoogleUser(googleAuthData)
-        {
-            var timestamp = Firebase.ServerValue.TIMESTAMP;
-            var firstName = googleAuthData.google.cachedUserProfile.given_name;
-            var lastName = googleAuthData.google.cachedUserProfile.family_name;
-            var email = googleAuthData.google.email;
-            var userType = '';
-            var profileImageUrl =  googleAuthData.google.profileImageURL;
-            var provider = fbAuthData.provider;
-            var createdOn = timestamp;
-            var lastModifiedOn = timestamp;
-            var personalStatement = '';
-
-            var user = new userModel(firstName, lastName, email, userType,
-              profileImageUrl, personalStatement,
-              provider, createdOn, lastModifiedOn);
-
-
-            return user;
-
-        };
-
-
-        this.registerNewUser = function registerNewUser(email, password) {
-
-            var deferred = $q.defer();
-            firebaseRef.$createUser({
-                email: email,
-                password : password})
-              .then(function(user) {
-                  deferred.resolve(user);
-              }, function(err) {
-                  deferred.reject(err);
-              });
-
-
-            return deferred.promise;
-        };
-    }
 })();
 
 /**
@@ -3068,6 +2358,742 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 ;
 
 
+/**
+ * Created by labrina.loving on 8/9/2015.
+ */
+angular.module('hirelyApp.core')
+    .config(['$provide', function($provide) {
+        // adapt ng-cloak to wait for auth before it does its magic
+        $provide.decorator('ngCloakDirective', ['$delegate', 'Auth',
+            function($delegate, Auth) {
+                var directive = $delegate[0];
+                // make a copy of the old directive
+                var _compile = directive.compile;
+                directive.compile = function(element, attr) {
+                    Auth.$waitForAuth().then(function() {
+                        // after auth, run the original ng-cloak directive
+                        _compile.call(directive, element, attr);
+                    });
+                };
+                // return the modified directive
+                return $delegate;
+            }]);
+    }]);
+
+/**
+ * Created by labrina.loving on 9/16/2015.
+ */
+angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
+    return function (items, occupation, minWage) {
+        var filtered = [];
+       for (var i = 0; i < items.length; i++) {
+            var occupationMatched = true;
+            var wageMatched = true;
+            var item = items[i];
+            if(occupation){
+                occupationMatched = occupation.id === item.occupationId;
+            }
+
+           wageMatched = item.wage.amount >= minWage;
+           if(wageMatched && occupationMatched)
+           {
+               filtered.push(item);
+           }
+
+        }
+        return filtered;
+    };
+});
+
+/**
+ * Created by labrina.loving on 8/8/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.core')
+        .factory('AuthService', ['$firebaseAuth', 'fbutil', '$q', AuthService]);
+
+    function AuthService($firebaseAuth, fbutil, $q) {
+        var self = this;
+        var firebaseRef = $firebaseAuth(fbutil.ref());
+        var authData = '';
+        var service =  {
+            thirdPartyLogin: thirdPartyLogin,
+            AuthRef: AuthRef,
+            passwordLogin: passwordLogin,
+            logout: logout
+        };
+        return service;
+
+        // Handle third party login providers
+        // returns a promise
+        function thirdPartyLogin(provider) {
+
+            var deferred = $q.defer();
+            firebaseRef.$authWithOAuthPopup(provider)
+                .then(function(user) {
+                   deferred.resolve(user);
+                }, function(err) {
+                    if (err.code === "TRANSPORT_UNAVAILABLE") {
+                        // fall-back to browser redirects, and pick up the session
+                        // automatically when we come back to the origin page
+                        ref.authWithOAuthRedirect.then(function(user) {
+                            deferred.resolve(user);
+                        }, function(err) {
+                            deferred.reject(err);
+                            });
+                    }
+                });
+
+
+          return deferred.promise;
+        };
+
+        function passwordLogin(email, password) {
+
+            var deferred = $q.defer();
+            firebaseRef.$authWithPassword({
+                email    : email,
+                password : password
+                })
+                .then(function(user) {
+                    deferred.resolve(user);
+                }, function(err) {
+                    deferred.reject(err);
+                });
+
+
+            return deferred.promise;
+        };
+
+        function AuthRef(){
+            return firebaseRef;
+        }
+
+        function logout(){
+            firebaseRef.$unauth();
+        }
+
+
+
+        function AuthRef(){
+            return firebaseRef;
+        }
+
+
+
+
+    }
+})();
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.manager')
+        .service('BusinessService', ['$q','FIREBASE_URL', 'RESPONSE', BusinessService]);
+
+     function BusinessService( $q, FIREBASE_URL, RESPONSE) {
+
+
+        var deferred = $q.defer();
+
+        var businessRef = new Firebase(FIREBASE_URL + '/business');
+        var businessRefPush = businessRef.push();
+
+        var onComplete = function (error) {
+          if(error){
+            deferred.resolve(RESPONSE.success);
+          } else {
+            deferred.reject(RESPONSE.success);
+          }
+        };
+
+        /**
+         *
+         * for Company profile refer to: Business model
+         *
+         * for Address refer to Address Model
+         *
+         * for Contact refer to Contact Model
+         *
+         **/
+
+        this.createNewBusiness = function createNewBusiness(companyProfile, address, contact, userEmail){
+
+            var business = new Business(
+              company.name,
+              company.description = description,
+              userEmail,
+              company.type,
+              company.active,
+              company.placeId,
+              company.website
+            );
+
+            businessRefPush.set(business, onComplete);
+        }
+    };
+
+})();
+
+
+
+/**
+ * Created by labrina.loving on 9/4/2015.
+ */
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.core')
+        .service('CandidateService', ['$q','$http','FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseArray', CandidateService]);
+
+    function CandidateService($q, $http, FIREBASE_URL, $firebaseObject, fbutil, $firebaseArray, CandidateService) {
+        var self = this;
+        var profile = '';
+        var candidateExperience = [];
+        var candidateEducation = [];
+
+        function candidateModel(){
+            this.authorizedInUS = '';
+            this.status = '';
+            this.experience ={};
+            this.education = {};
+            this.personality = {};
+            this.availability = {};
+        }
+
+
+        this.getProfile = function getProfile(userId){
+            var ref = new Firebase(FIREBASE_URL);
+            var deferred = $q.defer();
+            var profile = new Firebase.util.NormalizedCollection(
+                ref.child('users'),
+                ref.child('candidates'),
+                ref.child('candidate-availability'),
+                ref.child('candidate-personality')
+
+            );
+
+            // specify the fields for each path
+            profile = profile.select({key: 'candidates.$value', alias: 'candidate'},
+                {key: 'candidate-availability.$value', alias: 'availability'},
+                {key: 'candidate-personality.$value', alias: 'personality'}),
+
+            // apply a client-side filter to the data (only return users where key === 'user1'
+            profile = profile.filter(
+                function(data, key, priority) { return key === userId; }
+            );
+
+            var profileRef = profile.ref().child(userId);
+            // run it and see what we get
+            profileRef.once('value', function(snap) {
+                    var profile = snap.val();
+                    var ref = fbutil.ref('candidate-experience', userId);
+                    profile.experience =  $firebaseArray(ref);
+                    deferred.resolve(profile);
+
+                }, function (err) {
+                    deferred.reject(snap);
+                }
+            );
+
+            return deferred.promise;
+
+        }
+
+        this.saveCandidate = function saveCandidate(candidate, key) {
+            var ref = fbutil.ref('candidates', key);
+            ref.set(candidate);
+        };
+
+        this.saveAvailability = function saveAvailability(availability, key) {
+            var ref = fbutil.ref('candidate-availability', key);
+            ref.set(availability);
+        };
+
+        this.savePersonality = function savePersonality(personality, key){
+            var ref = fbutil.ref('candidate-personality', key);
+            ref.set(personality);
+        }
+
+        this.createTraitifyAssessment = function createTraitifyAssessment(){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessment')
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessmentResults = function getAssessmentResults(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentResults'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessmentSlides = function getAssessmentSlides(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentSlides'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessmentCareerMatches = function getAssessmentCareerMatches(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentCareerMatches'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getAssessment = function getAssessment(assessmentId){
+            var deferred = $q.defer();
+
+            $http.get('/api/assessmentData'+ assessmentId)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+
+        }
+
+        this.getExperience = function getExperience(userId){
+            var ref = fbutil.ref('candidate-experience', userId);
+            return $firebaseArray(ref);
+        }
+
+        this.savePositiontoFavorites = function savePositiontoFavorites(userId, positionId){
+            var ref = fbutil.ref('candidate-favorites', userId);
+            ref.child(positionId).set(true);
+
+        }
+
+
+
+
+    }
+})();
+
+
+/**
+ * Created by labrina.loving on 9/4/2015.
+ */
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.core')
+        .service('FilePickerService', ['$window', FilePickerService]);
+
+    function FilePickerService($window) {
+        return $window.filepicker;
+    }
+
+})();
+/**
+ * Created by labrina.loving on 8/14/2015.
+ */
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.core')
+        .factory('GeocodeService', ['$q', '$http', 'GOOGLEMAPSURL', 'FIREBASE_URL', GeocodeService]);
+
+    function GeocodeService($q, $http, GOOGLEMAPSURL, FIREBASE_URL) {
+        var mapsEndPoint = GOOGLEMAPSURL;
+        var currentPlace = null;
+
+        var service =  {
+            getPlacebyLatLong : getPlacebyLatLong,
+            getPlacebyPlaceId : getPlacebyPlaceId,
+            getPlace: getPlace,
+            setPlace: setPlace,
+            calculateDistancetoSite: calculateDistancetoSite,
+            getCityBySearchQuery: getCityBySearchQuery,
+            getLocationBySearchQuery: getLocationBySearchQuery
+        };
+        return service;
+
+        function getPlacebyLatLong(latitude, longitude){
+            var url = mapsEndPoint.replace('{POSITION}', latitude + ',' + longitude);
+            var deferred = $q.defer();
+
+            $http.get(url, {cache: true}).success(function(response) {
+                // hacky
+                var place;
+                angular.forEach(response.results, function(result) {
+                    if(result.types[0] === 'postal_code') {
+                        place = result;
+                    }
+                });
+                deferred.resolve(place);
+            }).error(deferred.reject);
+
+            return deferred.promise;
+        }
+
+        function getPlacebyPlaceId(placeId){
+
+            var deferred = $q.defer();
+
+            $http.get('/api/googleplace'+ placeId)
+                .success(function(data) {
+                    currentPlace = data;
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            return deferred.promise;
+        }
+
+        function getPlace(){
+            return currentPlace;
+        }
+
+        function setPlace(place){
+            currentPlace = place;
+        }
+
+        function calculateDistancetoSite(siteId, placeId){
+            var deferred = $q.defer();
+            var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
+            var geoFire = new GeoFire(firebaseRef);
+            geoFire.get(siteId).then(function(siteLocation) {
+                var place = getPlacebyPlaceId((placeId)).then(function(place) {
+                    var currentPlaceLocation = [place.geometry.location.lat, place.geometry.location.lng];
+                    var distance = GeoFire.distance(currentPlaceLocation, siteLocation) * 0.621371;
+                    deferred.resolve(distance);
+
+                }, function(error) {
+                    console.log("Error: " + error);
+                });
+
+            }, function(error) {
+                console.log("Error: " + error);
+            });
+            return deferred.promise;
+        }
+
+
+        function getCityBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/cities/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+
+        function getLocationBySearchQuery(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/search/locations/'+ query)
+              .success(function(data) {
+                  console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+
+    }
+
+
+})();
+
+/**
+ * Created by mike.baker on 9/25/2015.
+ */
+
+
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp.manager')
+    .service('JobService', ['$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', JobService]);
+
+  function JobService($q, FIREBASE_URL, $firebaseObject, fbutil, JobService) {
+    var self = this;
+    var ref = new Firebase(FIREBASE_URL + '/job');
+
+
+    //internal constructor
+    var Job = function (businessId, hiringMngrId, position, description, contact, applicants, workingHrs, created_at, modified_at, occupation_id) {
+      this.businessId = businessId;
+      this.hiringMngrId = hiringMngrId;
+      this.position = position;
+      this.description = description;
+      this.contact = contact;
+      this.applicants = applicants;
+      this.workingHrs = workingHrs;
+      this.created_at = created_at;
+      this.modified_at = modified_at;
+      this.occupation_id = occupation_id;
+    };
+
+    var Contact = function (email, phone, mobile, other) {
+      this.email = email;
+      this.phone = phone;
+      this.mobile = mobile;
+      this.other = other;
+    };
+
+    var onComplete = function (error) {
+      if (error) {
+        throw new Error('Storing new job failed' + error);
+      } else {
+        console.log('success.');
+      }
+    };
+
+    //exported to be used in Controller as: JobService.createNewJob(Job)
+    this.createNewJob = function createNewJob(jobData) {
+
+      //Create Job object from constructor
+      var job = new Job(
+        jobData.businessId,
+        jobData.hiringMngrId,
+        jobData.position,
+        jobData.description,
+        jobData.applicants,
+        jobData.workingHrs,
+        jobData.created_at,
+        jobData.modified_at,
+        jobData.occupation_id
+      );
+
+      //Create contact object
+      var contact = new Contact(
+        jobData.contact.email || '',
+        jobData.contact.phone || '',
+        jobData.contact.mobile || '',
+        jobData.conatct.other || ''
+      );
+
+      ref.child(generatePushID).set(job, function(){
+        ref.child(generatePushID).child('contact').set(contact, onComplete());
+      });
+    }
+  };
+
+})();
+
+
+
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp.core')
+    .service('OccupationService', ['$q', '$http', OccupationService]);
+
+  function OccupationService($q, $http) {
+
+    /*
+    * Search occupation by search query term
+    * HTTP function: GET
+    * Endpoint: /api/onet/titles/search/:query
+    * Return: Promise with 1 to 5 matching results
+    * */
+    this.getOccupations = function getOccupations(query) {
+      var deferred = $q.defer();
+
+      $http.get('/api/onet/titles/search/' + query)
+        .success(function (data) {
+          deferred.resolve(data);
+        })
+        .error(function (data) {
+          console.log('Error: ' + data);
+        });
+
+      return deferred.promise;
+    }
+  };
+})();
+
+
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp.core')
+    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', UserService]);
+
+  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, UserService) {
+    var self = this;
+    var ref = new Firebase(FIREBASE_URL + "/users");
+
+
+    this.createUserfromThirdParty = function createUserfromThirdParty(provider, authData) {
+      var deferred = $q.defer();
+      var user;
+
+      //get proper user for provider
+      switch (provider) {
+        case 'facebook':
+          user = createFacebookUser(authData);
+          break;
+        case 'google':
+          user = createGoogleUser(authData);
+          break;
+      }
+
+      //check if user previously exists
+      this.getUserByKey(authData.uid)
+        .then(function (snapshot) {
+          var exists = (snapshot.val() != null);
+          if (!exists) {
+            self.createUserinFirebase(user, authData.uid)
+
+          }
+          deferred.resolve(user);
+        }, function (err) {
+          deferred.reject(err);
+        });
+
+      return deferred.promise;
+
+    };
+
+
+    this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
+
+      var deferred = $q.defer();
+
+
+      var timestamp = Firebase.ServerValue.TIMESTAMP;
+
+      var firstName = userData.firstName;
+      var lastName = userData.lastName;
+      var email = userData.email;
+      var userType = userData.userType;
+      var profileImageUrl = userData.profileImageUrl;
+      var provider = 'password';
+      var createdOn = timestamp;
+      var lastModifiedOn = timestamp;
+      var personalStatement = userData.personalStatement;
+      var address = userData.address;
+
+      var user = new User(firstName, lastName, email, userType,
+        profileImageUrl, personalStatement,
+        provider, createdOn, lastModifiedOn, address);
+
+      self.createUserinFirebase(user, providerId);
+
+
+      deferred.resolve(user);
+      return deferred.promise;
+
+    };
+
+
+    function createFacebookUser(fbAuthData) {
+      var timestamp = Firebase.ServerValue.TIMESTAMP;
+      var firstName = fbAuthData.facebook.cachedUserProfile.first_name;
+      var lastName = fbAuthData.facebook.cachedUserProfile.last_name;
+      var email = fbAuthData.facebook.email;
+      var userType = '';
+      var profileImageUrl = "http://graph.facebook.com/" + fbAuthData.facebook.id + "/picture?width=300&height=300";
+      var provider = fbAuthData.provider;
+      var createdOn = timestamp;
+      var lastModifiedOn = timestamp;
+      var personalStatement = '';
+      var address = fbAuthData.facebook.address;
+
+      var user = new User(firstName, lastName, email, userType,
+        profileImageUrl, personalStatement,
+        provider, createdOn, lastModifiedOn, address);
+
+
+      return user;
+
+    };
+
+    function createGoogleUser(googleAuthData) {
+      var timestamp = Firebase.ServerValue.TIMESTAMP;
+      var firstName = googleAuthData.google.cachedUserProfile.given_name;
+      var lastName = googleAuthData.google.cachedUserProfile.family_name;
+      var email = googleAuthData.google.email;
+      var userType = '';
+      var profileImageUrl = googleAuthData.google.profileImageURL;
+      var provider = fbAuthData.provider;
+      var createdOn = timestamp;
+      var lastModifiedOn = timestamp;
+      var personalStatement = '';
+      var address = googleAuthData.google.address;
+
+      var user = new User(firstName, lastName, email, userType,
+        profileImageUrl, personalStatement,
+        provider, createdOn, lastModifiedOn, address);
+
+
+      return user;
+
+    };
+
+
+    this.registerNewUser = function registerNewUser(email, password) {
+
+      var deferred = $q.defer();
+      firebaseRef.$createUser({
+        email: email,
+        password: password
+      })
+        .then(function (user) {
+          deferred.resolve(user);
+        }, function (err) {
+          deferred.reject(err);
+        });
+
+
+      return deferred.promise;
+    };
+  }
+})();
+
  /**
  * Created by labrina.loving on 8/10/2015.
  */
@@ -3228,3 +3254,173 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
 
 
 })();
+
+/**
+ *
+ * Generic Address Model Used for Business and Users
+ *
+ * Our address model is based on: https://developers.google.com/maps/documentation/geocoding/intro?csw=1#Types
+ *
+ * */
+
+Address = Model({
+  initialize: function (formattedAddress, zipCode, unit, street, city, state, longitude, latitude){
+    this.formattedAddress = formattedAddress;
+    this.zipCode = zipCode;
+    this.street = street;
+    this.city = city;
+    this.state = state;
+  }
+});
+/**
+ *
+ * Business Model
+ * --- Photo Model
+ *
+ * Job Model
+ *
+ * */
+
+Business = Model({
+
+  initialize: function (name, description, admin, type, active, placeId, website){
+    this.name = name;
+    this.description = description;
+    this.admin = admin
+    this.type = type;
+    this.active = active;
+    this.placeId = placeId;
+    this.website = website;
+  },
+
+  toString: function(){
+    return "My unique email is "+ this.email+ " and my name is " + this.firstName;
+  }
+});
+
+
+Photo = Model({
+  initialize: function (url, main){
+    this.url = url;
+    this.main = main;
+  }
+});
+
+
+Job = Model({
+  initialize: function (businessId, hiringManager, position, occupationId, description, createdAt, updatedAt, available){
+    this.businessId = businessId;
+    this.hiringManager = hiringManager;
+    this.position = position;
+    this.occupationId = occupationId;
+    this.description = description;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.available = available;
+  }
+});
+
+/**
+ *
+ * Generic Contact Model Used for Business and Users
+ *
+ * */
+
+Contact = Model({
+  initialize: function (email, mobile, phone, other){
+    this.email = email;
+    this.mobile = mobile;
+    this.phone = phone;
+    this.other = other;
+  }
+});
+/**
+ *
+ * Base Model Generator
+ *
+ * */
+
+Model = function(methods) {
+  var baseModel = function() {
+    this.initialize.apply(this, arguments);
+  };
+
+  for (var property in methods) {
+    baseModel.prototype[property] = methods[property];
+  }
+
+  if (!baseModel.prototype.initialize) baseModel.prototype.initialize = function(){};
+
+  return baseModel;
+};
+/**
+ *
+ * User Model
+ *
+ * Experience Model
+ *
+ * Education Model
+ *
+ * */
+
+
+User = Model({
+
+  initialize: function (userName, firstName, lastName, email, userType,
+                        profileImageUrl, personalStatement,
+                        provider, createdOn, lastModifiedOn, address) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.userType = userType;
+    this.profileImageUrl = profileImageUrl;
+    this.personalStatement = personalStatement;
+    this.provider = provider;
+    this.createdOn = createdOn;
+    this.lastModifiedOn = lastModifiedOn;
+    this.address = address;
+  },
+
+  toString: function(){
+    return "My unique email is "+ this.email+ " and my name is " + this.firstName;
+  }
+
+});
+
+
+Education = Model({
+
+  initialize: function (programType, institutionName, degree, city, state,
+                        startMonth, startYear, endMonth, endYear, current) {
+    this.programType = programType;
+    this.institutionName = institutionName;
+    this.degree = degree;
+    this.city = city;
+    this.state = state;
+    this.startMonth = startMonth;
+    this.startYear = startYear;
+    this.endMonth = endMonth;
+    this.endYear = endYear;
+    this.current = current;
+  }
+
+});
+
+Experience = Model({
+
+  initialize: function (position, employer, empolyerPlaceId, city, state,
+                        startMonth, startYear, endMonth, endYear, current, accomplishments) {
+    this.position = position;
+    this.employer = employer;
+    this.empolyerPlaceId = empolyerPlaceId;
+    this.city = city;
+    this.state = state;
+    this.startMonth = startMonth;
+    this.startYear = startYear;
+    this.endMonth = endMonth;
+    this.endYear = endYear;
+    this.current = current;
+    this.accomplishments = accomplishments;
+  }
+
+});
