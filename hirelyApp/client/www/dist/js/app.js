@@ -940,6 +940,80 @@ angular.module('hirelyApp.core')
 })();
 
 /**
+ * Created by mike.baker on 8/17/2015.
+ */
+
+ (function () {
+    'use strict';
+
+    angular.module('hirelyApp.jobdetails').controller('JobDetailCtrl', ['$scope', '$state', '$stateParams','PositionService', 'GeocodeService', JobDetailCtrl ]);
+
+    function JobDetailCtrl ($scope, $state, $stateParams, PositionService, GeocodeService) {
+
+        var positionService = PositionService;
+        var geocodeService = GeocodeService;
+        var params = $stateParams;
+        var siteId = $stateParams.siteId;
+        var positionId = $stateParams.positionId;
+        var placeId = $stateParams.placeId;
+        $scope.position = '';
+        $scope.wageFormatted = '';
+        $scope.hoursFormatted = '';
+        $scope.distance = '';
+        $scope.photos = [];
+
+        positionService.getPositionbyId(siteId, positionId).then(function (positionObj) {
+            var today=new Date();
+            $scope.position = positionObj;
+            $scope.wageFormatted = positionObj.position.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.position.compensation.wage) : getnoMaxWageDisplay(positionObj.position.compensation.wage);
+            $scope.hoursFormatted =positionObj.position.workHours.max ? positionObj.position.workHours.min + '-' + positionObj.position.workHours.max : positionObj.position.workHours.min + '+'
+            var largePhoto = _.matcher({size: "l"});
+            var photos =  _.filter(positionObj.businessPhotos, largePhoto);
+            angular.forEach(photos, function(photoObj, photoKey) {
+
+                $scope.photos.push(photoObj.source);
+            });
+
+           geocodeService.calculateDistancetoSite(siteId, placeId).then(function (distance) {
+               $scope.distance = distance;
+           }, function (err) {
+                //TODO:  add error handling
+            });
+
+        }, function (err) {
+            //TODO:  add error handling
+        });
+
+        var getMaxWageDisplay = function(wage)
+        {
+
+            return  numeral(wage.minAmount).format('$0.00') + '-' + numeral(wage.maxAmount).format('$0.00');
+        }
+
+        var getnoMaxWageDisplay = function(wage)
+        {
+
+            return  numeral(wage.minAmount).format('$0.00') + '+';
+        }
+
+    }
+
+
+})();
+
+ 
+/**
+ * Created by mike.baker on 8/17/2015.
+ */
+
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.jobdetails', []);
+})();
+
+
+/**
  * Created by mike.baker on 8/10/2015.
  */
 
@@ -1245,80 +1319,6 @@ angular.module('hirelyApp.core')
 }
 
  })();
-
-/**
- * Created by mike.baker on 8/17/2015.
- */
-
- (function () {
-    'use strict';
-
-    angular.module('hirelyApp.jobdetails').controller('JobDetailCtrl', ['$scope', '$state', '$stateParams','PositionService', 'GeocodeService', JobDetailCtrl ]);
-
-    function JobDetailCtrl ($scope, $state, $stateParams, PositionService, GeocodeService) {
-
-        var positionService = PositionService;
-        var geocodeService = GeocodeService;
-        var params = $stateParams;
-        var siteId = $stateParams.siteId;
-        var positionId = $stateParams.positionId;
-        var placeId = $stateParams.placeId;
-        $scope.position = '';
-        $scope.wageFormatted = '';
-        $scope.hoursFormatted = '';
-        $scope.distance = '';
-        $scope.photos = [];
-
-        positionService.getPositionbyId(siteId, positionId).then(function (positionObj) {
-            var today=new Date();
-            $scope.position = positionObj;
-            $scope.wageFormatted = positionObj.position.compensation.wage.maxAmount ? getMaxWageDisplay(positionObj.position.compensation.wage) : getnoMaxWageDisplay(positionObj.position.compensation.wage);
-            $scope.hoursFormatted =positionObj.position.workHours.max ? positionObj.position.workHours.min + '-' + positionObj.position.workHours.max : positionObj.position.workHours.min + '+'
-            var largePhoto = _.matcher({size: "l"});
-            var photos =  _.filter(positionObj.businessPhotos, largePhoto);
-            angular.forEach(photos, function(photoObj, photoKey) {
-
-                $scope.photos.push(photoObj.source);
-            });
-
-           geocodeService.calculateDistancetoSite(siteId, placeId).then(function (distance) {
-               $scope.distance = distance;
-           }, function (err) {
-                //TODO:  add error handling
-            });
-
-        }, function (err) {
-            //TODO:  add error handling
-        });
-
-        var getMaxWageDisplay = function(wage)
-        {
-
-            return  numeral(wage.minAmount).format('$0.00') + '-' + numeral(wage.maxAmount).format('$0.00');
-        }
-
-        var getnoMaxWageDisplay = function(wage)
-        {
-
-            return  numeral(wage.minAmount).format('$0.00') + '+';
-        }
-
-    }
-
-
-})();
-
- 
-/**
- * Created by mike.baker on 8/17/2015.
- */
-
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.jobdetails', []);
-})();
-
 
 /**
  * Created by labrina.loving on 8/6/2015.
@@ -2359,28 +2359,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
 
 /**
- * Created by labrina.loving on 8/9/2015.
- */
-angular.module('hirelyApp.core')
-    .config(['$provide', function($provide) {
-        // adapt ng-cloak to wait for auth before it does its magic
-        $provide.decorator('ngCloakDirective', ['$delegate', 'Auth',
-            function($delegate, Auth) {
-                var directive = $delegate[0];
-                // make a copy of the old directive
-                var _compile = directive.compile;
-                directive.compile = function(element, attr) {
-                    Auth.$waitForAuth().then(function() {
-                        // after auth, run the original ng-cloak directive
-                        _compile.call(directive, element, attr);
-                    });
-                };
-                // return the modified directive
-                return $delegate;
-            }]);
-    }]);
-
-/**
  * Created by labrina.loving on 9/16/2015.
  */
 angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
@@ -2404,6 +2382,28 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         return filtered;
     };
 });
+
+/**
+ * Created by labrina.loving on 8/9/2015.
+ */
+angular.module('hirelyApp.core')
+    .config(['$provide', function($provide) {
+        // adapt ng-cloak to wait for auth before it does its magic
+        $provide.decorator('ngCloakDirective', ['$delegate', 'Auth',
+            function($delegate, Auth) {
+                var directive = $delegate[0];
+                // make a copy of the old directive
+                var _compile = directive.compile;
+                directive.compile = function(element, attr) {
+                    Auth.$waitForAuth().then(function() {
+                        // after auth, run the original ng-cloak directive
+                        _compile.call(directive, element, attr);
+                    });
+                };
+                // return the modified directive
+                return $delegate;
+            }]);
+    }]);
 
 /**
  * Created by labrina.loving on 8/8/2015.
@@ -2498,15 +2498,14 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         var deferred = $q.defer();
 
         var businessRef = new Firebase(FIREBASE_URL + '/business');
-        var businessRefPush = businessRef.push();
 
-        var onComplete = function (error) {
-          if(error){
-            deferred.resolve(RESPONSE.success);
-          } else {
-            deferred.reject(RESPONSE.success);
-          }
-        };
+        //var onComplete = function (error) {
+        //  if(error){
+        //    deferred.resolve(RESPONSE.success);
+        //  } else {
+        //    deferred.reject(RESPONSE.success);
+        //  }
+        //};
 
         /**
          *
@@ -2518,20 +2517,40 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
          *
          **/
 
-        this.createNewBusiness = function createNewBusiness(companyProfile, address, contact, userEmail){
+        this.createNewBusiness = function createNewBusiness(companyProfile, pAddress, pContact, userEmail){
 
+            var id = generatePushID();
             var business = new Business(
-              company.name,
-              company.description = description,
-              userEmail,
-              company.type,
-              company.active,
-              company.placeId,
-              company.website
+              companyProfile.name,
+              companyProfile.description = description,
+              companyProfile,
+              companyProfile.type,
+              companyProfile.active,
+              companyProfile.placeId,
+              companyProfile.website
             );
 
-            businessRefPush.set(business, onComplete);
+            var address = new Address(
+              pAddress.formattedAddress,
+              pAddress.zipCode,
+              pAddress.street,
+              pAddress.city,
+              pAddress.state,
+              pAddress.lng,
+              pAddress.lat
+            );
+
+            //businessRefPush.set(business, onComplete);
+
+            businessRef.child(id).set(business, function(error){
+              if(!error){
+                businessRef.child(id).child('address').set(address);
+                businessRef.child(id).child('contact').set(contact);
+              }
+            });
         }
+
+
     };
 
 })();
@@ -3310,10 +3329,11 @@ Photo = Model({
 
 
 Job = Model({
-  initialize: function (businessId, hiringManager, position, occupationId, description, createdAt, updatedAt, available){
+  initialize: function (businessId, hiringManager, position, numberOfPositions, occupationId, description, createdAt, updatedAt, available){
     this.businessId = businessId;
     this.hiringManager = hiringManager;
     this.position = position;
+    this.numberOfPositions = numberOfPositions;
     this.occupationId = occupationId;
     this.description = description;
     this.createdAt = createdAt;
@@ -3358,10 +3378,8 @@ Model = function(methods) {
 /**
  *
  * User Model
- *
- * Experience Model
- *
- * Education Model
+ * -- Experience Model
+ * -- Education Model
  *
  * */
 

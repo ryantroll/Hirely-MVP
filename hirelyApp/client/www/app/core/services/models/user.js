@@ -1,10 +1,8 @@
 /**
  *
  * User Model
- *
- * Experience Model
- *
- * Education Model
+ * -- Experience Model
+ * -- Education Model
  *
  * */
 

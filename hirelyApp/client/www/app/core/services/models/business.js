@@ -34,10 +34,11 @@ Photo = Model({
 
 
 Job = Model({
-  initialize: function (businessId, hiringManager, position, occupationId, description, createdAt, updatedAt, available){
+  initialize: function (businessId, hiringManager, position, numberOfPositions, occupationId, description, createdAt, updatedAt, available){
     this.businessId = businessId;
     this.hiringManager = hiringManager;
     this.position = position;
+    this.numberOfPositions = numberOfPositions;
     this.occupationId = occupationId;
     this.description = description;
     this.createdAt = createdAt;
