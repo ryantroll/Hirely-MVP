@@ -299,140 +299,6 @@ var myApp = angular.module('hirelyApp',
 })();
 
 /**
- * Created by labrina.loving on 8/16/2015.
- */
-
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.candidate', []);
-})();
-
-/**
- * Created by labrina.loving on 8/26/2015.
- **/
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
-
-
-    function CandidateCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
-        var vm = this;
-
-        $scope.user = userService.getCurrentUser();
-
-
-
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.user = args.message;
-
-
-        });
-    }
-})()
-;
-
-
-/**
- * Created by labrina.loving on 8/16/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
-
-
-    function CandidateDashboardCtrl($scope, $stateParams) {
-
-        var vm = this;
-        $scope.uiGridOptions  = {
-            data: 'recentApps',
-            columnDefs: [{
-                field: 'company'
-            }, {
-                field: 'position'
-            }, {
-                field: 'application date'
-            },
-                {
-                    field: 'current status'
-                }
-            ]
-        };
-
-        $scope.recentApps = [];
-
-        if($scope.user.Applications){
-            $scope.recentApps = $scope.user.Applications;
-        }
-
-        // Chart.js Data
-        $scope.data = [
-            {
-                value: 5,
-                color:'#FFA540',
-                highlight: '#BF7C30',
-                label: 'Review'
-            },
-            {
-                value: 2,
-                color: '#38A2D0',
-                highlight: '#5AD3D1',
-                label: 'Interview Scheduled '
-            },
-            {
-                value: 1,
-                color: '#37DB79',
-                highlight: '#FFC870',
-                label: 'Passed'
-            }
-        ];
-
-        // Chart.js Options
-        $scope.options =  {
-
-            // Sets the chart to be responsive
-            responsive: true,
-
-            //Boolean - Whether we should show a stroke on each segment
-            segmentShowStroke : true,
-
-            //String - The colour of each segment stroke
-            segmentStrokeColor : '#fff',
-
-            //Number - The width of each segment stroke
-            segmentStrokeWidth : 2,
-
-            //Number - The percentage of the chart that we cut out of the middle
-            percentageInnerCutout : 50, // This is 0 for Pie charts
-
-            //Number - Amount of animation steps
-            animationSteps : 100,
-
-            //String - Animation easing effect
-            animationEasing : 'easeOutBounce',
-
-            //Boolean - Whether we animate the rotation of the Doughnut
-            animateRotate : true,
-
-            //Boolean - Whether we animate scaling the Doughnut from the centre
-            animateScale : false,
-
-            showLegend: false
-
-          };
-
-
-
-    }
-})()
-;
-
-/**
  *
  * Job Application Workflow Main Controller
  *
@@ -638,6 +504,140 @@ var myApp = angular.module('hirelyApp',
 
   }
 })();
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.candidate', []);
+})();
+
+/**
+ * Created by labrina.loving on 8/26/2015.
+ **/
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
+
+
+    function CandidateCtrl($scope, $stateParams, UserService) {
+        var userService = UserService;
+        var vm = this;
+
+        $scope.user = userService.getCurrentUser();
+
+
+
+        //listen for changes to current user
+        $scope.$on('currentUserChanged', function (event, args) {
+            $scope.user = args.message;
+
+
+        });
+    }
+})()
+;
+
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
+
+
+    function CandidateDashboardCtrl($scope, $stateParams) {
+
+        var vm = this;
+        $scope.uiGridOptions  = {
+            data: 'recentApps',
+            columnDefs: [{
+                field: 'company'
+            }, {
+                field: 'position'
+            }, {
+                field: 'application date'
+            },
+                {
+                    field: 'current status'
+                }
+            ]
+        };
+
+        $scope.recentApps = [];
+
+        if($scope.user.Applications){
+            $scope.recentApps = $scope.user.Applications;
+        }
+
+        // Chart.js Data
+        $scope.data = [
+            {
+                value: 5,
+                color:'#FFA540',
+                highlight: '#BF7C30',
+                label: 'Review'
+            },
+            {
+                value: 2,
+                color: '#38A2D0',
+                highlight: '#5AD3D1',
+                label: 'Interview Scheduled '
+            },
+            {
+                value: 1,
+                color: '#37DB79',
+                highlight: '#FFC870',
+                label: 'Passed'
+            }
+        ];
+
+        // Chart.js Options
+        $scope.options =  {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke : true,
+
+            //String - The colour of each segment stroke
+            segmentStrokeColor : '#fff',
+
+            //Number - The width of each segment stroke
+            segmentStrokeWidth : 2,
+
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout : 50, // This is 0 for Pie charts
+
+            //Number - Amount of animation steps
+            animationSteps : 100,
+
+            //String - Animation easing effect
+            animationEasing : 'easeOutBounce',
+
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate : true,
+
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale : false,
+
+            showLegend: false
+
+          };
+
+
+
+    }
+})()
+;
+
 /**
  * Created by labrina.loving on 9/7/2015.
  */
@@ -3264,12 +3264,14 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
  * */
 
 Address = Model({
-  initialize: function (formattedAddress, zipCode, unit, street, city, state, longitude, latitude){
+  initialize: function (formattedAddress, zipCode, unit, street, city, state, lng, lat){
     this.formattedAddress = formattedAddress;
     this.zipCode = zipCode;
     this.street = street;
     this.city = city;
     this.state = state;
+    this.lng = lng;
+    this.lat = lat;
   }
 });
 /**
@@ -3368,7 +3370,7 @@ User = Model({
 
   initialize: function (userName, firstName, lastName, email, userType,
                         profileImageUrl, personalStatement,
-                        provider, createdOn, lastModifiedOn, address) {
+                        provider, createdOn, lastModifiedOn) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -3378,7 +3380,6 @@ User = Model({
     this.provider = provider;
     this.createdOn = createdOn;
     this.lastModifiedOn = lastModifiedOn;
-    this.address = address;
   },
 
   toString: function(){
