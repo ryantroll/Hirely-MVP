@@ -133,5 +133,106 @@
 
       return deferred.promise;
     };
+
+      /**
+         *
+         * for userData refer to: User model
+         *
+         * for pAddress refer to Address Model
+         *
+         * for pEducation refer to Edication Model
+         *
+         * for pExperience refer to Experience Model
+         *
+      **/
+
+    this.createNewUser = function createNewUser(userData , pAddress , pEducation , pExperience) {
+
+      var id = generatePushID();
+
+      var user  = new User (
+        userData.firstName,
+        userData.lastName,
+        userData.email,
+        userData.userType,
+        userData.profileImageUrl,
+        userData.personalStatement,
+        userData.provider,
+        userData.createdOn,
+        userData.lastModifiedOn
+      );
+
+        var address = new Address (
+          pAddress.formattedAddress,
+          pAddress.zipCode,
+          pAddress.unit,
+          pAddress.street,
+          pAddress.city,
+          pAddress.state,
+          pAddress.lng,
+          pAddress.lat
+        );
+
+
+        var education = new Education (
+          pEducation.programType,
+          pEducation.institutionName,
+          pEducation.degree,
+          pEducation.city,
+          pEducation.state,
+          pEducation.startMonth,
+          pEducation.startYear,
+          pEducation.endMonth,
+          pEducation.endYear,
+          pEducation.current
+          );
+
+        var experience = new Experience (
+          pExperience.position,
+          pExperience.employer,
+          pExperience.empolyerPlaceId,
+          pExperience.city,
+          pExperience.state,
+          pExperience.startMonth,
+          pExperience.startYear,
+          pExperience.endMonth,
+          pExperience.endYear,
+          pExperience.current,
+          pExperience.accomplishments
+          );
+
+
+        ref.child(id).set(user,function(error){
+          if(error)
+            console.log("error");
+          else
+          {
+            ref.child(id).child('experience').set(experience);
+            ref.child(id).child('education').set(education);
+            ref.child(id).child('address').set(address);
+            console.log("Success");
+          }
+         
+        });
+
+    };
+
+
+    this.getUserById = function getUserById(id)
+    { 
+      var deferred = $q.defer();
+      var user = {};
+      var url = new Firebase(FIREBASE_URL + "/users/" + id);
+      url.on("value", function(snapshot) {
+        user = snapshot.val();
+        deferred.resolve(user);
+        //return user;  
+      }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
+      });
+    };
+
   }
+
+
 })();

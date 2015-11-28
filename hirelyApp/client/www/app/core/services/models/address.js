@@ -11,6 +11,7 @@ Address = Model({
     this.formattedAddress = formattedAddress;
     this.zipCode = zipCode;
     this.street = street;
+    this.unit = unit;
     this.city = city;
     this.state = state;
     this.lng = lng;

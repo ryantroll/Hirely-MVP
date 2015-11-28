@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,'JobService',HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,'JobService','UserService',HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService , JobService) {
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService , JobService, UserService) {
 
 
         var geocodeService = GeocodeService;
@@ -94,5 +94,33 @@
         //};
 
         //JobService.createNewJob($scope.job, 1010);
+
+        $scope.userData = {
+            firstName : 'Hani',
+            lastName: 'Hanna',
+            email : 'hani-hanna-89@gmail-com',
+            userType : '1',
+            profileImageUrl : 'www.hani.com/pic/hani.jpg',
+            personalStatement : 'Same shit different days',
+            provider : 'password',
+            createdOn : '27-11-2015',
+            lastModifiedOn : '27-11-2015'
+        };
+
+
+        $scope.address = {
+          formattedAddress : 'Syria',
+          zipCode : '00963',
+          unit : ' ',
+          street : 'Al akabe',
+          city : 'Safita',
+          state : 'Tartous',
+          lng : '36.125',
+          lat : '37.452'
+        };
+
+        $scope.user = UserService.getUserById('hani-hanna-89%40gmail-com').success(function(user){
+            console.log(user.firstName);
+        });
     }
 })();

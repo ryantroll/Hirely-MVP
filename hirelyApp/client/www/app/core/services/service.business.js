@@ -29,7 +29,7 @@
          *
          **/
 
-        this.createNewBusiness = function createNewBusiness(companyProfile, pAddress, pContact, userEmail){
+        this.createNewBusiness = function createNewBusiness(companyProfile, pPhoto , pAddress, pContact){
 
             var id = generatePushID();
             var business = new Business(
@@ -42,9 +42,15 @@
               companyProfile.website
             );
 
+            var photo = new Photo (
+              pPhoto.url,
+              pPhoto.main
+              );
+
             var address = new Address(
               pAddress.formattedAddress,
               pAddress.zipCode,
+              pAddress.unit,
               pAddress.street,
               pAddress.city,
               pAddress.state,
@@ -52,10 +58,17 @@
               pAddress.lat
             );
 
-            //businessRefPush.set(business, onComplete);
+
+            var contact = new Contact (
+                pContact.email,
+                pContact.mobile,
+                pContact.phone,
+                pContact.other
+              );
 
             businessRef.child(id).set(business, function(error){
               if(!error){
+                businessRef.child(id).child('photo').set(photo);
                 businessRef.child(id).child('address').set(address);
                 businessRef.child(id).child('contact').set(contact);
               }

@@ -9,7 +9,7 @@
 
 User = Model({
 
-  initialize: function (userName, firstName, lastName, email, userType,
+  initialize: function (firstName, lastName, email, userType,
                         profileImageUrl, personalStatement,
                         provider, createdOn, lastModifiedOn) {
     this.firstName = firstName;
