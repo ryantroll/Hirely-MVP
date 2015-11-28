@@ -9,7 +9,7 @@
 
 Business = Model({
 
-  initialize: function (name, description, admin, type, active, placeId, website){
+  initialize: function (name, description, admin, type, active, placeId, website ,photo , address , contact ){
     this.name = name;
     this.description = description;
     this.admin = admin
@@ -17,6 +17,9 @@ Business = Model({
     this.active = active;
     this.placeId = placeId;
     this.website = website;
+    this.photo = photo || {};
+    this.address = address || {};
+    this.contact = contact || {};
   },
 
   toString: function(){

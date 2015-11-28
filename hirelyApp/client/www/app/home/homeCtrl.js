@@ -69,22 +69,17 @@
          *  TESTING AREA - STAY AWAY!!
          *
         **********************************************************************************/
-/*
+
         $scope.company = {
-            name: 'Hani Hanna',
+            name: 'KFC',
             description: 'Resturant',
+            admin: '1',
             type: '0',
             active: 'true',
             placeId: 'Gsghsddf215584sdfd',
-            website: 'www.hanna.com',
-            photos: {url:'http://www.hanna.com/images/hani.jpg',main:'true',order:'0'},
-            children: {},
-            parent: {},
-            jobs: {},
-            address: {google_place_id:'ggadfsf255sdf', latitude:'34.8167',longitude:'36.1167',formatted_address:'safita-alakba',postal_code:'043'}
+            website: 'www.KFC.com'
         };
-        BusinessService.createNewBusiness($scope.company, 123123123);*/
-
+/*
         //$scope.job = {
         //    businessId: {1234:'true'},
         //    hiringMgr: {123123132:'true'},
@@ -96,31 +91,65 @@
         //JobService.createNewJob($scope.job, 1010);
 
         $scope.userData = {
-            firstName : 'Hani',
+            firstName : 'Hanu',
             lastName: 'Hanna',
-            email : 'hani-hanna-89@gmail-com',
+            email : 'hani.hanna@gmail.com',
             userType : '1',
-            profileImageUrl : 'www.hani.com/pic/hani.jpg',
-            personalStatement : 'Same shit different days',
+            profileImageUrl : 'www.hani.com/pic/hehe.jpg',
+            personalStatement : 'work hard in silence let success make the noise',
             provider : 'password',
-            createdOn : '27-11-2015',
-            lastModifiedOn : '27-11-2015'
+            createdOn : '25-11-2015',
+            lastModifiedOn : '28-11-2015'
         };
 
-
+*/
         $scope.address = {
-          formattedAddress : 'Syria',
-          zipCode : '00963',
+          formattedAddress : 'USA-NY',
+          zipCode : '001',
           unit : ' ',
-          street : 'Al akabe',
-          city : 'Safita',
-          state : 'Tartous',
-          lng : '36.125',
-          lat : '37.452'
+          street : 'AA',
+          city : 'NY',
+          state : 'NY',
+          lng : '75.36',
+          lat : '35.36'
         };
 
+        $scope.contact = {
+            email : 'hani@developpers.com.au',
+            mobile: '05236542'
+        }
+
+        $scope.photo = {
+            url: 'http://www.kfc.com/pic/logo.jpg',
+            main: 'true'
+        }
+
+        //$scope.userData.address = $scope.address;
+
+        $scope.company.address = $scope.address;
+        $scope.company.photo = $scope.photo;
+
+        /*
         $scope.user = UserService.getUserById('hani-hanna-89%40gmail-com').then(function(user){
             console.log(user.firstName);
-        });
+        });*/
+
+        //UserService.createNewUser($scope.userData,589-676);
+        //BusinessService.createNewBusiness($scope.company,$scope.photo,$scope.address,$scope.contact);
+
+        $scope.job = {
+            businessId : '0L5DpYpNjhPiqj1wbFv',
+            hiringManager : '-444',
+            position : 'position',
+            numberOfPositions : '3',
+            occupationId : 'jhkjjhhk-87',
+            description : 'Hiring 3 waiters',
+            createdAt : '27-11-2015',
+            updatedAt : '28-11-2015',
+            available : 'true'
+        }
+
+        JobService.createNewJob($scope.job);
+
     }
 })();

@@ -52,6 +52,25 @@
           console.log('error');  
       });
     }
+
+
+    // retrieve job by its ID
+     this.getJobById = function getJobById(id)
+    { 
+      var deferred = $q.defer();
+      var user = {};
+      var url = new Firebase(FIREBASE_URL + "/job/" + id);
+      url.on("value", function(snapshot) {
+        user = snapshot.val();
+        deferred.resolve(user);
+      }, function (err) {
+      deferred.reject(err);
+      });
+
+      return deferred.promise;
+    }
+
+
   };
 
 })();

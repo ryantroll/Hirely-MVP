@@ -8,13 +8,13 @@
 
 Address = Model({
   initialize: function (formattedAddress, zipCode, unit, street, city, state, lng, lat){
-    this.formattedAddress = formattedAddress;
-    this.zipCode = zipCode;
-    this.street = street;
-    this.unit = unit;
-    this.city = city;
-    this.state = state;
-    this.lng = lng;
-    this.lat = lat;
+    this.formattedAddress = formattedAddress || '';
+    this.zipCode = zipCode || '';
+    this.unit = unit || '';
+    this.street = street || '';
+    this.city = city || '';
+    this.state = state || '';
+    this.lng = lng || '';
+    this.lat = lat || '';
   }
 });

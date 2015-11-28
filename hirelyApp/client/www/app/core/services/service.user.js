@@ -2,11 +2,13 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', UserService]);
+    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseAuth', UserService]);
 
-  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, UserService) {
+  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, $firebaseAuth, UserService) {
     var self = this;
+    var baseRef = new Firebase(FIREBASE_URL);
     var ref = new Firebase(FIREBASE_URL + "/users");
+    var auth = $firebaseAuth(baseRef);
 
 
     this.createUserfromThirdParty = function createUserfromThirdParty(provider, authData) {
@@ -83,11 +85,13 @@
       var createdOn = timestamp;
       var lastModifiedOn = timestamp;
       var personalStatement = '';
-      var address = fbAuthData.facebook.address;
+      var address = new Address ( fbAuthData.facebook.address );
+      var experience = {};
+      var education = {};
 
       var user = new User(firstName, lastName, email, userType,
         profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address);
+        provider, createdOn, lastModifiedOn, address , experience , education);
 
 
       return user;
@@ -105,12 +109,13 @@
       var createdOn = timestamp;
       var lastModifiedOn = timestamp;
       var personalStatement = '';
-      var address = googleAuthData.google.address;
+      var address = new Address (googleAuthData.google.address);
+      var experience = {};
+      var education = {};
 
       var user = new User(firstName, lastName, email, userType,
         profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address);
-
+        provider, createdOn, lastModifiedOn, address , experience , education);
 
       return user;
 
@@ -120,7 +125,7 @@
     this.registerNewUser = function registerNewUser(email, password) {
 
       var deferred = $q.defer();
-      firebaseRef.$createUser({
+      auth.$createUser({
         email: email,
         password: password
       })
@@ -134,21 +139,19 @@
       return deferred.promise;
     };
 
+
       /**
          *
          * for userData refer to: User model
          *
-         * for pAddress refer to Address Model
+         * for authId refer to USR_ID
          *
-         * for pEducation refer to Edication Model
-         *
-         * for pExperience refer to Experience Model
          *
       **/
 
-    this.createNewUser = function createNewUser(userData , pAddress , pEducation , pExperience) {
+    this.createNewUser = function createNewUser(userData  , authId) {
 
-      var id = generatePushID();
+      var id = authId;
 
       var user  = new User (
         userData.firstName,
@@ -159,9 +162,13 @@
         userData.personalStatement,
         userData.provider,
         userData.createdOn,
-        userData.lastModifiedOn
+        userData.lastModifiedOn,
+        userData.address,
+        userData.experience,
+        userData.education
       );
 
+      /*
         var address = new Address (
           pAddress.formattedAddress,
           pAddress.zipCode,
@@ -201,7 +208,7 @@
           pExperience.accomplishments
           );
 
-
+*/
         ref.child(id).set(user,function(error){
           if(error)
             console.log("error");
@@ -226,7 +233,6 @@
       url.on("value", function(snapshot) {
         user = snapshot.val();
         deferred.resolve(user);
-        //return user;  
       }, function (err) {
       deferred.reject(err);
       });
