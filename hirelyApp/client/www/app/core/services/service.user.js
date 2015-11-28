@@ -227,9 +227,11 @@
         user = snapshot.val();
         deferred.resolve(user);
         //return user;  
-      }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+      }, function (err) {
+      deferred.reject(err);
       });
+
+      return deferred.promise;
     };
 
   }

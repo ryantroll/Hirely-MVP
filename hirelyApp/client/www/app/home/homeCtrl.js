@@ -119,7 +119,7 @@
           lat : '37.452'
         };
 
-        $scope.user = UserService.getUserById('hani-hanna-89%40gmail-com').success(function(user){
+        $scope.user = UserService.getUserById('hani-hanna-89%40gmail-com').then(function(user){
             console.log(user.firstName);
         });
     }
