@@ -73,55 +73,6 @@
 
     };
 
-
-    function createFacebookUser(fbAuthData) {
-      var timestamp = Firebase.ServerValue.TIMESTAMP;
-      var firstName = fbAuthData.facebook.cachedUserProfile.first_name;
-      var lastName = fbAuthData.facebook.cachedUserProfile.last_name;
-      var email = fbAuthData.facebook.email;
-      var userType = '';
-      var profileImageUrl = "http://graph.facebook.com/" + fbAuthData.facebook.id + "/picture?width=300&height=300";
-      var provider = fbAuthData.provider;
-      var createdOn = timestamp;
-      var lastModifiedOn = timestamp;
-      var personalStatement = '';
-      var address = new Address ( fbAuthData.facebook.address );
-      var experience = {};
-      var education = {};
-
-      var user = new User(firstName, lastName, email, userType,
-        profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address , experience , education);
-
-
-      return user;
-
-    };
-
-    function createGoogleUser(googleAuthData) {
-      var timestamp = Firebase.ServerValue.TIMESTAMP;
-      var firstName = googleAuthData.google.cachedUserProfile.given_name;
-      var lastName = googleAuthData.google.cachedUserProfile.family_name;
-      var email = googleAuthData.google.email;
-      var userType = '';
-      var profileImageUrl = googleAuthData.google.profileImageURL;
-      var provider = fbAuthData.provider;
-      var createdOn = timestamp;
-      var lastModifiedOn = timestamp;
-      var personalStatement = '';
-      var address = new Address (googleAuthData.google.address);
-      var experience = {};
-      var education = {};
-
-      var user = new User(firstName, lastName, email, userType,
-        profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address , experience , education);
-
-      return user;
-
-    };
-
-
     this.registerNewUser = function registerNewUser(email, password) {
 
       var deferred = $q.defer();
@@ -140,20 +91,24 @@
     };
 
 
-      /**
-         *
-         * for userData refer to: User model
-         *
-         * for authId refer to USR_ID
-         *
-         *
-      **/
+    /**
+     *
+     * for userData refer to: User model
+     *
+     * for authId refer to USR_ID
+     *
+     *
+     **/
 
-    this.createNewUser = function createNewUser(userData  , authId) {
+    this.createNewUser = function createNewUser(userData, authId) {
 
       var id = authId;
 
-      var user  = new User (
+      var pAddress = userData.address || {};
+      var pEducation = userData.education || {};
+      var pExperience = userData.experience || {};
+
+      var user = new User(
         userData.firstName,
         userData.lastName,
         userData.email,
@@ -168,76 +123,130 @@
         userData.education
       );
 
+      /*****
+       *
+       * Uncomment When needed.
+       *
+       * ***/
+
       /*
-        var address = new Address (
-          pAddress.formattedAddress,
-          pAddress.zipCode,
-          pAddress.unit,
-          pAddress.street,
-          pAddress.city,
-          pAddress.state,
-          pAddress.lng,
-          pAddress.lat
-        );
+       var address = new Address (
+       pAddress.formattedAddress,
+       pAddress.zipCode,
+       pAddress.unit,
+       pAddress.street,
+       pAddress.city,
+       pAddress.state,
+       pAddress.lng,
+       pAddress.lat
+       );
 
 
-        var education = new Education (
-          pEducation.programType,
-          pEducation.institutionName,
-          pEducation.degree,
-          pEducation.city,
-          pEducation.state,
-          pEducation.startMonth,
-          pEducation.startYear,
-          pEducation.endMonth,
-          pEducation.endYear,
-          pEducation.current
-          );
+       var education = new Education (
+       pEducation.programType,
+       pEducation.institutionName,
+       pEducation.degree,
+       pEducation.city,
+       pEducation.state,
+       pEducation.startMonth,
+       pEducation.startYear,
+       pEducation.endMonth,
+       pEducation.endYear,
+       pEducation.current
+       );
 
-        var experience = new Experience (
-          pExperience.position,
-          pExperience.employer,
-          pExperience.empolyerPlaceId,
-          pExperience.city,
-          pExperience.state,
-          pExperience.startMonth,
-          pExperience.startYear,
-          pExperience.endMonth,
-          pExperience.endYear,
-          pExperience.current,
-          pExperience.accomplishments
-          );
+       var experience = new Experience (
+       pExperience.position,
+       pExperience.employer,
+       pExperience.empolyerPlaceId,
+       pExperience.city,
+       pExperience.state,
+       pExperience.startMonth,
+       pExperience.startYear,
+       pExperience.endMonth,
+       pExperience.endYear,
+       pExperience.current,
+       pExperience.accomplishments
+       );
 
-*/
-        ref.child(id).set(user,function(error){
-          if(error)
-            console.log("error");
-          else
-          {
-            ref.child(id).child('experience').set(experience);
-            ref.child(id).child('education').set(education);
-            ref.child(id).child('address').set(address);
-            console.log("Success");
-          }
-         
-        });
+       */
+      ref.child(id).set(user, function (error) {
+        if (error)
+          console.log("error");
+        else {
+          ref.child(id).child('experience').set(experience);
+          ref.child(id).child('education').set(education);
+          ref.child(id).child('address').set(address);
+          console.log("Success");
+        }
+
+      });
 
     };
 
 
-    this.getUserById = function getUserById(id)
-    { 
+    this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
       var url = new Firebase(FIREBASE_URL + "/users/" + id);
-      url.on("value", function(snapshot) {
+      url.on("value", function (snapshot) {
         user = snapshot.val();
         deferred.resolve(user);
       }, function (err) {
-      deferred.reject(err);
+        deferred.reject(err);
       });
 
       return deferred.promise;
+    };
+
+
+
+
+    function createFacebookUser(fbAuthData) {
+      var timestamp = Firebase.ServerValue.TIMESTAMP;
+      var firstName = fbAuthData.facebook.cachedUserProfile.first_name;
+      var lastName = fbAuthData.facebook.cachedUserProfile.last_name;
+      var email = fbAuthData.facebook.email;
+      var userType = '';
+      var profileImageUrl = "http://graph.facebook.com/" + fbAuthData.facebook.id + "/picture?width=300&height=300";
+      var provider = fbAuthData.provider;
+      var createdOn = timestamp;
+      var lastModifiedOn = timestamp;
+      var personalStatement = '';
+      var address = new Address(fbAuthData.facebook.address);
+      var experience = {};
+      var education = {};
+
+      var user = new User(firstName, lastName, email, userType,
+        profileImageUrl, personalStatement,
+        provider, createdOn, lastModifiedOn, address, experience, education);
+
+
+      return user;
+
+    };
+
+    function createGoogleUser(googleAuthData) {
+      var timestamp = Firebase.ServerValue.TIMESTAMP;
+      var firstName = googleAuthData.google.cachedUserProfile.given_name;
+      var lastName = googleAuthData.google.cachedUserProfile.family_name;
+      var email = googleAuthData.google.email;
+      var userType = '';
+      var profileImageUrl = googleAuthData.google.profileImageURL;
+      var provider = fbAuthData.provider;
+      var createdOn = timestamp;
+      var lastModifiedOn = timestamp;
+      var personalStatement = '';
+      var address = new Address(googleAuthData.google.address);
+      var experience = {};
+      var education = {};
+
+      var user = new User(firstName, lastName, email, userType,
+        profileImageUrl, personalStatement,
+        provider, createdOn, lastModifiedOn, address, experience, education);
+
+      return user;
+
     };
 
   }
