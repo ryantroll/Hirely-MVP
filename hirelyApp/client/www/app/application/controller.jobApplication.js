@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobApplicationController]);
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'UserService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady , UserService) {
 
     // test jobs
     var testJobOne = {
@@ -172,5 +172,17 @@
       )
     }
 
+    var user = UserService.getUserById('-444').then(function(user){
+            $scope.firstname = user.firstName;
+            $scope.lastname = user.lastName;
+            $scope.email = user.email;
+            $scope.mobile = user.mobile;
+            $scope.address = user.address.formattedAddress;
+            $scope.address_unit = user.address.unit;
+            $scope.address_city = user.address.city;
+            $scope.state = user.address.state;
+            $scope.zipcode = user.address.zipCode;
+    });
+    
   }
 })();
