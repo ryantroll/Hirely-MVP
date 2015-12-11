@@ -25,6 +25,7 @@ var myApp = angular.module('hirelyApp',
     'hirelyApp.manager',
     'ngSanitize',
     'multiStepForm'
+
   ])
 
 

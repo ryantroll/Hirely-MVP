@@ -1,0 +1,25 @@
+
+
+
+<form class="form-horizontal" name="stepOne" novalidate>
+    <fieldset>
+        <legend>Basic Profile Info</legend>
+
+        <!-- Date Picker -->
+        <div class="form-group">
+            <label for="startDate" class="col-sm-3 control-label">Starting Date<span class="required-field">*</span></label>
+            <div class="col-sm-9 col-md-6">
+                <div class="input-group">
+                    <input type="date" class="form-control" uib-datepicker-popup ng-model="startDate" is-open="status.opened" id="startDate" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-primary" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
+											</span>
+                </div>
+            </div>
+        </div>
+
+
+
+    </fieldset>
+    <!-- END Personal data -->
+</form>

@@ -74,6 +74,7 @@
     -webkit-border-radius:	0 !important;
     -moz-border-radius:		0 !important;
     border-radius:			0 !important;
+    position: relative;
   }
 
   .form-control:focus {
@@ -113,6 +114,7 @@
 
   .form-control-feedback {
     color: #ccc;
+    line-height: 34px !important;
   }
 
   .has-feedback.has-left-icon .form-control {
@@ -475,62 +477,25 @@
     vertical-align: middle;
   }
 
-  /*
-      Buttons
-  */
 
-  .btn {
-    position: relative;
-    overflow: hidden;
-    background: transparent;
-    z-index: 1;
-    -webkit-border-radius:	0;
-    -moz-border-radius:		0;
-    border-radius:			0;
-    -webkit-box-shadow:	none !important;
-    -moz-box-shadow:	none !important;
-    box-shadow:			none !important;
-    -webkit-transition:	all 0.3s;
-    -moz-transition:	all 0.3s;
-    transition:			all 0.3s;
-  }
 
-  .btn:hover {
-    background: transparent;
-  }
 
-  .btn:before {
-    position: absolute;
-    content: '';
-    top: -1px;
-    right: -1px;
-    bottom: -1px;
-    left: -1px;
-    z-index: -1;
-    -webkit-transition:	all 0.5s;
-    -moz-transition:	all 0.5s;
-    transition:			all 0.5s;
-  }
 
-  .btn:hover:before {
-    opacity: 0.2;
-  }
 
-  .btn.btn-animated:hover:before {
-    -webkit-transform:	rotate(180deg);
-    -moz-transform:		rotate(180deg);
-    transform:			rotate(180deg);
-  }
+
+
+
 
   .btn-default,
   .btn-default:hover	{ border-color: #ccc; }
   .btn-default:before	{ background: #f0f0f0; }
   .btn-default:hover	{ color: #999; }
 
+  .btn-primary          {color: #fff;}
   .btn-primary,
-  .btn-primary:hover	{ border-color: #0f9fcf; }
-  .btn-primary:before	{ background: #4fd0fb; }
-  .btn-primary:hover	{ color: #0f9fcf; }
+  .btn-primary:hover	{ border-color:  $blue; }
+  .btn-primary:before	{ background:  $blue; }
+  .btn-primary:hover	{  background:  darken($blue, 5%); border-color: darken($blue, 5%); color: #fff; }
 
   .btn-success,
   .btn-success:hover	{ border-color: #0ac964; }
@@ -910,8 +875,28 @@
     margin-right: 10px;
   }
 
-  input[type="text"]{
+  input[type="text"], input[type="phone"], input[type="email"], input[type="date"]{
     height: auto !important;
+  }
+
+  .spinner{
+    position: absolute;
+    right: 25px;
+    width: 16px;
+    height: 16px;
+    top:50%;
+    margin-top: -8px;
+  }
+  .fa-places-alert{
+    color: #FFA51F;
+    position: absolute;
+    right: 25px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    top:50%;
+    margin-top: -12px;
+    font-size: 16px;
   }
 
 }

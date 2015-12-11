@@ -331,6 +331,8 @@ var myApp = angular.module('hirelyApp',
       photoUrl: "http://retaildesignblog.net/wp-content/uploads/2011/08/McDonald-s-flagship-restaurant-by-SHH-London.jpg"
     };
 
+    var testUserId = '-444';
+
     var jobInfo = {};
 
 
@@ -396,24 +398,25 @@ var myApp = angular.module('hirelyApp',
     //form steps
     $scope.steps = [
       {
-        templateUrl: '/app/application/steps/step-one.tpl.html',
-        title: 'Get the source',
-        hasForm: true
+        templateUrl: '/app/application/step-1/step-one.tpl.html',
+        controller: 'StepOneController',
+        hasForm: false
       },
       {
-        templateUrl: '/app/application/steps/step-TWO.tpl.html',
-        title: 'Add it to your app',
-        isolatedScope: true,
+        templateUrl: '/app/application/step-2/step-two.tpl.html',
         controller: 'StepTwoController',
         hasForm: true
       },
       {
-        templateUrl: '/angular-multi-step-form/examples/1/step3.html',
-        title: 'Create your multi step forms / wizzards'
+        templateUrl: '/app/application/step-3/step-three.tpl.html'
       },
       {
-        templateUrl: '/angular-multi-step-form/examples/1/step4.html',
-        title: 'Read the docs'
+        templateUrl: '/app/application/step-4/step-four.tpl.html'
+      },
+      {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
       }
     ];
 
@@ -470,9 +473,9 @@ var myApp = angular.module('hirelyApp',
           description: $scope.description
         }
       )
-    }
+    };
 
-    var user = UserService.getUserById('-444').then(function(user){
+    var user = UserService.getUserById(testUserId).then(function(user){
             $scope.firstname = user.firstName;
             $scope.lastname = user.lastName;
             $scope.email = user.email;
@@ -483,39 +486,183 @@ var myApp = angular.module('hirelyApp',
             $scope.state = user.address.state;
             $scope.zipcode = user.address.zipCode;
     });
-    
+
+
+    $scope.submitStepOne = function () {
+      console.log(hello);
+    }
+
+
+
   }
 })();
 /**
- *
- * Job Application Workflow Main Controller
- *
- * Develoopers - Hirely 2015
+ * Created by labrina.loving on 8/5/2015.
  */
-(function () {
-  'use strict';
 
-  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
+(function() {
+    'use strict';
 
-
-  function StepTwoController($scope, $stateParams) {
-
-
-
-    $scope.xpItems = [];
-    $scope.addJobXp = function () {
-      console.log($scope.company);
-      $scope.xpItems.push(
-        {
-          company: $scope.company,
-          position: $scope.position,
-          description: $scope.description
-        }
-      )
-    }
-
-  }
+    angular.module('hirelyApp.home', []);
 })();
+
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,'JobService','UserService',HomeCtrl ]);
+
+    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService , JobService, UserService) {
+
+
+        var geocodeService = GeocodeService;
+
+        $scope.flexSliderOptions = {
+            animation: "fade",
+            directionNav: false,
+            controlNav: false,
+            slideshowSpeed: 10000
+        };
+
+        angular.element('.search-container').addClass('animated fadeInUp');
+
+        angular.element('.search-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+            angular.element('.search-container').removeClass('animated fadeInUp');
+        });
+
+
+        var locations = [];
+        $scope.selectedLocation = undefined;
+
+
+        $scope.searchLocations = function(query){
+            if(!!query && query.trim() != ''){
+                return geocodeService.getCityBySearchQuery(query).then(function(data){
+                    locations = [];
+                    if(data.statusCode == 200){
+                        data.results.predictions.forEach(function(prediction){
+                            locations.push({address: prediction.description, placeId: prediction.id});
+                        });
+                        return locations;
+                    } else {
+                        return {};
+                    }
+                });
+            }
+        };
+
+            //var place = geocodeService.getPlace();
+        //if(place){
+        //
+        //    $scope.results = place.formatted_address;
+        //    $scope.details = place;
+        //}
+        //
+        $scope.getResults = function() {
+            if(!!$scope.selectedLocation){
+                geocodeService.setPlace($scope.selectedLocation);
+                $state.go('app.job', {placeId: $scope.selectedLocation.placeId});
+            }
+            else {
+                console.log('no!');
+                angular.element('.search-container').addClass('animated shake');
+                angular.element('.search-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                    angular.element('.search-container').removeClass('animated shake');
+                });
+            }
+
+        };
+
+        /**********************************************************************************
+         *
+         *  TESTING AREA - STAY AWAY!!
+         *
+        **********************************************************************************/
+
+        $scope.company = {
+            name: 'KFC',
+            description: 'Resturant',
+            admin: '1',
+            type: '0',
+            active: 'true',
+            placeId: 'Gsghsddf215584sdfd',
+            website: 'www.KFC.com'
+        };
+/*
+        //$scope.job = {
+        //    businessId: {1234:'true'},
+        //    hiringMgr: {123123132:'true'},
+        //    contact: {email:'hani.hanna@develoopers.com.au',phone:'77445855',website:'www.hanna.com'},
+        //    applicants: {65555:'true'},
+        //    workingHrs: {0:{open:'10',close:'00'},1:{open:'10',close:'00'},2:{open:'10',close:'00'},3:{open:'10',close:'00'},4:{open:'10',close:'00'},5:{open:'10',close:'00'},6:{open:'12',close:'00'}}
+        //};
+
+        //JobService.createNewJob($scope.job, 1010);
+
+        $scope.userData = {
+            firstName : 'Hanu',
+            lastName: 'Hanna',
+            email : 'hani.hanna@gmail.com',
+            userType : '1',
+            profileImageUrl : 'www.hani.com/pic/hehe.jpg',
+            personalStatement : 'work hard in silence let success make the noise',
+            provider : 'password',
+            createdOn : '25-11-2015',
+            lastModifiedOn : '28-11-2015'
+        };
+
+*/
+        $scope.address = {
+          formattedAddress : 'USA-NY',
+          zipCode : '001',
+          unit : ' ',
+          street : 'AA',
+          city : 'NY',
+          state : 'NY',
+          lng : '75.36',
+          lat : '35.36'
+        };
+
+        $scope.contact = {
+            email : 'hani@developpers.com.au',
+            mobile: '05236542'
+        }
+
+        $scope.photo = {
+            url: 'http://www.kfc.com/pic/logo.jpg',
+            main: 'true'
+        }
+
+        //$scope.userData.address = $scope.address;
+
+        $scope.company.address = $scope.address;
+        $scope.company.photo = $scope.photo;
+
+        /*
+        $scope.user = UserService.getUserById('hani-hanna-89%40gmail-com').then(function(user){
+            console.log(user.firstName);
+        });*/
+
+        //UserService.createNewUser($scope.userData,589-676);
+        //BusinessService.createNewBusiness($scope.company,$scope.photo,$scope.address,$scope.contact);
+
+        $scope.job = {
+            businessId : '0L5DpYpNjhPiqj1wbFv',
+            hiringManager : '-444',
+            position : 'position',
+            numberOfPositions : '3',
+            occupationId : 'jhkjjhhk-87',
+            description : 'Hiring 3 waiters',
+            createdAt : '27-11-2015',
+            updatedAt : '28-11-2015',
+            available : 'true'
+        }
+
+        JobService.createNewJob($scope.job);
+
+    }
+})();
+
 /**
  * Created by labrina.loving on 9/7/2015.
  */
@@ -1147,173 +1294,6 @@ angular.module('hirelyApp.core')
 }
 
  })();
-
-/**
- * Created by labrina.loving on 8/5/2015.
- */
-
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.home', []);
-})();
-
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,'JobService','UserService',HomeCtrl ]);
-
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService , JobService, UserService) {
-
-
-        var geocodeService = GeocodeService;
-
-        $scope.flexSliderOptions = {
-            animation: "fade",
-            directionNav: false,
-            controlNav: false,
-            slideshowSpeed: 10000
-        };
-
-        angular.element('.search-container').addClass('animated fadeInUp');
-
-        angular.element('.search-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-            angular.element('.search-container').removeClass('animated fadeInUp');
-        });
-
-
-        var locations = [];
-        $scope.selectedLocation = undefined;
-
-
-        $scope.searchLocations = function(query){
-            if(!!query && query.trim() != ''){
-                return geocodeService.getCityBySearchQuery(query).then(function(data){
-                    locations = [];
-                    if(data.statusCode == 200){
-                        data.results.predictions.forEach(function(prediction){
-                            locations.push({address: prediction.description, placeId: prediction.id});
-                        });
-                        return locations;
-                    } else {
-                        return {};
-                    }
-                });
-            }
-        };
-
-            //var place = geocodeService.getPlace();
-        //if(place){
-        //
-        //    $scope.results = place.formatted_address;
-        //    $scope.details = place;
-        //}
-        //
-        $scope.getResults = function() {
-            if(!!$scope.selectedLocation){
-                geocodeService.setPlace($scope.selectedLocation);
-                $state.go('app.job', {placeId: $scope.selectedLocation.placeId});
-            }
-            else {
-                console.log('no!');
-                angular.element('.search-container').addClass('animated shake');
-                angular.element('.search-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                    angular.element('.search-container').removeClass('animated shake');
-                });
-            }
-
-        };
-
-        /**********************************************************************************
-         *
-         *  TESTING AREA - STAY AWAY!!
-         *
-        **********************************************************************************/
-
-        $scope.company = {
-            name: 'KFC',
-            description: 'Resturant',
-            admin: '1',
-            type: '0',
-            active: 'true',
-            placeId: 'Gsghsddf215584sdfd',
-            website: 'www.KFC.com'
-        };
-/*
-        //$scope.job = {
-        //    businessId: {1234:'true'},
-        //    hiringMgr: {123123132:'true'},
-        //    contact: {email:'hani.hanna@develoopers.com.au',phone:'77445855',website:'www.hanna.com'},
-        //    applicants: {65555:'true'},
-        //    workingHrs: {0:{open:'10',close:'00'},1:{open:'10',close:'00'},2:{open:'10',close:'00'},3:{open:'10',close:'00'},4:{open:'10',close:'00'},5:{open:'10',close:'00'},6:{open:'12',close:'00'}}
-        //};
-
-        //JobService.createNewJob($scope.job, 1010);
-
-        $scope.userData = {
-            firstName : 'Hanu',
-            lastName: 'Hanna',
-            email : 'hani.hanna@gmail.com',
-            userType : '1',
-            profileImageUrl : 'www.hani.com/pic/hehe.jpg',
-            personalStatement : 'work hard in silence let success make the noise',
-            provider : 'password',
-            createdOn : '25-11-2015',
-            lastModifiedOn : '28-11-2015'
-        };
-
-*/
-        $scope.address = {
-          formattedAddress : 'USA-NY',
-          zipCode : '001',
-          unit : ' ',
-          street : 'AA',
-          city : 'NY',
-          state : 'NY',
-          lng : '75.36',
-          lat : '35.36'
-        };
-
-        $scope.contact = {
-            email : 'hani@developpers.com.au',
-            mobile: '05236542'
-        }
-
-        $scope.photo = {
-            url: 'http://www.kfc.com/pic/logo.jpg',
-            main: 'true'
-        }
-
-        //$scope.userData.address = $scope.address;
-
-        $scope.company.address = $scope.address;
-        $scope.company.photo = $scope.photo;
-
-        /*
-        $scope.user = UserService.getUserById('hani-hanna-89%40gmail-com').then(function(user){
-            console.log(user.firstName);
-        });*/
-
-        //UserService.createNewUser($scope.userData,589-676);
-        //BusinessService.createNewBusiness($scope.company,$scope.photo,$scope.address,$scope.contact);
-
-        $scope.job = {
-            businessId : '0L5DpYpNjhPiqj1wbFv',
-            hiringManager : '-444',
-            position : 'position',
-            numberOfPositions : '3',
-            occupationId : 'jhkjjhhk-87',
-            description : 'Hiring 3 waiters',
-            createdAt : '27-11-2015',
-            updatedAt : '28-11-2015',
-            available : 'true'
-        }
-
-        JobService.createNewJob($scope.job);
-
-    }
-})();
 
 /**
  * Created by mike.baker on 8/17/2015.
@@ -1957,6 +1937,137 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 })();
 
 /**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', StepOneController]);
+
+
+  function StepOneController($scope, $stateParams, multiStepFormInstance, GeocodeService) {
+
+    var geocodeService = GeocodeService;
+
+    $scope.validStep = false;
+
+    var addressComponents = {
+      street_number: 'short_name',
+      route: 'long_name',
+      locality: 'long_name',
+      administrative_area_level_1: 'short_name',
+      country: 'long_name',
+      postal_code: 'short_name'
+    };
+
+
+
+    $scope.$watch('stepOne.$valid', function(state) {
+      multiStepFormInstance.setValidity(state);
+    });
+
+    var locations = [];
+    $scope.selectedLocation = undefined;
+
+    $scope.searchLocations = function(query){
+      if(!!query && query.trim() != ''){
+        return geocodeService.geoCodeAddress(query).then(function(data){
+          locations = [];
+          if(data.statusCode == 200){
+            console.log(data);
+            data.results.predictions.forEach(function(prediction){
+              locations.push({address: prediction.description, placeId: prediction.place_id});
+            });
+            return locations;
+          } else {
+            return {};
+          }
+        });
+      }
+    };
+
+    $scope.setAddress = function(address){
+      geocodeService.getPlaceDetails(address.placeId).then(function(data){
+        var place = data.results.result;
+        if(place){
+          for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            switch (addressType){
+              case "administrative_area_level_1":
+                $scope.state = place.address_components[i][addressComponents[addressType]];
+                break;
+
+              case "locality":
+                $scope.address_city = place.address_components[i][addressComponents[addressType]];
+                break;
+
+              case "postal_code":
+                $scope.zipcode = place.address_components[i][addressComponents[addressType]];
+                break;
+            }
+          }
+        }
+      });
+    }
+
+
+  }
+})();
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
+
+
+  function StepTwoController($scope, $stateParams) {
+
+    $scope.xpItems = [];
+    $scope.addJobXp = function () {
+      console.log($scope.company);
+      $scope.xpItems.push(
+        {
+          company: $scope.company,
+          position: $scope.position,
+          description: $scope.description
+        }
+      )
+    }
+
+  }
+})();
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepFiveController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', StepFiveController]);
+
+
+  function StepFiveController($scope, $stateParams, multiStepFormInstance, GeocodeService) {
+
+
+
+
+  }
+})();
+/**
  * Created by labrina.loving on 8/9/2015.
  */
 angular.module('hirelyApp.core')
@@ -2366,7 +2477,9 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
             setPlace: setPlace,
             calculateDistancetoSite: calculateDistancetoSite,
             getCityBySearchQuery: getCityBySearchQuery,
-            getLocationBySearchQuery: getLocationBySearchQuery
+            getLocationBySearchQuery: getLocationBySearchQuery,
+            geoCodeAddress: geoCodeAddress,
+            getPlaceDetails: getPlaceDetails
         };
         return service;
 
@@ -2455,6 +2568,36 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
             $http.get('/api/search/locations/'+ query)
               .success(function(data) {
                   console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+        function geoCodeAddress(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/geocode/'+ query)
+              .success(function(data) {
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+        function getPlaceDetails(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/places/'+ query)
+              .success(function(data) {
                   currentPlace = data;
                   deferred.resolve(data);
               })
@@ -2579,6 +2722,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     }
   };
 })();
+
 
 
 (function () {

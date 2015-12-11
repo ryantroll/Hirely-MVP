@@ -19,7 +19,9 @@
             setPlace: setPlace,
             calculateDistancetoSite: calculateDistancetoSite,
             getCityBySearchQuery: getCityBySearchQuery,
-            getLocationBySearchQuery: getLocationBySearchQuery
+            getLocationBySearchQuery: getLocationBySearchQuery,
+            geoCodeAddress: geoCodeAddress,
+            getPlaceDetails: getPlaceDetails
         };
         return service;
 
@@ -108,6 +110,36 @@
             $http.get('/api/search/locations/'+ query)
               .success(function(data) {
                   console.log(data);
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+        function geoCodeAddress(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/geocode/'+ query)
+              .success(function(data) {
+                  currentPlace = data;
+                  deferred.resolve(data);
+              })
+              .error(function(data) {
+                  console.log('Error: ' + data);
+              });
+
+            return deferred.promise;
+        }
+
+        function getPlaceDetails(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/places/'+ query)
+              .success(function(data) {
                   currentPlace = data;
                   deferred.resolve(data);
               })

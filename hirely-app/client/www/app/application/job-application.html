@@ -89,9 +89,9 @@
                         Previous
                     </a>
 
-                    <a ng-disabled="$isLast() || ($getActiveStep().hasForm && !$getActiveStep().valid)" class="btn btn-primary pull-right" ng-click="$nextStep()">
+                <button ng-disabled="$isLast() || ($getActiveStep().hasForm && !$getActiveStep().valid)" class="btn btn-blue btn-cta-blue pull-right" ng-click="$nextStep()">
                         Next Step
-                    </a>
+                    </button>
                 </div>
             </div>
 

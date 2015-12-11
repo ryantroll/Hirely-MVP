@@ -6,6 +6,7 @@ module.exports = function(app) {
     var memoryCache = cacheManager.caching({store: 'memory', max: 100, ttl: 0/*seconds*/});
     var traitify = require('traitify');
     var places = require('./services/places');
+    var geocoder = require('./services/geocoder');
     var apiUtil = require('./utils/api-response');
 
     var config = require('./config');
@@ -19,6 +20,8 @@ module.exports = function(app) {
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
     app.get('/api/search/cities/:addressQuery', getAddressFomQuery);
     app.get('/api/search/locations/:locationQuery', getLocationFomQuery);
+    app.get('/api/geocode/:address', fullAddressAutocomplete);
+    app.get('/api/places/:placeId', getPlaceDetailsByPlaceId);
     app.get('/api/assessment', createTraitifyAssessmentId);
     app.get('/api/assessmentData:assessmentId', getAssessment);
     app.get('/api/assessmentResults:assessmentId', getAssessmentResults);
@@ -57,6 +60,28 @@ module.exports = function(app) {
                 res.json(apiUtil.generateResponse(500, err, null));
             } else {
                 res.json(apiUtil.generateResponse(200, "locations retrieved", result));
+            }
+        });
+    }
+
+    function fullAddressAutocomplete(req, res){
+        var placeRef = req.params.address;
+        places.fullAddressAutocomplete(placeRef, function(err, result){
+            if(err){
+                res.json(apiUtil.generateResponse(500, err, null));
+            } else {
+                res.json(apiUtil.generateResponse(200, "location geocoded", result));
+            }
+        });
+    }
+
+    function getPlaceDetailsByPlaceId(req, res){
+        var placeRef = req.params.placeId;
+        places.getPlaceDetailsByPlaceId(placeRef, function(err, result){
+            if(err){
+                res.json(apiUtil.generateResponse(500, err, null));
+            } else {
+                res.json(apiUtil.generateResponse(200, "place details loaded", result));
             }
         });
     }

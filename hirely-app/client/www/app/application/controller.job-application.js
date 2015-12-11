@@ -98,24 +98,25 @@
     //form steps
     $scope.steps = [
       {
-        templateUrl: '/app/application/steps/step-one.tpl.html',
-        title: 'Get the source',
-        hasForm: true
+        templateUrl: '/app/application/step-1/step-one.tpl.html',
+        controller: 'StepOneController',
+        hasForm: false
       },
       {
-        templateUrl: '/app/application/steps/step-TWO.tpl.html',
-        title: 'Add it to your app',
-        isolatedScope: true,
+        templateUrl: '/app/application/step-2/step-two.tpl.html',
         controller: 'StepTwoController',
         hasForm: true
       },
       {
-        templateUrl: '/angular-multi-step-form/examples/1/step3.html',
-        title: 'Create your multi step forms / wizzards'
+        templateUrl: '/app/application/step-3/step-three.tpl.html'
       },
       {
-        templateUrl: '/angular-multi-step-form/examples/1/step4.html',
-        title: 'Read the docs'
+        templateUrl: '/app/application/step-4/step-four.tpl.html'
+      },
+      {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
       }
     ];
 
@@ -172,7 +173,7 @@
           description: $scope.description
         }
       )
-    }
+    };
 
     var user = UserService.getUserById(testUserId).then(function(user){
             $scope.firstname = user.firstName;
@@ -185,6 +186,13 @@
             $scope.state = user.address.state;
             $scope.zipcode = user.address.zipCode;
     });
-    
+
+
+    $scope.submitStepOne = function () {
+      console.log(hello);
+    }
+
+
+
   }
 })();
