@@ -1,0 +1,122 @@
+.job-application{
+
+  .angular-google-map-container{
+    width: 100% !important;
+    height: 200px !important;
+  }
+
+  //Header Starts
+  .job-header{
+    height: 200px;
+    width: 100%;
+    position: relative;
+
+    .info{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      //background: rgba(0,0,0,0.4);
+
+      background: -moz-linear-gradient(left, rgba(68,68,68,0.8) 0%, rgba(68,68,68,0.8) 34%, rgba(68,68,68,0.71) 48%, rgba(72,72,72,0.7) 49%, rgba(255,255,255,0) 100%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(left, rgba(68,68,68,0.8) 0%,rgba(68,68,68,0.8) 34%,rgba(68,68,68,0.71) 48%,rgba(72,72,72,0.7) 49%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to right, rgba(68,68,68,0.8) 0%,rgba(68,68,68,0.8) 34%,rgba(68,68,68,0.71) 48%,rgba(72,72,72,0.7) 49%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc444444', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+
+
+      top:0;
+      left: 0;
+      padding: 20px 30px;
+
+      img{
+        border: 1px solid #ffffff;
+        height: 160px;
+        float: left;
+      }
+      
+      .text{
+        float: left;
+        margin-left: 20px;
+        height: 160px;
+        display: table;
+        .text-inner{
+          display: table-cell;
+          vertical-align: middle;
+          p.position{
+            font-weight: 300;
+            font-size: 32px;
+            display: table-cell;
+            color: #ffffff;
+            width: 100%;
+          }
+          p.sub{
+            font-weight: 200;
+            font-size: 22px;
+            color: #ffffff;
+          }
+        }
+
+      }
+    }
+  }
+  //* Header Ends
+
+
+  //Navigation Dots Starts
+  .hirely-steps{
+    padding: 30px 0px;
+  }
+
+
+  .forms-container{
+    border: 1px solid #BFBBB9;
+    margin: 30px auto;
+    header{
+      margin-top: 20px;
+    }
+
+    .xp-form{
+      .xp-item{
+        &:first-child{
+          margin-top: 0px !important;
+        }
+        margin-top: 30px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #fafafa;
+      }
+
+      h2.company{
+        font-size: 16px;
+        font-weight: 400;
+        color: #323232;
+        margin-top: 0px;
+        margin-bottom: 9px;
+      }
+
+      h2.position{
+        font-size: 16px;
+        font-weight: 300;
+        color: #4B4B4B;
+        margin-top: 0px;
+        margin-bottom: 7px;
+      }
+
+      p.period{
+        font-size: 14px;
+        font-weight: 300;
+        color: #4B4B4B;
+        margin-top: 0px;
+        margin-bottom: 7px;
+      }
+
+      p.description{
+        font-size: 13px;
+        font-weight: 300;
+        color: #4B4B4B;
+      }
+
+    }
+  }
+
+
+
+}

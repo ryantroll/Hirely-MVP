@@ -3,8 +3,8 @@
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/hirelyApp/client/platforms" />
-      <excludeFolder url="file://$MODULE_DIR$/hirelyApp/node_modules/grunt-contrib-jshint/node_modules/jshint/src/platforms" />
-      <excludeFolder url="file://$MODULE_DIR$/hirelyApp/node_modules/gulp-jshint/node_modules/jshint/src/platforms" />
+      <excludeFolder url="file://$MODULE_DIR$/hirely-app/node_modules/grunt-contrib-jshint/node_modules/jshint/src/platforms" />
+      <excludeFolder url="file://$MODULE_DIR$/hirely-app/node_modules/gulp-jshint/node_modules/jshint/src/platforms" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

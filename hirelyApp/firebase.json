@@ -1,9 +1,0 @@
-{
-  "firebase": "shining-torch-5144",
-  "public": "C:\\projects\\Hirely-MVP\\hirelyApp\\dist",
-  "ignore": [
-    "firebase.json",
-    "**/.*",
-    "**/node_modules/**"
-  ]
-}

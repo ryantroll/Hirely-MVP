@@ -1,12 +1,12 @@
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
-hirelyApp/builds
-hirelyApp/node_modules/
-hirelyApp/platforms/
-hirelyApp/plugins/
-hirelyApp/dist/
-hirelyApp/lib/
-hirelyApp/tmp/
-hirelyApp/deploy/
+hirely-app/builds
+hirely-app/node_modules/
+hirely-app/platforms/
+hirely-app/plugins/
+hirely-app/dist/
+hirely-app/lib/
+hirely-app/tmp/
+hirely-app/deploy/
 .idea

@@ -1,0 +1,47 @@
+//TODO: Better Sass refactoring - This is an old less file
+
+div.absolute1 {
+    position: absolute;
+    border: 200px;
+    padding: 15px;
+    top: 250px;
+    left: 0;
+    width: 400px;
+    height: 50px;
+    border: 3px;
+}
+div.absolute2 {
+    position: absolute;
+    border: 200px;
+    padding: 15px;
+    top: 270px;
+    right: 0;
+    width: 200px;
+    height: 50px;
+    border: 3px;
+}
+li {
+    overflow: hidden;
+}
+.buttons, .owners {
+    float: left;
+}
+.text {
+    overflow: hidden;
+    color: red;
+    padding-left: 4px;
+}
+/* all map containers must be full height */
+html, body, .container-fluid, .row, .map { height: 100% }
+
+#map-canvas {
+  width:100%;
+    height: 100%;
+  height:calc(100% - 0px);
+}
+#comments_block {
+   overflow-y: scroll;
+   overflow-x: hidden;
+   width: 50%;
+   height: 1200px;
+}
