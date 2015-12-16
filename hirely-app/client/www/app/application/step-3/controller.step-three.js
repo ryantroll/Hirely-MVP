@@ -14,7 +14,7 @@
 
   function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
 
-    $scope.stepThreeLoaded = false;
+    $scope.stepThreeLoaded = true;
 
     Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
     Traitify.setHost("api-sandbox.traitify.com");
@@ -31,14 +31,6 @@
         //   $scope.stepThreeLoaded = true;
         //   $scope.$apply();
         // });
-
-        traitify.onInitialize(function(){
-          if(traitify.data.get("Slides")){
-            $scope.stepThreeLoaded = true;
-            $scope.$apply();
-          }
-          // console.log(traitify.data.get("Slides"));
-          // console.log("Initialized");
         });
 
     });
