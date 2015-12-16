@@ -31,7 +31,7 @@
         //   $scope.stepThreeLoaded = true;
         //   $scope.$apply();
         // });
-        });
+        
 
     });
 
