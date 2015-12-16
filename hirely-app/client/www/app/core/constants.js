@@ -27,4 +27,6 @@
         .constant('candidateStatus', {1: 'Active', 2: 'Employed', 3: 'Inactive'})
 
         .constant('RESPONSE', {success: {code: '1', status: 'ok'}, error: {code: '0', status: 'error'}})
+
+        .constant('TRAITIFY_PUBLIC_KEY', "vjcprrh344sj6d5jbs80b4tjns");
 })();

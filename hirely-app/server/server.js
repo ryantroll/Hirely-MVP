@@ -46,7 +46,6 @@ switch (environment){
     default:
         console.log('** DEV **');
         console.log('serving from ' + './src/client/ and ./');
-        //app.use(tinylr.middleware({ app: app }));
         app.use('/', express.static(__dirname +'/../client/www/')); //ded
         app.use('/', express.static(__dirname + '/../'));
 

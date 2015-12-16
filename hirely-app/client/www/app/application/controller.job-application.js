@@ -31,9 +31,14 @@
       photoUrl: "http://retaildesignblog.net/wp-content/uploads/2011/08/McDonald-s-flagship-restaurant-by-SHH-London.jpg"
     };
 
-    var testUserId = '-444';
-
     var jobInfo = {};
+
+
+    $scope.stepOneLoaded = false;
+    $scope.stepTwoLoaded = false;
+    //$scope.stepThreeLoaded = false; step three is special case, maintained in step controller
+    $scope.stepFourLoaded = false;
+    $scope.stepFiveLoaded = false;
 
 
     // test Job IDs
@@ -108,7 +113,8 @@
         hasForm: true
       },
       {
-        templateUrl: '/app/application/step-3/step-three.tpl.html'
+        templateUrl: '/app/application/step-3/step-three.tpl.html',
+        controller: 'StepThreeController'
       },
       {
         templateUrl: '/app/application/step-4/step-four.tpl.html'
@@ -174,18 +180,6 @@
         }
       )
     };
-
-    var user = UserService.getUserById(testUserId).then(function(user){
-            $scope.firstname = user.firstName;
-            $scope.lastname = user.lastName;
-            $scope.email = user.email;
-            $scope.mobile = user.mobile;
-            $scope.address = user.address.formattedAddress;
-            $scope.address_unit = user.address.unit;
-            $scope.address_city = user.address.city;
-            $scope.state = user.address.state;
-            $scope.zipcode = user.address.zipCode;
-    });
 
 
     $scope.submitStepOne = function () {

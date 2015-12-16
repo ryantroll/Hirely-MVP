@@ -9,10 +9,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', StepOneController]);
+  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService',StepOneController]);
 
 
-  function StepOneController($scope, $stateParams, multiStepFormInstance, GeocodeService) {
+  function StepOneController($scope, $stateParams, multiStepFormInstance, GeocodeService, UserService) {
 
     var geocodeService = GeocodeService;
 
@@ -75,6 +75,22 @@
           }
         }
       });
+    }
+    var testUserId = '-444';
+    if(!$scope.stepOneLoaded){
+      UserService.getUserById(testUserId).then(function(user){
+              $scope.firstname = user.firstName;
+              $scope.lastname = user.lastName;
+              $scope.email = user.email;
+              $scope.mobile = user.mobile;
+              $scope.address = user.address.formattedAddress;
+              $scope.address_unit = user.address.unit;
+              $scope.address_city = user.address.city;
+              $scope.state = user.address.state;
+              $scope.zipcode = user.address.zipCode;
+
+              $scope.stepOneLoaded = true;
+            });
     }
 
 

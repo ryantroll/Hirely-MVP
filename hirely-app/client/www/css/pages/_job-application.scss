@@ -32,7 +32,7 @@
         height: 160px;
         float: left;
       }
-      
+
       .text{
         float: left;
         margin-left: 20px;
@@ -60,8 +60,6 @@
   }
   //* Header Ends
 
-
-  //Navigation Dots Starts
   .hirely-steps{
     padding: 30px 0px;
   }
@@ -72,6 +70,21 @@
     margin: 30px auto;
     header{
       margin-top: 20px;
+    }
+
+    .form-content{
+      position: relative;
+      min-height: 300px;
+    }
+
+    .form-loader{
+      position: absolute;
+      top:50%;
+      left: 50%;
+      width:20px;
+      height: 20px;
+      margin-top: -10px;
+      margin-left: -10px;
     }
 
     .xp-form{
@@ -115,6 +128,20 @@
       }
 
     }
+  }
+
+  //personality
+  .personality-analysis{
+    float: none;
+    margin: 0 auto;
+  }
+
+  .tf-slide-deck-container .progress-bar .progress-bar-inner{
+    background-color: $light-grass-green !important;
+  }
+
+  .tf-slide-deck-container .progress-bar{
+    background-color: $light-blue !important;
   }
 
 

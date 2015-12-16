@@ -27,7 +27,7 @@ User = Model({
   },
 
   toString: function(){
-    return "My unique email is "+ this.email+ " and my name is " + this.firstName;
+    return "My unique email is "+ this.email +" and my name is " + this.firstName;
   }
 
 });
