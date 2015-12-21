@@ -53,9 +53,7 @@ At minimum, ONET data needs to be installed to your MongoDB.  This procedure has
 brew install mongodb
 mongod 2>&1 >> mongodb.log &
 cd seeddata
-curl https://www.dropbox.com/s/uiqcakm4a62bpsl/onetTasks.json.gz -o onetTasks.json.gz
-gunzip onetTasks.json.gz
-mongoimport --db hirely --drop --file onetTasks.json
+cat onetTasks.json.gz | gunzip | mongoimport --db hirely --collection onetTasks --drop
 ```
 
 ----------
