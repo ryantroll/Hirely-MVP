@@ -1,5 +1,5 @@
 
-<form class="form-horizontal" name="stepOne" novalidate>
+<form class="form-horizontal" name="stepFive" novalidate>
     <fieldset>
         <legend>Availability</legend>
 
@@ -7,27 +7,51 @@
         <div class="form-group row">
             <label for="startDate" class="col-sm-3 control-label">Starting Date<span class="required-field">*</span></label>
             <div class="col-sm-9 col-md-6">
-                <div class="input-group">
-                    <!-- <input type="date" class="form-control" uib-datepicker-popup ng-model="startDate" is-open="status.opened" id="startDate" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" /> -->
-                    <input type="date" class="form-control" ng-focus="openDatePicker($event)" uib-datepicker-popup="{{format}}" ng-model="startDate" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-primary" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
-					</span>
-                </div>
-            </div>
-        </div>
+                <div ng-class="{'has-feedback has-error': stepFive.startDate.$error.required && stepFive.startDate.$dirty, 'has-feedback has-success' : stepFive.startDate.$valid}">
+                    <div class="input-group">
+                        <input type="text" id="startDate" id="startDate" class="form-control" ng-model="availability.startDate" ng-focus="openDatePicker($event)" uib-datepicker-popup="{{format}}"  is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" required/>
+                        <span class="fa fa-close form-control-feedback" ng-show="stepFive.startDate.$error.required && stepFive.startDate.$dirty"></span>
+                        <span class="fa fa-check form-control-feedback" ng-show="stepFive.startDate.$valid"></span>
+    					<span class="input-group-btn" >
+    						<button class="btn btn-primary step-5-date-btn" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
+    					</span>
+                    </div><!--input-group-->
+                </div><!--error-div-->
+            </div><!--col-->
+        </div><!--form-group-->
 
         <legend>How many hours per week can you work?</legend>
         <div class="form-group row">
             <label for="min-hours" class="col-md-2 control-label">Min Hours<span class="required-field">*</span></label>
             <div class="col-md-2" >
-                <input type="number" min="1" class="form-control" ng-model="minHours" ng-pattern="/^[0-9]*$/"/>
+                <div ng-class="{'has-feedback has-error': stepFive.minHours.$error.required && stepFive.minHours.$dirty, 'has-feedback has-success' : stepFive.minHours.$valid}">
+                    <input type="number" id="minHours" name="minHours" required min="1"  class="form-control" ng-model="availability.minHours"  ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
+                    <span class="fa fa-close form-control-feedback" ng-show="stepFive.minHours.$error.required && stepFive.minHours.$dirty"></span>
+                    <span class="fa fa-check form-control-feedback" ng-show="stepFive.minHours.$valid"></span>
+                </div><!--error-div-->
             </div>
             <div class="col-md-2 step-5-to">TO</div>
             <label for="max-hours" class="col-md-2 control-label">Max Hours<span class="required-field">*</span></label>
             <div class="col-md-2">
-                <input type="number" min="1" class="form-control" ng-model="maxHours" ng-pattern="/^[0-9]*$/"/>
+                <div ng-class="{'has-feedback has-error': stepFive.maxHours.$error.required && stepFive.maxHours.$dirty, 'has-feedback has-success' : stepFive.maxHours.$valid}">
+                    <input type="number" id="maxHours" name="maxHours" required min="1"  class="form-control" ng-model="availability.maxHours" ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
+                    <span class="fa fa-close form-control-feedback" ng-show="stepFive.maxHours.$error.required && stepFive.maxHours.$dirty"></span>
+                    <span class="fa fa-check form-control-feedback" ng-show="stepFive.maxHours.$valid"></span>
+                </div><!--error-div-->
             </div>
+
+            <div class="col-md-12 bg-danger step-5-error-label" ng-show="availability.maxHours > 168">
+                You cannot work more than 168 hours per week!
+            </div>
+            <div class="col-md-12 bg-danger step-5-error-label" ng-show="stepFive.maxHours.$error.mismatch">
+                Max hours should be greater than or equal to min hours
+            </div>
+            <div class="col-md-12 bg-danger step-5-error-label" ng-show="stepFive.minHours.$error.mismatch">
+                Your number of selected hours on each week is less than min hours entered
+            </div>
+            <!--<div class="col-md-12 bg-danger step-5-error-label" ng-show="stepFive.maxHours.$error.mismatch">
+                Your number of selected hours on each week is more than max hours entered
+            </div> -->
         </div>
 
         <legend>What hours can you work each week (select all that apply)?</legend>
@@ -38,7 +62,7 @@
                 <table class="table table-striped table-bordered step-5-timetable">
                     <thead>
                         <tr>
-                            <th>&nbsp;</th>
+                            <th></th>
                             <th>Su</th>
                             <th>Mo</th>
                             <th>Tu</th>
@@ -49,7 +73,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="hour in weeklyTimetable">
+                        <tr ng-repeat="hour in availability.weeklyTimetable">
                             <th>{{hour.label}}</th>
                             <td ng-click="hourClick('su', $index)"><span ng-class="{'active':hour.days.su, 'inactive':!hour.days.su}"></span></td>
                             <td ng-click="hourClick('mo', $index)"><span ng-class="{'active':hour.days.mo, 'inactive':!hour.days.mo}"></span></td>

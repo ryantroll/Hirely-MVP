@@ -105,20 +105,47 @@
       angular.extend(this.ranges, newRanges);
 
       return this.ranges;
-    }/// fun. getTimeRangesByDay
+    }/// fun. updateRanges
+
+    this.getTotalHours = function(hours){
+      var ret = {};
+      ret.total = 0;
+      for(var i=0; i<24; i++){
+        for(var d=0; d<7; d++){
+          if(true === hours[i].days[this.days[d]]){
+            ++ret.total;
+          }
+        }//// d<7
+      }//// for i<24
+      return ret;
+    }//// fun. getTotalHours
   });
 
   step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', 'TimetableService', StepFiveController])
 
   function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, TimetableService) {
 
+    /**
+     * [availability this object will hold the data that need bot saved in database]
+     * @type {Object}
+     */
+    $scope.availability = {};
+
+    $scope.availability.maxHours = 0;
+    $scope.availability.minHours = 0;
+
+    /**
+     * Below code copied from data picker example from
+     * https://angular-ui.github.io/bootstrap/
+     */
+
     $scope.today = function() {
-    $scope.startDate = new Date();
+    $scope.availability.startDate = new Date();
     };
       $scope.today();
 
       $scope.clear = function () {
-        $scope.startDate = null;
+        $scope.availability.startDate = null;
       };
 
 
@@ -133,7 +160,7 @@
       };
 
       $scope.setDate = function(year, month, day) {
-        $scope.startDate = new Date(year, month, day);
+        $scope.availability.startDate = new Date(year, month, day);
       };
 
       $scope.dateOptions = {
@@ -167,7 +194,6 @@
       };
 
 
-
       /**
        * [weeklyTimetable build the weekly timetable for availability and assign it to scope]
        * @type {Array}
@@ -190,7 +216,7 @@
       }//// for
 
 
-      $scope.weeklyTimetable = weeklyTimetable;
+      $scope.availability.weeklyTimetable = weeklyTimetable;
 
       /**
        * [weeklyRanges scope variable to hold the the range data for mobile layout only
@@ -201,6 +227,22 @@
       ranges = TimetableService.updateRanges(weeklyTimetable);
       $scope.weeklyRanges = ranges;
 
+
+      /**
+       * [initialize the maxHour and minHours variables ]
+       * @type {Number}
+       */
+      $scope.availability.minHours = 1;
+      $scope.availability.maxHours = 1;/// 24 hours a day * 7 days a week = 168
+
+      /**
+       * [totalHours hold the total number of hours in each week and each day
+       * with .total property for total in week, .sa property total in sunday, ..
+       * used for validation and display purpos only]
+       * @type {[object]}
+       */
+      $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+
       /**
        * [hourClick trigger on td click event to set/unset hour availablity in time table]
        * @param  {[string]} day  [name of day in short format]
@@ -208,8 +250,21 @@
        * @return {[type]}      [description]
        */
       $scope.hourClick = function(day, hour){
-        $scope.weeklyTimetable[hour].days[day] = !$scope.weeklyTimetable[hour].days[day];
+        $scope.availability.weeklyTimetable[hour].days[day] = !$scope.availability.weeklyTimetable[hour].days[day];
+
+        //// update totalHours
+        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+
+        $scope.updateValidity();
       }//// fun. hourClick
+
+      $scope.updateValidity = function(){
+        //// set validity for max and min hours
+        // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.maxHours);
+        $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours.total >= $scope.availability.minHours);
+        $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.availability.minHours <= $scope.availability.maxHours);
+      }
+
 
       /**
        * [isMobile will be set on window.resize event]
@@ -256,7 +311,7 @@
 
         //// remove from timetable
         for(var i=start; i<start+count && i < 24; i++){
-          $scope.weeklyTimetable[i].days[day] = false;
+          $scope.availability.weeklyTimetable[i].days[day] = false;
         }
 
         ///// remove from ranges
@@ -268,6 +323,11 @@
           }
         });
 
+        //// update totalHours
+        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+
+        //// update the validity
+        $scope.updateValidity();
       }/// fun. removeRange
 
 
@@ -344,7 +404,7 @@
           if(start < end){
             //// Add to timetable
             for(var i=start; i<end && i < 24; i++){
-              $scope.weeklyTimetable[i].days[day] = true;
+              $scope.availability.weeklyTimetable[i].days[day] = true;
             }
 
             $scope.formRanges[day].min = undefined;
