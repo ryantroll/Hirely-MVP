@@ -18,7 +18,7 @@ We are using the following open-source tools and frameworks (not necessarily com
 - [Express.js](http://expressjs.com/en/index.html) - Node.js web-server framework
 - [MongoDB](https://www.mongodb.com/) - NoSql db.  Used to store ONET data, and business data
 - [Firebase JS Library](https://www.firebase.com/docs/web/quickstart.html) - library to comm with Firebase db web service
-- [node geocoder] - converts addresses to geo coords
+- [node geocoder](https://github.com/nchaulet/node-geocoder) - converts addresses to geo coords
 - [Traitify Node](https://github.com/traitify/traitify-node) - Traitify library for nodejs
 
 **3rd Party Services:**
