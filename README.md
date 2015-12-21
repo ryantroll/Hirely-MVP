@@ -49,28 +49,31 @@ Setup MongoDB Database
 
 At minimum, ONET data needs to be installed to your MongoDB.  This procedure has not been confirmed yet.  Need to figure out how to import ONET to mongo.
 
-> brew install mongodb
-> cd seeddata
-> curl http://www.onetcenter.org/dl_files/database/db_20_1_text.zip -o db_20_1_text
-> cd db_20_1_text
-> find . -name *.txt -exec mongoimport --db hirely --drop --file {} \;
-
+```
+brew install mongodb
+cd seeddata
+curl http://www.onetcenter.org/dl_files/database/db_20_1_text.zip -o db_20_1_text
+cd db_20_1_text
+find . -name *.txt -exec mongoimport --db hirely --drop --file {} \;
+```
 
 ----------
 
 Running the server locally
 -------------
 
-> brew update; brew install npm
-> npm install -g bower gulp
-> git clone git@github.com:ryantroll/Hirely-MVP.git
-> cd Hirely-MVP
-> npm install
-> bower install
-> gulp 2>&1 >> ../gulp.log &
-> cd server
-> node server.js 2>&1 >> ../server.log &
-> open http://localhost:7200
+```
+brew update; brew install npm
+npm install -g bower gulp
+git clone git@github.com:ryantroll/Hirely-MVP.git
+cd Hirely-MVP
+npm install
+bower install
+gulp 2>&1 >../gulp.log &
+cd server
+node server.js 2>&1 >../server.log &
+open http://localhost:7200
+```
 
 What's going on?
  1. Install node.js.  For mac, we recommend homebrew.
