@@ -43,7 +43,7 @@
     };
 
 
-    this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
+    this.createRegisteredNewUser = function createRegisteredNewUser(userData, userID) {
 
       var deferred = $q.defer();
 
@@ -54,18 +54,30 @@
       var lastName = userData.lastName;
       var email = userData.email;
       var userType = userData.userType;
-      var profileImageUrl = userData.profileImageUrl;
+      var profileImageUrl = userData.profileImageUrl ? userData.profileImageUrl : 0;
       var provider = 'password';
       var createdOn = timestamp;
       var lastModifiedOn = timestamp;
-      var personalStatement = userData.personalStatement;
-      var address = userData.address;
+      var personalStatement = userData.personalStatement ? userData.personalStatement : 0;
+      var address = userData.address ? userData.address : 0;
 
-      var user = new User(firstName, lastName, email, userType,
-        profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address);
+      // var user = new User(firstName, lastName, email, userType,
+      //   profileImageUrl, personalStatement,
+      //   provider, createdOn, lastModifiedOn, address);
 
-      self.createUserinFirebase(user, providerId);
+      // self.createUserinFirebase(user, providerId);
+      var user = {
+        'firstName': userData.firstName,
+        'lastName': userData.lastName,
+        'email': userData.email,
+        'userType': userData.userType,
+        'provider': 'password',
+        'createdOn': timestamp,
+        'lastModifiedOn': timestamp
+      };
+
+      self.saveUserData(user, userID);
+      // console.log(user);
 
 
       deferred.resolve(user);
@@ -90,6 +102,27 @@
       return deferred.promise;
     };
 
+
+    this.saveUserData = function(userData, userID){
+      var deferred = $q.defer();
+
+      ref.child(userID).set(userData, function(error){
+        if(error){
+          deferred.reject('User object cannot be created');
+        }
+        else{
+          userData.id = userID;
+          deferred.resolve(userData);
+        }
+      });
+
+      return deferred.promise;
+    }//// createUserinFirebase
+
+    this.setCurrentUser = function(user, userID){
+      console.log(user);
+      console.log(userID);
+    }
 
     /**
      *

@@ -20,7 +20,7 @@
         $scope.$on('currentUserChanged', function (event, args) {
             $scope.currentUser = args.message;
         });
-      
+
 
         //region Controller Functions
         vm.login = function() {
@@ -46,7 +46,7 @@
                 animation: true,
                 templateUrl: 'app/manager/hmRegister.html',
                 controller: 'HMRegisterCtrl as vm',
-                
+
             });
         };
 
