@@ -36,13 +36,13 @@ label.star:before {
 IMG.displayed {
     display: block;
     margin-left: auto;
-    margin-right: auto 
+    margin-right: auto
 }
   P.blocktext {
     margin-left: 175px;
     margin-right: 0px;
     width: 50em
-}  
+}
 body {
     background-color: white;
 }
@@ -66,9 +66,10 @@ div.absolute2 {
     height: 300px;
     border: 3px;
 }
-li {
-    overflow: hidden;
-}
+//// removed to fix the user drop-down menu
+// li {
+//     overflow: hidden;
+// }
 .buttons, .owners {
     float: left;
 }
@@ -83,7 +84,7 @@ li {
    width: 1000px;
    height: 1560px;
 }
-.angular-google-map-container { 
+.angular-google-map-container {
   width: 1000px;
   height: 1560px;
 }

@@ -120,8 +120,21 @@
     }//// createUserinFirebase
 
     this.setCurrentUser = function(user, userID){
-      console.log(user);
-      console.log(userID);
+      /// add the id to user object
+      var newUser = angular.extend({'id':userID}, user);
+
+      //// set the rootScope currentUser
+      $rootScope.currentUser = newUser;
+
+      //// if any of children scopes need to now whos logged in
+      //// let them know
+      $rootScope.$broadcast('UserLoggedIn', newUser);
+
+    }
+
+    this.removeCurrentUser = function(){
+      delete $rootScope.currentUser;
+      $rootScope.$broadcast('UserLoggedOut');
     }
 
     /**

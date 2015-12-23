@@ -82,5 +82,34 @@ What's going on?
  5. Run the css compiler 'gulp' as daemon
  5. Run server as daemon
  6. Open http://localhost:7200 in a browser
+```
+
+----------
+
+Users and Authentication
+-------------
+Logged in user presented in "$rootScope.currentUser" object when undefined user considered loged out.
+The $rootScope.currentUse object is used to notify controllars and modify the views accordingly
+the true securiyt check and login session managment is handled by Firebase SDK so far.
+
+Code Location:
+User Registration in www/app/account/registerCtrl.js
+User Login in www/app/account/loginCtrl.js
+User checked for login/logout status in www/app/layout/masterCtrl.js
+
+Models:
+1. User in www/app/core/services/models/user.js
+2. Education in www/app/core/services/models/user.js
+3. Experience in www/app/core/services/models/user.js
+
+Services:
+Users authenticatin and data saving is handled by below services
+1. UserService in www/app/core/services/service.user.js
+2. AuthService in www/app/core/services/service.auth.js
+
+Events:
+1. "UserLoggedIn": broadcast by $rootScope to notify child scope about logged, this event will send a new user object as variable.
+2. "UserLoggedOut": broadcast by $rootScope to notify children scope about user loged out, no variable sent with it.
+
 
 

@@ -5,9 +5,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .factory('AuthService', ['$firebaseAuth', 'fbutil', '$q', AuthService]);
+        .factory('AuthService', ['$firebaseAuth', 'fbutil', '$q', '$rootScope', AuthService]);
 
-    function AuthService($firebaseAuth, fbutil, $q) {
+    function AuthService($firebaseAuth, fbutil, $q, $rootScope) {
         var self = this;
         var firebaseRef = $firebaseAuth(fbutil.ref());
         var authData = '';
@@ -60,22 +60,21 @@
             return deferred.promise;
         };
 
+
+
         function AuthRef(){
             return firebaseRef;
         }
 
         function logout(){
             firebaseRef.$unauth();
+
+            if($rootScope.currentUser){
+                console.log('logout');
+                delete $rootScope.currentUser;
+                $rootScope.$broadcast('UserLoggedOut');
+            }
         }
-
-
-
-        function AuthRef(){
-            return firebaseRef;
-        }
-
-
-
 
     }
 })();

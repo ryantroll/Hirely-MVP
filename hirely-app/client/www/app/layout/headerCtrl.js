@@ -4,12 +4,15 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('HeaderCtrl', ['$stateParams', '$scope', '$modal', '$log', 'AuthService', HeaderCtrl ]);
+    angular.module('hirelyApp.layout').controller('HeaderCtrl', ['$stateParams', '$scope', '$modal', '$log', 'AuthService', '$rootScope', HeaderCtrl ]);
 
-    function HeaderCtrl($stateParams, $scope, $modal, $log, AuthService) {
+    function HeaderCtrl($stateParams, $scope, $modal, $log, AuthService, $rootScope) {
 
         //region Scope variables
-        $scope.currentUser = $scope.$parent.currentUser;
+        if(!angular.isUndefined($rootScope.currentUser)){
+            $scope.currentUser = $rootScope.currentUser;
+        }
+
 
         //endregion
 
@@ -17,8 +20,12 @@
         var authService = AuthService;
 
         //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.currentUser = args.message;
+        $scope.$on('UserLoggedIn', function (event, user) {
+            $scope.currentUser = user;
+        });
+
+        $scope.$on('UserLoggedOut', function (event) {
+            delete $scope.currentUser;
         });
 
 
@@ -54,6 +61,8 @@
         vm.logout = function(){
             authService.logout();
         };
+
+
 
         //endregion
 

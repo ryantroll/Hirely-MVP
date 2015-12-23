@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope','$stateParams','$modalInstance', 'AuthService', LoginCtrl ]);
+    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope','$stateParams','$modalInstance', 'AuthService', 'UserService', LoginCtrl ]);
 
 
-    function LoginCtrl($scope, $stateParams, $modalInstance, AuthService) {
+    function LoginCtrl($scope, $stateParams, $modalInstance, AuthService, userService) {
         var authService = AuthService;
         var vm = this;
         $scope.error = '';
@@ -17,7 +17,6 @@
            authService.thirdPartyLogin('facebook')
                .then(function(data){
                    $modalInstance.close();
-
                }, function(err) {
 
                    $scope.error = errMessage(err);
@@ -42,7 +41,15 @@
         vm.PasswordLogin = function() {
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(function(auth){
-                    $modalInstance.close();
+
+                    userService.getUserById(auth.uid)
+                    .then(function(user){
+                        userService.setCurrentUser(user, auth.uid);
+                        $modalInstance.close();
+                    }, function(err){
+                        alert(err);
+                    });
+
                 }, function(err) {
                     alert(err)
                 });
@@ -52,5 +59,6 @@
         vm.CloseModal = function (){
             $modalInstance.close();
         };
+
     }
 })();

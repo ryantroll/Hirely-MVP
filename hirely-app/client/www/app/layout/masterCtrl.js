@@ -21,6 +21,23 @@
         $scope.location = {};
         $scope.currentPlace = null;
 
+        /**
+         * check on loged in user
+         */
+        var auth = $scope.authRef.$getAuth();
+        if(auth){
+            $scope.userService.getUserById(auth.uid)
+                .then(function(user){
+                    $scope.userService.setCurrentUser(user, auth.uid);
+                }, function(err){
+                    /// do nothing
+                })
+        }
+        else{
+            /// as a safe step if authentication is faild  remove current user
+            $scope.userService.removeCurrentUser();
+        }
+
 
         //
         $window.navigator.geolocation.getCurrentPosition(function(position){
