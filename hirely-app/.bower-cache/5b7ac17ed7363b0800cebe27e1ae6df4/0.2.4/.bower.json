@@ -1,0 +1,25 @@
+{
+  "name": "angular-typeahead",
+  "version": "0.2.4",
+  "main": "./angular-typeahead.js",
+  "ignore": [
+    "CHANGELOG",
+    "README.md",
+    ".gitignore",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "typeahead.js": "~0.11.1"
+  },
+  "description": "An Angular.js wrapper around the Twitter Typeahead library.",
+  "homepage": "https://github.com/Siyfion/angular-typeahead",
+  "_release": "0.2.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.2.4",
+    "commit": "b93828c40d02e7227869933001ac6db25ab97123"
+  },
+  "_source": "git://github.com/Siyfion/angular-typeahead.git",
+  "_target": "~0.2.4"
+}

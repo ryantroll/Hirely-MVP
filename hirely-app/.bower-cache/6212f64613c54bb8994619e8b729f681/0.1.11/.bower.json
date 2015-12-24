@@ -1,0 +1,44 @@
+{
+  "name": "slideout.js",
+  "repository": "https://github.com/Mango/slideout",
+  "description": "A touch slideout navigation menu for your mobile web apps.",
+  "author": "Guille Paz <guille87paz@gmail.com>",
+  "dependencies": {
+    "decouple": "0.0.1",
+    "emitter-es6": "0.0.7"
+  },
+  "ignore": [
+    ".*",
+    "package.json",
+    "component.json",
+    "node_modules",
+    "browserify.js",
+    "**/.*",
+    "bower_components",
+    "test",
+    "demo"
+  ],
+  "homepage": "https://github.com/mango/slideout",
+  "moduleType": [
+    "adecouplemd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "slideout",
+    "offcanvas",
+    "menu",
+    "touch"
+  ],
+  "main": "dist/slideout.js",
+  "license": "MIT",
+  "version": "0.1.11",
+  "_release": "0.1.11",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.11",
+    "commit": "ca4d9e62c0564d4ad8528ea0d8c4fd4fccfc0b6f"
+  },
+  "_source": "git://github.com/Mango/slideout.git",
+  "_target": "~0.1.9"
+}
