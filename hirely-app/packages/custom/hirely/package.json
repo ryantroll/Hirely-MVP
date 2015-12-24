@@ -1,0 +1,23 @@
+{
+  "name": "hirely",
+  "version": "0.0.1",
+  "description": "Some description of hirely",
+  "author": {
+    "name": "mean scaffold"
+  },
+  "mean": "0.5.5",
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
+  "dependencies": {},
+  "license": "Proprietary",
+  "connect-mongo": "^0.8.2",
+  "cors": "^2.7.1",
+  "googlemaps": "^1.0.1",
+  "googleplaces": "^0.6.0",
+  "method-override": "^2.3.5",
+  "morgan": "^1.6.1",
+  "node-geocoder": "^3.4.1",
+  "traitify": "^2.2.0"
+}

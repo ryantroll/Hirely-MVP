@@ -1,0 +1,90 @@
+<style>
+.module {
+  background: #ffffff;
+  position: relative;
+  border: 5px solid #919191;  
+  margin: 20px;
+}
+</style>
+<div class="container"></div><div class="container-fluid"></div><hr>
+<div class="container">
+<div class="container" ng-app="">
+  <div ng-controller="HMCompanyCtrl">
+    <!--=== Search Block Version 2 ===-->
+    <div class="search-block">
+    <div class="container">
+    <div class="row job-filter">
+        
+    </div><!--/container-->
+ 
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-6">
+        <h4 class="text-center"></h4>
+      </div>
+      <div class="col-md-3">
+  
+      </div>
+      <div class="col-md-6">
+        <h1 class="text-center">Company Title....</h1>
+      </div>
+    </div>
+    <div class="content candidate">
+      <div class="module">
+     <a class="nav-item nav-item-cta last"><a ng-click="hmaddposition()"><h4>Add Position</h4></a></li>
+      </div>
+    </div>
+    <div>
+      <hr>
+    </div>
+    <div class="content candidate">
+    <div class="module">
+    <table class="table table-striped table-hover" >
+      <tbody><tr>
+        <th class="name"><a ng-click="sort_by('title')"><h4>Position<i class="fa fa-sort"></i></h4></a></th>
+        <th class="id"><a ng-click="sort_by('id')"><h4></h4></a></th>
+        <th class="wage"><a ng-click="sort_by('wage')"><h4>Wage<i class="fa fa-sort"></i></h4></a></th>
+        <th class="field3"><a ng-click="sort_by('field3')"><h4>Applicants<i class="fa fa-sort"></i></h4></a></th>
+        <th class="field4"><a ng-click="sort_by('field4')"><h4>New<i class="fa fa-sort"></i></h4></a></th>
+        <th class="field5"><a ng-click="sort_by('field5')"><h4>Active<i class="fa fa-sort"></i></h4></a></th>
+        <th></th>
+      </tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="9">{{sizes}}
+          <div class="text-center">
+            <ul class="pagination">
+              <li ng-class="{disabled: currentPage == 0}">
+                <a href="javascript:;" ng-click="prevPage()">« Prev</a>
+              </li>
+              <li ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()">
+                <a href="javascript:;" ng-bind="n + 1">1</a>
+              </li>
+              <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                <a href="javascript:;" ng-click="nextPage()">Next »</a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr></tfoot>
+      <tbody>
+        <tr ng-repeat="position in positions  | filter: HiringManager | filter: siteId |orderBy:sortingOrder:reverse">
+          <td ng-bind="position.title"><h5><a href="#" editable-text="{{position.title}}">{{ position.title || 'empty' }}</a> - <i class="fa fa-pencil-square-o"></i></h5></td>
+          <td><input type="button" ng-click="edit(position, positions.indexOf(position))" value="Edit"/></td>
+          <td ng-bind="position.compensation.wage.minAmount"><h5>${{position.compensation.wage.minAmount}}.00</h5></td>
+          <td ng-bind=""><h5>25</h5></td>
+          <td ng-bind=""><h5>25</h5></td>
+          <td ng-bind="position.status"><h5>{{position.status}} - <i class="fa fa-toggle-on"></i></h5></td>
+          <td><input type="button" ng-click="del(position.indexOf(position))" value="Delete"/><h4><h4></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+   </div>
+  </div>
+</div>
+    </div>
+  </div>
+    <!--=== End Footer Version 1 ===-->
+</div><!--/End Wrapepr-->
+

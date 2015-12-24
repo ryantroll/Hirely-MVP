@@ -1,0 +1,359 @@
+<style>
+.module {
+  background: #ffffff;
+  position: relative;
+  border: 5px solid #919191;  
+  margin: 20px;
+}
+</style>
+<div class="layered-content profile-nav container-fluid">
+<div class="container-fluid" ng-controller="HMCompanyCtrl">
+<div class="layered-content">
+ <div class="col-md-3">
+   <h2>Company Registration</h2>
+<!--=== Blog Posts ===-->
+    <div class="bg-color-light">
+        <div class="container content-sm">
+            <div class="row">
+                <hr>
+                <!-- Blog Sidebar -->
+                <div class="col-md-4">
+                    <div class="headline-v2"><h3>Trending</h3></div>
+                    <!-- Trending -->
+                    <ul class="list-unstyled blog-trending margin-bottom-50">
+                        <li>
+                            <h4><a href="#">Praesent tincidunt ornare tortor</a></h4>
+                            <small>23 Jan, 2015 / <a href="#">Art,</a> <a href="#">Lifestyles</a></small>
+                        </li>
+                        <li>
+                            <h4><a href="#">Nunc leo leo, faucibus non gravida</a></h4>
+                            <small>22 Jan, 2015 / <a href="#">Marketing</a></small>
+                        </li>
+                    </ul>
+                    <!-- End Trending -->
+                    <hr> 
+                    <div class="headline-v2"><h3>Latest Posts</h3></div>
+                    <!-- Latest Links -->
+                    <ul class="list-unstyled blog-latest-posts margin-bottom-50">
+                        <li>
+                            <h4><a href="#">Wireframe for the news view...</a></h4>
+                            <small>5 Jan, 2015 / <a href="#">Web,</a> <a href="#">Webdesign</a></small>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam odio leo.</p>
+                        </li>
+                        <li>
+                            <h4><a href="#">It is a long established fact that a reader</a></h4>
+                            <small>17 Jan, 2015 / <a href="#">Artificial Intelligence</a></small>
+                            <p>Pellentesque efficitur blandit dui, porta cursus velit imperdiet sit amet.</p>
+                        </li>
+                    </ul>
+                    <!-- End Latest Links -->
+                    <hr>          
+                    <div class="headline-v2"><h3>Photostream</h3></div>
+                    <!-- Photostream -->
+                    <ul class="list-inline blog-photostream margin-bottom-50">
+                        <li>
+                            <a href="assets/img/main/img22.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 1">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img23.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 2">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img4.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 3">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img9.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 4">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img25.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 5">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img6.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 6">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img20.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 7">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img3.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 8">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assets/img/main/img7.jpg" rel="gallery" class="fancybox img-hover-v2" title="Image 9">
+                                <span><img class="img-responsive" src="" alt=""></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- End Photostream -->
+                    <hr>
+                    <div class="headline-v2"><h3>Newsletter</h3></div>
+                    <!-- Blog Newsletter -->
+                    <div class="blog-newsletter">
+                        <p>Subscribe to our newsletter for good news, sent out every month.</p>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Email">
+                            <span class="input-group-btn">
+                                <button class="btn btn-blue btn-cta-blue" type="button">Subscribe</button>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- End Blog Newsletter -->
+                <hr>                    
+                </div>
+                <!-- End Blog Sidebar -->
+
+                
+            </div>
+        </div>
+    </div>
+    <!--=== End Blog Posts ===-->
+
+ </div>
+ <div class="col-md-6">
+ <div class="content candidate">
+ <div class="row padding-20">
+ <div class="layered-content">  
+ <div class="module">
+    <body>
+    <form class="form-layout" name="businessForm" id="business-profile-form" ng-submit="registerNewBus()">
+        <div class="form-group" >
+            <figure class="profile-pic">
+                <img class="img-square" src="{{companies.profileImageUrl && companies.profileImageUrl || 'img/img16-md.jpg' }}">
+                <button type="button" class="btn btn-blue btn-cta-blue" ng-click="pickFile()" >Add Picture</button>
+            </figure>
+        </div>
+        <hr>
+        <div class="clearfix margin-bottom-10"></div>
+          <div class="form-group businessName">
+                    <label class="sr-only" for="signupbusinessName">Business Name</label>
+                     <input  id="autocomplete" placeholder="Enter Business Name" type="text" id="signupbusinessName" name="signupbusinessName" class="form-control login-email" required placeholder="Search Name" ng-model="business.name" ng-autocomplete details="nameDetails"></input>
+                </div><!--//form-group-->
+
+                <table >
+                   <tr>
+                   <div class="form-group Address/Street/City/State/Zip">
+                     <input  class="slimField" id="street_number" name="street_number" auto-fillable-field type="street_number" required placeholder="Address"  ng-model="business.street_number" pa-options="paOptions"></input>
+                     <input class="slimField" id="route" name="route" auto-fillable-field type="street_number" required placeholder="Street"  ng-model="business.route" style="width: 320px" pa-options="paOptions"></input>
+                     <input class="slimField" id="locality" name="locality" auto-fillable-field type="locality" required placeholder="City" ng-model="business.locality" pa-options="paOptions"></input>
+                     <input class="slimField" id="administrative_area_level_1" name="administrative_area_level_1" auto-fillable-field type="administrative_area_level_1" required placeholder="State" style="width: 50px"   ng-model="business.administrative_area_level_1" pa-options="paOptions"></input> 
+                     <input class="slimField" id="postal_code" name="postal_code" auto-fillable-field type="postal_code" required placeholder="Zip code"   ng-model="business.postal_code" pa-options="paOptions"></input> 
+                     <input class="slimField" id="country" name="country" auto-fillable-field type="country" required placeholder="Country"  ng-model="business.country" pa-options="paOptions"></input> 
+                  </div><!--//form-group-->
+                  </tr>
+
+                  <tr>  
+                  <div class="form-group Country">           
+                   
+                  </div><!--//form-group--> 
+                 </tr>
+                <hr>
+                 <tr>
+                  <div class="form-group LAT/LONG">                  
+                    <input class="ng-hide" id="latitude" name="latitude" auto-fillable-field type="latitude" required placeholder="Lat"  ng-model="business.latitude" pa-options="paOptions"></input>       
+                    <input class="ng-hide" id="longitude" name="longitude" auto-fillable-field type="longitude" required placeholder="Long"   ng-model="business.longitude" pa-options="paOptions"></input>
+                  </div><!--//form-group--> 
+                 </tr>
+                 <tr>
+                 <div class="form-group decription">
+                <textarea class="form-control" id="signupdescription" name="signupdescription" type="decription"  required placeholder="Business Summary (550 Characters only)" ng-model="business.description" ng-minlength="0" ng-maxlength="500"></textarea>
+                  <span class="error" ng-show="loginForm.signupdescription.$error.required  && !loginForm.signupdescription.$pristine">
+                   Business Desription is required</span>
+                </div>
+                </tr>
+                <tr>
+                <div class="form-group webAddress">
+                <input class="form-control" id="signupwebAddress" name="signupwebAddress" type="webAddress" required placeholder="Web Address" ng-model="business.webaddress">
+                <div role="alert">
+                  <span class="error" ng-show="loginForm.signupwebAddress.$error.required  && !loginForm.signupwebAddress.$pristine">
+                    Web Address is required</span>
+                </div>
+                </div><!--//form-group-->
+            
+                <select class="form-control" name="Business Type" ng-model="business.status"><label style="width: 50px">Business Type: </label>     
+                    <option value="Local">Local Franchise</option>
+                    <option value="National">National Franchise</option>
+                    <option value="Single">Single Location</option>
+                 </select> 
+            
+                </tr>
+                </table> 
+                <script>
+                // This example displays an address form, using the autocomplete feature
+                // of the Google Places API to help users fill in the information.
+
+                $("#autocomplete").on('focus', function () {
+                    geolocate();
+                });
+
+                var placeSearch, autocomplete;
+                var componentForm = {
+                    street_number: 'short_name',
+                    route: 'long_name',
+                    locality: 'long_name',
+                    administrative_area_level_1: 'short_name',
+                    country: 'long_name',
+                    postal_code: 'short_name'
+                };
+                 var street_number = 'short_name';
+
+                function initialize() {
+                    // Create the autocomplete object, restricting the search
+                    // to geographical location types.
+                    autocomplete = new google.maps.places.Autocomplete(
+                    /** @type {HTMLInputElement} */ (document.getElementById('autocomplete')), {
+                        types: ['establishment']
+                    });
+                    // When the user selects an address from the dropdown,
+                    // populate the address fields in the form.
+                    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                        fillInAddress();
+                    });
+                }
+
+                // [START region_fillform]
+                function fillInAddress() {
+                    // Get the place details from the autocomplete object.
+                    var place = autocomplete.getPlace();
+
+                    
+                    document.getElementById("latitude").value = place.geometry.location.lat();
+                    document.getElementById("longitude").value = place.geometry.location.lng();
+                    document.getElementById("open_store_hours0").value = place.opening_hours.periods[0].open.time;
+                    document.getElementById("closed_store_hours0").value = place.opening_hours.periods[0].close.time;
+                    document.getElementById("open_store_hours1").value = place.opening_hours.periods[1].open.time;
+                    document.getElementById("closed_store_hours1").value = place.opening_hours.periods[1].close.time;
+                    document.getElementById("open_store_hours2").value = place.opening_hours.periods[2].open.time;
+                    document.getElementById("closed_store_hours2").value = place.opening_hours.periods[2].close.time;
+                    document.getElementById("open_store_hours3").value = place.opening_hours.periods[3].open.time;
+                    document.getElementById("closed_store_hours3").value = place.opening_hours.periods[3].close.time;
+                    document.getElementById("open_store_hours4").value = place.opening_hours.periods[4].open.time;
+                    document.getElementById("closed_store_hours4").value = place.opening_hours.periods[4].close.time;
+                    document.getElementById("open_store_hours5").value = place.opening_hours.periods[5].open.time;
+                    document.getElementById("closed_store_hours5").value = place.opening_hours.periods[5].close.time;
+                    document.getElementById("open_store_hours6").value = place.opening_hours.periods[6].open.time;
+                    document.getElementById("closed_store_hours6").value = place.opening_hours.periods[6].close.time;
+              
+
+                    for (var component in componentForm) {
+                        document.getElementById(component).value = '';
+                        document.getElementById(component).disabled = false;
+                    }
+
+                    // Get each component of the address from the place details
+                    // and fill the corresponding field on the form.
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+                        if (componentForm[addressType]) {
+                            var val = place.address_components[i][componentForm[addressType]];
+                            document.getElementById(addressType).value = val;
+                        }
+                    }
+                }
+                // [END region_fillform]
+
+                // [START region_geolocation]
+                // Bias the autocomplete object to the user's geographical location,
+                // as supplied by the browser's 'navigator.geolocation' object.
+                function geolocate() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var geolocation = new google.maps.LatLng(
+                            position.coords.latitude, position.coords.longitude);
+
+                            var latitude = position.coords.latitude;
+                            var longitude = position.coords.longitude;
+                            document.getElementById("latitude").value = latitude;
+                            document.getElementById("longitude").value = longitude;
+                           
+                            autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
+                        });
+                    }
+
+                }
+
+                initialize();
+                // [END region_geolocation]
+                
+                </script>
+                <hr>
+                <label><h4>Store Hours</h4></label>  
+                <div class="form-group Store_Hours" >
+                <div class="col-md-7">
+                  <table>
+                   <tr>  
+                    <label style="width: 100px">Sunday: </label>
+                    <input class="slimField" id="open_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="osignupstoreHours0" auto-fillable-field type="open_store_hours0" ng-model="business.open_store_hours0" pa-options="paOptions"></input>  
+                    <input class="slimField" id="closed_store_hours0" auto-fillable-field type="closed_store_hours0" required placeholder="Store Hours" id="signupstoreHours" name="csignupstoreHours0"  ng-model="business.closed_store_hours0" pa-options="paOptions"></input>
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Monday: </label>
+                    <input class="slimField" id="open_store_hours1" auto-fillable-field type="open_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="osignupstoreHours1"   ng-model="business.open_store_hours1" pa-options="paOptions"></input>
+                    <input class="slimField" id="closed_store_hours1" auto-fillable-field type="closed_store_hours1"required placeholder="Store Hours" id="signupstoreHours" name="csignupstoreHours1"   ng-model="business.closed_store_hours1" pa-options="paOptions">
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Tuesday: </label>
+                    <input class="slimField" id="open_store_hours2" auto-fillable-field type="open_store_hours1"required placeholder="Store Hours" id="signupstoreHours" name="osignupstoreHours2"   ng-model="business.open_store_hours2" pa-options="paOptions"></input>
+                    <input class="slimField" id="closed_store_hours2" auto-fillable-field type="closed_store_hours2"required placeholder="Store Hours" id="signupstoreHours" name="csignupstoreHours2"   ng-model="business.closed_store_hours2" pa-options="paOptions"></input>
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Wednesday: </label> 
+                    <input class="slimField" id="open_store_hours3" auto-fillable-field type="open_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="osignupstoreHours3"   ng-model="business.open_store_hours3" pa-options="paOptions"></input>
+                    <input class="slimField" id="closed_store_hours3" auto-fillable-field type="closed_store_hours3" required placeholder="Store Hours" id="signupstoreHours" name="csignupstoreHours3"   ng-model="business.closed_store_hours3" pa-options="paOptions"></input>
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Thursday: </label>  
+                    <input class="slimField" id="open_store_hours4" auto-fillable-field type="open_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="osignupstoreHours4"    ng-model="business.open_store_hours4" pa-options="paOptions"></input>
+                    <input class="slimField" id="closed_store_hours4" auto-fillable-field type="closed_store_hours4" required placeholder="Store Hours" id="signupstoreHours" name="csignupstoreHours4"   ng-model="business.closed_store_hours4" pa-options="paOptions"></input>
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Friday: </label>
+                    <input class="slimField" id="open_store_hours5" auto-fillable-field type="open_store_hours1" required placeholder="Store Hours" id="signupstoreHours" name="osignupstoreHours5"   ng-model="business.open_store_hours5" pa-options="paOptions"></input>
+                    <input class="slimField" id="closed_store_hours5" auto-fillable-field type="closed_store_hours5" required placeholder="Store Hours" id="signupstoreHours" name="csignupstoreHours5"   ng-model="business.closed_store_hours5" pa-options="paOptions"></input>
+                    </div> 
+                   </tr>
+                   <tr>
+                    <label style="width: 100px">Saturday: </label>  
+                    <input class="slimField" id="open_store_hours6" auto-fillable-field type="open_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="osignupstoreHours6"   ng-model="business.open_store_hours6"pa-options="paOptions"></input>
+                    <input class="slimField" id="closed_store_hours6" auto-fillable-field type="closed_store_hours6" required placeholder="Store Hours" id="signupstoreHours" name="csignupstoreHours6"   ng-model="business.closed_store_hours6" pa-options="paOptions"></input>
+                  </tr>
+                 </table> 
+                  </div>
+             </div>
+             <div class="col-md-12"><hr></div>
+            <div class="form-group row next-button">
+            <div class="col-xs-6 col-xs-offset-3">
+                <button type="submit" class="btn btn-block btn-cta-primary">
+                    <i class="fa fa-circle-arrow-right"></i>Create
+                </button>
+            </div>
+           </div>
+         </form>
+        </div><!--//login-form-container-->
+      </div>
+   </div>
+  </div> 
+</div>
+<div class="col-md-3">
+ </div>
+</div>
+</div>
+</div>
+
+<!--=== Job Img ===-->
+
+
+
+

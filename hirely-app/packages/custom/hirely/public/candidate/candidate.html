@@ -1,0 +1,48 @@
+<div class="content candidate">
+    <div class="container">
+        <div class="row profile">
+            <!--Left Sidebar-->
+            <div class="col-md-3">
+                <div class="profile-pic">
+                    <img class="img-circle" src="{{currentUser.profileImageUrl && currentUser.profileImageUrl || 'img/avatar.jpg' }}" alt="{{user.displayName}}">
+
+                </div>
+
+                <ul class="list-group sidebar-nav-v1 margin-bottom-40" id="sidebar-nav-1">
+                    <li class="list-group-item">
+                        <a ui-sref-active="active" ui-sref="app.candidate.dashboard"><i class="fa fa-bar-chart-o"></i> Dashboard</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a ui-sref-active="active" ui-sref="app.candidate.profile.basics"><i class="fa fa-user"></i> Profile</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a ui-sref-active="active"><i class="fa fa-files-o"></i> Applications</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a ui-sref-active="active"><i class="fa fa-heart-o"></i> Favorites</a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <a ui-sref-active="active"><i class="fa fa-cog"></i> Settings</a>
+                    </li>
+
+                </ul>
+
+
+            </div>
+            <!--End Left Sidebar-->
+
+            <!-- Profile Content -->
+            <div class="col-md-9">
+                <div class="candidate-content row"  ui-view>
+
+                </div>
+
+
+            </div>
+            <!-- End Profile Content -->
+        </div>
+    </div>
+</div>
+
+
