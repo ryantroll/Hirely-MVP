@@ -38,18 +38,11 @@
 
         };
 
+
         vm.PasswordLogin = function() {
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(function(auth){
-
-                    userService.getUserById(auth.uid)
-                    .then(function(user){
-                        userService.setCurrentUser(user, auth.uid);
-                        $modalInstance.close();
-                    }, function(err){
-                        alert(err);
-                    });
-
+                    $modalInstance.close();
                 }, function(err) {
                     alert(err)
                 });

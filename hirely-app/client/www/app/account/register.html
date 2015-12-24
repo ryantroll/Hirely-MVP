@@ -16,7 +16,7 @@
         <div class="divider"><span>Or</span></div>
         <div class="login-form-container">
             <form name="loginForm" class="login-form" ng-submit="vm.registerNewUser()">
-                <div class="form-group firstName">
+                <div class="form-group email">
                     <label class="sr-only" for="signupfirstName">First Name</label>
                     <input id="signupfirstName" name="signupfirstName" type="text" class="form-control login-email" required placeholder="First Name" ng-model="user.firstName">
                     <div role="alert">
@@ -24,7 +24,7 @@
                             First Name is required</span>
                     </div>
                  </div><!--//form-group-->
-                <div class="form-group lastName">
+                <div class="form-group email">
                     <label class="sr-only" for="signuplastName">last Name</label>
                     <input id="signuplastName" name="signuplastName" type="text" class="form-control login-email" required placeholder="Last Name" ng-model="user.lastName">
                     <div role="alert">
@@ -59,6 +59,6 @@
         </div><!--//login-form-container-->
     </div><!--//modal-body-->
     <div class="modal-footer">
-        <p>Already have an account? <a class="login-link" id="login-link" href="#">Log in</a></p>
+        <p>Already have an account? <a class="login-link" id="login-link" href="javascript:;" ng-click="vm.goToLogin($event)">Log in</a></p>
     </div><!--//modal-footer-->
 </div><!--//modal-content-->

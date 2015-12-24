@@ -88,9 +88,10 @@ What's going on?
 
 Users and Authentication
 -------------
-Logged in user presented in "$rootScope.currentUser" object when undefined user considered loged out.
-The $rootScope.currentUse object is used to notify controllars and modify the views accordingly
+Logged in user presented in "AuthService.currentUser" and "AuthService.currentUserID" object when undefined user considered loged out.
+The above objects used to notify controllars and modify the views accordingly only
 the true securiyt check and login session managment is handled by Firebase SDK so far.
+AuthService as angular service singelton object will provide the currentUser and currentUserID properties
 
 Code Location:
 User Registration in www/app/account/registerCtrl.js
@@ -104,8 +105,8 @@ Models:
 
 Services:
 Users authenticatin and data saving is handled by below services
-1. UserService in www/app/core/services/service.user.js
-2. AuthService in www/app/core/services/service.auth.js
+1. UserService in www/app/core/services/service.user.js this work as abstract auth service to isolate firebase authenticaion for easy migration
+2. AuthService in www/app/core/services/service.auth.js used for dealing with user data saving and retriving for DB
 
 Events:
 1. "UserLoggedIn": broadcast by $rootScope to notify child scope about logged, this event will send a new user object as variable.

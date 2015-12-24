@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
+    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
 
-    function RegisterCtrl($scope, $stateParams, $modalInstance, AuthService, UserService) {
+    function RegisterCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
 
         var vm = this;
         var authService = AuthService;
@@ -34,7 +34,12 @@
         }
 
         vm.CloseModal = function (){
-            $modalInstance.close();
+            $uibModalInstance.close();
+        }
+
+        vm.goToLogin = function(event){
+            $uibModalInstance.close();
+            $rootScope.$emit('ShowLogin');
         }
 
         //this function registers user in 3rd party and
@@ -59,10 +64,10 @@
             userService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(user) {
                     userService.createRegisteredNewUser(registeredUser, user.uid)
-                        .then(function(newUser){
+                        .then(function(newUserData){
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
-                                    userService.setCurrentUser(newUser, user.uid);
+                                    // authService.setCurrentUser(newUserData, user.uid);
                                     $modalInstance.close();
                                 }, function(err) {
                                     alert(err)

@@ -4,13 +4,13 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('HeaderCtrl', ['$stateParams', '$scope', '$modal', '$log', 'AuthService', '$rootScope', HeaderCtrl ]);
+    angular.module('hirelyApp.layout').controller('HeaderCtrl', ['$stateParams', '$scope', '$rootScope', '$modal', '$log', 'AuthService', '$rootScope', HeaderCtrl ]);
 
-    function HeaderCtrl($stateParams, $scope, $modal, $log, AuthService, $rootScope) {
+    function HeaderCtrl($stateParams, $scope, $rootScope, $modal, $log, AuthService) {
 
         //region Scope variables
-        if(!angular.isUndefined($rootScope.currentUser)){
-            $scope.currentUser = $rootScope.currentUser;
+        if(!angular.isUndefined(AuthService.currentUser)){
+            $scope.currentUser = AuthService.currentUser;
         }
 
 
@@ -27,6 +27,15 @@
         $scope.$on('UserLoggedOut', function (event) {
             delete $scope.currentUser;
         });
+
+        var logInListener = $rootScope.$on('ShowLogin', function(event){
+            vm.login();
+        });
+
+        $scope.$on('$destroy', function(){
+            //// to remove the root listener when scope is destored
+            logInListener();
+        })
 
 
         //region Controller Functions

@@ -9,25 +9,22 @@
 
 User = Model({
 
-  initialize: function (id, firstName, lastName, email, userType,
+  initialize: function (firstName, lastName, email, userType,
                         profileImageUrl, personalStatement,
                         provider, createdOn, lastModifiedOn , address , experience , education) {
-    //// user can be initiated without id
-    //// id will be set after user successfully saved in DB
-    this.id = id || 0;
 
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.userType = userType;
-    this.profileImageUrl = profileImageUrl || '';
-    this.personalStatement = personalStatement || '';
+    this.profileImageUrl = profileImageUrl || false;
+    this.personalStatement = personalStatement || false;
     this.provider = provider;
     this.createdOn = createdOn;
     this.lastModifiedOn = lastModifiedOn;
-    this.address = address || {} ;
-    this.experience = experience || {} ;
-    this.education = education || {};
+    this.address = address || false ;
+    this.experience = experience || false ;
+    this.education = education || false;
   },
 
   toString: function(){

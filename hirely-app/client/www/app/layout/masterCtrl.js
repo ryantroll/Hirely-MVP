@@ -23,20 +23,22 @@
 
         /**
          * check on loged in user
+         * getAuth method will do the needfull and set all the required variabls
          */
-        var auth = $scope.authRef.$getAuth();
-        if(auth){
-            $scope.userService.getUserById(auth.uid)
-                .then(function(user){
-                    $scope.userService.setCurrentUser(user, auth.uid);
-                }, function(err){
+
+        var auth = AuthService.getAuth()
+            .then(
+                function(isAuth){
+                    if(isAuth){
+                        console.log('User ' + AuthService.currentUser.firstName + ' is logged in');
+                    }
+                },
+                function(error){
+                    /// no authenticated user
                     /// do nothing
-                })
-        }
-        else{
-            /// as a safe step if authentication is faild  remove current user
-            $scope.userService.removeCurrentUser();
-        }
+                }
+            )/// Auth then
+
 
 
         //
