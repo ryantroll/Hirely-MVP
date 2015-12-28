@@ -4,7 +4,7 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
+    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$uibModalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
 
     function RegisterCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
 
@@ -50,7 +50,7 @@
                     userService.createUserfromThirdParty(provider, user)
                         .then(function(fbUser){
                             userService.setCurrentUser(fbUser, provider.uid);
-                            $modalInstance.close();
+                            $uibModalInstance.close();
                         }, function(err) {
                             alert(err)
                         });
@@ -68,7 +68,7 @@
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
                                     // authService.setCurrentUser(newUserData, user.uid);
-                                    $modalInstance.close();
+                                    $uibModalInstance.close();
                                 }, function(err) {
                                     alert(err)
                                 });

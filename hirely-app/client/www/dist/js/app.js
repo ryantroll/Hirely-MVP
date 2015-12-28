@@ -220,7 +220,7 @@ var myApp = angular.module('hirelyApp',
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
+    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$uibModalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
 
     function RegisterCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
 
@@ -266,7 +266,7 @@ var myApp = angular.module('hirelyApp',
                     userService.createUserfromThirdParty(provider, user)
                         .then(function(fbUser){
                             userService.setCurrentUser(fbUser, provider.uid);
-                            $modalInstance.close();
+                            $uibModalInstance.close();
                         }, function(err) {
                             alert(err)
                         });
@@ -284,7 +284,7 @@ var myApp = angular.module('hirelyApp',
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
                                     // authService.setCurrentUser(newUserData, user.uid);
-                                    $modalInstance.close();
+                                    $uibModalInstance.close();
                                 }, function(err) {
                                     alert(err)
                                 });
@@ -1373,6 +1373,141 @@ angular.module('hirelyApp.core')
 })();
 
 
+ /**
+ * Created by labrina.loving on 8/10/2015.
+ */
+(function () {
+    'use strict';
+
+angular.module('hirelyApp.manager').directive('autoFillableField', [
+  '$timeout',
+  function($timeout) {
+    return {
+      require: '?ngModel',
+      restrict: 'A',
+      link: function(scope, element, attrs, ngModel) {
+
+        $timeout(function() {
+          if (ngModel.$viewValue !== element.val()) {
+            ngModel.$setViewValue(element.val());
+          }
+        }, 50);
+      }
+    };
+  }
+]);
+}
+)();
+/**
+ * Created by mike.baker on 9/29/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
+   
+
+    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
+
+        var vm = this;
+        var authService = AuthService;
+        var userService = UserService;
+        var businessService = BusinessService;
+        var managerId = '';
+        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
+        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
+       
+        $scope.companies = $firebaseArray(businessRef);
+        $scope.picturesRef = $firebaseArray(photoRef);
+        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
+    
+        $scope.street_number = '';
+        $scope.route = '';
+        $scope.locality = '';
+        $scope.administrative_area_level_1 = '';
+        $scope.postal_code = '';
+        $scope.country = '';
+        $scope.latitude = '';
+        $scope.longitude = '';
+        $scope.open_store_hours0 = '';
+        $scope.closed_store_hours0 = '';
+        $scope.open_store_hours1 = '';
+        $scope.closed_store_hours1 = '';
+        $scope.open_store_hours2 = '';
+        $scope.closed_store_hours2 = '';
+        $scope.open_store_hours3 = '';
+        $scope.closed_store_hours3 = '';
+        $scope.open_store_hours4 = '';
+        $scope.closed_store_hours4 = '';
+        $scope.open_store_hours5 = '';
+        $scope.closed_store_hours5 = '';
+        $scope.open_store_hours6 = '';
+        $scope.closed_store_hours6 = '';
+        $scope.error = '';
+
+        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
+        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
+        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
+        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
+        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
+        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
+
+
+
+
+       $scope.options = {
+          types: '(regions)'
+       };
+
+       $scope.results = '';
+       $scope.details = '';
+    
+        vm.registerNewHMBUS = function() {
+            registerPasswordHM($scope.manager, $scope.business)
+        }
+       
+        vm.CloseModal = function (){
+            $modalInstance.close();
+        }
+
+        function registerPasswordHM(registeredUser, newbusinessObj){
+            //register new hiring manager
+            userService.registerNewUser(registeredUser.email, registeredUser.password)
+                .then(function(manager) {
+                    userService.createRegisteredNewUser(registeredUser, manager.uid)
+                        .then(function(newUser){
+                            authService.passwordLogin(registeredUser.email, registeredUser.password)
+                                .then(function(auth){
+                                    managerId = manager.uid;
+                                    userService.setCurrentUser(newUser, manager.uid);
+                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
+                                    $modalInstance.close();
+                                }, function(err) {
+                                    alert(err)
+                                });
+                        }, function(err) {
+                            alert(err)
+                        });
+                }, function(err) {
+                    alert(err)
+                })
+      $state.go('app.busDashboard');
+        }
+
+
+}
+
+
+})();
+
+/**
+ * Created by mike.baker on 9/8/2015.
+ */
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.manager', []);
+})();
 /**
  * Created by labrina.loving on 8/6/2015.
  */
@@ -1669,141 +1804,6 @@ angular.module("hirelyApp.layout").directive("header", function() {
         };
     };
 })();
- /**
- * Created by labrina.loving on 8/10/2015.
- */
-(function () {
-    'use strict';
-
-angular.module('hirelyApp.manager').directive('autoFillableField', [
-  '$timeout',
-  function($timeout) {
-    return {
-      require: '?ngModel',
-      restrict: 'A',
-      link: function(scope, element, attrs, ngModel) {
-
-        $timeout(function() {
-          if (ngModel.$viewValue !== element.val()) {
-            ngModel.$setViewValue(element.val());
-          }
-        }, 50);
-      }
-    };
-  }
-]);
-}
-)();
-/**
- * Created by mike.baker on 9/29/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
-   
-
-    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
-
-        var vm = this;
-        var authService = AuthService;
-        var userService = UserService;
-        var businessService = BusinessService;
-        var managerId = '';
-        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
-        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
-       
-        $scope.companies = $firebaseArray(businessRef);
-        $scope.picturesRef = $firebaseArray(photoRef);
-        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
-    
-        $scope.street_number = '';
-        $scope.route = '';
-        $scope.locality = '';
-        $scope.administrative_area_level_1 = '';
-        $scope.postal_code = '';
-        $scope.country = '';
-        $scope.latitude = '';
-        $scope.longitude = '';
-        $scope.open_store_hours0 = '';
-        $scope.closed_store_hours0 = '';
-        $scope.open_store_hours1 = '';
-        $scope.closed_store_hours1 = '';
-        $scope.open_store_hours2 = '';
-        $scope.closed_store_hours2 = '';
-        $scope.open_store_hours3 = '';
-        $scope.closed_store_hours3 = '';
-        $scope.open_store_hours4 = '';
-        $scope.closed_store_hours4 = '';
-        $scope.open_store_hours5 = '';
-        $scope.closed_store_hours5 = '';
-        $scope.open_store_hours6 = '';
-        $scope.closed_store_hours6 = '';
-        $scope.error = '';
-
-        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
-        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
-        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
-        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
-        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
-
-
-
-
-       $scope.options = {
-          types: '(regions)'
-       };
-
-       $scope.results = '';
-       $scope.details = '';
-    
-        vm.registerNewHMBUS = function() {
-            registerPasswordHM($scope.manager, $scope.business)
-        }
-       
-        vm.CloseModal = function (){
-            $modalInstance.close();
-        }
-
-        function registerPasswordHM(registeredUser, newbusinessObj){
-            //register new hiring manager
-            userService.registerNewUser(registeredUser.email, registeredUser.password)
-                .then(function(manager) {
-                    userService.createRegisteredNewUser(registeredUser, manager.uid)
-                        .then(function(newUser){
-                            authService.passwordLogin(registeredUser.email, registeredUser.password)
-                                .then(function(auth){
-                                    managerId = manager.uid;
-                                    userService.setCurrentUser(newUser, manager.uid);
-                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
-                                    $modalInstance.close();
-                                }, function(err) {
-                                    alert(err)
-                                });
-                        }, function(err) {
-                            alert(err)
-                        });
-                }, function(err) {
-                    alert(err)
-                })
-      $state.go('app.busDashboard');
-        }
-
-
-}
-
-
-})();
-
-/**
- * Created by mike.baker on 9/8/2015.
- */
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.manager', []);
-})();
     /**
  * Created by labrina.loving on 8/6/2015.
  */
@@ -1979,6 +1979,48 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
 /**
  *
+ * Job Application Workflow
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService' ,'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+
+
+  function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+
+    $scope.stepThreeLoaded = true;
+
+    Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
+    Traitify.setHost("api-sandbox.traitify.com");
+    Traitify.setVersion("v1");
+
+    TraitifyService.getAssessmentId().then(function (data) {
+        var assessmentId =  data.results.id;
+        var traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+          results: {target: ".personality-results"},
+          personalityTypes: {target: ".personality-types"},
+          personalityTraits: {target: ".personality-traits"}
+        });
+        // traitify.onInitialize(function(){
+        //   $scope.stepThreeLoaded = true;
+        //   $scope.$apply();
+        // });
+        
+
+    });
+
+
+
+  }
+})();
+
+/**
+ *
  * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
@@ -2104,48 +2146,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
   }
 })();
-/**
- *
- * Job Application Workflow
- *
- * Develoopers - Hirely 2015
- *
- *
- */
-(function () {
-  'use strict';
-
-  angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService' ,'TRAITIFY_PUBLIC_KEY', StepThreeController]);
-
-
-  function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
-
-    $scope.stepThreeLoaded = true;
-
-    Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-    Traitify.setHost("api-sandbox.traitify.com");
-    Traitify.setVersion("v1");
-
-    TraitifyService.getAssessmentId().then(function (data) {
-        var assessmentId =  data.results.id;
-        var traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-          results: {target: ".personality-results"},
-          personalityTypes: {target: ".personality-types"},
-          personalityTraits: {target: ".personality-traits"}
-        });
-        // traitify.onInitialize(function(){
-        //   $scope.stepThreeLoaded = true;
-        //   $scope.$apply();
-        // });
-        
-
-    });
-
-
-
-  }
-})();
-
 /**
  *
  * Job Application Workflow Main Controller
