@@ -35,7 +35,8 @@
           assessment_id: assessmentId,
           slides: results.slides,
           personality_types: results.types,
-          personality_traits: results.traits
+          personality_traits: results.traits,
+          personality_blend: results.blend
         }
         traitifyRef.child(userId).push(data);
     }
