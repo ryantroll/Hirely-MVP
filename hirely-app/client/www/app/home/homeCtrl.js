@@ -135,21 +135,21 @@
         });*/
 
         //UserService.createNewUser($scope.userData,589-676);
-        //BusinessService.createNewBusiness($scope.company,$scope.photo,$scope.address,$scope.contact);
+        BusinessService.testObj();
 
-        $scope.job = {
-            businessId : '0L5DpYpNjhPiqj1wbFv',
-            hiringManager : '-444',
-            position : 'position',
-            numberOfPositions : '3',
-            occupationId : 'jhkjjhhk-87',
-            description : 'Hiring 3 waiters',
-            createdAt : '27-11-2015',
-            updatedAt : '28-11-2015',
-            available : 'true'
-        }
-
-        JobService.createNewJob($scope.job);
+        // $scope.job = {
+        //     businessId : '0L5DpYpNjhPiqj1wbFv',
+        //     hiringManager : '-444',
+        //     position : 'position',
+        //     numberOfPositions : '3',
+        //     occupationId : 'jhkjjhhk-87',
+        //     description : 'Hiring 3 waiters',
+        //     createdAt : '27-11-2015',
+        //     updatedAt : '28-11-2015',
+        //     available : 'true'
+        // }
+        //
+        // JobService.createNewJob($scope.job);
 
     }
 })();

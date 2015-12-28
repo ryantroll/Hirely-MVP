@@ -121,13 +121,47 @@
 				/******************************************************************/
 				.personality-analysis {
 								float: none;
-								margin: 0 auto;
+								margin: 0px auto 25px auto;
 				}
 				.tf-slide-deck-container .progress-bar .progress-bar-inner {
 								background-color: $light-grass-green !important;
 				}
 				.tf-slide-deck-container .progress-bar {
 								background-color: $light-blue !important;
+				}
+
+				.personality-types-container-scroller{
+					height: auto !important;
+					.arrow{
+						display: none;
+					}
+				}
+
+				.tf-personality-types .personality-types-container .personality-types{
+					width: 100% !important;
+				}
+
+
+				.tf-personality-types{
+					.description{
+						display: none;
+					}
+				}
+
+				@media(max-width:$screen-xs-max){
+					.tf-personality-types .personality-types-container .personality-types{
+						.personality-type{
+							width: 50% !important;
+						}
+					}
+				}
+
+				@media(min-width:$screen-sm-min){
+					.tf-personality-types .personality-types-container .personality-types{
+						.personality-type{
+							width: 25% !important;
+						}
+					}
 				}
 				/******************************************************************/
 				/**************************** Step Five ***************************/

@@ -37,6 +37,7 @@
     "angucomplete-alt": "~2.0.3",
     "angular-loading-bar": "~0.8.0",
     "hover": "Hover#~2.0.2",
-    "angular-multi-step-form": "~1.2.4"
+    "angular-multi-step-form": "~1.2.4",
+    "moment": "~2.10.6"
   }
 }
