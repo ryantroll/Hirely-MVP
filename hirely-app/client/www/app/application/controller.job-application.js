@@ -105,7 +105,7 @@
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
-        hasForm: false
+        hasForm: true
       },
       {
         templateUrl: '/app/application/step-2/step-two.tpl.html',

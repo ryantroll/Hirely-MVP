@@ -11,7 +11,7 @@ User = Model({
 
   initialize: function (firstName, lastName, email, userType,
                         profileImageUrl, personalStatement,
-                        provider, createdOn, lastModifiedOn , address , experience , education) {
+                        provider, createdOn, lastModifiedOn , address , experience , education, mobile) {
 
     this.firstName = firstName;
     this.lastName = lastName;
@@ -25,6 +25,7 @@ User = Model({
     this.address = address || false ;
     this.experience = experience || false ;
     this.education = education || false;
+    this.mobile = mobile || false;
   },
 
   toString: function(){
@@ -67,6 +68,23 @@ Experience = Model({
     this.endYear = endYear || '';
     this.current = current || '';
     this.accomplishments = accomplishments || '';
+  }
+
+});
+
+Address = Model({
+
+  initialize: function (formattedAddress, zipCode, unit, number, street, city, state, country, lng, lat) {
+    this.formattedAddress = formattedAddress || false;
+    this.zipCode = zipCode || false;
+    this.unit = unit || false;
+    this.number = number || false;
+    this.street = street || false;
+    this.city = city || false;
+    this.state = state || false;
+    this.country = country || false;
+    this.lng = lng || false;
+    this.lat = lat || false;
   }
 
 });

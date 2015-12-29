@@ -134,7 +134,8 @@
         userData.lastModifiedOn,
         userData.address,
         userData.experience,
-        userData.education
+        userData.education,
+        userData.mobile
       );
 
       ////define the variable to avoid any udefined error
@@ -146,18 +147,22 @@
        *
        * ***/
 
-      /*
-       address = new Address (
-       pAddress.formattedAddress,
-       pAddress.zipCode,
-       pAddress.unit,
-       pAddress.street,
-       pAddress.city,
-       pAddress.state,
-       pAddress.lng,
-       pAddress.lat
-       );
+       if(!angular.isUndefined(userData.address)){
+          address = new Address (
+            pAddress.formattedAddress,
+            pAddress.zipCode,
+            pAddress.unit,
+            pAddress.number,
+            pAddress.street,
+            pAddress.city,
+            pAddress.state,
+            pAddress.country,
+            pAddress.lng,
+            pAddress.lat
+          );
+       }
 
+      /*
 
        education = new Education (
        pEducation.programType,
