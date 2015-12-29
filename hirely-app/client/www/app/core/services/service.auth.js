@@ -22,7 +22,10 @@
             currentUser: currentUser,
             currentUserID: currentUserID,
             setCurrentUser: setCurrentUser,
-            getAuth: getAuth
+            getAuth: getAuth,
+            isUserLoggedIn: isUserLoggedIn,
+            onAuth: onAuth,
+            resetPassword: resetPassword
         };
         return service;
 
@@ -86,7 +89,6 @@
         function logout(){
             firebaseRef.$unauth();
             removeCurrentUser();
-
         }
 
         function setCurrentUser(user, userID){
@@ -122,7 +124,7 @@
                 //// user is authenticated
 
                 //// fill current user if not exists
-                if(angular.isUndefined(currentUser)){
+                if(angular.isUndefined(service.currentUser)){
                     fillUserData(auth.uid)
                         .then(
                             function(user){
@@ -138,7 +140,6 @@
                     //// current user exists
                     deferred.resolve(true);
                 }
-
             }
             else{
                 //// no authenticated user make sure there is not user id
@@ -162,6 +163,30 @@
                 )/// .then
             return deferred.promise;
         }//// fun.. fillUserData
+
+        function isUserLoggedIn(){
+            return !angular.isUndefined(service.currentUser)
+                && !angular.isUndefined(service.currentUserID);
+        }//// fun. isUserLoggedIn
+
+        function onAuth(callBack){
+            firebaseRef.$onAuth(callBack);
+        }//// fun. onAuth
+
+        function resetPassword(email){
+            var deferred = $q.defer();
+
+            firebaseRef.$resetPassword({'email':email})
+                .then(function(){
+                    deferred.resolve();
+                })
+                .catch(function(error){
+                    deferred.reject(error);
+                });
+
+
+            return deferred.promise;
+        }//// fun. resetPasswrod
 
     }
 })();

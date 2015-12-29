@@ -15,7 +15,6 @@
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
         vm.FbRegister = function () {
-
             registerThirdPartyUser('facebook')
         }
 
@@ -39,6 +38,9 @@
 
         vm.goToLogin = function(event){
             $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to showLogin event
+             */
             $rootScope.$emit('ShowLogin');
         }
 

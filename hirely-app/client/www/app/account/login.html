@@ -29,7 +29,7 @@
                         </div><!--//form-group-->
                         <div class="form-group password">
                             <label class="sr-only" for="loginPassword">Password</label>
-                            <input id="loginPassword" name="loginPassword" type="password" class="form-control login-password" placeholder="Password" required ng-minlength="6" ng-maxlength="12"
+                            <input id="loginPassword" name="loginPassword" type="password" class="form-control login-password" placeholder="Password" required ng-minlength="6" ng-maxlength="20"
                                    ng-model="user.password">
                             <div role="alert">
                               <span class="error" ng-show="loginForm.loginPassword.$error.required  && !loginForm.loginPassword.$pristine">
@@ -38,7 +38,7 @@
                                 Password should be between 6 and 12 characters</span>
                             </div>
                             <p class="forgot-password">
-                                <a href="#" id="resetpass-link" data-toggle="modal" data-target="#resetpass-modal">Forgot password?</a>
+                                <a href="javascript:;" id="resetpass-link" ng-click="vm.forgotPassword()">Forgot password?</a>
                             </p>
                         </div><!--//form-group-->
                         <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="!loginForm.$valid">Log in</button>
@@ -51,6 +51,6 @@
                 </div><!--//login-form-container-->
             </div><!--//modal-body-->
             <div class="modal-footer">
-                <p>New to hirely? <a class="signup-link" id="signup-link" href="#/app/register" ng-click="vm.CloseModal()">Sign up now</a></p>
+                <p>New to hirely? <a class="signup-link" id="signup-link" href="javascript:;" ng-click="vm.signupClick()">Sign up now</a></p>
             </div><!--//modal-footer-->
 </div><!--//modal-->

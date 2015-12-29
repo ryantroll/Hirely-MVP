@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope','$stateParams','$modalInstance', 'AuthService', 'UserService', LoginCtrl ]);
+    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', 'UserService', LoginCtrl ]);
 
 
-    function LoginCtrl($scope, $stateParams, $modalInstance, AuthService, userService) {
+    function LoginCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, userService) {
         var authService = AuthService;
         var vm = this;
         $scope.error = '';
@@ -16,7 +16,7 @@
         vm.FbLogin = function(){
            authService.thirdPartyLogin('facebook')
                .then(function(data){
-                   $modalInstance.close();
+                   $uibModalInstance.close();
                }, function(err) {
 
                    $scope.error = errMessage(err);
@@ -28,7 +28,7 @@
         vm.GoogleLogin = function(){
             authService.thirdPartyLogin('google')
                 .then(function(data){
-                    $modalInstance.close();
+                    $uibModalInstance.close();
 
                 }, function(err) {
 
@@ -42,7 +42,7 @@
         vm.PasswordLogin = function() {
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(function(auth){
-                    $modalInstance.close();
+                    $uibModalInstance.close();
                 }, function(err) {
                     alert(err)
                 });
@@ -50,7 +50,24 @@
 
 
         vm.CloseModal = function (){
-            $modalInstance.close();
+            $uibModalInstance.close();
+        };
+
+        vm.signupClick = function(){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to ShowRegister
+             */
+            $rootScope.$emit('ShowRegister');
+        };
+
+
+        vm.forgotPassword = function(){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to ShowRegister
+             */
+            $rootScope.$emit('ShowForgotPassword');
         };
 
     }

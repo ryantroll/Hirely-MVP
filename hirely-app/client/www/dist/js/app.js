@@ -163,10 +163,10 @@ var myApp = angular.module('hirelyApp',
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope','$stateParams','$modalInstance', 'AuthService', 'UserService', LoginCtrl ]);
+    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', 'UserService', LoginCtrl ]);
 
 
-    function LoginCtrl($scope, $stateParams, $modalInstance, AuthService, userService) {
+    function LoginCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, userService) {
         var authService = AuthService;
         var vm = this;
         $scope.error = '';
@@ -175,7 +175,7 @@ var myApp = angular.module('hirelyApp',
         vm.FbLogin = function(){
            authService.thirdPartyLogin('facebook')
                .then(function(data){
-                   $modalInstance.close();
+                   $uibModalInstance.close();
                }, function(err) {
 
                    $scope.error = errMessage(err);
@@ -187,7 +187,7 @@ var myApp = angular.module('hirelyApp',
         vm.GoogleLogin = function(){
             authService.thirdPartyLogin('google')
                 .then(function(data){
-                    $modalInstance.close();
+                    $uibModalInstance.close();
 
                 }, function(err) {
 
@@ -201,7 +201,7 @@ var myApp = angular.module('hirelyApp',
         vm.PasswordLogin = function() {
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(function(auth){
-                    $modalInstance.close();
+                    $uibModalInstance.close();
                 }, function(err) {
                     alert(err)
                 });
@@ -209,9 +209,77 @@ var myApp = angular.module('hirelyApp',
 
 
         vm.CloseModal = function (){
-            $modalInstance.close();
+            $uibModalInstance.close();
         };
 
+        vm.signupClick = function(){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to ShowRegister
+             */
+            $rootScope.$emit('ShowRegister');
+        };
+
+
+        vm.forgotPassword = function(){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to ShowRegister
+             */
+            $rootScope.$emit('ShowForgotPassword');
+        };
+
+    }
+})();
+/**
+ * Created by labrina.loving on 8/5/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.account').controller('PasswordCtrl', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', PasswordCtrl ]);
+
+
+    function PasswordCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService) {
+
+        /**
+         * [error variable initiated to nothing]
+         * @type {String}
+         */
+        $scope.error = '';
+        $scope.success = false;
+
+        /**
+         * Submit event of passwor reset form
+         */
+        $scope.passwordReset = function(){
+            $scope.errorMsg = '';
+            $scope.success = false;
+            AuthService.resetPassword($scope.email).then(
+                function(){
+                    $scope.errorMsg = '';
+                    $scope.success = true;
+                    $scope.email = '';
+                    /**
+                     * reset for validation
+                     */
+                    $scope.passwordForm.$setPristine()
+                    $scope.passwordForm.$setUntouched()
+                },
+                function(error){
+
+                    $scope.errorMsg = error;
+                    $scope.success = false;
+                }
+            )/// resetPassrod.then
+        }//// fun. passwordReset
+
+        /**
+         * click event for close button to close the modal
+         */
+        $scope.closeModal = function(){
+            $uibModalInstance.close();
+        }
     }
 })();
 /**
@@ -231,7 +299,6 @@ var myApp = angular.module('hirelyApp',
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
         vm.FbRegister = function () {
-
             registerThirdPartyUser('facebook')
         }
 
@@ -255,6 +322,9 @@ var myApp = angular.module('hirelyApp',
 
         vm.goToLogin = function(event){
             $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to showLogin event
+             */
             $rootScope.$emit('ShowLogin');
         }
 
@@ -788,7 +858,7 @@ angular.module('hirelyApp.core')
          .run(['$rootScope', '$state', 'AuthService', 'UserService', 'loginRedirectPath',
             function ($rootScope, $state, AuthService, UserService, loginRedirectPath) {
                 // watch for login status changes and redirect if appropriate
-                AuthService.AuthRef().$onAuth(check);
+                AuthService.onAuth(check);
 
                 // some of our routes may reject resolve promises with the special {authRequired: true} error
                 // this redirects to the login page whenever that is encountered
@@ -799,8 +869,10 @@ angular.module('hirelyApp.core')
                 });
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-                    AuthService.AuthRef().$onAuth(check);
-                    if (toState.authRequired && !UserService.getIsLoggedIn()){
+                    AuthService.onAuth(check);
+                    // AuthService.isUserLoggedIn();
+                    
+                    if (toState.authRequired && !AuthService.isUserLoggedIn()){
                         // User isn’t authenticated
                         $state.transitionTo(loginRedirectPath);
                         event.preventDefault();
@@ -1373,141 +1445,6 @@ angular.module('hirelyApp.core')
 })();
 
 
- /**
- * Created by labrina.loving on 8/10/2015.
- */
-(function () {
-    'use strict';
-
-angular.module('hirelyApp.manager').directive('autoFillableField', [
-  '$timeout',
-  function($timeout) {
-    return {
-      require: '?ngModel',
-      restrict: 'A',
-      link: function(scope, element, attrs, ngModel) {
-
-        $timeout(function() {
-          if (ngModel.$viewValue !== element.val()) {
-            ngModel.$setViewValue(element.val());
-          }
-        }, 50);
-      }
-    };
-  }
-]);
-}
-)();
-/**
- * Created by mike.baker on 9/29/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
-   
-
-    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
-
-        var vm = this;
-        var authService = AuthService;
-        var userService = UserService;
-        var businessService = BusinessService;
-        var managerId = '';
-        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
-        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
-       
-        $scope.companies = $firebaseArray(businessRef);
-        $scope.picturesRef = $firebaseArray(photoRef);
-        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
-    
-        $scope.street_number = '';
-        $scope.route = '';
-        $scope.locality = '';
-        $scope.administrative_area_level_1 = '';
-        $scope.postal_code = '';
-        $scope.country = '';
-        $scope.latitude = '';
-        $scope.longitude = '';
-        $scope.open_store_hours0 = '';
-        $scope.closed_store_hours0 = '';
-        $scope.open_store_hours1 = '';
-        $scope.closed_store_hours1 = '';
-        $scope.open_store_hours2 = '';
-        $scope.closed_store_hours2 = '';
-        $scope.open_store_hours3 = '';
-        $scope.closed_store_hours3 = '';
-        $scope.open_store_hours4 = '';
-        $scope.closed_store_hours4 = '';
-        $scope.open_store_hours5 = '';
-        $scope.closed_store_hours5 = '';
-        $scope.open_store_hours6 = '';
-        $scope.closed_store_hours6 = '';
-        $scope.error = '';
-
-        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
-        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
-        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
-        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
-        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
-
-
-
-
-       $scope.options = {
-          types: '(regions)'
-       };
-
-       $scope.results = '';
-       $scope.details = '';
-    
-        vm.registerNewHMBUS = function() {
-            registerPasswordHM($scope.manager, $scope.business)
-        }
-       
-        vm.CloseModal = function (){
-            $modalInstance.close();
-        }
-
-        function registerPasswordHM(registeredUser, newbusinessObj){
-            //register new hiring manager
-            userService.registerNewUser(registeredUser.email, registeredUser.password)
-                .then(function(manager) {
-                    userService.createRegisteredNewUser(registeredUser, manager.uid)
-                        .then(function(newUser){
-                            authService.passwordLogin(registeredUser.email, registeredUser.password)
-                                .then(function(auth){
-                                    managerId = manager.uid;
-                                    userService.setCurrentUser(newUser, manager.uid);
-                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
-                                    $modalInstance.close();
-                                }, function(err) {
-                                    alert(err)
-                                });
-                        }, function(err) {
-                            alert(err)
-                        });
-                }, function(err) {
-                    alert(err)
-                })
-      $state.go('app.busDashboard');
-        }
-
-
-}
-
-
-})();
-
-/**
- * Created by mike.baker on 9/8/2015.
- */
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.manager', []);
-})();
 /**
  * Created by labrina.loving on 8/6/2015.
  */
@@ -1553,23 +1490,52 @@ angular.module("hirelyApp.layout").directive("footer", function() {
         var vm = this;
         var authService = AuthService;
 
-        //listen for changes to current user
+        /**
+         * Listen to change in user login status to set local $scope variable
+         *
+         */
         $scope.$on('UserLoggedIn', function (event, user) {
             $scope.currentUser = user;
         });
 
+        /**
+         * Lsiten to user logout event to remove local scope variable
+         */
         $scope.$on('UserLoggedOut', function (event) {
             delete $scope.currentUser;
         });
 
+        /**
+         * Listen to showLogin event that emited from different controller "registerCtrl.js" when there is a need to show the login form in modal
+         * the the loginListener is used to remove the listener when $scope is destroyed
+         */
         var logInListener = $rootScope.$on('ShowLogin', function(event){
             vm.login();
         });
 
-        $scope.$on('$destroy', function(){
-            //// to remove the root listener when scope is destored
-            logInListener();
+        /**
+         * Listent to ShowRegister event that emited from different controlers "loginCtrl.js"
+         * to show the regstration form
+         */
+        var regListener = $rootScope.$on('ShowRegister', function(event){
+            vm.register();
+        });
+
+        /**
+         * Listent to ShowForgotPassword event that emited from "LoginCtrl.js" to show rest password
+         */
+        var passListener = $rootScope.$on('ShowForgotPassword', function(event){
+            vm.hmforgotpassword();
         })
+
+        /**
+         * Listent to $destroy event and remove listener from $rootScope
+         */
+        $scope.$on('$destroy', function(){
+            regListener();
+            logInListener();
+            passListener();
+        });
 
 
         //region Controller Functions
@@ -1600,6 +1566,13 @@ angular.module("hirelyApp.layout").directive("footer", function() {
             });
         };
 
+        vm.hmforgotpassword = function(){
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'app/account/password.html',
+                controller: 'PasswordCtrl as vm'
+            });
+        }
 
         vm.logout = function(){
             authService.logout();
@@ -1804,6 +1777,141 @@ angular.module("hirelyApp.layout").directive("header", function() {
         };
     };
 })();
+ /**
+ * Created by labrina.loving on 8/10/2015.
+ */
+(function () {
+    'use strict';
+
+angular.module('hirelyApp.manager').directive('autoFillableField', [
+  '$timeout',
+  function($timeout) {
+    return {
+      require: '?ngModel',
+      restrict: 'A',
+      link: function(scope, element, attrs, ngModel) {
+
+        $timeout(function() {
+          if (ngModel.$viewValue !== element.val()) {
+            ngModel.$setViewValue(element.val());
+          }
+        }, 50);
+      }
+    };
+  }
+]);
+}
+)();
+/**
+ * Created by mike.baker on 9/29/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
+   
+
+    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
+
+        var vm = this;
+        var authService = AuthService;
+        var userService = UserService;
+        var businessService = BusinessService;
+        var managerId = '';
+        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
+        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
+       
+        $scope.companies = $firebaseArray(businessRef);
+        $scope.picturesRef = $firebaseArray(photoRef);
+        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
+    
+        $scope.street_number = '';
+        $scope.route = '';
+        $scope.locality = '';
+        $scope.administrative_area_level_1 = '';
+        $scope.postal_code = '';
+        $scope.country = '';
+        $scope.latitude = '';
+        $scope.longitude = '';
+        $scope.open_store_hours0 = '';
+        $scope.closed_store_hours0 = '';
+        $scope.open_store_hours1 = '';
+        $scope.closed_store_hours1 = '';
+        $scope.open_store_hours2 = '';
+        $scope.closed_store_hours2 = '';
+        $scope.open_store_hours3 = '';
+        $scope.closed_store_hours3 = '';
+        $scope.open_store_hours4 = '';
+        $scope.closed_store_hours4 = '';
+        $scope.open_store_hours5 = '';
+        $scope.closed_store_hours5 = '';
+        $scope.open_store_hours6 = '';
+        $scope.closed_store_hours6 = '';
+        $scope.error = '';
+
+        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
+        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
+        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
+        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
+        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
+        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
+
+
+
+
+       $scope.options = {
+          types: '(regions)'
+       };
+
+       $scope.results = '';
+       $scope.details = '';
+    
+        vm.registerNewHMBUS = function() {
+            registerPasswordHM($scope.manager, $scope.business)
+        }
+       
+        vm.CloseModal = function (){
+            $modalInstance.close();
+        }
+
+        function registerPasswordHM(registeredUser, newbusinessObj){
+            //register new hiring manager
+            userService.registerNewUser(registeredUser.email, registeredUser.password)
+                .then(function(manager) {
+                    userService.createRegisteredNewUser(registeredUser, manager.uid)
+                        .then(function(newUser){
+                            authService.passwordLogin(registeredUser.email, registeredUser.password)
+                                .then(function(auth){
+                                    managerId = manager.uid;
+                                    userService.setCurrentUser(newUser, manager.uid);
+                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
+                                    $modalInstance.close();
+                                }, function(err) {
+                                    alert(err)
+                                });
+                        }, function(err) {
+                            alert(err)
+                        });
+                }, function(err) {
+                    alert(err)
+                })
+      $state.go('app.busDashboard');
+        }
+
+
+}
+
+
+})();
+
+/**
+ * Created by mike.baker on 9/8/2015.
+ */
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.manager', []);
+})();
     /**
  * Created by labrina.loving on 8/6/2015.
  */
@@ -1979,48 +2087,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
 /**
  *
- * Job Application Workflow
- *
- * Develoopers - Hirely 2015
- *
- *
- */
-(function () {
-  'use strict';
-
-  angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService' ,'TRAITIFY_PUBLIC_KEY', StepThreeController]);
-
-
-  function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
-
-    $scope.stepThreeLoaded = true;
-
-    Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-    Traitify.setHost("api-sandbox.traitify.com");
-    Traitify.setVersion("v1");
-
-    TraitifyService.getAssessmentId().then(function (data) {
-        var assessmentId =  data.results.id;
-        var traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-          results: {target: ".personality-results"},
-          personalityTypes: {target: ".personality-types"},
-          personalityTraits: {target: ".personality-traits"}
-        });
-        // traitify.onInitialize(function(){
-        //   $scope.stepThreeLoaded = true;
-        //   $scope.$apply();
-        // });
-        
-
-    });
-
-
-
-  }
-})();
-
-/**
- *
  * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
@@ -2146,6 +2212,48 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
   }
 })();
+/**
+ *
+ * Job Application Workflow
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService' ,'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+
+
+  function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+
+    $scope.stepThreeLoaded = true;
+
+    Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
+    Traitify.setHost("api-sandbox.traitify.com");
+    Traitify.setVersion("v1");
+
+    TraitifyService.getAssessmentId().then(function (data) {
+        var assessmentId =  data.results.id;
+        var traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+          results: {target: ".personality-results"},
+          personalityTypes: {target: ".personality-types"},
+          personalityTraits: {target: ".personality-traits"}
+        });
+        // traitify.onInitialize(function(){
+        //   $scope.stepThreeLoaded = true;
+        //   $scope.$apply();
+        // });
+        
+
+    });
+
+
+
+  }
+})();
+
 /**
  *
  * Job Application Workflow Main Controller
@@ -3109,7 +3217,10 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
             currentUser: currentUser,
             currentUserID: currentUserID,
             setCurrentUser: setCurrentUser,
-            getAuth: getAuth
+            getAuth: getAuth,
+            isUserLoggedIn: isUserLoggedIn,
+            onAuth: onAuth,
+            resetPassword: resetPassword
         };
         return service;
 
@@ -3173,7 +3284,6 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         function logout(){
             firebaseRef.$unauth();
             removeCurrentUser();
-
         }
 
         function setCurrentUser(user, userID){
@@ -3209,7 +3319,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
                 //// user is authenticated
 
                 //// fill current user if not exists
-                if(angular.isUndefined(currentUser)){
+                if(angular.isUndefined(service.currentUser)){
                     fillUserData(auth.uid)
                         .then(
                             function(user){
@@ -3225,7 +3335,6 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
                     //// current user exists
                     deferred.resolve(true);
                 }
-
             }
             else{
                 //// no authenticated user make sure there is not user id
@@ -3249,6 +3358,30 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
                 )/// .then
             return deferred.promise;
         }//// fun.. fillUserData
+
+        function isUserLoggedIn(){
+            return !angular.isUndefined(service.currentUser)
+                && !angular.isUndefined(service.currentUserID);
+        }//// fun. isUserLoggedIn
+
+        function onAuth(callBack){
+            firebaseRef.$onAuth(callBack);
+        }//// fun. onAuth
+
+        function resetPassword(email){
+            var deferred = $q.defer();
+
+            firebaseRef.$resetPassword({'email':email})
+                .then(function(){
+                    deferred.resolve();
+                })
+                .catch(function(error){
+                    deferred.reject(error);
+                });
+
+
+            return deferred.promise;
+        }//// fun. resetPasswrod
 
     }
 })();
