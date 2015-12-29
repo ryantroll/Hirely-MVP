@@ -163,10 +163,10 @@ var myApp = angular.module('hirelyApp',
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope','$stateParams','$modalInstance', 'AuthService', LoginCtrl ]);
+    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', 'UserService', LoginCtrl ]);
 
 
-    function LoginCtrl($scope, $stateParams, $modalInstance, AuthService) {
+    function LoginCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, userService) {
         var authService = AuthService;
         var vm = this;
         $scope.error = '';
@@ -175,8 +175,7 @@ var myApp = angular.module('hirelyApp',
         vm.FbLogin = function(){
            authService.thirdPartyLogin('facebook')
                .then(function(data){
-                   $modalInstance.close();
-
+                   $uibModalInstance.close();
                }, function(err) {
 
                    $scope.error = errMessage(err);
@@ -188,7 +187,7 @@ var myApp = angular.module('hirelyApp',
         vm.GoogleLogin = function(){
             authService.thirdPartyLogin('google')
                 .then(function(data){
-                    $modalInstance.close();
+                    $uibModalInstance.close();
 
                 }, function(err) {
 
@@ -198,10 +197,11 @@ var myApp = angular.module('hirelyApp',
 
         };
 
+
         vm.PasswordLogin = function() {
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(function(auth){
-                    $modalInstance.close();
+                    $uibModalInstance.close();
                 }, function(err) {
                     alert(err)
                 });
@@ -209,8 +209,77 @@ var myApp = angular.module('hirelyApp',
 
 
         vm.CloseModal = function (){
-            $modalInstance.close();
+            $uibModalInstance.close();
         };
+
+        vm.signupClick = function(){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to ShowRegister
+             */
+            $rootScope.$emit('ShowRegister');
+        };
+
+
+        vm.forgotPassword = function(){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to ShowRegister
+             */
+            $rootScope.$emit('ShowForgotPassword');
+        };
+
+    }
+})();
+/**
+ * Created by labrina.loving on 8/5/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.account').controller('PasswordCtrl', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', PasswordCtrl ]);
+
+
+    function PasswordCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService) {
+
+        /**
+         * [error variable initiated to nothing]
+         * @type {String}
+         */
+        $scope.error = '';
+        $scope.success = false;
+
+        /**
+         * Submit event of passwor reset form
+         */
+        $scope.passwordReset = function(){
+            $scope.errorMsg = '';
+            $scope.success = false;
+            AuthService.resetPassword($scope.email).then(
+                function(){
+                    $scope.errorMsg = '';
+                    $scope.success = true;
+                    $scope.email = '';
+                    /**
+                     * reset for validation
+                     */
+                    $scope.passwordForm.$setPristine()
+                    $scope.passwordForm.$setUntouched()
+                },
+                function(error){
+
+                    $scope.errorMsg = error;
+                    $scope.success = false;
+                }
+            )/// resetPassrod.then
+        }//// fun. passwordReset
+
+        /**
+         * click event for close button to close the modal
+         */
+        $scope.closeModal = function(){
+            $uibModalInstance.close();
+        }
     }
 })();
 /**
@@ -219,9 +288,9 @@ var myApp = angular.module('hirelyApp',
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
+    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$uibModalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
 
-    function RegisterCtrl($scope, $stateParams, $modalInstance, AuthService, UserService) {
+    function RegisterCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
 
         var vm = this;
         var authService = AuthService;
@@ -230,7 +299,6 @@ var myApp = angular.module('hirelyApp',
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
         vm.FbRegister = function () {
-
             registerThirdPartyUser('facebook')
         }
 
@@ -249,7 +317,15 @@ var myApp = angular.module('hirelyApp',
         }
 
         vm.CloseModal = function (){
-            $modalInstance.close();
+            $uibModalInstance.close();
+        }
+
+        vm.goToLogin = function(event){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to showLogin event
+             */
+            $rootScope.$emit('ShowLogin');
         }
 
         //this function registers user in 3rd party and
@@ -260,7 +336,7 @@ var myApp = angular.module('hirelyApp',
                     userService.createUserfromThirdParty(provider, user)
                         .then(function(fbUser){
                             userService.setCurrentUser(fbUser, provider.uid);
-                            $modalInstance.close();
+                            $uibModalInstance.close();
                         }, function(err) {
                             alert(err)
                         });
@@ -274,11 +350,11 @@ var myApp = angular.module('hirelyApp',
             userService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(user) {
                     userService.createRegisteredNewUser(registeredUser, user.uid)
-                        .then(function(newUser){
+                        .then(function(newUserData){
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
-                                    userService.setCurrentUser(newUser, user.uid);
-                                    $modalInstance.close();
+                                    // authService.setCurrentUser(newUserData, user.uid);
+                                    $uibModalInstance.close();
                                 }, function(err) {
                                     alert(err)
                                 });
@@ -782,7 +858,7 @@ angular.module('hirelyApp.core')
          .run(['$rootScope', '$state', 'AuthService', 'UserService', 'loginRedirectPath',
             function ($rootScope, $state, AuthService, UserService, loginRedirectPath) {
                 // watch for login status changes and redirect if appropriate
-                AuthService.AuthRef().$onAuth(check);
+                AuthService.onAuth(check);
 
                 // some of our routes may reject resolve promises with the special {authRequired: true} error
                 // this redirects to the login page whenever that is encountered
@@ -793,8 +869,10 @@ angular.module('hirelyApp.core')
                 });
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-                    AuthService.AuthRef().$onAuth(check);
-                    if (toState.authRequired && !UserService.getIsLoggedIn()){
+                    AuthService.onAuth(check);
+                    // AuthService.isUserLoggedIn();
+                    
+                    if (toState.authRequired && !AuthService.isUserLoggedIn()){
                         // User isn’t authenticated
                         $state.transitionTo(loginRedirectPath);
                         event.preventDefault();
@@ -1397,23 +1475,68 @@ angular.module("hirelyApp.layout").directive("footer", function() {
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('HeaderCtrl', ['$stateParams', '$scope', '$modal', '$log', 'AuthService', HeaderCtrl ]);
+    angular.module('hirelyApp.layout').controller('HeaderCtrl', ['$stateParams', '$scope', '$rootScope', '$modal', '$log', 'AuthService', '$rootScope', HeaderCtrl ]);
 
-    function HeaderCtrl($stateParams, $scope, $modal, $log, AuthService) {
+    function HeaderCtrl($stateParams, $scope, $rootScope, $modal, $log, AuthService) {
 
         //region Scope variables
-        $scope.currentUser = $scope.$parent.currentUser;
+        if(!angular.isUndefined(AuthService.currentUser)){
+            $scope.currentUser = AuthService.currentUser;
+        }
+
 
         //endregion
 
         var vm = this;
         var authService = AuthService;
 
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.currentUser = args.message;
+        /**
+         * Listen to change in user login status to set local $scope variable
+         *
+         */
+        $scope.$on('UserLoggedIn', function (event, user) {
+            $scope.currentUser = user;
         });
-      
+
+        /**
+         * Lsiten to user logout event to remove local scope variable
+         */
+        $scope.$on('UserLoggedOut', function (event) {
+            delete $scope.currentUser;
+        });
+
+        /**
+         * Listen to showLogin event that emited from different controller "registerCtrl.js" when there is a need to show the login form in modal
+         * the the loginListener is used to remove the listener when $scope is destroyed
+         */
+        var logInListener = $rootScope.$on('ShowLogin', function(event){
+            vm.login();
+        });
+
+        /**
+         * Listent to ShowRegister event that emited from different controlers "loginCtrl.js"
+         * to show the regstration form
+         */
+        var regListener = $rootScope.$on('ShowRegister', function(event){
+            vm.register();
+        });
+
+        /**
+         * Listent to ShowForgotPassword event that emited from "LoginCtrl.js" to show rest password
+         */
+        var passListener = $rootScope.$on('ShowForgotPassword', function(event){
+            vm.hmforgotpassword();
+        })
+
+        /**
+         * Listent to $destroy event and remove listener from $rootScope
+         */
+        $scope.$on('$destroy', function(){
+            regListener();
+            logInListener();
+            passListener();
+        });
+
 
         //region Controller Functions
         vm.login = function() {
@@ -1439,14 +1562,23 @@ angular.module("hirelyApp.layout").directive("footer", function() {
                 animation: true,
                 templateUrl: 'app/manager/hmRegister.html',
                 controller: 'HMRegisterCtrl as vm',
-                
+
             });
         };
 
+        vm.hmforgotpassword = function(){
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'app/account/password.html',
+                controller: 'PasswordCtrl as vm'
+            });
+        }
 
         vm.logout = function(){
             authService.logout();
         };
+
+
 
         //endregion
 
@@ -1494,6 +1626,25 @@ angular.module("hirelyApp.layout").directive("header", function() {
         $scope.currentUser = null;
         $scope.location = {};
         $scope.currentPlace = null;
+
+        /**
+         * check on loged in user
+         * getAuth method will do the needfull and set all the required variabls
+         */
+
+        var auth = AuthService.getAuth()
+            .then(
+                function(isAuth){
+                    if(isAuth){
+                        console.log('User ' + AuthService.currentUser.firstName + ' is logged in');
+                    }
+                },
+                function(error){
+                    /// no authenticated user
+                    /// do nothing
+                }
+            )/// Auth then
+
 
 
         //
@@ -1939,6 +2090,34 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
  * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
+
+
+  function StepTwoController($scope, $stateParams) {
+
+    $scope.xpItems = [];
+    $scope.addJobXp = function () {
+      console.log($scope.company);
+      $scope.xpItems.push(
+        {
+          company: $scope.company,
+          position: $scope.position,
+          description: $scope.description
+        }
+      )
+    }
+
+  }
+})();
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
  *
  *
  */
@@ -2033,34 +2212,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
   }
 })();
 
-/**
- *
- * Job Application Workflow Main Controller
- *
- * Develoopers - Hirely 2015
- */
-(function () {
-  'use strict';
-
-  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
-
-
-  function StepTwoController($scope, $stateParams) {
-
-    $scope.xpItems = [];
-    $scope.addJobXp = function () {
-      console.log($scope.company);
-      $scope.xpItems.push(
-        {
-          company: $scope.company,
-          position: $scope.position,
-          description: $scope.description
-        }
-      )
-    }
-
-  }
-})();
 /**
  *
  * Job Application Workflow
@@ -3084,17 +3235,27 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     'use strict';
 
     angular.module('hirelyApp.core')
-        .factory('AuthService', ['$firebaseAuth', 'fbutil', '$q', AuthService]);
+        .factory('AuthService', ['$firebaseAuth', 'fbutil', '$q', '$rootScope', 'UserService', AuthService]);
 
-    function AuthService($firebaseAuth, fbutil, $q) {
+    function AuthService($firebaseAuth, fbutil, $q, $rootScope, UserService) {
         var self = this;
         var firebaseRef = $firebaseAuth(fbutil.ref());
         var authData = '';
+        var currentUser;
+        var currentUserID;
+
         var service =  {
             thirdPartyLogin: thirdPartyLogin,
             AuthRef: AuthRef,
             passwordLogin: passwordLogin,
-            logout: logout
+            logout: logout,
+            currentUser: currentUser,
+            currentUserID: currentUserID,
+            setCurrentUser: setCurrentUser,
+            getAuth: getAuth,
+            isUserLoggedIn: isUserLoggedIn,
+            onAuth: onAuth,
+            resetPassword: resetPassword
         };
         return service;
 
@@ -3129,8 +3290,18 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
                 email    : email,
                 password : password
                 })
-                .then(function(user) {
-                    deferred.resolve(user);
+                .then(function(auth) {
+                    fillUserData(auth.uid)
+                    .then(
+                        function(user){
+                            setCurrentUser(user, auth.uid);
+                            deferred.resolve(auth);
+                        },
+                        function(error){
+                            deferred.reject(error);
+                        }
+                    )/// then
+
                 }, function(err) {
                     deferred.reject(err);
                 });
@@ -3139,22 +3310,113 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
             return deferred.promise;
         };
 
+
+
         function AuthRef(){
             return firebaseRef;
         }
 
         function logout(){
             firebaseRef.$unauth();
+            removeCurrentUser();
         }
 
+        function setCurrentUser(user, userID){
+          /// add the id to user object
+          var newUser = angular.extend({}, user);
 
+          //// set the rootScope currentUser
+          service.currentUser = newUser;
+          service.currentUserID = userID;
 
-        function AuthRef(){
-            return firebaseRef;
+          //// if any of children scopes need to now whos logged in
+          //// let them know
+          $rootScope.$emit('UserLoggedIn', newUser);
+          $rootScope.$broadcast('UserLoggedIn', newUser);
         }
 
+        function removeCurrentUser(){
+          service.currentUser = undefined;
+          service.currentUserID = undefined;
+
+          /// let all scopes the user is logged out
+          $rootScope.$emit('UserLoggedOut');
+          $rootScope.$broadcast('UserLoggedOut');
+        }
+
+        function getAuth(){
+
+            var deferred = $q.defer();
+
+            var auth = firebaseRef.$getAuth();
+
+            if(auth){
+                //// user is authenticated
+
+                //// fill current user if not exists
+                if(angular.isUndefined(service.currentUser)){
+                    fillUserData(auth.uid)
+                        .then(
+                            function(user){
+                                setCurrentUser(user, auth.uid);
+                                deferred.resolve(true);
+                            },
+                            function(error){
+                                deferred.resolve('User data cannot be retrived');
+                            }
+                        )/// then
+                }
+                else{
+                    //// current user exists
+                    deferred.resolve(true);
+                }
+            }
+            else{
+                //// no authenticated user make sure there is not user id
+                removeCurrentUser();
+                deferred.reject('User is not authenticated');
+            }
+            return deferred.promise;
+        }/// fun. getAuth
+
+        function fillUserData(userID){
+            var deferred = $q.defer();
+
+            UserService.getUserById(userID)
+                .then(
+                    function(user){
+                        deferred.resolve(user);
+                    },
+                    function(error){
+                        deferred.reject(error);
+                    }
+                )/// .then
+            return deferred.promise;
+        }//// fun.. fillUserData
+
+        function isUserLoggedIn(){
+            return !angular.isUndefined(service.currentUser)
+                && !angular.isUndefined(service.currentUserID);
+        }//// fun. isUserLoggedIn
+
+        function onAuth(callBack){
+            firebaseRef.$onAuth(callBack);
+        }//// fun. onAuth
+
+        function resetPassword(email){
+            var deferred = $q.defer();
+
+            firebaseRef.$resetPassword({'email':email})
+                .then(function(){
+                    deferred.resolve();
+                })
+                .catch(function(error){
+                    deferred.reject(error);
+                });
 
 
+            return deferred.promise;
+        }//// fun. resetPasswrod
 
     }
 })();
@@ -3796,7 +4058,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     };
 
 
-    this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
+    this.createRegisteredNewUser = function createRegisteredNewUser(userData, userID) {
 
       var deferred = $q.defer();
 
@@ -3807,18 +4069,32 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
       var lastName = userData.lastName;
       var email = userData.email;
       var userType = userData.userType;
-      var profileImageUrl = userData.profileImageUrl;
+      var profileImageUrl = userData.profileImageUrl ? userData.profileImageUrl : '';
       var provider = 'password';
       var createdOn = timestamp;
       var lastModifiedOn = timestamp;
-      var personalStatement = userData.personalStatement;
-      var address = userData.address;
+      var personalStatement = userData.personalStatement ? userData.personalStatement : '';
+      var address = userData.address ? userData.address : 0;
 
       var user = new User(firstName, lastName, email, userType,
         profileImageUrl, personalStatement,
         provider, createdOn, lastModifiedOn, address);
 
-      self.createUserinFirebase(user, providerId);
+        self.createNewUser(user, userID);
+
+      // self.createUserinFirebase(user, providerId);
+      // var user = {
+      //   'firstName': userData.firstName,
+      //   'lastName': userData.lastName,
+      //   'email': userData.email,
+      //   'userType': userData.userType,
+      //   'provider': 'password',
+      //   'createdOn': timestamp,
+      //   'lastModifiedOn': timestamp
+      // };
+
+      // self.saveUserData(user, userID);
+      // console.log(user);
 
 
       deferred.resolve(user);
@@ -3876,6 +4152,9 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         userData.education
       );
 
+      ////define the variable to avoid any udefined error
+      var experience, address, education;
+
       /*****
        *
        * Uncomment When needed.
@@ -3883,7 +4162,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
        * ***/
 
       /*
-       var address = new Address (
+       address = new Address (
        pAddress.formattedAddress,
        pAddress.zipCode,
        pAddress.unit,
@@ -3895,7 +4174,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
        );
 
 
-       var education = new Education (
+       education = new Education (
        pEducation.programType,
        pEducation.institutionName,
        pEducation.degree,
@@ -3908,7 +4187,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
        pEducation.current
        );
 
-       var experience = new Experience (
+       experience = new Experience (
        pExperience.position,
        pExperience.employer,
        pExperience.empolyerPlaceId,
@@ -3923,13 +4202,21 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
        );
 
        */
+
       ref.child(id).set(user, function (error) {
         if (error)
           console.log("error");
         else {
-          ref.child(id).child('experience').set(experience);
-          ref.child(id).child('education').set(education);
-          ref.child(id).child('address').set(address);
+
+          if(!angular.isUndefined(experience)){
+            ref.child(id).child('experience').set(experience);
+          }
+          if(!angular.isUndefined(education)){
+            ref.child(id).child('education').set(education);
+          }
+          if(!angular.isUndefined(address)){
+            ref.child(id).child('address').set(address);
+          }
           console.log("Success");
         }
 
@@ -3941,9 +4228,11 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
+
       var url = new Firebase(FIREBASE_URL + "/users/" + id);
       url.on("value", function (snapshot) {
         user = snapshot.val();
+
         deferred.resolve(user);
       }, function (err) {
         deferred.reject(err);
@@ -4287,18 +4576,19 @@ User = Model({
   initialize: function (firstName, lastName, email, userType,
                         profileImageUrl, personalStatement,
                         provider, createdOn, lastModifiedOn , address , experience , education) {
+
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.userType = userType;
-    this.profileImageUrl = profileImageUrl;
-    this.personalStatement = personalStatement;
+    this.profileImageUrl = profileImageUrl || false;
+    this.personalStatement = personalStatement || false;
     this.provider = provider;
     this.createdOn = createdOn;
     this.lastModifiedOn = lastModifiedOn;
-    this.address = address || {} ;
-    this.experience = experience || {} ;
-    this.education = education || {};
+    this.address = address || false ;
+    this.experience = experience || false ;
+    this.education = education || false;
   },
 
   toString: function(){

@@ -43,7 +43,7 @@
     };
 
 
-    this.createRegisteredNewUser = function createRegisteredNewUser(userData, providerId) {
+    this.createRegisteredNewUser = function createRegisteredNewUser(userData, userID) {
 
       var deferred = $q.defer();
 
@@ -54,18 +54,32 @@
       var lastName = userData.lastName;
       var email = userData.email;
       var userType = userData.userType;
-      var profileImageUrl = userData.profileImageUrl;
+      var profileImageUrl = userData.profileImageUrl ? userData.profileImageUrl : '';
       var provider = 'password';
       var createdOn = timestamp;
       var lastModifiedOn = timestamp;
-      var personalStatement = userData.personalStatement;
-      var address = userData.address;
+      var personalStatement = userData.personalStatement ? userData.personalStatement : '';
+      var address = userData.address ? userData.address : 0;
 
       var user = new User(firstName, lastName, email, userType,
         profileImageUrl, personalStatement,
         provider, createdOn, lastModifiedOn, address);
 
-      self.createUserinFirebase(user, providerId);
+        self.createNewUser(user, userID);
+
+      // self.createUserinFirebase(user, providerId);
+      // var user = {
+      //   'firstName': userData.firstName,
+      //   'lastName': userData.lastName,
+      //   'email': userData.email,
+      //   'userType': userData.userType,
+      //   'provider': 'password',
+      //   'createdOn': timestamp,
+      //   'lastModifiedOn': timestamp
+      // };
+
+      // self.saveUserData(user, userID);
+      // console.log(user);
 
 
       deferred.resolve(user);
@@ -123,6 +137,9 @@
         userData.education
       );
 
+      ////define the variable to avoid any udefined error
+      var experience, address, education;
+
       /*****
        *
        * Uncomment When needed.
@@ -130,7 +147,7 @@
        * ***/
 
       /*
-       var address = new Address (
+       address = new Address (
        pAddress.formattedAddress,
        pAddress.zipCode,
        pAddress.unit,
@@ -142,7 +159,7 @@
        );
 
 
-       var education = new Education (
+       education = new Education (
        pEducation.programType,
        pEducation.institutionName,
        pEducation.degree,
@@ -155,7 +172,7 @@
        pEducation.current
        );
 
-       var experience = new Experience (
+       experience = new Experience (
        pExperience.position,
        pExperience.employer,
        pExperience.empolyerPlaceId,
@@ -170,13 +187,21 @@
        );
 
        */
+
       ref.child(id).set(user, function (error) {
         if (error)
           console.log("error");
         else {
-          ref.child(id).child('experience').set(experience);
-          ref.child(id).child('education').set(education);
-          ref.child(id).child('address').set(address);
+
+          if(!angular.isUndefined(experience)){
+            ref.child(id).child('experience').set(experience);
+          }
+          if(!angular.isUndefined(education)){
+            ref.child(id).child('education').set(education);
+          }
+          if(!angular.isUndefined(address)){
+            ref.child(id).child('address').set(address);
+          }
           console.log("Success");
         }
 
@@ -188,9 +213,11 @@
     this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
+
       var url = new Firebase(FIREBASE_URL + "/users/" + id);
       url.on("value", function (snapshot) {
         user = snapshot.val();
+
         deferred.resolve(user);
       }, function (err) {
         deferred.reject(err);

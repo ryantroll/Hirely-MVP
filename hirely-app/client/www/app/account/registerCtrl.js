@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$stateParams', '$modalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
+    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$uibModalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
 
-    function RegisterCtrl($scope, $stateParams, $modalInstance, AuthService, UserService) {
+    function RegisterCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
 
         var vm = this;
         var authService = AuthService;
@@ -15,7 +15,6 @@
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
         vm.FbRegister = function () {
-
             registerThirdPartyUser('facebook')
         }
 
@@ -34,7 +33,15 @@
         }
 
         vm.CloseModal = function (){
-            $modalInstance.close();
+            $uibModalInstance.close();
+        }
+
+        vm.goToLogin = function(event){
+            $uibModalInstance.close();
+            /**
+             * headerCtrl.js will listen to showLogin event
+             */
+            $rootScope.$emit('ShowLogin');
         }
 
         //this function registers user in 3rd party and
@@ -45,7 +52,7 @@
                     userService.createUserfromThirdParty(provider, user)
                         .then(function(fbUser){
                             userService.setCurrentUser(fbUser, provider.uid);
-                            $modalInstance.close();
+                            $uibModalInstance.close();
                         }, function(err) {
                             alert(err)
                         });
@@ -59,11 +66,11 @@
             userService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(user) {
                     userService.createRegisteredNewUser(registeredUser, user.uid)
-                        .then(function(newUser){
+                        .then(function(newUserData){
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
-                                    userService.setCurrentUser(newUser, user.uid);
-                                    $modalInstance.close();
+                                    // authService.setCurrentUser(newUserData, user.uid);
+                                    $uibModalInstance.close();
                                 }, function(err) {
                                     alert(err)
                                 });

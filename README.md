@@ -89,5 +89,42 @@ What's going on?
  5. Run the css compiler 'gulp' as daemon
  5. Run server as daemon
  6. Open http://localhost:7200 in a browser
+```
+
+----------
+
+Users and Authentication
+-------------
+Logged in user presented in "AuthService.currentUser" and "AuthService.currentUserID" object when undefined user considered loged out.
+The above objects used to notify controllars and modify the views accordingly only
+the true securiyt check and login session managment is handled by Firebase SDK so far.
+AuthService as angular service singelton object will provide the currentUser and currentUserID properties
+Header controler "app/layout/headerCtrl.js" has the code that register $rootScope listener for ShowRegister, ShowLogin, ShowForgotPassword events, the above event will be emited from differnet places to show the right form
+
+Code Location:
+User Registration in www/app/account/registerCtrl.js
+User Login in www/app/account/loginCtrl.js
+User checked for login/logout status in www/app/layout/masterCtrl.js
+
+Models:
+1. User in www/app/core/services/models/user.js
+2. Education in www/app/core/services/models/user.js
+3. Experience in www/app/core/services/models/user.js
+When user model first saved to DB eduction, education, experience and all other properties that don't have value are saved as "False"
+
+Services:
+Users authenticatin and data saving is handled by below services
+1. UserService in www/app/core/services/service.user.js this work as abstract auth service to isolate firebase authenticaion for easy migration
+2. AuthService in www/app/core/services/service.auth.js used for dealing with user data saving and retriving for DB
+
+Events:
+1. "UserLoggedIn": broadcast by $rootScope to notify child scope about logged, this event will send a new user object as variable.
+2. "UserLoggedOut": broadcast by $rootScope to notify children scope about user loged out, no variable sent with it.
+
+Note:
+AuthService is doing the job so far but it's not coded as it should be
+
+
+
 
 

@@ -21,6 +21,25 @@
         $scope.location = {};
         $scope.currentPlace = null;
 
+        /**
+         * check on loged in user
+         * getAuth method will do the needfull and set all the required variabls
+         */
+
+        var auth = AuthService.getAuth()
+            .then(
+                function(isAuth){
+                    if(isAuth){
+                        console.log('User ' + AuthService.currentUser.firstName + ' is logged in');
+                    }
+                },
+                function(error){
+                    /// no authenticated user
+                    /// do nothing
+                }
+            )/// Auth then
+
+
 
         //
         $window.navigator.geolocation.getCurrentPosition(function(position){
