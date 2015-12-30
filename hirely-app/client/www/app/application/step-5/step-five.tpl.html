@@ -1,6 +1,11 @@
 
-<form class="form-horizontal" name="stepFive" novalidate>
+<form class="form-horizontal" name="stepFive" novalidate form-step-validity>
     <fieldset>
+        <div class="form-loader" ng-show="!stepFiveLoaded">
+            <div class="loader"></div>
+        </div>
+
+        <div class="form-fields-wrapper" ng-show="stepFiveLoaded">
         <legend>Availability</legend>
 
         <!-- Date Picker -->
@@ -9,9 +14,9 @@
             <div class="col-sm-9 col-md-6">
                 <div ng-class="{'has-feedback has-error': stepFive.startDate.$error.required && stepFive.startDate.$dirty, 'has-feedback has-success' : stepFive.startDate.$valid}">
                     <div class="input-group">
-                        <input type="text" id="startDate" id="startDate" class="form-control" ng-model="availability.startDate" ng-focus="openDatePicker($event)" uib-datepicker-popup="{{format}}"  is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" required/>
-                        <span class="fa fa-close form-control-feedback" ng-show="stepFive.startDate.$error.required && stepFive.startDate.$dirty"></span>
-                        <span class="fa fa-check form-control-feedback" ng-show="stepFive.startDate.$valid"></span>
+                        <input type="text" id="startDate" id="startDate" class="form-control" ng-model="availability.startDate" ng-focus="openDatePicker($event)" uib-datepicker-popup="{{format}}"  is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                        <span class="fa fa-close form-control-feedback" ng-show="stepFive.startDate.$error.required && stepFive.startDate.$dirty">one</span>
+                        <span class="fa fa-check form-control-feedback" ng-show="stepFive.startDate.$valid">two</span>
     					<span class="input-group-btn" >
     						<button class="btn btn-primary step-5-date-btn" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
     					</span>
@@ -296,6 +301,7 @@
             </div>
         </div><!--end-mobile-layout-->
 
+    </div><!--form-field-wrapper-->
     </fieldset>
-    <!-- END Personal data -->
+
 </form>

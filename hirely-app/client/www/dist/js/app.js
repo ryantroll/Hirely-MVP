@@ -481,6 +481,11 @@ var myApp = angular.module('hirelyApp',
     //form steps
     $scope.steps = [
       {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
+      },
+      {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
         hasForm: true
@@ -497,10 +502,11 @@ var myApp = angular.module('hirelyApp',
       {
         templateUrl: '/app/application/step-4/step-four.tpl.html'
       },
+
       {
-        templateUrl: '/app/application/step-5/step-five.tpl.html',
-        controller: 'StepFiveController',
-        hasForm: true
+        templateUrl: '/app/application/step-6/step-six.tpl.html',
+        controller: 'StepSixController',
+        hasForm: false
       }
     ];
 
@@ -564,7 +570,9 @@ var myApp = angular.module('hirelyApp',
       console.log(hello);
     }
 
-
+    $scope.saveForm = function(){
+      alert('save');
+    }
 
 
   }
@@ -2261,6 +2269,83 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 })();
 /**
  *
+ * Job Application Workflow
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function() {
+	'use strict';
+
+	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+
+
+	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+
+		$scope.stepThreeLoaded = false;
+
+		$scope.resultsLoaded = false;
+
+		var saved = false;
+    
+    var assessmentId = null;
+
+		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
+		Traitify.setHost("api-sandbox.traitify.com");
+		Traitify.setVersion("v1");
+
+		TraitifyService.getAssessmentId().then(function(data) {
+			assessmentId = data.results.id;
+			var traitify = null;
+
+			var results = {};
+			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+				results: {
+					target: ".personality-results"
+				},
+				personalityTypes: {
+					target: ".personality-types"
+				},
+				personalityTraits: {
+					target: ".personality-traits"
+				}
+			});
+
+			traitify.slideDeck.onInitialize(function() {
+				results.slides = traitify.slideDeck.data.get("Slides");
+				$scope.stepThreeLoaded = true;
+				$scope.$apply();
+			});
+
+			traitify.results.onInitialize(function() {
+				console.log("Results");
+				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
+					results.types = data.personality_types;
+					results.blend = data.personality_blend;
+					saveAssessment()
+				});
+				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
+					results.traits = data;
+					saveAssessment()
+				});
+				$scope.resultsLoaded = true;
+				$scope.$apply();
+			});
+
+			function saveAssessment() {
+				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
+          saved = true;
+					TraitifyService.saveAssessment(results, '444', assessmentId);
+				}
+			}
+
+		});
+	}
+})();
+
+/**
+ *
  * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
@@ -2395,6 +2480,9 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
     $scope.availability.maxHours = 0;
     $scope.availability.minHours = 0;
 
+    $scope.stepFiveLoaded = false;
+
+
     /**
      * Below code copied from data picker example from
      * https://angular-ui.github.io/bootstrap/
@@ -2503,6 +2591,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        * @type {[object]}
        */
       $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+
 
       /**
        * [hourClick trigger on td click event to set/unset hour availablity in time table]
@@ -2678,85 +2767,36 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         }/// if !isUndefined
       }//// fun. addRange
 
+      /**
+       * [stepFiveLoaded set to true to remove loader and show form]
+       * @type {Boolean}
+       */
+      $scope.stepFiveLoaded = true;
+      $scope.updateValidity();
+
   }////fun. stepFiveController
 })();
 /**
  *
- * Job Application Workflow
+ * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
  *
  *
  */
-(function() {
-	'use strict';
+(function () {
+  'use strict';
 
-	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+  var step6App =  angular.module('hirelyApp');
+
+  step6App.controller('StepSixController', ['$scope', '$stateParams', 'multiStepFormInstance',  StepSixController])
+
+  function StepSixController($scope, $stateParams, multiStepFormInstance) {
 
 
-	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
 
-		$scope.stepThreeLoaded = false;
-
-		$scope.resultsLoaded = false;
-
-		var saved = false;
-    
-    var assessmentId = null;
-
-		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-		Traitify.setHost("api-sandbox.traitify.com");
-		Traitify.setVersion("v1");
-
-		TraitifyService.getAssessmentId().then(function(data) {
-			assessmentId = data.results.id;
-			var traitify = null;
-
-			var results = {};
-			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-				results: {
-					target: ".personality-results"
-				},
-				personalityTypes: {
-					target: ".personality-types"
-				},
-				personalityTraits: {
-					target: ".personality-traits"
-				}
-			});
-
-			traitify.slideDeck.onInitialize(function() {
-				results.slides = traitify.slideDeck.data.get("Slides");
-				$scope.stepThreeLoaded = true;
-				$scope.$apply();
-			});
-
-			traitify.results.onInitialize(function() {
-				console.log("Results");
-				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
-					results.types = data.personality_types;
-					results.blend = data.personality_blend;
-					saveAssessment()
-				});
-				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
-					results.traits = data;
-					saveAssessment()
-				});
-				$scope.resultsLoaded = true;
-				$scope.$apply();
-			});
-
-			function saveAssessment() {
-				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
-          saved = true;
-					TraitifyService.saveAssessment(results, '444', assessmentId);
-				}
-			}
-
-		});
-	}
+  }////fun. stepFiveController
 })();
-
 /**
  * Created by labrina.loving on 9/6/2015.
  */
@@ -3493,6 +3533,40 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
     }
 })();
+/**
+ * Created by Iyad Bitar
+ *
+ * Traitify Personality Analysis - more info: https://developer.traitify.com
+ *
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp.core')
+    .factory('AvailabilityService', ['$q', 'FIREBASE_URL', AvailabilityService]);
+
+  function AvailabilityService( $q, FIREBASE_URL) {
+
+    var ref = new Firebase(FIREBASE_URL + '/availability');
+    var service = {
+      save:save
+    };
+
+    return service;
+
+    function save(userId, availability){
+        var data = {
+          created_at: Firebase.ServerValue.TIMESTAMP,
+          availability:availability
+        }
+
+        ref.child(userId).push(data);
+    }
+
+    return service;
+  }
+})();
+
 (function () {
     'use strict';
 

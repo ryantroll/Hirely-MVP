@@ -134,6 +134,9 @@
     $scope.availability.maxHours = 0;
     $scope.availability.minHours = 0;
 
+    $scope.stepFiveLoaded = false;
+
+
     /**
      * Below code copied from data picker example from
      * https://angular-ui.github.io/bootstrap/
@@ -242,6 +245,7 @@
        * @type {[object]}
        */
       $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+
 
       /**
        * [hourClick trigger on td click event to set/unset hour availablity in time table]
@@ -416,6 +420,13 @@
           }/// if start < end
         }/// if !isUndefined
       }//// fun. addRange
+
+      /**
+       * [stepFiveLoaded set to true to remove loader and show form]
+       * @type {Boolean}
+       */
+      $scope.stepFiveLoaded = true;
+      $scope.updateValidity();
 
   }////fun. stepFiveController
 })();

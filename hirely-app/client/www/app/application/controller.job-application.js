@@ -103,6 +103,11 @@
     //form steps
     $scope.steps = [
       {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
+      },
+      {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
         hasForm: true
@@ -119,10 +124,11 @@
       {
         templateUrl: '/app/application/step-4/step-four.tpl.html'
       },
+
       {
-        templateUrl: '/app/application/step-5/step-five.tpl.html',
-        controller: 'StepFiveController',
-        hasForm: true
+        templateUrl: '/app/application/step-6/step-six.tpl.html',
+        controller: 'StepSixController',
+        hasForm: false
       }
     ];
 
@@ -186,7 +192,9 @@
       console.log(hello);
     }
 
-
+    $scope.saveForm = function(){
+      alert('save');
+    }
 
 
   }
