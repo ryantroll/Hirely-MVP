@@ -14,9 +14,10 @@
         </div>
         <div class="row job-basics">
             <div class="col-md-12">
-                <h3>{{position.position.title}}</h3>
-                <h4>{{position.business.name}}</h4>
-                <h6>{{position.business.description}}</h6>
+                <h3>{{job.description}}</h3>
+                <h3>{{job.position.title}}</h3>
+                <h4>{{job.business.name}}</h4>
+                <h6>{{job.business.description}}</h6>
 
             </div>
         </div>
@@ -24,7 +25,7 @@
             <div class="col-md-8 col-sm-8 job-description ">
                 <div class="row job-detail-row">
                     <h4>About the Position</h4>
-                    <h5>{{position.position.description}}</h5>
+                    <h5>{{job.position.description}}</h5>
 
                 </div>
                 <div class="row job-detail-row">
@@ -40,13 +41,13 @@
                                </div>
                                 <div>
                                     <span>Tips:   </span>
-                                    <span>{{position.position.compensation.tips ? 'Yes' : 'No' }}</span>
+                                    <span>{{job.position.compensation.tips ? 'Yes' : 'No' }}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div>
                                     <span>Commission:   </span>
-                                    <span>{{position.position.compensation.commission ? 'Yes' : 'No' }}</span>
+                                    <span>{{job.position.compensation.commission ? 'Yes' : 'No' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -59,35 +60,35 @@
                     </div>
                     <div class="col-md-9">
                         <div class="row">
-                            <div class="col-md-6" ng-show="position.position.benefits.medical">
+                            <div class="col-md-6" ng-show="job.position.benefits.medical">
                                 <span><i class="flaticon-caduceus1"></i></span>
                                 <span>Medical Insurance</span>
                             </div>
-                            <div class="col-md-6" ng-show="position.position.benefits.dental">
+                            <div class="col-md-6" ng-show="job.position.benefits.dental">
                                 <span><i class="flaticon-teeth15"></i></span>
                                 <span>Dental Insurance</span>
                             </div>
-                            <div class="col-md-6" ng-show="position.position.benefits.vision">
+                            <div class="col-md-6" ng-show="job.position.benefits.vision">
                                 <span><i class="flaticon-optic"></i></span>
                                 <span>Vision</span>
                             </div>
-                            <div class="col-md-6" ng-show="position.position.benefits.life">
+                            <div class="col-md-6" ng-show="job.position.benefits.life">
                                 <span><i class="flaticon-document295"></i></span>
                                 <span>Life Insurance</span>
                             </div>
-                            <div class="col-md-6" ng-show="position.position.benefits.retirement">
+                            <div class="col-md-6" ng-show="job.position.benefits.retirement">
                                 <span><i class="flaticon-money325"></i></span>
                                 <span>401k</span>
                             </div>
-                            <div class="col-md-6" ng-show="position.position.benefits.stocks">
+                            <div class="col-md-6" ng-show="job.position.benefits.stocks">
                                 <span><i class="flaticon-money325"></i></span>
                                 <span>Stocks</span>
                             </div>
-                            <div class="col-md-6" ng-show="position.position.benefits.discounts">
+                            <div class="col-md-6" ng-show="job.position.benefits.discounts">
                                 <span><i class="flaticon-discount5"></i></span>
                                 <span>Discounts</span>
                             </div>
-                            <div class="col-md-6" ng-show="position.position.benefits.flexibleSchedule">
+                            <div class="col-md-6" ng-show="job.position.benefits.flexibleSchedule">
                                 <span><i class="flaticon-agenda15"></i></span>
                                 <span>Flexible Schedule</span>
                             </div>
@@ -102,7 +103,7 @@
                     </div>
 
                     <div class="col-md-9">
-                        <span>{{position.position.taskDescription}}</span>
+                        <span>{{job.position.taskDescription}}</span>
                     </div>
 
                 </div>
@@ -122,91 +123,91 @@
                             <div class="row">
                                 <div class="col-md-3 col-xs-3">Monday</div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.monday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.monday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.monday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.monday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.monday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.monday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                             </div>
                              <!-- Tuesday-->
                             <div class="row">
                                 <div class="col-md-3 col-xs-3">Tuesday</div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.tuesday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.tuesday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.tuesday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.tuesday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.tuesday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.tuesday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                             </div>
                             <!-- Wednesday-->
                             <div class="row">
                                 <div class="col-md-3 col-xs-3">Wednesday</div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.wednesday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.wednesday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.wednesday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.wednesday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.wednesday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.wednesday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                             </div>
                             <!-- Thursday-->
                             <div class="row">
                                 <div class="col-md-3 col-xs-3">Thursday</div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.thursday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.thursday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.thursday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.thursday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.thursday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.thursday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                             </div>
                             <!-- Friday-->
                             <div class="row">
                                 <div class="col-md-3 col-xs-3">Friday</div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.friday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.friday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.friday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.friday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.friday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.friday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                             </div>
                             <!-- Saturday-->
                             <div class="row">
                                 <div class="col-md-3 col-xs-3">Saturday</div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.saturday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.saturday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.saturday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.saturday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.saturday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.saturday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                             </div>
                              <!-- Sunday-->
                             <div class="row">
                                 <div class="col-md-3 col-xs-3">Sunday</div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.sunday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.sunday.morning ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.sunday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.sunday.afternoon ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <div ng-class="position.position.availability.sunday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
+                                    <div ng-class="job.position.availability.sunday.evening ? 'schedule-circle schedule-circle-yes' : 'schedule-circle schedule-circle-no'"></div>
                                 </div>
                             </div>
                         </div>
@@ -250,8 +251,8 @@
                 </div>
                 <div class="job-hiring-mgr job-detail-right">
                     <h4>Hiring Manager</h4>
-                    <img class="img-circle" src="{{position.hiringMgr.profileImageUrl || 'img/avatar.jpg' }}" alt="position.hiringMgr.fullName">
-                    <h5>{{position.hiringMgr.fullName}}</h5>
+                    <img class="img-circle" src="{{job.hiringMgr.profileImageUrl || 'img/avatar.jpg' }}" alt="job.hiringMgr.fullName">
+                    <h5>{{job.hiringMgr.fullName}}</h5>
                 </div>
                 <div class="job-detail-right">
                     <div class="row">
