@@ -56,7 +56,7 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/job/job-search.html',
       })
       .state('app.jobdetails', {
-        url: '/jobdetails?siteId&positionId&placeId',
+        url: '/jobdetails?jobId',
         templateUrl: 'app/jobdetails/jobDetails.html',
       })
       .state('app.register', {
