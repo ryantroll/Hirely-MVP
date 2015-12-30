@@ -104,17 +104,13 @@
       return deferred.promise;
     };
 
-
     /**
-     *
-     * for userData refer to: User model
-     *
-     * for authId refer to USR_ID
-     *
-     *
-     **/
-
-    this.createNewUser = function createNewUser(userData, authId) {
+     * [createNewUser will create a new user data object in DB]
+     * @param  {[object]} userData [Refer to user model in www/app/core/services/models/user.js]
+     * @param  {[string]} authId   [user id retreved from DB]
+     * @return {[true]}          [true if user is successfully created / String as error desctiption in case of error]
+     */
+    this.createNewUser = function(userData, authId, isUpdate) {
 
       var id = authId;
 
@@ -131,7 +127,7 @@
         userData.personalStatement,
         userData.provider,
         userData.createdOn,
-        userData.lastModifiedOn,
+        isUpdate ? Firebase.ServerValue.TIMESTAMP : userData.lastModifiedOn,
         userData.address,
         userData.experience,
         userData.education,
@@ -193,9 +189,11 @@
 
        */
 
+
       ref.child(id).set(user, function (error) {
         if (error)
-          console.log("error");
+          //// not successful return error string
+          return error;
         else {
 
           if(!angular.isUndefined(experience)){
@@ -207,7 +205,9 @@
           if(!angular.isUndefined(address)){
             ref.child(id).child('address').set(address);
           }
-          console.log("Success");
+
+          //// operation is successful
+          return true;
         }
 
       });
@@ -222,9 +222,14 @@
       var url = new Firebase(FIREBASE_URL + "/users/" + id);
       url.on("value", function (snapshot) {
         user = snapshot.val();
-
-        deferred.resolve(user);
+        if(null !== user){
+          deferred.resolve(user);
+        }
+        else{
+          deferred.reject('User data cannot be retreived');
+        }
       }, function (err) {
+
         deferred.reject(err);
       });
 

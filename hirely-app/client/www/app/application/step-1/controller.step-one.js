@@ -99,30 +99,35 @@
 
       });
     }
-    // var testUserId = '-444';
-    var userID = AuthService.currentUserID;
-    var user = angular.copy(AuthService.currentUser);
 
+    //// get user data from AuthService
+    // var userID = AuthService.currentUserID;
+
+
+    //// check if user data from
     if(!$scope.stepOneLoaded){
-      // UserService.getUserById(userID).then(function(user){
-              // $scope.firstname = user.firstName;
-              // $scope.lastname = user.lastName;
-              // $scope.email = user.email;
-              // $scope.mobile = user.mobile;
-              // $scope.address = user.address.formattedAddress;
-              // $scope.address_unit = user.address.unit;
-              // $scope.address_city = user.address.city;
-              // $scope.state = user.address.state;
-              // $scope.zipcode = user.address.zipCode;
-              $scope.user = user;
-              if(false === $scope.user.address) $scope.user.address = {};
-              $scope.stepOneLoaded = true;
-            // });
+      $scope.user = angular.copy(AuthService.currentUser);;
+      $scope.stepOneLoaded = true;
     }
 
-    $scope.$on('$destroy', function(){
-      console.log($scope.user);
-      UserService.createNewUser($scope.user, userID);
+    //// wait for destroy event to update data
+    $scope.$on('$destroy', function(event){
+      AuthService.getAuth().then(
+        function(result){
+          if(true === result){
+            var result = UserService.createNewUser($scope.user, AuthService.currentUserID, true); //// last true variable to perform update operation
+
+            //// make sure the AuthService data is synced
+            if(true !== result){
+              AuthService.updateCurrentUser($scope.user);
+            }
+            else{
+              alert(result)
+            }
+          }//// if true === result
+        }///// resolve funtion
+      );/// getAuth promise
+
     });
 
 

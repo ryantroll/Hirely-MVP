@@ -22,6 +22,7 @@
             currentUser: currentUser,
             currentUserID: currentUserID,
             setCurrentUser: setCurrentUser,
+            updateCurrentUser: updateCurrentUser,
             getAuth: getAuth,
             isUserLoggedIn: isUserLoggedIn,
             onAuth: onAuth,
@@ -114,6 +115,24 @@
           $rootScope.$broadcast('UserLoggedOut');
         }
 
+        /**
+         * [updateCurrentUser will update the currentUser object without triggering login events UserDataChange event is emited instead
+         * Mainly this function will be user in uder profile update to make sure data in front ent is matching db]
+         * @param  {object} user [User object se user Model]
+         * @return {nothing}      [no return value]
+         */
+        function updateCurrentUser(user){
+            service.currentUser = user;
+
+            $rootScope.$emit('UserDataChange', service.currentUser);
+            $rootScope.$broadcast('UserDataChange', service.currentUser);
+        }
+        /**
+         * [getAuth this function will determin if there is authenticated user by sending true to promise resolve function
+         * If the user is authenticated and there is no user data object in service the function will try to fill current user object
+         * if the authenticated user is there but data cannot be retrived then user will be forced to log-off]
+         * @return {promise} [description]
+         */
         function getAuth(){
 
             var deferred = $q.defer();
@@ -128,11 +147,18 @@
                     fillUserData(auth.uid)
                         .then(
                             function(user){
-                                setCurrentUser(user, auth.uid);
-                                deferred.resolve(true);
+                                if(null !== user){
+                                    setCurrentUser(user, auth.uid);
+                                    deferred.resolve(true);
+                                }
+                                else{
+                                    logout();
+                                    deferred.resolve('User data cannot be retrived');
+                                }
                             },
                             function(error){
-                                deferred.resolve('User data cannot be retrived');
+
+                                deferred.reject(error);
                             }
                         )/// then
                 }

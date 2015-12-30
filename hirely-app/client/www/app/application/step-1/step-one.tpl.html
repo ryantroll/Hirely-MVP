@@ -42,7 +42,7 @@
 					</label>
 					<div class="col-sm-9 col-md-6">
 						<div ng-class="{'has-feedback has-error': stepOne.email.$error.required && stepOne.email.$dirty, 'has-feedback has-success' : stepOne.email.$valid}">
-							<input type="email" class="form-control" name="email" id="email" ng-model="user.email" required>
+							<input type="email" class="form-control" name="email" id="email" ng-model="user.email" required disabled>
 							<span class="fa fa-close form-control-feedback" ng-show="stepOne.email.$error.required && stepOne.email.$dirty"></span>
 							<span class="fa fa-check form-control-feedback" ng-show="stepOne.email.$valid"></span>
 						</div>
@@ -56,7 +56,7 @@
 					</label>
 					<div class="col-sm-9 col-md-6">
 						<div ng-class="{'has-feedback has-error': stepOne.mobile.$error.required && stepOne.mobile.$dirty, 'has-feedback has-success' : stepOne.mobile.$valid}">
-							<input type="phone" class="form-control" name="mobile" id="mobile" ng-model="user.mobile" required>
+							<input type="phone" class="form-control" name="mobile" id="mobile" ng-model="user.mobile" required ng-pattern="/^([0-9])*$/">
 							<span class="fa fa-close form-control-feedback" ng-show="stepOne.mobile.$error.required && stepOne.mobile.$dirty"></span>
 							<span class="fa fa-check form-control-feedback" ng-show="stepOne.mobile.$valid"></span>
 						</div>

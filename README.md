@@ -96,6 +96,7 @@ What's going on?
 Users and Authentication
 -------------
 Logged in user presented in "AuthService.currentUser" and "AuthService.currentUserID" object when undefined user considered loged out.
+Attention needed when updating current user profile in DB AuthService need to be notifed with updateCurrentUser method to make sure logged in user in fron-end is not out of sync.
 The above objects used to notify controllars and modify the views accordingly only
 the true securiyt check and login session managment is handled by Firebase SDK so far.
 AuthService as angular service singelton object will provide the currentUser and currentUserID properties
@@ -120,6 +121,7 @@ Users authenticatin and data saving is handled by below services
 Events:
 1. "UserLoggedIn": broadcast by $rootScope to notify child scope about logged, this event will send a new user object as variable.
 2. "UserLoggedOut": broadcast by $rootScope to notify children scope about user loged out, no variable sent with it.
+3. "UserDataChange": broadcast by $rootScope to notify children scope about data change in current loggedin user. Used when logged in user update his profile.
 
 Note:
 AuthService is doing the job so far but it's not coded as it should be

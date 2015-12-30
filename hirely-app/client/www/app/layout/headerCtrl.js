@@ -35,6 +35,13 @@
         });
 
         /**
+         * Listen if there is any data change in current user, sent when logged in user update his profile
+         */
+        $scope.$on('UserDataChange', function (event, user) {
+            $scope.currentUser = user;
+        });
+
+        /**
          * Listen to showLogin event that emited from different controller "registerCtrl.js" when there is a need to show the login form in modal
          * the the loginListener is used to remove the listener when $scope is destroyed
          */
