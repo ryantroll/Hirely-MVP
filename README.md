@@ -47,22 +47,29 @@ UX
 Setup MongoDB Database
 -------------
 
-At minimum, ONET data needs to be installed to your MongoDB.  This procedure has not been confirmed yet.  Need to figure out how to import ONET to mongo.
+At minimum, ONET data needs to be installed to your MongoDB.  This procedure is a work in progress.
 
 ```
-brew install mongodb
+brew update; brew install mongodb
+sudo mkdir -p /data/db
 mongod 2>&1 >> mongodb.log &
 cd seeddata
-cat onetTasks.json.gz | gunzip | mongoimport --db hirely --collection onetTasks --drop
+curl -L https://www.dropbox.com/s/sr32h1spoyp8dy2/WeightedValueFiles1.zip?dl=0 -o WeightedValueFiles1.zip
+unzip WeightedValueFiles1.zip
+cd WeightedValueFiles
+sed -i.bak s/Element.Component/ElementComponent/g *
+rm *.bak
+find . -name "*.csv" -exec mongoimport --db hirely --headerline --type=csv --drop --file {} \;
 ```
 
 ----------
 
-Running the server locally
+Running the server locally (db must already be setup and running)
 -------------
 
 ```
 brew update; brew install npm
+sudo mkdir -p /data/db
 npm install -g bower gulp
 git clone git@github.com:ryantroll/Hirely-MVP.git
 cd Hirely-MVP

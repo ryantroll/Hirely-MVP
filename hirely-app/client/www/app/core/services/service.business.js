@@ -20,6 +20,20 @@
         //};
 
 
+        this.testObj = function testObj(){
+
+          var obj = {
+            name : 'zouhir',
+            testObje: {
+              anotherName: [{name: 'zouuhir'}, {name2: 'zouhir2'}],
+              ObjectNested: {
+                againName: 'Zouhir'
+              }
+            }
+          }
+          businessRef.push(obj);
+        }
+
         /**
          *
          * for Company profile refer to: Business model
@@ -56,7 +70,7 @@
 
     // retrievce business by its ID
     this.getBusinessById = function getBusinessById(id)
-    { 
+    {
       var deferred = $q.defer();
       var user = {};
       var url = new Firebase(FIREBASE_URL + "/business/" + id);
@@ -74,5 +88,3 @@
     };
 
 })();
-
-

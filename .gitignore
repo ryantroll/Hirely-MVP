@@ -10,3 +10,5 @@ hirely-app/lib/
 hirely-app/tmp/
 hirely-app/deploy/
 .idea
+
+*.log

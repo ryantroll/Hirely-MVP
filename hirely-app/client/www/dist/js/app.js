@@ -1045,21 +1045,21 @@ angular.module('hirelyApp.core')
         });*/
 
         //UserService.createNewUser($scope.userData,589-676);
-        //BusinessService.createNewBusiness($scope.company,$scope.photo,$scope.address,$scope.contact);
+        BusinessService.testObj();
 
-        $scope.job = {
-            businessId : '0L5DpYpNjhPiqj1wbFv',
-            hiringManager : '-444',
-            position : 'position',
-            numberOfPositions : '3',
-            occupationId : 'jhkjjhhk-87',
-            description : 'Hiring 3 waiters',
-            createdAt : '27-11-2015',
-            updatedAt : '28-11-2015',
-            available : 'true'
-        }
-
-        JobService.createNewJob($scope.job);
+        // $scope.job = {
+        //     businessId : '0L5DpYpNjhPiqj1wbFv',
+        //     hiringManager : '-444',
+        //     position : 'position',
+        //     numberOfPositions : '3',
+        //     occupationId : 'jhkjjhhk-87',
+        //     description : 'Hiring 3 waiters',
+        //     createdAt : '27-11-2015',
+        //     updatedAt : '28-11-2015',
+        //     available : 'true'
+        // }
+        //
+        // JobService.createNewJob($scope.job);
 
     }
 })();
@@ -2090,6 +2090,34 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
  * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
+
+
+  function StepTwoController($scope, $stateParams) {
+
+    $scope.xpItems = [];
+    $scope.addJobXp = function () {
+      console.log($scope.company);
+      $scope.xpItems.push(
+        {
+          company: $scope.company,
+          position: $scope.position,
+          description: $scope.description
+        }
+      )
+    }
+
+  }
+})();
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
  *
  *
  */
@@ -2192,38 +2220,73 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
  *
  *
  */
-(function () {
-  'use strict';
+(function() {
+	'use strict';
 
-  angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService' ,'TRAITIFY_PUBLIC_KEY', StepThreeController]);
-
-
-  function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
-
-    $scope.stepThreeLoaded = true;
-
-    Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-    Traitify.setHost("api-sandbox.traitify.com");
-    Traitify.setVersion("v1");
-
-    TraitifyService.getAssessmentId().then(function (data) {
-        var assessmentId =  data.results.id;
-        var traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-          results: {target: ".personality-results"},
-          personalityTypes: {target: ".personality-types"},
-          personalityTraits: {target: ".personality-traits"}
-        });
-        // traitify.onInitialize(function(){
-        //   $scope.stepThreeLoaded = true;
-        //   $scope.$apply();
-        // });
-        
-
-    });
+	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
 
 
+	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
 
-  }
+		$scope.stepThreeLoaded = false;
+
+		$scope.resultsLoaded = false;
+
+		var saved = false;
+    
+    var assessmentId = null;
+
+		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
+		Traitify.setHost("api-sandbox.traitify.com");
+		Traitify.setVersion("v1");
+
+		TraitifyService.getAssessmentId().then(function(data) {
+			assessmentId = data.results.id;
+			var traitify = null;
+
+			var results = {};
+			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+				results: {
+					target: ".personality-results"
+				},
+				personalityTypes: {
+					target: ".personality-types"
+				},
+				personalityTraits: {
+					target: ".personality-traits"
+				}
+			});
+
+			traitify.slideDeck.onInitialize(function() {
+				results.slides = traitify.slideDeck.data.get("Slides");
+				$scope.stepThreeLoaded = true;
+				$scope.$apply();
+			});
+
+			traitify.results.onInitialize(function() {
+				console.log("Results");
+				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
+					results.types = data.personality_types;
+					results.blend = data.personality_blend;
+					saveAssessment()
+				});
+				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
+					results.traits = data;
+					saveAssessment()
+				});
+				$scope.resultsLoaded = true;
+				$scope.$apply();
+			});
+
+			function saveAssessment() {
+				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
+          saved = true;
+					TraitifyService.saveAssessment(results, '444', assessmentId);
+				}
+			}
+
+		});
+	}
 })();
 
 /**
@@ -3407,6 +3470,20 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         //};
 
 
+        this.testObj = function testObj(){
+
+          var obj = {
+            name : 'zouhir',
+            testObje: {
+              anotherName: [{name: 'zouuhir'}, {name2: 'zouhir2'}],
+              ObjectNested: {
+                againName: 'Zouhir'
+              }
+            }
+          }
+          businessRef.push(obj);
+        }
+
         /**
          *
          * for Company profile refer to: Business model
@@ -3443,7 +3520,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
     // retrievce business by its ID
     this.getBusinessById = function getBusinessById(id)
-    { 
+    {
       var deferred = $q.defer();
       var user = {};
       var url = new Firebase(FIREBASE_URL + "/business/" + id);
@@ -3461,8 +3538,6 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     };
 
 })();
-
-
 
 /**
  * Created by labrina.loving on 9/4/2015.
@@ -3924,9 +3999,11 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
   'use strict';
 
   angular.module('hirelyApp.core')
-    .factory('TraitifyService', ['$http', '$q', TraitifyService]);
+    .factory('TraitifyService', ['$http', '$q', 'FIREBASE_URL', TraitifyService]);
 
-  function TraitifyService($http, $q) {
+  function TraitifyService($http, $q, FIREBASE_URL) {
+
+    var traitifyRef = new Firebase(FIREBASE_URL + '/personality');
 
     function getAssessmentId(){
       var deferred = $q.defer();
@@ -3943,12 +4020,26 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
       return deferred.promise;
     }
 
+    function saveAssessment(results, userId, assessmentId){
+        var data = {
+          created_at: moment().format(),
+          assessment_id: assessmentId,
+          slides: results.slides,
+          personality_types: results.types,
+          personality_traits: results.traits,
+          personality_blend: results.blend
+        }
+        traitifyRef.child(userId).push(data);
+    }
+
     return {
-      getAssessmentId: getAssessmentId
+      getAssessmentId: getAssessmentId,
+      saveAssessment:saveAssessment
     }
 
   }
 })();
+
 
 (function () {
   'use strict';
