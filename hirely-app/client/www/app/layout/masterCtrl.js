@@ -36,6 +36,7 @@
                 function(error){
                     /// no authenticated user
                     /// do nothing
+                    console.log('No user is logged in');
                 }
             )/// Auth then
 

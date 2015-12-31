@@ -142,7 +142,8 @@ var myApp = angular.module('hirelyApp',
       .state('app.application', {
         url: '/:jobId/apply',
         templateUrl: 'app/application/job-application.html',
-        controller: 'JobApplicationController'
+        controller: 'JobApplicationController',
+        authRequired: true
       })
 
     // if none of the above states are matched, use this as the fallback
@@ -482,7 +483,7 @@ var myApp = angular.module('hirelyApp',
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
-        hasForm: false
+        hasForm: true
       },
       {
         templateUrl: '/app/application/step-2/step-two.tpl.html',
@@ -562,6 +563,7 @@ var myApp = angular.module('hirelyApp',
     $scope.submitStepOne = function () {
       console.log(hello);
     }
+
 
 
 
@@ -1506,6 +1508,13 @@ angular.module("hirelyApp.layout").directive("footer", function() {
         });
 
         /**
+         * Listen if there is any data change in current user, sent when logged in user update his profile
+         */
+        $scope.$on('UserDataChange', function (event, user) {
+            $scope.currentUser = user;
+        });
+
+        /**
          * Listen to showLogin event that emited from different controller "registerCtrl.js" when there is a need to show the login form in modal
          * the the loginListener is used to remove the listener when $scope is destroyed
          */
@@ -1642,6 +1651,7 @@ angular.module("hirelyApp.layout").directive("header", function() {
                 function(error){
                     /// no authenticated user
                     /// do nothing
+                    console.log('No user is logged in');
                 }
             )/// Auth then
 
@@ -2090,44 +2100,16 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
  * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
- */
-(function () {
-  'use strict';
-
-  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
-
-
-  function StepTwoController($scope, $stateParams) {
-
-    $scope.xpItems = [];
-    $scope.addJobXp = function () {
-      console.log($scope.company);
-      $scope.xpItems.push(
-        {
-          company: $scope.company,
-          position: $scope.position,
-          description: $scope.description
-        }
-      )
-    }
-
-  }
-})();
-/**
- *
- * Job Application Workflow Main Controller
- *
- * Develoopers - Hirely 2015
  *
  *
  */
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService',StepOneController]);
+  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService' ,StepOneController]);
 
 
-  function StepOneController($scope, $stateParams, multiStepFormInstance, GeocodeService, UserService) {
+  function StepOneController($scope, $stateParams, multiStepFormInstance, GeocodeService, UserService, AuthService) {
 
     var geocodeService = GeocodeService;
 
@@ -2156,7 +2138,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         return geocodeService.geoCodeAddress(query).then(function(data){
           locations = [];
           if(data.statusCode == 200){
-            console.log(data);
+            // console.log(data);
             data.results.predictions.forEach(function(prediction){
               locations.push({address: prediction.description, placeId: prediction.place_id});
             });
@@ -2171,42 +2153,79 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
     $scope.setAddress = function(address){
       geocodeService.getPlaceDetails(address.placeId).then(function(data){
         var place = data.results.result;
+
+        ////reset the user address
+        var unit = $scope.user.address.unit;
+        $scope.user.address = {};
+        $scope.user.address.unit = unit;
+
+        $scope.user.address.lng = place.geometry.location.lng || false;
+        $scope.user.address.lat = place.geometry.location.lat || false;
+        $scope.user.address.formattedAddress = place.formatted_address || false;
+
         if(place){
           for (var i = 0; i < place.address_components.length; i++) {
             var addressType = place.address_components[i].types[0];
             switch (addressType){
+              case "route":
+                $scope.user.address.street = place.address_components[i][addressComponents[addressType]] || false;
+                break;
+
+              case "street_number":
+                $scope.user.address.number = place.address_components[i][addressComponents[addressType]] || false;
+                break;
+
+              case "country":
+                $scope.user.address.country = place.address_components[i][addressComponents[addressType]] || false;
+                break;
+
               case "administrative_area_level_1":
-                $scope.state = place.address_components[i][addressComponents[addressType]];
+                $scope.user.address.state = place.address_components[i][addressComponents[addressType]] || false;
                 break;
 
               case "locality":
-                $scope.address_city = place.address_components[i][addressComponents[addressType]];
+                $scope.user.address.city = place.address_components[i][addressComponents[addressType]] || false;
                 break;
 
               case "postal_code":
-                $scope.zipcode = place.address_components[i][addressComponents[addressType]];
+                $scope.user.address.zipCode = place.address_components[i][addressComponents[addressType]] || false;
                 break;
             }
           }
         }
+
       });
     }
-    var testUserId = '-444';
-    if(!$scope.stepOneLoaded){
-      UserService.getUserById(testUserId).then(function(user){
-              $scope.firstname = user.firstName;
-              $scope.lastname = user.lastName;
-              $scope.email = user.email;
-              $scope.mobile = user.mobile;
-              $scope.address = user.address.formattedAddress;
-              $scope.address_unit = user.address.unit;
-              $scope.address_city = user.address.city;
-              $scope.state = user.address.state;
-              $scope.zipcode = user.address.zipCode;
 
-              $scope.stepOneLoaded = true;
-            });
+    //// get user data from AuthService
+    // var userID = AuthService.currentUserID;
+
+
+    //// check if user data from
+    if(!$scope.stepOneLoaded){
+      $scope.user = angular.copy(AuthService.currentUser);;
+      $scope.stepOneLoaded = true;
     }
+
+    //// wait for destroy event to update data
+    $scope.$on('$destroy', function(event){
+      AuthService.getAuth().then(
+        function(result){
+          if(true === result){
+            var result = UserService.createNewUser($scope.user, AuthService.currentUserID, true); //// last true variable to perform update operation
+
+            //// make sure the AuthService data is synced
+            if(true !== result){
+              AuthService.updateCurrentUser($scope.user);
+            }
+            else{
+              alert(result)
+            }
+          }//// if true === result
+        }///// resolve funtion
+      );/// getAuth promise
+
+    });
 
 
   }
@@ -2214,81 +2233,32 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
 /**
  *
- * Job Application Workflow
+ * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
- *
- *
  */
-(function() {
-	'use strict';
+(function () {
+  'use strict';
 
-	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
 
 
-	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+  function StepTwoController($scope, $stateParams) {
 
-		$scope.stepThreeLoaded = false;
+    $scope.xpItems = [];
+    $scope.addJobXp = function () {
+      console.log($scope.company);
+      $scope.xpItems.push(
+        {
+          company: $scope.company,
+          position: $scope.position,
+          description: $scope.description
+        }
+      )
+    }
 
-		$scope.resultsLoaded = false;
-
-		var saved = false;
-    
-    var assessmentId = null;
-
-		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-		Traitify.setHost("api-sandbox.traitify.com");
-		Traitify.setVersion("v1");
-
-		TraitifyService.getAssessmentId().then(function(data) {
-			assessmentId = data.results.id;
-			var traitify = null;
-
-			var results = {};
-			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-				results: {
-					target: ".personality-results"
-				},
-				personalityTypes: {
-					target: ".personality-types"
-				},
-				personalityTraits: {
-					target: ".personality-traits"
-				}
-			});
-
-			traitify.slideDeck.onInitialize(function() {
-				results.slides = traitify.slideDeck.data.get("Slides");
-				$scope.stepThreeLoaded = true;
-				$scope.$apply();
-			});
-
-			traitify.results.onInitialize(function() {
-				console.log("Results");
-				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
-					results.types = data.personality_types;
-					results.blend = data.personality_blend;
-					saveAssessment()
-				});
-				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
-					results.traits = data;
-					saveAssessment()
-				});
-				$scope.resultsLoaded = true;
-				$scope.$apply();
-			});
-
-			function saveAssessment() {
-				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
-          saved = true;
-					TraitifyService.saveAssessment(results, '444', assessmentId);
-				}
-			}
-
-		});
-	}
+  }
 })();
-
 /**
  *
  * Job Application Workflow Main Controller
@@ -2738,6 +2708,83 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
   }////fun. stepFiveController
 })();
+/**
+ *
+ * Job Application Workflow
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function() {
+	'use strict';
+
+	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+
+
+	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+
+		$scope.stepThreeLoaded = false;
+
+		$scope.resultsLoaded = false;
+
+		var saved = false;
+    
+    var assessmentId = null;
+
+		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
+		Traitify.setHost("api-sandbox.traitify.com");
+		Traitify.setVersion("v1");
+
+		TraitifyService.getAssessmentId().then(function(data) {
+			assessmentId = data.results.id;
+			var traitify = null;
+
+			var results = {};
+			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+				results: {
+					target: ".personality-results"
+				},
+				personalityTypes: {
+					target: ".personality-types"
+				},
+				personalityTraits: {
+					target: ".personality-traits"
+				}
+			});
+
+			traitify.slideDeck.onInitialize(function() {
+				results.slides = traitify.slideDeck.data.get("Slides");
+				$scope.stepThreeLoaded = true;
+				$scope.$apply();
+			});
+
+			traitify.results.onInitialize(function() {
+				console.log("Results");
+				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
+					results.types = data.personality_types;
+					results.blend = data.personality_blend;
+					saveAssessment()
+				});
+				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
+					results.traits = data;
+					saveAssessment()
+				});
+				$scope.resultsLoaded = true;
+				$scope.$apply();
+			});
+
+			function saveAssessment() {
+				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
+          saved = true;
+					TraitifyService.saveAssessment(results, '444', assessmentId);
+				}
+			}
+
+		});
+	}
+})();
+
 /**
  * Created by labrina.loving on 9/6/2015.
  */
@@ -3280,6 +3327,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
             currentUser: currentUser,
             currentUserID: currentUserID,
             setCurrentUser: setCurrentUser,
+            updateCurrentUser: updateCurrentUser,
             getAuth: getAuth,
             isUserLoggedIn: isUserLoggedIn,
             onAuth: onAuth,
@@ -3372,6 +3420,24 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
           $rootScope.$broadcast('UserLoggedOut');
         }
 
+        /**
+         * [updateCurrentUser will update the currentUser object without triggering login events UserDataChange event is emited instead
+         * Mainly this function will be user in uder profile update to make sure data in front ent is matching db]
+         * @param  {object} user [User object se user Model]
+         * @return {nothing}      [no return value]
+         */
+        function updateCurrentUser(user){
+            service.currentUser = user;
+
+            $rootScope.$emit('UserDataChange', service.currentUser);
+            $rootScope.$broadcast('UserDataChange', service.currentUser);
+        }
+        /**
+         * [getAuth this function will determin if there is authenticated user by sending true to promise resolve function
+         * If the user is authenticated and there is no user data object in service the function will try to fill current user object
+         * if the authenticated user is there but data cannot be retrived then user will be forced to log-off]
+         * @return {promise} [description]
+         */
         function getAuth(){
 
             var deferred = $q.defer();
@@ -3386,11 +3452,18 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
                     fillUserData(auth.uid)
                         .then(
                             function(user){
-                                setCurrentUser(user, auth.uid);
-                                deferred.resolve(true);
+                                if(null !== user){
+                                    setCurrentUser(user, auth.uid);
+                                    deferred.resolve(true);
+                                }
+                                else{
+                                    logout();
+                                    deferred.resolve('User data cannot be retrived');
+                                }
                             },
                             function(error){
-                                deferred.resolve('User data cannot be retrived');
+
+                                deferred.reject(error);
                             }
                         )/// then
                 }
@@ -4147,17 +4220,13 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
       return deferred.promise;
     };
 
-
     /**
-     *
-     * for userData refer to: User model
-     *
-     * for authId refer to USR_ID
-     *
-     *
-     **/
-
-    this.createNewUser = function createNewUser(userData, authId) {
+     * [createNewUser will create a new user data object in DB]
+     * @param  {[object]} userData [Refer to user model in www/app/core/services/models/user.js]
+     * @param  {[string]} authId   [user id retreved from DB]
+     * @return {[true]}          [true if user is successfully created / String as error desctiption in case of error]
+     */
+    this.createNewUser = function(userData, authId, isUpdate) {
 
       var id = authId;
 
@@ -4174,10 +4243,11 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         userData.personalStatement,
         userData.provider,
         userData.createdOn,
-        userData.lastModifiedOn,
+        isUpdate ? Firebase.ServerValue.TIMESTAMP : userData.lastModifiedOn,
         userData.address,
         userData.experience,
-        userData.education
+        userData.education,
+        userData.mobile
       );
 
       ////define the variable to avoid any udefined error
@@ -4189,18 +4259,22 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
        *
        * ***/
 
-      /*
-       address = new Address (
-       pAddress.formattedAddress,
-       pAddress.zipCode,
-       pAddress.unit,
-       pAddress.street,
-       pAddress.city,
-       pAddress.state,
-       pAddress.lng,
-       pAddress.lat
-       );
+       if(!angular.isUndefined(userData.address)){
+          address = new Address (
+            pAddress.formattedAddress,
+            pAddress.zipCode,
+            pAddress.unit,
+            pAddress.number,
+            pAddress.street,
+            pAddress.city,
+            pAddress.state,
+            pAddress.country,
+            pAddress.lng,
+            pAddress.lat
+          );
+       }
 
+      /*
 
        education = new Education (
        pEducation.programType,
@@ -4231,9 +4305,11 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
        */
 
+
       ref.child(id).set(user, function (error) {
         if (error)
-          console.log("error");
+          //// not successful return error string
+          return error;
         else {
 
           if(!angular.isUndefined(experience)){
@@ -4245,7 +4321,9 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
           if(!angular.isUndefined(address)){
             ref.child(id).child('address').set(address);
           }
-          console.log("Success");
+
+          //// operation is successful
+          return true;
         }
 
       });
@@ -4260,9 +4338,14 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
       var url = new Firebase(FIREBASE_URL + "/users/" + id);
       url.on("value", function (snapshot) {
         user = snapshot.val();
-
-        deferred.resolve(user);
+        if(null !== user){
+          deferred.resolve(user);
+        }
+        else{
+          deferred.reject('User data cannot be retreived');
+        }
       }, function (err) {
+
         deferred.reject(err);
       });
 
@@ -4603,20 +4686,21 @@ User = Model({
 
   initialize: function (firstName, lastName, email, userType,
                         profileImageUrl, personalStatement,
-                        provider, createdOn, lastModifiedOn , address , experience , education) {
+                        provider, createdOn, lastModifiedOn , address , experience , education, mobile) {
 
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.userType = userType;
-    this.profileImageUrl = profileImageUrl || false;
-    this.personalStatement = personalStatement || false;
-    this.provider = provider;
+    if(profileImageUrl) this.profileImageUrl = profileImageUrl;
+    if(personalStatement) this.personalStatement = personalStatement;
+    if(provider) this.provider = provider;
     this.createdOn = createdOn;
     this.lastModifiedOn = lastModifiedOn;
-    this.address = address || false ;
-    this.experience = experience || false ;
-    this.education = education || false;
+    if(address) this.address = address;
+    if(experience) this.experience = experience;
+    if(education) this.education = education;
+    if(mobile) this.mobile = mobile;
   },
 
   toString: function(){
@@ -4630,16 +4714,17 @@ Education = Model({
 
   initialize: function (programType, institutionName, degree, city, state,
                         startMonth, startYear, endMonth, endYear, current) {
-    this.programType = programType || '';
-    this.institutionName = institutionName || '';
-    this.degree = degree || '';
-    this.city = city || '';
-    this.state = state || '';
-    this.startMonth = startMonth || '';
-    this.startYear = startYear || '';
-    this.endMonth = endMonth || '';
-    this.endYear = endYear || '';
-    this.current = current || '';
+
+    if(programType) this.programType = programType;
+    if(institutionName) this.institutionName = institutionName;
+    if(degree) this.degree = degree;
+    if(city) this.city = city;
+    if(state) this.state = state;
+    if(startMonth) this.startMonth = startMonth;
+    if(startYear) this.startYear = startYear;
+    if(endmOnth) this.endMonth = endMonth;
+    if(endYear) this.endYear = endYear;
+    if(current) this.current = current;
   }
 
 });
@@ -4648,17 +4733,37 @@ Experience = Model({
 
   initialize: function (position, employer, empolyerPlaceId, city, state,
                         startMonth, startYear, endMonth, endYear, current, accomplishments) {
-    this.position = position || '';
-    this.employer = employer || '';
-    this.empolyerPlaceId = empolyerPlaceId || '';
-    this.city = city || '';
-    this.state = state || '';
-    this.startMonth = startMonth || '';
-    this.startYear = startYear || '';
-    this.endMonth = endMonth || '';
-    this.endYear = endYear || '';
-    this.current = current || '';
-    this.accomplishments = accomplishments || '';
+
+    if(position) this.position = position;
+    if(employer) this.employer = employer;
+    if(empolyerPlaceId) this.empolyerPlaceId = empolyerPlaceId;
+    if(city) this.city = city;
+    if(state) this.state = state;
+    if(startMonth) this.startMonth = startMonth;
+    if(startYear) this.startYear = startYear;
+    if(endMonth) this.endMonth = endMonth;
+    if(endYear) this.endYear = endYear;
+    if(current) this.current = current;
+    if(accomplishments) this.accomplishments = accomplishments;
+  }
+
+});
+
+Address = Model({
+
+  initialize: function (formattedAddress, zipCode, unit, number, street, city, state, country, lng, lat) {
+    if(formattedAddress) this.formattedAddress = formattedAddress;
+    if(zipCode) this.zipCode = zipCode;
+    if(unit) this.unit = unit;
+    if(number) this.number = number;
+    if(street) this.street = street;
+    if(city) this.city = city;
+    if(state) this.state = state;
+    if(country) this.country = country;
+    if(lng && lat){
+        this.lng = lng;
+        this.lat = lat;
+    }
   }
 
 });

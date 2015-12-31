@@ -142,7 +142,8 @@ var myApp = angular.module('hirelyApp',
       .state('app.application', {
         url: '/:jobId/apply',
         templateUrl: 'app/application/job-application.html',
-        controller: 'JobApplicationController'
+        controller: 'JobApplicationController',
+        authRequired: true
       })
 
     // if none of the above states are matched, use this as the fallback
