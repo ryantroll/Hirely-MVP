@@ -59,7 +59,7 @@
     { 
       var deferred = $q.defer();
       var user = {};
-      var url = new Firebase(FIREBASE_URL + "/job/" + id);
+      var url = new Firebase(FIREBASE_URL + "/business/" + id);
       url.on("value", function(snapshot) {
         user = snapshot.val();
         deferred.resolve(user);

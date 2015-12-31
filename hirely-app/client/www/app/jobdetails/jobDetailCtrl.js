@@ -26,12 +26,12 @@
             $scope.job = jobObj;
             $scope.wageFormatted = 1; // jobObj.position.compensation.wage.maxAmount ? getMaxWageDisplay(jobObj.position.compensation.wage) : getnoMaxWageDisplay(jobObj.position.compensation.wage);
             $scope.hoursFormatted = 1; // jobObj.position.workHours.max ? jobObj.position.workHours.min + '-' + jobObj.position.workHours.max : jobObj.position.workHours.min + '+'
-            var largePhoto = _.matcher({size: "l"});
-            var photos =  _.filter(jobObj.businessPhotos, largePhoto);
-            angular.forEach(photos, function(photoObj, photoKey) {
-
-                $scope.photos.push(photoObj.source);
-            });
+            //var largePhoto = _.matcher({size: "l"});
+            //var photos =  _.filter(jobObj.businessPhotos, largePhoto);
+            //angular.forEach(photos, function(photoObj, photoKey) {
+            //
+            //    $scope.photos.push(photoObj.source);
+            //});
 
            //geocodeService.calculateDistancetoSite(siteId, placeId).then(function (distance) {
            //    $scope.distance = distance;
