@@ -2378,124 +2378,16 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
   var step5App =  angular.module('hirelyApp');
 
-  step5App.service('TimetableService', function(){
 
-    /**
-     * Time Ranges
-     * @type {Object}
-     */
-    this.ranges = {};
-
-    this.ranges.su = [];
-    this.ranges.mo = [];
-    this.ranges.tu = [];
-    this.ranges.we = [];
-    this.ranges.th = [];
-    this.ranges.fr = [];
-    this.ranges.sa = [];
-
-    /**
-     * hours is array of hours names like 12AM, 1AM, ... with array index
-     * @type {Array}
-     */
-    this.hours = [];
-    for(var h=0; h<24; h++){
-      var hourLabel = '';
-      if(0==h){
-          hourLabel += '12AM';
-      }
-      else if(h<12){
-          hourLabel += String(h) + 'AM';
-      }
-      else{
-          hourLabel += String(h-12 <= 0 ? 12 : h-12) + 'PM';
-      }
-
-      this.hours.push({'hour':h, 'label':hourLabel});
-    }//// for
-
-    /**
-     * days is array of days short names
-     * @type {Array}
-     */
-    this.days = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
-
-    /**
-     * [updateRanges used to extract the time availibility ranges for each day our of weeklyTimeTable array]
-     * @param  {[type]} hours [weeklyTimeTable array]
-     * @return {[type]}       [Object with days property shortname
-     *                                each day property is an array of ranges object
-     *                                each range is an object]
-     */
-    this.updateRanges = function(hours){
-      var newRanges = {};
-      angular.extend(newRanges, this.ranges);
-
-      for(var key in newRanges){
-        newRanges[key] = [];
-        var isNewRange = false;
-        var obj = {};
-        for(var i=0; i<24; i++){
-            if(true === hours[i].days[key] ){
-              if(!isNewRange){
-                isNewRange = true; /// starting a new hourly range
-                obj.startLabel = hours[i].label;
-                obj.startHour = i;
-              }
-            }//if
-            else{
-              if(isNewRange){
-                isNewRange = false;
-                obj.endLabel = hours[i].label;
-                obj.endHour = i;
-                obj.hours = obj.endHour - obj.startHour;
-                newRanges[key].push( angular.extend({},obj) );
-                obj = {};
-
-              }
-            }/// else
-        }/// for i=0
-
-        //// if end of loop reached without end add one
-        // console.log(isNewRange, i);
-        if(isNewRange && angular.isUndefined(obj.end)){
-          isNewRange = false;
-          obj.endLabel = '12AM';
-          obj.endHour = 0;
-          obj.hours = 24 - obj.startHour;
-          newRanges[key].push( angular.extend({},obj) );
-          obj = {};
-        }
-
-      }//// for key in
-
-      angular.extend(this.ranges, newRanges);
-
-      return this.ranges;
-    }/// fun. updateRanges
-
-    this.getTotalHours = function(hours){
-      var ret = {};
-      ret.total = 0;
-      for(var i=0; i<24; i++){
-        for(var d=0; d<7; d++){
-          if(true === hours[i].days[this.days[d]]){
-            ++ret.total;
-          }
-        }//// d<7
-      }//// for i<24
-      return ret;
-    }//// fun. getTotalHours
-  });
 
   /**
    * ******************************************************************************
    * Controller Definition ********************************************************
    * ******************************************************************************
    */
-  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', 'TimetableService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
+  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
 
-  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, TimetableService, $q, AvailabilityService, AuthService, JobApplicationService) {
+  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService, JobApplicationService) {
 
     /**
      * [availability this object will hold the data that need bot saved in database
@@ -2588,40 +2480,38 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         //// check if availability for this user exists in DB
         AvailabilityService.isAvailabilityExists(AuthService.currentUserID)
         .then(
-          function(DBOjbect){
+          function(timeTable){
             //// the availability exists in DB
-            $scope.availability.weeklyTimetable = DBOjbect.weeklyTimetable;
+            $scope.availability.weeklyTimetable = timeTable;
           },/// resolve
           function(){
             //// availability not in DB create empty one of user
             var weeklyTimetable = [];
             for(var h=0; h<24; h++){
-
+              var days = {};
+              for(var day in AvailabilityService.days){
+                days[AvailabilityService.days[day]] = false;
+              }/// for in
               weeklyTimetable[h] = {
-                  'label': TimetableService.hours[h].label,
-                  'days':{
-                      'su' : false,
-                      'mo' : false,
-                      'tu' : false,
-                      'we' : false,
-                      'th' : false,
-                      'fr' : false,
-                      'sa' : false
-                  }
-                };
+                'label': AvailabilityService.hours[h].label,
+                'days': days
+              };
             }//// for
 
             $scope.availability.weeklyTimetable = weeklyTimetable;
+
           }//// reject
         )//// then isAvailabilityExists
         .finally(
           function(){
+
             initializeScope();
           }/// fun. in finally
         );//// finally
       }/// if weeklyTimetable
       else{
         //// initalize scope immediatly if weeklyTimetable exists
+
         initializeScope();
       }
 
@@ -2633,11 +2523,12 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
       function initializeScope(){
         /**
          * [weeklyRanges scope variable to hold the the range data for mobile layout only
-         * the a temp variable is used to get the ranges from TimetableServices]
+         * the a temp variable is used to get the ranges from AvailabilityServices]
          * @type {Object}
          */
+
         var ranges = {};
-        ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
+        ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
         $scope.weeklyRanges = ranges;
 
 
@@ -2647,7 +2538,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
          * used for validation and display purpos only]
          * @type {[object]}
          */
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         /**
          * Need to wait untill all views and data is been loaded to update the validity of form
@@ -2676,10 +2567,11 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        * @return {[type]}      [description]
        */
       $scope.hourClick = function(day, hour){
+
         $scope.availability.weeklyTimetable[hour].days[day] = !$scope.availability.weeklyTimetable[hour].days[day];
 
         //// update totalHours
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         $scope.updateValidity();
       }//// fun. hourClick
@@ -2687,6 +2579,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
       $scope.updateValidity = function(){
         //// set validity for max and min hours
         // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.maxHours);
+        // console.log($scope.totalHours.total, $scope.availability.minHours)
         $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours.total >= $scope.availability.minHours);
         $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.availability.minHours <= $scope.availability.maxHours);
       }
@@ -2709,7 +2602,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         if($window.innerWidth <= 768 && !$scope.isMobile){
           $scope.isMobile = true;
           var ranges = {};
-          ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
+          ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
           $scope.weeklyRanges = ranges;
         }
         else{
@@ -2750,7 +2643,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         });
 
         //// update totalHours
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         //// update the validity
         $scope.updateValidity();
@@ -2764,7 +2657,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        */
       $scope.formRanges = {};
       for(var d = 0; d<7; d++){
-        $scope.formRanges[ TimetableService.days[d] ] = {'min': undefined, 'max': undefined};
+        $scope.formRanges[ AvailabilityService.days[d] ] = {'min': undefined, 'max': undefined};
       }
 
       /**
@@ -2772,7 +2665,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        * Slice is used to brack the object reference and get fresh one]
        * @type {[type]}
        */
-      $scope.hoursListMin =  TimetableService.hours.slice(0);
+      $scope.hoursListMin =  AvailabilityService.hours.slice(0);
 
       /**
        * [hoursListMax to show list of hours in 'From' drop down in mobile version
@@ -2781,7 +2674,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        * to allow user to end his range on 12AM]
        * @type {[type]}
        */
-      $scope.hoursListMax =  TimetableService.hours.slice(0);
+      $scope.hoursListMax =  AvailabilityService.hours.slice(0);
       $scope.hoursListMax.push($scope.hoursListMax.shift());
 
       /**
@@ -2837,7 +2730,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
             $scope.formRanges[day].max = undefined;
 
             var ranges = {};
-            ranges = TimetableService.updateRanges(weeklyTimetable);
+            ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
             $scope.weeklyRanges = ranges;
           }/// if start < end
         }/// if !isUndefined
@@ -3750,7 +3643,112 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      * [ref Firbase referance object]
      * @type {firebase object}
      */
-    var ref = new Firebase(FIREBASE_URL + '/availability');
+    var ref = new Firebase(FIREBASE_URL + '/users');
+
+    /**
+     * days is array of days short names
+     * @type {Array}
+     */
+    var days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+    /**
+     * hours is array of hours names like 12AM, 1AM, ... with array index
+     * @type {Array}
+     */
+    var hours = [];
+    for(var h=0; h<24; h++){
+      var hourLabel = '';
+      if(0==h){
+          hourLabel += '12AM';
+      }
+      else if(h<12){
+          hourLabel += String(h) + 'AM';
+      }
+      else{
+          hourLabel += String(h-12 <= 0 ? 12 : h-12) + 'PM';
+      }
+
+      hours.push({'hour':h, 'label':hourLabel});
+    }//// for
+
+    /**
+     * Time Ranges
+     * @type {Object}
+     */
+    var ranges = {};
+
+    for(var d in days){
+      ranges[days[d]] = {};
+    }
+
+    /**
+     * [updateRanges used to extract the time availibility ranges for each day our of weeklyTimeTable array]
+     * @param  {[type]} hours [weeklyTimeTable array]
+     * @return {[type]}       [Object with days property shortname
+     *                                each day property is an array of ranges object
+     *                                each range is an object]
+     */
+    var updateRanges = function(hours){
+      var newRanges = {};
+      angular.extend(newRanges, ranges);
+
+      for(var key in newRanges){
+        newRanges[key] = [];
+        var isNewRange = false;
+        var obj = {};
+        for(var i=0; i<24; i++){
+            if(true === hours[i].days[key] ){
+              if(!isNewRange){
+                isNewRange = true; /// starting a new hourly range
+                obj.startLabel = hours[i].label;
+                obj.startHour = i;
+              }
+            }//if
+            else{
+              if(isNewRange){
+                isNewRange = false;
+                obj.endLabel = hours[i].label;
+                obj.endHour = i;
+                obj.hours = obj.endHour - obj.startHour;
+                newRanges[key].push( angular.extend({},obj) );
+                obj = {};
+
+              }
+            }/// else
+        }/// for i=0
+
+        //// if end of loop reached without end add one
+        // console.log(isNewRange, i);
+        if(isNewRange && angular.isUndefined(obj.end)){
+          isNewRange = false;
+          obj.endLabel = '12AM';
+          obj.endHour = 0;
+          obj.hours = 24 - obj.startHour;
+          newRanges[key].push( angular.extend({},obj) );
+          obj = {};
+        }
+
+      }//// for key in
+
+      angular.extend(ranges, newRanges);
+
+      return ranges;
+    }/// fun. updateRanges
+
+    var getTotalHours = function(hours){
+      var ret = {};
+      ret.total = 0;
+
+      for(var i=0; i<24; i++){
+        for(var d=0; d<7; d++){
+          if(true === hours[i].days[days[d]]){
+            ++ret.total;
+          }
+        }//// d<7
+      }//// for i<24
+
+      return ret;
+    }//// fun. getTotalHours
 
     /**
      * [service object that define angular service to be returned by factory function at the end of this code]
@@ -3758,7 +3756,11 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      */
     var service = {
       save:save,
-      isAvailabilityExists: isAvailabilityExists
+      isAvailabilityExists: isAvailabilityExists,
+      days:days,
+      hours:hours,
+      getTotalHours:getTotalHours,
+      updateRanges:updateRanges
     };
 
     /**
@@ -3769,12 +3771,9 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      */
     function save(availability, userId){
       var deferred = $q.defer();
-      var data = {
-        createdOn: Firebase.ServerValue.TIMESTAMP,
-        weeklyTimetable:availability
-      }
+      var data = toDBDataModel(availability);
 
-      ref.child(userId).set(data, function(error){
+      ref.child(userId).child('availability').set(data, function(error){
         if(error){
           deferred.reject(error);
         }
@@ -3794,11 +3793,11 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      */
     function isAvailabilityExists(userID){
         var deferred = $q.defer();
-
-        ref.child(userID).once('value', function(snap){
+        ref.child(userID).child('availability').once('value', function(snap){
             var exists = snap.val();
             if(null !== exists){
-                deferred.resolve(exists);
+              var ret = toFrontEndModel(exists);
+                deferred.resolve(angular.copy(ret));
             }
             else{
                 deferred.reject(false);
@@ -3807,6 +3806,53 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
         return deferred.promise;
     }
+
+    /**
+     * [toDBDataModel will take an array of of front-end availability and return an object ready to be saved in DB]
+     * @param  {[front-end availablity object]} avail [fornt-end user different object format to display availability table ]
+     * @return {[DB availabilty object]}       [availability is saved in different format in database]
+     */
+    function toDBDataModel(avail){
+      var ret = {};
+      for(var i=0; i<24; i++){
+        var days = avail[i].days
+
+        for(var day in days){
+
+          if(!angular.isArray(ret[day])){
+            ret[day] = [];
+          }
+          if(true === days[day]) ret[day].push(i);
+        } /// for day in days
+      }//for i
+      return ret;
+    }//// fun. forntEndToDB
+
+    /**
+     * [toFrontEndModel will take availability from db and confert it to fornt-end availability]
+     * @param  {[db availbility object]} avail [description]
+     * @return {[fornt-end availablity object]}       [description]
+     */
+    function toFrontEndModel(avail){
+      var ret = [];
+      for(var i = 0; i<24; i++){
+        var obj = {};
+        obj.label = hours[i].label;
+        var _days = {};
+        for(var d=0; d<7; d++){
+          _days[days[d]] = false;
+          if(angular.isArray(avail[ days[d] ]) && avail[ days[d] ].indexOf(i) > -1){
+            _days[days[d]] = true;
+          }
+
+          obj.days = _days;
+        } /// for day in
+
+        ret.push(obj);
+      }//// for i
+
+      return ret;
+    }//// fun. toFrondEndModel
 
     /**
      * Return server object

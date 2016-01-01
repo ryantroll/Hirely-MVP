@@ -11,131 +11,16 @@
 
   var step5App =  angular.module('hirelyApp');
 
-  step5App.service('TimetableService', function(){
 
-    /**
-     * days is array of days short names
-     * @type {Array}
-     */
-    this.days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-
-    /**
-     * Time Ranges
-     * @type {Object}
-     */
-    this.ranges = {};
-
-    for(var d in this.days){
-      this.ranges[this.days[d]] = {};
-    }
-    // this.ranges.su = [];
-    // this.ranges.mo = [];
-    // this.ranges.tu = [];
-    // this.ranges.we = [];
-    // this.ranges.th = [];
-    // this.ranges.fr = [];
-    // this.ranges.sa = [];
-
-    /**
-     * hours is array of hours names like 12AM, 1AM, ... with array index
-     * @type {Array}
-     */
-    this.hours = [];
-    for(var h=0; h<24; h++){
-      var hourLabel = '';
-      if(0==h){
-          hourLabel += '12AM';
-      }
-      else if(h<12){
-          hourLabel += String(h) + 'AM';
-      }
-      else{
-          hourLabel += String(h-12 <= 0 ? 12 : h-12) + 'PM';
-      }
-
-      this.hours.push({'hour':h, 'label':hourLabel});
-    }//// for
-
-
-
-    /**
-     * [updateRanges used to extract the time availibility ranges for each day our of weeklyTimeTable array]
-     * @param  {[type]} hours [weeklyTimeTable array]
-     * @return {[type]}       [Object with days property shortname
-     *                                each day property is an array of ranges object
-     *                                each range is an object]
-     */
-    this.updateRanges = function(hours){
-      var newRanges = {};
-      angular.extend(newRanges, this.ranges);
-
-      for(var key in newRanges){
-        newRanges[key] = [];
-        var isNewRange = false;
-        var obj = {};
-        for(var i=0; i<24; i++){
-            if(true === hours[i].days[key] ){
-              if(!isNewRange){
-                isNewRange = true; /// starting a new hourly range
-                obj.startLabel = hours[i].label;
-                obj.startHour = i;
-              }
-            }//if
-            else{
-              if(isNewRange){
-                isNewRange = false;
-                obj.endLabel = hours[i].label;
-                obj.endHour = i;
-                obj.hours = obj.endHour - obj.startHour;
-                newRanges[key].push( angular.extend({},obj) );
-                obj = {};
-
-              }
-            }/// else
-        }/// for i=0
-
-        //// if end of loop reached without end add one
-        // console.log(isNewRange, i);
-        if(isNewRange && angular.isUndefined(obj.end)){
-          isNewRange = false;
-          obj.endLabel = '12AM';
-          obj.endHour = 0;
-          obj.hours = 24 - obj.startHour;
-          newRanges[key].push( angular.extend({},obj) );
-          obj = {};
-        }
-
-      }//// for key in
-
-      angular.extend(this.ranges, newRanges);
-
-      return this.ranges;
-    }/// fun. updateRanges
-
-    this.getTotalHours = function(hours){
-      var ret = {};
-      ret.total = 0;
-
-      for(var i=0; i<24; i++){
-        for(var d=0; d<7; d++){
-          if(true === hours[i].days[this.days[d]]){
-            ++ret.total;
-          }
-        }//// d<7
-      }//// for i<24
-
-      return ret;
-    }//// fun. getTotalHours
-  });
 
   /**
    * ******************************************************************************
    * Controller Definition ********************************************************
    * ******************************************************************************
    */
-  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', 'TimetableService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
+  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
 
-  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, TimetableService, $q, AvailabilityService, AuthService, JobApplicationService) {
+  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService, JobApplicationService) {
 
     /**
      * [availability this object will hold the data that need bot saved in database
@@ -237,11 +122,11 @@
             var weeklyTimetable = [];
             for(var h=0; h<24; h++){
               var days = {};
-              for(var day in TimetableService.days){
-                days[TimetableService.days[day]] = false;
+              for(var day in AvailabilityService.days){
+                days[AvailabilityService.days[day]] = false;
               }/// for in
               weeklyTimetable[h] = {
-                'label': TimetableService.hours[h].label,
+                'label': AvailabilityService.hours[h].label,
                 'days': days
               };
             }//// for
@@ -252,12 +137,14 @@
         )//// then isAvailabilityExists
         .finally(
           function(){
+
             initializeScope();
           }/// fun. in finally
         );//// finally
       }/// if weeklyTimetable
       else{
         //// initalize scope immediatly if weeklyTimetable exists
+
         initializeScope();
       }
 
@@ -269,11 +156,12 @@
       function initializeScope(){
         /**
          * [weeklyRanges scope variable to hold the the range data for mobile layout only
-         * the a temp variable is used to get the ranges from TimetableServices]
+         * the a temp variable is used to get the ranges from AvailabilityServices]
          * @type {Object}
          */
+
         var ranges = {};
-        ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
+        ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
         $scope.weeklyRanges = ranges;
 
 
@@ -283,7 +171,7 @@
          * used for validation and display purpos only]
          * @type {[object]}
          */
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         /**
          * Need to wait untill all views and data is been loaded to update the validity of form
@@ -316,7 +204,7 @@
         $scope.availability.weeklyTimetable[hour].days[day] = !$scope.availability.weeklyTimetable[hour].days[day];
 
         //// update totalHours
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         $scope.updateValidity();
       }//// fun. hourClick
@@ -347,7 +235,7 @@
         if($window.innerWidth <= 768 && !$scope.isMobile){
           $scope.isMobile = true;
           var ranges = {};
-          ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
+          ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
           $scope.weeklyRanges = ranges;
         }
         else{
@@ -388,7 +276,7 @@
         });
 
         //// update totalHours
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         //// update the validity
         $scope.updateValidity();
@@ -402,7 +290,7 @@
        */
       $scope.formRanges = {};
       for(var d = 0; d<7; d++){
-        $scope.formRanges[ TimetableService.days[d] ] = {'min': undefined, 'max': undefined};
+        $scope.formRanges[ AvailabilityService.days[d] ] = {'min': undefined, 'max': undefined};
       }
 
       /**
@@ -410,7 +298,7 @@
        * Slice is used to brack the object reference and get fresh one]
        * @type {[type]}
        */
-      $scope.hoursListMin =  TimetableService.hours.slice(0);
+      $scope.hoursListMin =  AvailabilityService.hours.slice(0);
 
       /**
        * [hoursListMax to show list of hours in 'From' drop down in mobile version
@@ -419,7 +307,7 @@
        * to allow user to end his range on 12AM]
        * @type {[type]}
        */
-      $scope.hoursListMax =  TimetableService.hours.slice(0);
+      $scope.hoursListMax =  AvailabilityService.hours.slice(0);
       $scope.hoursListMax.push($scope.hoursListMax.shift());
 
       /**
@@ -475,7 +363,7 @@
             $scope.formRanges[day].max = undefined;
 
             var ranges = {};
-            ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
+            ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
             $scope.weeklyRanges = ranges;
           }/// if start < end
         }/// if !isUndefined
