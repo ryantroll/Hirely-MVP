@@ -14,18 +14,27 @@
   step5App.service('TimetableService', function(){
 
     /**
+     * days is array of days short names
+     * @type {Array}
+     */
+    this.days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+    /**
      * Time Ranges
      * @type {Object}
      */
     this.ranges = {};
 
-    this.ranges.su = [];
-    this.ranges.mo = [];
-    this.ranges.tu = [];
-    this.ranges.we = [];
-    this.ranges.th = [];
-    this.ranges.fr = [];
-    this.ranges.sa = [];
+    for(var d in this.days){
+      this.ranges[this.days[d]] = {};
+    }
+    // this.ranges.su = [];
+    // this.ranges.mo = [];
+    // this.ranges.tu = [];
+    // this.ranges.we = [];
+    // this.ranges.th = [];
+    // this.ranges.fr = [];
+    // this.ranges.sa = [];
 
     /**
      * hours is array of hours names like 12AM, 1AM, ... with array index
@@ -47,11 +56,7 @@
       this.hours.push({'hour':h, 'label':hourLabel});
     }//// for
 
-    /**
-     * days is array of days short names
-     * @type {Array}
-     */
-    this.days = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
+
 
     /**
      * [updateRanges used to extract the time availibility ranges for each day our of weeklyTimeTable array]
@@ -110,6 +115,7 @@
     this.getTotalHours = function(hours){
       var ret = {};
       ret.total = 0;
+
       for(var i=0; i<24; i++){
         for(var d=0; d<7; d++){
           if(true === hours[i].days[this.days[d]]){
@@ -117,6 +123,7 @@
           }
         }//// d<7
       }//// for i<24
+
       return ret;
     }//// fun. getTotalHours
   });
@@ -221,30 +228,26 @@
         //// check if availability for this user exists in DB
         AvailabilityService.isAvailabilityExists(AuthService.currentUserID)
         .then(
-          function(DBOjbect){
+          function(timeTable){
             //// the availability exists in DB
-            $scope.availability.weeklyTimetable = DBOjbect.weeklyTimetable;
+            $scope.availability.weeklyTimetable = timeTable;
           },/// resolve
           function(){
             //// availability not in DB create empty one of user
             var weeklyTimetable = [];
             for(var h=0; h<24; h++){
-
+              var days = {};
+              for(var day in TimetableService.days){
+                days[TimetableService.days[day]] = false;
+              }/// for in
               weeklyTimetable[h] = {
-                  'label': TimetableService.hours[h].label,
-                  'days':{
-                      'su' : false,
-                      'mo' : false,
-                      'tu' : false,
-                      'we' : false,
-                      'th' : false,
-                      'fr' : false,
-                      'sa' : false
-                  }
-                };
+                'label': TimetableService.hours[h].label,
+                'days': days
+              };
             }//// for
 
             $scope.availability.weeklyTimetable = weeklyTimetable;
+
           }//// reject
         )//// then isAvailabilityExists
         .finally(
@@ -309,6 +312,7 @@
        * @return {[type]}      [description]
        */
       $scope.hourClick = function(day, hour){
+
         $scope.availability.weeklyTimetable[hour].days[day] = !$scope.availability.weeklyTimetable[hour].days[day];
 
         //// update totalHours
@@ -320,6 +324,7 @@
       $scope.updateValidity = function(){
         //// set validity for max and min hours
         // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.maxHours);
+        // console.log($scope.totalHours.total, $scope.availability.minHours)
         $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours.total >= $scope.availability.minHours);
         $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.availability.minHours <= $scope.availability.maxHours);
       }
@@ -470,7 +475,7 @@
             $scope.formRanges[day].max = undefined;
 
             var ranges = {};
-            ranges = TimetableService.updateRanges(weeklyTimetable);
+            ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
             $scope.weeklyRanges = ranges;
           }/// if start < end
         }/// if !isUndefined
