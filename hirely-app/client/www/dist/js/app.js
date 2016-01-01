@@ -385,10 +385,10 @@ var myApp = angular.module('hirelyApp',
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'UserService', JobApplicationController]);
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady , UserService) {
+  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService) {
 
     // test jobs
     var testJobOne = {
@@ -417,6 +417,28 @@ var myApp = angular.module('hirelyApp',
     //$scope.stepThreeLoaded = false; step three is special case, maintained in step controller
     $scope.stepFourLoaded = false;
     $scope.stepFiveLoaded = false;
+
+    /**
+     * this a parent scope for each step
+     * each step scope will inheret from this scope
+     * We should define the object that we need to keep through steps
+     */
+    $scope.availability = {};
+    $scope.jobID = $stateParams.jobId;
+
+    if(angular.isDefined($scope.jobID)){
+      JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.jobID)
+      .then(
+        function(jobObj){
+          if(jobObj.application.minHours) $scope.availability.minHours = jobObj.application.minHours;
+          if(jobObj.application.maxHours) $scope.availability.maxHours = jobObj.application.maxHours;
+          if(jobObj.application.startDate) $scope.availability.startDate = new Date(jobObj.application.startDate);
+        },/// fun. resolve
+        function(error){
+
+        }/// fun. resolve
+      )//// then
+    }/// if job.ID
 
 
     // test Job IDs
@@ -480,6 +502,7 @@ var myApp = angular.module('hirelyApp',
 
     //form steps
     $scope.steps = [
+
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
@@ -501,6 +524,11 @@ var myApp = angular.module('hirelyApp',
         templateUrl: '/app/application/step-5/step-five.tpl.html',
         controller: 'StepFiveController',
         hasForm: true
+      },
+      {
+        templateUrl: '/app/application/step-6/step-six.tpl.html',
+        controller: 'StepSixController',
+        hasForm: false
       }
     ];
 
@@ -564,7 +592,9 @@ var myApp = angular.module('hirelyApp',
       console.log(hello);
     }
 
-
+    $scope.saveForm = function(){
+      alert('save');
+    }
 
 
   }
@@ -2227,7 +2257,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
     });
 
-
   }
 })();
 
@@ -2259,6 +2288,83 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
   }
 })();
+/**
+ *
+ * Job Application Workflow
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function() {
+	'use strict';
+
+	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+
+
+	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+
+		$scope.stepThreeLoaded = false;
+
+		$scope.resultsLoaded = false;
+
+		var saved = false;
+    
+    var assessmentId = null;
+
+		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
+		Traitify.setHost("api-sandbox.traitify.com");
+		Traitify.setVersion("v1");
+
+		TraitifyService.getAssessmentId().then(function(data) {
+			assessmentId = data.results.id;
+			var traitify = null;
+
+			var results = {};
+			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+				results: {
+					target: ".personality-results"
+				},
+				personalityTypes: {
+					target: ".personality-types"
+				},
+				personalityTraits: {
+					target: ".personality-traits"
+				}
+			});
+
+			traitify.slideDeck.onInitialize(function() {
+				results.slides = traitify.slideDeck.data.get("Slides");
+				$scope.stepThreeLoaded = true;
+				$scope.$apply();
+			});
+
+			traitify.results.onInitialize(function() {
+				console.log("Results");
+				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
+					results.types = data.personality_types;
+					results.blend = data.personality_blend;
+					saveAssessment()
+				});
+				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
+					results.traits = data;
+					saveAssessment()
+				});
+				$scope.resultsLoaded = true;
+				$scope.$apply();
+			});
+
+			function saveAssessment() {
+				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
+          saved = true;
+					TraitifyService.saveAssessment(results, '444', assessmentId);
+				}
+			}
+
+		});
+	}
+})();
+
 /**
  *
  * Job Application Workflow Main Controller
@@ -2410,18 +2516,33 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
     }//// fun. getTotalHours
   });
 
-  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', 'TimetableService', StepFiveController])
+  /**
+   * ******************************************************************************
+   * Controller Definition ********************************************************
+   * ******************************************************************************
+   */
+  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', 'TimetableService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
 
-  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, TimetableService) {
+  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, TimetableService, $q, AvailabilityService, AuthService, JobApplicationService) {
 
     /**
-     * [availability this object will hold the data that need bot saved in database]
+     * [availability this object will hold the data that need bot saved in database
+     * this object will be inhereted from parent scope which is MulitFormDataScope
+     * there is if() statement before initializing $scope variable to make sure the are never overwritten
+     * when use navigate between stpes]
      * @type {Object}
      */
-    $scope.availability = {};
+    if(angular.isUndefined($scope.availability)) $scope.availability = {};
 
-    $scope.availability.maxHours = 0;
-    $scope.availability.minHours = 0;
+    /**
+     * [initialize the maxHour and minHours variables ]
+     * @type {Number}
+     */
+    if(angular.isUndefined($scope.availability.maxHours)) $scope.availability.maxHours = 1;
+    if(angular.isUndefined($scope.availability.minHours)) $scope.availability.minHours = 1;
+
+    $scope.stepFiveLoaded = false;
+
 
     /**
      * Below code copied from data picker example from
@@ -2429,7 +2550,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
      */
 
     $scope.today = function() {
-    $scope.availability.startDate = new Date();
+      if(angular.isUndefined($scope.availability.startDate)) $scope.availability.startDate = new Date();
     };
       $scope.today();
 
@@ -2484,53 +2605,97 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
 
       /**
-       * [weeklyTimetable build the weekly timetable for availability and assign it to scope]
+       * [weeklyTimetable build the weekly timetable for availability and assign it to scope
+       * this operation might take some time if new availability need to be created
+       * because of online database letancy so the process is sequenced in promises
+       * The finally scopeInitialize function is called to set the right variables]
        * @type {Array}
        */
-      var weeklyTimetable = [];
-      for(var h=0; h<24; h++){
+      if(angular.isUndefined($scope.availability.weeklyTimetable)){
+        //// availability table dose not exits in scope
+        //// check if availability for this user exists in DB
+        AvailabilityService.isAvailabilityExists(AuthService.currentUserID)
+        .then(
+          function(DBOjbect){
+            //// the availability exists in DB
+            $scope.availability.weeklyTimetable = DBOjbect.weeklyTimetable;
+          },/// resolve
+          function(){
+            //// availability not in DB create empty one of user
+            var weeklyTimetable = [];
+            for(var h=0; h<24; h++){
 
-        weeklyTimetable[h] = {
-            'label': TimetableService.hours[h].label,
-            'days':{
-                'su' : false,
-                'mo' : false,
-                'tu' : false,
-                'we' : false,
-                'th' : false,
-                'fr' : false,
-                'sa' : false
-            }
-          };
-      }//// for
+              weeklyTimetable[h] = {
+                  'label': TimetableService.hours[h].label,
+                  'days':{
+                      'su' : false,
+                      'mo' : false,
+                      'tu' : false,
+                      'we' : false,
+                      'th' : false,
+                      'fr' : false,
+                      'sa' : false
+                  }
+                };
+            }//// for
 
+            $scope.availability.weeklyTimetable = weeklyTimetable;
+          }//// reject
+        )//// then isAvailabilityExists
+        .finally(
+          function(){
+            initializeScope();
+          }/// fun. in finally
+        );//// finally
+      }/// if weeklyTimetable
+      else{
+        //// initalize scope immediatly if weeklyTimetable exists
+        initializeScope();
+      }
 
-      $scope.availability.weeklyTimetable = weeklyTimetable;
 
       /**
-       * [weeklyRanges scope variable to hold the the range data for mobile layout only
-       * the a temp variable is used to get the ranges from TimetableServices]
-       * @type {Object}
+       * [initializeScope this function will called afer the availabiliyt.weeklyTimetable is been set by above code]
+       * @return {[type]} [description]
        */
-      var ranges = {};
-      ranges = TimetableService.updateRanges(weeklyTimetable);
-      $scope.weeklyRanges = ranges;
+      function initializeScope(){
+        /**
+         * [weeklyRanges scope variable to hold the the range data for mobile layout only
+         * the a temp variable is used to get the ranges from TimetableServices]
+         * @type {Object}
+         */
+        var ranges = {};
+        ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
+        $scope.weeklyRanges = ranges;
 
 
-      /**
-       * [initialize the maxHour and minHours variables ]
-       * @type {Number}
-       */
-      $scope.availability.minHours = 1;
-      $scope.availability.maxHours = 1;/// 24 hours a day * 7 days a week = 168
+        /**
+         * [totalHours hold the total number of hours in each week and each day
+         * with .total property for total in week, .sa property total in sunday, ..
+         * used for validation and display purpos only]
+         * @type {[object]}
+         */
+        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
 
-      /**
-       * [totalHours hold the total number of hours in each week and each day
-       * with .total property for total in week, .sa property total in sunday, ..
-       * used for validation and display purpos only]
-       * @type {[object]}
-       */
-      $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        /**
+         * Need to wait untill all views and data is been loaded to update the validity of form
+         * because the multi step form doesn't provide any way to detect the step loading we have to use $q.all
+         */
+        $q.all()
+          .then(function() {
+            //At this point all data is available for angular to render
+            $scope.updateValidity();
+
+            /**
+             * [stepFiveLoaded set to true to remove loader and show form]
+             * @type {Boolean}
+             */
+
+            $scope.stepFiveLoaded = true;
+          });
+
+      } //// fun. initializeScope
+
 
       /**
        * [hourClick trigger on td click event to set/unset hour availablity in time table]
@@ -2572,7 +2737,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         if($window.innerWidth <= 768 && !$scope.isMobile){
           $scope.isMobile = true;
           var ranges = {};
-          ranges = TimetableService.updateRanges(weeklyTimetable);
+          ranges = TimetableService.updateRanges($scope.availability.weeklyTimetable);
           $scope.weeklyRanges = ranges;
         }
         else{
@@ -2706,85 +2871,59 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         }/// if !isUndefined
       }//// fun. addRange
 
+
+
+        /**
+         * The way Multi step form work that you have to sabe the data in $scope destory event
+         */
+        $scope.$on('$destroy', function(){
+
+
+          //// Save to DB After checking authentication
+          AuthService.getAuth().then(
+            function(isAuth){
+              if(isAuth){
+                AvailabilityService.save( angular.copy($scope.availability.weeklyTimetable), AuthService.currentUserID)
+                  .then(
+                    function(isSave){
+                      var jobApp = new JobApplication($scope.availability.startDate, $scope.availability.minHours, $scope.availability.maxHours);
+                      JobApplicationService.save(jobApp, AuthService.currentUserID, $scope.jobID)
+                    },//// .save resolve
+                    function(error){
+                      alert('Availability Save Error!\n' + error);
+                    }//// save reject
+                  );//// save then
+              }/// if auth
+            }, //getAuth resolve
+            function(error){
+              // alert("Authentication Error!\n" + error);
+            }/// getAuth reject
+          ); // getAuth then
+
+        });// $on.$destory
   }////fun. stepFiveController
 })();
 /**
  *
- * Job Application Workflow
+ * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
  *
  *
  */
-(function() {
-	'use strict';
+(function () {
+  'use strict';
 
-	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+  var step6App =  angular.module('hirelyApp');
+
+  step6App.controller('StepSixController', ['$scope', '$stateParams', 'multiStepFormInstance',  StepSixController])
+
+  function StepSixController($scope, $stateParams, multiStepFormInstance) {
 
 
-	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
 
-		$scope.stepThreeLoaded = false;
-
-		$scope.resultsLoaded = false;
-
-		var saved = false;
-    
-    var assessmentId = null;
-
-		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-		Traitify.setHost("api-sandbox.traitify.com");
-		Traitify.setVersion("v1");
-
-		TraitifyService.getAssessmentId().then(function(data) {
-			assessmentId = data.results.id;
-			var traitify = null;
-
-			var results = {};
-			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-				results: {
-					target: ".personality-results"
-				},
-				personalityTypes: {
-					target: ".personality-types"
-				},
-				personalityTraits: {
-					target: ".personality-traits"
-				}
-			});
-
-			traitify.slideDeck.onInitialize(function() {
-				results.slides = traitify.slideDeck.data.get("Slides");
-				$scope.stepThreeLoaded = true;
-				$scope.$apply();
-			});
-
-			traitify.results.onInitialize(function() {
-				console.log("Results");
-				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
-					results.types = data.personality_types;
-					results.blend = data.personality_blend;
-					saveAssessment()
-				});
-				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
-					results.traits = data;
-					saveAssessment()
-				});
-				$scope.resultsLoaded = true;
-				$scope.$apply();
-			});
-
-			function saveAssessment() {
-				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
-          saved = true;
-					TraitifyService.saveAssessment(results, '444', assessmentId);
-				}
-			}
-
-		});
-	}
+  }////fun. stepFiveController
 })();
-
 /**
  * Created by labrina.loving on 9/6/2015.
  */
@@ -3304,6 +3443,106 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 });
 
 /**
+ * Created by Iyad Bitar
+ *
+ * Traitify Personality Analysis - more info: https://developer.traitify.com
+ *
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp.core')
+    .factory('JobApplicationService', ['$q', 'FIREBASE_URL', JobApplicationService]);
+
+  function JobApplicationService( $q, FIREBASE_URL) {
+
+    /**
+     * [ref Firbase referance object]
+     * @type {firebase object}
+     */
+    var ref = new Firebase(FIREBASE_URL + '/applications');
+
+    /**
+     * [service object that define angular service to be returned by factory function at the end of this code]
+     * @type {Object}
+     */
+    var service = {
+      save:save,
+      isApplicationExists: isApplicationExists
+    };
+
+    /**
+     * [addNewApplication this will create a new job application object in DB]
+     * @param {[type]} jobApp [Job Application obj see models/applications.js for more]
+     * @param {[type]} userId [User id to associate this job application with]
+     * @param {[type]} jobID  [ID of the Job applicant is applying to]
+     */
+    function save(jobApp, userID, jobID){
+      var deferred = $q.defer();
+      var data = {};
+
+      /**
+       * check if job app exists and set right create on date
+       */
+      isApplicationExists(userID, jobID)
+        .then(
+            function(jobApp){
+                data.createdOn = jobApp.createdOn;
+            },
+            function(){
+                data.createdOn = Firebase.ServerValue.TIMESTAMP
+            }
+        )/// then
+        .finally(
+            //// update the date after createdOn data is been set
+            function(){
+                data.application = jobApp;
+
+                ref.child(userID).child(jobID).set(data, function(error){
+                    if(error){
+                      deferred.reject(error);
+                    }
+                    else{
+                      deferred.resolve(true);
+                    }
+                });
+            }/// fun. in finally
+        )/// finally
+
+      return deferred.promise;
+    }//// fun. save
+
+    /**
+     * [isApplicationExists used to check and retrive job applicaiton object]
+     * @param  {[string]}  userID [id of user]
+     * @param  {[string]}  jobID  [id of job]
+     * @return {promise}        [usually promise will returned]
+     */
+    function isApplicationExists(userID, jobID){
+        var deferred = $q.defer();
+
+        ref.child(userID).child(jobID).once('value', function(snap){
+            var exists = snap.val();
+            if(null !== exists){
+                deferred.resolve(exists);
+            }
+            else{
+                deferred.reject(false);
+            }
+        })
+
+        return deferred.promise;
+    }
+
+    /**
+     * Return server object
+     * this way we can have private functions that we don't want to expose
+     */
+    return service;
+  }
+})();
+
+/**
  * Created by labrina.loving on 8/8/2015.
  */
 (function () {
@@ -3521,6 +3760,90 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
     }
 })();
+/**
+ * Created by Iyad Bitar
+ *
+ * Traitify Personality Analysis - more info: https://developer.traitify.com
+ *
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp.core')
+    .factory('AvailabilityService', ['$q', 'FIREBASE_URL', AvailabilityService]);
+
+  function AvailabilityService( $q, FIREBASE_URL) {
+
+    /**
+     * [ref Firbase referance object]
+     * @type {firebase object}
+     */
+    var ref = new Firebase(FIREBASE_URL + '/availability');
+
+    /**
+     * [service object that define angular service to be returned by factory function at the end of this code]
+     * @type {Object}
+     */
+    var service = {
+      save:save,
+      isAvailabilityExists: isAvailabilityExists
+    };
+
+    /**
+     * [save save a new availability object]
+     * @param  {[array of objects]} availability [avalability array of 24 item each is an object of 7 days to represent the applicant weakelly availability]
+     * @param  {[string]} userId       [user ID to associate the availability with]
+     * @return {[promise]}              [description]
+     */
+    function save(availability, userId){
+      var deferred = $q.defer();
+      var data = {
+        createdOn: Firebase.ServerValue.TIMESTAMP,
+        weeklyTimetable:availability
+      }
+
+      ref.child(userId).set(data, function(error){
+        if(error){
+          deferred.reject(error);
+        }
+        else{
+          deferred.resolve(true);
+        }
+      });
+
+      return deferred.promise;
+    }//// fun. save
+
+    /**
+     * [isAvailabilityExists will check if availability object exists for a user in DB
+     * if exits the promise will reslove with the availability]
+     * @param  {String}  userID [description]
+     * @return {Promise}        [usual promise object]
+     */
+    function isAvailabilityExists(userID){
+        var deferred = $q.defer();
+
+        ref.child(userID).once('value', function(snap){
+            var exists = snap.val();
+            if(null !== exists){
+                deferred.resolve(exists);
+            }
+            else{
+                deferred.reject(false);
+            }
+        })
+
+        return deferred.promise;
+    }
+
+    /**
+     * Return server object
+     * this way we can have private functions that we don't want to expose
+     */
+    return service;
+  }
+})();
+
 (function () {
     'use strict';
 
@@ -4586,6 +4909,27 @@ Address = Model({
     this.state = state || '';
     this.lng = lng || '';
     this.lat = lat || '';
+  }
+});
+/**
+ * Created by: Iyad Bitar 12/31/2015
+ * Generic Job Application object
+ *
+ * */
+
+JobApplication = Model({
+  initialize: function (startDate, minHours, maxHours){
+    // if(userID) this.userID = userID;
+    // if(jobID) this.jobID = jobID;
+
+    /**
+     * [startDate will be sent as date object and will be saved as number of milisecond
+     * to keep timestamp consistant with Firebase timestamp]
+     * @type {[Date]}
+     */
+    if(startDate) this.startDate = startDate.getTime();
+    if(maxHours) this.maxHours = maxHours;
+    if(minHours) this.minHours = minHours;
   }
 });
 /**
