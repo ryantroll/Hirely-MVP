@@ -170,10 +170,10 @@
             var exists = snap.val();
             if(null !== exists){
               var ret = toFrontEndModel(exists);
-                deferred.resolve(angular.copy(ret));
+              deferred.resolve(angular.copy(ret));
             }
             else{
-                deferred.reject(false);
+              deferred.reject(false);
             }
         })
 
@@ -185,8 +185,16 @@
      * @param  {[front-end availablity object]} avail [fornt-end user different object format to display availability table ]
      * @return {[DB availabilty object]}       [availability is saved in different format in database]
      */
-    function toDBDataModel(avail){
-      var ret = {};
+    function toDBDataModel(obj){
+      var ret = angular.copy(obj);
+
+      //// copy the time table to a local object and work on it and delete it
+      var avail = ret.weeklyTimetable;
+      delete ret.weeklyTimetable;
+
+      //// translate seekerStatus
+      ret.seekerStatus = true === ret.seekerStatus ? 'active' : 'inactive';
+
       for(var i=0; i<24; i++){
         var days = avail[i].days
 
@@ -198,6 +206,7 @@
           if(true === days[day]) ret[day].push(i);
         } /// for day in days
       }//for i
+
       return ret;
     }//// fun. forntEndToDB
 
@@ -206,7 +215,13 @@
      * @param  {[db availbility object]} avail [description]
      * @return {[fornt-end availablity object]}       [description]
      */
-    function toFrontEndModel(avail){
+    function toFrontEndModel(dbObj){
+      var retObj = angular.extend({}, dbObj);
+
+      //// translate seekerStatus
+      retObj.seekerStatus = retObj.seekerStatus === 'active';
+
+      //// translate weeklyTimetable
       var ret = [];
       for(var i = 0; i<24; i++){
         var obj = {};
@@ -214,17 +229,23 @@
         var _days = {};
         for(var d=0; d<7; d++){
           _days[days[d]] = false;
-          if(angular.isArray(avail[ days[d] ]) && avail[ days[d] ].indexOf(i) > -1){
+          // console.log(days[d]);
+          if(angular.isArray(dbObj[ days[d] ]) && dbObj[ days[d] ].indexOf(i) > -1){
             _days[days[d]] = true;
           }
-
           obj.days = _days;
         } /// for day in
 
         ret.push(obj);
       }//// for i
 
-      return ret;
+      retObj.weeklyTimetable = ret;
+
+      for(d=0; d<7; d++){
+        delete retObj[days[d]];
+      }
+
+      return retObj;
     }//// fun. toFrondEndModel
 
     /**

@@ -45,7 +45,7 @@
      * each step scope will inheret from this scope
      * We should define the object that we need to keep through steps
      */
-    $scope.availability = {};
+    if(!angular.isObject($scope.availability)) $scope.availability = {};
     $scope.jobID = $stateParams.jobId;
 
     if(angular.isDefined($scope.jobID)){
@@ -124,7 +124,11 @@
 
     //form steps
     $scope.steps = [
-
+      {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
+      },
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
@@ -142,11 +146,7 @@
       {
         templateUrl: '/app/application/step-4/step-four.tpl.html'
       },
-      {
-        templateUrl: '/app/application/step-5/step-five.tpl.html',
-        controller: 'StepFiveController',
-        hasForm: true
-      },
+
       {
         templateUrl: '/app/application/step-6/step-six.tpl.html',
         controller: 'StepSixController',

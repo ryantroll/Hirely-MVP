@@ -423,7 +423,7 @@ var myApp = angular.module('hirelyApp',
      * each step scope will inheret from this scope
      * We should define the object that we need to keep through steps
      */
-    $scope.availability = {};
+    if(!angular.isObject($scope.availability)) $scope.availability = {};
     $scope.jobID = $stateParams.jobId;
 
     if(angular.isDefined($scope.jobID)){
@@ -502,7 +502,11 @@ var myApp = angular.module('hirelyApp',
 
     //form steps
     $scope.steps = [
-
+      {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
+      },
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
@@ -520,11 +524,7 @@ var myApp = angular.module('hirelyApp',
       {
         templateUrl: '/app/application/step-4/step-four.tpl.html'
       },
-      {
-        templateUrl: '/app/application/step-5/step-five.tpl.html',
-        controller: 'StepFiveController',
-        hasForm: true
-      },
+
       {
         templateUrl: '/app/application/step-6/step-six.tpl.html',
         controller: 'StepSixController',
@@ -2396,77 +2396,10 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
      * when use navigate between stpes]
      * @type {Object}
      */
-    if(angular.isUndefined($scope.availability)) $scope.availability = {};
+    // if(angular.isUndefined($scope.availability)) $scope.availability = {};
 
-    /**
-     * [initialize the maxHour and minHours variables ]
-     * @type {Number}
-     */
-    if(angular.isUndefined($scope.availability.maxHours)) $scope.availability.maxHours = 1;
-    if(angular.isUndefined($scope.availability.minHours)) $scope.availability.minHours = 1;
 
     $scope.stepFiveLoaded = false;
-
-
-    /**
-     * Below code copied from data picker example from
-     * https://angular-ui.github.io/bootstrap/
-     */
-
-    $scope.today = function() {
-      if(angular.isUndefined($scope.availability.startDate)) $scope.availability.startDate = new Date();
-    };
-      $scope.today();
-
-      $scope.clear = function () {
-        $scope.availability.startDate = null;
-      };
-
-
-      $scope.toggleMin = function() {
-        $scope.minDate = $scope.minDate ? null : new Date();
-      };
-      $scope.toggleMin();
-      $scope.maxDate = new Date(2020, 5, 22);
-
-      $scope.openDatePicker = function($event) {
-        $scope.status.opened = true;
-      };
-
-      $scope.setDate = function(year, month, day) {
-        $scope.availability.startDate = new Date(year, month, day);
-      };
-
-      $scope.dateOptions = {
-        formatYear: 'yy',
-        startingDay: 1
-      };
-
-      $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-      $scope.format = $scope.formats[0];
-
-      $scope.status = {
-        opened: false
-      };
-
-
-
-      $scope.getDayClass = function(date, mode) {
-        if (mode === 'day') {
-          var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-          for (var i=0;i<$scope.events.length;i++){
-            var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
-            if (dayToCheck === currentDay) {
-              return $scope.events[i].status;
-            }
-          }
-        }
-
-        return '';
-      };
-
 
       /**
        * [weeklyTimetable build the weekly timetable for availability and assign it to scope
@@ -2475,14 +2408,17 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        * The finally scopeInitialize function is called to set the right variables]
        * @type {Array}
        */
+      console.log($scope.availability);
+      console.log($scope.jobID);
       if(angular.isUndefined($scope.availability.weeklyTimetable)){
+
         //// availability table dose not exits in scope
         //// check if availability for this user exists in DB
         AvailabilityService.isAvailabilityExists(AuthService.currentUserID)
         .then(
-          function(timeTable){
+          function(retObj){
             //// the availability exists in DB
-            $scope.availability.weeklyTimetable = timeTable;
+            $scope.availability = retObj;
           },/// resolve
           function(){
             //// availability not in DB create empty one of user
@@ -2504,7 +2440,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
         )//// then isAvailabilityExists
         .finally(
           function(){
-
             initializeScope();
           }/// fun. in finally
         );//// finally
@@ -2521,6 +2456,16 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        * @return {[type]} [description]
        */
       function initializeScope(){
+
+        /**
+         * [initialize the maxHour and minHours variables ]
+         * @type {Number}
+         */
+        if(angular.isUndefined($scope.availability.hoursPerWeekMax)) $scope.availability.hoursPerWeekMax = 1;
+        if(angular.isUndefined($scope.availability.hoursPerWeekMin)) $scope.availability.hoursPerWeekMin = 1;
+        if(angular.isUndefined($scope.availability.seekerStatus)) $scope.availability.seekerStatus = true;
+        if(angular.isUndefined($scope.availability.startAvailability)) $scope.availability.startAvailability = 0;
+
         /**
          * [weeklyRanges scope variable to hold the the range data for mobile layout only
          * the a temp variable is used to get the ranges from AvailabilityServices]
@@ -2578,10 +2523,10 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
       $scope.updateValidity = function(){
         //// set validity for max and min hours
-        // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.maxHours);
-        // console.log($scope.totalHours.total, $scope.availability.minHours)
-        $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours.total >= $scope.availability.minHours);
-        $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.availability.minHours <= $scope.availability.maxHours);
+        // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.hoursPerWeekMax);
+        // console.log($scope.totalHours.total, $scope.availability.hoursPerWeekMin)
+        $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours.total >= $scope.availability.hoursPerWeekMin);
+        $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.availability.hoursPerWeekMin <= $scope.availability.hoursPerWeekMax);
       }
 
 
@@ -2748,11 +2693,11 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
           AuthService.getAuth().then(
             function(isAuth){
               if(isAuth){
-                AvailabilityService.save( angular.copy($scope.availability.weeklyTimetable), AuthService.currentUserID)
+                AvailabilityService.save( angular.copy($scope.availability), AuthService.currentUserID)
                   .then(
                     function(isSave){
-                      var jobApp = new JobApplication($scope.availability.startDate, $scope.availability.minHours, $scope.availability.maxHours);
-                      JobApplicationService.save(jobApp, AuthService.currentUserID, $scope.jobID)
+                      // var jobApp = new JobApplication($scope.availability.startDate, $scope.availability.hoursPerWeekMin, $scope.availability.hoursPerWeekMax);
+                      // JobApplicationService.save(jobApp, AuthService.currentUserID, $scope.jobID)
                     },//// .save resolve
                     function(error){
                       alert('Availability Save Error!\n' + error);
@@ -3797,10 +3742,10 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
             var exists = snap.val();
             if(null !== exists){
               var ret = toFrontEndModel(exists);
-                deferred.resolve(angular.copy(ret));
+              deferred.resolve(angular.copy(ret));
             }
             else{
-                deferred.reject(false);
+              deferred.reject(false);
             }
         })
 
@@ -3812,8 +3757,16 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      * @param  {[front-end availablity object]} avail [fornt-end user different object format to display availability table ]
      * @return {[DB availabilty object]}       [availability is saved in different format in database]
      */
-    function toDBDataModel(avail){
-      var ret = {};
+    function toDBDataModel(obj){
+      var ret = angular.copy(obj);
+
+      //// copy the time table to a local object and work on it and delete it
+      var avail = ret.weeklyTimetable;
+      delete ret.weeklyTimetable;
+
+      //// translate seekerStatus
+      ret.seekerStatus = true === ret.seekerStatus ? 'active' : 'inactive';
+
       for(var i=0; i<24; i++){
         var days = avail[i].days
 
@@ -3825,6 +3778,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
           if(true === days[day]) ret[day].push(i);
         } /// for day in days
       }//for i
+
       return ret;
     }//// fun. forntEndToDB
 
@@ -3833,7 +3787,13 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      * @param  {[db availbility object]} avail [description]
      * @return {[fornt-end availablity object]}       [description]
      */
-    function toFrontEndModel(avail){
+    function toFrontEndModel(dbObj){
+      var retObj = angular.extend({}, dbObj);
+
+      //// translate seekerStatus
+      retObj.seekerStatus = retObj.seekerStatus === 'active';
+
+      //// translate weeklyTimetable
       var ret = [];
       for(var i = 0; i<24; i++){
         var obj = {};
@@ -3841,17 +3801,23 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
         var _days = {};
         for(var d=0; d<7; d++){
           _days[days[d]] = false;
-          if(angular.isArray(avail[ days[d] ]) && avail[ days[d] ].indexOf(i) > -1){
+          // console.log(days[d]);
+          if(angular.isArray(dbObj[ days[d] ]) && dbObj[ days[d] ].indexOf(i) > -1){
             _days[days[d]] = true;
           }
-
           obj.days = _days;
         } /// for day in
 
         ret.push(obj);
       }//// for i
 
-      return ret;
+      retObj.weeklyTimetable = ret;
+
+      for(d=0; d<7; d++){
+        delete retObj[days[d]];
+      }
+
+      return retObj;
     }//// fun. toFrondEndModel
 
     /**

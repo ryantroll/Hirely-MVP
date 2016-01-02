@@ -9,29 +9,25 @@
                 <div class="loader"></div>
             </div>
             <div class="form-fields-wrapper" ng-show="stepFiveLoaded">
-                <!-- Date Picker -->
+
+               <legend>Are you currently available?</legend>
                 <div class="form-group row">
-                    <label for="startDate" class="col-sm-3 control-label">Starting Date<span class="required-field">*</span></label>
                     <div class="col-sm-9 col-md-6">
-                        <div ng-class="{'has-feedback has-error': stepFive.startDate.$error.required && stepFive.startDate.$dirty, 'has-feedback has-success' : stepFive.startDate.$valid}">
-                            <div class="input-group">
-                                <input type="text" id="startDate" id="startDate" class="form-control" ng-model="availability.startDate" ng-focus="openDatePicker($event)" uib-datepicker-popup="{{format}}"  is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-                                <span class="fa fa-close form-control-feedback" ng-show="stepFive.startDate.$error.required && stepFive.startDate.$dirty">one</span>
-                                <span class="fa fa-check form-control-feedback" ng-show="stepFive.startDate.$valid">two</span>
-            					<span class="input-group-btn" >
-            						<button class="btn btn-primary step-5-date-btn" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
-            					</span>
-                            </div><!--input-group-->
-                        </div><!--error-div-->
+                        <label class="custom-option toggle" data-off="OFF" data-on="ON">
+                            <input type="checkbox" id="seekerStatus" name="seekerStatus" ng-model="availability.seekerStatus"/>
+                            <span class="button-checkbox"></span>
+                        </label>
+                        <label for="seekerStatus">I'm currently <span ng-show="availability.seekerStatus">availabile</span> <span ng-show="!availability.seekerStatus">unavailable</span></label>
                     </div><!--col-->
                 </div><!--form-group-->
+
 
                 <legend>How many hours per week can you work?</legend>
                 <div class="form-group row">
                     <label for="min-hours" class="col-md-2 control-label">Min Hours<span class="required-field">*</span></label>
                     <div class="col-md-2" >
                         <div ng-class="{'has-feedback has-error': stepFive.minHours.$error.required && stepFive.minHours.$dirty, 'has-feedback has-success' : stepFive.minHours.$valid}">
-                            <input type="number" id="minHours" name="minHours" required min="1"  class="form-control" ng-model="availability.minHours"  ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
+                            <input type="number" id="minHours" name="minHours" required min="1"  class="form-control" ng-model="availability.hoursPerWeekMin"  ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
                             <span class="fa fa-close form-control-feedback" ng-show="stepFive.minHours.$error.required && stepFive.minHours.$dirty"></span>
                             <span class="fa fa-check form-control-feedback" ng-show="stepFive.minHours.$valid"></span>
                         </div><!--error-div-->
@@ -40,13 +36,13 @@
                     <label for="max-hours" class="col-md-2 control-label">Max Hours<span class="required-field">*</span></label>
                     <div class="col-md-2">
                         <div ng-class="{'has-feedback has-error': stepFive.maxHours.$error.required && stepFive.maxHours.$dirty, 'has-feedback has-success' : stepFive.maxHours.$valid}">
-                            <input type="number" id="maxHours" name="maxHours" required min="1"  class="form-control" ng-model="availability.maxHours" ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
+                            <input type="number" id="maxHours" name="maxHours" required min="1"  class="form-control" ng-model="availability.hoursPerWeekMax" ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
                             <span class="fa fa-close form-control-feedback" ng-show="stepFive.maxHours.$error.required && stepFive.maxHours.$dirty"></span>
                             <span class="fa fa-check form-control-feedback" ng-show="stepFive.maxHours.$valid"></span>
                         </div><!--error-div-->
                     </div>
 
-                    <div class="col-md-12 bg-danger step-5-error-label" ng-show="availability.maxHours > 168">
+                    <div class="col-md-12 bg-danger step-5-error-label" ng-show="availability.hoursPerWeekMax > 168">
                         You cannot work more than 168 hours per week!
                     </div>
                     <div class="col-md-12 bg-danger step-5-error-label" ng-show="stepFive.maxHours.$error.mismatch">
