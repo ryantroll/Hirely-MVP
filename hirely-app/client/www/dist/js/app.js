@@ -4647,7 +4647,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
        */
 
 
-      ref.child(id).set(user, function (error) {
+      ref.child(id).update(user, function (error) {
         if (error)
           //// not successful return error string
           return error;
