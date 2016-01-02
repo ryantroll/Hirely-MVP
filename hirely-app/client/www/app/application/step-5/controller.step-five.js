@@ -11,128 +11,35 @@
 
   var step5App =  angular.module('hirelyApp');
 
-  step5App.service('TimetableService', function(){
+
+
+  /**
+   * ******************************************************************************
+   * Controller Definition ********************************************************
+   * ******************************************************************************
+   */
+  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
+
+  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService, JobApplicationService) {
 
     /**
-     * Time Ranges
+     * [availability this object will hold the data that need bot saved in database
+     * this object will be inhereted from parent scope which is MulitFormDataScope
+     * there is if() statement before initializing $scope variable to make sure the are never overwritten
+     * when use navigate between stpes]
      * @type {Object}
      */
-    this.ranges = {};
-
-    this.ranges.su = [];
-    this.ranges.mo = [];
-    this.ranges.tu = [];
-    this.ranges.we = [];
-    this.ranges.th = [];
-    this.ranges.fr = [];
-    this.ranges.sa = [];
+    if(angular.isUndefined($scope.availability)) $scope.availability = {};
 
     /**
-     * hours is array of hours names like 12AM, 1AM, ... with array index
-     * @type {Array}
+     * [initialize the maxHour and minHours variables ]
+     * @type {Number}
      */
-    this.hours = [];
-    for(var h=0; h<24; h++){
-      var hourLabel = '';
-      if(0==h){
-          hourLabel += '12AM';
-      }
-      else if(h<12){
-          hourLabel += String(h) + 'AM';
-      }
-      else{
-          hourLabel += String(h-12 <= 0 ? 12 : h-12) + 'PM';
-      }
+    if(angular.isUndefined($scope.availability.maxHours)) $scope.availability.maxHours = 1;
+    if(angular.isUndefined($scope.availability.minHours)) $scope.availability.minHours = 1;
 
-      this.hours.push({'hour':h, 'label':hourLabel});
-    }//// for
+    $scope.stepFiveLoaded = false;
 
-    /**
-     * days is array of days short names
-     * @type {Array}
-     */
-    this.days = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
-
-    /**
-     * [updateRanges used to extract the time availibility ranges for each day our of weeklyTimeTable array]
-     * @param  {[type]} hours [weeklyTimeTable array]
-     * @return {[type]}       [Object with days property shortname
-     *                                each day property is an array of ranges object
-     *                                each range is an object]
-     */
-    this.updateRanges = function(hours){
-      var newRanges = {};
-      angular.extend(newRanges, this.ranges);
-
-      for(var key in newRanges){
-        newRanges[key] = [];
-        var isNewRange = false;
-        var obj = {};
-        for(var i=0; i<24; i++){
-            if(true === hours[i].days[key] ){
-              if(!isNewRange){
-                isNewRange = true; /// starting a new hourly range
-                obj.startLabel = hours[i].label;
-                obj.startHour = i;
-              }
-            }//if
-            else{
-              if(isNewRange){
-                isNewRange = false;
-                obj.endLabel = hours[i].label;
-                obj.endHour = i;
-                obj.hours = obj.endHour - obj.startHour;
-                newRanges[key].push( angular.extend({},obj) );
-                obj = {};
-
-              }
-            }/// else
-        }/// for i=0
-
-        //// if end of loop reached without end add one
-        // console.log(isNewRange, i);
-        if(isNewRange && angular.isUndefined(obj.end)){
-          isNewRange = false;
-          obj.endLabel = '12AM';
-          obj.endHour = 0;
-          obj.hours = 24 - obj.startHour;
-          newRanges[key].push( angular.extend({},obj) );
-          obj = {};
-        }
-
-      }//// for key in
-
-      angular.extend(this.ranges, newRanges);
-
-      return this.ranges;
-    }/// fun. updateRanges
-
-    this.getTotalHours = function(hours){
-      var ret = {};
-      ret.total = 0;
-      for(var i=0; i<24; i++){
-        for(var d=0; d<7; d++){
-          if(true === hours[i].days[this.days[d]]){
-            ++ret.total;
-          }
-        }//// d<7
-      }//// for i<24
-      return ret;
-    }//// fun. getTotalHours
-  });
-
-  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', 'TimetableService', StepFiveController])
-
-  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, TimetableService) {
-
-    /**
-     * [availability this object will hold the data that need bot saved in database]
-     * @type {Object}
-     */
-    $scope.availability = {};
-
-    $scope.availability.maxHours = 0;
-    $scope.availability.minHours = 0;
 
     /**
      * Below code copied from data picker example from
@@ -140,7 +47,7 @@
      */
 
     $scope.today = function() {
-    $scope.availability.startDate = new Date();
+      if(angular.isUndefined($scope.availability.startDate)) $scope.availability.startDate = new Date();
     };
       $scope.today();
 
@@ -195,53 +102,96 @@
 
 
       /**
-       * [weeklyTimetable build the weekly timetable for availability and assign it to scope]
+       * [weeklyTimetable build the weekly timetable for availability and assign it to scope
+       * this operation might take some time if new availability need to be created
+       * because of online database letancy so the process is sequenced in promises
+       * The finally scopeInitialize function is called to set the right variables]
        * @type {Array}
        */
-      var weeklyTimetable = [];
-      for(var h=0; h<24; h++){
+      if(angular.isUndefined($scope.availability.weeklyTimetable)){
+        //// availability table dose not exits in scope
+        //// check if availability for this user exists in DB
+        AvailabilityService.isAvailabilityExists(AuthService.currentUserID)
+        .then(
+          function(timeTable){
+            //// the availability exists in DB
+            $scope.availability.weeklyTimetable = timeTable;
+          },/// resolve
+          function(){
+            //// availability not in DB create empty one of user
+            var weeklyTimetable = [];
+            for(var h=0; h<24; h++){
+              var days = {};
+              for(var day in AvailabilityService.days){
+                days[AvailabilityService.days[day]] = false;
+              }/// for in
+              weeklyTimetable[h] = {
+                'label': AvailabilityService.hours[h].label,
+                'days': days
+              };
+            }//// for
 
-        weeklyTimetable[h] = {
-            'label': TimetableService.hours[h].label,
-            'days':{
-                'su' : false,
-                'mo' : false,
-                'tu' : false,
-                'we' : false,
-                'th' : false,
-                'fr' : false,
-                'sa' : false
-            }
-          };
-      }//// for
+            $scope.availability.weeklyTimetable = weeklyTimetable;
 
+          }//// reject
+        )//// then isAvailabilityExists
+        .finally(
+          function(){
 
-      $scope.availability.weeklyTimetable = weeklyTimetable;
+            initializeScope();
+          }/// fun. in finally
+        );//// finally
+      }/// if weeklyTimetable
+      else{
+        //// initalize scope immediatly if weeklyTimetable exists
+
+        initializeScope();
+      }
+
 
       /**
-       * [weeklyRanges scope variable to hold the the range data for mobile layout only
-       * the a temp variable is used to get the ranges from TimetableServices]
-       * @type {Object}
+       * [initializeScope this function will called afer the availabiliyt.weeklyTimetable is been set by above code]
+       * @return {[type]} [description]
        */
-      var ranges = {};
-      ranges = TimetableService.updateRanges(weeklyTimetable);
-      $scope.weeklyRanges = ranges;
+      function initializeScope(){
+        /**
+         * [weeklyRanges scope variable to hold the the range data for mobile layout only
+         * the a temp variable is used to get the ranges from AvailabilityServices]
+         * @type {Object}
+         */
+
+        var ranges = {};
+        ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
+        $scope.weeklyRanges = ranges;
 
 
-      /**
-       * [initialize the maxHour and minHours variables ]
-       * @type {Number}
-       */
-      $scope.availability.minHours = 1;
-      $scope.availability.maxHours = 1;/// 24 hours a day * 7 days a week = 168
+        /**
+         * [totalHours hold the total number of hours in each week and each day
+         * with .total property for total in week, .sa property total in sunday, ..
+         * used for validation and display purpos only]
+         * @type {[object]}
+         */
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
-      /**
-       * [totalHours hold the total number of hours in each week and each day
-       * with .total property for total in week, .sa property total in sunday, ..
-       * used for validation and display purpos only]
-       * @type {[object]}
-       */
-      $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        /**
+         * Need to wait untill all views and data is been loaded to update the validity of form
+         * because the multi step form doesn't provide any way to detect the step loading we have to use $q.all
+         */
+        $q.all()
+          .then(function() {
+            //At this point all data is available for angular to render
+            $scope.updateValidity();
+
+            /**
+             * [stepFiveLoaded set to true to remove loader and show form]
+             * @type {Boolean}
+             */
+
+            $scope.stepFiveLoaded = true;
+          });
+
+      } //// fun. initializeScope
+
 
       /**
        * [hourClick trigger on td click event to set/unset hour availablity in time table]
@@ -250,10 +200,11 @@
        * @return {[type]}      [description]
        */
       $scope.hourClick = function(day, hour){
+
         $scope.availability.weeklyTimetable[hour].days[day] = !$scope.availability.weeklyTimetable[hour].days[day];
 
         //// update totalHours
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         $scope.updateValidity();
       }//// fun. hourClick
@@ -261,6 +212,7 @@
       $scope.updateValidity = function(){
         //// set validity for max and min hours
         // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.maxHours);
+        // console.log($scope.totalHours.total, $scope.availability.minHours)
         $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours.total >= $scope.availability.minHours);
         $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.availability.minHours <= $scope.availability.maxHours);
       }
@@ -283,7 +235,7 @@
         if($window.innerWidth <= 768 && !$scope.isMobile){
           $scope.isMobile = true;
           var ranges = {};
-          ranges = TimetableService.updateRanges(weeklyTimetable);
+          ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
           $scope.weeklyRanges = ranges;
         }
         else{
@@ -324,7 +276,7 @@
         });
 
         //// update totalHours
-        $scope.totalHours = TimetableService.getTotalHours($scope.availability.weeklyTimetable);
+        $scope.totalHours = AvailabilityService.getTotalHours($scope.availability.weeklyTimetable);
 
         //// update the validity
         $scope.updateValidity();
@@ -338,7 +290,7 @@
        */
       $scope.formRanges = {};
       for(var d = 0; d<7; d++){
-        $scope.formRanges[ TimetableService.days[d] ] = {'min': undefined, 'max': undefined};
+        $scope.formRanges[ AvailabilityService.days[d] ] = {'min': undefined, 'max': undefined};
       }
 
       /**
@@ -346,7 +298,7 @@
        * Slice is used to brack the object reference and get fresh one]
        * @type {[type]}
        */
-      $scope.hoursListMin =  TimetableService.hours.slice(0);
+      $scope.hoursListMin =  AvailabilityService.hours.slice(0);
 
       /**
        * [hoursListMax to show list of hours in 'From' drop down in mobile version
@@ -355,7 +307,7 @@
        * to allow user to end his range on 12AM]
        * @type {[type]}
        */
-      $scope.hoursListMax =  TimetableService.hours.slice(0);
+      $scope.hoursListMax =  AvailabilityService.hours.slice(0);
       $scope.hoursListMax.push($scope.hoursListMax.shift());
 
       /**
@@ -411,11 +363,41 @@
             $scope.formRanges[day].max = undefined;
 
             var ranges = {};
-            ranges = TimetableService.updateRanges(weeklyTimetable);
+            ranges = AvailabilityService.updateRanges($scope.availability.weeklyTimetable);
             $scope.weeklyRanges = ranges;
           }/// if start < end
         }/// if !isUndefined
       }//// fun. addRange
 
+
+
+        /**
+         * The way Multi step form work that you have to sabe the data in $scope destory event
+         */
+        $scope.$on('$destroy', function(){
+
+
+          //// Save to DB After checking authentication
+          AuthService.getAuth().then(
+            function(isAuth){
+              if(isAuth){
+                AvailabilityService.save( angular.copy($scope.availability.weeklyTimetable), AuthService.currentUserID)
+                  .then(
+                    function(isSave){
+                      var jobApp = new JobApplication($scope.availability.startDate, $scope.availability.minHours, $scope.availability.maxHours);
+                      JobApplicationService.save(jobApp, AuthService.currentUserID, $scope.jobID)
+                    },//// .save resolve
+                    function(error){
+                      alert('Availability Save Error!\n' + error);
+                    }//// save reject
+                  );//// save then
+              }/// if auth
+            }, //getAuth resolve
+            function(error){
+              // alert("Authentication Error!\n" + error);
+            }/// getAuth reject
+          ); // getAuth then
+
+        });// $on.$destory
   }////fun. stepFiveController
 })();

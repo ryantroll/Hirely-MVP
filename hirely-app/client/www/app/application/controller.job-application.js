@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'UserService', JobApplicationController]);
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady , UserService) {
+  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService) {
 
     // test jobs
     var testJobOne = {
@@ -39,6 +39,28 @@
     //$scope.stepThreeLoaded = false; step three is special case, maintained in step controller
     $scope.stepFourLoaded = false;
     $scope.stepFiveLoaded = false;
+
+    /**
+     * this a parent scope for each step
+     * each step scope will inheret from this scope
+     * We should define the object that we need to keep through steps
+     */
+    $scope.availability = {};
+    $scope.jobID = $stateParams.jobId;
+
+    if(angular.isDefined($scope.jobID)){
+      JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.jobID)
+      .then(
+        function(jobObj){
+          if(jobObj.application.minHours) $scope.availability.minHours = jobObj.application.minHours;
+          if(jobObj.application.maxHours) $scope.availability.maxHours = jobObj.application.maxHours;
+          if(jobObj.application.startDate) $scope.availability.startDate = new Date(jobObj.application.startDate);
+        },/// fun. resolve
+        function(error){
+
+        }/// fun. resolve
+      )//// then
+    }/// if job.ID
 
 
     // test Job IDs
@@ -102,6 +124,7 @@
 
     //form steps
     $scope.steps = [
+
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
@@ -123,6 +146,11 @@
         templateUrl: '/app/application/step-5/step-five.tpl.html',
         controller: 'StepFiveController',
         hasForm: true
+      },
+      {
+        templateUrl: '/app/application/step-6/step-six.tpl.html',
+        controller: 'StepSixController',
+        hasForm: false
       }
     ];
 
@@ -186,7 +214,9 @@
       console.log(hello);
     }
 
-
+    $scope.saveForm = function(){
+      alert('save');
+    }
 
 
   }
