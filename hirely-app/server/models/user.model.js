@@ -5,28 +5,57 @@ var userSchema = new Schema({
   /**
    * Personal info
    */
-  firstName     :       String,
-  lastName      :       String,
-  email         :       String,
-  mobile        :       String,
+  firstName     :       {type:String, required:true},
+  lastName      :       {type:String, required:true},
+  email         :       {
+                          type:String,
+                          required:true,
+                          index:true,
+                          unique:true,
+                          validate:{
+                            validator: function(v){
+                              return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v);
+                            },
+                            message:'{VALUE} is not valid email'
+                          }
+                        },
+  mobile        :       {type:String},
 
   /**
    * Date fields
    */
-  createdOn     :       Date,
+  createdOn     :       {type: Date,    default: Date.now},
   lastModifiedOn:       {type: Date,    default: Date.now},
 
   /**
    * User object meta fields
    */
-  provider      :       String,
-  userType      :       String,
+  provider      :       {
+                          type:String,
+                          required:true,
+                          validate:{
+                            validator: function(v){
+                              return /^(password|twitter|facebook|google)$/.test(v);
+                            },
+                            message:'{VALUE} is not valid provider name'
+                          }
+                        },
+  userType      :       {
+                          type:String,
+                          required:true,
+                          validate:{
+                            validator: function(v){
+                              return /^(JS|IOS|ANDROID)$/.test(v);
+                            },
+                            message:'{VALUE} is not valid userType'
+                          }
+                        },
 
   /**
    * Address fields
    */
   country           :   String,
-  stat              :   String,
+  state              :   String,
   city              :   String,
   street1           :   String,
   street2           :   String,
@@ -72,17 +101,27 @@ var userSchema = new Schema({
      * Availability
      */
     availability: {
-        seekerStatus        :       Number, //// 0 = inactive, 1 = active
+        seekerStatus        :       {//// 0 = inactive, 1 = active
+                                      type:Number,
+                                      required:true,
+                                      default: 1,
+                                      validate:{
+                                        validator: function(v){
+                                          return /^(0|1)$/.test(v.toString());
+                                        },
+                                        message:'{VALUE} is not a valid availability.seekerStatus'
+                                      }
+                                    },
         startAvailability   :       Number,
         hoursPerWeekMin     :       Number,
         hoursPerWeekMax     :       Number,
-        mon                 :       [],
-        tue                 :       [],
-        wed                 :       [],
-        thu                 :       [],
-        fri                 :       [],
-        sat                 :       [],
-        sun                 :       []
+        mon                 :       [Number],
+        tue                 :       [Number],
+        wed                 :       [Number],
+        thu                 :       [Number],
+        fri                 :       [Number],
+        sat                 :       [Number],
+        sun                 :       [Number]
     },
 
     /**
@@ -96,6 +135,6 @@ var userSchema = new Schema({
 });
 
 
-var UserModel = mongoose.model('User', userSchema, "userModel");
+var UserModel = mongoose.model('User', userSchema, "users");
 
 module.exports = UserModel;

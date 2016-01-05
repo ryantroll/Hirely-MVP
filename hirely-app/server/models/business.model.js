@@ -2,8 +2,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var applicationSchema = new Schema({
-  userId      :       String,
-  status      :       String,
+  userId      :       {type:String, required:true},
+  status      :       {//// 0 close, 1 open
+                        type:Number,
+                        required:true,
+                        validate:{
+                          validator: function(v){
+                            return /^(1|0)$/.test(v.toString());
+                          },
+                          message:'{VALUE} is not valid value for application status'
+                        }
+                      },
   prescreenAnswers  :
   [
     {
@@ -11,109 +20,152 @@ var applicationSchema = new Schema({
       answer    :     String
     }
   ]/// prescreen array
-});
+});//// applicationSchema
+
+var variantSchema = new Schema(
+  {
+    workType          :     {
+                              type:String,
+                              required:true,
+                              validate:{
+                                validator: function(v){
+                                  return /^(part\-time|full\-time)$/.test(v);
+                                },
+                                message:'{VALUE} is not valid work type'
+                              }
+                            },
+
+    hoursPerWeekMin   :     Number,
+    hoursPerWeekMax   :     Number,
+    minOpeningShifts  :     Number,
+    minClosingShifts  :     Number,
+    minWeekdayShifts  :     Number,
+    minWeekendShifts  :     Number,
+    openings          :     Number,
+
+    compensation:
+    {
+      wageType        :     {
+                              type:String,
+                              required:true,
+                              validate:{
+                                validator: function(v){
+                                  return /^(hourly)$/.test(v);
+                                },
+                                message:'{VALUE} is not valid work type'
+                              }
+                            },
+      wageAmount      :     {type:Number, required:true},
+      commission      :     Boolean,
+      tips            :     Boolean
+    }, //// ocmpensation object
+
+    benefits:
+    {
+      paidVacation    :     Boolean,
+      paidSickTime    :     Boolean,
+      flexibleSchedul :     Boolean,
+      healthInsurance :     Boolean,
+      dentalInsurance :     Boolean,
+      retirementPlan  :     Boolean,
+      discounts       :     Boolean
+    }, //// benefites
+
+    shifts:
+    {
+      mon           :       [Number],
+      tue           :       [Number],
+      wed           :       [Number],
+      thu           :       [Number],
+      fri           :       [Number],
+      sat           :       [Number],
+      sun           :       [Number],
+      required      :       Boolean
+    },/// shift object
+
+
+    applications:[ applicationSchema ]//// application array
+
+  }//// varients[] object
+);//// variantSchema
+
+var positionSchema = new Schema({
+        title         :    {type: String, required:true},
+        onetClass     :    {type: String, required:true},
+        variants      :    [ variantSchema ]//// vairants araay
+});//// positionSchema
+
+var locationSchema = new Schema({
+      name              :       {type:String, required:true},
+      hoursOfOperation  :
+      {
+        mon   : [Number],
+        tue   : [Number],
+        wed   : [Number],
+        thu   : [Number],
+        fri   : [Number],
+        sat   : [Number],
+        sun   : [Number]
+      },
+
+      /**
+       * Location Address
+       */
+      country           :   {type:String, required:true},
+      state             :   {type:String, required:true},
+      city              :   {type:String, required:true},
+      street1           :   {type:String, required:true},
+      street2           :   String,
+      street3           :   String,
+      postalCode        :   {type:String, required:true},
+      formattedAddress  :   {type:String, required:true},
+      lat               :   Number,
+      lng               :   Number,
+
+      /**
+       * Positions opened in this location
+       */
+      positions: [positionSchema] /// position array
+    }///location object
+);/// locationSchema
 
 var businessSchema = new Schema({
   /**
    * Business info
    */
-  name            :       String,
+  name            :       {type:String, required:true},
   description     :       String,
-  email           :       String,
-  website         :       String,
-  agreedToTerms   :       Boolean,
+  email           :       {
+                            type:String,
+                            required:true,
+                            index:true,
+                            unique:true,
+                            validate:{
+                              validator: function(v){
+                                return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v);
+                              },
+                              message:'{VALUE} is not valid email'
+                            }
+                          },
+  website         :       {
+                            type:String,
+                            validate:{
+                              validator: function(v){
+                                return /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i.test(v);
+                              },
+                              message:'{VALUE} is not valid website URL'
+                            }
+                          },
+  agreedToTerms   :       {type:Boolean, required:true},
 
   /**
    * Locations
    */
-  locations: [
-    {
-    name              :       String,
-    hoursOfOperation  :
-    {
-      mon   : [],
-      tue   : [],
-      wed   : [],
-      thu   : [],
-      fri   : [],
-      sat   : [],
-      sun   : []
-    },
-
-    /**
-     * Location Address
-     */
-    country           :   String,
-    stat              :   String,
-    city              :   String,
-    street1           :   String,
-    street2           :   String,
-    street3           :   String,
-    postalCode        :   String,
-    formattedAddress  :   String,
-    lat               :   Number,
-    lng               :   Number,
-
-    /**
-     * Positions opened in this location
-     */
-    positions: [
-      {
-        title         :    String,
-        onetClass     :    String,
-        variants      :
-        [
-          {
-            workType          :     String,
-            hoursPerWeekMin   :     Number,
-            hoursPerWeekMax   :     Number,
-            minOpeningShifts  :     Number,
-            minClosingShifts  :     Number,
-            minWeekdayShifts  :     Number,
-            minWeekendShifts  :     Number,
-            openings          :     Number,
-
-            compensation:
-            {
-              wageType        :     String,
-              wageAmount      :     Number,
-              commission      :     Boolean,
-              tips            :     Boolean
-            }, //// ocmpensation object
-
-            benefits:
-            {
-              paidVacation    :     Boolean,
-              paidSickTime    :     Boolean,
-              flexibleSchedul :     Boolean,
-              healthInsurance :     Boolean,
-              dentalInsurance :     Boolean,
-              retirementPlan  :     Boolean,
-              discounts       :     Boolean
-            }, //// benefites
-
-            shifts: [
-              {
-                shiftStart    :      Number,
-                shiftStop     :      Number,
-                day           :      String,
-                required      :      Boolean
-              }/// shift object
-            ],/// shifts array
-
-            applications:[ applicationSchema ]//// application array
-
-          }//// position.varients[] object
-
-        ],//// vairants araay
-      } //// position object
-    ] /// position array
-  }///location object
-  ],///locations array
+  locations: [locationSchema]///locations array
 
 });
 
 
-var BusinessModel = mongoose.model('Business', businessSchema, "businessModel");
+var BusinessModel = mongoose.model('Business', businessSchema, "business");
 
 module.exports = BusinessModel;
