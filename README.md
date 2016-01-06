@@ -78,6 +78,13 @@ npm install
 bower install
 ```
 
+What's going on?
+ 1. Install node.js.  For mac, we recommend homebrew.
+ 2. Install bower and gulp globally
+ 3. Clone this repo and cd to it
+ 4. Install dependencies
+
+
 ----------
 
 Seed Users and Businesses to MongoDB
@@ -109,13 +116,9 @@ open http://localhost:7200
 ```
 
 What's going on?
- 1. Install node.js.  For mac, we recommend homebrew.
- 2. Install bower and gulp globally
- 3. Clone this repo and cd to it
- 4. Install dependencies
- 5. Run the css compiler 'gulp' as daemon
- 5. Run server as daemon
- 6. Open http://localhost:7200 in a browser
+ 1. Run the css compiler 'gulp' as daemon
+ 2. Run server as daemon
+ 3. Open http://localhost:7200 in a browser
 
 
 ----------
