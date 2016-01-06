@@ -62,9 +62,10 @@ rm *.bak
 find . -name "*.csv" -exec mongoimport --db hirely --headerline --type=csv --drop --file {} \;
 ```
 
+
 ----------
 
-Running the server locally (db must already be setup and running)
+Install dependencies
 -------------
 
 ```
@@ -72,6 +73,32 @@ brew update; brew install npm
 sudo mkdir -p /data/db
 npm install -g bower gulp
 git clone git@github.com:ryantroll/Hirely-MVP.git
+cd Hirely-MVP
+npm install
+bower install
+```
+
+----------
+
+Seed Users and Businesses to MongoDB
+-------------
+
+Follow steps to install dependencies and run MongoDB first
+
+```
+cd Hirely-MVP/hirely-app/server
+node tests/test.*.model.js
+```
+
+
+----------
+
+Running the server locally
+-------------
+
+Follow steps to run MongoDB first
+
+```
 cd Hirely-MVP
 npm install
 bower install
@@ -89,7 +116,7 @@ What's going on?
  5. Run the css compiler 'gulp' as daemon
  5. Run server as daemon
  6. Open http://localhost:7200 in a browser
-```
+
 
 ----------
 
