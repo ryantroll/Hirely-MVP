@@ -12,6 +12,11 @@ module.exports = function(app) {
     var onetTitlesService = require('./services/onet-titles');
     var traitify = require('./services/traitify');
 
+    /**
+     * API for local users in mongoDB
+     */
+    var userApiRoutes = require('./routes/user.api.routes');
+
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
     app.get('/api/search/cities/:addressQuery', getAddressFomQuery);
@@ -23,6 +28,14 @@ module.exports = function(app) {
     app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
 
     app.get('/api/traitify/assesment-id', getAssessmentId);
+
+    /**
+     * Adding routes for local mongoDB users
+     */
+    // app.get('/api/v1/users', users.getAll);
+    app.get('/api/v1/users/:id', userApiRoutes.getUserById);
+    app.post('/api/v1/users/', userApiRoutes.createNewUser);
+    app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
 
     function getGooglePlacebyId(req, res) {
         var placeId = req.params.placeId;
