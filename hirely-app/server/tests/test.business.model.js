@@ -12,12 +12,12 @@ db.once('open', function(){
     var b = new BusinessModel({
         name: 'Starbucks',
         email: 'iyad.bitar@gmail.com',
-        website:'http://test.com',
+        website:'http://compasscoffee.com',
+        description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
         agreedToTerms:true,
         locations:[
             {
                 name:'Clifton',
-
                 country:'USA',
                 state:'NJ',
                 city:'Montclair',
@@ -25,9 +25,20 @@ db.once('open', function(){
                 street2: '',
                 street3: '',
                 postalCode: '07012',
+                phone: '+1.222.222.2222',
                 formattedAddress: '24 Kenter Pl, Montclair, NJ 07012',
                 lng: 12.39439493,
                 lat: -99.88888,
+
+                hoursOfOperation: {
+                    mon   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    tue   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    wed   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    thu   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    fri   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    sat   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    sun   : [8, 9 ,10, 11, 12, 13, 14, 15, 16, 17]
+                },
 
                 positions:[
                     {

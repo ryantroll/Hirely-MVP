@@ -96,7 +96,8 @@ var positionSchema = new Schema({
 });//// positionSchema
 
 var locationSchema = new Schema({
-      name              :       {type:String, required:true},
+      name              :   {type:String, required:true},
+      phone             :   String,
       hoursOfOperation  :
       {
         mon   : [Number],
