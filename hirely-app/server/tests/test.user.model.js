@@ -28,6 +28,10 @@ db.once('open', function(){
         formattedAddress: '24 Kenter Pl, Clifon, NJ 07012',
         lng: 12.39439493,
         lat: -99.88888,
+        businessesAppliedTo: [],
+        businessesOwned: [],
+        businessesManaged: [],
+        businessesStaffOf: [],
 
         preferences: {
             desiredWageMin      :       10,
@@ -52,13 +56,13 @@ db.once('open', function(){
             startAvailability   :       2,
             hoursPerWeekMin     :       2,
             hoursPerWeekMax     :       4,
-            mon                 :       [12, 12, 12],
-            tue                 :       [12],
-            wed                 :       [1],
-            thu                 :       [2],
-            fri                 :       [4],
-            sat                 :       [5],
-            sun                 :       [1]
+            mon                 :       [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+            tue                 :       [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+            wed                 :       [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+            thu                 :       [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+            fri                 :       [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+            sat                 :       [],
+            sun                 :       []
         },
 
         spokenLanguages: {
