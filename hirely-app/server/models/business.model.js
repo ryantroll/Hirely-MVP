@@ -167,6 +167,6 @@ var businessSchema = new Schema({
 });
 
 
-var BusinessModel = mongoose.model('Business', businessSchema, "business");
+var BusinessModel = mongoose.model('Businesses', businessSchema, "businesses");
 
 module.exports = BusinessModel;
