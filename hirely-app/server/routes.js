@@ -16,6 +16,7 @@ module.exports = function(app) {
      * API for local users in mongoDB
      */
     var userApiRoutes = require('./routes/user.api.routes');
+    var businessApiRoutes = require('./routes/business.api.routes');
 
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
@@ -32,10 +33,17 @@ module.exports = function(app) {
     /**
      * Adding routes for local mongoDB users
      */
-     app.get('/api/v1/users', userApiRoutes.getAll);
+    app.get('/api/v1/users', userApiRoutes.getAll);
     app.get('/api/v1/users/:id', userApiRoutes.getUserById);
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
     app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
+
+    /**
+     * Adding routes for local mongoDB businesses
+     */
+    app.get('/api/v1/businesses', businessApiRoutes.getAll);
+    app.get('/api/v1/businesses/:id', businessApiRoutes.getBusinessById);
+    app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
 
     function getGooglePlacebyId(req, res) {
         var placeId = req.params.placeId;

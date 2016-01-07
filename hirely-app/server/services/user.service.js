@@ -21,7 +21,7 @@ var userService = {
      * [getAll function will get all users.  Not to be used in production]
      * @return {[type]}        [promise]
      */
-    getAll : function(userId){
+    getAll : function(){
         return userModel.find().exec();
     },
 
