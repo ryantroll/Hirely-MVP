@@ -3,6 +3,22 @@ var apiUtil = require('../utils/api-response');
 
 var userRoutes = {
 
+    getAll : function(req, res){
+        /**
+         * Get all users
+         */
+        userService.getAll()
+        .then(
+            function(users){
+                res.status(200).json(apiUtil.generateResponse(200, "Users retrieved successfully", users));
+            },
+            function(error){
+                //// user couldn't be found 404
+                res.status(500).json(apiUtil.generateResponse(404, "Users couldn't be located", null));
+            }
+        );
+    },
+
     getUserById : function(req, res){
         /**
          * Send basic info if extended is not requested
@@ -11,7 +27,7 @@ var userRoutes = {
             userService.getBasicInfoById(req.params.id)
             .then(
                 function(user){
-                    res.status(200).json(apiUtil.generateResponse(200, "User retrived successfully", user));
+                    res.status(200).json(apiUtil.generateResponse(200, "User retrieved successfully", user));
                 },
                 function(error){
                     //// user couldn't be found 404
@@ -30,7 +46,7 @@ var userRoutes = {
                 },
                 function(error){
                     //// user couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(500, "User couldn't be located", null));
+                    res.status(500).json(apiUtil.generateResponse(404, "User couldn't be located", null));
                 }
             );
         }//// if extended else

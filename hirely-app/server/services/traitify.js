@@ -18,7 +18,7 @@ exports.getAssessmentId = function (next) {
   traitify.setSecretKey(config.traitify.secretKey);
 
   var deckId = 'career-deck';
-  traitify.createAssessment(deckId, function(assessment){
+  traitify.createwAssessment(deckId, function(assessment){
     if(assessment){
       next(null, assessment)
     } else {

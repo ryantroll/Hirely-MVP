@@ -18,6 +18,14 @@ var extendedFields = [
 
 var userService = {
     /**
+     * [getAll function will get all users.  Not to be used in production]
+     * @return {[type]}        [promise]
+     */
+    getAll : function(userId){
+        return userModel.find().exec();
+    },
+
+    /**
      * [getBasicInfoById function will get the basic user fields execluding the extend fields]
      * @param  {[type]} userId [user id should match user object id in DB]
      * @return {[type]}        [promise]

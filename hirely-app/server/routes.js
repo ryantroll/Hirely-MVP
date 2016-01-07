@@ -32,7 +32,7 @@ module.exports = function(app) {
     /**
      * Adding routes for local mongoDB users
      */
-    // app.get('/api/v1/users', users.getAll);
+     app.get('/api/v1/users', userApiRoutes.getAll);
     app.get('/api/v1/users/:id', userApiRoutes.getUserById);
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
     app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
