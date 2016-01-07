@@ -314,6 +314,8 @@ var myApp = angular.module('hirelyApp',
         }
 
         vm.registerNewUser = function() {
+            $scope.user.provider = 'password';
+            // $scope.user.email = Math.round(Math.random()*1000).toString() + $scope.user.email;
             registerPasswordUser($scope.user)
         }
 
@@ -1431,12 +1433,12 @@ angular.module('hirelyApp.core')
             $scope.job = jobObj;
             $scope.wageFormatted = 1; // jobObj.position.compensation.wage.maxAmount ? getMaxWageDisplay(jobObj.position.compensation.wage) : getnoMaxWageDisplay(jobObj.position.compensation.wage);
             $scope.hoursFormatted = 1; // jobObj.position.workHours.max ? jobObj.position.workHours.min + '-' + jobObj.position.workHours.max : jobObj.position.workHours.min + '+'
-            var largePhoto = _.matcher({size: "l"});
-            var photos =  _.filter(jobObj.businessPhotos, largePhoto);
-            angular.forEach(photos, function(photoObj, photoKey) {
-
-                $scope.photos.push(photoObj.source);
-            });
+            //var largePhoto = _.matcher({size: "l"});
+            //var photos =  _.filter(jobObj.businessPhotos, largePhoto);
+            //angular.forEach(photos, function(photoObj, photoKey) {
+            //
+            //    $scope.photos.push(photoObj.source);
+            //});
 
            //geocodeService.calculateDistancetoSite(siteId, placeId).then(function (distance) {
            //    $scope.distance = distance;
@@ -2291,34 +2293,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 /**
  *
  * Job Application Workflow
- *
- * Develoopers - Hirely 2015
- */
-(function () {
-  'use strict';
-
-  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
-
-
-  function StepTwoController($scope, $stateParams) {
-
-    $scope.xpItems = [];
-    $scope.addJobXp = function () {
-      console.log($scope.company);
-      $scope.xpItems.push(
-        {
-          company: $scope.company,
-          position: $scope.position,
-          description: $scope.description
-        }
-      )
-    }
-
-  }
-})();
-/**
- *
- * Job Application Workflow Main Controller
  *
  * Develoopers - Hirely 2015
  *
@@ -3447,7 +3421,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
                     fillUserData(auth.uid)
                     .then(
                         function(user){
-                            setCurrentUser(user, auth.uid);
+                            setCurrentUser(user, user._id);
                             deferred.resolve(auth);
                         },
                         function(error){
@@ -3530,7 +3504,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
                         .then(
                             function(user){
                                 if(null !== user){
-                                    setCurrentUser(user, auth.uid);
+                                    setCurrentUser(user, user._id);
                                     deferred.resolve(true);
                                 }
                                 else{
@@ -4287,6 +4261,121 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
 })();
 
+(function () {
+'use strict';
+
+angular.module('hirelyApp.core')
+  .service('HirelyApiService', ['$http', '$q', HirelyApiService]);
+
+function HirelyApiService($http, $q) {
+  /**
+   * [version api version involved in URL for api call]
+   * @type {String}
+   */
+  var version = 'v1';
+
+  /**
+   * [baseURL hold the base url used in calling the api]
+   * @type {String}
+   */
+  var baseURL = 'http://localhost:7200/api';
+
+  /**
+   * [endPoint private string variable to set endpoint in url for next request]
+   * @type {String}
+   */
+  var endpoint = '';
+
+  var service = {
+    version:version,
+
+    users:setUsersEndpoint
+  }
+
+  /**
+   * [users child object to hold user endpoint functions and allow function call chain]
+   * @type {Object}
+   */
+  var users = {
+    createNew:createNewUser,
+    get:getUsers
+  }
+
+  /**
+   * [setUsersEndpoint this will set the endpint for users api and return child users object for function call chain]
+   * @param {[type]} userId [if userId is sent to this function the endpoint will end with user id like /users/userId]
+   */
+  function setUsersEndpoint(userId, params){
+    endpoint = '/' + version + '/users';
+
+    if(angular.isDefined(userId) && userId !== '') endpoint += '/' + userId;
+
+    if(angular.isDefined(userId)){
+      if("string" === typeof params && '' !== params){
+        endpoint += '/' + params;
+      }
+      else if(angular.isArray(params)){
+        endpoint += "?" + params.join('&');
+      }
+    }
+
+    return users;
+  }
+
+
+
+  /**
+   * [createNewUser will create new user object in api and return the created object with its object id]
+   * @param  {object} user [user object with user Model data]
+   * @return {[promis]}      [description]
+   */
+  function createNewUser(userData){
+    var deferred = $q.defer();
+
+    $http.post(baseURL + endpoint, userData).then(
+      function(payload){
+        var res = payload.data;
+        if(res.statusCode = 200){
+          deferred.resolve(res.results);
+        }
+        else{
+          deferred.reject(res.message);
+        }
+      },
+      function(error){
+        deferred.reject(error);
+      }
+    )
+
+    return deferred.promise;
+  }/// fun. createNewUser
+
+  function getUsers(){
+    var deferred = $q.defer();
+
+    $http.get(baseURL + endpoint).then(
+      function(payload){
+        var res = payload.data;
+        if(res.statusCode = 200){
+          deferred.resolve(res.results);
+        }
+        else{
+          deferred.reject(res.message);
+        }
+      },
+      function(error){
+        deferred.reject(error);
+      }
+    )
+
+    return deferred.promise;
+  }//// fun. getUsers
+
+  return service;
+}//// fun. HirelyApiService
+
+})();
+
 /**
  * Created by mike.baker on 9/25/2015.
  */
@@ -4348,7 +4437,7 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     { 
       var deferred = $q.defer();
       var user = {};
-      var url = new Firebase(FIREBASE_URL + "/job/" + id);
+      var url = new Firebase(FIREBASE_URL + "/business/" + id);
       url.on("value", function(snapshot) {
         user = snapshot.val();
         deferred.resolve(user);
@@ -4453,9 +4542,9 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
   'use strict';
 
   angular.module('hirelyApp.core')
-    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseAuth', UserService]);
+    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseAuth', 'HirelyApiService', UserService]);
 
-  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, $firebaseAuth, UserService) {
+  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, $firebaseAuth, HirelyApiService) {
     var self = this;
     var baseRef = new Firebase(FIREBASE_URL);
     var ref = new Firebase(FIREBASE_URL + "/users");
@@ -4498,44 +4587,22 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
 
       var deferred = $q.defer();
 
+      var user = new User(userData.firstName, userData.lastName, userData.email, userData.mobile,
+        userData.userType, userData.provider,
+        userData.country, userData.state, userData.city, userData.street1, userData.street2, userData.street3, userData.postalCode, userData.formattedAddress, userData.lng, userData.lat,
+        userData.createdOn, userData.lastModifiedOn);
 
-      var timestamp = Firebase.ServerValue.TIMESTAMP;
+      self.createNewUser(user, userID)
+      .then(
+        function(user){
+          deferred.resolve(user)
+        },
+        function(error){
+          deferred.reject(error)
+        }
+      );
 
-      var firstName = userData.firstName;
-      var lastName = userData.lastName;
-      var email = userData.email;
-      var userType = userData.userType;
-      var profileImageUrl = userData.profileImageUrl ? userData.profileImageUrl : '';
-      var provider = 'password';
-      var createdOn = timestamp;
-      var lastModifiedOn = timestamp;
-      var personalStatement = userData.personalStatement ? userData.personalStatement : '';
-      var address = userData.address ? userData.address : 0;
-
-      var user = new User(firstName, lastName, email, userType,
-        profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address);
-
-        self.createNewUser(user, userID);
-
-      // self.createUserinFirebase(user, providerId);
-      // var user = {
-      //   'firstName': userData.firstName,
-      //   'lastName': userData.lastName,
-      //   'email': userData.email,
-      //   'userType': userData.userType,
-      //   'provider': 'password',
-      //   'createdOn': timestamp,
-      //   'lastModifiedOn': timestamp
-      // };
-
-      // self.saveUserData(user, userID);
-      // console.log(user);
-
-
-      deferred.resolve(user);
       return deferred.promise;
-
     };
 
     this.registerNewUser = function registerNewUser(email, password) {
@@ -4561,107 +4628,16 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      * @param  {[string]} authId   [user id retreved from DB]
      * @return {[true]}          [true if user is successfully created / String as error desctiption in case of error]
      */
-    this.createNewUser = function(userData, authId, isUpdate) {
+    this.createNewUser = function(userData, authId) {
 
       var id = authId;
 
-      var pAddress = userData.address || {};
-      var pEducation = userData.education || {};
-      var pExperience = userData.experience || {};
 
-      var user = new User(
-        userData.firstName,
-        userData.lastName,
-        userData.email,
-        userData.userType,
-        userData.profileImageUrl,
-        userData.personalStatement,
-        userData.provider,
-        userData.createdOn,
-        isUpdate ? Firebase.ServerValue.TIMESTAMP : userData.lastModifiedOn,
-        userData.address,
-        userData.experience,
-        userData.education,
-        userData.mobile
-      );
-
-      ////define the variable to avoid any udefined error
-      var experience, address, education;
-
-      /*****
-       *
-       * Uncomment When needed.
-       *
-       * ***/
-
-       if(!angular.isUndefined(userData.address)){
-          address = new Address (
-            pAddress.formattedAddress,
-            pAddress.zipCode,
-            pAddress.unit,
-            pAddress.number,
-            pAddress.street,
-            pAddress.city,
-            pAddress.state,
-            pAddress.country,
-            pAddress.lng,
-            pAddress.lat
-          );
-       }
-
-      /*
-
-       education = new Education (
-       pEducation.programType,
-       pEducation.institutionName,
-       pEducation.degree,
-       pEducation.city,
-       pEducation.state,
-       pEducation.startMonth,
-       pEducation.startYear,
-       pEducation.endMonth,
-       pEducation.endYear,
-       pEducation.current
-       );
-
-       experience = new Experience (
-       pExperience.position,
-       pExperience.employer,
-       pExperience.empolyerPlaceId,
-       pExperience.city,
-       pExperience.state,
-       pExperience.startMonth,
-       pExperience.startYear,
-       pExperience.endMonth,
-       pExperience.endYear,
-       pExperience.current,
-       pExperience.accomplishments
-       );
-
+      /**
+       * Set add firebase to user object as external ID to do the mapping
+       * @type {[type]}
        */
-
-
-      ref.child(id).update(user, function (error) {
-        if (error)
-          //// not successful return error string
-          return error;
-        else {
-
-          if(!angular.isUndefined(experience)){
-            ref.child(id).child('experience').set(experience);
-          }
-          if(!angular.isUndefined(education)){
-            ref.child(id).child('education').set(education);
-          }
-          if(!angular.isUndefined(address)){
-            ref.child(id).child('address').set(address);
-          }
-
-          //// operation is successful
-          return true;
-        }
-
-      });
+      return HirelyApiService.users().createNew( angular.extend({externalId:authId}, userData) );
 
     };
 
@@ -4669,22 +4645,34 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
     this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
+      /**
+       * find out if exteral id
+       * firebase user ids contains -
+       */
 
-      var url = new Firebase(FIREBASE_URL + "/users/" + id);
-      url.on("value", function (snapshot) {
-        user = snapshot.val();
-        if(null !== user){
-          deferred.resolve(user);
-        }
-        else{
-          deferred.reject('User data cannot be retreived');
-        }
-      }, function (err) {
+      if(id.indexOf('-') > -1){
+        //// firebase id is used set get user from external api
+        return HirelyApiService.users(id, 'external').get();
+      }
+      else{
+        return HirelyApiService.users(id).get();
+      }
 
-        deferred.reject(err);
-      });
+      // var url = new Firebase(FIREBASE_URL + "/users/" + id);
+      // url.on("value", function (snapshot) {
+      //   user = snapshot.val();
+      //   if(null !== user){
+      //     deferred.resolve(user);
+      //   }
+      //   else{
+      //     deferred.reject('User data cannot be retreived');
+      //   }
+      // }, function (err) {
 
-      return deferred.promise;
+      //   deferred.reject(err);
+      // });
+
+      // return deferred.promise;
     };
 
 
@@ -5040,23 +5028,37 @@ Model = function(methods) {
 
 User = Model({
 
-  initialize: function (firstName, lastName, email, userType,
-                        profileImageUrl, personalStatement,
-                        provider, createdOn, lastModifiedOn , address , experience , education, mobile) {
+  initialize: function (firstName, lastName, email, mobile,
+                        userType, provider,
+                        country, state, city, street1, street2, street3, postalCode, formattedAddress, lng, lat,
+                        spokenLanguages,
+                        createdOn, lastModifiedOn
+                        )
+  {
 
     this.firstName = firstName;
     this.lastName = lastName;
+    if(mobile) this.mobile = mobile;
     this.email = email;
     this.userType = userType;
-    if(profileImageUrl) this.profileImageUrl = profileImageUrl;
-    if(personalStatement) this.personalStatement = personalStatement;
-    if(provider) this.provider = provider;
-    this.createdOn = createdOn;
-    this.lastModifiedOn = lastModifiedOn;
-    if(address) this.address = address;
-    if(experience) this.experience = experience;
-    if(education) this.education = education;
-    if(mobile) this.mobile = mobile;
+    this.provider = provider;
+
+    if(country) this.country = country;
+    if(state) this.state = state;
+    if(city) this.city = city;
+    if(street1) this.street1 = street1;
+    if(street2) this.street2 = street2;
+    if(street3) this.street3 = street3;
+    if(postalCode) this.postalCode = postalCode;
+    if(formattedAddress) this.formattedAddress = formattedAddress
+    if(lng && lat) {
+        this.lng = lng;
+        this.lat = lat;
+    }
+    if(spokenLanguages) this.spokenLanguages = spokenLanguages
+
+    if(createdOn) this.createdOn = createdOn;
+    if(lastModifiedOn) this.lastModifiedOn = lastModifiedOn;
   },
 
   toString: function(){

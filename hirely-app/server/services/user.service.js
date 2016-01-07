@@ -28,7 +28,7 @@ var userService = {
     /**
      * [getBasicInfoById function will get the basic user fields execluding the extend fields]
      * @param  {[type]} userId [user id should match user object id in DB]
-     * @return {[type]}        [promise]
+     * @return {[type]}       [promise]
      */
     getBasicInfoById : function(userId){
         return userModel.findById(userId, '-' + extendedFields.join(' -')).exec();
@@ -50,7 +50,7 @@ var userService = {
      */
     createNewUser : function(userObj){
         var newUser = new userModel(userObj);
-
+        console.log(userObj);
         /**
          * make sure basic info of user returned by the promise.
          */

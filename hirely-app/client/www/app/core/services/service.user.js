@@ -2,9 +2,9 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseAuth', UserService]);
+    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseAuth', 'HirelyApiService', UserService]);
 
-  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, $firebaseAuth, UserService) {
+  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, $firebaseAuth, HirelyApiService) {
     var self = this;
     var baseRef = new Firebase(FIREBASE_URL);
     var ref = new Firebase(FIREBASE_URL + "/users");
@@ -47,44 +47,22 @@
 
       var deferred = $q.defer();
 
+      var user = new User(userData.firstName, userData.lastName, userData.email, userData.mobile,
+        userData.userType, userData.provider,
+        userData.country, userData.state, userData.city, userData.street1, userData.street2, userData.street3, userData.postalCode, userData.formattedAddress, userData.lng, userData.lat,
+        userData.createdOn, userData.lastModifiedOn);
 
-      var timestamp = Firebase.ServerValue.TIMESTAMP;
+      self.createNewUser(user, userID)
+      .then(
+        function(user){
+          deferred.resolve(user)
+        },
+        function(error){
+          deferred.reject(error)
+        }
+      );
 
-      var firstName = userData.firstName;
-      var lastName = userData.lastName;
-      var email = userData.email;
-      var userType = userData.userType;
-      var profileImageUrl = userData.profileImageUrl ? userData.profileImageUrl : '';
-      var provider = 'password';
-      var createdOn = timestamp;
-      var lastModifiedOn = timestamp;
-      var personalStatement = userData.personalStatement ? userData.personalStatement : '';
-      var address = userData.address ? userData.address : 0;
-
-      var user = new User(firstName, lastName, email, userType,
-        profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address);
-
-        self.createNewUser(user, userID);
-
-      // self.createUserinFirebase(user, providerId);
-      // var user = {
-      //   'firstName': userData.firstName,
-      //   'lastName': userData.lastName,
-      //   'email': userData.email,
-      //   'userType': userData.userType,
-      //   'provider': 'password',
-      //   'createdOn': timestamp,
-      //   'lastModifiedOn': timestamp
-      // };
-
-      // self.saveUserData(user, userID);
-      // console.log(user);
-
-
-      deferred.resolve(user);
       return deferred.promise;
-
     };
 
     this.registerNewUser = function registerNewUser(email, password) {
@@ -110,107 +88,16 @@
      * @param  {[string]} authId   [user id retreved from DB]
      * @return {[true]}          [true if user is successfully created / String as error desctiption in case of error]
      */
-    this.createNewUser = function(userData, authId, isUpdate) {
+    this.createNewUser = function(userData, authId) {
 
       var id = authId;
 
-      var pAddress = userData.address || {};
-      var pEducation = userData.education || {};
-      var pExperience = userData.experience || {};
 
-      var user = new User(
-        userData.firstName,
-        userData.lastName,
-        userData.email,
-        userData.userType,
-        userData.profileImageUrl,
-        userData.personalStatement,
-        userData.provider,
-        userData.createdOn,
-        isUpdate ? Firebase.ServerValue.TIMESTAMP : userData.lastModifiedOn,
-        userData.address,
-        userData.experience,
-        userData.education,
-        userData.mobile
-      );
-
-      ////define the variable to avoid any udefined error
-      var experience, address, education;
-
-      /*****
-       *
-       * Uncomment When needed.
-       *
-       * ***/
-
-       if(!angular.isUndefined(userData.address)){
-          address = new Address (
-            pAddress.formattedAddress,
-            pAddress.zipCode,
-            pAddress.unit,
-            pAddress.number,
-            pAddress.street,
-            pAddress.city,
-            pAddress.state,
-            pAddress.country,
-            pAddress.lng,
-            pAddress.lat
-          );
-       }
-
-      /*
-
-       education = new Education (
-       pEducation.programType,
-       pEducation.institutionName,
-       pEducation.degree,
-       pEducation.city,
-       pEducation.state,
-       pEducation.startMonth,
-       pEducation.startYear,
-       pEducation.endMonth,
-       pEducation.endYear,
-       pEducation.current
-       );
-
-       experience = new Experience (
-       pExperience.position,
-       pExperience.employer,
-       pExperience.empolyerPlaceId,
-       pExperience.city,
-       pExperience.state,
-       pExperience.startMonth,
-       pExperience.startYear,
-       pExperience.endMonth,
-       pExperience.endYear,
-       pExperience.current,
-       pExperience.accomplishments
-       );
-
+      /**
+       * Set add firebase to user object as external ID to do the mapping
+       * @type {[type]}
        */
-
-
-      ref.child(id).update(user, function (error) {
-        if (error)
-          //// not successful return error string
-          return error;
-        else {
-
-          if(!angular.isUndefined(experience)){
-            ref.child(id).child('experience').set(experience);
-          }
-          if(!angular.isUndefined(education)){
-            ref.child(id).child('education').set(education);
-          }
-          if(!angular.isUndefined(address)){
-            ref.child(id).child('address').set(address);
-          }
-
-          //// operation is successful
-          return true;
-        }
-
-      });
+      return HirelyApiService.users().createNew( angular.extend({externalId:authId}, userData) );
 
     };
 
@@ -218,22 +105,34 @@
     this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
+      /**
+       * find out if exteral id
+       * firebase user ids contains -
+       */
 
-      var url = new Firebase(FIREBASE_URL + "/users/" + id);
-      url.on("value", function (snapshot) {
-        user = snapshot.val();
-        if(null !== user){
-          deferred.resolve(user);
-        }
-        else{
-          deferred.reject('User data cannot be retreived');
-        }
-      }, function (err) {
+      if(id.indexOf('-') > -1){
+        //// firebase id is used set get user from external api
+        return HirelyApiService.users(id, 'external').get();
+      }
+      else{
+        return HirelyApiService.users(id).get();
+      }
 
-        deferred.reject(err);
-      });
+      // var url = new Firebase(FIREBASE_URL + "/users/" + id);
+      // url.on("value", function (snapshot) {
+      //   user = snapshot.val();
+      //   if(null !== user){
+      //     deferred.resolve(user);
+      //   }
+      //   else{
+      //     deferred.reject('User data cannot be retreived');
+      //   }
+      // }, function (err) {
 
-      return deferred.promise;
+      //   deferred.reject(err);
+      // });
+
+      // return deferred.promise;
     };
 
 

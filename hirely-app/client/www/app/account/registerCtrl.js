@@ -29,6 +29,8 @@
         }
 
         vm.registerNewUser = function() {
+            $scope.user.provider = 'password';
+            // $scope.user.email = Math.round(Math.random()*1000).toString() + $scope.user.email;
             registerPasswordUser($scope.user)
         }
 
