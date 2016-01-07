@@ -125,6 +125,7 @@ What's going on?
 
 Users and Authentication
 -------------
+
 Logged in user presented in "AuthService.currentUser" and "AuthService.currentUserID" object when undefined user considered loged out.
 Attention needed when updating current user profile in DB AuthService need to be notifed with updateCurrentUser method to make sure logged in user in fron-end is not out of sync.
 The above objects used to notify controllars and modify the views accordingly only
@@ -156,6 +157,19 @@ Events:
 Note:
 AuthService is doing the job so far but it's not coded as it should be
 
+
+----------
+
+User API
+-------------
+User fields in database identified as basic and extended the default api call will get the basic fields, extended field can retrived by add ?extnded query parameter to URL
+
+End points
+Get /api/v1/users/:id will return the user basic info
+Get /api/v1/users/:id/external will return the user basic info by sending external ID e.g. user ID in firebase
+Get /api/v1/users/:id?extended will return the user extended info only execluding the basic ifn
+
+Post /api/v1/users/ add new users and will return user object with Basic info only
 
 
 
