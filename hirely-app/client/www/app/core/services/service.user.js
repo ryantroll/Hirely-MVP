@@ -72,11 +72,11 @@
         email: email,
         password: password
       })
-        .then(function (user) {
-          deferred.resolve(user);
-        }, function (err) {
-          deferred.reject(err);
-        });
+      .then(function (user) {
+        deferred.resolve(user);
+      }, function (err) {
+        deferred.reject(err);
+      });
 
 
       return deferred.promise;
@@ -97,7 +97,7 @@
        * Set add firebase to user object as external ID to do the mapping
        * @type {[type]}
        */
-      return HirelyApiService.users().createNew( angular.extend({externalId:authId}, userData) );
+      return HirelyApiService.users().post( angular.extend({externalId:authId}, userData) );
 
     };
 
@@ -105,35 +105,42 @@
     this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
+
       /**
        * find out if exteral id
        * firebase user ids contains -
+       * e.g. firebase 93306b91-d5ba-4e06-838c-0ab85fd58783
+       * e.g. mongoDB 568fde202127fa312543f50f
        */
-
-      if(id.indexOf('-') > -1){
+      if(id.indexOf('-') > -1 && id.length > 30){
         //// firebase id is used set get user from external api
         return HirelyApiService.users(id, 'external').get();
       }
       else{
         return HirelyApiService.users(id).get();
       }
-
-      // var url = new Firebase(FIREBASE_URL + "/users/" + id);
-      // url.on("value", function (snapshot) {
-      //   user = snapshot.val();
-      //   if(null !== user){
-      //     deferred.resolve(user);
-      //   }
-      //   else{
-      //     deferred.reject('User data cannot be retreived');
-      //   }
-      // }, function (err) {
-
-      //   deferred.reject(err);
-      // });
-
-      // return deferred.promise;
     };
+
+    this.removeUser = function(email, password){
+      var deferred = $q.defer();
+      auth.$removeUser({
+        password: password,
+        email: email
+
+      })
+      .then(
+        function (user) {
+          deferred.resolve(true);
+        },
+        function (err) {
+          console.log('error removing');
+          console.log(err);
+          deferred.reject(err);
+        }
+      );
+
+      return deferred.promise;
+    }//// fun. removeUser
 
 
 

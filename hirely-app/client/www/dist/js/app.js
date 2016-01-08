@@ -352,19 +352,52 @@ var myApp = angular.module('hirelyApp',
             //register new user
             userService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(user) {
+                    /**
+                     * User authentication is created successfully
+                     * Create user object in database
+                     */
                     userService.createRegisteredNewUser(registeredUser, user.uid)
                         .then(function(newUserData){
+                            /**
+                             * user object created successfully in DB
+                             * Login registered user
+                             */
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
                                     // authService.setCurrentUser(newUserData, user.uid);
                                     $uibModalInstance.close();
                                 }, function(err) {
+                                    /**
+                                     * Error in login for new registered user
+                                     */
                                     alert(err)
                                 });
                         }, function(err) {
-                            alert(err)
+                            /**
+                             * user object couldn't be save in DB
+                             * Remove the user from authentication DB
+                             */
+                            userService.removeUser(registeredUser.email, registeredUser.password)
+                            .then(
+                                function(result){
+                                    if(true === result){
+
+                                    }
+                                    $uibModalInstance.close();
+                                },
+                                function(error){
+                                    // console.log('remove error');
+                                    // console.log(error);
+                                    $uibModalInstance.close();
+                                }
+                            );
+                            alert('System Error!\n\n' + err);
+
                         });
                 }, function(err) {
+                    /**
+                     * User authentication couldn't be created
+                     */
                     alert(err)
                 })
 
@@ -4286,9 +4319,12 @@ function HirelyApiService($http, $q) {
    */
   var endpoint = '';
 
+  /**
+   * [service this object will returned by servie factory in last code line of this file]
+   * @type {Object}
+   */
   var service = {
     version:version,
-
     users:setUsersEndpoint
   }
 
@@ -4297,30 +4333,98 @@ function HirelyApiService($http, $q) {
    * @type {Object}
    */
   var users = {
-    createNew:createNewUser,
+    post:createNewUser,
     get:getUsers
   }
 
   /**
    * [setUsersEndpoint this will set the endpint for users api and return child users object for function call chain]
-   * @param {[type]} userId [if userId is sent to this function the endpoint will end with user id like /users/userId]
+   * this function accept 2 argumets
+   * First Argument:
+   *   if string considered id
+   *   if array it considered as query sting arguments only if the item is of string type
+   *   if object is considered as query string argumets in format of KEY:VALUE only if VALUE is string
+   * Second Argument:
+   *   if string will be added to end of API url like /id/external
+   *   if array it considered as query sting arguments only if the item is of string type
+   *   if object is considered as query string argumets in format of KEY:VALUE only if VALUE is string
    */
-  function setUsersEndpoint(userId, params){
-    endpoint = '/' + version + '/users';
-
-    if(angular.isDefined(userId) && userId !== '') endpoint += '/' + userId;
-
-    if(angular.isDefined(userId)){
-      if("string" === typeof params && '' !== params){
-        endpoint += '/' + params;
-      }
-      else if(angular.isArray(params)){
-        endpoint += "?" + params.join('&');
-      }
-    }
+  function setUsersEndpoint(){
+    setEndpoint('users', arguments);
 
     return users;
-  }
+  }/// fun. setUserEndpoint
+
+  /**
+   * [setEndpoint will build the required url of desired API endpoint
+   * this functione will be called from endpoint setter functions]
+   * @param {string} point [string that identify the endpint in API e.g. users, business, ... ]
+   * @param {array} args  [arguments array the sent from endpoint setter functions]
+   */
+  function setEndpoint(point, args){
+    endpoint = '/' + version + '/' + point;
+
+    var numArgs = args.length;
+    /**
+     * [processArray take an array of strings and return it as query string format
+     * the item is included only if a string type ]
+     * @param  {array} arr [array of string]
+     * @return {string}     [s]
+     */
+    function processArray(arr){
+      var query = '';
+      for(var x=0; x<= arr.length; ++x){
+        if('string' === typeof arr[x] && arr[x].length > 0){
+          query += encodeURIComponent(arr[x]) + '&';
+        }/// if
+      }/// for
+      if(query != ''){
+        query = query.slice(0, -1);
+      }
+      return query;
+    }//// fun. processArray
+
+    function processObject(obj){
+      var query = '';
+      for(var key in obj){
+        if('string'  === typeof obj[key])
+          query += encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]) + '&';
+      }/// for
+      if('' !== query){
+        query = query.slice(0, -1);
+      }
+      return query;
+    }//// fun. processObject
+
+    if(1  <= numArgs){
+      if('string' === typeof args[0] && '' !== args[0]){
+        //// user id in first argument
+        endpoint += '/' + encodeURIComponent(args[0]);
+      }
+      else if(angular.isArray(args[0])){
+        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processArray(args[0]);
+      }
+      else if(angular.isObject(args[0])){
+        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processObject(args[0]);
+      }
+    }//// if one argument
+
+    if(2 <= numArgs){
+      /**
+       * if second argument is string add to end of URL only if first string is not array or object
+       * e.g. /api/v1/some-id/external
+       */
+      if("string" === typeof args[1] && '' !== args[1] && 'string' === typeof args[0] && '' !== args[0]){
+        endpoint += '/' + encodeURIComponent(args[1]);
+      }
+      else if(angular.isArray(args[1])){
+        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processArray(args[1]);
+      }
+      else if(angular.isObject(args[1])){
+        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processObject(args[1]);
+      }
+    }//// if 2 == argsNum
+  }//// fun. setEndpoint
 
 
 
@@ -4339,12 +4443,21 @@ function HirelyApiService($http, $q) {
           deferred.resolve(res.results);
         }
         else{
+          deferred.reject(error.message);
+        }
+      }, //// fun. resolve
+      function(error){
+        var res = error.data;
+        /**
+         * Check if dublicated email is the issue and set a readable message
+         */
+        if(res.statusCode === 11000){
+          deferred.reject('Email is already registered');
+        }
+        else{
           deferred.reject(res.message);
         }
-      },
-      function(error){
-        deferred.reject(error);
-      }
+      }//// fun. reject
     )
 
     return deferred.promise;
@@ -4612,11 +4725,11 @@ function HirelyApiService($http, $q) {
         email: email,
         password: password
       })
-        .then(function (user) {
-          deferred.resolve(user);
-        }, function (err) {
-          deferred.reject(err);
-        });
+      .then(function (user) {
+        deferred.resolve(user);
+      }, function (err) {
+        deferred.reject(err);
+      });
 
 
       return deferred.promise;
@@ -4637,7 +4750,7 @@ function HirelyApiService($http, $q) {
        * Set add firebase to user object as external ID to do the mapping
        * @type {[type]}
        */
-      return HirelyApiService.users().createNew( angular.extend({externalId:authId}, userData) );
+      return HirelyApiService.users().post( angular.extend({externalId:authId}, userData) );
 
     };
 
@@ -4645,35 +4758,42 @@ function HirelyApiService($http, $q) {
     this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
+
       /**
        * find out if exteral id
        * firebase user ids contains -
+       * e.g. firebase 93306b91-d5ba-4e06-838c-0ab85fd58783
+       * e.g. mongoDB 568fde202127fa312543f50f
        */
-
-      if(id.indexOf('-') > -1){
+      if(id.indexOf('-') > -1 && id.length > 30){
         //// firebase id is used set get user from external api
         return HirelyApiService.users(id, 'external').get();
       }
       else{
         return HirelyApiService.users(id).get();
       }
-
-      // var url = new Firebase(FIREBASE_URL + "/users/" + id);
-      // url.on("value", function (snapshot) {
-      //   user = snapshot.val();
-      //   if(null !== user){
-      //     deferred.resolve(user);
-      //   }
-      //   else{
-      //     deferred.reject('User data cannot be retreived');
-      //   }
-      // }, function (err) {
-
-      //   deferred.reject(err);
-      // });
-
-      // return deferred.promise;
     };
+
+    this.removeUser = function(email, password){
+      var deferred = $q.defer();
+      auth.$removeUser({
+        password: password,
+        email: email
+
+      })
+      .then(
+        function (user) {
+          deferred.resolve(true);
+        },
+        function (err) {
+          console.log('error removing');
+          console.log(err);
+          deferred.reject(err);
+        }
+      );
+
+      return deferred.promise;
+    }//// fun. removeUser
 
 
 
