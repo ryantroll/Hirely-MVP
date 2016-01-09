@@ -1,3 +1,4 @@
+var Utilities = require('./utilities-for-models');
 var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var Schema = mongoose.Schema;
@@ -18,7 +19,11 @@ var userSchema = new Schema({
                               return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v);
                             },
                             message:'{VALUE} is not valid email'
-                          }
+                          },
+                          /**
+                           * make sure emails are all saved in lower case to easy compare
+                           */
+                          set: Utilities.toLower
                         },
   mobile        :       {type:String},
 

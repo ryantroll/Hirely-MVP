@@ -11,4 +11,6 @@ config.traitify = {
 
 config.mongoUri = 'mongodb://localhost:27017/hirely';
 
+config.urlSeparator = '-';
+
 module.exports = config;

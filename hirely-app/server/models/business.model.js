@@ -1,3 +1,5 @@
+var Utilities = require('./utilities-for-models');
+var slug = require('./slug.plugin');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -24,6 +26,7 @@ var applicationSchema = new Schema({
 
 var variantSchema = new Schema(
   {
+
     workType          :     {
                               type:String,
                               required:true,
@@ -88,12 +91,20 @@ var variantSchema = new Schema(
 
   }//// varients[] object
 );//// variantSchema
+/**
+ * Add slug to postion schema
+ */
+// variantSchema.plugin(slug('workType'));
 
 var positionSchema = new Schema({
         title         :    {type: String, required:true},
         onetClass     :    {type: String, required:true},
         variants      :    [ variantSchema ]//// vairants araay
 });//// positionSchema
+/**
+ * Add slug to postion schema
+ */
+// positionSchema.plugin(slug('title'));
 
 var locationSchema = new Schema({
       name              :   {type:String, required:true},
@@ -118,6 +129,7 @@ var locationSchema = new Schema({
       street1           :   {type:String, required:true},
       street2           :   String,
       street3           :   String,
+      neighbourhood     :   String,
       postalCode        :   {type:String, required:true},
       formattedAddress  :   {type:String, required:true},
       lat               :   Number,
@@ -129,12 +141,17 @@ var locationSchema = new Schema({
       positions: [positionSchema] /// position array
     }///location object
 );/// locationSchema
+/**
+ * Add slug to location schema
+ */
+// locationSchema.plugin(slug('state city name'));
 
 var businessSchema = new Schema({
   /**
    * Business info
    */
   name            :       {type:String, required:true},
+  slug            :       {type:String, required:false, unique:true, index:true},
   description     :       String,
   email           :       {
                             type:String,
@@ -146,7 +163,8 @@ var businessSchema = new Schema({
                                 return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v);
                               },
                               message:'{VALUE} is not valid email'
-                            }
+                            },
+                            set: Utilities.toLower
                           },
   website         :       {
                             type:String,
@@ -165,6 +183,10 @@ var businessSchema = new Schema({
   locations: [locationSchema]///locations array
 
 });
+/**
+ * Add slug to bsiness through slug plugin
+ */
+businessSchema.plugin( Utilities.slug, {slug:'slug', fields:'name', unique:true} );
 
 
 var BusinessModel = mongoose.model('Businesses', businessSchema, "businesses");
