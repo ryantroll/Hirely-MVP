@@ -1,5 +1,4 @@
 var Utilities = require('./utilities-for-models');
-var slug = require('./slug.plugin');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

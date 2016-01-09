@@ -7,9 +7,11 @@ function toLower(v){
 
 function generateSlug(list, sep){
     var slug = '';
-    var unsafe = "\",´,’,·,‚,*,@,?,=,;,:,.,/,+,&,$,<,>,#,%,{,(,),},|,\,^,~,[,],—,–,-',,";
+
     for(var i=0; i<list.length; i++){
-        list[i] = list[i].replace(/[´"\.\·\‚\*@<>&%\:\+\$\^\[\]\-=\n]/g, '').split(' ').join(sep);
+        list[i] = list[i].replace(/[']/g, '') /// remove what sould be removed
+            .replace(/[´"\.\·\‚\*@<>&%\:\+\$\^\[\]\-=\{\}\~\n]/g, sep) //// replace what should be replaced
+            .split(' ').join(sep);
     }
     slug = list.join(sep);
     return slug.toLowerCase();
@@ -42,7 +44,14 @@ function addSlug(schema, opt){
          */
         var slug = generateSlug(slugies, config.urlSeparator);
 
-        console.log(slug);
+        /**
+         * if unique slug is required query the database
+         */
+        if(true === opt.unique){
+            slug += config.urlSeparator + Math.round(1000 * Math.random()).toString();
+        }//// if unique
+
+        this[opt.slug] = slug;
 
         next();
     })

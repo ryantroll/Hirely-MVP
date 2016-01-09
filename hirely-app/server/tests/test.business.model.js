@@ -10,7 +10,7 @@ db.on('error', console.error.bind(console, 'connection error:') );
 
 db.once('open', function(){
     var b = new BusinessModel({
-        name: 'Good Starbucks&iyad>good%s',
+        name: 'Good Starbuck\'s',
         email: Math.round(Math.random()*1000).toString() + 'IYAD.bitar@gmail.com',
         website:'http://compasscoffee.com',
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
