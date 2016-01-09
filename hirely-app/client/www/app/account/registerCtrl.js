@@ -29,6 +29,8 @@
         }
 
         vm.registerNewUser = function() {
+            $scope.user.provider = 'password';
+            // $scope.user.email = Math.round(Math.random()*1000).toString() + $scope.user.email;
             registerPasswordUser($scope.user)
         }
 
@@ -65,19 +67,52 @@
             //register new user
             userService.registerNewUser(registeredUser.email, registeredUser.password)
                 .then(function(user) {
+                    /**
+                     * User authentication is created successfully
+                     * Create user object in database
+                     */
                     userService.createRegisteredNewUser(registeredUser, user.uid)
                         .then(function(newUserData){
+                            /**
+                             * user object created successfully in DB
+                             * Login registered user
+                             */
                             authService.passwordLogin(registeredUser.email, registeredUser.password)
                                 .then(function(auth){
                                     // authService.setCurrentUser(newUserData, user.uid);
                                     $uibModalInstance.close();
                                 }, function(err) {
+                                    /**
+                                     * Error in login for new registered user
+                                     */
                                     alert(err)
                                 });
                         }, function(err) {
-                            alert(err)
+                            /**
+                             * user object couldn't be save in DB
+                             * Remove the user from authentication DB
+                             */
+                            userService.removeUser(registeredUser.email, registeredUser.password)
+                            .then(
+                                function(result){
+                                    if(true === result){
+
+                                    }
+                                    $uibModalInstance.close();
+                                },
+                                function(error){
+                                    // console.log('remove error');
+                                    // console.log(error);
+                                    $uibModalInstance.close();
+                                }
+                            );
+                            alert('System Error!\n\n' + err);
+
                         });
                 }, function(err) {
+                    /**
+                     * User authentication couldn't be created
+                     */
                     alert(err)
                 })
 

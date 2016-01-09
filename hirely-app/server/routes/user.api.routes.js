@@ -55,27 +55,14 @@ var userRoutes = {
 
     createNewUser : function(req, res){
 
-        var user = {
-            externalId: 'slklsdk-sdkflskd-skdfsldk-lkdlskjdf',
-
-            firstName:'Iyad',
-            lastName: 'Bitar',
-            email: '2iyad.bitar@mail.com',
-            mobile: '90909009',
-
-            provider: 'facebook',
-            userType: 'JS'
-
-        };
+        var user = req.body;
 
         userService.createNewUser(user)
         .then(
             function(user){
-                console.log(user);
                 res.status(200).json(apiUtil.generateResponse(200, "User created successfully", user));
             },
             function(error){
-                console.log(error);
                 res.status(500).json(apiUtil.generateResponse(error.code, error.message, null));
             }
         )

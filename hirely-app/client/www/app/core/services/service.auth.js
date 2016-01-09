@@ -65,7 +65,7 @@
                     fillUserData(auth.uid)
                     .then(
                         function(user){
-                            setCurrentUser(user, auth.uid);
+                            setCurrentUser(user, user._id);
                             deferred.resolve(auth);
                         },
                         function(error){
@@ -148,7 +148,7 @@
                         .then(
                             function(user){
                                 if(null !== user){
-                                    setCurrentUser(user, auth.uid);
+                                    setCurrentUser(user, user._id);
                                     deferred.resolve(true);
                                 }
                                 else{

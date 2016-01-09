@@ -28,7 +28,7 @@ var userService = {
     /**
      * [getBasicInfoById function will get the basic user fields execluding the extend fields]
      * @param  {[type]} userId [user id should match user object id in DB]
-     * @return {[type]}        [promise]
+     * @return {[type]}       [promise]
      */
     getBasicInfoById : function(userId){
         return userModel.findById(userId, '-' + extendedFields.join(' -')).exec();
@@ -50,7 +50,7 @@ var userService = {
      */
     createNewUser : function(userObj){
         var newUser = new userModel(userObj);
-
+        console.log(userObj);
         /**
          * make sure basic info of user returned by the promise.
          */
@@ -62,12 +62,42 @@ var userService = {
                  */
                 if(undefined !== userObj.externalId && '' !== userObj.externalId){
                     var idMap = new idMapModel({localId:user._id, externalId:userObj.externalId});
-                    return idMap.save()
+                    /**
+                     * make sure there is one map for each local user id
+                     */
+                    idMapModel.remove({localId:user._id})
                     .then(
-                        function(map){
-                            return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
-                        }
-                    );//// then
+                        function(){
+                            /**
+                             * Id Map removed successfully before insterting new one
+                             * go ahead and insert new one
+                             */
+                            return idMap.save()
+                            .then(
+                                function(map){
+                                    return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
+                                },/// fun. idMap.save reslove
+                                function(err){
+                                    /**
+                                     * Error in updateing ID map entry
+                                     */
+                                    return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
+                                    console.log('Error in saving idMap for new user');
+                                    console.log(err);
+                                } /// fun. idMap.save reject
+                            );//// then
+                        },/// fun. remove reslove
+                        function(err){
+                            /**
+                             * Error in remving idMap
+                             * still find the user object and return it
+                             */
+                            return userModel.findById(user._id, '-' + extendedFields.join(' -')).exec();
+                            console.log('error in removing idMap in prepration for new insert');
+                            console.log(err);
+                        }//// fun. remove reject
+                    );/// remove then
+
                 }
                 else{
                     return userModel.findById(user._id, '-' + extendedFields.join(' -')).exec();
@@ -85,9 +115,19 @@ var userService = {
 
         return idMapModel.findOne({externalId:extId}).exec()
         .then(
+            /**
+             * map is found for this external id
+             * find the user and return it in promise
+             */
             function(map){
                 return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
-            }
+            },//// fun. reslove
+            function(error){
+                /**
+                 * No map is found for this external id
+                 */
+                console.log(error);
+            }//// fun. reject
         )//// then
 
     }

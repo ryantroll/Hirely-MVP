@@ -9,23 +9,37 @@
 
 User = Model({
 
-  initialize: function (firstName, lastName, email, userType,
-                        profileImageUrl, personalStatement,
-                        provider, createdOn, lastModifiedOn , address , experience , education, mobile) {
+  initialize: function (firstName, lastName, email, mobile,
+                        userType, provider,
+                        country, state, city, street1, street2, street3, postalCode, formattedAddress, lng, lat,
+                        spokenLanguages,
+                        createdOn, lastModifiedOn
+                        )
+  {
 
     this.firstName = firstName;
     this.lastName = lastName;
+    if(mobile) this.mobile = mobile;
     this.email = email;
     this.userType = userType;
-    if(profileImageUrl) this.profileImageUrl = profileImageUrl;
-    if(personalStatement) this.personalStatement = personalStatement;
-    if(provider) this.provider = provider;
-    this.createdOn = createdOn;
-    this.lastModifiedOn = lastModifiedOn;
-    if(address) this.address = address;
-    if(experience) this.experience = experience;
-    if(education) this.education = education;
-    if(mobile) this.mobile = mobile;
+    this.provider = provider;
+
+    if(country) this.country = country;
+    if(state) this.state = state;
+    if(city) this.city = city;
+    if(street1) this.street1 = street1;
+    if(street2) this.street2 = street2;
+    if(street3) this.street3 = street3;
+    if(postalCode) this.postalCode = postalCode;
+    if(formattedAddress) this.formattedAddress = formattedAddress
+    if(lng && lat) {
+        this.lng = lng;
+        this.lat = lat;
+    }
+    if(spokenLanguages) this.spokenLanguages = spokenLanguages
+
+    if(createdOn) this.createdOn = createdOn;
+    if(lastModifiedOn) this.lastModifiedOn = lastModifiedOn;
   },
 
   toString: function(){
