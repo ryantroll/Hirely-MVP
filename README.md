@@ -164,7 +164,7 @@ AuthService is doing the job so far but it's not coded as it should be
 -------------
 Hirely API use 2 different type of URL components, each one of these components in URL will decide (1) what data collection or data object will be returned (2) what data will be included in returned in response and how it will be shaped
 
-1. ##URL folder structure:
+## 1. URL folder structure:
 
 The folder structure in API will decide data collection that is been quired with the request
 
@@ -178,7 +178,7 @@ parameter-2: a second parameter if need or descriptor that will tell the API wha
 
 **Example 2:** /api/v1/users/93306b91-d5ba-4e06-838c-0ab85fd58783/external this request will return user object but the last folder structuer '/external' used to descripe the ID as external
 
-2. ##URL query string:
+## 2. URL query string:
 
 The query string parameters is used by API to decide what is inside returned data and how it shaped
 
