@@ -43,6 +43,14 @@
     };
 
 
+    /**
+     * [createRegisteredNewUser will create user model data based on data sent from registration form
+     * and send the user model object to createUser function to save in DB
+     * This function usually called after registerNewUser is successfully add a user to Auth DB and returned it's ID]
+     * @param  {object} userData [data of user to be created in DB]
+     * @param  {string} userID   [the auth id of user returned by registerNewUser function]
+     * @return {promise}          [the resolve will return the new suser object created in DB]
+     */
     this.createRegisteredNewUser = function createRegisteredNewUser(userData, userID) {
 
       var deferred = $q.defer();
@@ -65,6 +73,12 @@
       return deferred.promise;
     };
 
+    /**
+     * [registerNewUser will add a new user in auth DB ]
+     * @param  {string} email    [email of user to be added]
+     * @param  {string} password [password of user to be added]
+     * @return {promise}          [a promsie, reslove function will return an object of new created user in auth DB ]
+     */
     this.registerNewUser = function registerNewUser(email, password) {
 
       var deferred = $q.defer();
@@ -102,6 +116,11 @@
     };
 
 
+    /**
+     * [getUserById will get a user object from DB by suppling user id for local DB or user id for exteranl DB like firebase id]
+     * @param  {string} id [id of user this id can b]
+     * @return {promise}    [description]
+     */
     this.getUserById = function getUserById(id) {
       var deferred = $q.defer();
       var user = {};
@@ -121,7 +140,13 @@
       }
     };
 
-    this.removeUser = function(email, password){
+    /**
+     * [removeAuthUser will remove user from auth database]
+     * @param  {string} email    [email of user to be removed]
+     * @param  {string} password [password of user to be removed]
+     * @return {promise}          [description]
+     */
+    this.removeAuthUser = function(email, password){
       var deferred = $q.defer();
       auth.$removeUser({
         password: password,

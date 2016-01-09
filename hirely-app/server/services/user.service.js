@@ -68,6 +68,10 @@ var userService = {
                     idMapModel.remove({localId:user._id})
                     .then(
                         function(){
+                            /**
+                             * Id Map removed successfully before insterting new one
+                             * go ahead and insert new one
+                             */
                             return idMap.save()
                             .then(
                                 function(map){
@@ -78,6 +82,8 @@ var userService = {
                                      * Error in updateing ID map entry
                                      */
                                     return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
+                                    console.log('Error in saving idMap for new user');
+                                    console.log(err);
                                 } /// fun. idMap.save reject
                             );//// then
                         },/// fun. remove reslove

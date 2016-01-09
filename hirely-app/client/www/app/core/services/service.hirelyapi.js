@@ -15,13 +15,15 @@ function HirelyApiService($http, $q) {
    * [baseURL hold the base url used in calling the api]
    * @type {String}
    */
-  var baseURL = 'http://localhost:7200/api';
+  var baseURL = '/api';
 
   /**
-   * [endPoint private string variable to set endpoint in url for next request]
+   * [endPoint private string variable to that hold the endpoint URL for next api request
+   * to use the api one of the endpoint setters functions must be called first e.g. .users(), .busienss(), .auth(),...
+   * the endpoitn setter fuction will reset this variable and build it again based on the requested service ]
    * @type {String}
    */
-  var endpoint = '';
+  var endpointUrl = '';
 
   /**
    * [service this object will returned by servie factory in last code line of this file]
@@ -33,7 +35,8 @@ function HirelyApiService($http, $q) {
   }
 
   /**
-   * [users child object to hold user endpoint functions and allow function call chain]
+   * [users child object to hold user endpoint functions and allow function call chain
+   * this object will be returned by .users() endpoint setter function to expose the http verbs function e.g. .users().get(), .users().post()]
    * @type {Object}
    */
   var users = {
@@ -43,13 +46,13 @@ function HirelyApiService($http, $q) {
 
   /**
    * [setUsersEndpoint this will set the endpint for users api and return child users object for function call chain]
-   * this function accept 2 argumets
+   * this function accept 2 argumets but they are NOT explicitly defined in function signature becase this function might be called with 0, 1, or 2 arguments
    * First Argument:
    *   if string considered id
    *   if array it considered as query sting arguments only if the item is of string type
    *   if object is considered as query string argumets in format of KEY:VALUE only if VALUE is string
    * Second Argument:
-   *   if string will be added to end of API url like /id/external
+   *   if string will be added to end of API url like /id/external only if first variable is string which mean first variable is id
    *   if array it considered as query sting arguments only if the item is of string type
    *   if object is considered as query string argumets in format of KEY:VALUE only if VALUE is string
    */
@@ -66,7 +69,7 @@ function HirelyApiService($http, $q) {
    * @param {array} args  [arguments array the sent from endpoint setter functions]
    */
   function setEndpoint(point, args){
-    endpoint = '/' + version + '/' + point;
+    endpointUrl = '/' + version + '/' + point;
 
     var numArgs = args.length;
     /**
@@ -103,13 +106,13 @@ function HirelyApiService($http, $q) {
     if(1  <= numArgs){
       if('string' === typeof args[0] && '' !== args[0]){
         //// user id in first argument
-        endpoint += '/' + encodeURIComponent(args[0]);
+        endpointUrl += '/' + encodeURIComponent(args[0]);
       }
       else if(angular.isArray(args[0])){
-        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processArray(args[0]);
+        endpointUrl += (endpointUrl.indexOf('?') < 0 ? "?" : "&") + processArray(args[0]);
       }
       else if(angular.isObject(args[0])){
-        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processObject(args[0]);
+        endpointUrl += (endpointUrl.indexOf('?') < 0 ? "?" : "&") + processObject(args[0]);
       }
     }//// if one argument
 
@@ -119,13 +122,13 @@ function HirelyApiService($http, $q) {
        * e.g. /api/v1/some-id/external
        */
       if("string" === typeof args[1] && '' !== args[1] && 'string' === typeof args[0] && '' !== args[0]){
-        endpoint += '/' + encodeURIComponent(args[1]);
+        endpointUrl += '/' + encodeURIComponent(args[1]);
       }
       else if(angular.isArray(args[1])){
-        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processArray(args[1]);
+        endpointUrl += (endpointUrl.indexOf('?') < 0 ? "?" : "&") + processArray(args[1]);
       }
       else if(angular.isObject(args[1])){
-        endpoint += (endpoint.indexOf('?') < 0 ? "?" : "&") + processObject(args[1]);
+        endpointUrl += (endpointUrl.indexOf('?') < 0 ? "?" : "&") + processObject(args[1]);
       }
     }//// if 2 == argsNum
   }//// fun. setEndpoint
@@ -140,7 +143,7 @@ function HirelyApiService($http, $q) {
   function createNewUser(userData){
     var deferred = $q.defer();
 
-    $http.post(baseURL + endpoint, userData).then(
+    $http.post(baseURL + endpointUrl, userData).then(
       function(payload){
         var res = payload.data;
         if(res.statusCode = 200){
@@ -170,7 +173,7 @@ function HirelyApiService($http, $q) {
   function getUsers(){
     var deferred = $q.defer();
 
-    $http.get(baseURL + endpoint).then(
+    $http.get(baseURL + endpointUrl).then(
       function(payload){
         var res = payload.data;
         if(res.statusCode = 200){
