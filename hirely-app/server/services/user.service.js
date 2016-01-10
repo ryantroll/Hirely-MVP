@@ -21,8 +21,13 @@ var userService = {
      * [getAll function will get all users.  Not to be used in production]
      * @return {[type]}        [promise]
      */
-    getAll : function(){
-        return userModel.find().exec();
+    getAll : function(reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+        return userModel.find({}, returnFields).exec();
     },
 
     /**

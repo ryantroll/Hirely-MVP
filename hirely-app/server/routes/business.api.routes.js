@@ -7,14 +7,14 @@ var businessRoutes = {
         /**
          * Get all businesss
          */
-        businessService.getAll()
+        businessService.getAll(req.query)
         .then(
-            function(businesss){
-                res.status(200).json(apiUtil.generateResponse(200, "Businesss retrieved successfully", businesss));
+            function(business){
+                res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
             },
             function(error){
                 //// business couldn't be found 404
-                res.status(500).json(apiUtil.generateResponse(404, "Businesss couldn't be located", null));
+                res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
             }
         );
     },

@@ -7,7 +7,7 @@ var userRoutes = {
         /**
          * Get all users
          */
-        userService.getAll()
+        userService.getAll(req.query)
         .then(
             function(users){
                 res.status(200).json(apiUtil.generateResponse(200, "Users retrieved successfully", users));

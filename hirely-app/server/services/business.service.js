@@ -13,8 +13,13 @@ var businessService = {
      * [getAll function will get all businesss.  Not to be used in production]
      * @return {[type]}        [promise]
      */
-    getAll : function(){
-        return businessModel.find().exec();
+    getAll : function(reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+        return businessModel.find({}, returnFields).exec();
     },
 
     /**
