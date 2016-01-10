@@ -76,7 +76,7 @@ var userSchema = new Schema({
    */
     businessesAppliedTo: [],
     businessesOwned: [],
-    businessesManaged: [],
+    locationsManaged: [],
     businessesStaffOf: [],
 
     /**

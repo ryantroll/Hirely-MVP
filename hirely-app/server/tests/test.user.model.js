@@ -30,7 +30,7 @@ db.once('open', function(){
         lat: -99.88888,
         businessesAppliedTo: [],
         businessesOwned: [],
-        businessesManaged: [],
+        locationsManaged: [],
         businessesStaffOf: [],
 
         preferences: {
