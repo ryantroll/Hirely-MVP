@@ -186,11 +186,13 @@ The query string parameters is used by API to decide what is inside returned dat
 
 parameters in query string can be passed as key name only or key=value if the key has more than one value
 
-**Example 1:** /api/v1/users/568fde202127fa312543f50f/?extended this will return the extended field of requested user object
+**Example 1:** /api/v1/users/568fde202127fa312543f50f/?complete this will return all fields of requested user object, instead of only the default public fields
 
-**Example 2:** /api/v1/users/568fde202127fa312543f50f/?availability&businessesManaged this will return availability and businessesManaged properties of requested user
+**Example 2 (coming soon):** /api/v1/businesses/?order=name&limit=10 this will return array of top 10 business entries order by name properties
 
-**Example 3:** /api/v1/business/?order=name&limit=10 this will return array of top 10 business entries order by name properties
+Businesses follow the same structure, except that the api will accept a business id OR a business slug.
+
+**Example:** /api/v1/businesses/starbucks will return all public fields of the business with slug=starbucks
 
 ## Users Api:
 
