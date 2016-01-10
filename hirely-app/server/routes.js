@@ -34,7 +34,7 @@ module.exports = function(app) {
      * Adding routes for local mongoDB users
      */
     app.get('/api/v1/users', userApiRoutes.getAll);
-    app.get('/api/v1/users/:id', userApiRoutes.getUserById);
+    app.get('/api/v1/users/:id', userApiRoutes.getById);
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
     app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
 
@@ -42,7 +42,7 @@ module.exports = function(app) {
      * Adding routes for local mongoDB businesses
      */
     app.get('/api/v1/businesses', businessApiRoutes.getAll);
-    app.get('/api/v1/businesses/:id', businessApiRoutes.getBusinessById);
+    app.get('/api/v1/businesses/:idOrSlug', businessApiRoutes.getByIdOrSlug);
     app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
 
     function getGooglePlacebyId(req, res) {

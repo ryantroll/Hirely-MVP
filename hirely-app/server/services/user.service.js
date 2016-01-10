@@ -2,10 +2,10 @@ var userModel = require('../models/user.model');
 var idMapModel = require('../models/useridmap.model');
 
 /**
- * [extendedFields array to define the names of extended fields in user objects]
+ * [privateFields array to define the names of private fields in user objects]
  * @type {Array}
  */
-var extendedFields = [
+var privateFields = [
     'businessesAppliedTo',
     'businessesOwned',
     'businessesManaged',
@@ -26,21 +26,18 @@ var userService = {
     },
 
     /**
-     * [getBasicInfoById function will get the basic user fields execluding the extend fields]
-     * @param  {[type]} userId [user id should match user object id in DB]
-     * @return {[type]}       [promise]
-     */
-    getBasicInfoById : function(userId){
-        return userModel.findById(userId, '-' + extendedFields.join(' -')).exec();
-    },
-
-    /**
-     * [getExtendedInfoById will get the extend user fields ONLY execluding the basic fields]
-     * @param  {[type]} userId [user id should match user object id in DB]
+     * [get function will get a user by id or slug]
+     * @param  {[type]} id [user id should match user object id in DB]
+     * @param  {[type]} reqQuery [req.query from service. if reqQuery.complete: return complete object]
      * @return {[type]}        [promise]
      */
-    getExtendedInfoById : function(userId){
-        return userModel.findById(userId, '_id ' + extendedFields.join(' ')).exec();
+    getById: function(id, reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+        return userModel.findById(id, returnFields).exec();
     },
 
     /**
@@ -75,13 +72,13 @@ var userService = {
                             return idMap.save()
                             .then(
                                 function(map){
-                                    return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
+                                    return userModel.findById(map.localId).exec();
                                 },/// fun. idMap.save reslove
                                 function(err){
                                     /**
                                      * Error in updateing ID map entry
                                      */
-                                    return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
+                                    return userModel.findById(map.localId).exec();
                                     console.log('Error in saving idMap for new user');
                                     console.log(err);
                                 } /// fun. idMap.save reject
@@ -92,7 +89,7 @@ var userService = {
                              * Error in remving idMap
                              * still find the user object and return it
                              */
-                            return userModel.findById(user._id, '-' + extendedFields.join(' -')).exec();
+                            return userModel.findById(user._id).exec();
                             console.log('error in removing idMap in prepration for new insert');
                             console.log(err);
                         }//// fun. remove reject
@@ -100,7 +97,7 @@ var userService = {
 
                 }
                 else{
-                    return userModel.findById(user._id, '-' + extendedFields.join(' -')).exec();
+                    return userModel.findById(user._id).exec();
                 }
             }//// then fun.
         );/// then
@@ -111,7 +108,13 @@ var userService = {
      * @param  {[string]} extId [esternal id ]
      * @return {[promis]}       [description]
      */
-    getUserByExternalId: function(extId){
+    getUserByExternalId: function(extId, reqQuery){
+
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
 
         return idMapModel.findOne({externalId:extId}).exec()
         .then(
@@ -120,8 +123,8 @@ var userService = {
              * find the user and return it in promise
              */
             function(map){
-                return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
-            },//// fun. reslove
+                return userModel.findById(map.localId, returnFields).exec();
+            },//// fun. resolve
             function(error){
                 /**
                  * No map is found for this external id
