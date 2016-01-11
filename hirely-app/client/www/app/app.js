@@ -139,13 +139,19 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
         authRequired: true
       })
+      //.state('app.application', {
+      //  url: '/:jobId/apply',
+      //  templateUrl: 'app/application/job-application.html',
+      //  controller: 'JobApplicationController',
+      //  authRequired: true
+      //})
       .state('app.application', {
-        url: '/:jobId/apply',
-        templateUrl: 'app/application/job-application.html',
-        controller: 'JobApplicationController',
-        authRequired: true
+          url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
+          templateUrl: 'app/application/job-application.html',
+          controller: 'JobApplicationController'
       })
 
+
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
+    //$urlRouterProvider.otherwise('/app/home');
   });

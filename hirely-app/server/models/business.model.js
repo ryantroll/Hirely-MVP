@@ -25,7 +25,8 @@ var applicationSchema = new Schema({
 
 var variantSchema = new Schema(
   {
-
+    title             :     { type:String, required:true },
+    slug              :     {type: String},
     workType          :     {
                               type:String,
                               required:true,
@@ -97,6 +98,7 @@ var variantSchema = new Schema(
 
 var positionSchema = new Schema({
         title         :    {type: String, required:true},
+        slug          :    {type: String},
         onetClass     :    {type: String, required:true},
         variants      :    [ variantSchema ]//// vairants araay
 });//// positionSchema
@@ -107,6 +109,7 @@ var positionSchema = new Schema({
 
 var locationSchema = new Schema({
       name              :   {type:String, required:true},
+      slug              :   {type: String},
       phone             :   {type:String, required:true},
       hoursOfOperation  :
       {
@@ -152,6 +155,7 @@ var businessSchema = new Schema({
   name            :       {type:String, required:true},
   slug            :       {type:String, required:false, unique:true, index:true},
   description     :       String,
+  photoUrl        :       {type:String},
   email           :       {
                             type:String,
                             required:true,

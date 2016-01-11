@@ -31,7 +31,8 @@ function HirelyApiService($http, $q) {
    */
   var service = {
     version:version,
-    users:setUsersEndpoint
+    users:setUsersEndpoint,
+    businesses:setBusinessesEndpoint
   }
 
   /**
@@ -42,6 +43,16 @@ function HirelyApiService($http, $q) {
   var users = {
     post:createNewUser,
     get:getUsers
+  }
+
+  /**
+   * [businesses child object to hold business endpoint functions and allow function call chain
+   * this object will be returned by .businesses() endpoint setter function to expose the http verbs function e.g. .businesses().get(), .users().post()]
+   * @type {Object}
+   */
+  var businesses = {
+    post:createNewUser,
+    get:getBusinesses
   }
 
   /**
@@ -61,6 +72,12 @@ function HirelyApiService($http, $q) {
 
     return users;
   }/// fun. setUserEndpoint
+
+  function setBusinessesEndpoint(){
+    setEndpoint('businesses', arguments);
+
+    return users;
+  }/// fun. setBusinessesEndpoint
 
   /**
    * [setEndpoint will build the required url of desired API endpoint
@@ -190,6 +207,27 @@ function HirelyApiService($http, $q) {
 
     return deferred.promise;
   }//// fun. getUsers
+
+  function getBusinesses(){
+    var deferred = $q.defer();
+
+    $http.get(baseURL + endpointUrl).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(res.message);
+          }
+        },
+        function(error){
+          deferred.reject(error);
+        }
+    )
+
+    return deferred.promise;
+  }//// fun. getBusinesses
 
   return service;
 }//// fun. HirelyApiService

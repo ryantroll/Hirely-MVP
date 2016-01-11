@@ -18,9 +18,9 @@
    * Controller Definition ********************************************************
    * ******************************************************************************
    */
-  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
+  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', StepFiveController])
 
-  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService, JobApplicationService) {
+  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService) {
 
     /**
      * [availability this object will hold the data that need bot saved in database

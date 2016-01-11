@@ -3,13 +3,13 @@
     <div class="job-header">
         <ui-gmap-google-map center='map.center' zoom='map.zoom' options="map.options"></ui-gmap-google-map>
         <div class="info">
-            <img ng-src="{{jobInfo.photoUrl}}">
+            <img ng-src="{{business.photoUrl}}">
 
             <div class="text">
                 <div class="text-inner">
-                    <p class="position">{{jobInfo.position}}</p>
+                    <p class="position">{{variant.title}}</p>
 
-                    <p class="sub">{{jobInfo.business}} - {{jobInfo.city}}{{}}</p>
+                    <p class="sub">{{business.name}} - {{location.neighborhood}}{{}}</p>
                 </div>
             </div>
         </div>
