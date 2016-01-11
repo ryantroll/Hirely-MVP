@@ -34,12 +34,12 @@ var myApp = angular.module('hirelyApp',
     $stateProvider
 
       .state('app', {
-        url: "/app",
+        //url: "/app",
         abstract: true,
         templateUrl: 'app/layout/master.html'
       })
       .state('app.home', {
-        url: '/home',
+        url: '/',
         parent: 'app',
         templateUrl: 'app/home/home.html',
 
