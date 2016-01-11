@@ -10,7 +10,7 @@ db.on('error', console.error.bind(console, 'connection error:') );
 
 db.once('open', function(){
     var b = new BusinessModel({
-        name: 'Good Starbuck\'s',
+        name: 'compass coffee',
         email: Math.round(Math.random()*1000).toString() + 'IYAD.bitar@gmail.com',
         website:'http://compasscoffee.com',
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
@@ -31,6 +31,8 @@ db.once('open', function(){
                 lng: -77.0576414,
                 lat: 38.9340854,
 
+                slug: 'dc-washington-shaw',
+
                 hoursOfOperation: {
                     mon   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
                     tue   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
@@ -46,9 +48,13 @@ db.once('open', function(){
                         title: 'Barista',
                         onetClass: '11-1011.03',
 
+                        slug: 'barista',
+
                         variants:[
                             {
+                                title             :     'Morning Barista',
                                 workType          :     'part-time',
+                                slug              :     'morning-barista',
                                 hoursPerWeekMin   :     1,
                                 hoursPerWeekMax   :     2,
                                 minOpeningShifts  :     2,
