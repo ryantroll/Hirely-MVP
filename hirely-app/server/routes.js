@@ -36,6 +36,7 @@ module.exports = function(app) {
     app.get('/api/v1/users', userApiRoutes.getAll);
     app.get('/api/v1/users/:id', userApiRoutes.getById);
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
+    app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
     app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
 
     /**

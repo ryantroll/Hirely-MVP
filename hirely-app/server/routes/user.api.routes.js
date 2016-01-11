@@ -66,6 +66,20 @@ var userRoutes = {
         );
     },//// fun. getUserByExternalId
 
+    saveUser: function(req, res){
+
+        userService.saveUser(req.params.id, req.body)
+        .then(
+            function(user){
+                res.status(200).json(apiUtil.generateResponse(200, "User updated successfully", user));
+            },
+            function(error){
+                //// user couldn't be saved 404
+                res.status(500).json(apiUtil.generateResponse(404, error, null));
+            }
+        );
+    }, //// fun. saveUser
+
 
 }/// users object
 

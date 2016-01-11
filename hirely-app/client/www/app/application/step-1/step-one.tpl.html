@@ -70,7 +70,7 @@
 					</label>
 					<div class="col-sm-9 col-md-6">
 						<div ng-class="{'has-feedback has-error': stepOne.address.$error.required && stepOne.address.$dirty, 'has-feedback has-success' : stepOne.address.$valid}">
-							<input type="text" ng-model="user.address.formattedAddress" id="address" name="address" uib-typeahead="location as location.address for location in searchLocations($viewValue)" class="form-control txt-search" typeahead-loading="loadingLocations" typeahead-no-results="noResults"
+							<input type="text" ng-model="user.formattedAddress" id="address" name="address" uib-typeahead="location as location.address for location in searchLocations($viewValue)" class="form-control txt-search" typeahead-loading="loadingLocations" typeahead-no-results="noResults"
 							typeahead-on-select="setAddress($item)" required>
 							<div class="spinner" ng-show="loadingLocations">
 								<div class="double-bounce1"></div>
@@ -89,7 +89,7 @@
 						<!-- <span class="required-field">*</span> -->
 					</label>
 					<div class="col-sm-5 col-md-3">
-						<input type="text" class="form-control" id="address-unit" ng-model="user.address.unit">
+						<input type="text" class="form-control" id="address-unit" ng-model="user.street2">
 					</div>
 				</div>
 
@@ -101,7 +101,7 @@
 					</label>
 					<div class="col-sm-9 col-md-6">
 						<div ng-class="{'has-feedback has-error': stepOne.city.$error.required && stepOne.city.$dirty, 'has-feedback has-success' : stepOne.city.$valid}">
-							<input type="text" class="form-control" name="city" id="address-city" ng-model="user.address.city" required>
+							<input type="text" class="form-control" name="city" id="address-city" ng-model="user.city" required>
 							<span class="fa fa-close form-control-feedback" ng-show="stepOne.city.$error.required && stepOne.city.$dirty"></span>
 							<span class="fa fa-check form-control-feedback" ng-show="stepOne.city.$valid"></span>
 						</div>
@@ -116,7 +116,7 @@
 					</label>
 					<div class="col-sm-9 col-md-6">
 						<div ng-class="{'has-feedback has-error': stepOne.state.$error.required && stepOne.state.$dirty, 'has-feedback has-success' : stepOne.state.$valid}">
-							<input type="text" class="form-control" name="state" id="state" ng-model="user.address.state" required>
+							<input type="text" class="form-control" name="state" id="state" ng-model="user.state" required>
 							<span class="fa fa-close form-control-feedback" ng-show="stepOne.state.$error.required && stepOne.state.$dirty"></span>
 							<span class="fa fa-check form-control-feedback" ng-show="stepOne.state.$valid"></span>
 						</div>
@@ -130,7 +130,7 @@
 					</label>
 					<div class="col-sm-9 col-md-6">
 						<div ng-class="{'has-feedback has-error': stepOne.zipcode.$error.required && stepOne.zipcode.$dirty, 'has-feedback has-success' : stepOne.zipcode.$valid}">
-							<input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="user.address.zipCode" required>
+							<input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="user.postalCode" required>
 							<span class="fa fa-close form-control-feedback" ng-show="stepOne.zipcode.$error.required && stepOne.zipcode.$dirty"></span>
 							<span class="fa fa-check form-control-feedback" ng-show="stepOne.zipcode.$valid"></span>
 						</div>

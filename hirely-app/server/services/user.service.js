@@ -1,5 +1,6 @@
 var userModel = require('../models/user.model');
 var idMapModel = require('../models/useridmap.model');
+var q = require('q');
 
 /**
  * [privateFields array to define the names of private fields in user objects]
@@ -38,10 +39,34 @@ var userService = {
      */
     getById: function(id, reqQuery){
         // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -')
+
+        var returnFields = '';
         if(undefined !== reqQuery.complete) {
-            returnFields = '-nothing'
+            /**
+             * Complete set is requested let's send the whole user object
+             */
+
+
+            returnFields = '-nothing';
         }
+        else{
+
+            /**
+             * No complete set is requested
+             * Checek of any property name is sent in query throuhg the below loop
+             */
+            for(var field in reqQuery){
+                returnFields += '' + field + ' ';
+            }
+
+            /**
+             * if no properties requested send the basic info
+             */
+            if(returnFields === ''){
+                returnFields = '-' + privateFields.join(' -')
+            }
+        }
+
         return userModel.findById(id, returnFields).exec();
     },
 
@@ -138,8 +163,83 @@ var userService = {
             }//// fun. reject
         )//// then
 
-    }
+    }, //// fun. getUserByExternalId
 
+    /**
+     * [saveUser will update user in database after checking the existance of user by his id
+     * this function create and manage its own promise
+     * this function does NOT make use of model.update() method because it doesn't trigger schema validation]
+     * @param  {string} userId   [id of user to be updated]
+     * @param  {object} userData [object that hold properites that need to be updated]
+     * @return {promise}          [promise]
+     */
+    saveUser: function(userId, userData){
+        var deferred = q.defer()
+
+        var user = new userModel(userData);
+
+        /**
+         * Make sure the posted properties are valid properties
+         */
+        // userModel.schema.eachPath(function(path){
+        //     console.log(path);
+        // });
+        //
+
+        /**
+         * is the user exists in DB
+         */
+        userModel.findOne({_id:userId})
+        .then(
+            function(foundedUser){
+                /**
+                 * User exists in DB, do the update
+                 */
+
+                if(foundedUser){
+
+                    /**
+                     * Loop through sent properties and set them
+                     */
+                    for(prop in userData){
+                        foundedUser[prop] = userData[prop];
+                    }//// for
+
+                    /**
+                     * Save the new user document after setting lastModifiedOn date to now
+                     */
+                    foundedUser.lastModifiedOn = new Date();
+                    foundedUser.save()
+                    .then(
+                        function(user){
+                            /**
+                             * User saved successfully
+                             */
+
+                            deferred.resolve(user);
+                        },//// save() resolve
+                        function(err){
+                            /**
+                             * Error in updating user
+                             */
+                            console.log('Error: user couldn\'t be updated');
+                            deferred.reject(err);
+                        }
+                    )/// .save().then
+
+                }//// if user._id
+
+            },//// fun. reslove
+            function(err){
+                /**
+                 * User doesn't exists
+                 */
+                deferred.reject("User trying to update doesn't exists");
+            }
+        );//// then
+
+        return deferred.promise;
+    }//// fun. saveUser
 
 }/// users object
 

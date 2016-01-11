@@ -69,9 +69,10 @@
 
     // Get business
     //var currentJob = $stateParams.businessSlug;
+    console.log($scope.businessSlug);
     if(angular.isDefined($scope.businessSlug)) {
       //$scope.businessInfo = HirelyApiService.businesses("compass-coffee").get()
-      HirelyApiService.businesses("compass-coffee").get().then(function(business) {
+      HirelyApiService.businesses($scope.businessSlug).get().then(function(business) {
         console.dir("bus: ");
         console.dir(business);
         $scope.business = business;
@@ -115,16 +116,7 @@
       })
     }
 
-    // test Job IDs
-    var currentJob = $stateParams.businessSlug;
-    switch (currentJob) {
-      case "122122":
-        $scope.jobInfo = testJobOne;
-        break;
-      case "130130":
-        $scope.jobInfo = testJobTwo;
-        break;
-    }
+
 
 
     /***
@@ -180,11 +172,7 @@
 
     //form steps
     $scope.steps = [
-      {
-        templateUrl: '/app/application/step-5/step-five.tpl.html',
-        controller: 'StepFiveController',
-        hasForm: true
-      },
+
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
@@ -202,7 +190,11 @@
       {
         templateUrl: '/app/application/step-4/step-four.tpl.html'
       },
-
+      {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
+      },
       {
         templateUrl: '/app/application/step-6/step-six.tpl.html',
         controller: 'StepSixController',

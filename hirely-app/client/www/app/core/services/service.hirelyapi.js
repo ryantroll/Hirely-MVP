@@ -42,7 +42,8 @@ function HirelyApiService($http, $q) {
    */
   var users = {
     post:createNewUser,
-    get:getUsers
+    get:getUsers,
+    patch:saveUser
   }
 
   /**
@@ -207,6 +208,28 @@ function HirelyApiService($http, $q) {
 
     return deferred.promise;
   }//// fun. getUsers
+
+  function saveUser(userData){
+    var deferred = $q.defer();
+
+    $http.patch(baseURL + endpointUrl, userData)
+    .then(
+      function(payload){
+        var res = payload.data;
+        if(res.statusCode = 200){
+          deferred.resolve(res.results);
+        }
+        else{
+          deferred.reject(res.message);
+        }
+      },
+      function(error){
+        deferred.reject(error);
+      }
+    );/// patch.then
+
+    return deferred.promise;
+  }//// fun. saveUser
 
   function getBusinesses(){
     var deferred = $q.defer();

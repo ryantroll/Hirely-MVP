@@ -30,6 +30,7 @@ db.once('open', function(){
                 formattedAddress: '24 Kenter Pl, Montclair, NJ 07012',
                 lng: -77.0576414,
                 lat: 38.9340854,
+                neighborhood: 'Shaw',
 
                 slug: 'dc-washington-shaw',
 

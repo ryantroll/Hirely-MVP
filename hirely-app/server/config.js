@@ -1,6 +1,6 @@
 var config = {};
 
-config.googleMapsAPIKey = 'AIzaSyDoM7YVRZsYdeoJ3XezTX-l_eCgFz2EqfM';
+config.googleMapsAPIKey = 'AIzaSyDXt_V8OyuoNph540_ZBTUSjx66QKLUuJc';
 
 config.traitify = {
   host: 'api-sandbox.traitify.com',
