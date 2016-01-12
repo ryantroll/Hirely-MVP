@@ -100,6 +100,12 @@ var positionSchema = new Schema({
         title         :    {type: String, required:true},
         slug          :    {type: String},
         onetClass     :    {type: String, required:true},
+        prescreenQuestions:
+        [
+            {
+                question  :     String,
+            }
+        ], /// prescreen array
         variants      :    [ variantSchema ]//// vairants araay
 });//// positionSchema
 /**

@@ -51,6 +51,12 @@ db.once('open', function(){
 
                         slug: 'barista',
 
+                        prescreenQuestions:[
+                            {
+                                question:'what\'s up?',
+                            }
+                        ],
+
                         variants:[
                             {
                                 title             :     'Morning Barista',
