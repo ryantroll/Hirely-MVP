@@ -59,9 +59,37 @@ var businessService = {
             function(business){
                 return businessModel.findById(business._id).exec();
             }//// then fun.
+
         );/// then
+    },
+
+    getByVariantId: function(variantId){
+        console.log(variantId);
+        // return businessModel.findOne({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{_id:  varaintId  }}}}}}}).exec();
+        return businessModel.find({})
+        .where({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{_id:variantId}}}}}}})
+        .exec();
     }
 
 }/// businesss object
+
+/**
+ * get business by variant id query
+ * db.getCollection('businesses').find(
+    {
+        "locations":{
+            $elemMatch:{
+                "positions":{
+                    $elemMatch:{
+                        "variants":{
+                            $elemMatch:{"_id": ObjectId("56952b8f0c3d16003e49a3e2")}
+                         }
+                    }
+                 }
+            }
+        }
+     }
+)
+ */
 
 module.exports = businessService;

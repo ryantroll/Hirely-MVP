@@ -149,12 +149,12 @@ var myApp = angular.module('hirelyApp',
           url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
           templateUrl: 'app/application/job-application.html',
           controller: 'JobApplicationController',
-          authRequired: true
+          //authRequired: true
       })
 
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/');
+    //$urlRouterProvider.otherwise('/');
   });
 
 /**
@@ -492,6 +492,7 @@ var myApp = angular.module('hirelyApp',
     console.log($scope.businessSlug);
     if(angular.isDefined($scope.businessSlug)) {
       //$scope.businessInfo = HirelyApiService.businesses("compass-coffee").get()
+      // TODO:  Use BusinessService to get the business once implemented
       HirelyApiService.businesses($scope.businessSlug).get().then(function(business) {
         console.dir("bus: ");
         console.dir(business);
@@ -608,7 +609,9 @@ var myApp = angular.module('hirelyApp',
         controller: 'StepThreeController'
       },
       {
-        templateUrl: '/app/application/step-4/step-four.tpl.html'
+        templateUrl: '/app/application/step-4/step-four.tpl.html',
+        controller: 'StepFourController',
+        hasForm: true
       },
       {
         templateUrl: '/app/application/step-5/step-five.tpl.html',
@@ -689,6 +692,335 @@ var myApp = angular.module('hirelyApp',
 
   }
 })();
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.candidate', []);
+})();
+
+/**
+ * Created by labrina.loving on 8/26/2015.
+ **/
+
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
+
+
+    function CandidateCtrl($scope, $stateParams, UserService) {
+        var userService = UserService;
+        var vm = this;
+
+        $scope.user = userService.getCurrentUser();
+
+
+
+        //listen for changes to current user
+        $scope.$on('currentUserChanged', function (event, args) {
+            $scope.user = args.message;
+
+
+        });
+    }
+})()
+;
+
+
+/**
+ * Created by labrina.loving on 8/16/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
+
+
+    function CandidateDashboardCtrl($scope, $stateParams) {
+
+        var vm = this;
+        $scope.uiGridOptions  = {
+            data: 'recentApps',
+            columnDefs: [{
+                field: 'company'
+            }, {
+                field: 'position'
+            }, {
+                field: 'application date'
+            },
+                {
+                    field: 'current status'
+                }
+            ]
+        };
+
+        $scope.recentApps = [];
+
+        if($scope.user.Applications){
+            $scope.recentApps = $scope.user.Applications;
+        }
+
+        // Chart.js Data
+        $scope.data = [
+            {
+                value: 5,
+                color:'#FFA540',
+                highlight: '#BF7C30',
+                label: 'Review'
+            },
+            {
+                value: 2,
+                color: '#38A2D0',
+                highlight: '#5AD3D1',
+                label: 'Interview Scheduled '
+            },
+            {
+                value: 1,
+                color: '#37DB79',
+                highlight: '#FFC870',
+                label: 'Passed'
+            }
+        ];
+
+        // Chart.js Options
+        $scope.options =  {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke : true,
+
+            //String - The colour of each segment stroke
+            segmentStrokeColor : '#fff',
+
+            //Number - The width of each segment stroke
+            segmentStrokeWidth : 2,
+
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout : 50, // This is 0 for Pie charts
+
+            //Number - Amount of animation steps
+            animationSteps : 100,
+
+            //String - Animation easing effect
+            animationEasing : 'easeOutBounce',
+
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate : true,
+
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale : false,
+
+            showLegend: false
+
+          };
+
+
+
+    }
+})()
+;
+
+/**
+ * Created by labrina.loving on 9/7/2015.
+ */
+(function() {
+    'use strict';
+
+    angular
+        .module('hirelyApp.core')
+
+        .config(function(uiGmapGoogleMapApiProvider) {
+            uiGmapGoogleMapApiProvider.configure({
+                key: '711561845732-pg1q3d3cn30f4jk07bmqno9qeio7unmg.apps.googleusercontent.com',
+                v: '3.20', //defaults to latest 3.X anyhow
+                libraries: 'weather,geometry,visualization'
+            });
+        })
+        .config(function(NotificationProvider) {
+            NotificationProvider.setOptions({
+                delay: 5000,
+                startTop: 80,
+                startRight: 20,
+                verticalSpacing: 20,
+                horizontalSpacing: 20,
+                positionX: 'left',
+                positionY: 'top'
+            });
+    });
+})();
+/**
+ * Created by labrina.loving on 8/8/2015.
+ */
+(function() {
+    'use strict';
+
+    angular
+        .module('hirelyApp.core')
+        // version of this seed app is compatible with angularFire 0.6
+        // see tags for other versions: https://github.com/firebase/angularFire-seed/tags
+        .constant('version', '0.6')
+
+        // where to redirect users if they need to authenticate (see module.routeSecurity)
+        .constant('loginRedirectPath', 'app.home')
+
+        // your Firebase URL goes here
+        .constant('FIREBASE_URL', 'https://hirely-dev.firebaseio.com')
+
+        .constant('GOOGLEMAPSURL', 'https://maps.google.com/maps/api/geocode/json?latlng={POSITION}&sensor=false')
+
+        .constant('filePickerKey', 'AALU2i7ySUuUi8XUDHq8wz')
+
+        .constant('GOOGLEMAPSSERVERKEY', 'AIzaSyDoM7YVRZsYdeoJ3XezTX-l_eCgFz2EqfM')
+
+        .constant('GOOGLEPLACESURL', 'https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACEID}&key={KEY}')
+
+        .constant('candidateStatus', {1: 'Active', 2: 'Employed', 3: 'Inactive'})
+
+        .constant('RESPONSE', {success: {code: '1', status: 'ok'}, error: {code: '0', status: 'error'}})
+
+        .constant('TRAITIFY_PUBLIC_KEY', "vjcprrh344sj6d5jbs80b4tjns");
+})();
+/**
+ * Created by labrina.loving on 8/8/2015.
+ */
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.core', []);
+})();
+
+/**
+ * Created by labrina.loving on 8/10/2015.
+ */
+
+// a simple wrapper on Firebase and AngularFire to simplify deps and keep things DRY
+angular.module('hirelyApp.core')
+    .factory('fbutil', ['$window', 'FIREBASE_URL', '$q', function($window, FIREBASE_URL, $q) {
+
+
+        var utils = {
+            // convert a node or Firebase style callback to a future
+            handler: function(fn, context) {
+                return utils.defer(function(def) {
+                    fn.call(context, function(err, result) {
+                        if( err !== null ) { def.reject(err); }
+                        else { def.resolve(result); }
+                    });
+                });
+            },
+
+            // abstract the process of creating a future/promise
+            defer: function(fn, context) {
+                var def = $q.defer();
+                fn.call(context, def);
+                return def.promise;
+            },
+
+            ref: firebaseRef
+        };
+
+        return utils;
+
+        function pathRef(args) {
+            for (var i = 0; i < args.length; i++) {
+                if (angular.isArray(args[i])) {
+                    args[i] = pathRef(args[i]);
+                }
+                else if( typeof args[i] !== 'string' ) {
+                    throw new Error('Argument '+i+' to firebaseRef is not a string: '+args[i]);
+                }
+            }
+            return args.join('/');
+        }
+
+        /**
+         * Example:
+         * <code>
+         *    function(firebaseRef) {
+         *       var ref = firebaseRef('path/to/data');
+         *    }
+         * </code>
+         *
+         * @function
+         * @name firebaseRef
+         * @param {String|Array...} path relative path to the root folder in Firebase instance
+         * @return a Firebase instance
+         */
+        function firebaseRef(path) {
+            var ref = new $window.Firebase(FIREBASE_URL);
+            var args = Array.prototype.slice.call(arguments);
+            if( args.length ) {
+                ref = ref.child(pathRef(args));
+            }
+            return ref;
+        }
+    }]);
+
+
+/**
+ * Created by labrina.loving on 8/9/2015.
+ */
+(function (angular) {
+    "use strict";
+
+      var securedRoutes = [];
+
+    angular.module('hirelyApp.core')
+
+    /**
+     * Apply some route security. Any route's resolve method can reject the promise with
+     * { authRequired: true } to force a redirect. This method enforces that and also watches
+     * for changes in auth status which might require us to navigate away from a path
+     * that we can no longer view.
+     */
+         .run(['$rootScope', '$state', 'AuthService', 'UserService', 'loginRedirectPath',
+            function ($rootScope, $state, AuthService, UserService, loginRedirectPath) {
+                // watch for login status changes and redirect if appropriate
+                AuthService.onAuth(check);
+
+                // some of our routes may reject resolve promises with the special {authRequired: true} error
+                // this redirects to the login page whenever that is encountered
+                $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
+                    if (error === "AUTH_REQUIRED") {
+                        $state.go(loginRedirectPath);
+                    }
+                });
+
+                $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+                    AuthService.onAuth(check);
+                    // AuthService.isUserLoggedIn();
+                    
+                    if (toState.authRequired && !AuthService.isUserLoggedIn()){
+                        // User isn’t authenticated
+                        $state.transitionTo(loginRedirectPath);
+                        event.preventDefault();
+                    }
+                });
+
+
+
+                function check(user) {
+                    if (!user && $state.current.authRequired) {
+                         $state.go(loginRedirectPath);
+                    }
+                }
+
+            }
+        ]);
+
+})(angular);
+
+
+/**
+ * Created by labrina.loving on 9/7/2015.
+ */
 
 /**
  * Created by labrina.loving on 8/5/2015.
@@ -1165,140 +1497,6 @@ var myApp = angular.module('hirelyApp',
  })();
 
 /**
- * Created by labrina.loving on 8/16/2015.
- */
-
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.candidate', []);
-})();
-
-/**
- * Created by labrina.loving on 8/26/2015.
- **/
-
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateCtrl', ['$scope','$stateParams', 'UserService', CandidateCtrl ]);
-
-
-    function CandidateCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
-        var vm = this;
-
-        $scope.user = userService.getCurrentUser();
-
-
-
-        //listen for changes to current user
-        $scope.$on('currentUserChanged', function (event, args) {
-            $scope.user = args.message;
-
-
-        });
-    }
-})()
-;
-
-
-/**
- * Created by labrina.loving on 8/16/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.candidate').controller('CandidateDashboardCtrl', ['$scope','$stateParams', CandidateDashboardCtrl ]);
-
-
-    function CandidateDashboardCtrl($scope, $stateParams) {
-
-        var vm = this;
-        $scope.uiGridOptions  = {
-            data: 'recentApps',
-            columnDefs: [{
-                field: 'company'
-            }, {
-                field: 'position'
-            }, {
-                field: 'application date'
-            },
-                {
-                    field: 'current status'
-                }
-            ]
-        };
-
-        $scope.recentApps = [];
-
-        if($scope.user.Applications){
-            $scope.recentApps = $scope.user.Applications;
-        }
-
-        // Chart.js Data
-        $scope.data = [
-            {
-                value: 5,
-                color:'#FFA540',
-                highlight: '#BF7C30',
-                label: 'Review'
-            },
-            {
-                value: 2,
-                color: '#38A2D0',
-                highlight: '#5AD3D1',
-                label: 'Interview Scheduled '
-            },
-            {
-                value: 1,
-                color: '#37DB79',
-                highlight: '#FFC870',
-                label: 'Passed'
-            }
-        ];
-
-        // Chart.js Options
-        $scope.options =  {
-
-            // Sets the chart to be responsive
-            responsive: true,
-
-            //Boolean - Whether we should show a stroke on each segment
-            segmentShowStroke : true,
-
-            //String - The colour of each segment stroke
-            segmentStrokeColor : '#fff',
-
-            //Number - The width of each segment stroke
-            segmentStrokeWidth : 2,
-
-            //Number - The percentage of the chart that we cut out of the middle
-            percentageInnerCutout : 50, // This is 0 for Pie charts
-
-            //Number - Amount of animation steps
-            animationSteps : 100,
-
-            //String - Animation easing effect
-            animationEasing : 'easeOutBounce',
-
-            //Boolean - Whether we animate the rotation of the Doughnut
-            animateRotate : true,
-
-            //Boolean - Whether we animate scaling the Doughnut from the centre
-            animateScale : false,
-
-            showLegend: false
-
-          };
-
-
-
-    }
-})()
-;
-
-/**
  * Created by mike.baker on 8/17/2015.
  */
 
@@ -1712,6 +1910,141 @@ angular.module("hirelyApp.layout").directive("header", function() {
         };
     };
 })();
+ /**
+ * Created by labrina.loving on 8/10/2015.
+ */
+(function () {
+    'use strict';
+
+angular.module('hirelyApp.manager').directive('autoFillableField', [
+  '$timeout',
+  function($timeout) {
+    return {
+      require: '?ngModel',
+      restrict: 'A',
+      link: function(scope, element, attrs, ngModel) {
+
+        $timeout(function() {
+          if (ngModel.$viewValue !== element.val()) {
+            ngModel.$setViewValue(element.val());
+          }
+        }, 50);
+      }
+    };
+  }
+]);
+}
+)();
+/**
+ * Created by mike.baker on 9/29/2015.
+ */
+(function () {
+    'use strict';
+
+    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
+   
+
+    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
+
+        var vm = this;
+        var authService = AuthService;
+        var userService = UserService;
+        var businessService = BusinessService;
+        var managerId = '';
+        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
+        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
+       
+        $scope.companies = $firebaseArray(businessRef);
+        $scope.picturesRef = $firebaseArray(photoRef);
+        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
+    
+        $scope.street_number = '';
+        $scope.route = '';
+        $scope.locality = '';
+        $scope.administrative_area_level_1 = '';
+        $scope.postal_code = '';
+        $scope.country = '';
+        $scope.latitude = '';
+        $scope.longitude = '';
+        $scope.open_store_hours0 = '';
+        $scope.closed_store_hours0 = '';
+        $scope.open_store_hours1 = '';
+        $scope.closed_store_hours1 = '';
+        $scope.open_store_hours2 = '';
+        $scope.closed_store_hours2 = '';
+        $scope.open_store_hours3 = '';
+        $scope.closed_store_hours3 = '';
+        $scope.open_store_hours4 = '';
+        $scope.closed_store_hours4 = '';
+        $scope.open_store_hours5 = '';
+        $scope.closed_store_hours5 = '';
+        $scope.open_store_hours6 = '';
+        $scope.closed_store_hours6 = '';
+        $scope.error = '';
+
+        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
+        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
+        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
+        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
+        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
+        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
+
+
+
+
+       $scope.options = {
+          types: '(regions)'
+       };
+
+       $scope.results = '';
+       $scope.details = '';
+    
+        vm.registerNewHMBUS = function() {
+            registerPasswordHM($scope.manager, $scope.business)
+        }
+       
+        vm.CloseModal = function (){
+            $modalInstance.close();
+        }
+
+        function registerPasswordHM(registeredUser, newbusinessObj){
+            //register new hiring manager
+            userService.registerNewUser(registeredUser.email, registeredUser.password)
+                .then(function(manager) {
+                    userService.createRegisteredNewUser(registeredUser, manager.uid)
+                        .then(function(newUser){
+                            authService.passwordLogin(registeredUser.email, registeredUser.password)
+                                .then(function(auth){
+                                    managerId = manager.uid;
+                                    userService.setCurrentUser(newUser, manager.uid);
+                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
+                                    $modalInstance.close();
+                                }, function(err) {
+                                    alert(err)
+                                });
+                        }, function(err) {
+                            alert(err)
+                        });
+                }, function(err) {
+                    alert(err)
+                })
+      $state.go('app.busDashboard');
+        }
+
+
+}
+
+
+})();
+
+/**
+ * Created by mike.baker on 9/8/2015.
+ */
+(function() {
+    'use strict';
+
+    angular.module('hirelyApp.manager', []);
+})();
     /**
  * Created by labrina.loving on 8/6/2015.
  */
@@ -1886,336 +2219,6 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 })();
 
 /**
- * Created by labrina.loving on 9/7/2015.
- */
-(function() {
-    'use strict';
-
-    angular
-        .module('hirelyApp.core')
-
-        .config(function(uiGmapGoogleMapApiProvider) {
-            uiGmapGoogleMapApiProvider.configure({
-                key: '711561845732-pg1q3d3cn30f4jk07bmqno9qeio7unmg.apps.googleusercontent.com',
-                v: '3.20', //defaults to latest 3.X anyhow
-                libraries: 'weather,geometry,visualization'
-            });
-        })
-        .config(function(NotificationProvider) {
-            NotificationProvider.setOptions({
-                delay: 5000,
-                startTop: 80,
-                startRight: 20,
-                verticalSpacing: 20,
-                horizontalSpacing: 20,
-                positionX: 'left',
-                positionY: 'top'
-            });
-    });
-})();
-/**
- * Created by labrina.loving on 8/8/2015.
- */
-(function() {
-    'use strict';
-
-    angular
-        .module('hirelyApp.core')
-        // version of this seed app is compatible with angularFire 0.6
-        // see tags for other versions: https://github.com/firebase/angularFire-seed/tags
-        .constant('version', '0.6')
-
-        // where to redirect users if they need to authenticate (see module.routeSecurity)
-        .constant('loginRedirectPath', 'app.home')
-
-        // your Firebase URL goes here
-        .constant('FIREBASE_URL', 'https://hirely-dev.firebaseio.com')
-
-        .constant('GOOGLEMAPSURL', 'https://maps.google.com/maps/api/geocode/json?latlng={POSITION}&sensor=false')
-
-        .constant('filePickerKey', 'AALU2i7ySUuUi8XUDHq8wz')
-
-        .constant('GOOGLEMAPSSERVERKEY', 'AIzaSyDoM7YVRZsYdeoJ3XezTX-l_eCgFz2EqfM')
-
-        .constant('GOOGLEPLACESURL', 'https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACEID}&key={KEY}')
-
-        .constant('candidateStatus', {1: 'Active', 2: 'Employed', 3: 'Inactive'})
-
-        .constant('RESPONSE', {success: {code: '1', status: 'ok'}, error: {code: '0', status: 'error'}})
-
-        .constant('TRAITIFY_PUBLIC_KEY', "vjcprrh344sj6d5jbs80b4tjns");
-})();
-/**
- * Created by labrina.loving on 8/8/2015.
- */
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.core', []);
-})();
-
-/**
- * Created by labrina.loving on 8/10/2015.
- */
-
-// a simple wrapper on Firebase and AngularFire to simplify deps and keep things DRY
-angular.module('hirelyApp.core')
-    .factory('fbutil', ['$window', 'FIREBASE_URL', '$q', function($window, FIREBASE_URL, $q) {
-
-
-        var utils = {
-            // convert a node or Firebase style callback to a future
-            handler: function(fn, context) {
-                return utils.defer(function(def) {
-                    fn.call(context, function(err, result) {
-                        if( err !== null ) { def.reject(err); }
-                        else { def.resolve(result); }
-                    });
-                });
-            },
-
-            // abstract the process of creating a future/promise
-            defer: function(fn, context) {
-                var def = $q.defer();
-                fn.call(context, def);
-                return def.promise;
-            },
-
-            ref: firebaseRef
-        };
-
-        return utils;
-
-        function pathRef(args) {
-            for (var i = 0; i < args.length; i++) {
-                if (angular.isArray(args[i])) {
-                    args[i] = pathRef(args[i]);
-                }
-                else if( typeof args[i] !== 'string' ) {
-                    throw new Error('Argument '+i+' to firebaseRef is not a string: '+args[i]);
-                }
-            }
-            return args.join('/');
-        }
-
-        /**
-         * Example:
-         * <code>
-         *    function(firebaseRef) {
-         *       var ref = firebaseRef('path/to/data');
-         *    }
-         * </code>
-         *
-         * @function
-         * @name firebaseRef
-         * @param {String|Array...} path relative path to the root folder in Firebase instance
-         * @return a Firebase instance
-         */
-        function firebaseRef(path) {
-            var ref = new $window.Firebase(FIREBASE_URL);
-            var args = Array.prototype.slice.call(arguments);
-            if( args.length ) {
-                ref = ref.child(pathRef(args));
-            }
-            return ref;
-        }
-    }]);
-
-
-/**
- * Created by labrina.loving on 8/9/2015.
- */
-(function (angular) {
-    "use strict";
-
-      var securedRoutes = [];
-
-    angular.module('hirelyApp.core')
-
-    /**
-     * Apply some route security. Any route's resolve method can reject the promise with
-     * { authRequired: true } to force a redirect. This method enforces that and also watches
-     * for changes in auth status which might require us to navigate away from a path
-     * that we can no longer view.
-     */
-         .run(['$rootScope', '$state', 'AuthService', 'UserService', 'loginRedirectPath',
-            function ($rootScope, $state, AuthService, UserService, loginRedirectPath) {
-                // watch for login status changes and redirect if appropriate
-                AuthService.onAuth(check);
-
-                // some of our routes may reject resolve promises with the special {authRequired: true} error
-                // this redirects to the login page whenever that is encountered
-                $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
-                    if (error === "AUTH_REQUIRED") {
-                        $state.go(loginRedirectPath);
-                    }
-                });
-
-                $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-                    AuthService.onAuth(check);
-                    // AuthService.isUserLoggedIn();
-                    
-                    if (toState.authRequired && !AuthService.isUserLoggedIn()){
-                        // User isn’t authenticated
-                        $state.transitionTo(loginRedirectPath);
-                        event.preventDefault();
-                    }
-                });
-
-
-
-                function check(user) {
-                    if (!user && $state.current.authRequired) {
-                         $state.go(loginRedirectPath);
-                    }
-                }
-
-            }
-        ]);
-
-})(angular);
-
-
-/**
- * Created by labrina.loving on 9/7/2015.
- */
-
- /**
- * Created by labrina.loving on 8/10/2015.
- */
-(function () {
-    'use strict';
-
-angular.module('hirelyApp.manager').directive('autoFillableField', [
-  '$timeout',
-  function($timeout) {
-    return {
-      require: '?ngModel',
-      restrict: 'A',
-      link: function(scope, element, attrs, ngModel) {
-
-        $timeout(function() {
-          if (ngModel.$viewValue !== element.val()) {
-            ngModel.$setViewValue(element.val());
-          }
-        }, 50);
-      }
-    };
-  }
-]);
-}
-)();
-/**
- * Created by mike.baker on 9/29/2015.
- */
-(function () {
-    'use strict';
-
-    angular.module('hirelyApp.manager').controller('HMRegisterCtrl', ['$scope', '$state', '$firebaseObject', '$firebaseArray', 'FIREBASE_URL', 'AuthService', 'UserService', 'BusinessService',  HMRegisterCtrl ]);
-   
-
-    function HMRegisterCtrl($scope, $state, $firebaseObject, $firebaseArray, FIREBASE_URL, AuthService, UserService, BusinessService) {
-
-        var vm = this;
-        var authService = AuthService;
-        var userService = UserService;
-        var businessService = BusinessService;
-        var managerId = '';
-        var businessRef = new Firebase(FIREBASE_URL + '/businessSite');
-        var photoRef = new Firebase(FIREBASE_URL + '/businessPhotos');
-       
-        $scope.companies = $firebaseArray(businessRef);
-        $scope.picturesRef = $firebaseArray(photoRef);
-        $scope.split_jobs = [['job1', 'job2', 'job3'], ['job5', 'job6', 'job7']];
-    
-        $scope.street_number = '';
-        $scope.route = '';
-        $scope.locality = '';
-        $scope.administrative_area_level_1 = '';
-        $scope.postal_code = '';
-        $scope.country = '';
-        $scope.latitude = '';
-        $scope.longitude = '';
-        $scope.open_store_hours0 = '';
-        $scope.closed_store_hours0 = '';
-        $scope.open_store_hours1 = '';
-        $scope.closed_store_hours1 = '';
-        $scope.open_store_hours2 = '';
-        $scope.closed_store_hours2 = '';
-        $scope.open_store_hours3 = '';
-        $scope.closed_store_hours3 = '';
-        $scope.open_store_hours4 = '';
-        $scope.closed_store_hours4 = '';
-        $scope.open_store_hours5 = '';
-        $scope.closed_store_hours5 = '';
-        $scope.open_store_hours6 = '';
-        $scope.closed_store_hours6 = '';
-        $scope.error = '';
-
-        $scope.manager = {email: '', password: '', firstName: '', lastName: ''}
-        $scope.business = {name: '', description: '', status: '', street_number: $scope.street_number, route: $scope.route, locality: $scope.locality, administrative_area_level_1: $scope.administrative_area_level_1, 
-        postal_code: '', country: '', latitude: '', longitude: '', webaddress: '', open_store_hours0: '', 
-        closed_store_hours0: '', open_store_hours1: '', closed_store_hours1: '', open_store_hours2: '', closed_store_hours2: '', 
-        open_store_hours3: '', closed_store_hours3: '', open_store_hours4: '', closed_store_hours4: '', open_store_hours5: '', 
-        closed_store_hours5: '', open_store_hours6: '', closed_store_hours6: ''}
-
-
-
-
-       $scope.options = {
-          types: '(regions)'
-       };
-
-       $scope.results = '';
-       $scope.details = '';
-    
-        vm.registerNewHMBUS = function() {
-            registerPasswordHM($scope.manager, $scope.business)
-        }
-       
-        vm.CloseModal = function (){
-            $modalInstance.close();
-        }
-
-        function registerPasswordHM(registeredUser, newbusinessObj){
-            //register new hiring manager
-            userService.registerNewUser(registeredUser.email, registeredUser.password)
-                .then(function(manager) {
-                    userService.createRegisteredNewUser(registeredUser, manager.uid)
-                        .then(function(newUser){
-                            authService.passwordLogin(registeredUser.email, registeredUser.password)
-                                .then(function(auth){
-                                    managerId = manager.uid;
-                                    userService.setCurrentUser(newUser, manager.uid);
-                                    businessService.createNewBusiness(newbusinessObj, manager.uid);
-                                    $modalInstance.close();
-                                }, function(err) {
-                                    alert(err)
-                                });
-                        }, function(err) {
-                            alert(err)
-                        });
-                }, function(err) {
-                    alert(err)
-                })
-      $state.go('app.busDashboard');
-        }
-
-
-}
-
-
-})();
-
-/**
- * Created by mike.baker on 9/8/2015.
- */
-(function() {
-    'use strict';
-
-    angular.module('hirelyApp.manager', []);
-})();
-/**
  *
  * Job Application Workflow Main Controller
  *
@@ -2356,24 +2359,25 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
               /**
                * User is authenticated update user data
                */
-              UserService.saveUser($scope.user, AuthService.currentUserID)
-              .then(
-                function(savedUser){
-                  /**
-                   * User data updated successfully
-                   */
-
-                  //// make sure the AuthService data is synced
-                  AuthService.updateCurrentUser($scope.user);
-                },//// fun. resolve
-                function(err){
-                  /**
-                   * Error in updateing user data
-                   */
-
-                  alert('Error!\nSomething wrong happened while saving data.');
-                }//// fun. reject
-              );//// saveUser then
+              // TODO:  Upsert application to business once BusinessService is ready
+              //UserService.saveUser($scope.user, AuthService.currentUserID)
+              //.then(
+              //  function(savedUser){
+              //    /**
+              //     * User data updated successfully
+              //     */
+              //
+              //    //// make sure the AuthService data is synced
+              //    AuthService.updateCurrentUser($scope.user);
+              //  },//// fun. resolve
+              //  function(err){
+              //    /**
+              //     * Error in updateing user data
+              //     */
+              //
+              //    alert('Error!\nSomething wrong happened while saving data.');
+              //  }//// fun. reject
+              //);//// saveUser then
             }//// if getAuth
             else{
               /**
@@ -2395,6 +2399,217 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
     });
 
   }
+})();
+
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
+ */
+(function () {
+  'use strict';
+
+  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
+
+
+  function StepTwoController($scope, $stateParams) {
+
+    $scope.xpItems = [];
+    $scope.addJobXp = function () {
+      console.log($scope.company);
+      $scope.xpItems.push(
+        {
+          company: $scope.company,
+          position: $scope.position,
+          description: $scope.description
+        }
+      )
+    }
+
+  }
+})();
+/**
+ *
+ * Job Application Workflow
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function() {
+	'use strict';
+
+	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+
+
+	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+
+		$scope.stepThreeLoaded = false;
+
+		$scope.resultsLoaded = false;
+
+		var saved = false;
+    
+    var assessmentId = null;
+
+		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
+		Traitify.setHost("api-sandbox.traitify.com");
+		Traitify.setVersion("v1");
+
+		TraitifyService.getAssessmentId().then(function(data) {
+			assessmentId = data.results.id;
+			var traitify = null;
+
+			var results = {};
+			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+				results: {
+					target: ".personality-results"
+				},
+				personalityTypes: {
+					target: ".personality-types"
+				},
+				personalityTraits: {
+					target: ".personality-traits"
+				}
+			});
+
+			traitify.slideDeck.onInitialize(function() {
+				results.slides = traitify.slideDeck.data.get("Slides");
+				$scope.stepThreeLoaded = true;
+				$scope.$apply();
+			});
+
+			traitify.results.onInitialize(function() {
+				console.log("Results");
+				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
+					results.types = data.personality_types;
+					results.blend = data.personality_blend;
+					saveAssessment()
+				});
+				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
+					results.traits = data;
+					saveAssessment()
+				});
+				$scope.resultsLoaded = true;
+				$scope.$apply();
+			});
+
+			function saveAssessment() {
+				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
+          saved = true;
+					TraitifyService.saveAssessment(results, '444', assessmentId);
+				}
+			}
+
+		});
+	}
+})();
+
+/**
+ *
+ * Job Application Workflow Main Controller
+ *
+ * Develoopers - Hirely 2015
+ *
+ *
+ */
+(function () {
+	'use strict';
+
+	angular.module('hirelyApp').controller('StepFourController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', StepFourController]);
+
+
+	function StepFourController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout) {
+
+		$scope.validStep = false;
+
+		$scope.stepFourLoaded = true;  // TODO:  Handle this
+
+		//$scope.application = {
+		//	userId: $scope.user,
+		//	status: 0,
+		//}
+		//$scope.prescreenAnswers = [
+		//	{
+		//		question: "what's up?",
+		//		answer: "Nothing",
+		//	}
+		//]
+
+		$scope.$watch('stepFour.$valid', function(state) {
+			multiStepFormInstance.setValidity(state);
+		});
+
+		$scope.$watch('stepFour.$valid', function(state) {
+			multiStepFormInstance.setValidity(state);
+		});
+
+		/**
+		 * Waite for 1 sec to check the stepOnLoaded
+		 * waiting time is adde dto prevent the undefined value for this var that happen occasionally
+		 */
+		$timeout(function(){
+			if(!$scope.stepFourLoaded){
+				$scope.user = angular.copy(AuthService.currentUser);
+				$scope.stepFourLoaded = true;
+			}
+		}, 1000);/// $timeout
+
+
+		//// wait for destroy event to update data
+		$scope.$on('$destroy', function(event){
+			/**
+			 * Make sure user is logged in before you do update
+			 */
+			AuthService.getAuth().then(
+				/**
+				 * user is logged in go ahead and do data update
+				 */
+				function(result){
+					if(true === result){
+						/**
+						 * User is authenticated update user data
+						 */
+						UserService.saveUser($scope.user, AuthService.currentUserID)
+							.then(
+								function(savedUser){
+									/**
+									 * User data updated successfully
+									 */
+
+										//// make sure the AuthService data is synced
+									AuthService.updateCurrentUser($scope.user);
+								},//// fun. resolve
+								function(err){
+									/**
+									 * Error in updateing user data
+									 */
+
+									alert('Error!\nSomething wrong happened while saving data.');
+								}//// fun. reject
+							);//// saveUser then
+					}//// if getAuth
+					else{
+						/**
+						 * Error in getAuth
+						 */
+						console.log(result);
+						alert(result);
+					}//// if true else
+
+				},///// resolve funtion
+				function(err){
+					/**
+					 * User is not logged id do do anything
+					 */
+
+				}//// fun. getAuth Reject
+			);/// getAuth promise
+
+		});
+
+	}
 })();
 
 /**
@@ -2780,111 +2995,6 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
 
 
   }////fun. stepFiveController
-})();
-/**
- *
- * Job Application Workflow
- *
- * Develoopers - Hirely 2015
- *
- *
- */
-(function() {
-	'use strict';
-
-	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
-
-
-	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
-
-		$scope.stepThreeLoaded = false;
-
-		$scope.resultsLoaded = false;
-
-		var saved = false;
-    
-    var assessmentId = null;
-
-		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-		Traitify.setHost("api-sandbox.traitify.com");
-		Traitify.setVersion("v1");
-
-		TraitifyService.getAssessmentId().then(function(data) {
-			assessmentId = data.results.id;
-			var traitify = null;
-
-			var results = {};
-			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-				results: {
-					target: ".personality-results"
-				},
-				personalityTypes: {
-					target: ".personality-types"
-				},
-				personalityTraits: {
-					target: ".personality-traits"
-				}
-			});
-
-			traitify.slideDeck.onInitialize(function() {
-				results.slides = traitify.slideDeck.data.get("Slides");
-				$scope.stepThreeLoaded = true;
-				$scope.$apply();
-			});
-
-			traitify.results.onInitialize(function() {
-				console.log("Results");
-				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
-					results.types = data.personality_types;
-					results.blend = data.personality_blend;
-					saveAssessment()
-				});
-				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
-					results.traits = data;
-					saveAssessment()
-				});
-				$scope.resultsLoaded = true;
-				$scope.$apply();
-			});
-
-			function saveAssessment() {
-				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
-          saved = true;
-					TraitifyService.saveAssessment(results, '444', assessmentId);
-				}
-			}
-
-		});
-	}
-})();
-
-/**
- *
- * Job Application Workflow Main Controller
- *
- * Develoopers - Hirely 2015
- */
-(function () {
-  'use strict';
-
-  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', StepTwoController]);
-
-
-  function StepTwoController($scope, $stateParams) {
-
-    $scope.xpItems = [];
-    $scope.addJobXp = function () {
-      console.log($scope.company);
-      $scope.xpItems.push(
-        {
-          company: $scope.company,
-          position: $scope.position,
-          description: $scope.description
-        }
-      )
-    }
-
-  }
 })();
 /**
  * Created by labrina.loving on 9/6/2015.
@@ -3356,6 +3466,28 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
 })()
 ;
 
+
+/**
+ * Created by labrina.loving on 8/9/2015.
+ */
+angular.module('hirelyApp.core')
+    .config(['$provide', function($provide) {
+        // adapt ng-cloak to wait for auth before it does its magic
+        $provide.decorator('ngCloakDirective', ['$delegate', 'Auth',
+            function($delegate, Auth) {
+                var directive = $delegate[0];
+                // make a copy of the old directive
+                var _compile = directive.compile;
+                directive.compile = function(element, attr) {
+                    Auth.$waitForAuth().then(function() {
+                        // after auth, run the original ng-cloak directive
+                        _compile.call(directive, element, attr);
+                    });
+                };
+                // return the modified directive
+                return $delegate;
+            }]);
+    }]);
 
 /**
  * Created by labrina.loving on 9/16/2015.
@@ -5226,28 +5358,6 @@ angular.module('hirelyApp.manager').directive('autoFillableField', [
 
 
 })();
-
-/**
- * Created by labrina.loving on 8/9/2015.
- */
-angular.module('hirelyApp.core')
-    .config(['$provide', function($provide) {
-        // adapt ng-cloak to wait for auth before it does its magic
-        $provide.decorator('ngCloakDirective', ['$delegate', 'Auth',
-            function($delegate, Auth) {
-                var directive = $delegate[0];
-                // make a copy of the old directive
-                var _compile = directive.compile;
-                directive.compile = function(element, attr) {
-                    Auth.$waitForAuth().then(function() {
-                        // after auth, run the original ng-cloak directive
-                        _compile.call(directive, element, attr);
-                    });
-                };
-                // return the modified directive
-                return $delegate;
-            }]);
-    }]);
 
 /**
  *

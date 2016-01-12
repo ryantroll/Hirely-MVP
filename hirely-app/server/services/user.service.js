@@ -41,7 +41,7 @@ var userService = {
         // Determine what fields to return based on reqQuery.
 
         var returnFields = '';
-        if(undefined !== reqQuery.complete) {
+        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
             /**
              * Complete set is requested let's send the whole user object
              */
@@ -77,7 +77,7 @@ var userService = {
      */
     createNewUser : function(userObj){
         var newUser = new userModel(userObj);
-        console.log(userObj);
+
         /**
          * make sure basic info of user returned by the promise.
          */

@@ -2,27 +2,6 @@ var Utilities = require('./utilities-for-models');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var applicationSchema = new Schema({
-  userId      :       {type:String, required:true},
-  status      :       {//// 0 close, 1 open
-                        type:Number,
-                        required:true,
-                        validate:{
-                          validator: function(v){
-                            return /^(1|0)$/.test(v.toString());
-                          },
-                          message:'{VALUE} is not valid value for application status'
-                        }
-                      },
-  prescreenAnswers  :
-  [
-    {
-      question  :     String,
-      answer    :     String
-    }
-  ]/// prescreen array
-});//// applicationSchema
-
 var variantSchema = new Schema(
   {
     title             :     { type:String, required:true },
@@ -86,8 +65,15 @@ var variantSchema = new Schema(
       required      :       Boolean
     },/// shift object
 
+    prescreenQuestions:
+        [
+            {
+                question  :     String,
+            }
+        ], /// prescreen array
 
-    applications:[ applicationSchema ]//// application array
+
+    // applications:[ applicationSchema ]//// application array
 
   }//// varients[] object
 );//// variantSchema
@@ -100,12 +86,7 @@ var positionSchema = new Schema({
         title         :    {type: String, required:true},
         slug          :    {type: String},
         onetClass     :    {type: String, required:true},
-        prescreenQuestions:
-        [
-            {
-                question  :     String,
-            }
-        ], /// prescreen array
+
         variants      :    [ variantSchema ]//// vairants araay
 });//// positionSchema
 /**
@@ -195,7 +176,7 @@ var businessSchema = new Schema({
 /**
  * Add slug to bsiness through slug plugin
  */
-businessSchema.plugin( Utilities.slug, {slug:'slug', fields:'name', unique:true} );
+// businessSchema.plugin( Utilities.slug, {slug:'slug', fields:'name', unique:true} );
 
 
 var BusinessModel = mongoose.model('Businesses', businessSchema, "businesses");

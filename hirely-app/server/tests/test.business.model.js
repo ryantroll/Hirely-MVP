@@ -10,7 +10,8 @@ db.on('error', console.error.bind(console, 'connection error:') );
 
 db.once('open', function(){
     var b = new BusinessModel({
-        name: 'compass coffee',
+        name: 'compass coffee 2',
+        slug: 'compass-coffee-2',
         email: Math.round(Math.random()*1000).toString() + 'IYAD.bitar@gmail.com',
         website:'http://compasscoffee.com',
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
@@ -51,11 +52,7 @@ db.once('open', function(){
 
                         slug: 'barista',
 
-                        prescreenQuestions:[
-                            {
-                                question:'what\'s up?',
-                            }
-                        ],
+
 
                         variants:[
                             {
@@ -101,18 +98,13 @@ db.once('open', function(){
                                     required      :       false
                                   },
 
-                                applications:[
+                                prescreenQuestions:[
                                     {
-                                        userId:'lkd098098sds98d09',
-                                        status:1,
-                                        prescreenAnswers:[
-                                            {
-                                                question:'what\'s up?',
-                                                answer: 'Nothing'
-                                            }
-                                        ]
+                                        question:'what\'s up?',
                                     }
-                                ]/// applicaiton object
+                                ],
+
+
                             }///variant object
                         ]
                     }
