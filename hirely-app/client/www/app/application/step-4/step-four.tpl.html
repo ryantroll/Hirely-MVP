@@ -1,0 +1,28 @@
+<form class="form-horizontal" name="step-four" form-step-validity>
+    <!-- Short Bio -->
+    <fieldset>
+        <legend>Prescreen Questions</legend>
+    </fieldset>
+
+    <div class="form-content">
+        <div class="form-loader" ng-show="!stepFourLoaded">
+            <div class="loader"></div>
+        </div>
+
+        <div class="form-fields-wrapper" ng-show="stepFourLoaded">
+            <div class="form-group" ng-repeat="question in variant.prescreenQuestions">
+                <label for="question-{{$index}}" class="col-sm-3 control-label">{{question.question}}
+                </label>
+                <div class="col-sm-9 col-md-6">
+                    <div ng-class="{'has-feedback has-error': question.$error.required && question.$dirty, 'has-feedback has-success' : question.$valid}">
+                        <input type="text" class="form-control" id="{{$index +1}}" name="{{$index +1}}">
+                        <span class="fa fa-close form-control-feedback" ng-show="question.$error.required && question.$dirty"></span>
+                        <span class="fa fa-check form-control-feedback" ng-show="question.$valid"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>

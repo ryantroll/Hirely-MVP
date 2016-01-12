@@ -139,24 +139,25 @@
               /**
                * User is authenticated update user data
                */
-              UserService.saveUser($scope.user, AuthService.currentUserID)
-              .then(
-                function(savedUser){
-                  /**
-                   * User data updated successfully
-                   */
-
-                  //// make sure the AuthService data is synced
-                  AuthService.updateCurrentUser($scope.user);
-                },//// fun. resolve
-                function(err){
-                  /**
-                   * Error in updateing user data
-                   */
-
-                  alert('Error!\nSomething wrong happened while saving data.');
-                }//// fun. reject
-              );//// saveUser then
+              // TODO:  Upsert application to business once BusinessService is ready
+              //UserService.saveUser($scope.user, AuthService.currentUserID)
+              //.then(
+              //  function(savedUser){
+              //    /**
+              //     * User data updated successfully
+              //     */
+              //
+              //    //// make sure the AuthService data is synced
+              //    AuthService.updateCurrentUser($scope.user);
+              //  },//// fun. resolve
+              //  function(err){
+              //    /**
+              //     * Error in updateing user data
+              //     */
+              //
+              //    alert('Error!\nSomething wrong happened while saving data.');
+              //  }//// fun. reject
+              //);//// saveUser then
             }//// if getAuth
             else{
               /**
