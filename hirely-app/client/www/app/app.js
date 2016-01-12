@@ -149,10 +149,10 @@ var myApp = angular.module('hirelyApp',
           url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
           templateUrl: 'app/application/job-application.html',
           controller: 'JobApplicationController',
-          authRequired: true
+          //authRequired: true
       })
 
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/');
+    //$urlRouterProvider.otherwise('/');
   });
