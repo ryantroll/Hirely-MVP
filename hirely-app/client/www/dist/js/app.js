@@ -492,7 +492,6 @@ var myApp = angular.module('hirelyApp',
     console.log($scope.businessSlug);
     if(angular.isDefined($scope.businessSlug)) {
       //$scope.businessInfo = HirelyApiService.businesses("compass-coffee").get()
-      // TODO:  Use BusinessService to get the business once implemented
       HirelyApiService.businesses($scope.businessSlug).get().then(function(business) {
         console.dir("bus: ");
         console.dir(business);
@@ -2526,16 +2525,10 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 
 		$scope.stepFourLoaded = true;  // TODO:  Handle this
 
-		//$scope.application = {
-		//	userId: $scope.user,
-		//	status: 0,
-		//}
-		//$scope.prescreenAnswers = [
-		//	{
-		//		question: "what's up?",
-		//		answer: "Nothing",
-		//	}
-		//]
+		// TODO: Figure out how to map the input prescreen answers to an array like below
+		$scope.prescreenAnswers = [];
+
+		$scope.application = {};
 
 		$scope.$watch('stepFour.$valid', function(state) {
 			multiStepFormInstance.setValidity(state);
@@ -2569,26 +2562,24 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 				function(result){
 					if(true === result){
 						/**
-						 * User is authenticated update user data
+						 * User is authenticated create application data
 						 */
-						UserService.saveUser($scope.user, AuthService.currentUserID)
-							.then(
-								function(savedUser){
-									/**
-									 * User data updated successfully
-									 */
 
-										//// make sure the AuthService data is synced
-									AuthService.updateCurrentUser($scope.user);
-								},//// fun. resolve
-								function(err){
-									/**
-									 * Error in updateing user data
-									 */
+						var application = new JobApplication(UserService.currentUser,
+															 $scope.variant.id,
+															 0,
+															 $scope.prescreenAnswers)
+						HirelyApiService.applications().post(application).then(
+							function(application){
+								deferred.resolve(application);
+								$scope.application = application;
+							},
+							function(error){
+								deferred.reject(error);
+							}
+						);
 
-									alert('Error!\nSomething wrong happened while saving data.');
-								}//// fun. reject
-							);//// saveUser then
+						return deferred.promise;
 					}//// if getAuth
 					else{
 						/**
@@ -4567,7 +4558,8 @@ function HirelyApiService($http, $q) {
   var service = {
     version:version,
     users:setUsersEndpoint,
-    businesses:setBusinessesEndpoint
+    businesses:setBusinessesEndpoint,
+    applications:setApplicationsEndpoint
   }
 
   /**
@@ -4583,12 +4575,24 @@ function HirelyApiService($http, $q) {
 
   /**
    * [businesses child object to hold business endpoint functions and allow function call chain
-   * this object will be returned by .businesses() endpoint setter function to expose the http verbs function e.g. .businesses().get(), .users().post()]
+   * this object will be returned by .businesses() endpoint setter function to expose the http verbs function e.g. .businesses().get(), .businesses().post()]
    * @type {Object}
    */
   var businesses = {
     post:createNewUser,
-    get:getBusinesses
+    get:getBusinesses,
+    patch:saveBusiness
+  }
+
+  /**
+   * [applications child object to hold application endpoint functions and allow function call chain
+   * this object will be returned by .applications() endpoint setter function to expose the http verbs function e.g. .applications().get(), .applications().post()]
+   * @type {Object}
+   */
+  var applications = {
+    post:createNewApplication,
+    get:getApplications,
+    patch:saveApplication
   }
 
   /**
@@ -4614,6 +4618,12 @@ function HirelyApiService($http, $q) {
 
     return users;
   }/// fun. setBusinessesEndpoint
+
+  function setApplicationsEndpoint(){
+    setEndpoint('applications', arguments);
+
+    return users;
+  }/// fun. setApplicationsEndpoint
 
   /**
    * [setEndpoint will build the required url of desired API endpoint
@@ -4723,6 +4733,64 @@ function HirelyApiService($http, $q) {
     return deferred.promise;
   }/// fun. createNewUser
 
+
+
+  /**
+   * [createNewBusiness will create new user object in api and return the created object with its object id]
+   * @param  {object} business [business object with business Model data]
+   * @return {[promis]}      [description]
+   */
+  function createNewBusiness(userData){
+    var deferred = $q.defer();
+
+    $http.post(baseURL + endpointUrl, userData).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(error.message);
+          }
+        }, //// fun. resolve
+        function(error){
+          var res = error.data;
+          deferred.reject(res.message);
+        }//// fun. reject
+    )
+
+    return deferred.promise;
+  }/// fun. createNewBusiness
+
+
+
+  /**
+   * [createNewApplication will create new user object in api and return the created object with its object id]
+   * @param  {object} application [application object with user Model data]
+   * @return {[promis]}      [description]
+   */
+  function createNewApplication(applicationData){
+    var deferred = $q.defer();
+
+    $http.post(baseURL + endpointUrl, applicaitonData).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(error.message);
+          }
+        }, //// fun. resolve
+        function(error){
+          var res = error.data;
+          deferred.reject(res.message);
+        }//// fun. reject
+    )
+
+    return deferred.promise;
+  }/// fun. createNewApplication
+
   function getUsers(){
     var deferred = $q.defer();
 
@@ -4766,6 +4834,52 @@ function HirelyApiService($http, $q) {
     return deferred.promise;
   }//// fun. saveUser
 
+
+  function saveBusiness(userData){
+    var deferred = $q.defer();
+
+    $http.patch(baseURL + endpointUrl, userData)
+        .then(
+            function(payload){
+              var res = payload.data;
+              if(res.statusCode = 200){
+                deferred.resolve(res.results);
+              }
+              else{
+                deferred.reject(res.message);
+              }
+            },
+            function(error){
+              deferred.reject(error);
+            }
+        );/// patch.then
+
+    return deferred.promise;
+  }//// fun. saveBusiness
+
+
+  function saveApplication(userData){
+    var deferred = $q.defer();
+
+    $http.patch(baseURL + endpointUrl, userData)
+        .then(
+            function(payload){
+              var res = payload.data;
+              if(res.statusCode = 200){
+                deferred.resolve(res.results);
+              }
+              else{
+                deferred.reject(res.message);
+              }
+            },
+            function(error){
+              deferred.reject(error);
+            }
+        );/// patch.then
+
+    return deferred.promise;
+  }//// fun. saveApplication
+
   function getBusinesses(){
     var deferred = $q.defer();
 
@@ -4786,6 +4900,27 @@ function HirelyApiService($http, $q) {
 
     return deferred.promise;
   }//// fun. getBusinesses
+
+  function getApplications(){
+    var deferred = $q.defer();
+
+    $http.get(baseURL + endpointUrl).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(res.message);
+          }
+        },
+        function(error){
+          deferred.reject(error);
+        }
+    )
+
+    return deferred.promise;
+  }//// fun. getApplications
 
   return service;
 }//// fun. HirelyApiService
@@ -5062,11 +5197,6 @@ function HirelyApiService($http, $q) {
 
       var id = authId;
 
-
-      /**
-       * Set add firebase to user object as external ID to do the mapping
-       * @type {[type]}
-       */
       return HirelyApiService.users().post( angular.extend({externalId:authId}, userData) );
 
     };
@@ -5386,18 +5516,11 @@ Address = Model({
  * */
 
 JobApplication = Model({
-  initialize: function (startDate, minHours, maxHours){
-    // if(userID) this.userID = userID;
-    // if(jobID) this.jobID = jobID;
+  initialize: function (userId, variantId, status, prescreenAnswers){
+    if(userID) this.userID = userID;
+    if(variantId) this.variantId = variantId;
+    if(prescreenAnswers) this.prescreenAnswers = prescreenAnswers;
 
-    /**
-     * [startDate will be sent as date object and will be saved as number of milisecond
-     * to keep timestamp consistant with Firebase timestamp]
-     * @type {[Date]}
-     */
-    if(startDate) this.startDate = startDate.getTime();
-    if(maxHours) this.maxHours = maxHours;
-    if(minHours) this.minHours = minHours;
   }
 });
 /**

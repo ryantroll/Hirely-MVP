@@ -63,9 +63,12 @@ var businessService = {
         );/// then
     },
 
+    /**
+     * [getByVariantId will return a busniess object based on variant ID that in locations.positions.variants array]
+     * @param  {string} variantId [id of variant tha belong to requested business object ]
+     * @return {promise}           [description]
+     */
     getByVariantId: function(variantId){
-        console.log(variantId);
-        // return businessModel.findOne({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{_id:  varaintId  }}}}}}}).exec();
         return businessModel.find({})
         .where({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{_id:variantId}}}}}}})
         .exec();
@@ -73,23 +76,5 @@ var businessService = {
 
 }/// businesss object
 
-/**
- * get business by variant id query
- * db.getCollection('businesses').find(
-    {
-        "locations":{
-            $elemMatch:{
-                "positions":{
-                    $elemMatch:{
-                        "variants":{
-                            $elemMatch:{"_id": ObjectId("56952b8f0c3d16003e49a3e2")}
-                         }
-                    }
-                 }
-            }
-        }
-     }
-)
- */
 
 module.exports = businessService;

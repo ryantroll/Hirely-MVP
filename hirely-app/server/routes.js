@@ -52,8 +52,6 @@ module.exports = function(app) {
      */
     app.get('/api/v1/applications', applicationApiRoutes.getAll);
     app.get('/api/v1/applications/:id', applicationApiRoutes.getById);
-    app.get('/api/v1/applications/:userId/user', applicationApiRoutes.getByUserId);
-    app.get('/api/v1/applications/:variantId/variant', applicationApiRoutes.getByVariantId);
     app.post('/api/v1/applications/', applicationApiRoutes.createNewApplication);
     app.patch('/api/v1/applications/:appId', applicationApiRoutes.saveApplication);
 
