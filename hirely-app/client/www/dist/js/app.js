@@ -427,10 +427,10 @@ var myApp = angular.module('hirelyApp',
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'HirelyApiService', JobApplicationController]);
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, HirelyApiService) {
+  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, HirelyApiService) {
 
     // test jobs
     var testJobOne = {
@@ -470,6 +470,18 @@ var myApp = angular.module('hirelyApp',
     $scope.locationSlug = $stateParams.locationSlug;
     $scope.positionSlug = $stateParams.positionSlug;
     $scope.variantSlug = $stateParams.variantSlug;
+
+    /**
+     * [application to hold the aplicaiton object if user is already applied]
+     * @type {object}
+     */
+    $scope.application = null;
+
+    /**
+     * [isDataLoaded flag that will be watched in child scope who want to check data availablity]
+     * @type {Boolean}
+     */
+    $scope.isDataLoaded = false;
 
     // Handle user already applied
     //if(angular.isDefined($scope.businessSlug)){
@@ -533,7 +545,27 @@ var myApp = angular.module('hirelyApp',
         if(!angular.isDefined($scope.variant)) {
           console.log("variant not found.");
         }
-      })
+
+        /**
+         * find if there application already saved for this user
+         */
+        JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.variant._id)
+        .then(
+          function(jobApp){
+            $scope.application = jobApp;
+            /**
+             * Notify child scope about the end of data loading
+             * so they can access the data in daddy and granddaddy
+             */
+            $scope.$broadcast('data-loaded');
+          },
+          function(err){
+            $scope.isDataLoaded = true;
+          }
+        )//// .isApplicaitonExists.then()
+
+
+      })//// .get().then()
     }
 
 
@@ -2516,38 +2548,71 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 (function () {
 	'use strict';
 
-	angular.module('hirelyApp').controller('StepFourController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', StepFourController]);
+	angular.module('hirelyApp')
+	.controller('StepFourController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', 'JobApplicationService', StepFourController]);
 
 
-	function StepFourController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout) {
+	function StepFourController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout, JobApplicationService) {
 
-		$scope.validStep = false;
+		/**
+		 * vaiant to hold the vaiant object
+		 * this is out of scope as it is only for reading
+		 */
+		var variant;
 
-		$scope.stepFourLoaded = true;  // TODO:  Handle this
+		// /**
+		//  * Wait for daddy scope to finish loading data and then start initalize                                 [description]
+		//  */
+		// var eventUnbinder = $scope.$on('data-loaded', function(){
+		// 	/**
+		// 	 * Remove listener
+		// 	 */
+		// 	eventUnbinder();
+		// });/// $on
 
-		// TODO: Figure out how to map the input prescreen answers to an array like below
-		$scope.prescreenAnswers = [];
+		/**
+		 * bring the vaiant object to me from grandfather
+		 */
+		variant = angular.copy($scope.$parent.$parent.variant);
 
-		$scope.application = {};
 
-		$scope.$watch('stepFour.$valid', function(state) {
-			multiStepFormInstance.setValidity(state);
-		});
+		if(angular.isDefined($scope.$parent.$parent.application) && null !== $scope.$parent.$parent.application){
 
-		$scope.$watch('stepFour.$valid', function(state) {
-			multiStepFormInstance.setValidity(state);
-		});
+			$scope.model = {
+				prescreenAnswers: angular.copy($scope.$parent.$parent.application.prescreenAnswers)
+			}
+
+		}//// if application in granddaddy
+		else{
+			/**
+			 * initialize the data model to be saved in DB
+			 * @type {Object}
+			 */
+			$scope.model = {
+				prescreenAnswers: angular.copy(variant.prescreenQuestions)
+			};
+			/**
+			 * Remove the _id property from answers array, if kept and sent with post request will create problem
+			 */
+			for(var x=0; x<$scope.model.prescreenAnswers.length; x++){
+				delete $scope.model.prescreenAnswers[x]._id;
+			}
+		}/// if applicaiton in granddaddy else
+
+
 
 		/**
 		 * Waite for 1 sec to check the stepOnLoaded
-		 * waiting time is adde dto prevent the undefined value for this var that happen occasionally
+		 * waiting time is added to prevent the undefined value for this var that happen occasionally
 		 */
 		$timeout(function(){
 			if(!$scope.stepFourLoaded){
-				$scope.user = angular.copy(AuthService.currentUser);
+				// $scope.user = angular.copy(AuthService.currentUser);
 				$scope.stepFourLoaded = true;
 			}
+
 		}, 1000);/// $timeout
+
 
 
 		//// wait for destroy event to update data
@@ -2559,40 +2624,48 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
 				/**
 				 * user is logged in go ahead and do data update
 				 */
+
 				function(result){
 					if(true === result){
 						/**
 						 * User is authenticated create application data
 						 */
 
-						var application = new JobApplication(UserService.currentUser,
-															 $scope.variant.id,
-															 0,
-															 $scope.prescreenAnswers)
-						HirelyApiService.applications().post(application).then(
-							function(application){
-								deferred.resolve(application);
-								$scope.application = application;
-							},
-							function(error){
-								deferred.reject(error);
-							}
+						var application = new JobApplication(
+							AuthService.currentUserID,
+							variant._id,
+							 1, //// set status to 1
+							 angular.copy($scope.model.prescreenAnswers)
 						);
 
-						return deferred.promise;
+						JobApplicationService.save(application)
+						.then(
+							function(savedApp){
+								/**
+								 * application saved
+								 * Update the the grandparent scope
+								 */
+								console.log(savedApp)
+								$scope.$parent.$parent.application = savedApp;
+							},//// save resolve
+							function(err){
+								alert(err);
+							}//// save reject
+						);//// save().then()
+
+						// return deferred.promise;
 					}//// if getAuth
 					else{
 						/**
 						 * Error in getAuth
 						 */
-						console.log(result);
 						alert(result);
 					}//// if true else
 
 				},///// resolve funtion
 				function(err){
 					/**
-					 * User is not logged id do do anything
+					 * User is not logged in don't do anything
 					 */
 
 				}//// fun. getAuth Reject
@@ -2646,8 +2719,7 @@ angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 
        * The finally scopeInitialize function is called to set the right variables]
        * @type {Array}
        */
-      console.log($scope.availability);
-      console.log($scope.jobID);
+
       if(angular.isUndefined($scope.availability.weeklyTimetable)){
 
         //// availability table dose not exits in scope
@@ -3515,15 +3587,9 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
   'use strict';
 
   angular.module('hirelyApp.core')
-    .factory('JobApplicationService', ['$q', 'FIREBASE_URL', JobApplicationService]);
+    .factory('JobApplicationService', ['$q', 'HirelyApiService', JobApplicationService]);
 
-  function JobApplicationService( $q, FIREBASE_URL) {
-
-    /**
-     * [ref Firbase referance object]
-     * @type {firebase object}
-     */
-    var ref = new Firebase(FIREBASE_URL + '/applications');
+  function JobApplicationService( $q, HirelyApiService) {
 
     /**
      * [service object that define angular service to be returned by factory function at the end of this code]
@@ -3540,37 +3606,33 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      * @param {[type]} userId [User id to associate this job application with]
      * @param {[type]} jobID  [ID of the Job applicant is applying to]
      */
-    function save(jobApp, userID, jobID){
+    function save(jobApp){
       var deferred = $q.defer();
       var data = {};
 
       /**
        * check if job app exists and set right create on date
        */
-      isApplicationExists(userID, jobID)
+      return isApplicationExists(jobApp.userId, jobApp.variantId)
         .then(
-            function(jobApp){
-                data.createdOn = jobApp.createdOn;
+            function(foundedApp){
+                /**
+                 * application exist do patch
+                 */
+                delete foundedApp.prescreenAnswers;
+
+                angular.extend(foundedApp, jobApp);
+
+                return HirelyApiService.applications(foundedApp._id).patch(jobApp);
             },
             function(){
-                data.createdOn = Firebase.ServerValue.TIMESTAMP
+                /**
+                 * application doesn't exists do post
+                 */
+                return HirelyApiService.applications().post(jobApp);
             }
         )/// then
-        .finally(
-            //// update the date after createdOn data is been set
-            function(){
-                data.application = jobApp;
 
-                ref.child(userID).child(jobID).set(data, function(error){
-                    if(error){
-                      deferred.reject(error);
-                    }
-                    else{
-                      deferred.resolve(true);
-                    }
-                });
-            }/// fun. in finally
-        )/// finally
 
       return deferred.promise;
     }//// fun. save
@@ -3581,18 +3643,23 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
      * @param  {[string]}  jobID  [id of job]
      * @return {promise}        [usually promise will returned]
      */
-    function isApplicationExists(userID, jobID){
+    function isApplicationExists(userId, variantId){
         var deferred = $q.defer();
 
-        ref.child(userID).child(jobID).once('value', function(snap){
-            var exists = snap.val();
-            if(null !== exists){
-                deferred.resolve(exists);
+        HirelyApiService.applications({userId:userId, variantId:variantId}).get()
+        .then(
+            function(foundedApp){
+                if(angular.isArray(foundedApp) && foundedApp.length > 0){
+                    deferred.resolve(foundedApp[0]);
+                }
+                else{
+                    deferred.reject();
+                }
+            },
+            function(err){
+                deferred.reject(err);
             }
-            else{
-                deferred.reject(false);
-            }
-        })
+        )//// .get().then()
 
         return deferred.promise;
     }
@@ -3978,8 +4045,8 @@ angular.module("hirelyApp.core").filter('jobSearchFilter', function () {
       HirelyApiService.users(userId).patch({availability:data})
       .then(
         function(user){
-          console.log('Avilability saved')
-          console.log(user)
+          // console.log('Avilability saved')
+          // console.log(user)
         },
         function(err){
           console.log('error saving availablity');
@@ -5517,8 +5584,9 @@ Address = Model({
 
 JobApplication = Model({
   initialize: function (userId, variantId, status, prescreenAnswers){
-    if(userID) this.userID = userID;
+    if(userId) this.userId = userId;
     if(variantId) this.variantId = variantId;
+    if(undefined !== status) this.status = status;
     if(prescreenAnswers) this.prescreenAnswers = prescreenAnswers;
 
   }

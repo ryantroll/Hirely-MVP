@@ -175,6 +175,7 @@ var applicationService = {
                                 /**
                                  * Loop through sent properties and set them
                                  */
+                                // delete foundedApp.prescreenAnswers;
                                 for(prop in appObj){
                                     foundedApp[prop] = appObj[prop];
                                 }//// for

@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'HirelyApiService', JobApplicationController]);
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, HirelyApiService) {
+  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, HirelyApiService) {
 
     // test jobs
     var testJobOne = {
@@ -50,6 +50,18 @@
     $scope.locationSlug = $stateParams.locationSlug;
     $scope.positionSlug = $stateParams.positionSlug;
     $scope.variantSlug = $stateParams.variantSlug;
+
+    /**
+     * [application to hold the aplicaiton object if user is already applied]
+     * @type {object}
+     */
+    $scope.application = null;
+
+    /**
+     * [isDataLoaded flag that will be watched in child scope who want to check data availablity]
+     * @type {Boolean}
+     */
+    $scope.isDataLoaded = false;
 
     // Handle user already applied
     //if(angular.isDefined($scope.businessSlug)){
@@ -113,7 +125,27 @@
         if(!angular.isDefined($scope.variant)) {
           console.log("variant not found.");
         }
-      })
+
+        /**
+         * find if there application already saved for this user
+         */
+        JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.variant._id)
+        .then(
+          function(jobApp){
+            $scope.application = jobApp;
+            /**
+             * Notify child scope about the end of data loading
+             * so they can access the data in daddy and granddaddy
+             */
+            $scope.$broadcast('data-loaded');
+          },
+          function(err){
+            $scope.isDataLoaded = true;
+          }
+        )//// .isApplicaitonExists.then()
+
+
+      })//// .get().then()
     }
 
 

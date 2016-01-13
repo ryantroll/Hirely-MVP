@@ -41,8 +41,7 @@
        * The finally scopeInitialize function is called to set the right variables]
        * @type {Array}
        */
-      console.log($scope.availability);
-      console.log($scope.jobID);
+
       if(angular.isUndefined($scope.availability.weeklyTimetable)){
 
         //// availability table dose not exits in scope

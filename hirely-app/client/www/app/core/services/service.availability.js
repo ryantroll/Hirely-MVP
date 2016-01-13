@@ -151,8 +151,8 @@
       HirelyApiService.users(userId).patch({availability:data})
       .then(
         function(user){
-          console.log('Avilability saved')
-          console.log(user)
+          // console.log('Avilability saved')
+          // console.log(user)
         },
         function(err){
           console.log('error saving availablity');

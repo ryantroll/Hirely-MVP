@@ -1,4 +1,4 @@
-<form class="form-horizontal" name="step-four" form-step-validity>
+<form class="form-horizontal" name="stepFour" novalidate form-step-validity>
     <!-- Short Bio -->
     <fieldset>
         <legend>Prescreen Questions</legend>
@@ -10,14 +10,16 @@
         </div>
 
         <div class="form-fields-wrapper" ng-show="stepFourLoaded">
-            <div class="form-group" ng-repeat="question in variant.prescreenQuestions">
-                <label for="question-{{$index}}" class="col-sm-3 control-label">{{question.question}}
+            <div class="form-group" ng-repeat="question in model.prescreenAnswers">
+                <div class="col-sm-12 col-md-12">
+                <label for="question-{{$index+1}}" class="control-label">{{question.question}} <span class="required-field">*</span>
                 </label>
-                <div class="col-sm-9 col-md-6">
+            </div>
+                <div class="col-sm-12 col-md-12">
                     <div ng-class="{'has-feedback has-error': question.$error.required && question.$dirty, 'has-feedback has-success' : question.$valid}">
-                        <input type="text" class="form-control" id="{{$index +1}}" name="{{$index +1}}">
-                        <span class="fa fa-close form-control-feedback" ng-show="question.$error.required && question.$dirty"></span>
-                        <span class="fa fa-check form-control-feedback" ng-show="question.$valid"></span>
+                        <input type="text" class="form-control" id="question-{{$index+1}}" name="question-{{$index+1}}" ng-model="question.answer" required>
+                        <span class="fa fa-close form-control-feedback" ng-show="stepFour.question.$error.required && stepFour.question.$dirty"></span>
+                        <span class="fa fa-check form-control-feedback" ng-show="stepFour.question.$valid"></span>
                     </div>
                 </div>
             </div>
