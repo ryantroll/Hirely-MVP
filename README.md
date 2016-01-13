@@ -162,37 +162,6 @@ AuthService is doing the job so far but it's not coded as it should be
 
 # API
 -------------
-Hirely API use 2 different type of URL components, each one of these components in URL will decide (1) what data collection or data object will be returned (2) what data will be included in returned in response and how it will be shaped
-
-## 1. URL folder structure:
-
-The folder structure in API will decide data collection that is been quired with the request
-
-**Structure:** /api/v1/{data-collection}/{parameter-1}/{parameter-2 or descriptor}
-
-parameter-1: id of data object that is been retrived
-
-parameter-2: a second parameter if need or descriptor that will tell the API what the first parameter is, see example below for more
-
-**Example 1:** /api/v1/users/568fde202127fa312543f50f/ this request will return user object
-
-**Example 2:** /api/v1/users/93306b91-d5ba-4e06-838c-0ab85fd58783/external this request will return user object but the last folder structuer '/external' used to descripe the ID as external
-
-## 2. URL query string:
-
-The query string parameters is used by API to decide what is inside returned data and how it shaped
-
-**Structure:** /api/v1/users/user-id/? {key1} & {key2}={value2} (spaces in URL added of clarity)
-
-parameters in query string can be passed as key name only or key=value if the key has more than one value
-
-**Example 1:** /api/v1/users/568fde202127fa312543f50f/?complete this will return all fields of requested user object, instead of only the default public fields
-
-**Example 2 (coming soon):** /api/v1/businesses/?order=name&limit=10 this will return array of top 10 business entries order by name properties
-
-Businesses follow the same structure, except that the api will accept a business id OR a business slug.
-
-**Example:** /api/v1/businesses/starbucks will return all public fields of the business with slug=starbucks
 
 ## Users Api:
 

@@ -10,11 +10,13 @@ db.on('error', console.error.bind(console, 'connection error:') );
 
 db.once('open', function(){
     var b = new BusinessModel({
-        name: 'Starbucks',
-        email: 'iyad.bitar@gmail.com',
+        name: 'compass coffee 2',
+        slug: 'compass-coffee-2',
+        email: Math.round(Math.random()*1000).toString() + 'IYAD.bitar@gmail.com',
         website:'http://compasscoffee.com',
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
         agreedToTerms:true,
+        photoUrl:  "http://assets.inhabitat.com/wp-content/blogs.dir/1/files/2013/12/starbucks-canal-street-NOLA-store-6.jpg",
         locations:[
             {
                 name:'Clifton',
@@ -27,8 +29,11 @@ db.once('open', function(){
                 postalCode: '07012',
                 phone: '+1.222.222.2222',
                 formattedAddress: '24 Kenter Pl, Montclair, NJ 07012',
-                lng: 12.39439493,
-                lat: -99.88888,
+                lng: -77.0576414,
+                lat: 38.9340854,
+                neighborhood: 'Shaw',
+
+                slug: 'dc-washington-shaw',
 
                 hoursOfOperation: {
                     mon   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
@@ -45,9 +50,15 @@ db.once('open', function(){
                         title: 'Barista',
                         onetClass: '11-1011.03',
 
+                        slug: 'barista',
+
+
+
                         variants:[
                             {
+                                title             :     'Morning Barista',
                                 workType          :     'part-time',
+                                slug              :     'morning-barista',
                                 hoursPerWeekMin   :     1,
                                 hoursPerWeekMax   :     2,
                                 minOpeningShifts  :     2,
@@ -87,18 +98,13 @@ db.once('open', function(){
                                     required      :       false
                                   },
 
-                                applications:[
+                                prescreenQuestions:[
                                     {
-                                        userId:'lkd098098sds98d09',
-                                        status:1,
-                                        prescreenAnswers:[
-                                            {
-                                                question:'what\'s up?',
-                                                answer: 'Nothing'
-                                            }
-                                        ]
+                                        question:'what\'s up?',
                                     }
-                                ]/// applicaiton object
+                                ],
+
+
                             }///variant object
                         ]
                     }

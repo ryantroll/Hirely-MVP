@@ -7,64 +7,32 @@ var businessRoutes = {
         /**
          * Get all businesss
          */
-        businessService.getAll()
+        businessService.getAll(req.query)
         .then(
-            function(businesss){
-                res.status(200).json(apiUtil.generateResponse(200, "Businesss retrieved successfully", businesss));
+            function(business){
+                res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
             },
             function(error){
                 //// business couldn't be found 404
-                res.status(500).json(apiUtil.generateResponse(404, "Businesss couldn't be located", null));
+                res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
             }
         );
     },
 
-    getBusinessById : function(req, res){
+    getByIdOrSlug: function(req, res){
         /**
          * Send public info if all is not requested
          */
-        if(undefined !== req.query.public){
-            businessService.getPublicInfoById(req.params.id)
-                .then(
-                    function(business){
-                        res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
-                    },
-                    function(error){
-                        //// business couldn't be found 404
-                        res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
-                    }
-                );
-        } //// if all
-        /**
-         * Send public info if all is not requested
-         */
-        else if(undefined !== req.query.all){
-            businessService.getAllInfoById(req.params.id)
-                .then(
-                    function(business){
-                        res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
-                    },
-                    function(error){
-                        //// business couldn't be found 404
-                        res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
-                    }
-                );
-        } //// if all
-        /**
-         * Send extend info if extended in URL query
-         */
-        else{
-            businessService.getBasicInfoById(req.params.id)
-                .then(
-                    function(business){
-                        res.status(200).json(apiUtil.generateResponse(200, "Business retrived successfully", business));
-                    },
-                    function(error){
-                        //// business couldn't be found 404
-                        res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
-                    }
-                );
-        }//// if extended else
+        businessService.getByIdOrSlug(req.params.idOrSlug, req.query)
+        .then(
+            function(business){
+                res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
+            },
+            function(error){
+                //// business couldn't be found 404
+                res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
+            }
+        );
     },
 
     createNewBusiness : function(req, res){

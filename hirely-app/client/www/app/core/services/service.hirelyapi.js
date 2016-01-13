@@ -31,7 +31,9 @@ function HirelyApiService($http, $q) {
    */
   var service = {
     version:version,
-    users:setUsersEndpoint
+    users:setUsersEndpoint,
+    businesses:setBusinessesEndpoint,
+    applications:setApplicationsEndpoint
   }
 
   /**
@@ -41,7 +43,30 @@ function HirelyApiService($http, $q) {
    */
   var users = {
     post:createNewUser,
-    get:getUsers
+    get:getUsers,
+    patch:saveUser
+  }
+
+  /**
+   * [businesses child object to hold business endpoint functions and allow function call chain
+   * this object will be returned by .businesses() endpoint setter function to expose the http verbs function e.g. .businesses().get(), .businesses().post()]
+   * @type {Object}
+   */
+  var businesses = {
+    post:createNewUser,
+    get:getBusinesses,
+    patch:saveBusiness
+  }
+
+  /**
+   * [applications child object to hold application endpoint functions and allow function call chain
+   * this object will be returned by .applications() endpoint setter function to expose the http verbs function e.g. .applications().get(), .applications().post()]
+   * @type {Object}
+   */
+  var applications = {
+    post:createNewApplication,
+    get:getApplications,
+    patch:saveApplication
   }
 
   /**
@@ -61,6 +86,18 @@ function HirelyApiService($http, $q) {
 
     return users;
   }/// fun. setUserEndpoint
+
+  function setBusinessesEndpoint(){
+    setEndpoint('businesses', arguments);
+
+    return users;
+  }/// fun. setBusinessesEndpoint
+
+  function setApplicationsEndpoint(){
+    setEndpoint('applications', arguments);
+
+    return users;
+  }/// fun. setApplicationsEndpoint
 
   /**
    * [setEndpoint will build the required url of desired API endpoint
@@ -170,6 +207,64 @@ function HirelyApiService($http, $q) {
     return deferred.promise;
   }/// fun. createNewUser
 
+
+
+  /**
+   * [createNewBusiness will create new user object in api and return the created object with its object id]
+   * @param  {object} business [business object with business Model data]
+   * @return {[promis]}      [description]
+   */
+  function createNewBusiness(userData){
+    var deferred = $q.defer();
+
+    $http.post(baseURL + endpointUrl, userData).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(error.message);
+          }
+        }, //// fun. resolve
+        function(error){
+          var res = error.data;
+          deferred.reject(res.message);
+        }//// fun. reject
+    )
+
+    return deferred.promise;
+  }/// fun. createNewBusiness
+
+
+
+  /**
+   * [createNewApplication will create new user object in api and return the created object with its object id]
+   * @param  {object} application [application object with user Model data]
+   * @return {[promis]}      [description]
+   */
+  function createNewApplication(applicationData){
+    var deferred = $q.defer();
+
+    $http.post(baseURL + endpointUrl, applicaitonData).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(error.message);
+          }
+        }, //// fun. resolve
+        function(error){
+          var res = error.data;
+          deferred.reject(res.message);
+        }//// fun. reject
+    )
+
+    return deferred.promise;
+  }/// fun. createNewApplication
+
   function getUsers(){
     var deferred = $q.defer();
 
@@ -190,6 +285,116 @@ function HirelyApiService($http, $q) {
 
     return deferred.promise;
   }//// fun. getUsers
+
+  function saveUser(userData){
+    var deferred = $q.defer();
+
+    $http.patch(baseURL + endpointUrl, userData)
+    .then(
+      function(payload){
+        var res = payload.data;
+        if(res.statusCode = 200){
+          deferred.resolve(res.results);
+        }
+        else{
+          deferred.reject(res.message);
+        }
+      },
+      function(error){
+        deferred.reject(error);
+      }
+    );/// patch.then
+
+    return deferred.promise;
+  }//// fun. saveUser
+
+
+  function saveBusiness(userData){
+    var deferred = $q.defer();
+
+    $http.patch(baseURL + endpointUrl, userData)
+        .then(
+            function(payload){
+              var res = payload.data;
+              if(res.statusCode = 200){
+                deferred.resolve(res.results);
+              }
+              else{
+                deferred.reject(res.message);
+              }
+            },
+            function(error){
+              deferred.reject(error);
+            }
+        );/// patch.then
+
+    return deferred.promise;
+  }//// fun. saveBusiness
+
+
+  function saveApplication(userData){
+    var deferred = $q.defer();
+
+    $http.patch(baseURL + endpointUrl, userData)
+        .then(
+            function(payload){
+              var res = payload.data;
+              if(res.statusCode = 200){
+                deferred.resolve(res.results);
+              }
+              else{
+                deferred.reject(res.message);
+              }
+            },
+            function(error){
+              deferred.reject(error);
+            }
+        );/// patch.then
+
+    return deferred.promise;
+  }//// fun. saveApplication
+
+  function getBusinesses(){
+    var deferred = $q.defer();
+
+    $http.get(baseURL + endpointUrl).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(res.message);
+          }
+        },
+        function(error){
+          deferred.reject(error);
+        }
+    )
+
+    return deferred.promise;
+  }//// fun. getBusinesses
+
+  function getApplications(){
+    var deferred = $q.defer();
+
+    $http.get(baseURL + endpointUrl).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(res.message);
+          }
+        },
+        function(error){
+          deferred.reject(error);
+        }
+    )
+
+    return deferred.promise;
+  }//// fun. getApplications
 
   return service;
 }//// fun. HirelyApiService

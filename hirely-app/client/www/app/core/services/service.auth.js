@@ -95,6 +95,8 @@
         function setCurrentUser(user, userID){
           /// add the id to user object
           var newUser = angular.extend({}, user);
+          delete newUser._id;
+          delete newUser.__v;
 
           //// set the rootScope currentUser
           service.currentUser = newUser;

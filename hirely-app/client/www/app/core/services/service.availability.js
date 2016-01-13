@@ -8,15 +8,15 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .factory('AvailabilityService', ['$q', 'FIREBASE_URL', AvailabilityService]);
+    .factory('AvailabilityService', ['$q', 'HirelyApiService', AvailabilityService]);
 
-  function AvailabilityService( $q, FIREBASE_URL) {
+  function AvailabilityService( $q, HirelyApiService) {
 
     /**
      * [ref Firbase referance object]
      * @type {firebase object}
      */
-    var ref = new Firebase(FIREBASE_URL + '/users');
+    // var ref = new Firebase(FIREBASE_URL + '/users');
 
     /**
      * days is array of days short names
@@ -146,15 +146,19 @@
       var deferred = $q.defer();
       var data = toDBDataModel(availability);
 
-      ref.child(userId).child('availability').set(data, function(error){
-        if(error){
-          deferred.reject(error);
-        }
-        else{
-          deferred.resolve(true);
-        }
-      });
 
+
+      HirelyApiService.users(userId).patch({availability:data})
+      .then(
+        function(user){
+          // console.log('Avilability saved')
+          // console.log(user)
+        },
+        function(err){
+          console.log('error saving availablity');
+          console.log(err);
+        }
+      )
       return deferred.promise;
     }//// fun. save
 
@@ -164,18 +168,23 @@
      * @param  {String}  userID [description]
      * @return {Promise}        [usual promise object]
      */
-    function isAvailabilityExists(userID){
+    function isAvailabilityExists(userId){
         var deferred = $q.defer();
-        ref.child(userID).child('availability').once('value', function(snap){
-            var exists = snap.val();
-            if(null !== exists){
-              var ret = toFrontEndModel(exists);
-              deferred.resolve(angular.copy(ret));
+
+        HirelyApiService.users(userId, ['availability']).get()
+        .then(
+          function(avail){
+            if(angular.isDefined(avail.availability)){
+              deferred.resolve( toFrontEndModel(avail.availability) );
             }
             else{
-              deferred.reject(false);
+              deferred.reject('Error in getting availability');
             }
-        })
+          },
+          function(err){
+            console.log('error in getting availability');
+          }
+        )
 
         return deferred.promise;
     }
@@ -193,7 +202,8 @@
       delete ret.weeklyTimetable;
 
       //// translate seekerStatus
-      ret.seekerStatus = true === ret.seekerStatus ? 'active' : 'inactive';
+      console.log(obj.seekerStatus);
+      ret.seekerStatus =  obj.seekerStatus ?  1 : 0;
 
       for(var i=0; i<24; i++){
         var days = avail[i].days
@@ -219,7 +229,7 @@
       var retObj = angular.extend({}, dbObj);
 
       //// translate seekerStatus
-      retObj.seekerStatus = retObj.seekerStatus === 'active';
+      retObj.seekerStatus = retObj.seekerStatus === 1;
 
       //// translate weeklyTimetable
       var ret = [];

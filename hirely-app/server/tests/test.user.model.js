@@ -10,9 +10,9 @@ db.on('error', console.error.bind(console, 'connection error:') );
 
 db.once('open', function(){
     var user = new UserModel({
-        firstName:'Iyad',
-        lastName: 'Bitar',
-        email: 'iyad.bitar@mail.com',
+        firstName:'Brian',
+        lastName: 'Dombrowski',
+        email: 'bdombro@gmail.com',
         mobile: '90909009',
 
         provider: 'facebook',
@@ -30,7 +30,7 @@ db.once('open', function(){
         lat: -99.88888,
         businessesAppliedTo: [],
         businessesOwned: [],
-        businessesManaged: [],
+        locationsManaged: [],
         businessesStaffOf: [],
 
         preferences: {

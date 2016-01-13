@@ -8,15 +8,9 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .factory('JobApplicationService', ['$q', 'FIREBASE_URL', JobApplicationService]);
+    .factory('JobApplicationService', ['$q', 'HirelyApiService', JobApplicationService]);
 
-  function JobApplicationService( $q, FIREBASE_URL) {
-
-    /**
-     * [ref Firbase referance object]
-     * @type {firebase object}
-     */
-    var ref = new Firebase(FIREBASE_URL + '/applications');
+  function JobApplicationService( $q, HirelyApiService) {
 
     /**
      * [service object that define angular service to be returned by factory function at the end of this code]
@@ -33,37 +27,33 @@
      * @param {[type]} userId [User id to associate this job application with]
      * @param {[type]} jobID  [ID of the Job applicant is applying to]
      */
-    function save(jobApp, userID, jobID){
+    function save(jobApp){
       var deferred = $q.defer();
       var data = {};
 
       /**
        * check if job app exists and set right create on date
        */
-      isApplicationExists(userID, jobID)
+      return isApplicationExists(jobApp.userId, jobApp.variantId)
         .then(
-            function(jobApp){
-                data.createdOn = jobApp.createdOn;
+            function(foundedApp){
+                /**
+                 * application exist do patch
+                 */
+                delete foundedApp.prescreenAnswers;
+
+                angular.extend(foundedApp, jobApp);
+
+                return HirelyApiService.applications(foundedApp._id).patch(jobApp);
             },
             function(){
-                data.createdOn = Firebase.ServerValue.TIMESTAMP
+                /**
+                 * application doesn't exists do post
+                 */
+                return HirelyApiService.applications().post(jobApp);
             }
         )/// then
-        .finally(
-            //// update the date after createdOn data is been set
-            function(){
-                data.application = jobApp;
 
-                ref.child(userID).child(jobID).set(data, function(error){
-                    if(error){
-                      deferred.reject(error);
-                    }
-                    else{
-                      deferred.resolve(true);
-                    }
-                });
-            }/// fun. in finally
-        )/// finally
 
       return deferred.promise;
     }//// fun. save
@@ -74,18 +64,23 @@
      * @param  {[string]}  jobID  [id of job]
      * @return {promise}        [usually promise will returned]
      */
-    function isApplicationExists(userID, jobID){
+    function isApplicationExists(userId, variantId){
         var deferred = $q.defer();
 
-        ref.child(userID).child(jobID).once('value', function(snap){
-            var exists = snap.val();
-            if(null !== exists){
-                deferred.resolve(exists);
+        HirelyApiService.applications({userId:userId, variantId:variantId}).get()
+        .then(
+            function(foundedApp){
+                if(angular.isArray(foundedApp) && foundedApp.length > 0){
+                    deferred.resolve(foundedApp[0]);
+                }
+                else{
+                    deferred.reject();
+                }
+            },
+            function(err){
+                deferred.reject(err);
             }
-            else{
-                deferred.reject(false);
-            }
-        })
+        )//// .get().then()
 
         return deferred.promise;
     }

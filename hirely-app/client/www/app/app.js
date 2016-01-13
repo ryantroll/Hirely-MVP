@@ -34,12 +34,12 @@ var myApp = angular.module('hirelyApp',
     $stateProvider
 
       .state('app', {
-        url: "/app",
+        //url: "/app",
         abstract: true,
         templateUrl: 'app/layout/master.html'
       })
       .state('app.home', {
-        url: '/home',
+        url: '/',
         parent: 'app',
         templateUrl: 'app/home/home.html',
 
@@ -139,13 +139,20 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
         authRequired: true
       })
+      //.state('app.application', {
+      //  url: '/:jobId/apply',
+      //  templateUrl: 'app/application/job-application.html',
+      //  controller: 'JobApplicationController',
+      //  authRequired: true
+      //})
       .state('app.application', {
-        url: '/:jobId/apply',
-        templateUrl: 'app/application/job-application.html',
-        controller: 'JobApplicationController',
-        authRequired: true
+          url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
+          templateUrl: 'app/application/job-application.html',
+          controller: 'JobApplicationController',
+          //authRequired: true
       })
 
+
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
+    //$urlRouterProvider.otherwise('/');
   });

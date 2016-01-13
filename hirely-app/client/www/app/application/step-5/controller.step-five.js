@@ -18,9 +18,9 @@
    * Controller Definition ********************************************************
    * ******************************************************************************
    */
-  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', 'JobApplicationService', StepFiveController])
+  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', StepFiveController])
 
-  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService, JobApplicationService) {
+  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService) {
 
     /**
      * [availability this object will hold the data that need bot saved in database
@@ -41,8 +41,7 @@
        * The finally scopeInitialize function is called to set the right variables]
        * @type {Array}
        */
-      console.log($scope.availability);
-      console.log($scope.jobID);
+
       if(angular.isUndefined($scope.availability.weeklyTimetable)){
 
         //// availability table dose not exits in scope
@@ -322,23 +321,38 @@
         $scope.$on('$destroy', function(){
 
 
-          //// Save to DB After checking authentication
+          /**
+           * Save to DB After checking authentication
+           */
           AuthService.getAuth().then(
             function(isAuth){
-              if(isAuth){
+              if(true === isAuth){
+                /**
+                 * user is logged in do availability saving
+                 */
                 AvailabilityService.save( angular.copy($scope.availability), AuthService.currentUserID)
                   .then(
                     function(isSave){
+                      /**
+                       * Availability saved successfully
+                       */
+
                       // var jobApp = new JobApplication($scope.availability.startDate, $scope.availability.hoursPerWeekMin, $scope.availability.hoursPerWeekMax);
                       // JobApplicationService.save(jobApp, AuthService.currentUserID, $scope.jobID)
                     },//// .save resolve
                     function(error){
+                      /**
+                       * Error in saving
+                       */
                       alert('Availability Save Error!\n' + error);
                     }//// save reject
                   );//// save then
               }/// if auth
             }, //getAuth resolve
             function(error){
+              /**
+               * Error in authentication
+               */
               // alert("Authentication Error!\n" + error);
             }/// getAuth reject
           ); // getAuth then

@@ -7,7 +7,7 @@ var userRoutes = {
         /**
          * Get all users
          */
-        userService.getAll()
+        userService.getAll(req.query)
         .then(
             function(users){
                 res.status(200).json(apiUtil.generateResponse(200, "Users retrieved successfully", users));
@@ -19,12 +19,11 @@ var userRoutes = {
         );
     },
 
-    getUserById : function(req, res){
+    getById: function(req, res){
         /**
-         * Send basic info if extended is not requested
+         * Send public info if all is not requested
          */
-        if(undefined === req.query.extended){
-            userService.getBasicInfoById(req.params.id)
+        userService.getById(req.params.id, req.query)
             .then(
                 function(user){
                     res.status(200).json(apiUtil.generateResponse(200, "User retrieved successfully", user));
@@ -34,23 +33,6 @@ var userRoutes = {
                     res.status(500).json(apiUtil.generateResponse(404, "User couldn't be located", null));
                 }
             );
-        } //// if extended
-        /**
-         * Send extend info if extended in URL query
-         */
-        else{
-            userService.getExtendedInfoById(req.params.id)
-            .then(
-                function(user){
-                    res.status(200).json(apiUtil.generateResponse(200, "User retrived successfully", user));
-                },
-                function(error){
-                    //// user couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(404, "User couldn't be located", null));
-                }
-            );
-        }//// if extended else
-
     },
 
     createNewUser : function(req, res){
@@ -71,10 +53,10 @@ var userRoutes = {
     },
 
     getUserByExternalId: function(req, res){
-        userService.getUserByExternalId(req.params.extId)
+        userService.getUserByExternalId(req.params.extId, req.query)
         .then(
             function(user){
-                res.status(200).json(apiUtil.generateResponse(200, "User retrived successfully", user));
+                res.status(200).json(apiUtil.generateResponse(200, "User retrieved successfully", user));
             },
             function(error){
                 //// user couldn't be found 404
@@ -83,6 +65,20 @@ var userRoutes = {
             }
         );
     },//// fun. getUserByExternalId
+
+    saveUser: function(req, res){
+
+        userService.saveUser(req.params.id, req.body)
+        .then(
+            function(user){
+                res.status(200).json(apiUtil.generateResponse(200, "User updated successfully", user));
+            },
+            function(error){
+                //// user couldn't be saved 404
+                res.status(500).json(apiUtil.generateResponse(404, error, null));
+            }
+        );
+    }, //// fun. saveUser
 
 
 }/// users object

@@ -1,14 +1,6 @@
 var businessModel = require('../models/business.model');
 
 /**
- * [extendedFields array to define the names of extended fields in user objects]
- * @type {Array}
- */
-var extendedFields = [
-    'locations'
-];
-
-/**
  * [privateFields array to define the names of extended fields in user objects]
  * @type {Array}
  */
@@ -21,35 +13,37 @@ var businessService = {
      * [getAll function will get all businesss.  Not to be used in production]
      * @return {[type]}        [promise]
      */
-    getAll : function(){
-        return businessModel.find().exec();
+    getAll : function(reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+        return businessModel.find({}, returnFields).exec();
     },
 
     /**
-     * [getPublicInfoById function will get the basic business fields execluding the extend fields]
-     * @param  {[type]} businessId [business id should match business object id in DB]
+     * [get function will get a business by id or slug]
+     * @param  {[type]} idOrSlug [business id/slug should match business object id/slug in DB]
+     * @param  {[type]} reqQuery [req.query from service. if reqQuery.complete: return complete object]
      * @return {[type]}        [promise]
      */
-    getBasicInfoById : function(businessId){
-        return businessModel.findById(businessId, '-' + extendedFields.join(' -')).exec();
-    },
+    getByIdOrSlug: function(idOrSlug, reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
 
-    /**
-     * [getPublicInfoById function will get the public]
-     * @param  {[type]} businessId [business id should match business object id in DB]
-     * @return {[type]}        [promise]
-     */
-    getPublicInfoById : function(businessId){
-        return businessModel.findById(businessId, '-' + privateFields.join(' -')).exec();
-    },
 
-    /**
-     * [getAllInfoById will get the all business fields]
-     * @param  {[type]} businessId [business id should match business object id in DB]
-     * @return {[type]}        [promise]
-     */
-    getAllInfoById : function(businessId){
-        return businessModel.findById(businessId).exec();
+        // Choose between filtering on id or field depending on whether the value has a number in it
+        // /\d/.test(value) is a regex test
+        // This will work for now so long as slugs never have a number in them
+        if(/\d/.test(idOrSlug)) {
+            return businessModel.findById(idOrSlug, returnFields).exec();
+        } else {
+            return businessModel.findOne({ slug: idOrSlug }, returnFields).exec();
+        }
     },
 
     /**
@@ -65,9 +59,22 @@ var businessService = {
             function(business){
                 return businessModel.findById(business._id).exec();
             }//// then fun.
+
         );/// then
+    },
+
+    /**
+     * [getByVariantId will return a busniess object based on variant ID that in locations.positions.variants array]
+     * @param  {string} variantId [id of variant tha belong to requested business object ]
+     * @return {promise}           [description]
+     */
+    getByVariantId: function(variantId){
+        return businessModel.find({})
+        .where({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{_id:variantId}}}}}}})
+        .exec();
     }
 
 }/// businesss object
+
 
 module.exports = businessService;

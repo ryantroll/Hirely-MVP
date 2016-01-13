@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', JobApplicationController]);
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService) {
+  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, HirelyApiService) {
 
     // test jobs
     var testJobOne = {
@@ -46,33 +46,109 @@
      * We should define the object that we need to keep through steps
      */
     if(!angular.isObject($scope.availability)) $scope.availability = {};
-    $scope.jobID = $stateParams.jobId;
+    $scope.businessSlug = $stateParams.businessSlug;
+    $scope.locationSlug = $stateParams.locationSlug;
+    $scope.positionSlug = $stateParams.positionSlug;
+    $scope.variantSlug = $stateParams.variantSlug;
 
-    if(angular.isDefined($scope.jobID)){
-      JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.jobID)
-      .then(
-        function(jobObj){
-          if(jobObj.application.minHours) $scope.availability.minHours = jobObj.application.minHours;
-          if(jobObj.application.maxHours) $scope.availability.maxHours = jobObj.application.maxHours;
-          if(jobObj.application.startDate) $scope.availability.startDate = new Date(jobObj.application.startDate);
-        },/// fun. resolve
-        function(error){
+    /**
+     * [application to hold the aplicaiton object if user is already applied]
+     * @type {object}
+     */
+    $scope.application = null;
 
-        }/// fun. resolve
-      )//// then
-    }/// if job.ID
+    /**
+     * [isDataLoaded flag that will be watched in child scope who want to check data availablity]
+     * @type {Boolean}
+     */
+    $scope.isDataLoaded = false;
+
+    // Handle user already applied
+    //if(angular.isDefined($scope.businessSlug)){
+    //  JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.businessSlug)
+    //  .then(
+    //    function(jobObj){
+    //      if(jobObj.application.minHours) $scope.availability.minHours = jobObj.application.minHours;
+    //      if(jobObj.application.maxHours) $scope.availability.maxHours = jobObj.application.maxHours;
+    //      if(jobObj.application.startDate) $scope.availability.startDate = new Date(jobObj.application.startDate);
+    //    },/// fun. resolve
+    //    function(error){
+    //
+    //    }/// fun. resolve
+    //  )//// then
+    //}/// if job.ID
 
 
-    // test Job IDs
-    var currentJob = $stateParams.jobId;
-    switch (currentJob) {
-      case "122122":
-        $scope.jobInfo = testJobOne;
-        break;
-      case "130130":
-        $scope.jobInfo = testJobTwo;
-        break;
+    // Get business
+    //var currentJob = $stateParams.businessSlug;
+    console.log($scope.businessSlug);
+    if(angular.isDefined($scope.businessSlug)) {
+      //$scope.businessInfo = HirelyApiService.businesses("compass-coffee").get()
+      HirelyApiService.businesses($scope.businessSlug).get().then(function(business) {
+        console.dir("bus: ");
+        console.dir(business);
+        $scope.business = business;
+        // Get the location
+        business.locations.forEach(function(location) {
+          if(location.slug == $scope.locationSlug) {
+            console.dir("loc: ");
+            console.dir(location);
+            $scope.location = location;
+            $scope.updateMap();
+            // Get position
+            location.positions.forEach(function(position) {
+              if(position.slug == $scope.positionSlug) {
+                console.dir("pos: ");
+                console.dir(position);
+                $scope.position = position;
+              }
+              // Get variant
+              position.variants.forEach(function(variant) {
+                if(variant.slug == $scope.variantSlug) {
+                  console.dir("variant: ");
+                  console.dir(variant);
+                  $scope.variant = variant;
+                }
+              })
+            })
+          }
+        });
+        if(!angular.isDefined($scope.business)) {
+          console.log("business not found.");
+        }
+        if(!angular.isDefined($scope.location)) {
+          console.log("location not found.");
+        }
+        if(!angular.isDefined($scope.position)) {
+          console.log("position not found.");
+        }
+        if(!angular.isDefined($scope.variant)) {
+          console.log("variant not found.");
+        }
+
+        /**
+         * find if there application already saved for this user
+         */
+        JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.variant._id)
+        .then(
+          function(jobApp){
+            $scope.application = jobApp;
+            /**
+             * Notify child scope about the end of data loading
+             * so they can access the data in daddy and granddaddy
+             */
+            $scope.$broadcast('data-loaded');
+          },
+          function(err){
+            $scope.isDataLoaded = true;
+          }
+        )//// .isApplicaitonExists.then()
+
+
+      })//// .get().then()
     }
+
+
 
 
     /***
@@ -90,45 +166,45 @@
     };
 
 
-    uiGmapGoogleMapApi
-      .then(function (maps) {
-        console.log('redy');
-        $scope.googlemap = {};
-        $scope.map = {
-          center: {
-            latitude: $scope.jobInfo.lat,
-            longitude: $scope.jobInfo.lng
-          },
-          zoom: 10,
-          pan: 1,
-          options: $scope.mapOptions,
-          control: {},
-          clusterOptions: {
-            title: 'hirely',
-            gridSize: 20,
-            ignoreHidden: true,
-            minimumClusterSize: 1,
-            zoomOnClick: false
-          }
-          //events: {
-          //  tilesloaded: function (maps, eventName, args) {
-          //  },
-          //  dragend: function (maps, eventName, args) {
-          //  },
-          //  zoom_changed: function (maps, eventName, args) {
-          //  }
-          //}
-        };
-      });
+    $scope.updateMap = function() {
+      uiGmapGoogleMapApi
+        .then(function (maps) {
+          console.log('updateMap');
+          console.log($scope.location.lat);
+          console.log($scope.location.lng);
+          $scope.googlemap = {};
+          $scope.map = {
+            center: {
+              latitude: $scope.location.lat,
+              longitude: $scope.location.lng
+            },
+            zoom: 10,
+            pan: 1,
+            options: $scope.mapOptions,
+            control: {},
+            clusterOptions: {
+              title: 'hirely',
+              gridSize: 20,
+              ignoreHidden: true,
+              minimumClusterSize: 1,
+              zoomOnClick: false
+            }
+            //events: {
+            //  tilesloaded: function (maps, eventName, args) {
+            //  },
+            //  dragend: function (maps, eventName, args) {
+            //  },
+            //  zoom_changed: function (maps, eventName, args) {
+            //  }
+            //}
+          };
+        });
+    };
 
 
     //form steps
     $scope.steps = [
-      {
-        templateUrl: '/app/application/step-5/step-five.tpl.html',
-        controller: 'StepFiveController',
-        hasForm: true
-      },
+
       {
         templateUrl: '/app/application/step-1/step-one.tpl.html',
         controller: 'StepOneController',
@@ -144,9 +220,15 @@
         controller: 'StepThreeController'
       },
       {
-        templateUrl: '/app/application/step-4/step-four.tpl.html'
+        templateUrl: '/app/application/step-4/step-four.tpl.html',
+        controller: 'StepFourController',
+        hasForm: true
       },
-
+      {
+        templateUrl: '/app/application/step-5/step-five.tpl.html',
+        controller: 'StepFiveController',
+        hasForm: true
+      },
       {
         templateUrl: '/app/application/step-6/step-six.tpl.html',
         controller: 'StepSixController',

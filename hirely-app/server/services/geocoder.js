@@ -19,6 +19,7 @@ var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
 exports.geocodeAddress = function(address, next){
 
   geocoder.geocode({address: address, country:'US'}, function(error, response) {
+    console.log(error);
     next(error, response);
   });
 

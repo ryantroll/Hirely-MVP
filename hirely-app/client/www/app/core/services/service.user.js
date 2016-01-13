@@ -106,11 +106,6 @@
 
       var id = authId;
 
-
-      /**
-       * Set add firebase to user object as external ID to do the mapping
-       * @type {[type]}
-       */
       return HirelyApiService.users().post( angular.extend({externalId:authId}, userData) );
 
     };
@@ -166,6 +161,26 @@
 
       return deferred.promise;
     }//// fun. removeUser
+
+    /**
+     * [saveUser will update a user information by callin api]
+     * @param  {object} userData [hold the fields of user object to be updated]
+     * @param  {string} userId   [id of user to be updated]
+     * @return {promiss}          [description]
+     */
+    this.saveUser = function(userData, userId){
+      var deferred = $q.defer();
+      HirelyApiService.users(userId).patch( userData )
+      .then(
+        function(newData){
+          deferred.resolve(newData);
+        },
+        function(err){
+          deferred.reject(err);
+        }
+      );
+      return deferred.promise;
+    }//// fun. saveUser
 
 
 

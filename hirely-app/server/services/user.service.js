@@ -1,11 +1,12 @@
 var userModel = require('../models/user.model');
 var idMapModel = require('../models/useridmap.model');
+var q = require('q');
 
 /**
- * [extendedFields array to define the names of extended fields in user objects]
+ * [privateFields array to define the names of private fields in user objects]
  * @type {Array}
  */
-var extendedFields = [
+var privateFields = [
     'businessesAppliedTo',
     'businessesOwned',
     'businessesManaged',
@@ -21,26 +22,52 @@ var userService = {
      * [getAll function will get all users.  Not to be used in production]
      * @return {[type]}        [promise]
      */
-    getAll : function(){
-        return userModel.find().exec();
+    getAll : function(reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+        return userModel.find({}, returnFields).exec();
     },
 
     /**
-     * [getBasicInfoById function will get the basic user fields execluding the extend fields]
-     * @param  {[type]} userId [user id should match user object id in DB]
-     * @return {[type]}       [promise]
-     */
-    getBasicInfoById : function(userId){
-        return userModel.findById(userId, '-' + extendedFields.join(' -')).exec();
-    },
-
-    /**
-     * [getExtendedInfoById will get the extend user fields ONLY execluding the basic fields]
-     * @param  {[type]} userId [user id should match user object id in DB]
+     * [get function will get a user by id or slug]
+     * @param  {[type]} id [user id should match user object id in DB]
+     * @param  {[type]} reqQuery [req.query from service. if reqQuery.complete: return complete object]
      * @return {[type]}        [promise]
      */
-    getExtendedInfoById : function(userId){
-        return userModel.findById(userId, '_id ' + extendedFields.join(' ')).exec();
+    getById: function(id, reqQuery){
+        // Determine what fields to return based on reqQuery.
+
+        var returnFields = '';
+        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
+            /**
+             * Complete set is requested let's send the whole user object
+             */
+
+
+            returnFields = '-nothing';
+        }
+        else{
+
+            /**
+             * No complete set is requested
+             * Checek of any property name is sent in query throuhg the below loop
+             */
+            for(var field in reqQuery){
+                returnFields += '' + field + ' ';
+            }
+
+            /**
+             * if no properties requested send the basic info
+             */
+            if(returnFields === ''){
+                returnFields = '-' + privateFields.join(' -')
+            }
+        }
+
+        return userModel.findById(id, returnFields).exec();
     },
 
     /**
@@ -50,7 +77,7 @@ var userService = {
      */
     createNewUser : function(userObj){
         var newUser = new userModel(userObj);
-        console.log(userObj);
+
         /**
          * make sure basic info of user returned by the promise.
          */
@@ -75,13 +102,13 @@ var userService = {
                             return idMap.save()
                             .then(
                                 function(map){
-                                    return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
+                                    return userModel.findById(map.localId).exec();
                                 },/// fun. idMap.save reslove
                                 function(err){
                                     /**
                                      * Error in updateing ID map entry
                                      */
-                                    return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
+                                    return userModel.findById(map.localId).exec();
                                     console.log('Error in saving idMap for new user');
                                     console.log(err);
                                 } /// fun. idMap.save reject
@@ -92,7 +119,7 @@ var userService = {
                              * Error in remving idMap
                              * still find the user object and return it
                              */
-                            return userModel.findById(user._id, '-' + extendedFields.join(' -')).exec();
+                            return userModel.findById(user._id).exec();
                             console.log('error in removing idMap in prepration for new insert');
                             console.log(err);
                         }//// fun. remove reject
@@ -100,7 +127,7 @@ var userService = {
 
                 }
                 else{
-                    return userModel.findById(user._id, '-' + extendedFields.join(' -')).exec();
+                    return userModel.findById(user._id).exec();
                 }
             }//// then fun.
         );/// then
@@ -111,7 +138,13 @@ var userService = {
      * @param  {[string]} extId [esternal id ]
      * @return {[promis]}       [description]
      */
-    getUserByExternalId: function(extId){
+    getUserByExternalId: function(extId, reqQuery){
+
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
 
         return idMapModel.findOne({externalId:extId}).exec()
         .then(
@@ -120,8 +153,8 @@ var userService = {
              * find the user and return it in promise
              */
             function(map){
-                return userModel.findById(map.localId, '-' + extendedFields.join(' -')).exec();
-            },//// fun. reslove
+                return userModel.findById(map.localId, returnFields).exec();
+            },//// fun. resolve
             function(error){
                 /**
                  * No map is found for this external id
@@ -130,8 +163,83 @@ var userService = {
             }//// fun. reject
         )//// then
 
-    }
+    }, //// fun. getUserByExternalId
 
+    /**
+     * [saveUser will update user in database after checking the existance of user by his id
+     * this function create and manage its own promise
+     * this function does NOT make use of model.update() method because it doesn't trigger schema validation]
+     * @param  {string} userId   [id of user to be updated]
+     * @param  {object} userData [object that hold properites that need to be updated]
+     * @return {promise}          [promise]
+     */
+    saveUser: function(userId, userData){
+        var deferred = q.defer()
+
+        var user = new userModel(userData);
+
+        /**
+         * Make sure the posted properties are valid properties
+         */
+        // userModel.schema.eachPath(function(path){
+        //     console.log(path);
+        // });
+        //
+
+        /**
+         * is the user exists in DB
+         */
+        userModel.findOne({_id:userId})
+        .then(
+            function(foundedUser){
+                /**
+                 * User exists in DB, do the update
+                 */
+
+                if(foundedUser){
+
+                    /**
+                     * Loop through sent properties and set them
+                     */
+                    for(prop in userData){
+                        foundedUser[prop] = userData[prop];
+                    }//// for
+
+                    /**
+                     * Save the new user document after setting lastModifiedOn date to now
+                     */
+                    foundedUser.lastModifiedOn = new Date();
+                    foundedUser.save()
+                    .then(
+                        function(user){
+                            /**
+                             * User saved successfully
+                             */
+
+                            deferred.resolve(user);
+                        },//// save() resolve
+                        function(err){
+                            /**
+                             * Error in updating user
+                             */
+                            console.log('Error: user couldn\'t be updated');
+                            deferred.reject(err);
+                        }
+                    )/// .save().then
+
+                }//// if user._id
+
+            },//// fun. reslove
+            function(err){
+                /**
+                 * User doesn't exists
+                 */
+                deferred.reject("User trying to update doesn't exists");
+            }
+        );//// then
+
+        return deferred.promise;
+    }//// fun. saveUser
 
 }/// users object
 

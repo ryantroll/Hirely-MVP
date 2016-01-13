@@ -17,6 +17,7 @@ module.exports = function(app) {
      */
     var userApiRoutes = require('./routes/user.api.routes');
     var businessApiRoutes = require('./routes/business.api.routes');
+    var applicationApiRoutes = require('./routes/application.api.routes');
 
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
@@ -34,16 +35,25 @@ module.exports = function(app) {
      * Adding routes for local mongoDB users
      */
     app.get('/api/v1/users', userApiRoutes.getAll);
-    app.get('/api/v1/users/:id', userApiRoutes.getUserById);
+    app.get('/api/v1/users/:id', userApiRoutes.getById);
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
+    app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
     app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
 
     /**
      * Adding routes for local mongoDB businesses
      */
     app.get('/api/v1/businesses', businessApiRoutes.getAll);
-    app.get('/api/v1/businesses/:id', businessApiRoutes.getBusinessById);
+    app.get('/api/v1/businesses/:idOrSlug', businessApiRoutes.getByIdOrSlug);
     app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
+
+    /**
+     * Adding routs for local monogoDB applicaion
+     */
+    app.get('/api/v1/applications', applicationApiRoutes.getAll);
+    app.get('/api/v1/applications/:id', applicationApiRoutes.getById);
+    app.post('/api/v1/applications/', applicationApiRoutes.createNewApplication);
+    app.patch('/api/v1/applications/:appId', applicationApiRoutes.saveApplication);
 
     function getGooglePlacebyId(req, res) {
         var placeId = req.params.placeId;
