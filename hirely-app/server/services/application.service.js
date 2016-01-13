@@ -57,8 +57,17 @@ var applicationService = {
      * @return {[type]}        [promise]
      */
     getAll : function(reqQuery){
-
-        return applicationModel.find({}).exec();
+        var filters = {}
+        if(undefined !== reqQuery.userId) {
+            filters['userId'] = reqQuery.userId;
+        }
+        if(undefined !== reqQuery.variantId) {
+            filters['variantId'] = reqQuery.variantId;
+        }
+        if(undefined !== reqQuery.status) {
+            filters['status'] = reqQuery.status;
+        }
+        return applicationModel.find(filters).exec();
     },
 
     /**
