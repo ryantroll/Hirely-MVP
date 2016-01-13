@@ -106,11 +106,6 @@
 
       var id = authId;
 
-
-      /**
-       * Set add firebase to user object as external ID to do the mapping
-       * @type {[type]}
-       */
       return HirelyApiService.users().post( angular.extend({externalId:authId}, userData) );
 
     };

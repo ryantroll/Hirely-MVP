@@ -18,16 +18,10 @@
 
 		$scope.stepFourLoaded = true;  // TODO:  Handle this
 
-		//$scope.application = {
-		//	userId: $scope.user,
-		//	status: 0,
-		//}
-		//$scope.prescreenAnswers = [
-		//	{
-		//		question: "what's up?",
-		//		answer: "Nothing",
-		//	}
-		//]
+		// TODO: Figure out how to map the input prescreen answers to an array like below
+		$scope.prescreenAnswers = [];
+
+		$scope.application = {};
 
 		$scope.$watch('stepFour.$valid', function(state) {
 			multiStepFormInstance.setValidity(state);
@@ -61,26 +55,24 @@
 				function(result){
 					if(true === result){
 						/**
-						 * User is authenticated update user data
+						 * User is authenticated create application data
 						 */
-						UserService.saveUser($scope.user, AuthService.currentUserID)
-							.then(
-								function(savedUser){
-									/**
-									 * User data updated successfully
-									 */
 
-										//// make sure the AuthService data is synced
-									AuthService.updateCurrentUser($scope.user);
-								},//// fun. resolve
-								function(err){
-									/**
-									 * Error in updateing user data
-									 */
+						var application = new JobApplication(UserService.currentUser,
+															 $scope.variant.id,
+															 0,
+															 $scope.prescreenAnswers)
+						HirelyApiService.applications().post(application).then(
+							function(application){
+								deferred.resolve(application);
+								$scope.application = application;
+							},
+							function(error){
+								deferred.reject(error);
+							}
+						);
 
-									alert('Error!\nSomething wrong happened while saving data.');
-								}//// fun. reject
-							);//// saveUser then
+						return deferred.promise;
 					}//// if getAuth
 					else{
 						/**

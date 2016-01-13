@@ -72,7 +72,6 @@
     console.log($scope.businessSlug);
     if(angular.isDefined($scope.businessSlug)) {
       //$scope.businessInfo = HirelyApiService.businesses("compass-coffee").get()
-      // TODO:  Use BusinessService to get the business once implemented
       HirelyApiService.businesses($scope.businessSlug).get().then(function(business) {
         console.dir("bus: ");
         console.dir(business);
