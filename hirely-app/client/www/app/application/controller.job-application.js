@@ -50,7 +50,10 @@
        * Set the form steps
        */
       $scope.steps = [
-
+        {
+          templateUrl: '/app/application/step-3/step-three.tpl.html',
+          controller: 'StepThreeController'
+        },
         {
           templateUrl: '/app/application/step-1/step-one.tpl.html',
           controller: 'StepOneController',
@@ -62,10 +65,7 @@
           controller: 'StepTwoController',
           hasForm: true
         },
-        {
-          templateUrl: '/app/application/step-3/step-three.tpl.html',
-          controller: 'StepThreeController'
-        },
+
         {
           templateUrl: '/app/application/step-4/step-four.tpl.html',
           controller: 'StepFourController',
@@ -142,8 +142,6 @@
                * so they can access the data in daddy and granddaddy
                */
               $scope.$broadcast('data-loaded');
-
-
             },//// fun. resolve
             function(err){
 
@@ -153,8 +151,6 @@
 
         })//// .get().then()
       }/// if define businesSlug
-
-
     })();//// fun. init()
 
     // Handle user already applied

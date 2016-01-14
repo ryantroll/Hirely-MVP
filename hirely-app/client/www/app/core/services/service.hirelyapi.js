@@ -33,7 +33,8 @@ function HirelyApiService($http, $q) {
     version:version,
     users:setUsersEndpoint,
     businesses:setBusinessesEndpoint,
-    applications:setApplicationsEndpoint
+    applications:setApplicationsEndpoint,
+    traitify:setTraitifyEndpoint
   }
 
   /**
@@ -70,6 +71,16 @@ function HirelyApiService($http, $q) {
   }
 
   /**
+   * [traitify child object to hold traitify endpoint functions and allow function call chain
+   * this object will be returned by .traitify() endpoint setter function to expose the http verbs function e.g. .traitify().get(), .traitify().post()]
+   * @type {Object}
+   */
+  var traitify = {
+    post:createTraitifyAssessment,
+    get:getTraifityAssessment
+  }
+
+  /**
    * [setUsersEndpoint this will set the endpint for users api and return child users object for function call chain]
    * this function accept 2 argumets but they are NOT explicitly defined in function signature becase this function might be called with 0, 1, or 2 arguments
    * First Argument:
@@ -98,6 +109,12 @@ function HirelyApiService($http, $q) {
 
     return users;
   }/// fun. setApplicationsEndpoint
+
+  function setTraitifyEndpoint(){
+    setEndpoint('traitify', arguments);
+
+    return traitify;
+  }
 
   /**
    * [setEndpoint will build the required url of desired API endpoint
@@ -395,6 +412,32 @@ function HirelyApiService($http, $q) {
 
     return deferred.promise;
   }//// fun. getApplications
+
+  function getTraifityAssessment(){
+    var deferred = $q.defer();
+
+    $http.get(baseURL + endpointUrl).then(
+        function(payload){
+          var res = payload.data;
+
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(res.message);
+          }
+        },
+        function(error){
+          deferred.reject(error);
+        }
+    )
+
+    return deferred.promise;
+  }//// fun. getTraifity
+
+  function createTraitifyAssessment(){
+
+  }//// fun. createTraitifyAssessment
 
   return service;
 }//// fun. HirelyApiService

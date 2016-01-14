@@ -9,17 +9,17 @@
 (function() {
 	'use strict';
 
-	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'AuthService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
 
 
-	function StepThreeController($scope, $stateParams, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+	function StepThreeController($scope, $stateParams, TraitifyService, AuthService, TRAITIFY_PUBLIC_KEY) {
 
 		$scope.stepThreeLoaded = false;
 
 		$scope.resultsLoaded = false;
 
 		var saved = false;
-    
+
     var assessmentId = null;
 
 		Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
@@ -27,7 +27,7 @@
 		Traitify.setVersion("v1");
 
 		TraitifyService.getAssessmentId().then(function(data) {
-			assessmentId = data.results.id;
+			assessmentId = data.id;
 			var traitify = null;
 
 			var results = {};
@@ -67,7 +67,7 @@
 			function saveAssessment() {
 				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
           saved = true;
-					TraitifyService.saveAssessment(results, '444', assessmentId);
+					TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId);
 				}
 			}
 

@@ -8,37 +8,29 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .factory('TraitifyService', ['$http', '$q', 'FIREBASE_URL', TraitifyService]);
+    .factory('TraitifyService', ['$http', '$q', 'HirelyApiService', 'FIREBASE_URL', TraitifyService]);
 
-  function TraitifyService($http, $q, FIREBASE_URL) {
+  function TraitifyService($http, $q, HirelyApiService, FIREBASE_URL) {
 
     var traitifyRef = new Firebase(FIREBASE_URL + '/personality');
 
     function getAssessmentId(){
-      var deferred = $q.defer();
-
-      $http.get('/api/traitify/assesment-id')
-        .success(function (data) {
-          console.log(data);
-          deferred.resolve(data);
-        })
-        .error(function (data) {
-          console.log('Error: ' + data);
-        });
-
-      return deferred.promise;
+      return HirelyApiService.traitify('assessment-id').get();
     }
 
     function saveAssessment(results, userId, assessmentId){
         var data = {
-          created_at: moment().format(),
-          assessment_id: assessmentId,
-          slides: results.slides,
-          personality_types: results.types,
-          personality_traits: results.traits,
-          personality_blend: results.blend
+          personalityExams:[{
+            extId: assessmentId,
+            slides: results.slides,
+            personalityTypes: results.types,
+            personalityTraits: results.traits,
+            personalityBlend: results.blend
+          }]
         }
-        traitifyRef.child(userId).push(data);
+        console.log(data);
+        return HirelyApiService.users(userId).patch(data);
+        // traitifyRef.child(userId).push(data);
     }
 
     return {

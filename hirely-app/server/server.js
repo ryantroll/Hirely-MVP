@@ -21,8 +21,8 @@ var routes;
 
 var environment = process.env.NODE_ENV;
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true, limit:'50mb'}));
+app.use(bodyParser.json({limit:'50mb'}));
 app.use(logger('dev'));
 app.use(cors());                // enable ALL CORS requests
 app.use(errorHandler.init);

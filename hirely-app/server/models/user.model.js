@@ -99,8 +99,12 @@ var userSchema = new Schema({
      */
     personalityExams:[
         {
-          extId: String,
-          skills: []
+          extId               :       {type:String, required:true},
+          createdAt           :       {type:Date, required:true, default:Date.now},
+          personalityTypes    :       [],
+          personalityTraits   :       [],
+          personalityBlend    :       Object,
+          slides              :       []
         }
     ],
 
