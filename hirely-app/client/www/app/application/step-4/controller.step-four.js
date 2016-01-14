@@ -34,13 +34,13 @@
 		/**
 		 * bring the vaiant object to me from grandfather
 		 */
-		variant = angular.copy($scope.$parent.$parent.variant);
+		variant = angular.copy($scope.variant);
 
 
-		if(angular.isDefined($scope.$parent.$parent.application) && null !== $scope.$parent.$parent.application){
+		if(angular.isDefined($scope.application) && null !== $scope.application){
 
 			$scope.model = {
-				prescreenAnswers: angular.copy($scope.$parent.$parent.application.prescreenAnswers)
+				prescreenAnswers: angular.copy($scope.application.prescreenAnswers)
 			}
 
 		}//// if application in granddaddy
