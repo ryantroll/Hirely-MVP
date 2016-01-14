@@ -62,6 +62,7 @@
     };/// fun. searchLocations
 
     $scope.setAddress = function(address){
+      $scope.user.googlePlaceId = address.placeId
       geocodeService.getPlaceDetails(address.placeId).then(function(data){
         var place = data.results.result;
 
@@ -140,24 +141,24 @@
                * User is authenticated update user data
                */
               // TODO:  Upsert application to business once BusinessService is ready
-              //UserService.saveUser($scope.user, AuthService.currentUserID)
-              //.then(
-              //  function(savedUser){
-              //    /**
-              //     * User data updated successfully
-              //     */
-              //
-              //    //// make sure the AuthService data is synced
-              //    AuthService.updateCurrentUser($scope.user);
-              //  },//// fun. resolve
-              //  function(err){
-              //    /**
-              //     * Error in updateing user data
-              //     */
-              //
-              //    alert('Error!\nSomething wrong happened while saving data.');
-              //  }//// fun. reject
-              //);//// saveUser then
+              UserService.saveUser($scope.user, AuthService.currentUserID)
+              .then(
+                function(savedUser){
+                  /**
+                   * User data updated successfully
+                   */
+
+                  //// make sure the AuthService data is synced
+                  AuthService.updateCurrentUser($scope.user);
+                },//// fun. resolve
+                function(err){
+                  /**
+                   * Error in updateing user data
+                   */
+
+                  alert('Error!\nSomething wrong happened while saving data.');
+                }//// fun. reject
+              );//// saveUser then
             }//// if getAuth
             else{
               /**

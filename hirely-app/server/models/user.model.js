@@ -67,6 +67,7 @@ var userSchema = new Schema({
   street2           :   String,
   street3           :   String,
   postalCode        :   String,
+  googlePlaceId     :   String,
   formattedAddress  :   String,
   lat               :   Number,
   lng               :   Number,
