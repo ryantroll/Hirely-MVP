@@ -42,6 +42,18 @@ exports.fullAddressAutocomplete = function(query, next){
   });
 };
 
+exports.placeAutocomplete = function(query, next){
+  var parameters = {
+    input: query,
+    types: [],
+    components:"country:US"
+  };
+
+  places.placeAutocomplete(parameters, function (error, response) {
+    next(error, response);
+  });
+};
+
 
 
 exports.getPlaceDetailsByPlaceId = function(query, next){

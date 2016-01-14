@@ -62,7 +62,7 @@
     };/// fun. searchLocations
 
     $scope.setAddress = function(address){
-      $scope.user.googlePlaceId = address.placeId
+      $scope.user.googlePlaceId = address.placeId;
       geocodeService.getPlaceDetails(address.placeId).then(function(data){
         var place = data.results.result;
 

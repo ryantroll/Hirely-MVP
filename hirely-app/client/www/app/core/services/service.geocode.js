@@ -21,6 +21,7 @@
             getCityBySearchQuery: getCityBySearchQuery,
             getLocationBySearchQuery: getLocationBySearchQuery,
             geoCodeAddress: geoCodeAddress,
+            placeSearch: placeSearch,
             getPlaceDetails: getPlaceDetails
         };
         return service;
@@ -131,6 +132,21 @@
               .error(function(data) {
                   console.log('Error: ' + data);
               });
+
+            return deferred.promise;
+        }
+
+        function placeSearch(query){
+            var deferred = $q.defer();
+
+            $http.get('/api/placeSearch/'+ query)
+                .success(function(data) {
+                    currentPlace = data;
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    console.log('Error: ' + data);
+                });
 
             return deferred.promise;
         }

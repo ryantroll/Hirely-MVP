@@ -24,6 +24,7 @@ module.exports = function(app) {
     app.get('/api/search/cities/:addressQuery', getAddressFomQuery);
     app.get('/api/search/locations/:locationQuery', getLocationFomQuery);
     app.get('/api/geocode/:address', fullAddressAutocomplete);
+    app.get('/api/placeSearch/:query', placeAutocomplete);
     app.get('/api/places/:placeId', getPlaceDetailsByPlaceId);
     app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
 
@@ -92,6 +93,17 @@ module.exports = function(app) {
     function fullAddressAutocomplete(req, res){
         var placeRef = req.params.address;
         places.fullAddressAutocomplete(placeRef, function(err, result){
+            if(err){
+                res.json(apiUtil.generateResponse(500, err, null));
+            } else {
+                res.json(apiUtil.generateResponse(200, "location geocoded", result));
+            }
+        });
+    }
+
+    function placeAutocomplete(req, res){
+        var placeRef = req.params.query;
+        places.placeAutocomplete(placeRef, function(err, result){
             if(err){
                 res.json(apiUtil.generateResponse(500, err, null));
             } else {

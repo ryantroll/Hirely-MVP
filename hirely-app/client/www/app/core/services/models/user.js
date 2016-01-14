@@ -13,7 +13,7 @@ User = Model({
                         userType, provider,
                         country, state, city, street1, street2, street3, postalCode, formattedAddress, lng, lat,
                         spokenLanguages,
-                        createdOn, lastModifiedOn
+                        createdOn, lastModifiedOn, googlePlaceId
                         )
   {
 
@@ -24,6 +24,7 @@ User = Model({
     this.userType = userType;
     this.provider = provider;
 
+    if(googlePlaceId) this.googlePlaceId = googlePlaceId;
     if(country) this.country = country;
     if(state) this.state = state;
     if(city) this.city = city;
