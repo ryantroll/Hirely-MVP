@@ -3,6 +3,24 @@ var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
+var persoanlitySchema = new Schema({
+  extId               :       {type:String, required:true},
+  createdAt           :       {type:Date, required:true, default:Date.now},
+  personalityTypes    :       [{
+                                score:Number,
+                                name:String
+                              }],
+  personalityTraits   :       [{
+                                score:Number,
+                                name:String
+                              }],
+  personalityBlend    :       {
+                                name:String,
+                                personalityTypes:[{name:String, description:String}]
+                              }
+
+});
+
 var userSchema = new Schema({
   /**
    * Personal info
@@ -61,7 +79,7 @@ var userSchema = new Schema({
    * Address fields
    */
   country           :   String,
-  state              :   String,
+  state             :   String,
   city              :   String,
   street1           :   String,
   street2           :   String,
@@ -97,16 +115,7 @@ var userSchema = new Schema({
     /**
      * Personality Exams
      */
-    personalityExams:[
-        {
-          extId               :       {type:String, required:true},
-          createdAt           :       {type:Date, required:true, default:Date.now},
-          personalityTypes    :       [],
-          personalityTraits   :       [],
-          personalityBlend    :       Object,
-          slides              :       []
-        }
-    ],
+    personalityExams:[persoanlitySchema],
 
     /**
      * Availability
