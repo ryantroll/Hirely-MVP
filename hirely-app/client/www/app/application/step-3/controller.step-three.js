@@ -26,51 +26,67 @@
 		Traitify.setHost("api-sandbox.traitify.com");
 		Traitify.setVersion("v1");
 
-		TraitifyService.getAssessmentId().then(function(data) {
-			assessmentId = data.id;
-			var traitify = null;
+		$scope.assessment = {};
+		TraitifyService.getTest().then(
+			function(obj){
+				$scope.assessment = obj;
+			},
+			function(err){
 
-			var results = {};
-			traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-				results: {
-					target: ".personality-results"
-				},
-				personalityTypes: {
-					target: ".personality-types"
-				},
-				personalityTraits: {
-					target: ".personality-traits"
-				}
-			});
-
-			traitify.slideDeck.onInitialize(function() {
-				results.slides = traitify.slideDeck.data.get("Slides");
-				$scope.stepThreeLoaded = true;
-				$scope.$apply();
-			});
-
-			traitify.results.onInitialize(function() {
-				console.log("Results");
-				Traitify.getPersonalityTypes(assessmentId).then(function(data) {
-					results.types = data.personality_types;
-					results.blend = data.personality_blend;
-					saveAssessment()
-				});
-				Traitify.getPersonalityTraits(assessmentId).then(function(data) {
-					results.traits = data;
-					saveAssessment()
-				});
-				$scope.resultsLoaded = true;
-				$scope.$apply();
-			});
-
-			function saveAssessment() {
-				if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
-          saved = true;
-					TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId);
-				}
 			}
 
+		);//// then()
+
+		$scope.$on('$destroy', function(event){
+			TraitifyService.saveAssessment($scope.assessment, AuthService.currentUserID, $scope.assessment.extId);
 		});
+
+		// TraitifyService.getAssessmentId().then(function(data) {
+		// 	assessmentId = data.id;
+		// 	var traitify = null;
+
+		// 	var results = {};
+		// 	traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+		// 		results: {
+		// 			target: ".personality-results"
+		// 		},
+		// 		personalityTypes: {
+		// 			target: ".personality-types"
+		// 		},
+		// 		personalityTraits: {
+		// 			target: ".personality-traits"
+		// 		}
+		// 	});
+
+		// 	traitify.slideDeck.onInitialize(function() {
+		// 		results.slides = traitify.slideDeck.data.get("Slides");
+		// 		$scope.stepThreeLoaded = true;
+		// 		$scope.$apply();
+		// 	});
+
+		// 	traitify.results.onInitialize(function() {
+		// 		console.log("Results");
+		// 		Traitify.getPersonalityTypes(assessmentId).then(function(data) {
+		// 			results.types = data.personality_types;
+		// 			results.blend = data.personality_blend;
+		// 			saveAssessment()
+		// 		});
+		// 		Traitify.getPersonalityTraits(assessmentId).then(function(data) {
+		// 			results.traits = data;
+		// 			saveAssessment()
+		// 		});
+		// 		$scope.resultsLoaded = true;
+		// 		$scope.$apply();
+		// 	});
+
+
+		// 	function saveAssessment() {
+		// 		if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
+  //         saved = true;
+		// 			TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId);
+		// 		}
+		// 	}
+
+		// });//// then
 	}
 })();

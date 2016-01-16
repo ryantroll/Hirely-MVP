@@ -28,14 +28,20 @@
             personalityBlend: results.blend
           }]
         }
-        console.log(data);
-        return HirelyApiService.users(userId).patch(data);
+
+        // return HirelyApiService.users(userId).patch(data);
+        HirelyApiService.traitify({userId:userId, assessmentId:assessmentId}).post(results);
         // traitifyRef.child(userId).push(data);
+    }
+
+    function getTest(){
+      return HirelyApiService.traitify('test').get();
     }
 
     return {
       getAssessmentId: getAssessmentId,
-      saveAssessment:saveAssessment
+      saveAssessment:saveAssessment,
+      getTest: getTest
     }
 
   }

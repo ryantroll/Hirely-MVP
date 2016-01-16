@@ -16,7 +16,7 @@ var persoanlitySchema = new Schema({
                               }],
   personalityBlend    :       {
                                 name:String,
-                                personalityTypes:[{name:String, description:String}]
+                                personalityTypes:[{name:String}]
                               }
 
 });
@@ -111,6 +111,7 @@ var userSchema = new Schema({
         retirementPlan      :       Boolean,
         discounts           :       Boolean
     },
+
 
     /**
      * Personality Exams

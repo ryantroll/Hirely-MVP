@@ -435,8 +435,26 @@ function HirelyApiService($http, $q) {
     return deferred.promise;
   }//// fun. getTraifity
 
-  function createTraitifyAssessment(){
+  function createTraitifyAssessment(data){
+    var deferred = $q.defer();
 
+    $http.post(baseURL + endpointUrl, data).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(error.message);
+          }
+        }, //// fun. resolve
+        function(error){
+          var res = error.data;
+          deferred.reject(res.message);
+        }//// fun. reject
+    )
+
+    return deferred.promise;
   }//// fun. createTraitifyAssessment
 
   return service;
