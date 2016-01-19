@@ -1,18 +1,15 @@
 var Utilities = require('./utilities-for-models');
 var mongoose = require('mongoose');
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
 var metaSchema = new Schema({
-  enviornments:[{id:{type:String, required:true, unique:true}}],
-  famousPeople:[{id:{type:String, required:true, unique:true}}],
-  personalityTraits:[Object],
-  personalityTypes:[{
-    id:{type:String, required:true, unique:true},
-    name:{type:String, required:true, unique:true}
-  }],
+  metaId:{type:String, required:true, unique:true, index:true},
+  metaName:{type:String, required:true, index:true},
+  metaType:{type:String, required:true, index:true},
+  meta:{type:Object}
 },
-{strict:false});
+{strict:true});
 
 var TraitifyMeta = mongoose.model('TraitifyMeta', metaSchema, "traitifymeta");
 

@@ -13,4 +13,6 @@ config.mongoUri = 'mongodb://localhost:27017/hirely';
 
 config.urlSeparator = '-';
 
+config.extractTraitifyMeta = true;
+config.saveTraitifyFamousPeople = false;
 module.exports = config;

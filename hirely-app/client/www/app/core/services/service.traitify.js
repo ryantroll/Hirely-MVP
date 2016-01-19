@@ -20,28 +20,33 @@
 
     function saveAssessment(results, userId, assessmentId){
         var data = {
-          personalityExams:[{
-            extId: assessmentId,
-            slides: results.slides,
-            personalityTypes: results.types,
-            personalityTraits: results.traits,
-            personalityBlend: results.blend
-          }]
+          slides: results.slides,
+          personalityTypes: results.types,
+          personalityTraits: results.traits,
+          personalityBlend: results.blend
         }
 
-        // return HirelyApiService.users(userId).patch(data);
-        HirelyApiService.traitify({userId:userId, assessmentId:assessmentId}).post(results);
-        // traitifyRef.child(userId).push(data);
+        return HirelyApiService.traitify({userId:userId, assessmentId:assessmentId}).post(data);
     }
 
     function getTest(){
       return HirelyApiService.traitify('test').get();
     }
 
+    function getUserAssessment(userId){
+      return HirelyApiService.traitify({userId:userId}).get();
+    }
+
+    function getOldAssessment(assessmentId) {
+      return HirelyApiService.traitify(assessmentId).get();
+    }
+
     return {
       getAssessmentId: getAssessmentId,
       saveAssessment:saveAssessment,
-      getTest: getTest
+      getTest: getTest,
+      getUserAssessment: getUserAssessment,
+      getOldAssessment: getOldAssessment
     }
 
   }
