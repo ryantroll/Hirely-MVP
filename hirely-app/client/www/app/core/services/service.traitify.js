@@ -29,6 +29,10 @@
         return HirelyApiService.traitify({userId:userId, assessmentId:assessmentId}).post(data);
     }
 
+    /**
+     * [getTest will return a test exam object from local server to avoid anwering the 56 slide of traitify]
+     * @return {promise} [description]
+     */
     function getTest(){
       return HirelyApiService.traitify('test').get();
     }
@@ -37,16 +41,11 @@
       return HirelyApiService.traitify({userId:userId}).get();
     }
 
-    function getOldAssessment(assessmentId) {
-      return HirelyApiService.traitify(assessmentId).get();
-    }
-
     return {
       getAssessmentId: getAssessmentId,
       saveAssessment:saveAssessment,
       getTest: getTest,
-      getUserAssessment: getUserAssessment,
-      getOldAssessment: getOldAssessment
+      getUserAssessment: getUserAssessment
     }
 
   }

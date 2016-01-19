@@ -39,6 +39,9 @@
 			}
 		}//// fun. saveAssessment
 
+		/**
+		 * Start by checking if user taken the personality assessment before
+		 */
     	UserService.getUserCompleteFields(AuthService.currentUserID, ['personalityExams'])
     	.then(
     		function(founded){
@@ -50,6 +53,9 @@
     					return founded.personalityExams[0].extId;
     				}
     				else{
+    					/**
+    					 * Send null to next then() function if user has no assessment
+    					 */
     					return null;
     				}
     			}
@@ -63,24 +69,31 @@
     				 */
     				assessmentId = extId;
 
+    				/**
+    				 * Load the result
+    				 * @type {[type]}
+    				 */
 	    			var traitifyResults = Traitify.ui.load("results", assessmentId, ".personality-results"); // Example selector for widget target
 				    traitifyResults.onInitialize(function(){
-				    	$scope.stepThreeLoaded = true;
-				    	$scope.resultsLoaded = true;
+				    	$scope.traitifyResultLoaded = true;
+				    	$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
 				    	$scope.$apply();
 				    });
 
+				    /**
+				     * Load Traitify personality types
+				     */
 	    			var traitifyTypes = Traitify.ui.load("personalityTypes", assessmentId, ".personality-types"); // Example selector for widget target
 				    traitifyTypes.onInitialize(function(){
-				    	$scope.stepThreeLoaded = true;
-				    	$scope.resultsLoaded = true;
+				    	$scope.traitifyTypesLoaded = true;
+				    	$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
 				    	$scope.$apply();
 				    });
 
 				    var traitifyTraits = Traitify.ui.load("personalityTraits", assessmentId, ".personality-traits"); // Example selector for widget target
 				    traitifyTraits.onInitialize(function(){
-				    	$scope.stepThreeLoaded = true;
-				    	$scope.resultsLoaded = true;
+				    	$scope.traitifyTraitsLoaded = true;
+				    	$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
 				    	$scope.$apply();
 				    });
 
@@ -89,7 +102,7 @@
     			else{
     				/**
     				 * no assessment is been taken
-    				 * move to next
+    				 * get new assessment from traitify and move to next then()
     				 */
     				return TraitifyService.getAssessmentId();
     			}////
@@ -97,7 +110,6 @@
     	)//// then()
 		.then(
 			function(data){
-				console.log(data);
 				if(data){
 					assessmentId = data.id;
 
@@ -120,14 +132,19 @@
 					});
 
 					traitify.results.onInitialize(function() {
+				    	$scope.traitifyResultLoaded = true;
 
 						Traitify.getPersonalityTypes(assessmentId).then(function(data) {
 							results.types = data.personality_types;
 							results.blend = data.personality_blend;
+				    		$scope.traitifyTypesLoaded = true;
+
 							saveAssessment()
 						});
 						Traitify.getPersonalityTraits(assessmentId).then(function(data) {
 							results.traits = data;
+				    		$scope.traitifyTraitsLoaded = true;
+
 							saveAssessment()
 						});
 						$scope.resultsLoaded = true;
@@ -137,64 +154,5 @@
 			}//// fun.
 		)//// then()
 
-
-
-
-		// TraitifyService.getTest().then(
-		// 	function(obj){
-		// 		$scope.assessment = obj;
-		// 	},
-		// 	function(err){
-
-		// 	}
-
-		// );//// then()
-
-		// $scope.$on('$destroy', function(event){
-		// 	TraitifyService.saveAssessment($scope.assessment, AuthService.currentUserID, $scope.assessment.extId);
-		// });
-
-		// // TraitifyService.getAssessmentId().then(function(data) {
-		// // 	assessmentId = data.id;
-		// // 	var traitify = null;
-
-		// // 	var results = {};
-		// // 	traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-		// // 		results: {
-		// // 			target: ".personality-results"
-		// // 		},
-		// // 		personalityTypes: {
-		// // 			target: ".personality-types"
-		// // 		},
-		// // 		personalityTraits: {
-		// // 			target: ".personality-traits"
-		// // 		}
-		// // 	});
-
-		// // 	traitify.slideDeck.onInitialize(function() {
-		// // 		results.slides = traitify.slideDeck.data.get("Slides");
-		// // 		$scope.stepThreeLoaded = true;
-		// // 		$scope.$apply();
-		// // 	});
-
-		// // 	traitify.results.onInitialize(function() {
-
-		// // 		Traitify.getPersonalityTypes(assessmentId).then(function(data) {
-		// // 			results.types = data.personality_types;
-		// // 			results.blend = data.personality_blend;
-		// // 			saveAssessment()
-		// // 		});
-		// // 		Traitify.getPersonalityTraits(assessmentId).then(function(data) {
-		// // 			results.traits = data;
-		// // 			saveAssessment()
-		// // 		});
-		// // 		$scope.resultsLoaded = true;
-		// // 		$scope.$apply();
-		// // 	});
-
-
-
-
-		// });//// then
 	}
 })();

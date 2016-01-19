@@ -14,21 +14,6 @@ var traitifyRoutes = {
         });
     },//// fun. getAssmentId
 
-    getOldAssessment: function(req, res){
-        traitifyService.getOldAssessment(req.params.assessmentId)
-        .then(
-            function (assessment) {
-                console.log(assessment);
-                if(!assessment){
-                    res.json(apiUtil.generateResponse(500, err, null));
-                } else{
-
-                    res.json(apiUtil.generateResponse(200, "Assesment Id retrieved", assessment));
-                }
-            }//// fun.
-        );
-    },
-
     getAll: function(req, res){
         traitifyService.getAll(req.query)
         .then(

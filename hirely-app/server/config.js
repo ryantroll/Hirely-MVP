@@ -11,8 +11,22 @@ config.traitify = {
 
 config.mongoUri = 'mongodb://localhost:27017/hirely';
 
+/**
+ * [urlSeparator this will be used in slug generating as word separator]
+ * @type {String}
+ */
 config.urlSeparator = '-';
 
+/**
+ * [extractTraitifyMeta congiration option if set to false will stop the code from proccessing the meta of traitify with each assessment save]
+ * @type {Boolean}
+ */
 config.extractTraitifyMeta = true;
+/**
+ * [saveTraitifyFamousPeople if set to true will add the famous people to traitify meta processing]
+ * @type {Boolean}
+ */
 config.saveTraitifyFamousPeople = false;
+
+
 module.exports = config;

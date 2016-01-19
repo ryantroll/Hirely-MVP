@@ -163,17 +163,28 @@ AuthService is doing the job so far but it's not coded as it should be
 # API
 -------------
 
-## Users Api:
+## Users API:
 
 User fields in database identified as basic and extended the default api call will get the basic fields, extended field can retrived by add ?extnded query parameter to URL
 
 End points
-Get /api/v1/users/:id will return the user basic info
-Get /api/v1/users/:id/external will return the user basic info by sending external ID e.g. user ID in firebase
-Get /api/v1/users/:id?extended will return the user extended info only execluding the basic ifn
+GET /api/v1/users/:id will return the user basic info
+GET /api/v1/users/:id/external will return the user basic info by sending external ID e.g. user ID in firebase
+GET /api/v1/users/:id?extended will return the user extended info only execluding the basic ifn
 
-Post /api/v1/users/ add new users and will return user object with Basic info only
+POST /api/v1/users/ add new users and will return user object with Basic info only
 
+## Traitify API:
+
+Traifiy API desinged to deal with traifiy API from local server mainly to protect the secret key of traitify API from being exposed in front-end
+
+End points
+GET     /api/v1/traitify/ will return the
+GET     /api/v1/traitify/assessment-id will issue a request to Traitify API from local server to generate a new assessment test and return the assessment ID form Traifiy API in response
+GET     /api/v1/traitify/test will return in the response a static and full assessment test object from local server, very usefull to avoid answering the 56 slide while testing
+POST    /api/v1/traitify/?userId={userId}&assessmentid={assessmentId} will save a new personality assessment summary to the user object in database and extract the meta data from the assessment
+
+**NOTE:** A summary of personality assessment is saved as part of user object and meta data of assessment is extracted form the assessment data and saved in seperate collection in database, important to note that the assessemnt saving is done by starting a post request to traitify endpint of API not user endpoint due to the extrat proccessing required to extract meta data
 
 
 

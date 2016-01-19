@@ -200,20 +200,6 @@ var traitifySevice = {
 
   },
 
-  getOldAssessment: function (assessmentId){
-    var deferred = q.defer();
-
-    traitify.setHost(config.traitify.host);
-    traitify.setVersion(config.traitify.version);
-    traitify.setSecretKey(config.traitify.secretKey);
-
-    traitify.getPersonalityTypes(assessmentId, function(assessment){
-      // console.log(assessment);
-      deferred.resolve(assessment);
-    });
-    return deferred.promise;
-  },
-
   getAll: function(reqQuery){
     var filters = {}
     if(undefined !== reqQuery.userId) {
