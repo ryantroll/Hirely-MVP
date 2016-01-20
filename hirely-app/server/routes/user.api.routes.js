@@ -67,7 +67,6 @@ var userRoutes = {
     },//// fun. getUserByExternalId
 
     saveUser: function(req, res){
-
         userService.saveUser(req.params.id, req.body)
         .then(
             function(user){

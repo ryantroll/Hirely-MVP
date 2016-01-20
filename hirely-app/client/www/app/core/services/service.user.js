@@ -136,6 +136,19 @@
     };
 
     /**
+     * [getUserCompleteFields will return user complete fields ]
+     * @param  {string} id     [id of user ]
+     * @param  {array of string} fields [list of fields to be retreived]
+     * @return {promise}        [description]
+     */
+    this.getUserCompleteFields = function getUserById(id, fields) {
+      var deferred = $q.defer();
+      var user = {};
+
+      return HirelyApiService.users(id, fields).get();
+    };
+
+    /**
      * [removeAuthUser will remove user from auth database]
      * @param  {string} email    [email of user to be removed]
      * @param  {string} password [password of user to be removed]

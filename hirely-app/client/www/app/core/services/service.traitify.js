@@ -8,42 +8,44 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .factory('TraitifyService', ['$http', '$q', 'FIREBASE_URL', TraitifyService]);
+    .factory('TraitifyService', ['$http', '$q', 'HirelyApiService', 'FIREBASE_URL', TraitifyService]);
 
-  function TraitifyService($http, $q, FIREBASE_URL) {
+  function TraitifyService($http, $q, HirelyApiService, FIREBASE_URL) {
 
     var traitifyRef = new Firebase(FIREBASE_URL + '/personality');
 
     function getAssessmentId(){
-      var deferred = $q.defer();
-
-      $http.get('/api/traitify/assesment-id')
-        .success(function (data) {
-          console.log(data);
-          deferred.resolve(data);
-        })
-        .error(function (data) {
-          console.log('Error: ' + data);
-        });
-
-      return deferred.promise;
+      return HirelyApiService.traitify('assessment-id').get();
     }
 
     function saveAssessment(results, userId, assessmentId){
         var data = {
-          created_at: moment().format(),
-          assessment_id: assessmentId,
           slides: results.slides,
-          personality_types: results.types,
-          personality_traits: results.traits,
-          personality_blend: results.blend
+          personalityTypes: results.types,
+          personalityTraits: results.traits,
+          personalityBlend: results.blend
         }
-        traitifyRef.child(userId).push(data);
+
+        return HirelyApiService.traitify({userId:userId, assessmentId:assessmentId}).post(data);
+    }
+
+    /**
+     * [getTest will return a test exam object from local server to avoid anwering the 56 slide of traitify]
+     * @return {promise} [description]
+     */
+    function getTest(){
+      return HirelyApiService.traitify('test').get();
+    }
+
+    function getUserAssessment(userId){
+      return HirelyApiService.traitify({userId:userId}).get();
     }
 
     return {
       getAssessmentId: getAssessmentId,
-      saveAssessment:saveAssessment
+      saveAssessment:saveAssessment,
+      getTest: getTest,
+      getUserAssessment: getUserAssessment
     }
 
   }

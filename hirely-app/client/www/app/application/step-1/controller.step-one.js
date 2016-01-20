@@ -27,8 +27,6 @@
       postal_code: 'short_name'
     };
 
-
-
     $scope.$watch('stepOne.$valid', function(state) {
       multiStepFormInstance.setValidity(state);
     });

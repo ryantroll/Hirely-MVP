@@ -222,6 +222,7 @@ var userService = {
                             /**
                              * Error in updating user
                              */
+                            console.log(err);
                             console.log('Error: user couldn\'t be updated');
                             deferred.reject(err);
                         }

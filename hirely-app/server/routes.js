@@ -10,7 +10,7 @@ module.exports = function(app) {
     var apiUtil = require('./utils/api-response');
     var config = require('./config');
     var onetTitlesService = require('./services/onet-titles');
-    var traitify = require('./services/traitify');
+    // var traitify = require('./services/traitify');
 
     /**
      * API for local users in mongoDB
@@ -18,6 +18,7 @@ module.exports = function(app) {
     var userApiRoutes = require('./routes/user.api.routes');
     var businessApiRoutes = require('./routes/business.api.routes');
     var applicationApiRoutes = require('./routes/application.api.routes');
+    var traitifyApiRoutes = require('./routes/traitify.api.routes');
 
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
@@ -30,7 +31,13 @@ module.exports = function(app) {
 
     app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
 
-    app.get('/api/traitify/assesment-id', getAssessmentId);
+    /**
+     * Traitify routs
+     */
+    app.get('/api/v1/traitify/', traitifyApiRoutes.getAll);
+    app.get('/api/v1/traitify/assessment-id', traitifyApiRoutes.getAssessmentId);
+    app.post('/api/v1/traitify/', traitifyApiRoutes.createNewAssessment);
+    app.get('/api/v1/traitify/test', traitifyApiRoutes.getTest);
 
     /**
      * Adding routes for local mongoDB users
@@ -156,14 +163,6 @@ module.exports = function(app) {
         });
     };
 
-    function getAssessmentId(req, res){
-        traitify.getAssessmentId(function (err, results) {
-            if(err){
-                res.json(apiUtil.generateResponse(500, err, null));
-            } else{
-                res.json(apiUtil.generateResponse(200, "Assesment Id retrieved", results));
-            }
-        });
-    }
+
 
 };
