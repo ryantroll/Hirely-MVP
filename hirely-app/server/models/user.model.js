@@ -3,20 +3,24 @@ var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
+/**
+ * [customeId schema with disabled auto _id to be used in arrays of personalityExam schema where the "name" is used as _id]
+ * @type {Schema}
+ */
+var customeId = new Schema({
+  _id:{type:String, requireed:true},
+  score:{type:Number, required:false}
+}
+,{strict:false, _id:false});
+
 var persoanlitySchema = new Schema({
   extId               :       {type:String, required:true},
   createdAt           :       {type:Date, required:true, default:Date.now},
-  personalityTypes    :       [{
-                                score:Number,
-                                name:String
-                              }],
-  personalityTraits   :       [{
-                                score:Number,
-                                name:String
-                              }],
+  personalityTypes    :       [customeId],
+  personalityTraits   :       [customeId],
   personalityBlend    :       {
                                 name:String,
-                                personalityTypes:[{name:String}]
+                                personalityTypes:[customeId]
                               }
 
 });

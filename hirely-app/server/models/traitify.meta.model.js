@@ -4,12 +4,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var metaSchema = new Schema({
-  metaId:{type:String, required:true, unique:true, index:true},
-  metaName:{type:String, required:true, index:true},
+    _id:{type:String, requireed:true},
+  metaId:{type:String, required:false, unique:true, index:true},
+  // metaName:{type:String, required:true, index:true},
   metaType:{type:String, required:true, index:true},
   meta:{type:Object}
 },
-{strict:true});
+{strict:true, _id:false});
 
 var TraitifyMeta = mongoose.model('TraitifyMeta', metaSchema, "traitifymeta");
 

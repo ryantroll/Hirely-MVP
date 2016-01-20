@@ -32,6 +32,20 @@
 
 		$scope.assessment = {};
 
+        // TraitifyService.getTest()
+        // .then(
+        //     function(test){
+        //         console.log(test);
+        //         var data = {};
+        //         data.slides = test.slides;
+        //         data.types = test.personalityTypes;
+        //         data.traits = test.personalityTraits;
+        //         data.blend = test.personalityBlend;
+
+        //         return TraitifyService.saveAssessment(data, AuthService.currentUserID, test.extId );
+        //     }
+        // )
+
 		function saveAssessment() {
 			if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
       			saved = true;

@@ -181,27 +181,6 @@
 
     })();//// fun. init()
 
-    // Handle user already applied
-    //if(angular.isDefined($scope.businessSlug)){
-    //  JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.businessSlug)
-    //  .then(
-    //    function(jobObj){
-    //      if(jobObj.application.minHours) $scope.availability.minHours = jobObj.application.minHours;
-    //      if(jobObj.application.maxHours) $scope.availability.maxHours = jobObj.application.maxHours;
-    //      if(jobObj.application.startDate) $scope.availability.startDate = new Date(jobObj.application.startDate);
-    //    },/// fun. resolve
-    //    function(error){
-    //
-    //    }/// fun. resolve
-    //  )//// then
-    //}/// if job.ID
-
-
-
-
-
-
-
     /***
      *
      * Map stuff:

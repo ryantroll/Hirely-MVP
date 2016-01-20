@@ -13,18 +13,19 @@ var q = require('q');
 
 function extractPersonalitySummary(full){
     var summary = {};
+
     summary.personalityBlend = {};
     summary.personalityBlend.name = full.personalityBlend.name
     summary.personalityBlend.personalityTypes = [];
-    summary.personalityBlend.personalityTypes.push({name:full.personalityBlend.personality_type_1.name});
-    summary.personalityBlend.personalityTypes.push({name:full.personalityBlend.personality_type_2.name});
+    summary.personalityBlend.personalityTypes.push({_id:full.personalityBlend.personality_type_1.name});
+    summary.personalityBlend.personalityTypes.push({_id:full.personalityBlend.personality_type_2.name});
 
     summary.personalityTypes = [];
     for(var x=0; x<full.personalityTypes.length; x++){
         var type = full.personalityTypes[x];
         var typeSummary = {};
         typeSummary.score = type.score;
-        typeSummary.name = type.personality_type.name;
+        typeSummary._id = type.personality_type.name;
         summary.personalityTypes.push(typeSummary);
     }
 
@@ -33,7 +34,7 @@ function extractPersonalitySummary(full){
         var trait = full.personalityTraits[x];
         var traitSummary = {};
         traitSummary.score = trait.score;
-        traitSummary.name = trait.personality_trait.name;
+        traitSummary._id = trait.personality_trait.name;
         summary.personalityTraits.push(traitSummary);
     }
 
@@ -44,7 +45,8 @@ function saveEnvironment(env){
   var toSave = {};
   toSave.meta = {};
   toSave.metaId = env.id;
-  toSave.metaName = env.name;
+  // toSave.metaName = env.name;
+  toSave._id = env.name;
   toSave.metaType = 'environment';
 
   var envModel = traitifyModel(toSave);
@@ -73,6 +75,8 @@ function saveEnvironment(env){
 
     }
   );/// .then
+
+  return toSave._id;
 }/// fun. saveEviorme
 
 function saveFamous(fam){
@@ -80,7 +84,7 @@ function saveFamous(fam){
   var toSave = {};
   toSave.meta = {};
   toSave.metaId = fam.id;
-  toSave.metaName = fam.name;
+  toSave._id = fam.name;
   toSave.metaType = 'famous_people';
   toSave.meta.picture = fam.picture;
   toSave.meta.description = fam.description;
@@ -111,13 +115,14 @@ function saveFamous(fam){
     }
   );/// .then
 
+  return toSave._id;
 }/// fun. saveFamous
 
 function extractTraitMeta(trait){
     // console.log(trait);
     var ret = {};
     ret.meta = {};
-    ret.metaName = trait.personality_trait.name;
+    ret._id = trait.personality_trait.name;
     ret.metaType = 'personality_trait';
     ret.meta.definition = trait.personality_trait.definition;
     ret.meta.personalityType = trait.personality_trait.personality_type.id;
@@ -134,7 +139,8 @@ function extractTypeMeta(type){
 
     ret.metaId = type.id;
     ret.metaType = 'personality_type';
-    ret.metaName = type.name;
+    // ret.metaName = type.name;
+    ret._id = type.name;
 
 
     ret.meta.keywords = type.keywords;
@@ -143,9 +149,10 @@ function extractTypeMeta(type){
     ret.meta.environments = [];
     var envirs = type.environments;
     for(var x=0; x<envirs.length; x++){
-        saveEnvironment(envirs[x])
-        var envMeta = {};
-        envMeta.id = envirs[x].id;
+
+        // var envMeta = {};
+        // envMeta.id = envirs[x].id;
+        var envMeta = saveEnvironment(envirs[x]);
         ret.meta.environments.push(envMeta);
     }
 
@@ -153,9 +160,9 @@ function extractTypeMeta(type){
       ret.meta.famousPeople = [];
       var fams = type.famous_people;
       for(var x=0; x<fams.length; x++){
-          saveFamous(fams[x]);
-          var famMeta = {};
-          famMeta.id = fams[x].id;
+          var famMeta = saveFamous(fams[x]);
+          // var famMeta = {};
+          // famMeta.id = fams[x].id;
           ret.meta.famousPeople.push(famMeta);
           // console.log(fams[x]);
       }////
@@ -170,7 +177,8 @@ function extractBlendMeta(blend){
   ret.meta = {};
   // console.log(blend);
 
-  ret.metaName = blend.name;
+  // ret.metaName = blend.name;
+  ret._id = blend.name;
   ret.metaType = 'personality_blend'
   ret.meta.details = blend.details;
   ret.meta.description = blend.description
@@ -209,7 +217,8 @@ var traitifySevice = {
   },
 
   createNewAssessment: function(userId, examId, data){
-    var deferred = q.defer()
+    var deferred = q.defer();
+
     /**
      * Get summary for user
      */
@@ -252,10 +261,9 @@ var traitifySevice = {
      */
     var blend = extractBlendMeta(data.personalityBlend);
 
-    traitifyModel.findOne({metaName:blend.metaName, metaType:'personality_blend'}).exec()
+    traitifyModel.findOne({_id:blend._id}).exec()
     .then(
       function(founded){
-
         if(null !== founded){
           founded.meta = blend.meta;
           founded.save(function(err, saved){
@@ -264,12 +272,15 @@ var traitifySevice = {
         }//// if null !== founded
         else{
           var newBlend = new traitifyModel(blend);
-          newBlend.metaId = newBlend._id;
+
           newBlend.save(function(err, saved){
             if(err) deferred.reject(err);
           })
         }//// if null !== else
-      }//// fun. resolve
+      },//// fun. resolve
+      function(err){
+        console.log(err);
+      }
     );/// then
 
     /**
@@ -278,7 +289,7 @@ var traitifySevice = {
     if(Array.isArray(data.personalityTypes) && data.personalityTypes.length > 0){
       var promises = data.personalityTypes.map(function(rawType){
         var type = extractTypeMeta(rawType);
-        return q.ninvoke(traitifyModel, 'findOne', {metaId:type.metaId})
+        return q.ninvoke(traitifyModel, 'findOne', {_id:type._id})
           .then(function(founded){
             if(founded){
               /**
@@ -318,7 +329,7 @@ var traitifySevice = {
       if(Array.isArray(data.personalityTraits) && data.personalityTraits.length > 0){
         var promises = data.personalityTraits.map(function(rawTrait){
           var trait = extractTraitMeta(rawTrait);
-          return q.ninvoke(traitifyModel, 'findOne', {metaName:trait.metaName})
+          return q.ninvoke(traitifyModel, 'findOne', {_id:trait._id})
           .then(function(founded){
             if(founded){
               /**
@@ -335,7 +346,7 @@ var traitifySevice = {
                * Trait is not there add new trait meta
                */
               var newTrait = new traitifyModel(trait);
-              newTrait.metaId = newTrait._id;
+
               newTrait.save(function(err, saved){
                 if(err) deferred.reject(err);
               });
