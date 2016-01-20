@@ -12,6 +12,6 @@ var metaSchema = new Schema({
 },
 {strict:true, _id:false});
 
-var TraitifyMeta = mongoose.model('TraitifyMeta', metaSchema, "traitifymeta");
+var TraitifyMeta = mongoose.model('TraitifyMeta', metaSchema, "traitifyMeta");
 
 module.exports = TraitifyMeta;
