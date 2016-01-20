@@ -7,11 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', JobApplicationController]);
+  angular.module('hirelyApp').controller('JobApplicationController', ['$scope', '$stateParams', '$state', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $stateParams, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, HirelyApiService) {
-
+  function JobApplicationController($scope, $stateParams, $state, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, HirelyApiService) {
 
 
     var jobInfo = {};
@@ -45,6 +44,7 @@
      * @return {[type]} [description]
      */
     (function init() {
+
 
       /**
        * Set the form steps
@@ -82,35 +82,34 @@
           hasForm: false
         }
       ];
-
       /**
        * Get the business data based on slugs in url
        */
       if(angular.isDefined($scope.businessSlug)) {
         //$scope.businessInfo = HirelyApiService.businesses("compass-coffee").get()
         HirelyApiService.businesses($scope.businessSlug).get().then(function(business) {
-          console.dir("bus: ");
-          console.dir(business);
+          // console.dir("bus: ");
+          // console.dir(business);
           $scope.business = business;
           // Get the location
           business.locations.forEach(function(location) {
             if(location.slug == $scope.locationSlug) {
-              console.dir("loc: ");
-              console.dir(location);
+              // console.dir("loc: ");
+              // console.dir(location);
               $scope.location = location;
               $scope.updateMap();
               // Get position
               location.positions.forEach(function(position) {
                 if(position.slug == $scope.positionSlug) {
-                  console.dir("pos: ");
-                  console.dir(position);
+                  // console.dir("pos: ");
+                  // console.dir(position);
                   $scope.position = position;
                 }
                 // Get variant
                 position.variants.forEach(function(variant) {
                   if(variant.slug == $scope.variantSlug) {
-                    console.dir("variant: ");
-                    console.dir(variant);
+                    // console.dir("variant: ");
+                    // console.dir(variant);
                     $scope.variant = variant;
                   }
                 })
@@ -133,24 +132,53 @@
           /**
            * find if there application already saved for this user
            */
-          JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.variant._id)
+
+          AuthService.getAuth()
+          .then(
+            function(isAuth){
+              if(true === isAuth){
+                return JobApplicationService.isApplicationExists(AuthService.currentUserID, $scope.variant._id);
+              }
+              else{
+                return null;
+              }
+            },
+            function(err){
+              console.log(err);
+              return null;
+            }
+          )//// .then
           .then(
             function(jobApp){
-              $scope.application = jobApp;
-              /**
-               * Notify child scope about the end of data loading
-               * so they can access the data in daddy and granddaddy
-               */
-              $scope.$broadcast('data-loaded');
-            },//// fun. resolve
+              if(jobApp){
+                $scope.application = jobApp;
+                /**
+                 * Notify child scope about the end of data loading
+                 * so they can access the data in daddy and granddaddy
+                 */
+                $scope.$broadcast('data-loaded');
+              }/// if jobApp
+            },/// fun. reslove
             function(err){
 
-            }//// fun. reject
-          )//// .isApplicaitonExists.then()
+            }
+          )//// .then
+
 
 
         })//// .get().then()
       }/// if define businesSlug
+
+      /**
+       * Monitro is user is logged out and reload the current state
+       */
+      $scope.$on('UserLoggedOut', function(){
+        if($scope.application){
+           delete $scope.application;
+           $state.reload();
+        }
+      });/// $on UserLoggedOut
+
     })();//// fun. init()
 
     // Handle user already applied
