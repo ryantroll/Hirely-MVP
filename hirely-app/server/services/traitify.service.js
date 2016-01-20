@@ -125,7 +125,7 @@ function extractTraitMeta(trait){
     ret._id = trait.personality_trait.name;
     ret.metaType = 'personality_trait';
     ret.meta.definition = trait.personality_trait.definition;
-    ret.meta.personalityType = trait.personality_trait.personality_type.id;
+    ret.meta.personalityType = trait.personality_trait.personality_type.name;
 
     return ret;
 }//// fun. extractTraitMeta
