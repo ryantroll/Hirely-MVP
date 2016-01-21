@@ -1,4 +1,4 @@
-<form class="form-horizontal" name="step-two" form-step-validity>
+<form class="form-horizontal" name="stepTwo" form-step-validity>
     <!-- Work Experience -->
     <fieldset>
         <legend>Work Experience</legend>
@@ -36,14 +36,21 @@
         </div>
 
         <div class="row" ng-show="addWorkXpForm">
-            <div class="col-md-9">
+            <div class="col-md-9 clearfix">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="inputWithRightIcon-2" class="control-label">Company Name</label>
 
                         <div ng-class="{'has-feedback has-error': stepTwo.company.$error.required && stepTwo.company.$dirty, 'has-feedback has-success' : stepTwo.company.$valid}">
-                            <input type="text" ng-model="occupation.formattedAddress" id="address" name="address" uib-typeahead="location as location.address for location in searchLocations($viewValue)" class="form-control txt-search" typeahead-loading="loadingLocations" typeahead-no-results="noResults"
-                                   typeahead-on-select="setAddress($item)" required>
+                            <input type="text" id="company" name="company"
+                                class="form-control txt-search"
+                                ng-model="occupation.formattedAddress"
+                                uib-typeahead="location as location.address for location in searchLocations($viewValue)"
+                                typeahead-loading="loadingLocations"
+                                typeahead-no-results="noResults"
+                                typeahead-on-select="setAddress($item)"
+                                required
+                            />
                             <div class="spinner" ng-show="loadingLocations">
                                 <div class="double-bounce1"></div>
                                 <div class="double-bounce2"></div>
@@ -66,22 +73,37 @@
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="inputWithRightIcon-3" class="control-label">Position</label>
 
-                        <div class="has-feedback">
-                            <input type="text" class="form-control" id="inputWithRightIcon-3"
-                                   ng-model="position"/>
+                        <div ng-class="{'has-feedback has-error': stepTwo.position.$error.required && stepTwo.position.$dirty, 'has-feedback has-success' : stepTwo.position.$valid}">
+                            <input type="text" id="position" name="position" class="form-control txt-search"
+                                ng-model="occupation.reportedJobName"
+                                uib-typeahead="position as position.title for position in searchPosition($viewValue)"
+                                typeahead-loading="loadingPositions"
+                                typeahead-no-results="noResultsPos"
+                                typeahead-on-select="setPosition($item)"
+                                required
+                            />
+                            <div class="spinner" ng-show="loadingPositions">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
+                            </div>
+                            <i class="fa fa-places-alert fa-exclamation-triangle" ng-show="noResultsPos"></i>
+                            <span class="fa fa-close form-control-feedback" ng-show="stepTwo.position.$error.required && stepTwo.position.$dirty"></span>
+                            <span class="fa fa-check form-control-feedback" ng-show="stepTwo.position.$valid"></span>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9 clearfix">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="inputWithRightIcon-2" class="control-label">City</label>
-
-                        <div class="has-feedback">
-                            <input type="text" class="form-control" id="inputWithRightIcon-4"
-                                   ng-model="city"/>
+                        <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwo.workCity.$error.required && stepTwo.workCity.$dirty, 'has-feedback has-success' : stepTwo.workCity.$valid}">
+                            <input type="text" class="form-control" id="workCity" name="workCity"
+                                ng-model="occupation.city"
+                                required
+                            />
                         </div>
                     </div>
                 </div>
@@ -89,21 +111,26 @@
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="inputWithRightIcon-3" class="control-label">State</label>
 
-                        <div class="has-feedback">
-                            <input type="text" class="form-control" id="inputWithRightIcon-5"
-                                   ng-model="state"/>
+                        <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwo.workState.$error.required && stepTwo.workState.$dirty, 'has-feedback has-success' : stepTwo.workState.$valid}">
+                            <input type="text" class="form-control" id="inputWithRightIcon-5" name="workState"
+                               ng-model="occupation.state"
+                               required
+                            />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9 clearfix">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="inputWithRightIcon-2" class="control-label">Start Month</label>
 
-                        <div class="has-feedback">
-                            <input type="text" class="form-control" id="inputWithRightIcon-6"/>
+                        <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwo.workDateStartM.$error.required && stepTwo.workDateStartM.$dirty, 'has-feedback has-success' : stepTwo.workDateStartM.$valid}">
+                            <input type="text" class="form-control" id="inputWithRightIcon-6" name="workDateStartM"
+                                ng-model="occupation.dateStartMonth"
+                                required
+                            />
                         </div>
                     </div>
                 </div>
@@ -111,14 +138,17 @@
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="inputWithRightIcon-3" class="control-label">Start Year</label>
 
-                        <div class="has-feedback">
-                            <input type="text" class="form-control" id="inputWithRightIcon-7"/>
+                        <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwo.workDateStartY.$error.required && stepTwo.workDateStartY.$dirty, 'has-feedback has-success' : stepTwo.workDateStartY.$valid}">
+                            <input type="text" class="form-control" id="inputWithRightIcon-7" name="workDateStartY"
+                                ng-model="occupation.dateStartYear"
+                                required
+                            />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9 clearfix">
                 <div class="form-group">
                     <div class="col-md-9 col-sm-12 checkbox">
                         <label class="custom-option toggle" data-off="OFF" data-on="ON">
@@ -130,7 +160,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9" ng-if="!currentlyHere">
+            <div class="col-md-9 clearfix" ng-if="!currentlyHere">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="inputWithRightIcon-2" class="control-label">End Month</label>
@@ -151,7 +181,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9 clearfix">
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label for="inputTextarea-2" class="control-label">Accomplishments</label>
@@ -160,7 +190,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9 clearfix">
                 <a class="btn btn-default" ng-click="addWorkXpForm = false; addWorkXpButton = true">
                     Cancel
                 </a>
@@ -333,7 +363,7 @@
                 </div>
             </div>
 
-			<!--
+            <!--
             <div class="col-md-9">
                 <div class="col-xs-12">
                     <div class="form-group">

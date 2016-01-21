@@ -3,6 +3,13 @@ var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
+function endDateValidator(value){
+  /**
+   * this here will refer to schema
+   */
+  return value > this.dateStart;
+}
+
 /**
  * [customeId schema with disabled auto _id to be used in arrays of personalityExam schema where the "name" is used as _id]
  * @type {Schema}
@@ -23,6 +30,22 @@ var persoanlitySchema = new Schema({
                                 personalityTypes:[customeId]
                               }
 
+});
+
+var experienceSchema = new Schema({
+  formattedAddress        :         {type:String, required:false},
+  city                    :         {type:String, required:true},
+  state                   :         {type:String, required:true},
+  googlePlaceId           :         {type:String, required:false},
+  dateStart               :         {type:Date, required:true},
+  dateEnd                 :         {
+                                      type:Date,
+                                      required:false,
+                                      validate:[endDateValidator, 'End date must be greater than start date']
+                                    },
+  reportedJobName         :         {type:String, required:true},
+  onetOccupationId        :         {type:String, required:false},
+  accomplishments          :        {type:String, required:false}
 });
 
 var userSchema = new Schema({
@@ -47,7 +70,12 @@ var userSchema = new Schema({
                            */
                           set: Utilities.toLower
                         },
-  mobile        :       {type:String},
+  mobile                :     {type:String},
+  agreedToTerms         :     {type:Boolean},
+  personalStatment      :     {type:String},
+  profileImageURL       :     {type:String},
+  eligibleToWorkInUS    :     {type:Boolean},
+
 
   /**
    * Date fields
@@ -155,7 +183,12 @@ var userSchema = new Schema({
     spokenLanguages: {
         English         :       Boolean,
         Spanish         :       Boolean
-    }
+    },
+
+    /**
+     * Work Experience
+     */
+    workExperience      :       [experienceSchema]
 
 });
 

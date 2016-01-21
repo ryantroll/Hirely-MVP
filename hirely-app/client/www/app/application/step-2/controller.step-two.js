@@ -7,12 +7,13 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', 'GeocodeService', StepTwoController]);
+  angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', 'GeocodeService', 'OccupationService', StepTwoController]);
 
 
-  function StepTwoController($scope, $stateParams, GeocodeService) {
+  function StepTwoController($scope, $stateParams, GeocodeService, OccupationService) {
 
     var geocodeService = GeocodeService;
+
 
     $scope.xpItems = [];
     $scope.addJobXp = function () {
@@ -55,54 +56,81 @@
       };/// fun. searchLocations
 
       $scope.setAddress = function(address){
+          $scope.occupation.formattedAddress = address.address;
           $scope.occupation.googlePlaceId = address.placeId;
+
           geocodeService.getPlaceDetails(address.placeId).then(function(data){
               var place = data.results.result;
 
               if(place){
-
                   /**
                    * Loop throught  address components and take what is needed
                    */
                   for (var i = 0; i < place.address_components.length; i++) {
                       var addressType = place.address_components[i].types[0];
+
                       switch (addressType){
-                          case "route":
-                              $scope.occupation.street1 = place.address_components[i][addressComponents[addressType]] || false;
-                              break;
+                          // case "route":
+                              // $scope.occupation.street1 = place.address_components[i][addressComponents[addressType]] || false;
+                              // break;
 
                           // case "street_number":
                           //   $scope.user.number = place.address_components[i][addressComponents[addressType]] || false;
                           //   break;
 
-                          case "country":
-                              $scope.occupation.country = place.address_components[i][addressComponents[addressType]] || false;
-                              break;
+                          // case "country":
+                          //     $scope.occupation.country = place.address_components[i][addressComponents[addressType]] || false;
+                          //     break;
 
                           case "administrative_area_level_1":
-                              $scope.occupation.state = place.address_components[i][addressComponents[addressType]] || false;
+                              $scope.occupation.state = place.address_components[i].short_name || null;
                               break;
 
                           case "locality":
-                              $scope.occupation.city = place.address_components[i][addressComponents[addressType]] || false;
+                              $scope.occupation.city = place.address_components[i].long_name || null;
                               break;
 
-                          case "postal_code":
-                              $scope.occupation.postalCode = place.address_components[i][addressComponents[addressType]] || false;
-                              break;
+                          // case "postal_code":
+                          //     $scope.occupation.postalCode = place.address_components[i][addressComponents[addressType]] || false;
+                          //     break;
                       }//// switch
                   }//// for
-
-                  $scope.occupation.lng = place.geometry.location.lng || null;
-                  $scope.occupation.lat = place.geometry.location.lat || null;
-                  $scope.occupation.formattedAddress = place.formatted_address || null;
-                  $scope.occupation.street1 = place.name;
-                  // $scope.user.neighbourhood = place.vicinity;
 
               }//// if place
 
           });
+
       }//// fun. setAddress
+
+      $scope.searchPosition = function(query){
+        if(query.trim().length > 1){
+          return OccupationService.getOccupations(query)
+          .then(
+            function(data){
+              if(200 === data.statusCode){
+                var occupations = data.results;
+                return occupations;
+              }
+              else{
+                console.log(data.statusCode);
+                return [];
+              }
+            },
+            function(err){
+              console.log(err);
+              return [];
+            }
+          )
+        }//// if query
+        else{
+          return [];
+        }
+      }//// fun. searchPositions
+
+      $scope.setPosition = function(position){
+        $scope.occupation.reportedJobName = position.title;
+        $scope.occupation.onetOccupationId
+      }
 
   }
 })();
