@@ -24,6 +24,7 @@ var variantSchema = new Schema(
     minWeekdayShifts  :     Number,
     minWeekendShifts  :     Number,
     openings          :     Number,
+    experienceLvl     :     Number,
 
     compensation:
     {

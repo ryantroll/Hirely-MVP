@@ -66,6 +66,7 @@ db.once('open', function(){
                                 minWeekdayShifts  :     3,
                                 minWeekendShifts  :     3,
                                 openings          :     3,
+                                experienceLvl     :     1,
 
                                 compensation:
                                 {
