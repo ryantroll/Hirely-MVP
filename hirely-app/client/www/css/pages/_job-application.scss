@@ -1,4 +1,7 @@
 .job-application {
+				.section-separator{
+					padding:1em;
+				}
 				.angular-google-map-container {
 								width: 100% !important;
 								height: 200px !important;
@@ -87,7 +90,12 @@
 												}
 												margin-top: 30px;
 												margin-bottom: 30px;
-												border-bottom: 1px solid #fafafa;
+												padding-bottom:30px;
+												border-bottom: 1px solid #e5e5e5;
+												position:relative;
+												&:last-child {
+																border:none;
+												}
 								}
 								h2.company {
 												font-size: 16px;
@@ -114,6 +122,9 @@
 												font-size: 13px;
 												font-weight: 300;
 												color: #4B4B4B;
+								}
+								a.delete {
+									color:#a94442!important;
 								}
 				}
 				/******************************************************************/
