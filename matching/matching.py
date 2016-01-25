@@ -86,9 +86,9 @@ class MatchCacheService(object):
   knowledgesWeight = .1
   skillsWeight = .1
   abilitiesWeight = .1
-  workActivitiesWeight = .1
-  educationWeight = .3
-  personalityWeight = .4
+  workActivitiesWeight = .2
+  educationWeight = .1
+  personalityWeight = .5
 
   # This should be an api endpoint
   # Generates a MatchCache document for every onet occupation
