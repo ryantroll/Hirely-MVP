@@ -25,6 +25,7 @@ class UserService(object):
     else:
       return 0
 
+  # This should be an api endpoint, and should be called automatically when a profile is completed or when relevant fields are updated after completed
   def updateUserCacheFields(user):
     # Clear the old Ksa
     user.knowledges = user.skills = user.abilities = user.workActivities = []
@@ -77,36 +78,6 @@ class UserService(object):
 
     return user
 
-  def getCareerSuggestions(user, limit=100):
-    queryset = MatchCache.find(userId=user.id, sort_by_descending=maxScoreTotal, limit=limit)
-    return queryset
-
-  def getVariantSuggestions(user, limit=100, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
-    suggestions = {}
-
-    # Get all businesses with open position variants within a lat-lon region
-    if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
-      Business.find(locations__positions__variants__openings__gt=0, 
-                    limit=limit,
-                    locations__lng__within=(lng_lower_bound, lng_upper_bound), 
-                    locations__lat__within=(lat_lower_bound, lat_upper_bound))
-    else:
-      Business.find(locations__positions__variants__openings__gt=0, 
-                    limit=limit)
-    
-    # Now get match scores for every variant and append to suggestions
-    for business in businesses
-      for locations in business:
-        for positions in location:
-          for variant in positions:
-            if variant.openings > 0:
-              matchCache = MatchCache.findOne(onetOccupationId=variant.onetOccupationId, userId=user.id)
-              scores = matchCache.scores[variant.experienceLvl]
-              suggestions.append({"businessId": business.id, "variantId": variant.id, "scores": scores})
-
-    # Finally, sort by suggestion['scores']['total'] and limit to top 100
-    return suggestions.sort('scores.total')[:100]
-
 
 class MatchCacheService(object):
   # I have this list, when you are ready
@@ -119,7 +90,7 @@ class MatchCacheService(object):
   educationWeight = .3
   personalityWeight = .4
 
-  # Should make an api endpoint for this
+  # This should be an api endpoint
   # Generates a MatchCache document for every onet occupation
   def generateForUser(user):
     for onetOccupationId in self.onetOccupationIds:
@@ -139,9 +110,9 @@ class MatchCacheService(object):
         for knowledgeName, score in user.knowledges.iteritems():
           ss_user_knowledge[knowledgeName] = (user.knowledges[knowledgeName] - occupationKnowledges[experienceLvl][knowledgeName])**2 
           ss_occupation_knowledge[knowledgeName] =  occupationKnowledges[experienceLvl][knowledgeName]**2
-        knowledgesTotal = 1 - sqrt(ss_user_knowledge/ss_occupation_knowledge)
-        knowledgesTotal = Max( knowledgesTotal, 0 )
-        matchCache.scores[experienceLvl]['knowledgesTotal'] = knowledgesTotal
+        knowledgesScore = 1 - sqrt(ss_user_knowledge/ss_occupation_knowledge)
+        knowledgesScore = Max( knowledgesScore, 0 )
+        matchCache.scores[experienceLvl]['knowledgesScore'] = knowledgesScore
 
 
         # Skill calcs
@@ -150,9 +121,9 @@ class MatchCacheService(object):
         for skillName, score in user.skills.iteritems():
           ss_user_skill[skillName] = (user.skills[skillName] - occupationSkills[experienceLvl][skillName])**2 
           ss_occupation_skill[skillName] =  occupationSkills[experienceLvl][skillName]**2
-        skillsTotal = 1 - sqrt(ss_user_skill/ss_occupation_skill)
-        skillsTotal = Max( skillsTotal, 0 )
-        matchCache.scores[experienceLvl]['skillsTotal'] = skillsTotal
+        skillsScore = 1 - sqrt(ss_user_skill/ss_occupation_skill)
+        skillsScore = Max( skillsScore, 0 )
+        matchCache.scores[experienceLvl]['skillsScore'] = skillsScore
       
       
         # Abilities calcs
@@ -161,9 +132,9 @@ class MatchCacheService(object):
         for abilityName, score in user.abilities.iteritems():
           ss_user_ability[abilityName] = (user.abilities[abilityName] - occupationAbilities[experienceLvl][abilityName])**2 
           ss_occupation_ability[abilityName] =  occupationAbilities[experienceLvl][abilityName]**2
-        abilitiesTotal = 1 - sqrt(ss_user_abilities/ss_occupation_abilities)
-        abilitiesTotal = Max( abilitiesTotal, 0 )
-        matchCache.scores[experienceLvl]['abilitiesTotal'] = abiliitesTotal
+        abilitiesScore = 1 - sqrt(ss_user_abilities/ss_occupation_abilities)
+        abilitiesScore = Max( abilitiesScore, 0 )
+        matchCache.scores[experienceLvl]['abilitiesScore'] = abiliitesScore
       
       
         # WorkActivities calcs
@@ -172,9 +143,9 @@ class MatchCacheService(object):
         for workActivityName, score in user.workActivities.iteritems():
           ss_user_workActivity[workActivityName] = (user.workActivities[workActivityName] - occupationWorkActivities[experienceLvl][workActivityName])**2 
           ss_occupation_workActivity[workActivityName] =  occupationWorkActivities[experienceLvl][workActivityName]**2
-        workActivitiesTotal = 1 - sqrt(ss_user_workActivities/ss_occupation_workActivities)
-        workActivitiesTotal = Max( workActivitiesTotal, 0 )
-        matchCache.scores[experienceLvl]['workActivitiesTotal'] = workActivitiesTotal
+        workActivitiesScore = 1 - sqrt(ss_user_workActivities/ss_occupation_workActivities)
+        workActivitiesScore = Max( workActivitiesScore, 0 )
+        matchCache.scores[experienceLvl]['workActivitiesScore'] = workActivitiesScore
       
       
         # Education calcs
@@ -184,37 +155,90 @@ class MatchCacheService(object):
         # Personality calcs
         matchCache.scores[experienceLvl]['personalityScore'] = user.personalityCareerScores[onetOccupationId]
 
-        # Grand total calcs
-        total = Max( total, 0 )
-        total = knowledgesTotal*self.knowledgesWeight 
-                + skillsTotal*self.skillsWeight 
-                + abilitiesTotal*self.abilitiesWeight
-                + workActivitiesTotal*self.workActivitiesWeight
+        # Grand overallScore calcs
+        overallScore = knowledgesScore*self.knowledgesWeight 
+                + skillsScore*self.skillsWeight 
+                + abilitiesScore*self.abilitiesWeight
+                + workActivitiesScore*self.workActivitiesWeight
                 + educationScore*self.educationWeight
                 + personalityScore*self.personalityWeight
 
-        matchCache.scores[experienceLvl]['total'] = total
+        matchCache.scores[experienceLvl]['overallScore'] = overallScore
 
-        if total > matchCache.scores['maxScoreTotal']:
-          matchCache.scores['maxScoreTotal'] = total
+        if overallScore > matchCache.maxOverallScore:
+          matchCache.maxOverallScore = overallScore
 
       matchCache.save()
-    
 
-class BusinessService(object):
+  # This should be an api endpoint
+  def getCareerSuggestions(userId, limit=100):
+    queryset = MatchCache.find(userId=userId, sort_by_descending=maxOverallScore, limit=limit)
+    return queryset
+
+  # This should be an api endpoint
+  def getVariantSuggestions(userId, limit=100, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
+
+    suggestions = {}
+
+    # Get all businesses with open position variants within a lat-lon region
+    if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
+      Business.find(locations__positions__variants__openings__gt=0, 
+                    limit=limit,
+                    locations__lng__within=(lng_lower_bound, lng_upper_bound), 
+                    locations__lat__within=(lat_lower_bound, lat_upper_bound))
+    else:
+      Business.find(locations__positions__variants__openings__gt=0, 
+                    limit=limit)
+    
+    # Now get match scores for every variant and append to suggestions
+    for business in business['locations']:
+      for location in business['locations']:
+        for position in location['positions']:
+          for variant in position['variants']:
+            if variant.openings > 0:
+              matchCache = MatchCache.findOne(onetOccupationId=variant.onetOccupationId, userId=userId)
+              scores = matchCache.scores[variant.experienceLvl]
+              suggestions.append({"businessId": business.id, "variantId": variant.id, "scores": scores})
+
+    # Finally, sort by suggestion['scores']['overallScore'] and limit to top 100
+    return suggestions.sort('scores.overallScore')[:100]
+
+  # This should be an api endpoint
   def getUserSuggestions(onetOccupationId, experienceLvl, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
     if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
       queryset = MatchCache.find(onetOccupationId=onetOccupationId, 
                                  userOptOutOfSuggetionsFromEmployers=False, 
-                                 sort_by_descending=scores[experienceLvl]['total'], 
+                                 sort_by_descending=scores[experienceLvl]['overallScore'], 
                                  limit=100, locations__lng__within=(lng_lower_bound, lng_upper_bound), 
                                  locations__lat__within=(lat_lower_bound, lat_upper_bound))
     else:
       queryset = MatchCache.find(onetOccupationId=onetOccupationId,
                                  userOptOutOfSuggetionsFromEmployers=False, 
-                                 sort_by_descending=scores[experienceLvl]['total'], limit=100)
+                                 sort_by_descending=scores[experienceLvl]['overallScore'], limit=100)
     return queryset
 
+
+class ApplicationService
+  # This should be an api endpoint
+  def getApplicationsByVariant(variantId):
+    return Applications.find(variantId=variantId)
+
+  # This should be an api endpoint
+  def createApplication(businessId, variantId, userId, prescreenAnswers):
+    business = Business.findOne(businessId=businessId)
+    user = User.findOne(userId=userId)
+
+    application = new Application
+
+    # Now get match scores for every variant and append to suggestions
+    for location in business['locations']:
+      for position in location['positions']:
+        for variant in position['variants']:
+          if variant.id == variantId:
+            matchCache = MatchCache.findOne(onetOccupationId=variant.onetOccupationId, userId=userId)
+            application.scores = matchCache.scores[variant.experienceLvl]
+
+    application.save()
 
 
 # This doesn't work right now, but demonstrates how this framework would work
