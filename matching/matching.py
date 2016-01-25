@@ -83,10 +83,7 @@ class MatchCacheService(object):
   # I have this list, when you are ready
   onetOccupationIds = [...]
   experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months 
-  knowledgesWeight = .1
-  skillsWeight = .1
-  abilitiesWeight = .1
-  workActivitiesWeight = .2
+  experienceWeight = .4
   educationWeight = .1
   personalityWeight = .5
 
@@ -110,10 +107,6 @@ class MatchCacheService(object):
         for knowledgeName, score in user.knowledges.iteritems():
           ss_user_knowledge[knowledgeName] = (user.knowledges[knowledgeName] - occupationKnowledges[experienceLvl][knowledgeName])**2 
           ss_occupation_knowledge[knowledgeName] =  occupationKnowledges[experienceLvl][knowledgeName]**2
-        knowledgesScore = 1 - sqrt(ss_user_knowledge/ss_occupation_knowledge)
-        knowledgesScore = Max( knowledgesScore, 0 )
-        matchCache.scores[experienceLvl]['knowledgesScore'] = knowledgesScore
-
 
         # Skill calcs
         ss_user_skill = {}
@@ -121,10 +114,6 @@ class MatchCacheService(object):
         for skillName, score in user.skills.iteritems():
           ss_user_skill[skillName] = (user.skills[skillName] - occupationSkills[experienceLvl][skillName])**2 
           ss_occupation_skill[skillName] =  occupationSkills[experienceLvl][skillName]**2
-        skillsScore = 1 - sqrt(ss_user_skill/ss_occupation_skill)
-        skillsScore = Max( skillsScore, 0 )
-        matchCache.scores[experienceLvl]['skillsScore'] = skillsScore
-      
       
         # Abilities calcs
         ss_user_abilities = {}
@@ -132,10 +121,6 @@ class MatchCacheService(object):
         for abilityName, score in user.abilities.iteritems():
           ss_user_ability[abilityName] = (user.abilities[abilityName] - occupationAbilities[experienceLvl][abilityName])**2 
           ss_occupation_ability[abilityName] =  occupationAbilities[experienceLvl][abilityName]**2
-        abilitiesScore = 1 - sqrt(ss_user_abilities/ss_occupation_abilities)
-        abilitiesScore = Max( abilitiesScore, 0 )
-        matchCache.scores[experienceLvl]['abilitiesScore'] = abiliitesScore
-      
       
         # WorkActivities calcs
         ss_user_workActivities = {}
@@ -143,25 +128,25 @@ class MatchCacheService(object):
         for workActivityName, score in user.workActivities.iteritems():
           ss_user_workActivity[workActivityName] = (user.workActivities[workActivityName] - occupationWorkActivities[experienceLvl][workActivityName])**2 
           ss_occupation_workActivity[workActivityName] =  occupationWorkActivities[experienceLvl][workActivityName]**2
-        workActivitiesScore = 1 - sqrt(ss_user_workActivities/ss_occupation_workActivities)
-        workActivitiesScore = Max( workActivitiesScore, 0 )
-        matchCache.scores[experienceLvl]['workActivitiesScore'] = workActivitiesScore
-      
+
+        # Calc Experience score
+        ss_user_all = ss_user_knowledge + ss_user_skills + ss_user_abilities + ss_user_workActivities
+        ss_occupation_all = ss_occupation_knowledge + ss_occupation_skills + ss_occupation_abilities + ss_occupation_workActivities
+        experienceScore = 1 - sqrt(ss_user_all/ss_occupation_all)
+        experienceScore = Max( experienceScore, 0 )
+        matchCache.scores[experienceLvl]['experienceScore'] = experienceScore
       
         # Education calcs
-        # EducationScores is a to be created lookup table for pre-calculated education percentiles for a given occupation
+        # TODO: EducationScores is a to be created lookup table for pre-calculated education percentiles for a given occupation
         matchCache.scores[experienceLvl]['educationScore'] = OnetMeta.findOne(onetOccupationId=onetOccupationId)['percentiles'][experienceLvl]['educationIndex'][user.educationMaxLvl]
 
         # Personality calcs
         matchCache.scores[experienceLvl]['personalityScore'] = user.personalityCareerScores[onetOccupationId]
 
         # Grand overallScore calcs
-        overallScore = knowledgesScore*self.knowledgesWeight 
-                + skillsScore*self.skillsWeight 
-                + abilitiesScore*self.abilitiesWeight
-                + workActivitiesScore*self.workActivitiesWeight
-                + educationScore*self.educationWeight
-                + personalityScore*self.personalityWeight
+        overallScore = experienceScore*self.experienceWeight
+                       + educationScore*self.educationWeight
+                       + personalityScore*self.personalityWeight
 
         matchCache.scores[experienceLvl]['overallScore'] = overallScore
 
