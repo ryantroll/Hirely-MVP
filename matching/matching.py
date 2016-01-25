@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# TODO:  Consider location and availability in suggestions
 
 class UserService(object):
   experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months
@@ -79,11 +78,10 @@ class UserService(object):
     return user
 
   def getCareerSuggestions(user, limit=100):
-    queryset = MatchCache.find(userId=user.id, sort_by_descending=maxScore, limit=limit)
+    queryset = MatchCache.find(userId=user.id, sort_by_descending=maxScoreTotal, limit=limit)
     return queryset
 
   def getVariantSuggestions(user, limit=100, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
-    # TODO:  Figure out if we should pre-calc and cache variant-to-user scores
     suggestions = {}
     if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
       Business.find(locations__positions__variants__openings__gt=0, 
@@ -112,11 +110,11 @@ class MatchCacheService(object)
     onetOccupationIds = [...]
     experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months
     matchScores = {}
-    maxScore = 0
-    knowledgeWeight = .1
-    skillWeight = .1
-    abilityWeight = .1
-    workActivitesWeight = .1
+    maxScoreTotal = 0
+    knowledgesWeight = .1
+    skillsWeight = .1
+    abilitiesWeight = .1
+    workActivitiesWeight = .1
     educationWeight = .3
     personalityWeight = .4
 
@@ -142,9 +140,9 @@ class MatchCacheService(object)
         for knowledgeName, score in user.knowledges.iteritems():
           ss_user_knowledge[knowledgeName] = (user.knowledges[knowledgeName] - occupationKnowledges[experienceLvl][knowledgeName])**2 
           ss_occupation_knowledge[knowledgeName] =  occupationKnowledges[experienceLvl][knowledgeName]**2
-        knowledgeTotal = 1 - sqrt(ss_user_knowledge/ss_occupation_knowledge)
-        knowledgeTotal = Max( knowledgeTotal, 0 )
-        self.matchScores[experienceLvl]['knowledgeTotal'] = knowledgeTotal
+        knowledgesTotal = 1 - sqrt(ss_user_knowledge/ss_occupation_knowledge)
+        knowledgesTotal = Max( knowledgesTotal, 0 )
+        self.matchScores[experienceLvl]['knowledgesTotal'] = knowledgesTotal
 
 
         # Skill calcs
@@ -153,9 +151,9 @@ class MatchCacheService(object)
         for skillName, score in user.skills.iteritems():
           ss_user_skill[skillName] = (user.skills[skillName] - occupationSkills[experienceLvl][skillName])**2 
           ss_occupation_skill[skillName] =  occupationSkills[experienceLvl][skillName]**2
-        skillTotal = 1 - sqrt(ss_user_skill/ss_occupation_skill)
-        skillTotal = Max( skillTotal, 0 )
-        self.matchScores[experienceLvl]['skillTotal'] = skillTotal
+        skillsTotal = 1 - sqrt(ss_user_skill/ss_occupation_skill)
+        skillsTotal = Max( skillsTotal, 0 )
+        self.matchScores[experienceLvl]['skillsTotal'] = skillsTotal
       
       
         # Abilities calcs
@@ -181,24 +179,25 @@ class MatchCacheService(object)
       
       
         # Education calcs
-        # TODO:  Talk to Ryan about new education context
         # EducationScores is a to be created lookup table for pre-calculated education percentiles for a given occupation
         self.matchScores[experienceLvl]['educationScore'] = OnetMeta.findOne(onetOccupationId=onetOccupationId)['percentiles'][experienceLvl]['educationIndex'][user.educationMaxLvl]
 
         # Personality calcs
-        # TODO:  Determine if personalityCareerScores should be on user or elsewhere
         self.matchScores[experienceLvl]['personalityScore'] = user.personalityCareerScores[onetOccupationId]
 
         # Grand total calcs
-        # TODO:  Ask Dave how to factor in weights, education and personality in total
-        ss_user_all = ss_user_knowledge + ss_user_skills + ss_user_abilities + ss_user_workActivities
-        ss_occupation_all = ss_occupation_knowledge + ss_occupation_skills + ss_occupation_abilities + ss_occupation_workActivities
-        total = 1 - sqrt(ss_user_all/ss_occupation_all)
         total = Max( total, 0 )
+        total = knowledgesTotal*self.knowledgesWeight 
+                + skillsTotal*self.skillsWeight 
+                + abilitiesTotal*self.abilitiesWeight
+                + workActivitiesTotal*self.workActivitiesWeight
+                + educationScore*self.educationWeight
+                + personalityScore*self.personalityWeight
+
         self.matchScores[experienceLvl]['total'] = total
 
-        if total > self.maxScore:
-          self.maxScore = total
+        if total > self.maxScoreTotal:
+          self.maxScoreTotal = total
     
 
 class BusinessService(object):
