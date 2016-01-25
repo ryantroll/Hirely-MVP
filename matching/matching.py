@@ -83,6 +83,8 @@ class UserService(object):
 
   def getVariantSuggestions(user, limit=100, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
     suggestions = {}
+
+    # Get all businesses with open position variants within a lat-lon region
     if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
       Business.find(locations__positions__variants__openings__gt=0, 
                     limit=limit,
@@ -91,46 +93,43 @@ class UserService(object):
     else:
       Business.find(locations__positions__variants__openings__gt=0, 
                     limit=limit)
+    
+    # Now get match scores for every variant and append to suggestions
     for business in businesses
       for locations in business:
         for positions in location:
           for variant in positions:
             if variant.openings > 0:
-              match = MatchCache.findOne(onetOccupationId=variant.onetOccupationId, userId=user.id)
-              matchScore = match.scores[variant.experienceLvl]['total']
-              suggestions.append({"businessId": business.id, "variantId": variant.id, "score": matchScore})
+              matchCache = MatchCache.findOne(onetOccupationId=variant.onetOccupationId, userId=user.id)
+              scores = matchCache.scores[variant.experienceLvl]
+              suggestions.append({"businessId": business.id, "variantId": variant.id, "scores": scores})
 
-    return suggestions.sort('score')[:100]
+    # Finally, sort by suggestion['scores']['total'] and limit to top 100
+    return suggestions.sort('scores.total')[:100]
 
 
-class MatchCacheService(object)
-  class MatchCacheGenerator(object):
-    user = None
-    # I have this list, when you are ready
-    onetOccupationIds = [...]
-    experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months
-    matchScores = {}
-    maxScoreTotal = 0
-    knowledgesWeight = .1
-    skillsWeight = .1
-    abilitiesWeight = .1
-    workActivitiesWeight = .1
-    educationWeight = .3
-    personalityWeight = .4
+class MatchCacheService(object):
+  # I have this list, when you are ready
+  onetOccupationIds = [...]
+  experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months 
+  knowledgesWeight = .1
+  skillsWeight = .1
+  abilitiesWeight = .1
+  workActivitiesWeight = .1
+  educationWeight = .3
+  personalityWeight = .4
 
-    def __call__(user):
-      self.user = user
+  # Should make an api endpoint for this
+  # Generates a MatchCache document for every onet occupation
+  def generateForUser(user):
+    for onetOccupationId in self.onetOccupationIds:
 
-    def generateAll():
-      for onetOccupationId in self.onetOccupationIds:
-        self.generateForId(onetOccupationId)
-
-    def generateForId(onetOccupationId):
-      
       occupationKnowledges = Knowledges.get(onetOccupationId=onetOccupationId)
       occupationSkills = Skills.get(onetOccupationId=onetOccupationId)
       occupationAbilities = Abilities.get(onetOccupationId=onetOccupationId)
       occupationWorkActivites = WorkActivities.get(onetOccupationId=onetOccupationId)
+
+      matchCache = new MatchCache()
 
       for experienceLvl in self.experienceLevels:
             
@@ -142,7 +141,7 @@ class MatchCacheService(object)
           ss_occupation_knowledge[knowledgeName] =  occupationKnowledges[experienceLvl][knowledgeName]**2
         knowledgesTotal = 1 - sqrt(ss_user_knowledge/ss_occupation_knowledge)
         knowledgesTotal = Max( knowledgesTotal, 0 )
-        self.matchScores[experienceLvl]['knowledgesTotal'] = knowledgesTotal
+        matchCache.scores[experienceLvl]['knowledgesTotal'] = knowledgesTotal
 
 
         # Skill calcs
@@ -153,7 +152,7 @@ class MatchCacheService(object)
           ss_occupation_skill[skillName] =  occupationSkills[experienceLvl][skillName]**2
         skillsTotal = 1 - sqrt(ss_user_skill/ss_occupation_skill)
         skillsTotal = Max( skillsTotal, 0 )
-        self.matchScores[experienceLvl]['skillsTotal'] = skillsTotal
+        matchCache.scores[experienceLvl]['skillsTotal'] = skillsTotal
       
       
         # Abilities calcs
@@ -164,7 +163,7 @@ class MatchCacheService(object)
           ss_occupation_ability[abilityName] =  occupationAbilities[experienceLvl][abilityName]**2
         abilitiesTotal = 1 - sqrt(ss_user_abilities/ss_occupation_abilities)
         abilitiesTotal = Max( abilitiesTotal, 0 )
-        self.matchScores[experienceLvl]['abilitiesTotal'] = abiliitesTotal
+        matchCache.scores[experienceLvl]['abilitiesTotal'] = abiliitesTotal
       
       
         # WorkActivities calcs
@@ -175,15 +174,15 @@ class MatchCacheService(object)
           ss_occupation_workActivity[workActivityName] =  occupationWorkActivities[experienceLvl][workActivityName]**2
         workActivitiesTotal = 1 - sqrt(ss_user_workActivities/ss_occupation_workActivities)
         workActivitiesTotal = Max( workActivitiesTotal, 0 )
-        self.matchScores[experienceLvl]['workActivitiesTotal'] = workActivitiesTotal
+        matchCache.scores[experienceLvl]['workActivitiesTotal'] = workActivitiesTotal
       
       
         # Education calcs
         # EducationScores is a to be created lookup table for pre-calculated education percentiles for a given occupation
-        self.matchScores[experienceLvl]['educationScore'] = OnetMeta.findOne(onetOccupationId=onetOccupationId)['percentiles'][experienceLvl]['educationIndex'][user.educationMaxLvl]
+        matchCache.scores[experienceLvl]['educationScore'] = OnetMeta.findOne(onetOccupationId=onetOccupationId)['percentiles'][experienceLvl]['educationIndex'][user.educationMaxLvl]
 
         # Personality calcs
-        self.matchScores[experienceLvl]['personalityScore'] = user.personalityCareerScores[onetOccupationId]
+        matchCache.scores[experienceLvl]['personalityScore'] = user.personalityCareerScores[onetOccupationId]
 
         # Grand total calcs
         total = Max( total, 0 )
@@ -194,10 +193,12 @@ class MatchCacheService(object)
                 + educationScore*self.educationWeight
                 + personalityScore*self.personalityWeight
 
-        self.matchScores[experienceLvl]['total'] = total
+        matchCache.scores[experienceLvl]['total'] = total
 
-        if total > self.maxScoreTotal:
-          self.maxScoreTotal = total
+        if total > matchCache.scores['maxScoreTotal']:
+          matchCache.scores['maxScoreTotal'] = total
+
+      matchCache.save()
     
 
 class BusinessService(object):
