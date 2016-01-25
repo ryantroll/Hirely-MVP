@@ -2,8 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var onetTitlesSchema = new Schema({
-  code: 'String',
-  title: 'String'
+  onetId:String,
+  occupationTitle:String,
+  reportedTitle:String,
+  combinedTitle:String
 });
 
 

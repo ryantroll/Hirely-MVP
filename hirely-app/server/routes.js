@@ -29,7 +29,7 @@ module.exports = function(app) {
     app.get('/api/places/:placeId', getPlaceDetailsByPlaceId);
     app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
 
-    app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
+    // app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
 
     /**
      * Traitify routs

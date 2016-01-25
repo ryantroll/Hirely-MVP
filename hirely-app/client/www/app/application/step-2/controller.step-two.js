@@ -215,6 +215,7 @@
             function(data){
               if(200 === data.statusCode){
                 var occupations = data.results;
+                console.log(occupations);
                 return occupations;
               }
               else{
@@ -237,9 +238,26 @@
        * [setPosition used in typeahead and triggered when user select one of the position in typeahead list]
        * @param {Object} position [description]
        */
-      $scope.setPosition = function(position){
-        $scope.occupation.reportedJobName = position.title;
-        $scope.occupation.onetOccupationId = position.code;
+      $scope.setPosition = function(reported){
+
+        if(reported.occupations.length === 1){
+          $scope.occupation.reportedJobName = reported.occupations[0].occupationTitle;
+          $scope.occupation.onetOccupationId = reported.occupations[0].onetId;
+        }
+        else{
+          $scope.positionSub = reported.occupations;
+        }
+
+      }
+
+      $scope.setPositionSub = function(){
+        if($scope.sub){
+          $scope.occupation.reportedJobName = $scope.sub.occupationTitle;
+          $scope.occupation.onetOccupationId  = $scope.sub.onetId;
+          delete $scope.positionSub;
+          delete $scope.sub;
+        }
+
       }
 
       /**

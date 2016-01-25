@@ -78,12 +78,13 @@
                         <div ng-class="{'has-feedback has-error': stepTwo.position.$error.required && stepTwo.position.$dirty, 'has-feedback has-success' : stepTwo.position.$valid}">
                             <input type="text" id="position" name="position" class="form-control txt-search"
                                 ng-model="occupation.reportedJobName"
-                                uib-typeahead="position as position.title for position in searchPosition($viewValue)"
+                                uib-typeahead="position as position.reportedTitle for position in searchPosition($viewValue)"
                                 typeahead-loading="loadingPositions"
                                 typeahead-no-results="noResultsPos"
                                 typeahead-on-select="setPosition($item)"
                                 required
                             />
+
                             <div class="spinner" ng-show="loadingPositions">
                                 <div class="double-bounce1"></div>
                                 <div class="double-bounce2"></div>
@@ -96,6 +97,17 @@
                     </div>
                 </div>
             </div>
+
+             <div class="col-md-9 clearfix" ng-show="positionSub">
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-right: 0px;">
+                         <label class="control-label" for="workCity">Occupation</label>
+                         <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwo.occupationSub.$error.required && stepTwo.occupationSub.$dirty, 'has-feedback has-success' : stepTwo.occupationSub.$valid}">
+                            <select name="occupationSub" ng-options="item as item.occupationTitle for item in positionSub" ng-model="sub" ng-change="setPositionSub(item)"></select>
+                        </div>
+                    </div>
+                </div>
+             </div>
 
             <div class="col-md-9 clearfix">
                 <div class="col-xs-6">
