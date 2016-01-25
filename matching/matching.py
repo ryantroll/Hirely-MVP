@@ -2,26 +2,51 @@
 # TODO:  Consider location and availability in suggestions
 
 class UserService(object):
+  experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months
+
+  def monthCountToExperienceLevel(monthCount):
+    if rmonthCount > 124:
+      return 124
+    elif rmonthCount > 98:
+      return 98
+    elif rmonthCount > 64:
+      return 64
+    elif rmonthCount > 48:
+      return 48
+    elif rmonthCount > 24:
+      return 24
+    elif rmonthCount > 12:
+      return 12
+    elif rmonthCount > 6:
+      return 6
+    elif rmonthCount > 3:
+      return 3
+    elif rmonthCount > 1:
+      return 1
+    else:
+      return 0
+
   def updateUserCacheFields(user):
     # Clear the old Ksa
     user.knowledges = user.skills = user.abilities = user.workActivities = []
     
     # Concat roles
     roles = {}
+    totalWorkMonths = 0
     for workExperience in user['workExperiences']:
+      totalWorkMonths += workExperience['monthCount']
       if workExperience.onetOccupationId in roles:
-        # experienceLvl: tiers of experience where level = num of months in the role
-        roles[workExperience['onetOccupationId']["experienceLvl"] += workExperience['experienceLvl']
+        roles[workExperience['onetOccupationId']["monthCount"] += workExperience['monthCount']
       else:
-        roles[workExperience['onetOccupationId'] = {"experienceLvl": workExperience['experienceLvl']}
+        roles[workExperience['onetOccupationId'] = {"monthCount": workExperience['monthCount']}
 
-    # add KSA calcs to roles
+    # add KSA and experienceLvl calcs to roles
     for onetOccupationId, meta in roles.iteritems():
         roles[onetOccupationId]["knowledges"] = Knowledges.findOne(onetOccupationId=onetOccupationId, workExperienceLowerBound<=meta["experienceLvl"], workExperienceUpperBound>meta["experienceLvl"])
         roles[onetOccupationId]["skills"] = Skills.findOne(onetOccupationId=onetOccupationId, workExperienceLowerBound<=meta["experienceLvl"], workExperienceUpperBound>meta["experienceLvl"])
         roles[onetOccupationId]["abilities"] = Abilities.findOne(onetOccupationId=onetOccupationId, workExperienceLowerBound<=meta["experienceLvl"], workExperienceUpperBound>meta["experienceLvl"])
         roles[onetOccupationId]["workActivities"] = WorkActivities.findOne(onetOccupationId=onetOccupationId, workExperienceLowerBound<=meta["experienceLvl"], workExperienceUpperBound>meta["experienceLvl"])
-
+        roles[onetOccupationId]["experienceLvl"] = monthCountToExperienceLevel(roles[onetOccupationId]['monthCount'])
     
     # Calc master KSAs
     # Start by making the baseline
@@ -30,21 +55,20 @@ class UserService(object):
     user.skills = role1["skills"]
     user.abilities = role1["abilities"]
     user.workActivities = role1["workActivities"]
-    weightingTotal = sum(workExperience.experienceLvl)  # What exactly is this?  Dave should walk me through
     
     # Now update for weighted Averageing
     for role in roles:
         for knowledgeName, value in role["knowledges"]:
-            value = float(role["experienceLvl"]/weightingTotal)*value
+            value = float(role["experienceLvl"]/totalWorkMonths)*value
             user.knowledges[knowledgeName] += value
         for skillName, value in role["skills"]:
-            value = float(role["experienceLvl"]/weightingTotal)*value
+            value = float(role["experienceLvl"]/totalWorkMonths)*value
             user.skills[skillName] += value
         for abilityName, value in role["abilities"]:
-            value = float(role["experienceLvl"]/weightingTotal)*value
+            value = float(role["experienceLvl"]/totalWorkMonths)*value
             user.abilities[abilityName] += value
         for workActivityName, value in role["workActivities"]:
-            value = float(role["experienceLvl"]/weightingTotal)*value
+            value = float(role["experienceLvl"]/totalWorkMonths)*value
             user.workAbilitys[workActivityName] += value
 
     user.educationMaxLvl = 0
@@ -59,6 +83,7 @@ class UserService(object):
     return queryset
 
   def getVariantSuggestions(user, limit=100, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
+    # TODO:  Figure out if we should pre-calc and cache variant-to-user scores
     suggestions = {}
     if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
       Business.find(locations__positions__variants__openings__gt=0, 
@@ -85,8 +110,8 @@ class MatchCacheService(object)
     user = None
     # I have this list, when you are ready
     onetOccupationIds = [...]
+    experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months
     matchScores = {}
-    experienceLevels =  [0, 6, 12, 18, 24, 48, 96] # tiers of experience where level = num of months
     maxScore = 0
     knowledgeWeight = .1
     skillWeight = .1
@@ -95,73 +120,80 @@ class MatchCacheService(object)
     educationWeight = .3
     personalityWeight = .4
 
-    def __call__(self, user):
+    def __call__(user):
       self.user = user
 
-    def generateAll(self):
+    def generateAll():
       for onetOccupationId in self.onetOccupationIds:
         self.generateForId(onetOccupationId)
 
-    def generateForId(self, onetOccupationId):
+    def generateForId(onetOccupationId):
+      
+      occupationKnowledges = Knowledges.get(onetOccupationId=onetOccupationId)
+      occupationSkills = Skills.get(onetOccupationId=onetOccupationId)
+      occupationAbilities = Abilities.get(onetOccupationId=onetOccupationId)
+      occupationWorkActivites = WorkActivities.get(onetOccupationId=onetOccupationId)
+
       for experienceLvl in self.experienceLevels:
             
         # Knowledge calcs
         ss_user_knowledge = {}
-        ss_job_knowledge = {}
-        for knowledgeName, score in user.knowledges:  
-          ss_user_knowledge[knowledgeName] = (user.knowledges[knowledgeName] - Knowledges[onetOccupationId][experienceLvl][knowledgeName])**2 
-          ss_job_knowledge[knowledgeName] =  Knowledges.get(onetOccupationId=onetOccupationId,workExpereinceName=experienceLvl,elementComponenet=knowledgeName)**2
-        knowledgeTotal = 1 - sqrt(ss_user_knowledge/ss_job_knowledge)
+        ss_occupation_knowledge = {}
+        for knowledgeName, score in user.knowledges.iteritems():
+          ss_user_knowledge[knowledgeName] = (user.knowledges[knowledgeName] - occupationKnowledges[experienceLvl][knowledgeName])**2 
+          ss_occupation_knowledge[knowledgeName] =  occupationKnowledges[experienceLvl][knowledgeName]**2
+        knowledgeTotal = 1 - sqrt(ss_user_knowledge/ss_occupation_knowledge)
         knowledgeTotal = Max( knowledgeTotal, 0 )
         self.matchScores[experienceLvl]['knowledgeTotal'] = knowledgeTotal
 
 
         # Skill calcs
         ss_user_skill = {}
-        ss_job_skill = {}
-        for skillName, score in user.skills:
-          ss_user_skill[skillName] = (user.skills[skillName] - Skills[onetOccupationId][experienceLvl][skillName])**2 
-          ss_job_skill[skillName] =  Skills.get(onetOccupationId=onetOccupationId,workExpereinceName=experienceLvl,elementComponenet=skillName)**2
-        skillTotal = 1 - sqrt(ss_user_skill/ss_job_skill)
+        ss_occupation_skill = {}
+        for skillName, score in user.skills.iteritems():
+          ss_user_skill[skillName] = (user.skills[skillName] - occupationSkills[experienceLvl][skillName])**2 
+          ss_occupation_skill[skillName] =  occupationSkills[experienceLvl][skillName]**2
+        skillTotal = 1 - sqrt(ss_user_skill/ss_occupation_skill)
         skillTotal = Max( skillTotal, 0 )
         self.matchScores[experienceLvl]['skillTotal'] = skillTotal
       
       
         # Abilities calcs
         ss_user_abilities = {}
-        ss_job_abilities = {}
-        for abilitiesName, score in user.abilities:
-          ss_user_abilities[abilitiesName] = (user.abilities[abilitiesName] - Abilities[onetOccupationId][experienceLvl][abilitiesName])**2 
-          ss_job_abilities[abilitiesName] =  Abilities.get(onetOccupationId=onetOccupationId,workExpereinceName=experienceLvl,elementComponenet=Abilities)**2
-        abilitiesTotal = 1 - sqrt(ss_user_abilities/ss_job_abilities)
+        ss_occupation_abilities = {}
+        for abilityName, score in user.abilities.iteritems():
+          ss_user_ability[abilityName] = (user.abilities[abilityName] - occupationAbilities[experienceLvl][abilityName])**2 
+          ss_occupation_ability[abilityName] =  occupationAbilities[experienceLvl][abilityName]**2
+        abilitiesTotal = 1 - sqrt(ss_user_abilities/ss_occupation_abilities)
         abilitiesTotal = Max( abilitiesTotal, 0 )
         self.matchScores[experienceLvl]['abilitiesTotal'] = abiliitesTotal
       
       
         # WorkActivities calcs
         ss_user_workActivities = {}
-        ss_job_workActivities = {}
-        for workActivitiesName, score in user.workActivities:
-          ss_user_workActivities[workActivitiesName] = (user.workActivities[workActivitiesName] - WorkActivities[onetOccupationId][experienceLvl][workActivitiesName])**2 
-          ss_job_workActivities[workActivities] =  WorkActivities.get(onetOccupationId=onetOccupationId,workExpereinceName=experienceLvl,elementComponenet=workActivities)**2
-        workActivitiesTotal = 1 - sqrt(ss_user_workActivities/ss_job_workActivities)
+        ss_occupation_workActivities = {}
+        for workActivityName, score in user.workActivities.iteritems():
+          ss_user_workActivity[workActivityName] = (user.workActivities[workActivityName] - occupationWorkActivities[experienceLvl][workActivityName])**2 
+          ss_occupation_workActivity[workActivityName] =  occupationWorkActivities[experienceLvl][workActivityName]**2
+        workActivitiesTotal = 1 - sqrt(ss_user_workActivities/ss_occupation_workActivities)
         workActivitiesTotal = Max( workActivitiesTotal, 0 )
         self.matchScores[experienceLvl]['workActivitiesTotal'] = workActivitiesTotal
       
       
         # Education calcs
-        educationScores = Education.get(onetOccupationId=onetOccupationId)
-        # EducationScores is a to be created lookup table for pre-calculated education percentiles for a given job
-        self.matchScores[experienceLvl]['educationScore'] = OnetMeta.findOne(onetOccupationId=onetOccupationId)['percentiles'][experienceLvl][educationIndex][user.educationMaxLvl]
+        # TODO:  Talk to Ryan about new education context
+        # EducationScores is a to be created lookup table for pre-calculated education percentiles for a given occupation
+        self.matchScores[experienceLvl]['educationScore'] = OnetMeta.findOne(onetOccupationId=onetOccupationId)['percentiles'][experienceLvl]['educationIndex'][user.educationMaxLvl]
 
         # Personality calcs
-        self.matchScores[experienceLvl]['personalityScore'] = user.personalityScores[onetOccupationId]
+        # TODO:  Determine if personalityCareerScores should be on user or elsewhere
+        self.matchScores[experienceLvl]['personalityScore'] = user.personalityCareerScores[onetOccupationId]
 
         # Grand total calcs
-        # TODO:  Ask Dave how to factor in weights, education and personality
+        # TODO:  Ask Dave how to factor in weights, education and personality in total
         ss_user_all = ss_user_knowledge + ss_user_skills + ss_user_abilities + ss_user_workActivities
-        ss_job_all = ss_job_knowledge + ss_job_skills + ss_job_abilities + ss_job_workActivities
-        total = 1 - sqrt(ss_user_all/ss_job_all)
+        ss_occupation_all = ss_occupation_knowledge + ss_occupation_skills + ss_occupation_abilities + ss_occupation_workActivities
+        total = 1 - sqrt(ss_user_all/ss_occupation_all)
         total = Max( total, 0 )
         self.matchScores[experienceLvl]['total'] = total
 
@@ -173,13 +205,13 @@ class BusinessService(object):
   def getUserSuggestions(onetOccupationId, experienceLvl, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
     if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
       queryset = MatchCache.find(onetOccupationId=onetOccupationId, 
-                                 userOptOutOfSuggetions=False, 
+                                 userOptOutOfSuggetionsFromEmployers=False, 
                                  sort_by_descending=scores[experienceLvl]['total'], 
                                  limit=100, locations__lng__within=(lng_lower_bound, lng_upper_bound), 
                                  locations__lat__within=(lat_lower_bound, lat_upper_bound))
     else:
       queryset = MatchCache.find(onetOccupationId=onetOccupationId,
-                                 userOptOutOfSuggetions=False, 
+                                 userOptOutOfSuggetionsFromEmployers=False, 
                                  sort_by_descending=scores[experienceLvl]['total'], limit=100)
     return queryset
 
