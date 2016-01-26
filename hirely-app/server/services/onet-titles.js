@@ -12,7 +12,7 @@ function organizeTitles(list){
     var inner = {onetId:cObj.onetId, occupationTitle:cObj.occupationTitle, combinedTtitle:cObj.combinedTtitle};
 
     if(cObj.reportedTitle === preTitle || preTitle === null){
-      toSave.reportedTitle = preTitle;
+      toSave.reportedTitle = cObj.reportedTitle;
       toSave.occupations.push(inner);
     }
     else{
@@ -47,7 +47,7 @@ exports.findTitleByTitleName = function(titleName, next){
 // search title by name
 exports.searchTitles = function(query, next){
   OnetTitles.find({ reportedTitle: {$regex : new RegExp(query, "i")}} , function(err, title){
-    console.log(organizeTitles(title));
+
     next(err, organizeTitles(title));
   }).limit(20);
 };

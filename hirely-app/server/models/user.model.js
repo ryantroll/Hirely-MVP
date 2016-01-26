@@ -7,7 +7,12 @@ function endDateValidator(value){
   /**
    * this here will refer to schema
    */
-  return value > this.dateStart;
+  if(null != value && value.getTime() != 0){
+    return value > this.dateStart;
+  }
+  else{
+    return true;
+  }
 }
 
 /**
@@ -44,8 +49,9 @@ var experienceSchema = new Schema({
                                       validate:[endDateValidator, 'End date must be greater than start date']
                                     },
   reportedJobName         :         {type:String, required:true},
+  occupationJobName       :         {type:String, required:true},
   onetOccupationId        :         {type:String, required:false},
-  accomplishments          :        {type:String, required:false}
+  accomplishments         :         {type:String, required:false}
 });
 
 var userSchema = new Schema({

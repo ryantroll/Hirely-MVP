@@ -90,8 +90,8 @@
 												}
 												margin-top: 30px;
 												margin-bottom: 30px;
-												padding-bottom:30px;
-												border-bottom: 1px solid #e5e5e5;
+												// padding-bottom:20px;
+												// border-bottom: 1px dotted #e5e5e5;
 												position:relative;
 												&:last-child {
 																border:none;
@@ -103,6 +103,7 @@
 												color: #323232;
 												margin-top: 0;
 												margin-bottom: 9px;
+												width:95%;
 								}
 								h2.position {
 												font-size: 16px;
@@ -125,6 +126,9 @@
 								}
 								a.delete {
 									color:#a94442!important;
+									position:absolute;
+									top:0;
+									right: 0;
 								}
 				}
 				/******************************************************************/
@@ -173,6 +177,9 @@
 							width: 25% !important;
 						}
 					}
+				}
+				.fullwidth{
+					width:100%;
 				}
 				/******************************************************************/
 				/**************************** Step Five ***************************/

@@ -101,7 +101,7 @@
       var newExp = angular.copy($scope.occupation);
       newExp.dateStart = new Date(Number(newExp.dateStartYear), Number(newExp.dateStartMonth)-1, 1);
 
-      if(false == newExp.currentlyHere){
+      if(true !== newExp.currentlyHere){
         newExp.dateEnd = new Date(Number(newExp.dateEndYear), Number(newExp.dateEndMonth)-1, 1);
       }
 
@@ -215,7 +215,6 @@
             function(data){
               if(200 === data.statusCode){
                 var occupations = data.results;
-                console.log(occupations);
                 return occupations;
               }
               else{
@@ -239,25 +238,25 @@
        * @param {Object} position [description]
        */
       $scope.setPosition = function(reported){
-
+        $scope.occupation.reportedJobName = reported.reportedTitle;
         if(reported.occupations.length === 1){
-          $scope.occupation.reportedJobName = reported.occupations[0].occupationTitle;
+          $scope.occupation.occupationJobName = reported.occupations[0].occupationTitle;
           $scope.occupation.onetOccupationId = reported.occupations[0].onetId;
         }
         else{
           $scope.positionSub = reported.occupations;
+          $scope.stepTwo.position.$setValidity('occupationRequired', false);
         }
 
       }
 
-      $scope.setPositionSub = function(){
-        if($scope.sub){
-          $scope.occupation.reportedJobName = $scope.sub.occupationTitle;
-          $scope.occupation.onetOccupationId  = $scope.sub.onetId;
+      $scope.setPositionSub = function(sub){
+        if(sub){
+          $scope.occupation.occupationJobName = sub.occupationTitle;
+          $scope.occupation.onetOccupationId  = sub.onetId;
+          $scope.stepTwo.position.$setValidity('occupationRequired', true);
           delete $scope.positionSub;
-          delete $scope.sub;
         }
-
       }
 
       /**
@@ -351,7 +350,7 @@
                   // console.log(user);
                 },
                 function(err){
-                  alert(err);
+                  console.log(err);
                 }
               )
             }//// if isAuth
