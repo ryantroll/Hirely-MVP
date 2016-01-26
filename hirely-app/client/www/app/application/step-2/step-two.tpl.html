@@ -16,7 +16,7 @@
 
                     <h2 class="position">{{xpItem.reportedJobName}}</h2>
 
-                    <p class="period" ng-class="{'bg-danger':xpItem.conflict}">{{xpItem.dateStartMonth}}/{{xpItem.dateStartYear}} - <span ng-show="xpItem.dateEnd">{{xpItem.dateEndMonth}}/{{xpItem.dateEndYear}}</span><span ng-show="!xpItem.dateEnd">Current</span></p>
+                    <p class="period" ng-class="{'bg-danger':xpItem.conflict}">{{xpItem.dateStartMonth}}/{{xpItem.dateStartYear}} - <span ng-show="xpItem.dateEndMonth">{{xpItem.dateEndMonth}}/{{xpItem.dateEndYear}}</span><span ng-show="!xpItem.dateEndMonth">Current</span></p>
 
                     <p class="description">{{xpItem.accomplishments}}</p>
 
@@ -82,6 +82,7 @@
                                 typeahead-loading="loadingPositions"
                                 typeahead-no-results="noResultsPos"
                                 typeahead-on-select="setPosition($item)"
+                                typeahead-popup-template-url="customPopupTemplate.html"
                                 required
                             />
 
@@ -97,7 +98,52 @@
                     </div>
                 </div>
             </div>
+            <script type="text/ng-template" id="customPopupTemplate.html">
+              <div class="custom-popup-wrapper"
+                 ng-style="{top: position().top+'px', left: position().left+'px'}"
+                 style="display: block;"
+                 ng-show="isOpen() && !moveInProgress"
+                 aria-hidden="{{!isOpen()}}">
+                <p class="message">select location from drop down.</p>
 
+                <ul class="dropdown-menu" role="listbox">
+                    <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }"
+                         role="option" id="{{::match.id}}">
+                        <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+                        <ul>
+                            <li ng-repeat="sub in match.model.occupations track by $index" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" id="{{$index}}">
+                            <a href tabindex=\"-1\">{{sub.occupationTitle}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+              </div>
+            </script>
+<style>
+  .custom-popup-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    background-color: #f9f9f9;
+  }
+  .custom-popup-wrapper > .message {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    color: #868686;
+  }
+  .custom-popup-wrapper > .dropdown-menu {
+    position: static;
+    float: none;
+    display: block;
+    min-width: 160px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+</style>
              <div class="col-md-9 clearfix" ng-show="positionSub">
                 <div class="col-xs-12">
                     <div class="form-group" style="margin-right: 0px;">
