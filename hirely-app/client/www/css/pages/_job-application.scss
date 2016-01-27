@@ -181,6 +181,9 @@
 				.fullwidth{
 					width:100%;
 				}
+				select.form-control{
+					height: auto;
+				}
 				/******************************************************************/
 				/**************************** Step Five ***************************/
 				/******************************************************************/
@@ -196,6 +199,9 @@
 					// margin:1em;
 					padding:0.5em;
 					margin-top: 1em;
+				}
+				.step-5-error-label:last-of-type{
+					margin-bottom: 1em;
 				}
 				.step-5-timetable {
 								max-width: 100%;

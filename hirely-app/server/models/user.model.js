@@ -25,7 +25,7 @@ var customeId = new Schema({
 }
 ,{strict:false, _id:false});
 
-var persoanlitySchema = new Schema({
+var personalitySchema = new Schema({
   extId               :       {type:String, required:true},
   createdAt           :       {type:Date, required:true, default:Date.now},
   personalityTypes    :       [customeId],
@@ -52,6 +52,32 @@ var experienceSchema = new Schema({
   occupationJobName       :         {type:String, required:true},
   onetOccupationId        :         {type:String, required:false},
   accomplishments         :         {type:String, required:false}
+});
+
+var educationSchema = new Schema({
+  institutionName         :         {type:String, required:true},
+  city                    :         {type:String, required:true},
+  state                   :         {type:String, required:true},
+  programType             :         {
+                                      type:String,
+                                      required:true,
+                                      validate:{
+                                        validator: function(v){
+                                          return /^(High School Equivalent|Associates|Bachelors|Masters|PhD)$/.test(v);
+                                        },
+                                        message:'{VALUE} is not valid education program type'
+                                      }
+                                    },
+  degree                  :         {type:String, reqired:true},
+
+  dateStart               :         {type:Date, required:true},
+  dateEnd                 :         {
+                                      type:Date,
+                                      required:false,
+                                      validate:[endDateValidator, 'End date must be greater than start date']
+                                    },
+  isCompleted             :         {type:Boolean, required:true},
+  isOnline                :         {type:Boolean, required:true}
 });
 
 var userSchema = new Schema({
@@ -154,7 +180,7 @@ var userSchema = new Schema({
     /**
      * Personality Exams
      */
-    personalityExams:[persoanlitySchema],
+    personalityExams:[personalitySchema],
 
     /**
      * Availability
@@ -194,7 +220,12 @@ var userSchema = new Schema({
     /**
      * Work Experience
      */
-    workExperience      :       [experienceSchema]
+    workExperience      :       [experienceSchema],
+
+    /**
+     * Education
+     */
+    education           :       [educationSchema]
 
 });
 
