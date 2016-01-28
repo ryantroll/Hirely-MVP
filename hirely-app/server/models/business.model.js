@@ -78,9 +78,9 @@ var variantSchema = new Schema(
   }//// varients[] object
 );//// variantSchema
 /**
- * Add slug to postion schema
+ * Add slug to variant schema
  */
-// variantSchema.plugin(slug('workType'));
+variantSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
 
 var positionSchema = new Schema({
         title         :    {type: String, required:true},
@@ -92,7 +92,7 @@ var positionSchema = new Schema({
 /**
  * Add slug to postion schema
  */
-// positionSchema.plugin(slug('title'));
+positionSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
 
 var locationSchema = new Schema({
       name              :   {type:String, required:true},
@@ -133,7 +133,7 @@ var locationSchema = new Schema({
 /**
  * Add slug to location schema
  */
-// locationSchema.plugin(slug('state city name'));
+locationSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['state', 'city', 'name'], unique:false, model:'Businesses'} );
 
 var businessSchema = new Schema({
   /**
@@ -141,7 +141,7 @@ var businessSchema = new Schema({
    */
   name            :       {type:String, required:true},
   slug            :       {type:String, required:false, unique:true, index:true},
-  description     :       String,
+  description     :       {type:String},
   photoUrl        :       {type:String},
   email           :       {
                             type:String,
@@ -176,7 +176,7 @@ var businessSchema = new Schema({
 /**
  * Add slug to bsiness through slug plugin
  */
-// businessSchema.plugin( Utilities.slug, {slug:'slug', fields:'name', unique:true} );
+businessSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:'name', unique:true, model:'Businesses'} );
 
 
 var BusinessModel = mongoose.model('Businesses', businessSchema, "businesses");
