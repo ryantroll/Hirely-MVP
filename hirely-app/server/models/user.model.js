@@ -3,6 +3,18 @@ var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
+function endDateValidator(value){
+  /**
+   * this here will refer to schema
+   */
+  if(null != value && value.getTime() != 0){
+    return value > this.dateStart;
+  }
+  else{
+    return true;
+  }
+}
+
 /**
  * [customeId schema with disabled auto _id to be used in arrays of personalityExam schema where the "name" is used as _id]
  * @type {Schema}
@@ -13,7 +25,7 @@ var customeId = new Schema({
 }
 ,{strict:false, _id:false});
 
-var persoanlitySchema = new Schema({
+var personalitySchema = new Schema({
   extId               :       {type:String, required:true},
   createdAt           :       {type:Date, required:true, default:Date.now},
   personalityTypes    :       [customeId],
@@ -23,6 +35,49 @@ var persoanlitySchema = new Schema({
                                 personalityTypes:[customeId]
                               }
 
+});
+
+var experienceSchema = new Schema({
+  formattedAddress        :         {type:String, required:false},
+  city                    :         {type:String, required:true},
+  state                   :         {type:String, required:true},
+  googlePlaceId           :         {type:String, required:false},
+  dateStart               :         {type:Date, required:true},
+  dateEnd                 :         {
+                                      type:Date,
+                                      required:false,
+                                      validate:[endDateValidator, 'End date must be greater than start date']
+                                    },
+  reportedJobName         :         {type:String, required:true},
+  occupationJobName       :         {type:String, required:true},
+  onetOccupationId        :         {type:String, required:false},
+  accomplishments         :         {type:String, required:false}
+});
+
+var educationSchema = new Schema({
+  institutionName         :         {type:String, required:true},
+  city                    :         {type:String, required:true},
+  state                   :         {type:String, required:true},
+  programType             :         {
+                                      type:String,
+                                      required:true,
+                                      validate:{
+                                        validator: function(v){
+                                          return /^(High School Equivalent|Associates|Bachelors|Masters|PhD)$/.test(v);
+                                        },
+                                        message:'{VALUE} is not valid education program type'
+                                      }
+                                    },
+  degree                  :         {type:String, reqired:true},
+
+  dateStart               :         {type:Date, required:true},
+  dateEnd                 :         {
+                                      type:Date,
+                                      required:false,
+                                      validate:[endDateValidator, 'End date must be greater than start date']
+                                    },
+  isCompleted             :         {type:Boolean, required:true},
+  isOnline                :         {type:Boolean, required:true}
 });
 
 var userSchema = new Schema({
@@ -47,7 +102,12 @@ var userSchema = new Schema({
                            */
                           set: Utilities.toLower
                         },
-  mobile        :       {type:String},
+  mobile                :     {type:String},
+  agreedToTerms         :     {type:Boolean},
+  personalStatment      :     {type:String},
+  profileImageURL       :     {type:String},
+  eligibleToWorkInUS    :     {type:Boolean},
+
 
   /**
    * Date fields
@@ -120,7 +180,7 @@ var userSchema = new Schema({
     /**
      * Personality Exams
      */
-    personalityExams:[persoanlitySchema],
+    personalityExams:[personalitySchema],
 
     /**
      * Availability
@@ -155,7 +215,17 @@ var userSchema = new Schema({
     spokenLanguages: {
         English         :       Boolean,
         Spanish         :       Boolean
-    }
+    },
+
+    /**
+     * Work Experience
+     */
+    workExperience      :       [experienceSchema],
+
+    /**
+     * Education
+     */
+    education           :       [educationSchema]
 
 });
 
