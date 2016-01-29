@@ -82,6 +82,7 @@ class UserService:
     return user
 
 
+
 class BusinessService:
 
   def qualificationComputer(self, operator, left, right):
@@ -171,8 +172,10 @@ class BusinessService:
       qScore = qScore / maxScore
     return qScore
 
-  # This should be called when a variant's specification 
-  def updateApplicationScores
+  # This should be called when a variant's qualification specification changes
+  # TODO:  this
+  def updateApplicationScores(business, variant):
+    pass
 
 
 class MatchCacheService:
