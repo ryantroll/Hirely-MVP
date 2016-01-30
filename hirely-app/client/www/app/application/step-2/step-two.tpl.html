@@ -148,12 +148,21 @@
                         <label class="control-label" for="workDateStartM">Start Month</label>
 
                         <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwo.workDateStartM.$dirty && (stepTwo.workDateStartM.$error.required || stepTwo.workDateStartM.$error.invalidMonth || stepTwo.workDateStartM.$error.startDateConflict), 'has-feedback has-success' : stepTwo.workDateStartM.$valid}">
-                            <input type="text" class="form-control" id="workDateStartM" name="workDateStartM"
+                            <!-- <input type="text" class="form-control" id="workDateStartM" name="workDateStartM"
                                 ng-model="occupation.dateStartMonth"
                                 ng-maxlength="2"
                                 required
                                 validate-month
-                            />
+                            /> -->
+                            <select  class="form-control" id="workDateStartM" name="workDateStartM"
+                                ng-model="occupation.dateStartMonth"
+                                ng-maxlength="2"
+                                required
+                                validate-month
+                            >
+                                <option></option>
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
                             <span class="fa fa-close form-control-feedback" ng-show="stepTwo.workDateStartM.$dirty && (stepTwo.workDateStartM.$error.required || stepTwo.workDateStartM.$error.invalidMonth || stepTwo.workDateStartM.$error.startDateConflict)"></span>
                             <span class="fa fa-check form-control-feedback" ng-show="stepTwo.workDateStartM.$valid"></span>
                         </div>
@@ -199,11 +208,19 @@
                         <label class="control-label" for="workDateEndM">End Month</label>
 
                         <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwo.workDateEndM.$dirty && (stepTwo.workDateEndM.$error.invalidMonth || stepTwo.workDateEndM.$error.required || stepTwo.workDateEndM.$error.invalidEndDate || stepTwo.workDateEndM.$error.endDateConflict), 'has-feedback has-success' : stepTwo.workDateEndM.$valid}">
-                            <input type="text" class="form-control" id="workDateEndM" name="workDateEndM"
+                            <!-- <input type="text" class="form-control" id="workDateEndM" name="workDateEndM"
                                 ng-model="occupation.dateEndMonth"
                                 ng-required="!occupation.currentlyHere"
                                 validate-month
-                            />
+                            /> -->
+                            <select type="text" class="form-control" id="workDateEndM" name="workDateEndM"
+                                ng-model="occupation.dateEndMonth"
+                                ng-required="!occupation.currentlyHere"
+                                validate-month
+                            >
+                                <option></option>
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
                             <span class="fa fa-close form-control-feedback" ng-show="stepTwo.workDateEndM.$dirty && (stepTwo.workDateEndM.$error.invalidMonth || stepTwo.workDateEndM.$error.required || stepTwo.workDateEndM.$error.invalidEndDate || stepTwo.workDateEndM.$error.endDateConflict)"></span>
                             <span class="fa fa-check form-control-feedback" ng-show="stepTwo.workDateEndM.$valid"></span>
                         </div>
@@ -383,11 +400,19 @@
                         <label for="eduDateStartM" class="control-label">Start Month</label>
 
                         <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwoE.eduDateStartM.$dirty && (stepTwoE.eduDateStartM.$error.required || stepTwoE.eduDateStartM.$error.invalidMonth || stepTwoE.eduDateStartM.$error.startDateConflict) , 'has-feedback has-success' : stepTwoE.eduDateStartM.$valid}">
-                            <input type="text" class="form-control" id="eduDateStartM" name="eduDateStartM"
+                            <!-- <input type="text" class="form-control" id="eduDateStartM" name="eduDateStartM"
                                 ng-model="education.dateStartMonth"
                                 required
                                 validate-month
-                            />
+                            /> -->
+                            <select class="form-control" id="eduDateStartM" name="eduDateStartM"
+                                ng-model="education.dateStartMonth"
+                                required
+                                validate-month
+                            >
+                                <option></option>
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
                             <span class="fa fa-close form-control-feedback" ng-show="stepTwoE.eduDateStartM.$dirty && (stepTwoE.eduDateStartM.$error.required || stepTwoE.eduDateStartM.$error.invalidMonth || stepTwoE.eduDateStartM.$error.startDateConflict)"></span>
                             <span class="fa fa-check form-control-feedback" ng-show="stepTwoE.eduDateStartM.$valid"></span>
                         </div>
@@ -429,11 +454,19 @@
                         <label for="eduDateEndM" class="control-label">End Month</label>
 
                         <div class="has-feedback" ng-class="{'has-feedback has-error': stepTwoE.eduDateEndM.$dirty && (stepTwoE.eduDateEndM.$error.required || stepTwoE.eduDateEndM.$error.invalidMonth || stepTwoE.eduDateEndM.$error.endDateConflict || stepTwoE.eduDateEndM.$error.invalidEndDate) , 'has-feedback has-success' : stepTwoE.eduDateEndM.$valid}">
-                            <input type="text" class="form-control" id="eduDateEndM" name="eduDateEndM"
+                            <!-- <input type="text" class="form-control" id="eduDateEndM" name="eduDateEndM"
                                 ng-model="education.dateEndMonth"
                                 ng-required="!education.currentlyEnrolled"
                                 validate-month
-                            />
+                            /> -->
+                            <select class="form-control" id="eduDateEndM" name="eduDateEndM"
+                                ng-model="education.dateEndMonth"
+                                ng-required="!education.currentlyEnrolled"
+                                validate-month
+                            >
+                                <option></option>
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
                             <span class="fa fa-close form-control-feedback" ng-show="stepTwoE.eduDateEndM.$dirty && (stepTwoE.eduDateEndM.$error.required || stepTwoE.eduDateEndM.$error.invalidMonth || stepTwoE.eduDateEndM.$error.endDateConflict || stepTwoE.eduDateEndM.$error.invalidEndDate)"></span>
                             <span class="fa fa-check form-control-feedback" ng-show="stepTwoE.eduDateEndM.$valid"></span>
                         </div>

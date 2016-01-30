@@ -58,18 +58,33 @@
 
     $scope.states = StatesNames;
 
-    /**
-       * [eduItems will hold the education data]
-       * @type {Array}
-       */
-      $scope.eduItems = [];
+    $scope.months = [
+      {order:1, name:'Jan'},
+      {order:2, name:'Feb'},
+      {order:3, name:'Mar'},
+      {order:4, name:'Apr'},
+      {order:5, name:'May'},
+      {order:6, name:'Jun'},
+      {order:7, name:'Jul'},
+      {order:8, name:'Aug'},
+      {order:9, name:'Sep'},
+      {order:10, name:'Oct'},
+      {order:11, name:'Nov'},
+      {order:12, name:'Dec'}
+    ];
 
-      /**
-       * [education will hold a single education data and serve as angular data model
-       * this object get filled while user filling the form and cleard after users add it to list of education]
-       * @type {Object}
-       */
-      $scope.education = {};
+    /**
+     * [eduItems will hold the education data]
+     * @type {Array}
+     */
+    $scope.eduItems = [];
+
+    /**
+     * [education will hold a single education data and serve as angular data model
+     * this object get filled while user filling the form and cleard after users add it to list of education]
+     * @type {Object}
+     */
+    $scope.education = {};
 
 
     /**

@@ -1,5 +1,6 @@
 var Utilities = require('./utilities-for-models');
 var mongoose = require('mongoose');
+mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
 var variantSchema = new Schema(
@@ -24,6 +25,7 @@ var variantSchema = new Schema(
     minWeekdayShifts  :     Number,
     minWeekendShifts  :     Number,
     openings          :     Number,
+    experienceLvl     :     Number,
 
     compensation:
     {
