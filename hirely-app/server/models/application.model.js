@@ -25,6 +25,6 @@ var applicationSchema = new Schema({
   ]/// prescreen array
 });//// applicationSchema
 
-var ApplicationModel = mongoose.model('Applications', applicationSchema, "applicaitons");
+var ApplicationModel = mongoose.model('Applications', applicationSchema, "applications");
 
 module.exports = ApplicationModel;
