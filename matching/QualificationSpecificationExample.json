@@ -1,0 +1,198 @@
+//  Think about having hard and soft isCritical.  Hard would auto-decline applications, soft would just act as filters
+
+// To be a subobject of variant
+// Importance is an int 1-3.  The higher the value, the more effect it has on scores and filters
+// 1: important enough to be factored into score but is not important enough to be a filter
+// 2: important enough to be filtered out in HM views
+// 3: important enough to automatically disqualify and dismiss without human intervention
+// qualificationSpecification = 
+{
+    "formulas": [
+        {
+            "name": "Min Education",
+            "dateCreated": "<date>",
+            "type": "computation",
+            "importance": "1",
+            "operator": ">",
+            "operands": [
+                {
+                    "type": "attribute",
+                    "value": "user.educationMaxLvl"
+                },
+                {
+                    "type": "Number",
+                    "value": "1"
+                }
+            ]
+        },
+        {
+            "name": "Max Education",
+            "dateCreated": "<date>",
+            "type": "computation",
+            "importance": "0",
+            "operator": "<",
+            "operands": [
+                {
+                    "type": "attribute",
+                    "value": "user.educationMaxLvl"
+                },
+                {
+                    "type": "Number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "name": "Min Hours",
+            "dateCreated": "<date>",
+            "type": "computation",
+            "importance": "1",
+            "operator": ">",
+            "operands": [
+                {
+                    "type": "attribute",
+                    "value": "user.availability.minWeeklyHours"
+                },
+                {
+                    "type": "Number",
+                    "value": "30"
+                }
+            ]
+        },
+        {
+            "name": "Max Hours",
+            "dateCreated": "<date>",
+            "type": "computation",
+            "importance": "0",
+            "operator": "<",
+            "operands": [
+                {
+                    "type": "attribute",
+                    "value": "user.availability.maxWeeklyHours"
+                },
+                {
+                    "type": "Number",
+                    "value": "30"
+                }
+            ]
+        },
+        {
+            "name": "Min 3 Morning Shifts",
+            "dateCreated": "<date>",
+            "type": "computation",
+            "importance": "2",
+            "operator": ">",
+            "operands": [
+                {
+                    "type": "computation",
+                    "operator": "+",
+                    "operands": [
+                        {
+                            "type": "computation",
+                            "operator": "within",
+                            "operands": [
+                                {
+                                    "type": "array",
+                                    "value": [6,7,8,9,10,11,12]
+                                },
+                                {
+                                    "type": "attribute",
+                                    "value": "user.availability.mon"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "computation",
+                            "operator": "within",
+                            "operands": [
+                                {
+                                    "type": "array",
+                                    "value": [6,7,8,9,10,11,12]
+                                },
+                                {
+                                    "type": "attribute",
+                                    "value": "user.availability.tue"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "computation",
+                            "operator": "within",
+                            "operands": [
+                                {
+                                    "type": "array",
+                                    "value": [6,7,8,9,10,11,12]
+                                },
+                                {
+                                    "type": "attribute",
+                                    "value": "user.availability.wed"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "computation",
+                            "operator": "within",
+                            "operands": [
+                                {
+                                    "type": "array",
+                                    "value": [6,7,8,9,10,11,12]
+                                },
+                                {
+                                    "type": "attribute",
+                                    "value": "user.availability.thu"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "computation",
+                            "operator": "within",
+                            "operands": [
+                                {
+                                    "type": "array",
+                                    "value": [6,7,8,9,10,11,12]
+                                },
+                                {
+                                    "type": "attribute",
+                                    "value": "user.availability.fri"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "computation",
+                            "operator": "within",
+                            "operands": [
+                                {
+                                    "type": "array",
+                                    "value": [6,7,8,9,10,11,12]
+                                },
+                                {
+                                    "type": "attribute",
+                                    "value": "user.availability.sat"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "computation",
+                            "operator": "within",
+                            "operands": [
+                                {
+                                    "type": "array",
+                                    "value": [6,7,8,9,10,11,12]
+                                },
+                                {
+                                    "type": "attribute",
+                                    "value": "user.availability.sun"
+                                }
+                            ]
+                        }
+                        
+                    ]
+                },
+                {
+                    "type": "Number",
+                    "value": "3"
+                }
+            ]
+        }
+    ]
+}
