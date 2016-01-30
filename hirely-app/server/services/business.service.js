@@ -72,6 +72,13 @@ var businessService = {
         return businessModel.find({})
         .where({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{_id:variantId}}}}}}})
         .exec();
+    },
+
+    getByVariantSlug: function(variantSlug){
+        console.log(variantSlug)
+        return businessModel.find({})
+        .where({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{slug:variantSlug}}}}}}})
+        .exec();
     }
 
 }/// businesss object
