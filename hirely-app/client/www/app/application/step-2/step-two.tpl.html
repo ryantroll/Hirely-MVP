@@ -1,7 +1,7 @@
 <div class="form-content">
     <!-- Work Experience -->
 
-        <legend>Work Experience</legend>
+        <legend class="text-center">Work Experience</legend>
 
 
         <div class="form-loader clearfix" ng-show="!stepTwoLoaded" style="min-height: 200px;">
@@ -27,7 +27,7 @@
         </div>
 
         <div class="row" ng-show="stepTwoLoaded">
-            <div class="col-md-9">
+            <div class="col-md-9 grid-center-within-parent text-center">
                 <a class="btn btn-info" ng-click="addWorkXpForm = true; addWorkXpButton = false"
                    ng-show="!addWorkXpForm">
                     Add a New Experience
@@ -38,7 +38,7 @@
         <div class="row" ng-show="addWorkXpForm">
             <form class="form-horizontal" name="stepTwo" form-step-validity>
                  <fieldset>
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-12">
                     <div class="form-group" style="margin-right: 0px;">
                         <label class="control-label" for="company">Company Name</label>
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-12">
                     <div class="form-group" style="margin-right: 0px;">
                         <label class="control-label" for="position">Position</label>
@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-             <div class="col-md-9 clearfix" ng-show="positionSub">
+             <div class="col-md-9 clearfix grid-center-within-parent max-width-450" ng-show="positionSub">
                 <div class="col-xs-12">
                     <div class="form-group" style="margin-right: 0px;">
                          <label class="control-label" for="workCity">Occupation</label>
@@ -112,7 +112,7 @@
                 </div>
              </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label class="control-label" for="workCity">City</label>
@@ -142,7 +142,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label class="control-label" for="workDateStartM">Start Month</label>
@@ -188,7 +188,7 @@
                 <div class="col-xs-12 bg-danger step-5-error-label" ng-show="stepTwo.workDateStartY.$error.startDateConflict">Start date conflicting with one of previous entered experience dates</div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="form-group">
                     <div class="col-md-9 col-sm-12 checkbox">
                         <label class="custom-option toggle" data-off="OFF" data-on="ON">
@@ -202,7 +202,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 clearfix" ng-show="!occupation.currentlyHere">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450" ng-show="!occupation.currentlyHere">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label class="control-label" for="workDateEndM">End Month</label>
@@ -245,7 +245,7 @@
                 <div class="col-xs-12 bg-danger step-5-error-label" ng-show="stepTwo.workDateEndY.$error.invalidEndDate">End date should be greater than start date</div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label for="accomplishments" class="control-label">Accomplishments</label>
@@ -256,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <a class="btn btn-default" ng-click="addWorkXpForm = false; addWorkXpButton = true">
                     Cancel
                 </a>
@@ -277,7 +277,7 @@
 
     <!-- Education -->
 
-        <legend ng-show="stepTwoLoaded">Education History</legend>
+        <legend class="text-center" ng-show="stepTwoLoaded">Education History</legend>
         <div class="row">
             <div class="col-md-9 xp-form">
                 <div class="xp-item" ng-repeat="eduItem in eduItems">
@@ -294,7 +294,7 @@
         </div>
 
         <div class="row clearfix" ng-show="stepTwoLoaded">
-            <div class="col-md-9">
+            <div class="col-md-9 grid-center-within-parent text-center">
                 <a class="btn btn-info" ng-click="addEducationForm = true; addEducationButton = false"
                    ng-show="!addEducationForm">
                     Add a New Education
@@ -307,7 +307,7 @@
             <fieldset>
 
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-12">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="institution" class="control-label">Instituation Name</label>
@@ -325,7 +325,7 @@
             </div>
 
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="programType" class="control-label">Program Type</label>
@@ -360,7 +360,7 @@
                 </div>
              </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="educationCity" class="control-label">City</label>
@@ -394,7 +394,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="eduDateStartM" class="control-label">Start Month</label>
@@ -436,7 +436,7 @@
                 <div class="col-xs-12 bg-danger step-5-error-label" ng-show="stepTwoE.eduDateStartY.$error.startDateConflict">Start date conflicting with one of previous entered education dates</div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="form-group">
                     <div class="col-md-9 col-sm-12 checkbox">
                         <label class="custom-option toggle" data-off="NO" data-on="YES">
@@ -448,7 +448,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 clearfix" ng-show="!education.currentlyEnrolled">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450" ng-show="!education.currentlyEnrolled">
                 <div class="col-xs-6">
                     <div class="form-group" style="margin-right: 0px;">
                         <label for="eduDateEndM" class="control-label">End Month</label>
@@ -491,7 +491,7 @@
                 <div class="col-xs-12 bg-danger step-5-error-label" ng-show="stepTwoE.eduDateEndY.$error.invalidEndDate">End date should be greater than start date</div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <div class="form-group">
                     <div class="col-md-9 col-sm-12 checkbox">
                         <label class="custom-option toggle" data-off="NO" data-on="YES">
@@ -503,7 +503,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 clearfix">
+            <div class="col-md-9 clearfix grid-center-within-parent max-width-450">
                 <a class="btn btn-default" ng-click="addEducationForm = false; addEducationButton = true">
                     Cancel
                 </a>

@@ -22,6 +22,16 @@ html, body {
   }
 }
 
+.grid-center-within-parent {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none;
+}
+
+.max-width-450 {
+  max-width: 450px;
+}
+
 .footer {
   height:100px;
 }
