@@ -91,12 +91,12 @@
           // console.dir("bus: ");
           // console.dir(business);
           $scope.business = business;
-          // Get the location
 
+          // Get the sub-objects
           $scope.location = business.locations[business.locationSlugs[$scope.locationSlug]];
           $scope.updateMap();
-          $scope.position = business.positions[positionSlugs[$scope.positionSlug]];
-          $scope.variant = business.variants[variantSlugs[$scope.variantSlug]];
+          $scope.position = business.positions[business.positionSlugs[$scope.positionSlug]];
+          $scope.variant = business.variants[business.variantSlugs[$scope.variantSlug]];
 
           if(!angular.isDefined($scope.business)) {
             console.log("business not found.");
