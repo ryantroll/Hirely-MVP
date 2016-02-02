@@ -28,22 +28,14 @@ var businessService = {
      * @param  {[type]} reqQuery [req.query from service. if reqQuery.complete: return complete object]
      * @return {[type]}        [promise]
      */
-    getByIdOrSlug: function(idOrSlug, reqQuery){
+    getBySlug: function(slug, reqQuery){
         // Determine what fields to return based on reqQuery.
         var returnFields = '-' + privateFields.join(' -')
         if(undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }
 
-
-        // Choose between filtering on id or field depending on whether the value has a number in it
-        // /\d/.test(value) is a regex test
-        // This will work for now so long as slugs never have a number in them
-        if(/\d/.test(idOrSlug)) {
-            return businessModel.findById(idOrSlug, returnFields).exec();
-        } else {
-            return businessModel.findOne({ slug: idOrSlug }, returnFields).exec();
-        }
+        return businessModel.findOne({ slug: slug }, returnFields).exec();
     },
 
     /**

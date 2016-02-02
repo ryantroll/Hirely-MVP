@@ -19,11 +19,11 @@ var businessRoutes = {
         );
     },
 
-    getByIdOrSlug: function(req, res){
+    getBySlug: function(req, res){
         /**
          * Send public info if all is not requested
          */
-        businessService.getByIdOrSlug(req.params.idOrSlug, req.query)
+        businessService.getBySlug(req.params.slug, req.query)
         .then(
             function(business){
                 res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));

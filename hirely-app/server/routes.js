@@ -52,7 +52,7 @@ module.exports = function(app) {
      * Adding routes for local mongoDB businesses
      */
     app.get('/api/v1/businesses', businessApiRoutes.getAll);
-    app.get('/api/v1/businesses/:idOrSlug', businessApiRoutes.getByIdOrSlug);
+    app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);
     app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
 
     /**
