@@ -3,8 +3,14 @@ var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
+// TODO:  stop using freeSchema the way it's being used.  Should instead
+// convert the existing sub-schemas to freeSchemas
+var freeSchema = new Schema({}, {strict:false, _id:false});
+
 var variantSchema = new Schema(
   {
+    location_id       :     { type:Schema.ObjectId, required:true },
+    position_id       :     { type:Schema.ObjectId, required:true },
     title             :     { type:String, required:true },
     slug              :     {type: String},
     workType          :     {
@@ -82,19 +88,19 @@ var variantSchema = new Schema(
 /**
  * Add slug to variant schema
  */
-variantSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
+//variantSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
 
 var positionSchema = new Schema({
+        location_id   :    {type: Schema.ObjectId, required:true},
         title         :    {type: String, required:true},
         slug          :    {type: String},
         onetClass     :    {type: String, required:true},
 
-        variants      :    [ variantSchema ]//// vairants araay
 });//// positionSchema
 /**
  * Add slug to postion schema
  */
-positionSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
+//positionSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
 
 var locationSchema = new Schema({
       name              :   {type:String, required:true},
@@ -126,16 +132,12 @@ var locationSchema = new Schema({
       lat               :   Number,
       lng               :   Number,
 
-      /**
-       * Positions opened in this location
-       */
-      positions: [positionSchema] /// position array
     }///location object
 );/// locationSchema
 /**
  * Add slug to location schema
  */
-locationSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['state', 'city', 'name'], unique:false, model:'Businesses'} );
+//locationSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['state', 'city', 'name'], unique:false, model:'Businesses'} );
 
 var businessSchema = new Schema({
   /**
@@ -172,13 +174,21 @@ var businessSchema = new Schema({
   /**
    * Locations
    */
-  locations: [locationSchema]///locations array
+  //locations: [locationSchema]///locations array
+  locations: {type:freeSchema, required:false},
+  locationSlugs: {type:freeSchema, required:false},
+
+  positions: {type:freeSchema, required:false},
+  positionSlugs: {type:freeSchema, required:false},
+
+  variants: {type:freeSchema, required:false},
+  variantSlugs: {type:freeSchema, required:false}
 
 });
 /**
  * Add slug to bsiness through slug plugin
  */
-businessSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:'name', unique:true, model:'Businesses'} );
+//businessSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:'name', unique:true, model:'Businesses'} );
 
 
 var BusinessModel = mongoose.model('Businesses', businessSchema, "businesses");
