@@ -84,67 +84,79 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/manager/hmHiring.html',
         controller: 'HMRegisterCtrl'
       })
-      .state('app.candidate', {
-        url: '/candidate',
-        abstract: true,
-        templateUrl: 'app/candidate/candidate.html',
-        authRequired: true,
-        controller: 'CandidateCtrl'
-      })
-      .state('app.candidate.dashboard', {
-        url: '/dashboard',
-        templateUrl: 'app/candidate/candidate-dashboard.html',
-        controller: 'CandidateDashboardCtrl',
-        authRequired: true
-      })
-      .state('app.candidate.profile', {
-        abstract: true,
-        url: '/profile',
-        templateUrl: 'app/candidate/profile/candidate-profile.html',
-        controller: 'CandidateProfileCtrl',
-        authRequired: true,
-        resolve: {
-          profile: function ($q, CandidateService, UserService) {
-            //retrieve profile before loading
-            var user = UserService.getCurrentUser();
-            return CandidateService.getProfile(user.userId).then(function (profile) {
+      // .state('app.candidate', {
+      //   url: '/candidate',
+      //   abstract: true,
+      //   templateUrl: 'app/candidate/candidate.html',
+      //   authRequired: true,
+      //   controller: 'CandidateCtrl'
+      // })
+      // .state('app.candidate.dashboard', {
+      //   url: '/dashboard',
+      //   templateUrl: 'app/candidate/candidate-dashboard.html',
+      //   controller: 'CandidateDashboardCtrl',
+      //   authRequired: true
+      // })
+      // .state('app.candidate.profile', {
+      //   abstract: true,
+      //   url: '/profile',
+      //   templateUrl: 'app/user/profile/candidate-profile.html',
+      //   controller: 'CandidateProfileCtrl',
+      //   authRequired: true,
+      //   resolve: {
+      //     profile: function ($q, CandidateService, UserService) {
+      //       //retrieve profile before loading
+      //       var user = UserService.getCurrentUser();
+      //       return CandidateService.getProfile(user.userId).then(function (profile) {
 
-              return profile;
-            }, function (err) {
-              deferred.reject(err);
-            });
+      //         return profile;
+      //       }, function (err) {
+      //         deferred.reject(err);
+      //       });
 
-          }
-        }
-      })
-      .state('app.candidate.profile.basics', {
-        url: '/basics',
-        templateUrl: 'app/candidate/profile/candidate-profile-basics.html',
+      //     }
+      //   }
+      // })
+      // .state('app.candidate.profile.basics', {
+      //   url: '/basics',
+      //   templateUrl: 'app/candidate/profile/candidate-profile-basics.html',
 
-        controller: 'CandidateProfileBasicsCtrl',
-        authRequired: true
-      })
-      .state('app.candidate.profile.availability', {
-        url: '/Availability',
-        templateUrl: 'app/candidate/profile/candidate-profile-availability.html',
-        authRequired: true
-      })
-      .state('app.candidate.profile.experience', {
-        url: '/Experience',
-        templateUrl: 'app/candidate/profile/candidate-profile-experience.html',
-        authRequired: true
-      })
-      .state('app.candidate.profile.personality', {
-        url: '/Personality',
-        templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
-        authRequired: true
-      })
+      //   controller: 'CandidateProfileBasicsCtrl',
+      //   authRequired: true
+      // })
+      // .state('app.candidate.profile.availability', {
+      //   url: '/Availability',
+      //   templateUrl: 'app/candidate/profile/candidate-profile-availability.html',
+      //   authRequired: true
+      // })
+      // .state('app.candidate.profile.experience', {
+      //   url: '/Experience',
+      //   templateUrl: 'app/candidate/profile/candidate-profile-experience.html',
+      //   authRequired: true
+      // })
+      // .state('app.candidate.profile.personality', {
+      //   url: '/Personality',
+      //   templateUrl: 'app/candidate/profile/candidate-profile-personality.html',
+      //   authRequired: true
+      // })
       //.state('app.application', {
       //  url: '/:jobId/apply',
       //  templateUrl: 'app/application/job-application.html',
       //  controller: 'JobApplicationController',
       //  authRequired: true
       //})
+      .state('app.user', {
+        url:'/user',
+        templateUrl: 'app/user/user.html',
+        controller: 'UserController',
+        authRequired: true
+      })
+      .state('app.user.profile', {
+        url:'/profile',
+        templateUrl: 'app/user/profile/user-profile.html',
+        controller: 'UserProfileController',
+        authRequired: true
+      })
       .state('app.application', {
           url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
           templateUrl: 'app/application/job-application.html',
