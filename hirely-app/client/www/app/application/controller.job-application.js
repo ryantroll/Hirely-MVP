@@ -92,30 +92,12 @@
           // console.dir(business);
           $scope.business = business;
           // Get the location
-          business.locations.forEach(function(location) {
-            if(location.slug == $scope.locationSlug) {
-              // console.dir("loc: ");
-              // console.dir(location);
-              $scope.location = location;
-              $scope.updateMap();
-              // Get position
-              location.positions.forEach(function(position) {
-                if(position.slug == $scope.positionSlug) {
-                  // console.dir("pos: ");
-                  // console.dir(position);
-                  $scope.position = position;
-                }
-                // Get variant
-                position.variants.forEach(function(variant) {
-                  if(variant.slug == $scope.variantSlug) {
-                    // console.dir("variant: ");
-                    // console.dir(variant);
-                    $scope.variant = variant;
-                  }
-                })
-              })
-            }
-          });
+
+          $scope.location = business.locations[business.locationSlugs[$scope.locationSlug]];
+          $scope.updateMap();
+          $scope.position = business.positions[positionSlugs[$scope.positionSlug]];
+          $scope.variant = business.variants[variantSlugs[$scope.variantSlug]];
+
           if(!angular.isDefined($scope.business)) {
             console.log("business not found.");
           }
