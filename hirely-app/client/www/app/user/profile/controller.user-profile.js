@@ -50,12 +50,12 @@
           templateUrl: '/app/user/profile/step-5/step-five.tpl.html',
           controller: 'StepFiveController',
           hasForm: true
-        },
-        {
-          templateUrl: '/app/user/profile/step-6/step-six.tpl.html',
-          controller: 'StepSixController',
-          hasForm: false
         }
+        // {
+        //   templateUrl: '/app/user/profile/step-6/step-six.tpl.html',
+        //   controller: 'StepSixController',
+        //   hasForm: false
+        // }
       ];
 
 

@@ -145,23 +145,23 @@ var myApp = angular.module('hirelyApp',
       //  controller: 'JobApplicationController',
       //  authRequired: true
       //})
-      .state('app.user', {
+      .state('user', {
         url:'/user',
         templateUrl: 'app/user/user.html',
         controller: 'UserController',
         authRequired: true
       })
-      .state('app.user.profile', {
+      .state('user.profile', {
         url:'/profile',
         templateUrl: 'app/user/profile/user-profile.html',
         controller: 'UserProfileController',
         authRequired: true
       })
       .state('app.application', {
-          url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
-          templateUrl: 'app/application/job-application.html',
-          controller: 'JobApplicationController',
-          //authRequired: true
+        url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
+        templateUrl: 'app/application/job-application.html',
+        controller: 'JobApplicationController',
+        //authRequired: true
       })
 
 

@@ -880,6 +880,10 @@ select {
         font-size: 16px;
         color: $text-color;
         width: inherit;
+
+      }
+      input[type="text"]{
+        @include border-radiuses(0, 0, 4px, 4px, !important);
       }
 
       .btn-search{
@@ -888,6 +892,8 @@ select {
         padding: 0 15px;
         margin-left: -4px;
         vertical-align: top !important;
+        @include border-radiuses(4px, 4px, 0, 0)
+        overflow: hidden;
       }
       .btn-search-inner
       {
