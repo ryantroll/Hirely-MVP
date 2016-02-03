@@ -1,0 +1,82 @@
+<section class="job-application">
+
+
+    <div class="forms-container container h-from">
+
+        <multi-step-container steps="steps" class="simple-prev-next" >
+            <header>
+                <div class="h-steps">
+                    <ul>
+                        <li class="col-sm-2 col-sm-offset-1" ng-if="{'active' : $getActiveIndex(step)>=1}"><span>1</span>Basic Info</li>
+                        <li class="col-sm-2" ng-if="{'active' : $getActiveIndex(step)>=2}"><span>2</span>Experience</li>
+                        <li class="col-sm-2" ng-if="{'active' : $getActiveIndex(step)>=3}"><span>3</span>Education</li>
+                        <li class="col-sm-2" ng-class="{'active' : $getActiveIndex(step)>=4}"><span>4</span>Personality</li>
+                        <li class="col-sm-2" ng-class="{'active' : $getActiveIndex(step)>=5}"><span>5</span>Availability</li>
+                    </ul>
+                </div>
+            </header>
+
+
+            <!-- <aside class="col-sm-4 col-md-3 sidebar"> -->
+                <!-- <ul class="nav nav-pills nav-stacked hidden-xs"> -->
+                    <!-- <li> -->
+                        <!-- <a href="#"><i class="pe-7s-like"></i>Bookmark This Job</a> -->
+                    <!-- </li> -->
+
+                    <!--<li>-->
+                        <!--<a href="#"><i class="pe-7s-id"></i>Business Profile</a>-->
+                    <!--</li>-->
+                <!-- </ul> -->
+
+
+                <!--<ul class="nav nav-pills nav-stacked hidden-xs">-->
+                    <!--<li>-->
+                        <!--<a href="#"><i class="pe-7s-help1"></i>Problem applying for a job</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="#"><i class="pe-7s-help1"></i>Problem signing in</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="#"><i class="pe-7s-help1"></i>Problem loading my profile</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="#"><i class="pe-7s-attention"></i>Report Job</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="#"><i class="pe-7s-mail-open-file"></i>Conatct Hirely</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!-- </aside> -->
+
+            <div class="col-sm-8 col-md-7 clearfix grid-center-within-parent">
+                <main step-container>
+
+
+                </main>
+            </div>
+
+
+            <div class="col-md-7 form-horizontal grid-center-within-parent">
+
+                <div class="form-group">
+                    <a ng-hide="$isLast()" ng-disabled="$isFirst()" class="btn btn-default  pull-left" ng-click="$previousStep()">
+                        Previous
+                    </a>
+
+                <button ng-hide="$isLast()" ng-disabled="$isLast() || ($getActiveStep().hasForm && !$getActiveStep().valid)" class="btn btn-blue btn-cta-blue pull-right" ng-click="$nextStep()">
+                        Next Step
+                    </button>
+                </div>
+            </div>
+
+
+        </multi-step-container>
+
+    </div>
+
+
+</section>
