@@ -218,7 +218,7 @@
     this.formatDate = function(val){
       var ret = '';
       val = new Date(val);
-      console.log(val);
+
       var m = val.getMonth()+1;
       var d = val.getDate();
       var y = val.getFullYear();
