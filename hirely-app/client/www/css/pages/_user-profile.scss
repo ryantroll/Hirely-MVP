@@ -123,4 +123,111 @@ $footer-height: 60px;
 			}
 		}
 	}//// footer
-}//// .user
+}//// .profile
+.form-loader{
+	width:40px;
+	margin:0 auto;
+	padding: 15em 0 0 0;
+	min-height:400px;
+}
+.form-container{
+	width:90%;
+	margin:0 auto;
+	padding: 2em 0;
+	// background-color:#eee;
+	min-height:400px;
+	@media screen and (min-width:$screen-xs-min){
+		width:40%;
+	}
+}/// .form-container
+
+.user-profile-basic{
+
+	.user-image{
+		width:150px;
+		margin: 0 auto;
+		> img{
+			display: block;
+			max-width:100%;
+
+		}
+	}//// .user-image
+
+	.image-links{
+		padding-top:0.5em;
+		font-size:0.9em;
+	}
+}//// .user-profile-basic
+
+.hirely-form{
+
+	.field-wrapper{
+		padding-top:3em;
+	}//// field-wrapper
+
+	.feedback-valid{
+		display: none;
+		color:$light-grass-green;
+	}
+	.feedback-error{
+		display: none;
+		color:$c-hirely-red;
+	}
+
+	.field-wrapper.error{
+		.feedback-valid{
+			display:none;
+		}
+		.feedback-error{
+			display:inline-block;
+		}
+		.text-field{
+			border-color:$c-hirely-red;
+		}
+		label{
+			color:$c-hirely-red;
+		}
+	}
+
+	.field-wrapper.valid{
+		.feedback-valid{
+			display:inline-block;
+		}
+		.feedback-error{
+			display:none;
+		}
+		.text-field{
+			// border-color:$c-hirely-red;
+		}
+		label{
+			// color:$c-hirely-red;
+		}
+	}
+
+	label{
+		display: block;
+		color:$c-hirely-mid-gray;
+		font-weight: 300;
+		text-transform:uppercase;
+		font-size:0.9em;
+		margin-bottom: 0;
+	}
+
+	input[type="text"],
+	input[type="password"],
+	input[type="number"],
+	input[type="date"],
+	input[type="phone"],
+	input[type="email"]{
+		border:none;
+		border-bottom:1px solid $c-hirely-text-gray;
+		color:#000;
+		padding:0.3em 0;
+		width:100%;
+		// background-color:#ccc;
+	}
+
+	input:focus{
+		outline:none;
+	}
+}//// .hirely-form

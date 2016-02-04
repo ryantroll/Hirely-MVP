@@ -195,6 +195,41 @@
       return deferred.promise;
     }//// fun. saveUser
 
+    this.clearPhoneFormat = function(val){
+      return val.split(/[\(|\)| |\-|\+|\.]/).join('');
+    }
+
+    this.formatPhone = function(val){
+      var rawValue = this.clearPhoneFormat(val);
+      var formated = '';
+      if(rawValue.length > 3){
+        formated += '(' + rawValue.slice(0,3) + ') ';
+        rawValue = rawValue.slice(3);
+      }
+      if(rawValue.length > 3){
+        formated += rawValue.slice(0,3) + '-';
+        rawValue = rawValue.slice(3);
+      }
+      formated += rawValue;
+
+      return formated;
+    }//// fun. formatPhone
+
+    this.formatDate = function(val){
+      var ret = '';
+      val = new Date(val);
+      console.log(val);
+      var m = val.getMonth()+1;
+      var d = val.getDate();
+      var y = val.getFullYear();
+
+      ret += (m<10 ? '0' : '') + m + '/';
+      ret += (d<10 ? '0' : '') + d + '/';
+      ret += y;
+
+      return ret;
+    }
+
 
 
 
