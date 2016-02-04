@@ -1,141 +1,113 @@
-<form class="form-horizontal" name="stepOne" novalidate form-step-validity>
-	<fieldset>
-		<legend class="text-center">Basic Profile Info</legend>
-		<div class="form-content">
-
-			<div class="form-loader" ng-show="!stepOneLoaded">
-				<div class="loader"></div>
+<div class="form-loader" ng-show="!stepOneLoaded">
+	<div class="loader"></div>
+</div>
+<div class="form-container user-profile-basic hirely-form" ng-show="stepOneLoaded">
+	<form class="form-horizontal" name="stepOne" novalidate form-step-validity>
+		<fieldset>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="text-center user-image">
+						<img class="img-circle" src="https://lh3.googleusercontent.com/-1p0-ELNl0mk/AAAAAAAAAAI/AAAAAAAAAAA/xeGC2Eu7i0o/photo.jpg"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="text-center image-links">
+						<a href="javascript:void(0);">Edit</a> | <a href="javascript:void(0);">Remove</a>
+					</div>
+				</div>
 			</div>
 
-			<div class="form-fields-wrapper" ng-show="stepOneLoaded">
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="firstname" class="col-sm-3 control-label">First name
-						<span class="required-field">*</span>
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.firstname.$error.required && stepOne.firstname.$dirty, 'has-feedback has-success' : stepOne.firstname.$valid}">
-							<input type="text" class="form-control" id="firstname" name="firstname" ng-model="user.firstName" required>
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.firstname.$error.required && stepOne.firstname.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.firstname.$valid"></span>
-						</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.firstname.$valid && stepOne.firstname.$dirty, 'valid' : stepOne.firstname.$valid}">
+						<label for="firstname">
+							First Name
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" id="firstname" name="firstname" ng-model="user.firstName" required/>
+						<!-- <input type="text" /> -->
 					</div>
 				</div>
-
-				<!-- Last name -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="lastname" class="col-sm-3 control-label">Last name
-						<span class="required-field">*</span>
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.lastname.$error.required && stepOne.lastname.$dirty, 'has-feedback has-success' : stepOne.lastname.$valid}">
-							<input type="text" class="form-control" name="lastname" id="lastname" ng-model="user.lastName" required>
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.lastname.$error.required && stepOne.lastname.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.lastname.$valid"></span>
-						</div>
+				<div class="col-sm-6">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.lastname.$valid && stepOne.lastname.$dirty, 'valid' : stepOne.lastname.$valid}">
+						<label for="lastname">
+							Last Name
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" name="lastname" id="lastname" ng-model="user.lastName" required/>
 					</div>
 				</div>
-
-				<!-- Email -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="email" class="col-sm-3 control-label">Email
-						<span class="required-field">*</span>
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.email.$error.required && stepOne.email.$dirty, 'has-feedback has-success' : stepOne.email.$valid}">
-							<input type="email" class="form-control" name="email" id="email" ng-model="user.email" required disabled>
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.email.$error.required && stepOne.email.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.email.$valid"></span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Mobile -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="mobile" class="col-sm-3 control-label">Mobile
-						<span class="required-field">*</span>
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.mobile.$error.required && stepOne.mobile.$dirty, 'has-feedback has-success' : stepOne.mobile.$valid}">
-							<input type="phone" class="form-control" name="mobile" id="mobile" ng-model="user.mobile" required ng-pattern="/^([0-9])*$/">
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.mobile.$error.required && stepOne.mobile.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.mobile.$valid"></span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Address -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="address" class="col-sm-3 control-label">Address
-						<span class="required-field">*</span>
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.address.$error.required && stepOne.address.$dirty, 'has-feedback has-success' : stepOne.address.$valid}">
-							<input type="text" ng-model="user.formattedAddress" id="address" name="address" uib-typeahead="location as location.address for location in searchLocations($viewValue)" class="form-control txt-search" typeahead-loading="loadingLocations" typeahead-no-results="noResults"
-							typeahead-on-select="setAddress($item)" required>
-							<div class="spinner" ng-show="loadingLocations">
-								<div class="double-bounce1"></div>
-								<div class="double-bounce2"></div>
-							</div>
-							<i class="fa fa-places-alert fa-exclamation-triangle" ng-show="noResults"></i>
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.address.$error.required && stepOne.address.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.address.$valid"></span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Unit -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="address-unit" class="col-sm-3 control-label">Apartment \ Unit
-						<!-- <span class="required-field">*</span> -->
-					</label>
-					<div class="col-sm-5 col-md-3">
-						<input type="text" class="form-control" id="address-unit" ng-model="user.street2">
-					</div>
-				</div>
-
-
-				<!-- City -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="address-city" class="col-sm-3 control-label">City
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.city.$error.required && stepOne.city.$dirty, 'has-feedback has-success' : stepOne.city.$valid}">
-							<input type="text" class="form-control" name="city" id="address-city" ng-model="user.city">
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.city.$error.required && stepOne.city.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.city.$valid"></span>
-						</div>
-					</div>
-				</div>
-
-				<!-- State -->
-				<!-- Zipcode -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="state" class="col-sm-3 control-label">State
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.state.$error.required && stepOne.state.$dirty, 'has-feedback has-success' : stepOne.state.$valid}">
-							<input type="text" class="form-control" name="state" id="state" ng-model="user.state">
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.state.$error.required && stepOne.state.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.state.$valid"></span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Zipcode -->
-				<div class="form-group grid-center-within-parent max-width-450">
-					<label for="zipcode" class="col-sm-3 control-label">Zip Code
-					</label>
-					<div class="col-sm-9 col-md-9">
-						<div ng-class="{'has-feedback has-error': stepOne.zipcode.$error.required && stepOne.zipcode.$dirty, 'has-feedback has-success' : stepOne.zipcode.$valid}">
-							<input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="user.postalCode">
-							<span class="fa fa-close form-control-feedback" ng-show="stepOne.zipcode.$error.required && stepOne.zipcode.$dirty"></span>
-							<span class="fa fa-check form-control-feedback" ng-show="stepOne.zipcode.$valid"></span>
-						</div>
-					</div>
-				</div>
-
 			</div>
 
-		</div>
-	</fieldset>
-</form>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper" ng-class="{'error': stepOne.email.$error.required && stepOne.email.$dirty, 'valid' : stepOne.email.$valid}">
+						<label for="email">
+							Email
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="email" class="text-field" name="email" id="email" ng-model="user.email" required disabled/>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper"  ng-class="{'error': !stepOne.mobile.$valid && stepOne.mobile.$dirty, 'valid' : stepOne.mobile.$valid}">
+						<label for="mobile">
+							Phone
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="phone" class="text-field" name="mobile" id="mobile"
+							ng-model="_mobile"
+							required
+							ng-change="formatPhone()"
+							validate-phone
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.dob.$valid && stepOne.dob.$dirty, 'valid' : stepOne.dob.$valid}">
+						<label>
+							Date of Birth
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" id="dob" name="dob" placeholder="MM/DD/YYYY"
+							ng-model="_dateOfBirth"
+							validate-date
+							required
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.zipcode.$valid && stepOne.zipcode.$dirty, 'valid' : stepOne.zipcode.$valid}">
+						<label>
+							Zipcode
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" id="zipcode" name="zipcode"
+							ng-model="user.postalCode"
+							ng-pattern="/^\d{4,6}$/"
+							required
+						/>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div><!--user-profile-pasics

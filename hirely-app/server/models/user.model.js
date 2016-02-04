@@ -103,6 +103,7 @@ var userSchema = new Schema({
                           set: Utilities.toLower
                         },
   mobile                :     {type:String},
+  dateOfBirth           :     {type:Date},
   agreedToTerms         :     {type:Boolean},
   personalStatment      :     {type:String},
   profileImageURL       :     {type:String},

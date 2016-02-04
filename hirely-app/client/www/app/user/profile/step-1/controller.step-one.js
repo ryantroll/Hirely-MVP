@@ -9,7 +9,83 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService', '$timeout', StepOneController]);
+  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService', '$timeout', StepOneController])
+  .directive('validateDate', function(){
+    return {
+      restrict:'A',
+      require:'ngModel',
+      link:function(scope, ele, attrs, ctrl){
+        ctrl.$parsers.unshift(function(value){
+          var pat = /^\d{2}\/\d{2}\/\d{4}$/;
+          var valid = true;
+
+          valid = valid && pat.test(value);
+          if(false === valid){
+            ctrl.$setValidity('invalidDate', false)
+            return null;
+          }
+
+          var dateParts = value.split('/');
+          var D = Date.parse(dateParts[2]+"-"+dateParts[0]+"-"+dateParts[1]);
+          var now = new Date();
+
+          if(isNaN(D)){
+            ctrl.$setValidity('invalidDate', false)
+            return null;
+          }
+
+          D = new Date(D);
+
+          if(D >= now){
+            ctrl.$setValidity('invalidDate', false)
+            return null;
+          }
+
+          ctrl.$setValidity('invalidDate', true);
+          return dateParts;
+        });/// unshift
+      }//// fun. link
+    }/// return object
+  })/// validate date;
+  .directive('validatePhone', function(){
+    return {
+      restrict:'A',
+      require:'ngModel',
+      link:function(scope, ele, attrs, ctrl){
+        ctrl.$parsers.unshift(function(value){
+          var pat = /^((\(\d{3}\))|(\d{3})) ?\d{3}(\-| )?\d{4}$/;
+
+          if(false === pat.test(value)){
+            ctrl.$setValidity('invalidPhone', false);
+            return value;
+          }
+
+          ctrl.$setValidity('invalidPhone', true);
+          return value;
+        });/// unshift
+      }//// fun. link
+    }/// return object
+  })/// validate date;
+  .directive('validateZipcode', function(){
+    return {
+      restrict:'A',
+      require:'ngModel',
+      link:function(scope, ele, attrs, ctrl){
+        ctrl.$parsers.unshift(function(value){
+          scope.searchLocations(value)
+          .then(
+            function(locations){
+              console.log(locations);
+            },
+            function(err){
+              console.log(err)
+            }
+          )
+          return value;
+        });/// unshift
+      }//// fun. link
+    }/// return object
+  })/// validate date;
 
 
   function StepOneController($scope, $stateParams, multiStepFormInstance, GeocodeService, UserService, AuthService, $timeout) {
@@ -31,83 +107,99 @@
       multiStepFormInstance.setValidity(state);
     });
 
-    var locations = [];
-    $scope.selectedLocation = undefined;
+    /**
+     * [formatPhone Will set the right format for phone while the user typing in]
+     */
+    $scope.formatPhone = function(){
+      var newVal = $scope._mobile;
 
-    $scope.searchLocations = function(query){
-      if(!!query && query.trim() != ''){
+      if(newVal === false || angular.isUndefined(newVal)) return;
 
-        return geocodeService.geoCodeAddress(query)
-        .then(
-          function(data){
-            locations = [];
-            if(data.statusCode == 200){
-              data.results.predictions.forEach(function(prediction){
-                locations.push({address: prediction.description, placeId: prediction.place_id});
-              });
-              return locations;
-            } //// if statusCode == 200
-            else {
-              console.dir('error', data.statusCode);
-              return {};
-            }
-          },//// fun. reslove
-          function(error){
-            console.dir(error);
-          }/// fun. reject
-        );//// then
-      }//// if query
-    };/// fun. searchLocations
+      $scope._mobile = UserService.formatPhone(newVal);
+    };
 
-    $scope.setAddress = function(address){
-      $scope.user.googlePlaceId = address.placeId;
-      geocodeService.getPlaceDetails(address.placeId).then(function(data){
-        var place = data.results.result;
+    /**
+     *
+     */
 
-        if(place){
 
-          /**
-           * Loop throught  address components and take what is needed
-           */
-          for (var i = 0; i < place.address_components.length; i++) {
-            var addressType = place.address_components[i].types[0];
-            switch (addressType){
-              case "route":
-                $scope.user.street1 = place.address_components[i][addressComponents[addressType]] || false;
-                break;
+    // var locations = [];
+    // $scope.selectedLocation = undefined;
 
-              // case "street_number":
-              //   $scope.user.number = place.address_components[i][addressComponents[addressType]] || false;
-              //   break;
+    // $scope.searchLocations = function(query){
+    //   if(!!query && query.trim() != ''){
 
-              case "country":
-                $scope.user.country = place.address_components[i][addressComponents[addressType]] || false;
-                break;
+    //     return geocodeService.geoCodeAddress(query)
+    //     .then(
+    //       function(data){
+    //         locations = [];
+    //         if(data.statusCode == 200){
+    //           data.results.predictions.forEach(function(prediction){
+    //             locations.push({address: prediction.description, placeId: prediction.place_id});
+    //           });
+    //           return locations;
+    //         } //// if statusCode == 200
+    //         else {
+    //           console.dir('error', data.statusCode);
+    //           return {};
+    //         }
+    //       },//// fun. reslove
+    //       function(error){
+    //         console.dir(error);
+    //       }/// fun. reject
+    //     );//// then
+    //   }//// if query
+    // };/// fun. searchLocations
 
-              case "administrative_area_level_1":
-                $scope.user.state = place.address_components[i][addressComponents[addressType]] || false;
-                break;
+    // $scope.setAddress = function(address){
+    //   $scope.user.googlePlaceId = address.placeId;
+    //   geocodeService.getPlaceDetails(address.placeId).then(function(data){
+    //     var place = data.results.result;
 
-              case "locality":
-                $scope.user.city = place.address_components[i][addressComponents[addressType]] || false;
-                break;
+    //     if(place){
 
-              case "postal_code":
-                $scope.user.postalCode = place.address_components[i][addressComponents[addressType]] || false;
-                break;
-            }//// switch
-          }//// for
+    //       /**
+    //        * Loop throught  address components and take what is needed
+    //        */
+    //       for (var i = 0; i < place.address_components.length; i++) {
+    //         var addressType = place.address_components[i].types[0];
+    //         switch (addressType){
+    //           case "route":
+    //             $scope.user.street1 = place.address_components[i][addressComponents[addressType]] || false;
+    //             break;
 
-          $scope.user.lng = place.geometry.location.lng || null;
-          $scope.user.lat = place.geometry.location.lat || null;
-          $scope.user.formattedAddress = place.formatted_address || null;
-          $scope.user.street1 = place.name;
-          // $scope.user.neighbourhood = place.vicinity;
+    //           // case "street_number":
+    //           //   $scope.user.number = place.address_components[i][addressComponents[addressType]] || false;
+    //           //   break;
 
-        }//// if place
+    //           case "country":
+    //             $scope.user.country = place.address_components[i][addressComponents[addressType]] || false;
+    //             break;
 
-      });
-    }//// fun. setAddress
+    //           case "administrative_area_level_1":
+    //             $scope.user.state = place.address_components[i][addressComponents[addressType]] || false;
+    //             break;
+
+    //           case "locality":
+    //             $scope.user.city = place.address_components[i][addressComponents[addressType]] || false;
+    //             break;
+
+    //           case "postal_code":
+    //             $scope.user.postalCode = place.address_components[i][addressComponents[addressType]] || false;
+    //             break;
+    //         }//// switch
+    //       }//// for
+
+    //       $scope.user.lng = place.geometry.location.lng || null;
+    //       $scope.user.lat = place.geometry.location.lat || null;
+    //       $scope.user.formattedAddress = place.formatted_address || null;
+    //       $scope.user.street1 = place.name;
+    //       // $scope.user.neighbourhood = place.vicinity;
+
+    //     }//// if place
+
+    //   });
+    // }//// fun. setAddress
 
 
 
@@ -119,6 +211,12 @@
     $timeout(function(){
       if(!$scope.stepOneLoaded){
         $scope.user = angular.copy(AuthService.currentUser);
+        /**
+         * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
+         */
+        $scope._mobile = UserService.formatPhone($scope.user.mobile.split('+1.').join(''));
+        $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
+
         $scope.stepOneLoaded = true;
       }
     }, 1000);/// $timeout
@@ -139,6 +237,12 @@
                * User is authenticated update user data
                */
               // TODO:  Upsert application to business once BusinessService is ready
+              /**
+               * do some data clean up
+               */
+              $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
+              $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+
               UserService.saveUser($scope.user, AuthService.currentUserID)
               .then(
                 function(savedUser){
