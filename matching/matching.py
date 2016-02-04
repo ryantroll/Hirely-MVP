@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-# TODO: EducationScores is a to be created lookup table for pre-calculated education percentiles for a given occupation
-# TODO: Application scores should be generated when an application is submitted to avoid crunching multiple times
-
 class UserService:
   experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] # tiers of experience where level = num of months
 
@@ -76,6 +73,9 @@ class UserService:
 
     user.educationMaxLvl = 0
     for program in user.education:
+      # TODO: Make sure that program type numbers match up to onet, and that 2 = some college
+      if program.programType > 1 && !program.isCompleted:
+        program.programType = 2
       if program.programType > educationMaxLvl:  # 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD
         user.educationMaxLvl = program.programType
 
@@ -123,7 +123,7 @@ class BusinessService:
     if formula['type'] in ['number', 'string']:
       result = formula['value']
     
-    if formula['type'] == 'attribute':
+    elif formula['type'] == 'attribute':
       parts = formula['value'].split('.')
       obj = objLookup[parts.pop(0)]
       result = obj
@@ -133,49 +133,9 @@ class BusinessService:
     elif formula['type'] == 'computation':
       result = self.qualificationFormulaEvaluator(formula['operands'].pop())
       for childField in formula['operands']:
-        # TODO:  create compute function.  Should not use eval
         result = self.qualificationComputer(formula['operator']), result, self.qualificationFormulaEvaluator(formula.pop('operands'))
     
     return result
-
-  def getQualificationScore(self, variantId, userId, disqualifyThreshold=0):
-    user = User.findOne(id=userId)
-    business = Business.findOne(variants__id=variandId)
-    variant = business['variants'][variantId]
-    position = business['position'][variant['positionId']]
-    location = business['locations'][variant['locationId']]
-    
-    fScoreSum = 0
-    fScoreMaxSum = 0
-    disqualified = false
-    for formula in variant['qualificationSpecification']['formulas']:
-      fScoreSum = self.qualificationFormulaEvaluator(formula=formula, 
-                                                     business=business, 
-                                                     location=location, 
-                                                     position=position, 
-                                                     variant=variant, 
-                                                     user=user)
-      if fScore > 0:
-        fScore = 1
-      
-      fScoreMaxSum += formula['importance']
-      fScoreSum += fScore * formula['importance']
-    
-      if fScore == 0 and formula['importance'] >= disqualifyThreshold:
-        disqualified = true
-    
-    if disqualified:
-      qScore = 0
-    else if fScoreMaxSum == 0:
-      qScore = 1
-    else:
-      qScore = qScore / maxScore
-    return qScore
-
-  # This should be called when a variant's qualification specification changes
-  # TODO:  this
-  def updateApplicationScores(business, variant):
-    pass
 
 
 class MatchCacheService:
@@ -189,14 +149,12 @@ class MatchCacheService:
   # This should be an api endpoint
   # Generates a MatchCache document for every onet occupation
   def generateForUser(user):
-    for onetOccupationId in self.onetOccupationIds:
 
-      occupationKnowledges = Knowledges.get(onetOccupationId=onetOccupationId)
-      occupationSkills = Skills.get(onetOccupationId=onetOccupationId)
-      occupationAbilities = Abilities.get(onetOccupationId=onetOccupationId)
-      occupationWorkActivites = WorkActivities.get(onetOccupationId=onetOccupationId)
+    MatchCache.find({userId: user.id}).remove().exec()
 
-      matchCache = new MatchCache()
+    for occupation in OnetMetrics.all():
+
+      matchCache = new MatchCache(userId=user.id, occupationId=occupation.id)
 
       for experienceLvl in self.experienceLevels:
             
@@ -204,29 +162,29 @@ class MatchCacheService:
         ss_user_knowledge = {}
         ss_occupation_knowledge = {}
         for knowledgeName, score in user.knowledges.iteritems():
-          ss_user_knowledge[knowledgeName] = (user.knowledges[knowledgeName] - occupationKnowledges[experienceLvl][knowledgeName])**2 
-          ss_occupation_knowledge[knowledgeName] =  occupationKnowledges[experienceLvl][knowledgeName]**2
+          ss_user_knowledge[knowledgeName] = (user.knowledges[knowledgeName] - occupation[experienceLvl]['knowledges'][knowledgeName])**2 
+          ss_occupation_knowledge[knowledgeName] =  occupation[experienceLvl]['knowledges'][knowledgeName]**2
 
         # Skill calcs
         ss_user_skill = {}
         ss_occupation_skill = {}
         for skillName, score in user.skills.iteritems():
-          ss_user_skill[skillName] = (user.skills[skillName] - occupationSkills[experienceLvl][skillName])**2 
-          ss_occupation_skill[skillName] =  occupationSkills[experienceLvl][skillName]**2
+          ss_user_skill[skillName] = (user.skills[skillName] - occupation[experienceLvl]['skills'][skillName])**2 
+          ss_occupation_skill[skillName] =  occupation[experienceLvl]['skills'][skillName]**2
       
         # Abilities calcs
         ss_user_abilities = {}
         ss_occupation_abilities = {}
         for abilityName, score in user.abilities.iteritems():
-          ss_user_ability[abilityName] = (user.abilities[abilityName] - occupationAbilities[experienceLvl][abilityName])**2 
-          ss_occupation_ability[abilityName] =  occupationAbilities[experienceLvl][abilityName]**2
+          ss_user_ability[abilityName] = (user.abilities[abilityName] - occupation[experienceLvl]['abilities'][abilityName])**2 
+          ss_occupation_ability[abilityName] =  occupation[experienceLvl]['abilities'][abilityName]**2
       
         # WorkActivities calcs
         ss_user_workActivities = {}
         ss_occupation_workActivities = {}
         for workActivityName, score in user.workActivities.iteritems():
-          ss_user_workActivity[workActivityName] = (user.workActivities[workActivityName] - occupationWorkActivities[experienceLvl][workActivityName])**2 
-          ss_occupation_workActivity[workActivityName] =  occupationWorkActivities[experienceLvl][workActivityName]**2
+          ss_user_workActivity[workActivityName] = (user.workActivities[workActivityName] - occupation[experienceLvl]['workActivities'][activityName])**2 
+          ss_occupation_workActivity[workActivityName] =  occupation[experienceLvl]['workActivities'][activityName]**2
 
         # Calc Experience score
         ss_user_all = ss_user_knowledge + ss_user_skills + ss_user_abilities + ss_user_workActivities
@@ -234,6 +192,8 @@ class MatchCacheService:
         experienceScore = 1 - sqrt(ss_user_all/ss_occupation_all)
         experienceScore = Max( experienceScore, 0 )
         matchCache.scores[experienceLvl]['experienceScore'] = experienceScore
+
+        # TODO:  If we decide to boost exp when exact experience occupation id, put it here
       
         # Education calcs
         matchCache.scores[experienceLvl]['educationScore'] = OnetMeta.findOne(onetOccupationId=onetOccupationId)['percentiles'][experienceLvl]['educationIndex'][user.educationMaxLvl]
@@ -287,72 +247,113 @@ class MatchCacheService:
   def getUserSuggestions(onetOccupationId, experienceLvl, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
     if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
       queryset = MatchCache.find(onetOccupationId=onetOccupationId, 
-                                 userOptOutOfSuggetionsFromEmployers=False, 
                                  sort_by_descending=scores[experienceLvl]['overallScore'], 
                                  limit=100, locations__lng__within=(lng_lower_bound, lng_upper_bound), 
                                  locations__lat__within=(lat_lower_bound, lat_upper_bound))
     else:
       queryset = MatchCache.find(onetOccupationId=onetOccupationId,
-                                 userOptOutOfSuggetionsFromEmployers=False, 
                                  sort_by_descending=scores[experienceLvl]['overallScore'], limit=100)
 
-      for index, matchCatch in queryset:
-        user = User.findOne(id=matchCache['userId'])
-        # TODO:  Strip out irrelevant user fields
-        queryset[index]['user'] = user
-    return queryset
+    # TODO:  Remove users who userOptOutOfSuggestionsFromEmployers = true
+
+    return queryset.exec()
 
 
 class ApplicationService:
   # This should be an api endpoint
   def getApplicationsByBusiness(businessId):
-    return Applications.find(businessId=businessId)
+    return Applications.find(businessId=businessId).exec()
 
   # This should be an api endpoint
   def getApplicationsByLocation(locationId):
-    return Applications.find(locationId=locationId)
+    return Applications.find(locationId=locationId).exec()
 
   # This should be an api endpoint
   def getApplicationsByPosition(positionId):
-    return Applications.find(positionId=positionId)
+    return Applications.find(positionId=positionId).exec()
 
   # This should be an api endpoint
   def getApplicationsByVariant(variantId):
-    return Applications.find(variantId=variantId)
+    return Applications.find(variantId=variantId).exec()
+
+  def getQualificationScore(self, variantId, userId, disqualifyThreshold=0):
+    user = User.findOne(id=userId)
+    business = Business.findOne(variants__id=variandId)
+    variant = business['variants'][variantId]
+    position = business['position'][variant['positionId']]
+    location = business['locations'][variant['locationId']]
+
+    fScoreMaxSum = 0
+    disqualified = false
+    for formula in variant['qualificationSpecification']['formulas']:
+      fScoreSum = self.qualificationFormulaEvaluator(formula=formula,
+                                                     business=business,
+                                                     location=location,
+                                                     position=position,
+                                                     variant=variant,
+                                                     user=user)
+      if fScore > 0:
+        fScore = 1
+
+      fScoreMaxSum += formula['importance']
+      fScoreSum += fScore * formula['importance']
+
+      if fScore == 0 and formula['importance'] >= disqualifyThreshold:
+        disqualified = true
+
+    if disqualified:
+      qScore = 0
+    elif fScoreMaxSum == 0:
+      qScore = 1
+    else:
+      qScore = qScore / maxScore
+    return qScore
 
   # This should be an api endpoint
   def createApplication(variantId, userId, prescreenAnswers):
-    business = Business.findOne(business__variant=variantId)
-    user = User.findOne(userId=userId)
+    # TODO:  Check that all of the application fields are being populated
+    application = new Application(variantId=variantId, userId=userId, prescreenAnswers=prescreenAnswers)
+    application.save()
+    ApplicationService.updateApplicationscores(application=application)
 
-    application = new Application()
+  def updateApplicationScores(application):
+    business = Business.findOne(business__variant=application['variantId'])
+    user = User.findOne(userId=application['userId'])
+    variant = business['variants'][variantId]
+    matchCache = MatchCache.findOne(onetOccupationId=variant['onetOccupationId'], userId=userId)
 
-    variant = business['variants'][variantId]:
-    matchCache = MatchCache.findOne(onetOccupationId=variant.onetOccupationId, userId=userId)
     application.scores = matchCache.scores[variant.experienceLvl]
     application.scores['experienceScore'] *= variant['scoreWeights']['experience']
     application.scores['educationScore'] *= variant['scoreWeights']['education']
     application.scores['personalityScore'] *= variant['scoreWeights']['personality']
-    
-    # TODO:  Finish QualificationSpecificationService
-    application.scores['qualificationScore'] = qualificationSpecificationService.getQaulificationScore(variantId=variant.id, userId=user.id, disqualifyThreshold=0)
+
+    application.scores['qualificationScore'] = ApplicationService.getQaulificationScore(variantId=variant.id, userId=user.id, disqualifyThreshold=0)
     application.scores['qualificationScore'] *= variant['scoreWeights']['qualification']
-    
+
     application.scores['overallScore'] = avg(application.scores['experienceScore'],
                                              application.scores['educationScore'],
                                              application.scores['personalityScore'],
                                              application.scores['qualificationScore'])
-
     application.save()
+
+  # This should be called when a variant's qualification specification changes
+  def updateApplicationScoresForVariant(variant):
+    for application in Applications.find({variantId: variant.id}):
+      ApplicationService.updateApplicationscores(application=application)
+
+  # This should be called when a user's profile changes
+  def updateApplicationScoresForUser(user):
+    for application in Applications.find({userId: user.id}):
+      ApplicationService.updateApplicationscores(application=application)
 
 
 # This doesn't work right now, but demonstrates how this framework would work
-def test():def test():
+def test():
   onetOccupationId = "22-22222.00"
 
   user = User.fineOne()
   userService.updateUserCacheFields(user)
-  userService.MatchCacheGenerator(user)
+  MatchCacheService.generateForUser(user)
 
   # job is some onetOccupation, and the scores are based on x months experience
   business = Business.findOne()
