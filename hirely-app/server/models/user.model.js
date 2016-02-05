@@ -7,8 +7,10 @@ function endDateValidator(value){
   /**
    * this here will refer to schema
    */
-  console.log(this.formattedAddress, value > this.dateStart)
-  if(null != value && value.getTime() != 0){
+
+  if(null != value && !isNaN(value.getTime())
+    && this.dateStart && !isNaN(this.dateStart.getTime())
+  ){
     return value > this.dateStart;
   }
   else{
