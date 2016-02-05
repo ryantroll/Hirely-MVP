@@ -163,6 +163,7 @@ $footer-height: 60px;
 
 	.field-wrapper{
 		padding-top:3em;
+		position:relative;
 	}//// field-wrapper
 
 	.feedback-valid{
@@ -227,7 +228,141 @@ $footer-height: 60px;
 		// background-color:#ccc;
 	}
 
-	input:focus{
+	select{
+		border:none;
+		border-bottom:1px solid $c-hirely-text-gray;
+		padding:0 0;
+		margin-top:0;
+		margin-bottom:0;
+		height: 29px;
+		@include border-radius(0);
+		border-color:$c-hirely-text-gray;
+		width:100%;
+		background-color:#fff;
+
+		option:first-child{
+			color:#ccc;
+		}
+	}
+	select + span { //// this style the caret down arrow
+		display: block;
+		width:20px;
+		height: 29px;
+		line-height: 29px;
+		content: " ";
+		position:absolute;
+		top:59px;
+		right:0;
+		text-align: center;
+		font-size:0.8em;
+		color:$c-hirely-text-gray;
+	}
+
+	input:focus,
+	select:focus,
+	textarea:focus{
 		outline:none;
+		border-color:$c-hirely-blue;
+	}
+	select:focus+span{
+		color:$c-hirely-blue;
 	}
 }//// .hirely-form
+
+.user-profile-exp{
+	min-height:400px;
+}//// .user-profile-exp
+
+.cards-wrapper{
+	.card{
+		width:90%;
+		height:auto;
+		margin: 0 auto 2em auto;
+		border:1px solid $c-hirely-text-gray;
+		@include border-radius(5px);
+		position:relative;
+		padding:1em 1em 39px 1em;
+		overflow: hidden;
+
+		.btn-group{
+			position:absolute;
+			bottom:0;
+			width:102%; //// to hide the top right round corner
+			margin-left:-1.2em;/// to hide the top round corner
+
+			.btn{
+				width:50%;
+				outline: none;
+			}
+		}//// .btn-group
+	}//// .card
+
+	.add-card{
+		height:170px;
+		padding:0;
+
+		.add-group{
+			width:50%;
+			margin:0 auto;
+			text-align: center;
+			@include vertical-align;
+		}
+		.btn-circle {
+			width: 50px;
+			height: 50px;
+			padding: 10px 16px;
+			font-size: 18px;
+			line-height: 1.33;
+			border-radius: 25px;
+			clear:both;
+			background-color:#fff;
+			border-color:$c-hirely-text-gray;
+			outline: none;
+		}
+		p{
+			font-size:0.8em;
+		}
+	}//// .add-card
+}//// .cards-wrapper
+.btn.red{
+	background-color:$c-hirely-red;
+	color:#fff;
+}
+.btn.blue{
+	background-color:$c-hirely-blue;
+	color:#fff;
+}
+.btn.white{
+	background-color:#fff;
+}
+.fullwidth{
+	width:100%;
+}
+.form-overlay{
+	position:absolute;
+	z-index:1100;
+	top:0;
+	// bottom:0;
+	left:0;
+	right:0;
+	background-color:#fff;
+
+	header{
+		width:100%;
+		background-color:$c-hirely-navy;
+		min-height: $header-height;
+		@include drop-shadow;
+		color:#fff;
+		text-align: center;
+
+		h3{
+			line-height: $header-height;
+			padding-bottom:0;
+		}
+	}
+
+	.btn.red{
+		padding-left:3em;
+		padding-right:3em;
+	}
+}//// .form-overlay
