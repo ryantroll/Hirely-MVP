@@ -80,7 +80,7 @@
      */
     $scope.xpItems = [];
 
-    UserService.getUserCompleteFields(AuthService.currentUserID, ['workExperience', 'education'])
+    UserService.getUserCompleteFields(AuthService.currentUserID, ['workExperience'])
     .then(
       function(founded){
         if(Array.isArray(founded.workExperience)){
@@ -94,10 +94,13 @@
             item.dateStart = new Date(item.dateStart);
             item.dateEnd = new Date(item.dateEnd);
             item.dateStartYear = item.dateStart.getFullYear();
-            item.dateStartMonth = item.dateStart.getMonth() + 1;
+            item.dateStartMonth = String(item.dateStart.getMonth() + 1);
             if(!isNaN(item.dateEnd.getTime()) ){
               item.dateEndYear = item.dateEnd.getFullYear();
-              item.dateEndMonth = item.dateEnd.getMonth() + 1;
+              item.dateEndMonth = String(item.dateEnd.getMonth() + 1);
+            }
+            else{
+              item.currentlyHere = true;
             }
           });
           $scope.xpItems = orderBy(founded.workExperience, 'dateStart', true);
@@ -120,6 +123,27 @@
     $scope.addJobXp = function () {
       if(!$scope.stepTwo.$valid) return null;
 
+      /**
+       * Check if edit
+       */
+      if(!isNaN($scope.editIndex)){
+        $scope.occupation.dateStart = new Date(Number($scope.occupation.dateStartYear), Number($scope.occupation.dateStartMonth)-1, 1);
+
+        if(true !== $scope.occupation.currentlyHere){
+          $scope.occupation.dateEnd = new Date(Number($scope.occupation.dateEndYear), Number($scope.occupation.dateEndMonth)-1, 1);
+        }
+        angular.extend($scope.xpItems[$scope.editIndex], $scope.occupation);
+
+        $scope.occupation = {};
+        $scope.editIndex = null;
+
+        // $scope.xpItems = orderBy($scope.xpItems, 'dateStart', true);
+
+        $scope.stepTwo.$setUntouched();
+        $scope.stepTwo.$setPristine();
+        return;
+      }//// if edit;
+
       var newExp = angular.copy($scope.occupation);
       newExp.dateStart = new Date(Number(newExp.dateStartYear), Number(newExp.dateStartMonth)-1, 1);
 
@@ -136,10 +160,6 @@
       $scope.stepTwo.$setUntouched();
       $scope.stepTwo.$setPristine();
 
-      /**
-       * Update step validity
-       */
-      // $scope.$setValidity(true === $scope.eduItems.length > 0 && $scope.xpItems.length > 0);
     }//// fun. addJobXp
 
     /**
@@ -149,96 +169,98 @@
      */
     $scope.removeJobXp = function(index){
       $scope.xpItems.splice(index, 1);
-
-      /**
-       * Update step validity
-       */
-      // $scope.$setValidity($scope.eduItems.length > 0 && $scope.xpItems.length > 0);
     }
 
-      var locations = [];
-      $scope.selectedLocation = undefined;
+    $scope.editJobXp = function(index){
+      $scope.occupation = angular.copy($scope.xpItems[index]);
+      console.log(typeof $scope.xpItems[index].dateStartMonth);
+      $scope.editIndex = index;
+      $scope.addWorkXpForm = true;
+    }
 
-      /**
-       * [searchLocations used for the typeahead in company name, will get the matchin addrss based on entered query]
-       * @param  {string} query [text string to search google places for]
-       * @return {array}       [array of address objects from google places]
-       */
-      $scope.searchLocations = function(query){
-          if(!!query && query.trim() != ''){
+      // var locations = [];
+      // $scope.selectedLocation = undefined;
 
-              return geocodeService.placeSearch(query)
-                  .then(
-                      function(data){
-                          locations = [];
-                          if(data.statusCode == 200){
-                              data.results.predictions.forEach(function(prediction){
-                                  locations.push({address: prediction.description, placeId: prediction.place_id});
-                              });
-                              return locations;
-                          } //// if statusCode == 200
-                          else {
-                              console.dir('error', data.statusCode);
-                              return {};
-                          }
-                      },//// fun. reslove
-                      function(error){
-                          console.dir(error);
-                      }/// fun. reject
-                  );//// then
-          }//// if query
-      };/// fun. searchLocations
+      // /**
+      //  * [searchLocations used for the typeahead in company name, will get the matchin addrss based on entered query]
+      //  * @param  {string} query [text string to search google places for]
+      //  * @return {array}       [array of address objects from google places]
+      //  */
+      // $scope.searchLocations = function(query){
+      //     if(!!query && query.trim() != ''){
 
-      /**
-       * [setAddress will set the right address component in scop when user select one address form typeahead]
-       * @param {object} address [address object from selected item in typeahead]
-       */
-      $scope.setAddress = function(address){
-          $scope.occupation.formattedAddress = address.address;
-          $scope.occupation.googlePlaceId = address.placeId;
+      //         return geocodeService.placeSearch(query)
+      //             .then(
+      //                 function(data){
+      //                     locations = [];
+      //                     if(data.statusCode == 200){
+      //                         data.results.predictions.forEach(function(prediction){
+      //                             locations.push({address: prediction.description, placeId: prediction.place_id});
+      //                         });
+      //                         return locations;
+      //                     } //// if statusCode == 200
+      //                     else {
+      //                         console.dir('error', data.statusCode);
+      //                         return {};
+      //                     }
+      //                 },//// fun. reslove
+      //                 function(error){
+      //                     console.dir(error);
+      //                 }/// fun. reject
+      //             );//// then
+      //     }//// if query
+      // };/// fun. searchLocations
 
-          geocodeService.getPlaceDetails(address.placeId).then(function(data){
-              var place = data.results.result;
+      // /**
+      //  * [setAddress will set the right address component in scop when user select one address form typeahead]
+      //  * @param {object} address [address object from selected item in typeahead]
+      //  */
+      // $scope.setAddress = function(address){
+      //     $scope.occupation.formattedAddress = address.address;
+      //     $scope.occupation.googlePlaceId = address.placeId;
 
-              if(place){
-                  /**
-                   * Loop throught  address components and take what is needed
-                   */
-                  for (var i = 0; i < place.address_components.length; i++) {
-                      var addressType = place.address_components[i].types[0];
+      //     geocodeService.getPlaceDetails(address.placeId).then(function(data){
+      //         var place = data.results.result;
 
-                      switch (addressType){
-                          // case "route":
-                              // $scope.occupation.street1 = place.address_components[i][addressComponents[addressType]] || false;
-                              // break;
+      //         if(place){
+      //             /**
+      //              * Loop throught  address components and take what is needed
+      //              */
+      //             for (var i = 0; i < place.address_components.length; i++) {
+      //                 var addressType = place.address_components[i].types[0];
 
-                          // case "street_number":
-                          //   $scope.user.number = place.address_components[i][addressComponents[addressType]] || false;
-                          //   break;
+      //                 switch (addressType){
+      //                     // case "route":
+      //                         // $scope.occupation.street1 = place.address_components[i][addressComponents[addressType]] || false;
+      //                         // break;
 
-                          // case "country":
-                          //     $scope.occupation.country = place.address_components[i][addressComponents[addressType]] || false;
-                          //     break;
+      //                     // case "street_number":
+      //                     //   $scope.user.number = place.address_components[i][addressComponents[addressType]] || false;
+      //                     //   break;
 
-                          case "administrative_area_level_1":
-                              $scope.occupation.state = place.address_components[i].short_name || null;
-                              break;
+      //                     // case "country":
+      //                     //     $scope.occupation.country = place.address_components[i][addressComponents[addressType]] || false;
+      //                     //     break;
 
-                          case "locality":
-                              $scope.occupation.city = place.address_components[i].long_name || null;
-                              break;
+      //                     case "administrative_area_level_1":
+      //                         $scope.occupation.state = place.address_components[i].short_name || null;
+      //                         break;
 
-                          // case "postal_code":
-                          //     $scope.occupation.postalCode = place.address_components[i][addressComponents[addressType]] || false;
-                          //     break;
-                      }//// switch
-                  }//// for
+      //                     case "locality":
+      //                         $scope.occupation.city = place.address_components[i].long_name || null;
+      //                         break;
 
-              }//// if place
+      //                     // case "postal_code":
+      //                     //     $scope.occupation.postalCode = place.address_components[i][addressComponents[addressType]] || false;
+      //                     //     break;
+      //                 }//// switch
+      //             }//// for
 
-          });
+      //         }//// if place
 
-      }//// fun. setAddress
+      //     });
+
+      // }//// fun. setAddress
 
       /**
        * [searchPosition will be used in typeahead to query onet positions and return a list of matching position]
@@ -311,6 +333,7 @@
           /**
            * check if end date is less than start date
            */
+
           if( !isNaN(start.getTime() ) && !isNaN(end.getTime() ) ){
             $scope.stepTwo.workDateEndY.$setValidity('invalidEndDate', end > start);
             $scope.stepTwo.workDateEndM.$setValidity('invalidEndDate', end > start);
@@ -321,6 +344,12 @@
            */
           if(Array.isArray($scope.xpItems))
           for(var x=0; x<$scope.xpItems.length; x++){
+            /**
+             * Dont validate the range of the edit item with himself
+             */
+            if(!isNaN($scope.editIndex) && $scope.editIndex === x){
+              continue;
+            }
             /**
              * check if start date in a middle of range
              */
@@ -391,6 +420,7 @@
               var toSave = {
                 workExperience:angular.copy($scope.xpItems)
               };
+              console.log(toSave)
               UserService.saveUser(toSave, AuthService.currentUserID)
               .then(
                 function(user){

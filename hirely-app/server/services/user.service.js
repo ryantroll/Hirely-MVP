@@ -13,7 +13,9 @@ var privateFields = [
     'businessesStaffOf',
     'personalityExams',
     'availability',
-    'preferences'
+    'preferences',
+    'workExperience',
+    'education'
 ];
 
 
@@ -66,7 +68,7 @@ var userService = {
                 returnFields = '-' + privateFields.join(' -')
             }
         }
-
+        console.log('>>>>>', returnFields)
         return userModel.findById(id, returnFields).exec();
     },
 
@@ -153,6 +155,7 @@ var userService = {
              * find the user and return it in promise
              */
             function(map){
+                console.log('>>>>>',returnFields)
                 return userModel.findById(map.localId, returnFields).exec();
             },//// fun. resolve
             function(error){

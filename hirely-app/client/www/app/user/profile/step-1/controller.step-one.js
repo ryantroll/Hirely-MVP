@@ -243,6 +243,11 @@
               $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
               $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
 
+              /**
+               * Save only basic information
+               */
+
+
               UserService.saveUser($scope.user, AuthService.currentUserID)
               .then(
                 function(savedUser){
