@@ -173,7 +173,6 @@
 
     $scope.editJobXp = function(index){
       $scope.occupation = angular.copy($scope.xpItems[index]);
-      console.log(typeof $scope.xpItems[index].dateStartMonth);
       $scope.editIndex = index;
       $scope.addWorkXpForm = true;
     }
@@ -420,7 +419,6 @@
               var toSave = {
                 workExperience:angular.copy($scope.xpItems)
               };
-              console.log(toSave)
               UserService.saveUser(toSave, AuthService.currentUserID)
               .then(
                 function(user){
