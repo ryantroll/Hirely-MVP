@@ -54,8 +54,6 @@
 
     $scope.stepTwoLoaded = false;
 
-
-
     $scope.states = StatesNames;
 
     $scope.months = [

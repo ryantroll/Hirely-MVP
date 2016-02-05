@@ -26,17 +26,17 @@
        * Set the form steps
        */
       $scope.steps = [
-
-        {
-          templateUrl: '/app/user/profile/step-1/step-one.tpl.html',
-          controller: 'StepOneController',
-          hasForm: true
-        },
         {
           templateUrl: '/app/user/profile/step-2/step-two.tpl.html',
           controller: 'StepTwoController',
           hasForm: false
         },
+        {
+          templateUrl: '/app/user/profile/step-1/step-one.tpl.html',
+          controller: 'StepOneController',
+          hasForm: true
+        },
+
         {
           templateUrl: '/app/user/profile/step-2-e/step-two-e.tpl.html',
           controller: 'StepTwoEController',
