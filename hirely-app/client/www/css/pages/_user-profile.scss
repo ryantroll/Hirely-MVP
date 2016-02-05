@@ -205,6 +205,12 @@ $footer-height: 60px;
 		}
 	}
 
+	.error-label{
+		margin:1em;
+		@include border-radius(5px);
+		padding:0.3em .5em;
+	}
+
 	label{
 		display: block;
 		color:$c-hirely-mid-gray;
@@ -267,6 +273,8 @@ $footer-height: 60px;
 	select:focus+span{
 		color:$c-hirely-blue;
 	}
+
+
 }//// .hirely-form
 
 .user-profile-exp{
@@ -317,6 +325,7 @@ $footer-height: 60px;
 			clear:both;
 			background-color:#fff;
 			border-color:$c-hirely-text-gray;
+			color:$c-hirely-text-gray;
 			outline: none;
 		}
 		p{
@@ -324,6 +333,10 @@ $footer-height: 60px;
 		}
 	}//// .add-card
 }//// .cards-wrapper
+.no-col-padding{
+	padding-left:0;
+	padding-right:0;
+}
 .btn.red{
 	background-color:$c-hirely-red;
 	color:#fff;

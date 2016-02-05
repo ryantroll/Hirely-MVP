@@ -5,18 +5,18 @@
 <div class="form-container user-profile-exp" ng-show="stepTwoLoaded">
     <div class="row">
         <div class="cards-wrapper">
-            <div class="card">
-                <h3>Barista</h3>
-                <p>Startbucks - Washington DC Startbucks - Washington DC Startbucks - Washington DC</p>
-                <p>9/2008 - 9/2010</p>
+            <div class="card" ng-repeat="xpItem in xpItems">
+                <h3>{{xpItem.reportedJobName}}</h3>
+                <p>{{xpItem.formattedAddress}} - {{xpItem.city}}, {{xpItem.state}} </p>
+                <p ng-class="{'-xxxx-bg-danger':xpItem.conflict}">{{xpItem.dateStartMonth}}/{{xpItem.dateStartYear}} - <span ng-show="xpItem.dateEndMonth">{{xpItem.dateEndMonth}}/{{xpItem.dateEndYear}}</span><span ng-show="!xpItem.dateEndMonth">Current</span></p>
                 <div class="btn-group">
-                    <button class="btn blue">EDIT</button>
-                    <button class="btn red">REMOVE</button>
+                    <button class="btn blue" ng-click="editJobXp($index)">EDIT</button>
+                    <button class="btn red" ng-click="removeJobXp($index)">REMOVE</button>
                 </div>
             </div>
             <div class="card add-card">
                 <div class="add-group">
-                    <button class="btn btn-circle blue" ng-click="addWorkXpForm=true;">+</button>
+                    <button class="btn btn-circle blue" ng-click="occupation={};addWorkXpForm=true;">+</button>
                     <p>Add Experience</p>
                 </dvi>
             </dvi>
@@ -170,6 +170,10 @@
                             />
                         </div>
                     </div>
+                    <div class="col-sm-12 no-col-padding">
+                        <div class="bg-danger error-label" ng-show="stepTwo.workDateStartY.$error.startDateConflict">Start date conflicting with one of previous entered experience dates</div>
+                    </div>
+
                 </div>
 
                 <div class="row">
@@ -220,12 +224,16 @@
                             />
                         </div>
                     </div>
+                    <div class="col-sm-12 no-col-padding">
+                        <div class="error-label bg-danger" ng-show="stepTwo.workDateEndY.$error.endDateConflict">End date conflicting with one of previous entered experience dates</div>
+                        <div class="error-label bg-danger" ng-show="stepTwo.workDateEndY.$error.invalidEndDate">End date should be greater than start date</div>
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="field-wrapper text-center">
-                            <button class="btn btn-lg red" ng-disabled="!stepTwo.$valid">SAVE</button>
+                            <button class="btn btn-lg red" ng-disabled="!stepTwo.$valid" ng-click="addWorkXpForm = false; addJobXp()">SAVE</button>
                         </div>
                     </div>
                 </div>
@@ -233,7 +241,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="field-wrapper text-center">
-                            <button class="btn white" ng-click="addWorkXpForm=false;">Cancel</button>
+                            <button class="btn white" ng-click="occupation={};editIndex=null; addWorkXpForm=false;">Cancel</button>
                         </div>
                     </div>
                 </div>

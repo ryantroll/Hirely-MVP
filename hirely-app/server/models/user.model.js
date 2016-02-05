@@ -7,6 +7,7 @@ function endDateValidator(value){
   /**
    * this here will refer to schema
    */
+  console.log(this.formattedAddress, value > this.dateStart)
   if(null != value && value.getTime() != 0){
     return value > this.dateStart;
   }
