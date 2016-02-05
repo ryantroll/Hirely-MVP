@@ -74,11 +74,22 @@ var variantSchema = new Schema(
     },/// shift object
 
     prescreenQuestions:
-        [
-            {
-                question  :     String,
-            }
-        ], /// prescreen array
+    [
+        {
+            question  :     String,
+        }
+    ], /// prescreen array
+
+    qualificationSpecification: {
+        formulas: {
+            name: String,
+            dateCreated: String,
+            type: String,
+            importance: String,
+            operator: String,
+            operands: []
+        }
+    }
 
 
     // applications:[ applicationSchema ]//// application array
