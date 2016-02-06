@@ -212,7 +212,7 @@ $footer-height: 60px;
 	}
 
 	label{
-		display: block;
+		// display: block;
 		color:$c-hirely-mid-gray;
 		font-weight: 300;
 		text-transform:uppercase;
@@ -274,7 +274,149 @@ $footer-height: 60px;
 		color:$c-hirely-blue;
 	}
 
+	/**
+	 * check box style copyed from css/modules/_forms.scsss
+	 */
+	.radio-inline,
+  .checkbox-inline {
+    padding: 0;
+  }
 
+  label.custom-option {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    height: 20px;
+    vertical-align: top;
+    @include border-radius(4px);
+  }
+
+  label.custom-option + label {
+    padding: 0 10px;
+  }
+
+  label.custom-option input[type="checkbox"],
+  label.custom-option input[type="radio"],
+  label.custom-option .button-checkbox,
+  label.custom-option .button-radio {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  label.custom-option input[type="checkbox"],
+  label.custom-option input[type="radio"] {
+    margin: 0;
+    opacity: 0;
+  }
+
+  label.custom-option .button-checkbox,
+  label.custom-option .button-radio {
+    border: 1px solid #ccc;
+    background: #fff;
+    @include border-radius(10px);
+  }
+
+  label.custom-option input[type="checkbox"]:checked + .button-checkbox,
+  label.custom-option input[type="radio"]:checked+ .button-radio {
+    border-color: $light-blue;
+    // @include border-radius(4px);
+  }
+
+  label.custom-option input[type="checkbox"] + .button-checkbox:after,
+  label.custom-option input[type="radio"] + .button-radio:after {
+    position: absolute;
+    content: '';
+    z-index: 2;
+    @include border-radius(10px);
+  }
+
+  label.custom-option .button-radio,
+  label.custom-option .button-radio:after {
+    -webkit-border-radius:	20px;
+    -moz-border-radius:		20px;
+    border-radius:			20px;
+  }
+
+  /* Checkbox and radio */
+  label.custom-option {
+    width: 20px;
+  }
+
+  label.custom-option.button input[type="checkbox"] + .button-checkbox:after,
+  label.custom-option.button input[type="radio"] + .button-radio:after {
+    display: none;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    width: 8px;
+    background: $light-blue;
+  }
+
+  label.custom-option.button input[type="checkbox"]:checked + .button-checkbox:after,
+  label.custom-option.button input[type="radio"]:checked + .button-radio:after {
+    display: block;
+  }
+
+  /* Toggles */
+  label.custom-option.toggle {
+    width: 46px;
+  }
+
+  label.custom-option.toggle:before,
+  label.custom-option.toggle:after {
+    position: absolute;
+    top: 1px;
+    width: 24px;
+    font-size: 8px;
+    line-height: 19px;
+    text-align: center;
+    color: #777;
+    z-index: 1;
+  }
+
+  label.custom-option.toggle:before {
+    content: attr(data-on);
+    left: 1px;
+    color: $light-blue;
+  }
+
+  label.custom-option.toggle:after {
+    content: attr(data-off);
+    right: 1px;
+  }
+
+  label.custom-option.toggle input[type="checkbox"] + .button-checkbox:after,
+  label.custom-option.toggle input[type="radio"] + .button-radio:after {
+    display: block;
+    top: 1px;
+    bottom: 1px;
+    left: 1px;
+    width: 20px;
+    background: #ccc;
+    -webkit-transition:	all 0.3s;
+    -moz-transition:	all 0.3s;
+    transition:			all 0.3s;
+  }
+
+  label.custom-option.toggle input[type="checkbox"]:checked + .button-checkbox:after,
+  label.custom-option.toggle input[type="radio"]:checked + .button-radio:after {
+    left: 23px;
+    background: $light-blue;
+  }
+
+  .info-label{
+  	display: inline;
+  	background-color:$c-hirely-text-gray;
+  	color:#fff;
+  	padding:0 5px;
+  	@include border-radius();
+  	cursor:help;
+  	font-size:0.8em;
+  	font-weight: 700;
+  }
 }//// .hirely-form
 
 .user-profile-exp{
