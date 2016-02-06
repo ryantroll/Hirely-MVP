@@ -126,7 +126,11 @@
       /**
        * Check if edit
        */
-      if(!isNaN($scope.editIndex)){
+      if(angular.isDefined($scope.editIndex)
+        && $scope.editIndex >=0
+        && $scope.editIndex < $scope.xpItems.length
+      ){
+        console.log($scope.editIndex, $scope.editIndex > 0);
         $scope.occupation.dateStart = new Date(Number($scope.occupation.dateStartYear), Number($scope.occupation.dateStartMonth)-1, 1);
 
         if(true !== $scope.occupation.currentlyHere){
@@ -135,12 +139,14 @@
         angular.extend($scope.xpItems[$scope.editIndex], $scope.occupation);
 
         $scope.occupation = {};
-        $scope.editIndex = null;
+        delete $scope.editIndex;
 
         // $scope.xpItems = orderBy($scope.xpItems, 'dateStart', true);
 
         $scope.stepTwo.$setUntouched();
         $scope.stepTwo.$setPristine();
+
+        $scope.addWorkXpForm = false;
         return;
       }//// if edit;
 
@@ -160,7 +166,26 @@
       $scope.stepTwo.$setUntouched();
       $scope.stepTwo.$setPristine();
 
+      $scope.addWorkXpForm = false;
     }//// fun. addJobXp
+
+    /**
+     * [fixFormDiv will set the form div to window height and scroll page to top
+     * form is shown as an overlay and should cover the whole screen]
+     * @return {null}
+     */
+    function fixFormDiv(){
+      var formDiv = $('#expFormDiv');
+      $(window).scrollTop(0);
+      /**
+       * Add some delay so we can read the height property after div is added to dom
+       */
+      setTimeout(function(){
+        if(formDiv.height() < $(document).height()){
+          formDiv.height($(document).height());
+        }
+      },100)
+    }
 
     /**
      * [removeJobXp will remove work wperience from the array]
@@ -171,11 +196,45 @@
       $scope.xpItems.splice(index, 1);
     }
 
+    /**
+     * [editJobXp will show the form after setting the occupatin scope var to holde the edited item]
+     * @param  {number} index [index of edited item in xpItems array ]
+     * @return {null}       [description]
+     */
     $scope.editJobXp = function(index){
       $scope.occupation = angular.copy($scope.xpItems[index]);
       $scope.editIndex = index;
       $scope.addWorkXpForm = true;
+
+      fixFormDiv();
     }
+
+    /**
+     * [cancelJobXp will be trigger when cancel is clicked in form, will reset the form and clear the required variables]
+     * @return {null} [description]
+     */
+    $scope.cancelJobXp = function(){
+      $scope.occupation={};
+
+      delete $scope.editIndex;
+
+      $scope.stepTwo.$setUntouched();
+      $scope.stepTwo.$setPristine();
+
+      $scope.addWorkXpForm=false;
+    }//// fun. cancelJobXp
+
+    /**
+     * [showJobXp will be triggered when "Add Experinece" clicked to show the form and set the required vars]
+     * @return {null} [description]
+     */
+    $scope.showJobXp = function(){
+      $scope.occupation={};
+      delete $scope.editIndex;
+      $scope.addWorkXpForm=true;
+
+      fixFormDiv();
+    }//// fun. ShowJobXp
 
       // var locations = [];
       // $scope.selectedLocation = undefined;

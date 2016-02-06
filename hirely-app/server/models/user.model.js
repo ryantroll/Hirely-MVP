@@ -66,21 +66,19 @@ var educationSchema = new Schema({
                                       required:true,
                                       validate:{
                                         validator: function(v){
-                                          return /^(High School Equivalent|Associates|Bachelors|Masters|PhD)$/.test(v);
+                                          return /^(High School|Certificate|Associates Degree|Bachelors Degree|Master's Degree|Professional Degree|Doctoral Degree|Post-Doctoral Training)$/.test(v);
                                         },
                                         message:'{VALUE} is not valid education program type'
                                       }
                                     },
   degree                  :         {type:String, reqired:true},
 
-  dateStart               :         {type:Date, required:true},
   dateEnd                 :         {
                                       type:Date,
                                       required:false,
                                       validate:[endDateValidator, 'End date must be greater than start date']
                                     },
-  isCompleted             :         {type:Boolean, required:true},
-  isOnline                :         {type:Boolean, required:true}
+  isCompleted             :         {type:Boolean, required:true}
 });
 
 var userSchema = new Schema({

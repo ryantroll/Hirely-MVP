@@ -54,7 +54,7 @@
 
     $scope.stepTwoLoaded = false;
 
-    $scope.programTypes = ['High School Equivalent', 'Associates', 'Bachelors', 'Masters', 'PhD'];
+    $scope.programTypes = ['High School', 'Certificate', 'Associates Degree', 'Bachelors Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
     $scope.states = StatesNames;
 
@@ -86,9 +86,6 @@
      */
     $scope.education = {};
 
-
-
-
     UserService.getUserCompleteFields(AuthService.currentUserID, ['education'])
     .then(
       function(founded){
@@ -99,19 +96,23 @@
            * list of education is found for this user
            */
           angular.forEach(founded.education, function(item){
-            item.dateStart = new Date(item.dateStart);
-            item.dateStartYear = item.dateStart.getFullYear();
-            item.dateStartMonth = item.dateStart.getMonth() + 1;
 
-            if(angular.isDefined(item.dateEnd) ){
+            item.currentlyEnrolled = !item.isCompleted;
+
+            if(item.isCompleted){
               item.dateEnd = new Date(item.dateEnd);
               item.dateEndYear = item.dateEnd.getFullYear();
-              item.dateEndMonth = item.dateEnd.getMonth() + 1;
+              item.dateEndMonth = String(item.dateEnd.getMonth() + 1);
             }
+            else{
+              //// make now the end date if not completed
+              // item.dateEnd = new Date();
+            }
+
 
           });//// for each
 
-          $scope.eduItems = orderBy(founded.education, 'dateStart', true);
+          $scope.eduItems = orderBy(founded.education, 'dateEnd', true);
         }//// if isArray(eduction)
 
         /**
@@ -126,11 +127,6 @@
       }
     );//// then
 
-
-
-
-
-
       /**
        * [addEducation will save education form to education list, order the education by dateStart and clear the form for next save
        * this function will be trigger by click of "Save Education" button ]
@@ -138,31 +134,63 @@
       $scope.addEducation = function(){
         if(!$scope.stepTwoE.$valid) return null;
 
-        var newEdu = angular.copy($scope.education);
+        if(angular.isDefined($scope.editIndex)){
 
-        newEdu.dateStart = new Date(Number(newEdu.dateStartYear), Number(newEdu.dateStartMonth)-1, 1);
+          if(true !== $scope.education.currentlyEnrolled){
+            $scope.education.dateEnd = new Date(Number($scope.education.dateEndYear), Number($scope.education.dateEndMonth)-1, 1);
+          }
+
+          $scope.education.isCompleted = !$scope.education.currentlyEnrolled;
+
+          angular.extend($scope.eduItems[$scope.editIndex], $scope.education);
+
+          $scope.occupation = {};
+          delete $scope.editIndex;
+
+          $scope.stepTwoE.$setUntouched();
+          $scope.stepTwoE.$setPristine();
+
+          $scope.addEducationForm = false;
+          return;
+        }/// if edit
+
+        var newEdu = angular.copy($scope.education);
 
         if(true !== newEdu.currentlyEnrolled){
           newEdu.dateEnd = new Date(Number(newEdu.dateEndYear), Number(newEdu.dateEndMonth)-1, 1);
         }
 
-        newEdu.isOnline = !!newEdu.isOnline;
-
         newEdu.isCompleted = !newEdu.currentlyEnrolled;
 
         $scope.eduItems.push(newEdu);
 
-        $scope.eduItems = orderBy($scope.eduItems, 'dateStart', true);
+        $scope.eduItems = orderBy($scope.eduItems, 'dateEnd', true);
+
 
         $scope.education = {};
 
         $scope.stepTwoE.$setUntouched();
         $scope.stepTwoE.$setPristine();
 
+        $scope.addEducationForm = false;
+      }
+
+      /**
+       * [fixFormDiv will set the form div to window height and scroll page to top
+       * form is shown as an overlay and should cover the whole screen]
+       * @return {null}
+       */
+      function fixFormDiv(){
+        var formDiv = $('#expFormDiv');
+        $(window).scrollTop(0);
         /**
-         * Update step validity
+         * Add some delay so we can read the height property after div is added to dom
          */
-        // $scope.$setValidity($scope.eduItems.length > 0 && $scope.xpItems.length > 0);
+        setTimeout(function(){
+          if(formDiv.height() < $(document).height()){
+            formDiv.height($(document).height());
+          }
+        },100)
       }
 
       /**
@@ -172,88 +200,42 @@
        */
       $scope.removeEducation = function(index){
         $scope.eduItems.splice(index, 1);
+      }
 
-        /**
-         * Update step validity
-         */
-        // $scope.$setValidity($scope.eduItems.length > 0 && $scope.xpItems.length > 0);
+      $scope.editEducation = function(index){
+        $scope.education = angular.copy($scope.eduItems[index]);
+        $scope.editIndex = index;
+        $scope.addEducationForm = true;
+
+        fixFormDiv();
       }
 
       /**
-       * Watch education dates to make sure end data is greater than start date
+       * [cancelJobXp will be trigger when cancel is clicked in form, will reset the form and clear the required variables]
+       * @return {null} [description]
        */
-       $scope.$watchCollection('[education.dateStartYear, education.dateStartMonth, education.dateEndYear, education.dateEndMonth]', function(newValues, oldVaues){
-          var start = new Date(Number(newValues[0]), Number(newValues[1])-1, 1);
-          var end = new Date(Number(newValues[2]), Number(newValues[3])-1, 1);
+      $scope.cancelEducation = function(){
+        $scope.education={};
 
-          /**
-           * check if end date is less than start date
-           */
-          if(true !== $scope.education.currentlyEnrolled && !isNaN(start.getTime() ) && !isNaN(end.getTime() ) ){
-            $scope.stepTwoE.eduDateEndY.$setValidity('invalidEndDate', end > start);
-            $scope.stepTwoE.eduDateEndM.$setValidity('invalidEndDate', end > start);
-          }
+        delete $scope.editIndex;
 
-          /**
-           * Check for date conflicts with previous dates
-           */
-          if(Array.isArray($scope.eduItems))
-          for(var x=0; x<$scope.eduItems.length; x++){
-            /**
-             * check if start date in a middle of range
-             */
-            if(start >= $scope.eduItems[x].dateStart && start < $scope.eduItems[x].dateEnd){
-              $scope.stepTwoE.eduDateStartY.$setValidity('startDateConflict', false);
-              $scope.stepTwoE.eduDateStartM.$setValidity('startDateConflict', false);
-              $scope.eduItems[x].conflict = true;
-              break;
-            }
-            else{
-              $scope.stepTwoE.eduDateStartY.$setValidity('startDateConflict', true);
-              $scope.stepTwoE.eduDateStartM.$setValidity('startDateConflict', true);
-              $scope.eduItems[x].conflict = false;
-            }
+        $scope.stepTwoE.$setUntouched();
+        $scope.stepTwoE.$setPristine();
 
-            /**
-             * check if end date in a middle of range
-             */
-            if(end > $scope.eduItems[x].dateStart && end <= $scope.eduItems[x].dateEnd){
-              $scope.stepTwoE.eduDateEndY.$setValidity('endDateConflict', false);
-              $scope.stepTwoE.eduDateEndM.$setValidity('endDateConflict', false);
-              $scope.eduItems[x].conflict = true;
-              break;
-            }
-            else{
-              $scope.stepTwoE.eduDateEndY.$setValidity('endDateConflict', true);
-              $scope.stepTwoE.eduDateEndM.$setValidity('endDateConflict', true);
-              $scope.eduItems[x].conflict = false;
-            }
+        $scope.addEducationForm=false;
+      }//// fun. cancelJobXp
 
-            /**
-             * Check if new rang is overlap one old range
-             */
-            if(start <= $scope.eduItems[x].dateStart && end >= $scope.eduItems[x].dateEnd){
+      /**
+       * [showJobXp will be triggered when "Add Experinece" clicked to show the form and set the required vars]
+       * @return {null} [description]
+       */
+      $scope.showEducation = function(){
+        $scope.education={};
+        delete $scope.editIndex;
+        $scope.addEducationForm=true;
 
-              $scope.stepTwoE.eduDateEndY.$setValidity('endDateConflict', false);
-              $scope.stepTwoE.eduDateEndM.$setValidity('endDateConflict', false);
-
-              $scope.stepTwoE.eduDateStartY.$setValidity('startDateConflict', false);
-              $scope.stepTwoE.eduDateStartM.$setValidity('startDateConflict', false);
-              $scope.eduItems[x].conflict = true;
-              break;
-            }
-            else{
-
-              $scope.stepTwoE.eduDateEndY.$setValidity('endDateConflict', true);
-              $scope.stepTwoE.eduDateEndM.$setValidity('endDateConflict', true);
-              $scope.stepTwoE.eduDateStartY.$setValidity('startDateConflict', true);
-              $scope.stepTwoE.eduDateStartM.$setValidity('startDateConflict', true);
-              $scope.eduItems[x].conflict = false;
-            }
-
-          }//// for
-       });//// $watch
-
+        fixFormDiv();
+      }//// fun. ShowJobXp
 
       /**
        * Save the entries to database on scope destroy]
