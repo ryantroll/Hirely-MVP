@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var hirelyApp = angular.module('hirelyApp').controller('StepTwoEController', ['$scope', '$stateParams', '$filter', 'AuthService', 'UserService', 'StatesNames', StepTwoEController]);
+  var hirelyApp = angular.module('hirelyApp').controller('StepTwoEController', ['$scope', '$stateParams', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', StepTwoEController]);
 
   hirelyApp.directive('validateMonth', function(){
     return {
@@ -43,7 +43,7 @@
 
   })/// validate year
 
-  function StepTwoEController($scope, $stateParams, $filter, AuthService, UserService, StatesNames) {
+  function StepTwoEController($scope, $stateParams, $filter, $timeout, AuthService, UserService, StatesNames) {
 
 
 
@@ -115,11 +115,12 @@
           $scope.eduItems = orderBy(founded.education, 'dateEnd', true);
         }//// if isArray(eduction)
 
-        /**
-         * Set step validity if user already has education and experienc
-         */
-        // $scope.$setValidity($scope.eduItems.length > 0 && $scope.xpItems.length > 0);
-        $scope.stepTwoLoaded = true;
+        $timeout(function(){
+          if(!$scope.stepOneLoaded){
+            $scope.stepTwoLoaded = true;
+          }
+        }, 1000);/// $timeout
+
       },
       function(err){
         //// console.log(err);

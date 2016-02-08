@@ -521,3 +521,71 @@ $footer-height: 60px;
 		padding-right:3em;
 	}
 }//// .form-overlay
+
+.user-profile-personality{
+	width:90%;
+	@media screen and (min-width:$screen-xs-min){
+		width:55%;
+	}
+
+	.first-time{
+		padding-top:5em;
+		h4{
+			margin-bottom: 2em;
+			font-size:1.5em;
+			line-height: 1.4em;
+		}
+		.btn{
+			width:100%;
+			padding:4em 0;
+			font-size:1.3em;
+			color:#fff;
+			outline: none;
+			word-wrap: normal;
+			@media screen and (min-width:$screen-xs-min){
+				width:auto;
+				padding:4em 4em;
+			}
+		}
+	}//// .first-time
+
+	.results{
+		h4{
+			margin-bottom: 0;
+		}
+
+		.tf-personality-types .personality-types-container{
+			background-color:$c-hirely-navy;
+			@include border-radius();
+		}
+		.tf-personality-types .personality-types-container-scroller{
+			height: auto;
+			margin-bottom: 1em;
+		}
+		.tf-personality-types .personality-types-container .personality-types{
+		    width:100%;
+		    height: auto;
+		    background-color:$c-hirely-navy;
+		}
+
+		.tf-personality-types .personality-types-container .personality-types  .personality-type{
+
+		}
+
+		/**
+		 * Hide esscription
+		 */
+		.tf-personality-types .description{
+		    display: none;
+		}
+
+		img.badge:empty{
+			display:inline-block;
+			background-color:transparent;
+			padding:none;
+		}
+	}
+
+}//// .user-profile-personality
+
+
