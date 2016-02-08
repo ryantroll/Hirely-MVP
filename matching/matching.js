@@ -4,15 +4,15 @@ var UserService {
   var experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] // tiers of experience where level = num of months
 
   var monthCountToExperienceLevel = function(monthCount) {
-    if      (rmonthCount > 124) { return 124 };
-    else if (rmonthCount > 98) { return 98 };
-    else if (rmonthCount > 64) { return 64 };
-    else if (rmonthCount > 48) { return 48 };
-    else if (rmonthCount > 24) { return 24 };
-    else if (rmonthCount > 12) { return 12 };
-    else if (rmonthCount > 6) { return 6 };
-    else if (rmonthCount > 3) { return 3 };
-    else if (rmonthCount > 1) { return 1 };
+    if      (monthCount > 124) { return 124 };
+    else if (monthCount > 98) { return 98 };
+    else if (monthCount > 64) { return 64 };
+    else if (monthCount > 48) { return 48 };
+    else if (monthCount > 24) { return 24 };
+    else if (monthCount > 12) { return 12 };
+    else if (monthCount > 6) { return 6 };
+    else if (monthCount > 3) { return 3 };
+    else if (monthCount > 1) { return 1 };
     else { return 0 };
   }
 
@@ -21,7 +21,7 @@ var UserService {
 
     // Education
     user.educationMaxLvl = 0;
-    for program in user.education.forEach(function(program) {
+    user.education.forEach(function(program) {
       // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
       if (program.programType > 1 && program.isCompleted == 0) {
         program.programType = 2;
@@ -65,49 +65,31 @@ var UserService {
       // Extend roles with onet metrics
       occupations.forEach(function(occupation) {
           var role = roles[occupation.onetId]
-          role.knowledges = data[role.experienceLvl].knowledges
-          role.skills = data[role.experienceLvl].skills
-          role.abilities = data[role.experienceLvl].abilities
-          role.workActivities = data[role.experienceLvl].workActivities
+          ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
+            role[category] = data[role.experienceLvl][category]
+          });
       });
 
 
       // Calc master KSAs;
-      // Start by making the baseline;
-      role1 = roles.pop();
-      user.knowledges = role1["knowledges"];
-      user.skills = role1["skills"];
-      user.abilities = role1["abilities"];
-      user.workActivities = role1["workActivities"];
-      
-      // Now update for weighted Averageing;
       roles.forEach(function(role) {
         // TODO:  Ask Dave if we should be using role.monthCount here instead of experienceLvl
-        weight = role.experienceLvl) / totalWorkMonths;
-        
-        role.knowledges.forEach(function (value, name)) {
-          weighted = weight * value;
-          user.knowledges[name] += weighted;
-        });
+        weight = role.experienceLvl / totalWorkMonths;
 
-        role.skills.forEach(function (value, name)) {
-          weighted = weight * value;
-          user.skills[name] += weighted;
+        ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
+          role[category].forEach(function (value, name)) {
+            weighted = weight * value;
+            if (user[category] === null) {
+              user[category][name] = weighted;  
+            } else {
+              user[category][name] += weighted;
+            }
+          });
         });
-
-        role.abilities.forEach(function (value, name)) {
-          weighted = weight * value;
-          user.abilities[name] += weighted;
-        });
-
-        role.workActivities.forEach(function (value, name)) {
-          weighted = weight * value;
-          user.workActivities[name] += weighted;
-        });
-
-        user.save();
 
       });  // end roles.forEach
+      
+      user.save();
 
         
     }).catch(function(error) {
@@ -203,13 +185,13 @@ var MatchCacheService {
   // Generates a MatchCache document for every onet occupation;
   var generateForUser = function(user) {
 
-    MatchCache.find({userId: user.id}).remove().then(function(err) {
+    MatchCache.find({userId: user._id}).remove().then(function(err) {
 
       OnetMetrics.all().then(function(onetMetrics) {
 
         onetMetrics.forEach(function(occ) {
 
-          matchCache = new MatchCache(userId=user.id, occupationId=occupation.id);
+          matchCache = new MatchCache(userId=user._id, occupationId=occupation._id);
 
           this.expLevels.forEach(function(expLvl) {
                 
@@ -237,22 +219,22 @@ var MatchCacheService {
             ss_occ_all = ss_occ_k + ss_occ_s + ss_occ_a + ss_occ_w;
             expScore = 1 - Math.sqrt(ss_user_all / ss_occ_all);
             expScore = Math.max(experienceScore, 0);
-            matchCache.scores[expLvl]['exp'] = expScore;
+            matchCache.scores[expLvl].exp = expScore;
 
             // TODO:  If we decide to boost exp when exact experience occupation id, put it here;
           
             // Education calcs;
             eduScore = occ[expLvl].eduPercentiles[user.educationMaxLvl];
-            matchCache.scores[expLvl]['edu'] = eduScore;
+            matchCache.scores[expLvl].edu = eduScore;
 
             // Personality calcs;
             psyScore = user.personalityCareerScores[onetId];
-            matchCache.scores[expLvl]['psy'] = psyScore;
+            matchCache.scores[expLvl].psy = psyScore;
 
             // Grand overallScore calcs;
             overallScore = expScore * self.expWeight + educationScore * self.eduWeight + personalityScore * self.psyWeight;
 
-            matchCache.scores[expLvl]['overall'] = overallScore;
+            matchCache.scores[expLvl].overall = overallScore;
 
             if overallScore > matchCache.maxOverallScore:
               matchCache.maxOverallScore = overallScore;
@@ -337,19 +319,20 @@ var MatchCacheService {
   };  // end getVariantSuggestions
 
   // This should be an api endpoint;
-  def getUserSuggestions(onetId, experienceLvl, lng_lower_bound=None, lng_upper_bound=None, lat_lower_bound=None, lat_upper_bound=None):
-    if lng_lower_bound and lng_upper_bound and lat_lower_bound and lat_upper_bound:
-      queryset = MatchCache.find(onetId=onetId, ;
-                                 sort_by_descending=scores[experienceLvl]['overallScore'], ;
-                                 limit=100, locations__lng__within=(lng_lower_bound, lng_upper_bound), ;
+  var getUserSuggestions = function(onetId, experienceLvl, lng_lower_bound=null, lng_upper_bound=null, lat_lower_bound=null, lat_upper_bound=null) {
+    if (lng_lower_bound && lng_upper_bound and lat_lower_bound and lat_upper_bound) {
+      queryset = MatchCache.find(onetId=onetId,
+                                 sort_by_descending=scores[experienceLvl]['overallScore'],
+                                 limit=100, locations__lng__within=(lng_lower_bound, lng_upper_bound),
                                  locations__lat__within=(lat_lower_bound, lat_upper_bound));
-    else:
-      queryset = MatchCache.find(onetId=onetId,;
-                                 sort_by_descending=scores[experienceLvl]['overallScore'], limit=100);
+    }
+    else {
+      queryset = MatchCache.find(onetId=onetId, sort_by_descending=scores[experienceLvl]['overallScore'], limit=100);
+    }
 
     // TODO:  Remove users who userOptOutOfSuggestionsFromEmployers = true;
-
     return queryset.exec();
+  };  // end getUserSuggestions
 };
 
 
@@ -357,117 +340,120 @@ var MatchCacheService {
 
 var ApplicationService = {
   // This should be an api endpoint;
-  def getApplicationsByBusiness(businessId):
-    return Applications.find(businessId=businessId).exec();
+  var getApplicationsByBusiness = function(businessId) {
+    return Applications.find(businessId: businessId).exec();
+  }
 
   // This should be an api endpoint;
-  def getApplicationsByLocation(locationId):
-    return Applications.find(locationId=locationId).exec();
+  var getApplicationsByLocation = function(locationId) {
+    return Applications.find(locationId: locationId).exec();
+  }
 
   // This should be an api endpoint;
-  def getApplicationsByPosition(positionId):
-    return Applications.find(positionId=positionId).exec();
+  var getApplicationsByPosition = function(positionId) {
+    return Applications.find(positionId: positionId).exec();
+  }
 
   // This should be an api endpoint;
-  def getApplicationsByVariant(variantId):
-    return Applications.find(variantId=variantId).exec();
+  var getApplicationsByVariant = function(variantId) {
+    return Applications.find(variantId: variantId).exec();
+  }
 
-  def getQualificationScore(self, variantId, userId, disqualifyThreshold=0):
-    user = User.findOne(id=userId);
-    business = Business.findOne(variants__id=variandId);
-    variant = business['variants'][variantId];
-    position = business['position'][variant['positionId']];
-    location = business['locations'][variant['locationId']];
+  var getQualificationScore = function(variantId, userId, disqualifyThreshold=0) {
+    User.findOne(id: userId).then(function(user) {
+      // TODO:  Index variant and/or figure out how to speed this up if it's slow
+      Business.findOne('variants.'+variantId+'._id': variantId).then(function(business) {
 
-    fScoreMaxSum = 0;
-    disqualified = false;
-    for formula in variant['qualificationSpecification']['formulas']:
-      fScoreSum = self.qualificationFormulaEvaluator(formula=formula,;
-                                                     business=business,;
-                                                     location=location,;
-                                                     position=position,;
-                                                     variant=variant,;
-                                                     user=user);
-      if fScore > 0:
-        fScore = 1;
+        variant = business.variants[variantId];
+        position = business.position[variant.positionId];
+        location = business.locations[variant.locationId];
 
-      fScoreMaxSum += formula['importance'];
-      fScoreSum += fScore * formula['importance'];
+        fScoreMaxSum = 0;
+        disqualified = false;
+        variant.qualificationSpecification.formulas.forEach(formula) {
+          fScoreSum = self.qualificationFormulaEvaluator(formula=formula,
+                                                         business=business,
+                                                         location=location,
+                                                         position=position,
+                                                         variant=variant,
+                                                         user=user);
+          if (fScore > 0) {
+            fScore = 1;
+          }
 
-      if fScore == 0 and formula['importance'] >= disqualifyThreshold:
-        disqualified = true;
+          fScoreMaxSum += formula.importance;
+          fScoreSum += fScore * formula.importance;
 
-    if disqualified:
-      qScore = 0;
-    elif fScoreMaxSum == 0:
-      qScore = 1;
-    else:
-      qScore = qScore / maxScore;
-    return qScore;
+          if (fScore == 0 && formula.importance >= disqualifyThreshold) {
+            disqualified = true;
+          }
+        }
+
+        if (disqualified) {
+          qScore = 0;
+        } else if (fScoreMaxSum == 0) {
+          qScore = 1;
+        } else {
+          qScore = qScore / maxScore;
+        }
+        return qScore;
+      
+      });  // end Business.findOne
+    
+    });  // end User.findOne
+      
+  }  // end getQualificationScore
 
   // This should be an api endpoint;
-  def createApplication(variantId, userId, prescreenAnswers):
+  var createApplication = function(variantId, userId, prescreenAnswers) {
     // TODO:  Check that all of the application fields are being populated;
-    application = new Application(variantId=variantId, userId=userId, prescreenAnswers=prescreenAnswers);
+    application = new Application(variantId, userId, prescreenAnswers);
     application.save();
-    ApplicationService.updateApplicationscores(application=application);
+    ApplicationService.updateApplicationscores(application);
+  }
 
-  def updateApplicationScores(application):
-    business = Business.findOne(business__variant=application['variantId']);
-    user = User.findOne(userId=application['userId']);
-    variant = business['variants'][variantId];
-    matchCache = MatchCache.findOne(onetId=variant['onetId'], userId=userId);
+  var updateApplicationScores = function(application) {
+    User.findOne(id: application.userId).then(function(user) {
+      // TODO:  Index variant and/or figure out how to speed this up if it's slow
+      Business.findOne('variants.'+application.variantId+'._id': application.variantId).then(function(business) {
 
-    application.scores = matchCache.scores[variant.experienceLvl];
-    application.scores['experienceScore'] *= variant['scoreWeights']['experience'];
-    application.scores['educationScore'] *= variant['scoreWeights']['education'];
-    application.scores['personalityScore'] *= variant['scoreWeights']['personality'];
+        MatchCache.findOne(onetId=variant.onetId, userId=userId).then(function(matchCache) {
+          variant = business.variants[variantId];
 
-    application.scores['qualificationScore'] = ApplicationService.getQaulificationScore(variantId=variant.id, userId=user.id, disqualifyThreshold=0);
-    application.scores['qualificationScore'] *= variant['scoreWeights']['qualification'];
+          application.scores = matchCache.scores[variant.experienceLvl];
+          application.scores.experienceScore *= variant.scoreWeights.experience;
+          application.scores.educationScore *= variant.scoreWeights.education;
+          application.scores.personalityScore *= variant.scoreWeights.personality;
 
-    application.scores['overallScore'] = avg(application.scores['experienceScore'],;
-                                             application.scores['educationScore'],;
-                                             application.scores['personalityScore'],;
-                                             application.scores['qualificationScore']);
-    application.save();
+          application.scores.qualificationScore = ApplicationService.getQaulificationScore(variant._id, user._id, 0);
+          application.scores.qualificationScore *= variant.scoreWeights.qualification;
+
+          application.scores.overallScore = avg(application.scores.experienceScore,
+                                                application.scores.educationScore,
+                                                application.scores.personalityScore,
+                                                application.scores.qualificationScore);
+          application.save();
+        
+        });  // end MatchCache.findOne
+      });  // end Business.findOne
+    });  // end User.findOne
+  }  // end updateApplicationScores
 
   // This should be called when a variant's qualification specification changes;
-  def updateApplicationScoresForVariant(variant):
-    for application in Applications.find({variantId: variant.id}):
-      ApplicationService.updateApplicationscores(application=application);
+  var updateApplicationScoresForVariant = function(variant) {
+    Applications.find({variantId: variant._id}).then(function(applications) {
+      applications.forEach(function(application) {
+        ApplicationService.updateApplicationscores(application);    
+      });
+    });
+  }
 
   // This should be called when a user's profile changes;
-  def updateApplicationScoresForUser(user):
-    for application in Applications.find({userId: user.id}):
-      ApplicationService.updateApplicationscores(application=application);
-};
-
-// This doesn't work right now, but demonstrates how this framework would work;
-function test() {
-  onetId = "22-22222.00";
-
-  user = User.fineOne();
-  userService.updateUserCacheFields(user);
-  MatchCacheService.generateForUser(user);
-
-  // job is some onetOccupation, and the scores are based on x months experience;
-  business = Business.findOne();
-  l = business['locations'].first();
-  v = l['positions'].first()['variants'].first();
-
-  userSuggestions = businessService.getUserSuggestions(onetId=v.onetId, ;
-                                                       experienceLvl=v.experienceLvl, ;
-                                                       lng_lower_bound=(l['address']['lng']-.5), ;
-                                                       lng_upper_bound=(l['address']['lng']+.5), ;
-                                                       lat_lower_bound=(l['address']['lat']-.5), ;
-                                                       lat_upper_bound=(l['address']['lat']+.5));
-
-  careerSuggestions = userService.getCareerSuggestions(user=user);
-
-  variantSuggestions = userService.getVariantSuggestions(user=user,;
-                                                         lng_lower_bound=(user['address']['lng']-.5), ;
-                                                         lng_upper_bound=(user['address']['lng']+.5), ;
-                                                         lat_lower_bound=(user['address']['lat']-.5), ;
-                                                         lat_upper_bound=(user['address']['lat']+.5));
+  var updateApplicationScoresForUser = function(user) {
+    Applications.find({userId: user._id}).then(function(applications) {
+      applications.forEach(function(application) {
+        ApplicationService.updateApplicationscores(application=application);
+      });
+    });
+  }
 };
