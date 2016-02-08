@@ -1,29 +1,41 @@
-<form class="form-horizontal" name="step-three" form-step-validity>
-	<!-- Short Bio -->
-	<fieldset>
-		<legend class="text-center">Personality</legend>
-	</fieldset>
+<div class="form-loader" ng-show="!stepThreeLoaded">
+    <div class="loader"></div>
+</div>
 
+<div class="form-container user-profile-personality" ng-show="stepThreeLoaded">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="first-time text-center" ng-show="!resultsLoaded">
+                <h4>Help us make you shine by completing a 90 second personality assessment. It’s fast, we promise!</h4>
+                <button class="btn btn-large" ng-click="showAssessment()">TAKE ASSESSMENT</button>
+            </div>
 
-	<div class="form-content">
-		<div class="form-loader" ng-show="!stepThreeLoaded">
-			<div class="loader"></div>
-		</div>
+            <div class="results text-center" ng-show="resultsLoaded">
+                <uib-accordion >
+                    <uib-accordion-group heading="Personality Blend" is-open="status.isFirstOpen">
+                        <div class="col-sm-12 personality-results" ng-show="stepThreeLoaded && traitifyResultLoaded"></div>
+                    </uib-accordion-group>
 
-		<div class="col-sm-12 col-sm-10 col-md-8 personality-analysis" ng-show="stepThreeLoaded"></div>
+                    <uib-accordion-group heading="Personality Breakdown">
+                        <div class="col-sm-12 personality-types" ng-show="stepThreeLoaded && traitifyTypesLoaded"></div>
+                    </uib-accordion-group>
 
-		<uib-accordion ng-show="resultsLoaded">
-			<uib-accordion-group heading="Personality Blend" is-open="status.isFirstOpen">
-				<div class="col-sm-12 personality-results" ng-show="stepThreeLoaded && traitifyResultLoaded"></div>
-			</uib-accordion-group>
-      <uib-accordion-group heading="Personality Breakdown">
-				<div class="col-sm-12 personality-types" ng-show="stepThreeLoaded && traitifyTypesLoaded"></div>
-			</uib-accordion-group>
-			<uib-accordion-group heading="Personality Traits">
-				<div class="col-sm-12 personality-traits" ng-show="stepThreeLoaded && traitifyTraitsLoaded"></div>
-			</uib-accordion-group>
-		</uib-accordion>
+                    <uib-accordion-group heading="Personality Traits">
+                        <div class="col-sm-12 personality-traits" ng-show="stepThreeLoaded && traitifyTraitsLoaded"></div>
+                    </uib-accordion-group>
+                </uib-accordion>
+            </div>
+        </div><!--col-->
+    </div><!--row-->
+</div><!--user-profile-exp-->
 
-	</div>
-
-</form>
+<div class="form-overlay" ng-show="personalityExam" id="expFormDiv">
+    <header>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Personality</h3>
+                </div><!--col-xs-->
+            </div><!--row-->
+    </header>
+    <div class="personality-analysis" ng-show="stepThreeLoaded"></div>
+</div>

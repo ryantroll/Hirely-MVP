@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var hirelyApp = angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', '$filter', 'GeocodeService', 'OccupationService', 'AuthService', 'UserService', 'StatesNames', StepTwoController]);
+  var hirelyApp = angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', '$filter', '$timeout', 'GeocodeService', 'OccupationService', 'AuthService', 'UserService', 'StatesNames', StepTwoController]);
 
   hirelyApp.directive('validateMonth', function(){
     return {
@@ -43,7 +43,7 @@
 
   })/// validate year
 
-  function StepTwoController($scope, $stateParams, $filter, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
+  function StepTwoController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
 
     var geocodeService = GeocodeService;
 
@@ -106,8 +106,12 @@
           $scope.xpItems = orderBy(founded.workExperience, 'dateStart', true);
         }//// if isArray(experience)
 
+        $timeout(function(){
+          if(!$scope.stepOneLoaded){
+            $scope.stepTwoLoaded = true;
+          }
+        }, 1000);/// $timeout
 
-        $scope.stepTwoLoaded = true;
       },
       function(err){
         //// console.log(err);
