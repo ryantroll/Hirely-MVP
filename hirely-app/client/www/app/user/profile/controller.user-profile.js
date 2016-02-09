@@ -27,35 +27,31 @@
        */
       $scope.steps = [
         {
-          templateUrl: '/app/user/profile/step-3/step-three.tpl.html',
-          controller: 'StepThreeController'
-        },
-        {
-          templateUrl: '/app/user/profile/step-1/step-one.tpl.html',
-          controller: 'StepOneController',
+          templateUrl: '/app/user/profile/availability/availability.tpl.html',
+          controller: 'ProfileAvailabilityController',
           hasForm: true
         },
         {
-          templateUrl: '/app/user/profile/step-2/step-two.tpl.html',
-          controller: 'StepTwoController',
+          templateUrl: '/app/user/profile/basic/basic.tpl.html',
+          controller: 'ProfileBasicController',
+          hasForm: true
+        },
+        {
+          templateUrl: '/app/user/profile/experience/experience.tpl.html',
+          controller: 'ProfileExperienceController',
           hasForm: false
         },
         {
-          templateUrl: '/app/user/profile/step-2-e/step-two-e.tpl.html',
-          controller: 'StepTwoEController',
+          templateUrl: '/app/user/profile/education/education.tpl.html',
+          controller: 'ProfileEducationController',
           hasForm: false
+        },
+        {
+          templateUrl: '/app/user/profile/personality/personality.tpl.html',
+          controller: 'ProfilePersonalityController'
         },
 
-        {
-          templateUrl: '/app/user/profile/step-5/step-five.tpl.html',
-          controller: 'StepFiveController',
-          hasForm: true
-        }
-        // {
-        //   templateUrl: '/app/user/profile/step-6/step-six.tpl.html',
-        //   controller: 'StepSixController',
-        //   hasForm: false
-        // }
+
       ];
 
 

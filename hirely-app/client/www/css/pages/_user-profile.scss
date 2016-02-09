@@ -25,7 +25,7 @@ $footer-height: 60px;
 				margin-right: 4em;
 				line-height:$header-height;
 				@include transition-all();
-				@media screen and (min-width:$screen-xs-min){
+				@media screen and (min-width:$screen-sm-min){
 					margin-right: 6em;
 				}
 
@@ -83,7 +83,7 @@ $footer-height: 60px;
 
 		button{
 			padding: 0.5em 1em;
-			@media screen and (min-width:$screen-xs-min){
+			@media screen and (min-width:$screen-sm-min){
 				padding: 0.5em 4em;
 			}
 		}
@@ -109,7 +109,7 @@ $footer-height: 60px;
 			background-color:$c-hirely-text-gray;
 			@include border-radius(4px);
 			float:none;
-			@media screen and (min-width:$screen-xs-min){
+			@media screen and (min-width:$screen-sm-min){
 				width:200px;
 			}
 
@@ -135,8 +135,8 @@ $footer-height: 60px;
 	margin:0 auto;
 	padding: 2em 0;
 	// background-color:#eee;
-	min-height:400px;
-	@media screen and (min-width:$screen-xs-min){
+	min-height:100px;
+	@media screen and (min-width:$screen-sm-min){
 		width:40%;
 	}
 }/// .form-container
@@ -417,6 +417,14 @@ $footer-height: 60px;
   	font-size:0.8em;
   	font-weight: 700;
   }
+
+  .copy-section{
+  	padding:3em 0 0 0;
+
+  	*{
+  		font-size:0.9em;
+  	}
+  }
 }//// .hirely-form
 
 .user-profile-exp{
@@ -475,6 +483,7 @@ $footer-height: 60px;
 		}
 	}//// .add-card
 }//// .cards-wrapper
+
 .no-col-padding{
 	padding-left:0;
 	padding-right:0;
@@ -524,7 +533,7 @@ $footer-height: 60px;
 
 .user-profile-personality{
 	width:90%;
-	@media screen and (min-width:$screen-xs-min){
+	@media screen and (min-width:$screen-sm-min){
 		width:55%;
 	}
 
@@ -542,7 +551,7 @@ $footer-height: 60px;
 			color:#fff;
 			outline: none;
 			word-wrap: normal;
-			@media screen and (min-width:$screen-xs-min){
+			@media screen and (min-width:$screen-sm-min){
 				width:auto;
 				padding:4em 4em;
 			}
@@ -587,5 +596,92 @@ $footer-height: 60px;
 	}
 
 }//// .user-profile-personality
+
+.user-profile-availability{
+	width:100%;
+	margin:0 auto;
+	min-height:300px;
+	@media screen and (min-width:$screen-sm-min){
+		width:75%;
+	}
+
+	.day-link{
+		display: block;
+		width:100%;
+		height: 100px;
+		background-color:$c-hirely-text-gray;
+		color:#fff;
+		text-align: center;
+		@include border-radius(4px);
+		margin-bottom:20px;
+		font-size:1.3em;
+
+		@media screen and (min-width:$screen-sm-min){
+			position:relative;
+			height: auto;
+		}
+	}
+	///trick to keep the height same as width and make it look like a square
+	/// onl on mobile layout
+	.day-link:before{
+		@media screen and (min-width:$screen-sm-min){
+			content:"";
+			display: block;
+			padding-top:100%;
+		}
+	}
+
+	.day-link > span{
+		position: inline;
+		line-height: 100px;
+		padding-top:0;
+
+		@media screen and (min-width:$screen-sm-min){
+			position:  absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			padding-top:40%;
+			line-height: inherit;
+		}
+
+	}
+}//// .user-profile-availability
+
+/**
+ * Adding 5 col layout to bootstrap
+ */
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.col-xs-15 {
+    width: 20%;
+    float: left;
+}
+@media (min-width: 768px) {
+.col-sm-15 {
+        width: 20%;
+        float: left;
+    }
+}
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 20%;
+        float: left;
+    }
+}
+@media (min-width: 1200px) {
+    .col-lg-15 {
+        width: 20%;
+        float: left;
+    }
+}
 
 
