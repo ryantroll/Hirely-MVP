@@ -1,7 +1,11 @@
-var Q = require('q')
+var Q = require('q');
 
-var UserService {
-  var experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] // tiers of experience where level = num of months
+var MatchService {
+  // I have this list, when you are ready;
+  var expLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124]; // tiers of experience where level = num of months
+  var expWeight = .4;
+  var eduWeight = .1;
+  var psyWeight = .5;
 
   var monthCountToExperienceLevel = function(monthCount) {
     if      (monthCount > 124) { return 124 };
@@ -95,11 +99,68 @@ var UserService {
     }).catch(function(error) {
       // Do whatever happens if one or more errored
     });  // end Q.all()
-    
-};
 
+  };
 
-var BusinessService = {
+  // This should be an api endpoint;
+  // Generates a CareerMatchCache document for every onet occupation;
+  var generateCareerMatchCacheForUser = function(user) {
+
+    CareerMatchCache.find({userId: user._id}).remove().then(function(err) {
+
+      OnetMetrics.all().then(function(onetMetrics) {
+
+        onetMetrics.forEach(function(occ) {
+
+          careerMatchCache = new CareerMatchCache(userId=user._id, occupationId=occ._id);
+
+          this.expLevels.forEach(function(expLvl) {
+
+            ss_user_all = {};
+            ss_occ_all = {};
+
+            // Calc std deviation of ksaw
+            ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
+              Object.keys(user[category]).forEach(function(key) {
+                oScore = occ[expLvl][category][key]
+                ss_user_all[key] = Math.pow(user[category][key] - oScore, 2);
+              };
+              Object.keys(occ[expLvl][category]).forEach(function(key) {
+                ss_occ_all[key] = occ[expLvl][category][key]  ** 2;
+              };
+            });
+            // Calc Overall Experience score based on std deviations
+            expScore = 1 - Math.sqrt(ss_user_all / ss_occ_all);
+            // TODO:  Ask Dave why we need to do this?  Won't expScore always be > 0?
+            expScore = Math.max(expScore, 0);
+            careerMatchCache.scores[expLvl].exp = expScore;
+
+            // Education calcs
+            eduScore = occ[expLvl].eduPercentiles[user.educationMaxLvl];
+            careerMatchCache.scores[expLvl].edu = eduScore;
+
+            // Personality calcs
+            psyScore = user.personalityCareerScores[onetId];
+            careerMatchCache.scores[expLvl].psy = psyScore;
+
+            // Grand overallScore calcs;
+            overallScore = expScore * self.expWeight;
+            overallScore += educationScore * self.eduWeight
+            overallScore += personalityScore * self.psyWeight;
+            careerMatchCache.scores[expLvl].overall = overallScore;
+
+            if (overallScore > careerMatchCache.maxOverallScore) {
+              careerMatchCache.maxOverallScore = overallScore;
+            };
+
+          } // end this.expLevels.forEach
+
+          careerMatchCache.save();
+
+        };  // end onetMetrics.forEach
+      });  // end OnetMetrics.all.then
+    });  // end CareerMatchCache.find.then
+  };  // end generateForUser
 
   var qualificationComputer = function(operator, left, right) {
     switch (operator) {
@@ -155,209 +216,6 @@ var BusinessService = {
     };
     return result;
   };
-};
-
-var MatchCacheService {
-  // I have this list, when you are ready;
-  var expLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124]; // tiers of experience where level = num of months
-  var expWeight = .4;
-  var eduWeight = .1;
-  var psyWeight = .5;
-
-  var calc_ss_user_for_onet_group = function(userOnetGroup, occOnetGroup) {
-    ss = {};
-    userOnetGroup.forEach(function(uScore, key)) {
-      oScore = occOnetGroup[key]
-      ss[key] = Math.pow(uScore - oScore, 2);
-    };
-    return ss;
-  };
-
-  var calc_ss_occupation_for_onet_group = function(userOnetGroup, occOnetGroup) {
-    ss = {};
-    userOnetGroup.forEach(function(uScore, key)) {
-      ss[key] = occOnetGroup[key]  ** 2;
-    };
-    return ss
-  };
-
-  // This should be an api endpoint;
-  // Generates a MatchCache document for every onet occupation;
-  var generateForUser = function(user) {
-
-    MatchCache.find({userId: user._id}).remove().then(function(err) {
-
-      OnetMetrics.all().then(function(onetMetrics) {
-
-        onetMetrics.forEach(function(occ) {
-
-          matchCache = new MatchCache(userId=user._id, occupationId=occupation._id);
-
-          this.expLevels.forEach(function(expLvl) {
-                
-            // Knowledge calcs;
-            ss_user_k = this.calc_ss_user_for_onet_group(user.knowledges, occ[expLvl].knowledges);
-            ss_occ_k = this.calc_ss_occupation_for_onet_group(user.knowledges, occ[expLvl].knowledges);
-
-            // Skill calcs;
-            ss_user_s = this.calc_ss_user_for_onet_group(user.skills, occ[expLvl].skills);
-            ss_occ_s = this.calc_ss_occupation_for_onet_group(user.skills, occ[expLvl].skills);
-
-          
-            // Abilities calcs;
-            ss_user_a = this.calc_ss_user_for_onet_group(user.abilities, occ[expLvl].abilities);
-            ss_occ_a = this.calc_ss_occupation_for_onet_group(user.abilities, occ[expLvl].abilities);
-
-          
-            // WorkActivities calcs;
-            ss_user_w = this.calc_ss_user_for_onet_group(user.workActivities, occ[expLvl].workActivities);
-            ss_occ_w = this.calc_ss_occupation_for_onet_group(user.workActivities, occ[expLvl].workActivities);
-
-
-            // Calc Experience score;
-            ss_user_all = ss_user_k + ss_user_s + ss_user_a + ss_user_w;
-            ss_occ_all = ss_occ_k + ss_occ_s + ss_occ_a + ss_occ_w;
-            expScore = 1 - Math.sqrt(ss_user_all / ss_occ_all);
-            expScore = Math.max(experienceScore, 0);
-            matchCache.scores[expLvl].exp = expScore;
-
-            // TODO:  If we decide to boost exp when exact experience occupation id, put it here;
-          
-            // Education calcs;
-            eduScore = occ[expLvl].eduPercentiles[user.educationMaxLvl];
-            matchCache.scores[expLvl].edu = eduScore;
-
-            // Personality calcs;
-            psyScore = user.personalityCareerScores[onetId];
-            matchCache.scores[expLvl].psy = psyScore;
-
-            // Grand overallScore calcs;
-            overallScore = expScore * self.expWeight + educationScore * self.eduWeight + personalityScore * self.psyWeight;
-
-            matchCache.scores[expLvl].overall = overallScore;
-
-            if overallScore > matchCache.maxOverallScore:
-              matchCache.maxOverallScore = overallScore;
-          } // end this.experienceLevels.forEach
-
-          matchCache.save();
-
-        };  // end onetMetrics.forEach
-      });  // end OnetMetrics.all.then
-    });  // end MatchCache.find.then
-  };  // end generateForUser
-
-  
-  // This should be an api endpoint;
-  var getCareerSuggestions = function(userId, limit=100) {
-    // TODO:  Figure out how to sort and limit
-    return MatchCache.find(userId=userId, sort_by_descending=maxOverallScore, limit=limit).exec();
-  };  // end getCareerSuggestions
-
-  
-  // This should be an api endpoint;
-  var getVariantSuggestions = function(userId, limit=100, lng_lower_bound=null, lng_upper_bound=null, lat_lower_bound=null, lat_upper_bound=null) {
-
-    var suggestions = [];
-    var suggestionSortMap = [];
-
-    // Get all businesses with open position variants within a lat-lon region;
-    // TODO:  figure out how to do these filters
-    if (lng_lower_bound !== null && lng_upper_bound !== null && lat_lower_bound !== null && lat_upper_bound !== null) {
-      businessQuery = Business.find(variants__openings__gt=0,
-                                    locations__lng__within=(lng_lower_bound, lng_upper_bound),
-                                    locations__lat__within=(lat_lower_bound, lat_upper_bound));
-    } else {
-      businessQuery = Business.find(variants__openings__gt=0);
-    }
-
-    businessQuery.then(function(businesses) {
-      
-      var promises = [];
-
-      businesses.forEach(function(business) {
-        
-        // Now get match scores for every variant and append to suggestions;
-        business.variants.forEach(function(variant) {
-          
-          if (variant.openings > 0) {
-            
-            promises.push(MatchCache.findOne({onetId:variant.onetId, userId:userId}).then(function(match) {
-              
-              scores = match.scores[variant.expLvl];
-              index = suggestions.push({business:business, variant:variant, scores:scores}) - 1;
-              suggestionSortMap.push({index:index, score:scores.overallScore});
-            
-            }));  // end MatchCache.findOne
-          
-          };  // end if variant.openings
-        
-        });  // end business.variants.foreach
-      
-      });  // end businesses.foreach
-
-      // Wait until retrieves are done
-      Q.all(promises).then(function() {
-      
-        // Inverse sort by suggestion['scores']['overallScore']
-        // Use the map to eval sort order to boost performance
-        // reference:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-        suggestionSortMap.sort(function(a, b) {return a.score - b.score;});
-        // Now apply the sort to suggestions
-        var suggestionsSorted = suggestionSortMap.map(function(element){
-          return suggestions[element.index];
-        });
-        // Finally limit
-        suggestionsSortedAndLimited = suggestionsSorted.slice(0, limit);
-        // TODO:  Figure out how to return this synchronously for api requests
-        return suggestionsSortedAndLimited
-
-      }  // end Q.all
-    
-    });  // end businessQuery.then
-
-  };  // end getVariantSuggestions
-
-  // This should be an api endpoint;
-  var getUserSuggestions = function(onetId, experienceLvl, lng_lower_bound=null, lng_upper_bound=null, lat_lower_bound=null, lat_upper_bound=null) {
-    if (lng_lower_bound && lng_upper_bound and lat_lower_bound and lat_upper_bound) {
-      queryset = MatchCache.find(onetId=onetId,
-                                 sort_by_descending=scores[experienceLvl]['overallScore'],
-                                 limit=100, locations__lng__within=(lng_lower_bound, lng_upper_bound),
-                                 locations__lat__within=(lat_lower_bound, lat_upper_bound));
-    }
-    else {
-      queryset = MatchCache.find(onetId=onetId, sort_by_descending=scores[experienceLvl]['overallScore'], limit=100);
-    }
-
-    // TODO:  Remove users who userOptOutOfSuggestionsFromEmployers = true;
-    return queryset.exec();
-  };  // end getUserSuggestions
-};
-
-
-
-
-var ApplicationService = {
-  // This should be an api endpoint;
-  var getApplicationsByBusiness = function(businessId) {
-    return Applications.find(businessId: businessId).exec();
-  }
-
-  // This should be an api endpoint;
-  var getApplicationsByLocation = function(locationId) {
-    return Applications.find(locationId: locationId).exec();
-  }
-
-  // This should be an api endpoint;
-  var getApplicationsByPosition = function(positionId) {
-    return Applications.find(positionId: positionId).exec();
-  }
-
-  // This should be an api endpoint;
-  var getApplicationsByVariant = function(variantId) {
-    return Applications.find(variantId: variantId).exec();
-  }
 
   var getQualificationScore = function(variantId, userId, disqualifyThreshold=0) {
     User.findOne(id: userId).then(function(user) {
@@ -404,23 +262,15 @@ var ApplicationService = {
       
   }  // end getQualificationScore
 
-  // This should be an api endpoint;
-  var createApplication = function(variantId, userId, prescreenAnswers) {
-    // TODO:  Check that all of the application fields are being populated;
-    application = new Application(variantId, userId, prescreenAnswers);
-    application.save();
-    ApplicationService.updateApplicationscores(application);
-  }
-
   var updateApplicationScores = function(application) {
     User.findOne(id: application.userId).then(function(user) {
       // TODO:  Index variant and/or figure out how to speed this up if it's slow
       Business.findOne('variants.'+application.variantId+'._id': application.variantId).then(function(business) {
 
-        MatchCache.findOne(onetId=variant.onetId, userId=userId).then(function(matchCache) {
+        CareerMatchCache.findOne(onetId=variant.onetId, userId=userId).then(function(careerMatchCache) {
           variant = business.variants[variantId];
 
-          application.scores = matchCache.scores[variant.experienceLvl];
+          application.scores = careerMatchCache.scores[variant.experienceLvl];
           application.scores.experienceScore *= variant.scoreWeights.experience;
           application.scores.educationScore *= variant.scoreWeights.education;
           application.scores.personalityScore *= variant.scoreWeights.personality;
@@ -434,26 +284,102 @@ var ApplicationService = {
                                                 application.scores.qualificationScore);
           application.save();
         
-        });  // end MatchCache.findOne
+        });  // end CareerMatchCache.findOne
       });  // end Business.findOne
     });  // end User.findOne
-  }  // end updateApplicationScores
+  };  // end updateApplicationScores
 
   // This should be called when a variant's qualification specification changes;
-  var updateApplicationScoresForVariant = function(variant) {
-    Applications.find({variantId: variant._id}).then(function(applications) {
+  var updateApplicationScoresForVariant = function(variantId) {
+    Applications.find({variantId: variantId}).then(function(applications) {
       applications.forEach(function(application) {
         ApplicationService.updateApplicationscores(application);    
       });
     });
-  }
+  };
 
   // This should be called when a user's profile changes;
-  var updateApplicationScoresForUser = function(user) {
-    Applications.find({userId: user._id}).then(function(applications) {
+  var updateApplicationScoresForUser = function(userId) {
+    Applications.find({'userId': userId}).then(function(applications) {
       applications.forEach(function(application) {
         ApplicationService.updateApplicationscores(application=application);
       });
     });
-  }
+  };
+
+
+  // This should be an api endpoint;
+  var getCareerSuggestions = function(userId, limit=100) {
+    return CareerMatchCache.find({'userId': userId, $sort: {"scores."+experienceLvl+".overallScore": -1}, $limit: 100).exec()
+  };  // end getUserSuggestions
+
+  
+  // This should be an api endpoint
+  var getVariantSuggestions = function(userId, distance=null, limit=100) {
+    // Not implemented yet
+
+    var suggestions = [];
+    var suggestionSortMap = [];
+
+    // Get all businesses with open position variants within a lat-lon region;
+    // TODO:  figure out how to do these filters
+    if (lng_lower_bound !== null && lng_upper_bound !== null && lat_lower_bound !== null && lat_upper_bound !== null) {
+      businessQuery = Business.find(variants__openings__gt=0,
+                                    locations__lng__within=(lng_lower_bound, lng_upper_bound),
+                                    locations__lat__within=(lat_lower_bound, lat_upper_bound));
+    } else {
+      businessQuery = Business.find(variants__openings__gt=0);
+    }
+
+    businessQuery.then(function(businesses) {
+      
+      var promises = [];
+
+      businesses.forEach(function(business) {
+        
+        // Now get match scores for every variant and append to suggestions;
+        business.variants.forEach(function(variant) {
+          
+          if (variant.openings > 0) {
+            
+            promises.push(CareerMatchCache.findOne({onetId:variant.onetId, userId:userId}).then(function(match) {
+              
+              scores = match.scores[variant.expLvl];
+              index = suggestions.push({businessId:business._id, variantId:variant._id, scores:scores}) - 1;
+              suggestionSortMap.push({index:index, score:scores.overallScore});
+            
+            }));  // end CareerMatchCache.findOne
+          
+          };  // end if variant.openings
+        
+        });  // end business.variants.foreach
+      
+      });  // end businesses.foreach
+
+      // Wait until retrieves are done
+      Q.all(promises).then(function() {
+      
+        // Inverse sort by suggestion['scores']['overallScore']
+        // Use the map to eval sort order to boost performance
+        // reference:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+        suggestionSortMap.sort(function(a, b) {return a.score - b.score;});
+        // Now apply the sort to suggestions
+        var suggestionsSorted = suggestionSortMap.map(function(element){
+          return suggestions[element.index];
+        });
+        // Finally limit
+        suggestionsSortedAndLimited = suggestionsSorted.slice(0, limit);
+        // TODO:  Figure out how to return this synchronously for api requests
+        return suggestionsSortedAndLimited
+
+      }  // end Q.all
+    
+    });  // end businessQuery.then
+
+  };  // end getVariantSuggestions
+
+  var getUserSuggestions = function(variantId, limit=100) {
+    // Not implemented yet
+  };  // end getUserSuggestions
+
 };
