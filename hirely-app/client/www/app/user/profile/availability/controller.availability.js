@@ -18,9 +18,9 @@
    * Controller Definition ********************************************************
    * ******************************************************************************
    */
-  step5App.controller('StepFiveController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', StepFiveController])
+  step5App.controller('ProfileAvailabilityController', ['$scope', '$stateParams', '$window', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', ProfileAvailabilityController])
 
-  function StepFiveController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService) {
+  function ProfileAvailabilityController($scope, $stateParams, $window, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService) {
 
     /**
      * [availability this object will hold the data that need bot saved in database
@@ -33,6 +33,17 @@
 
 
     $scope.stepFiveLoaded = false;
+
+    $scope.startOptions = [
+      {days:0, label:'Immediatly'},
+      {days:1, label:'1 Day'},
+      {days:2, label:'2 Days'},
+      {days:3, label:'3 Days'},
+      {days:4, label:'4 Days'},
+      {days:5, label:'5 Days'},
+      {days:7, label:'1 Week'},
+      {days:14, label:'2 Weeks'},
+    ];
 
       /**
        * [weeklyTimetable build the weekly timetable for availability and assign it to scope

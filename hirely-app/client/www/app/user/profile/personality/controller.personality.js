@@ -9,10 +9,10 @@
 (function() {
 	'use strict';
 
-	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+	angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$stateParams', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
 
 
-	function StepThreeController($scope, $stateParams, TraitifyService, AuthService, UserService, TRAITIFY_PUBLIC_KEY) {
+	function ProfilePersonalityController($scope, $stateParams, TraitifyService, AuthService, UserService, TRAITIFY_PUBLIC_KEY) {
 
 		$scope.stepThreeLoaded = false;
 

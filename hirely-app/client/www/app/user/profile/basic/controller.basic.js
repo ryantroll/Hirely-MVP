@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('StepOneController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService', '$timeout', StepOneController])
+  angular.module('hirelyApp').controller('ProfileBasicController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService', '$timeout', ProfileBasicController])
   .directive('validateDate', function(){
     return {
       restrict:'A',
@@ -88,7 +88,7 @@
   })/// validate date;
 
 
-  function StepOneController($scope, $stateParams, multiStepFormInstance, GeocodeService, UserService, AuthService, $timeout) {
+  function ProfileBasicController($scope, $stateParams, multiStepFormInstance, GeocodeService, UserService, AuthService, $timeout) {
 
     var geocodeService = GeocodeService;
 

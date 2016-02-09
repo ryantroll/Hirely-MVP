@@ -188,17 +188,6 @@ var userSchema = new Schema({
      * Availability
      */
     availability: {
-        seekerStatus        :       {//// 0 = inactive, 1 = active
-                                      type:Number,
-                                      required:true,
-                                      default: 1,
-                                      validate:{
-                                        validator: function(v){
-                                          return /^(0|1)$/.test(v.toString());
-                                        },
-                                        message:'{VALUE} is not a valid availability.seekerStatus'
-                                      }
-                                    },
         startAvailability   :       Number,
         hoursPerWeekMin     :       Number,
         hoursPerWeekMax     :       Number,
