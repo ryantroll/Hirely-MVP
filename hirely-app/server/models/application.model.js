@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var applicationSchema = new Schema({
   userId      :       {type:Schema.Types.ObjectId, ref:'users', required:true, index:true},
-  variantId   :       {type:Schema.Types.ObjectId, required:true, index:true},
+  positionId   :       {type:Schema.Types.ObjectId, required:true, index:true},
   createdAt   :       {type:Date, required:true, default:Date.now},
   status      :       {
                         type:Number, //// 0 close, 1 open

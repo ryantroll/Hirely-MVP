@@ -3,7 +3,7 @@ var userService = require('./user.service');
 var businessService = require('./business.service');
 var q = require('q');
 
-function validateIds(userId, variantId){
+function validateIds(userId, positionId){
     var deferred = q.defer();
     /**
      * First Check if user is a valid user
@@ -13,29 +13,29 @@ function validateIds(userId, variantId){
         function(user){
             if(null !== user){
                 /**
-                 * User existes check if variant is there with it's business object
+                 * User existes check if position is there with it's business object
                  */
-                businessService.getByVariantId(variantId)
+                businessService.getByPositionId(positionId)
                 .then(
                     function(business){
                         /**
-                         * Variant ID exists is list of returned business more than 0
+                         * position ID exists is list of returned business more than 0
                          */
                         if(null !== business && business.length > 0){
                             /**
-                             * variant is found announce
+                             * position is found announce
                              */
 
                             deferred.resolve(true);
                         }
                         else{
                             /**
-                             * Variant not there
+                             * position not there
                              */
-                            deferred.reject('Variant ID doesn\'t exists');
+                            deferred.reject('position ID doesn\'t exists');
                         }
 
-                    }//// getByVariantIid().then()
+                    }//// getByPositionIid().then()
                 )
             }//// if null !== user
             else{
@@ -60,8 +60,8 @@ var applicationService = {
         if(undefined !== reqQuery.userId) {
             filters['userId'] = reqQuery.userId;
         }
-        if(undefined !== reqQuery.variantId) {
-            filters['variantId'] = reqQuery.variantId;
+        if(undefined !== reqQuery.positionId) {
+            filters['positionId'] = reqQuery.positionId;
         }
         if(undefined !== reqQuery.status) {
             filters['status'] = reqQuery.status;
@@ -90,17 +90,17 @@ var applicationService = {
     },
 
     /**
-     * [getByVariantId will get applications list that match a variant id]
-     * @param  {string} variantId [id of variant]
+     * [getByPositionId will get applications list that match a position id]
+     * @param  {string} positionId [id of position]
      * @param  {object} reqQuery  [query string parameters]
      * @return {promise}           [description]
      */
-    getByVariantId: function(variantId, reqQuery){
-        return applicationModel.find({variantId:variantId}).exec();
+    getByPositionId: function(positionId, reqQuery){
+        return applicationModel.find({positionId:positionId}).exec();
     },
 
     /**
-     * [createNewApplication will insert a new application after it make sure user id and variant id are valid by checking existance in database]
+     * [createNewApplication will insert a new application after it make sure user id and position id are valid by checking existance in database]
      * @param  {object} appObj [object that hold the properties of new applictaion to be insterted]
      * @return {promise}        [description]
      */
@@ -110,14 +110,14 @@ var applicationService = {
         var newApplication = new applicationModel(appObj);
 
         /**
-         * start with making sure ids of user and variants are exists in DB
+         * start with making sure ids of user and positions are exists in DB
          */
-        validateIds(newApplication.userId, newApplication.variantId)
+        validateIds(newApplication.userId, newApplication.positionId)
         .then(
             function(isValid){
                 if(true === isValid){
                     /**
-                     * IDs of user and variant are valid go ahead and save
+                     * IDs of user and position are valid go ahead and save
                      */
                     newApplication.save()
                     .then(
@@ -134,7 +134,7 @@ var applicationService = {
                      * this else will not be executed as validateIds will return only true
                      * Add for future
                      */
-                     deferred.reject("User ID or variant ID is not valid");
+                     deferred.reject("User ID or position ID is not valid");
                 }
             },//// fun. reslove
             function(err){
@@ -159,7 +159,7 @@ var applicationService = {
 
         // var newApplication = new applicationModel(appObj);
 
-        validateIds(appObj.userId, appObj.variantId)
+        validateIds(appObj.userId, appObj.positionId)
         .then(
             function(isValid){
                 if(true === isValid){
@@ -206,7 +206,7 @@ var applicationService = {
                     /**
                      * This else will not be executed because validateIds return only true
                      */
-                    deferred.reject("User ID or variant ID is not valid");
+                    deferred.reject("User ID or position ID is not valid");
                 }/// i isValid else
             },//// fun. reslove
             function(err){
