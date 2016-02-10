@@ -1,5 +1,6 @@
 $header-height: 60px;
 $footer-height: 60px;
+$day-botton-size: 60px;
 
 .profile{
 	padding-bottom:$footer-height;
@@ -646,8 +647,124 @@ $footer-height: 60px;
 			line-height: inherit;
 		}
 
+	}/// .day-link
+	.day-link.active{
+		background-color:$light-grass-green;
 	}
 }//// .user-profile-availability
+
+.timetable{
+	padding:2em 0;
+
+	.days-list{
+
+		ul{
+			display: table;
+			width:auto;
+			margin: 0 auto;
+			list-style: none;
+			padding-left:0;
+
+			li{
+				display: none;
+				float:left;
+				width:$day-botton-size;
+				height: $day-botton-size;
+				margin-right: 0.8em;
+				line-height: $day-botton-size;
+				@media screen and (min-width:$screen-sm-min){
+					display: block;
+				}
+			}
+			li:last-child{
+				margin-right: 0;
+			}
+			li > a{
+				display: block;
+				width:100%;
+				height: $day-botton-size;
+				background-color:$c-hirely-text-gray;
+				color:#fff;
+				text-align: center;
+				@include border-radius(4px);
+				font-weight: 700;
+			}
+			li.active{
+				display: block!important;
+			}
+			li.active > a{
+				background-color:$c-hirely-mid-gray;
+			}
+			li.arrow{
+				display: block;
+				@media screen and (min-width:$screen-sm-min){
+					display: none;
+				}
+			}
+			li.arrow > a{
+				background-color:transparent;
+				color:$c-hirely-text-gray;
+				font-size:1.4em;
+			}
+		}//// ul
+
+	}///.day-list
+
+	.title{
+		text-align: center;
+		padding: 2em 0;
+	}
+	.hours{
+		width:50%;
+		margin:0 auto;
+		min-width: 300px;
+		@media screen and (min-width:$screen-sm-min){
+			width:95%;
+			min-width:auto;
+		}
+	}
+	.hour-btns{
+		width:100%;
+		display: table;
+		padding-bottom:2em;
+	}
+	.btn-hour{
+		position: relative;
+		border:1px solid $c-hirely-text-gray;
+		width:23.5%;
+		// height:23.5%;
+		background-color:#fff;
+		@include border-radius(50%);
+		float:left;
+		margin-right:2%;
+		margin-bottom: 1em;
+		padding:0;
+		outline: none;
+
+		> span{
+			text-align: center;
+			width:100%;
+			line-height: 1em;
+			display: block;
+			@include vertical-align(absolute);
+		}
+	}
+	.btn-hour:before{
+		// @media screen and (min-width:$screen-sm-min){
+			content:"";
+			display: block;
+			padding-top:100%;
+		// }
+	}
+	.btn-hour:nth-child(4n+4){
+		margin-right:0;
+		clear: right;
+	}
+
+	.btn-hour.active{
+		background-color:$light-grass-green;
+	}
+}
 
 /**
  * Adding 5 col layout to bootstrap
