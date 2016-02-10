@@ -35,6 +35,22 @@ var businessRoutes = {
         );
     },
 
+    getByPositionId: function(req, res){
+        /**
+         * Send public info if all is not requested
+         */
+        businessService.getByPositionId(req.params.pid, req.query)
+            .then(
+                function(business){
+                    res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
+                },
+                function(error){
+                    //// business couldn't be found 404
+                    res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
+                }
+            );
+    },
+
     createNewBusiness : function(req, res){
 
         var business = {
