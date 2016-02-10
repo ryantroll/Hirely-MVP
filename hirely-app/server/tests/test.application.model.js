@@ -18,7 +18,14 @@ db.once('open', function(){
                 question:'what\'s up?',
                 answer: 'Nothing'
             }
-        ]
+        ],
+        scores: {
+            exp: .2,
+            edu: .1,
+            qual: .2,
+            psy: .2,
+            overall: .8
+        }
     });
 
     a.save(function(err, user){

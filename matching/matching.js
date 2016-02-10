@@ -2,7 +2,7 @@ var Q = require('q');
 
 var MatchService {
   // I have this list, when you are ready;
-  var expLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124]; // tiers of experience where level = num of months
+  var expLvls =  [0, 3, 6, 12, 24, 48, 64, 98, 124]; // tiers of experience where level = num of months
   var expWeight = .4;
   var eduWeight = .1;
   var psyWeight = .5;
@@ -42,18 +42,18 @@ var MatchService {
     // Concat roles
     roles = {};
     totalWorkMonths = 0;
-    onetIds = [];
+    occIds = [];
     user.workExperiences.forEach(function (workExperience) {
       totalWorkMonths += workExperience.monthCount;
-      onetIds.push(workExperience.onetId);
+      occIds.push(workExperience.occId);
 
       // If role doesn't already exist, create it
-      if (roles.indexOf(workExperience.onetId) == -1) {
-        roles[workExperience.onetId] = {"monthCount": 0};
+      if (roles.indexOf(workExperience.occId) == -1) {
+        roles[workExperience.occId] = {"monthCount": 0};
       }
-      role = roles[workExperience.onetId];
+      role = roles[workExperience.occId];
       role.monthCount += workExperience.monthCount;
-      role.experienceLvl = this.monthCountToExperienceLevel(role.monthCount)
+      role.expLvl = this.monthCountToExperienceLevel(role.monthCount)
     });
 
     
@@ -68,20 +68,20 @@ var MatchService {
         
       // Extend roles with onet metrics
       occupations.forEach(function(occupation) {
-          var role = roles[occupation.onetId]
+          var role = roles[occupation.occId]
           ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
-            role[category] = data[role.experienceLvl][category]
+            role[category] = data[role.expLvl][category]
           });
       });
 
 
       // Calc master KSAs;
       roles.forEach(function(role) {
-        // TODO:  Ask Dave if we should be using role.monthCount here instead of experienceLvl
-        weight = role.experienceLvl / totalWorkMonths;
+        // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
+        weight = role.expLvl / totalWorkMonths;
 
         ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
-          role[category].forEach(function (value, name)) {
+          role[category].forEach(function(value, name) {
             weighted = weight * value;
             if (user[category] === null) {
               user[category][name] = weighted;  
@@ -112,9 +112,9 @@ var MatchService {
 
         onetMetrics.forEach(function(occ) {
 
-          careerMatchCache = new CareerMatchCache(userId=user._id, occupationId=occ._id);
+          careerMatchCache = new CareerMatchCache(userId=user._id, occId=occ._id);
 
-          this.expLevels.forEach(function(expLvl) {
+          this.expLvls.forEach(function(expLvl) {
 
             ss_user_all = {};
             ss_occ_all = {};
@@ -140,20 +140,20 @@ var MatchService {
             careerMatchCache.scores[expLvl].edu = eduScore;
 
             // Personality calcs
-            psyScore = user.personalityCareerScores[onetId];
+            psyScore = user.personalityCareerScores[occId];
             careerMatchCache.scores[expLvl].psy = psyScore;
 
             // Grand overallScore calcs;
             overallScore = expScore * self.expWeight;
             overallScore += educationScore * self.eduWeight
-            overallScore += personalityScore * self.psyWeight;
+            overallScore += psyScore * self.psyWeight;
             careerMatchCache.scores[expLvl].overall = overallScore;
 
             if (overallScore > careerMatchCache.maxOverallScore) {
               careerMatchCache.maxOverallScore = overallScore;
             };
 
-          } // end this.expLevels.forEach
+          } // end this.expLvls.forEach
 
           careerMatchCache.save();
 
@@ -184,13 +184,12 @@ var MatchService {
   };
 
 
-  var qualificationFormulaEvaluator = function(formula, business, location, position, variant, user) {
+  var qualificationFormulaEvaluator = function(formula, business, location, position, user) {
     var objLookup = {
-      'business': business,;
-      'location': location,;
-      'position': position,;
-      'variant': variant,;
-      'user': user;
+      'business': business,
+      'location': location,
+      'position': position,
+      'user': user
     };
     
     switch (formula.type) {
@@ -208,7 +207,7 @@ var MatchService {
         });
         return result
       case 'computation':
-        result = this.qualificationFormulaEvaluator(formula.operands.pop(), business, location, position, variant, user);
+        result = this.qualificationFormulaEvaluator(formula.operands.pop(), business, location, position, user);
         formula.operands.forEach(function(operand) {
           oResult = self.qualificationFormulaEvaluator(formula.pop('operands')
           result = this.qualificationComputer(formula['operator']), result, oResult);
@@ -217,24 +216,18 @@ var MatchService {
     return result;
   };
 
-  var getQualificationScore = function(variantId, userId, disqualifyThreshold=0) {
+  var getQualificationScore = function(positionId, userId, disqualifyThreshold=0) {
     User.findOne(id: userId).then(function(user) {
-      // TODO:  Index variant and/or figure out how to speed this up if it's slow
-      Business.findOne('variants.'+variantId+'._id': variantId).then(function(business) {
+      // TODO:  Index position and/or figure out how to speed this up if it's slow
+      businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
 
-        variant = business.variants[variantId];
-        position = business.position[variant.positionId];
-        location = business.locations[variant.locationId];
+        position = business.position[positionId];
+        location = business.locations[position.locationId];
 
         fScoreMaxSum = 0;
         disqualified = false;
-        variant.qualificationSpecification.formulas.forEach(formula) {
-          fScoreSum = self.qualificationFormulaEvaluator(formula=formula,
-                                                         business=business,
-                                                         location=location,
-                                                         position=position,
-                                                         variant=variant,
-                                                         user=user);
+        position.qualificationSpecification.formulas.forEach(formula) {
+          fScoreSum = self.qualificationFormulaEvaluator(formula, business, location, position, user);
           if (fScore > 0) {
             fScore = 1;
           }
@@ -264,24 +257,23 @@ var MatchService {
 
   var updateApplicationScores = function(application) {
     User.findOne(id: application.userId).then(function(user) {
-      // TODO:  Index variant and/or figure out how to speed this up if it's slow
-      Business.findOne('variants.'+application.variantId+'._id': application.variantId).then(function(business) {
+      
+      // TODO:  Index position and/or figure out how to speed this up if it's slow
+      businessModel.findOne({ $where: "obj.positions['"+application.positionId+"']" }).then(function(business) {
+        position = business.positions[positionId];
 
-        CareerMatchCache.findOne(onetId=variant.onetId, userId=userId).then(function(careerMatchCache) {
-          variant = business.variants[variantId];
+        CareerMatchCache.findOne(position.occId, userId).then(function(careerMatchCache) {
 
-          application.scores = careerMatchCache.scores[variant.experienceLvl];
-          application.scores.experienceScore *= variant.scoreWeights.experience;
-          application.scores.educationScore *= variant.scoreWeights.education;
-          application.scores.personalityScore *= variant.scoreWeights.personality;
+          application.scores = careerMatchCache.scores[position.expLvl];
+          application.scores.exp *= position.scoreWeights.exp;
+          application.scores.edu *= position.scoreWeights.edu;
+          application.scores.psy *= position.scoreWeights.psy;
 
-          application.scores.qualificationScore = ApplicationService.getQaulificationScore(variant._id, user._id, 0);
-          application.scores.qualificationScore *= variant.scoreWeights.qualification;
+          // instead of id, to prevent unnecesary db calls
+          application.scores.qual = MatchService.getQualificationScore(position, user, 0);
+          application.scores.qual *= position.scoreWeights.qual;
 
-          application.scores.overallScore = avg(application.scores.experienceScore,
-                                                application.scores.educationScore,
-                                                application.scores.personalityScore,
-                                                application.scores.qualificationScore);
+          application.scores.overall = Object.values(application.scores).sum()
           application.save();
         
         });  // end CareerMatchCache.findOne
@@ -289,11 +281,11 @@ var MatchService {
     });  // end User.findOne
   };  // end updateApplicationScores
 
-  // This should be called when a variant's qualification specification changes;
-  var updateApplicationScoresForVariant = function(variantId) {
-    Applications.find({variantId: variantId}).then(function(applications) {
+  // This should be called when a position's qualification specification changes;
+  var updateApplicationScoresForPosition = function(positionId) {
+    Applications.find({positionId: positionId}).then(function(applications) {
       applications.forEach(function(application) {
-        ApplicationService.updateApplicationscores(application);    
+        MatchService.updateApplicationscores(application);    
       });
     });
   };
@@ -302,7 +294,7 @@ var MatchService {
   var updateApplicationScoresForUser = function(userId) {
     Applications.find({'userId': userId}).then(function(applications) {
       applications.forEach(function(application) {
-        ApplicationService.updateApplicationscores(application=application);
+        MatchService.updateApplicationscores(application);
       });
     });
   };
@@ -310,25 +302,25 @@ var MatchService {
 
   // This should be an api endpoint;
   var getCareerSuggestions = function(userId, limit=100) {
-    return CareerMatchCache.find({'userId': userId, $sort: {"scores."+experienceLvl+".overallScore": -1}, $limit: 100).exec()
+    return CareerMatchCache.find({'userId': userId, $sort: {"scores."+expLvl+".overallScore": -1}, $limit: 100}).exec()
   };  // end getUserSuggestions
 
   
   // This should be an api endpoint
-  var getVariantSuggestions = function(userId, distance=null, limit=100) {
+  var getPositionSuggestions = function(userId, distance=null, limit=100) {
     // Not implemented yet
 
     var suggestions = [];
     var suggestionSortMap = [];
 
-    // Get all businesses with open position variants within a lat-lon region;
+    // Get all businesses with open position positions within a lat-lon region;
     // TODO:  figure out how to do these filters
     if (lng_lower_bound !== null && lng_upper_bound !== null && lat_lower_bound !== null && lat_upper_bound !== null) {
-      businessQuery = Business.find(variants__openings__gt=0,
+      businessQuery = Business.find(positions__openings__gt=0,
                                     locations__lng__within=(lng_lower_bound, lng_upper_bound),
                                     locations__lat__within=(lat_lower_bound, lat_upper_bound));
     } else {
-      businessQuery = Business.find(variants__openings__gt=0);
+      businessQuery = Business.find(positions__openings__gt=0);
     }
 
     businessQuery.then(function(businesses) {
@@ -337,22 +329,22 @@ var MatchService {
 
       businesses.forEach(function(business) {
         
-        // Now get match scores for every variant and append to suggestions;
-        business.variants.forEach(function(variant) {
+        // Now get match scores for every position and append to suggestions;
+        business.positions.forEach(function(position) {
           
-          if (variant.openings > 0) {
+          if (position.openings > 0) {
             
-            promises.push(CareerMatchCache.findOne({onetId:variant.onetId, userId:userId}).then(function(match) {
+            promises.push(CareerMatchCache.findOne({occId:position.occId, userId:userId}).then(function(match) {
               
-              scores = match.scores[variant.expLvl];
-              index = suggestions.push({businessId:business._id, variantId:variant._id, scores:scores}) - 1;
+              scores = match.scores[position.expLvl];
+              index = suggestions.push({businessId:business._id, positionId:position._id, scores:scores}) - 1;
               suggestionSortMap.push({index:index, score:scores.overallScore});
             
             }));  // end CareerMatchCache.findOne
           
-          };  // end if variant.openings
+          };  // end if position.openings
         
-        });  // end business.variants.foreach
+        });  // end business.positions.foreach
       
       });  // end businesses.foreach
 
@@ -376,9 +368,9 @@ var MatchService {
     
     });  // end businessQuery.then
 
-  };  // end getVariantSuggestions
+  };  // end getPositionSuggestions
 
-  var getUserSuggestions = function(variantId, limit=100) {
+  var getUserSuggestions = function(positionId, limit=100) {
     // Not implemented yet
   };  // end getUserSuggestions
 

@@ -11,7 +11,7 @@ var positionSchema = new Schema({
     location_id   :    {type: Schema.ObjectId, required:true},
     title         :    {type: String, required:true},
     slug          :    {type: String},
-    onetClass     :    {type: String, required:true},
+    occId         :    {type: String, required:true},
 
     workType          :     {
         type:String,
@@ -31,7 +31,14 @@ var positionSchema = new Schema({
     minWeekdayShifts  :     Number,
     minWeekendShifts  :     Number,
     openings          :     Number,
-    experienceLvl     :     Number,
+    expLvl            :     Number,
+
+    scoreWeights      :     {
+        exp:  Number,
+        edu:  Number,
+        qual: Number,
+        psy: Number,
+    },
 
     compensation:
     {

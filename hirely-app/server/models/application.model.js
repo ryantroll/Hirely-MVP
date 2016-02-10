@@ -22,7 +22,15 @@ var applicationSchema = new Schema({
       question  :     String,
       answer    :     String
     }
-  ]/// prescreen array
+  ],/// prescreen array
+
+  scores : {
+      exp: Number,
+      edu: Number,
+      qual: Number,
+      psy: Number,
+      overall: Number
+  }
 });//// applicationSchema
 
 var ApplicationModel = mongoose.model('Applications', applicationSchema, "applications");

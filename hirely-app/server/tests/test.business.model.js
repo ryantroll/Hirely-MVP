@@ -95,7 +95,7 @@ db.once('open', function(){
                 _id: positionId,
                 location_id: locationId,
                 title: 'Barista',
-                onetClass: '11-1011.03',
+                occId: '11-1011.03',
                 slug: 'barista',
                 workType: 'part-time',
                 hoursPerWeekMin: 1,
@@ -105,6 +105,14 @@ db.once('open', function(){
                 minWeekdayShifts: 3,
                 minWeekendShifts: 3,
                 openings: 3,
+                expLvl: 2,
+
+                scoreWeights: {
+                    exp: .2,
+                    edu: .1,
+                    qual: .2,
+                    psy: .5
+                },
 
                 compensation: {
                     wageType: 'hourly',
@@ -144,7 +152,7 @@ db.once('open', function(){
                 _id: positionId2,
                 location_id: locationId2,
                 title: 'Web Developer',
-                onetClass: '11-1011.03',
+                occId: '11-1011.03',
                 slug: 'barista',
                 workType          :     'part-time',
                 hoursPerWeekMin   :     1,
@@ -154,6 +162,13 @@ db.once('open', function(){
                 minWeekdayShifts  :     3,
                 minWeekendShifts  :     3,
                 openings          :     3,
+                expLvl: 3,
+                scoreWeights: {
+                    exp: .2,
+                    edu: .1,
+                    qual: .2,
+                    psy: .5
+                },
 
                 compensation:
                 {

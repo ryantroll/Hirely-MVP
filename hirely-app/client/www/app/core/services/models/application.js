@@ -5,9 +5,9 @@
  * */
 
 JobApplication = Model({
-  initialize: function (userId, variantId, status, prescreenAnswers){
+  initialize: function (userId, positionId, status, prescreenAnswers){
     if(userId) this.userId = userId;
-    if(variantId) this.variantId = variantId;
+    if(positionId) this.positionId = positionId;
     if(undefined !== status) this.status = status;
     if(prescreenAnswers) this.prescreenAnswers = prescreenAnswers;
 
