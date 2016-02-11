@@ -1,0 +1,8 @@
+<div class="content">
+    <h3>{{business.name}}</h3>
+    <p>Open Jobs:</p>
+    <div class="alert alert-success" ng-repeat="variant in variants">
+        {{$index + 1}}. {{variant.data.title}}
+        <a class="pull-right" href="javascript:void(0);" ng-click="jobApply($index)">Apply</a>
+    </div>
+</div>

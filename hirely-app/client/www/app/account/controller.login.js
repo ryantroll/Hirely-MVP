@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginCtrl', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', 'UserService', LoginCtrl ]);
+    angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', 'UserService', LoginController ]);
 
 
-    function LoginCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, userService) {
+    function LoginController($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, userService) {
         var authService = AuthService;
         var vm = this;
         $scope.error = '';

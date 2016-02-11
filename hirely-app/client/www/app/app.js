@@ -45,11 +45,11 @@ var myApp = angular.module('hirelyApp',
 
         controller: 'HomeCtrl'
       })
-      .state('app.login', {
-        url: '/login',
-        templateUrl: 'app/account/login.html',
-        controller: 'LoginCtrl'
-      })
+      // .state('app.login', {
+      //   url: '/login',
+      //   templateUrl: 'app/account/login.html',
+      //   controller: 'LoginCtrl'
+      // })
       .state('app.job', {
         url: '/job?placeId&distance&occupationId&wage',
         parent: 'app',
@@ -59,11 +59,11 @@ var myApp = angular.module('hirelyApp',
         url: '/jobdetails?jobId',
         templateUrl: 'app/jobdetails/jobDetails.html',
       })
-      .state('app.register', {
-        url: '/register',
-        templateUrl: 'app/account/register.html',
-        controller: 'RegisterCtrl'
-      })
+      // .state('app.register', {
+      //   url: '/register',
+      //   templateUrl: 'app/account/register.html',
+      //   controller: 'RegisterCtrl'
+      // })
       .state('app.hmregister', {
         url: '/hmregister',
         templateUrl: 'app/manager/hmRegister.html',
@@ -157,12 +157,25 @@ var myApp = angular.module('hirelyApp',
         controller: 'UserProfileController',
         authRequired: true
       })
-      .state('app.application', {
-        url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
-        templateUrl: 'app/application/job-application.html',
-        controller: 'JobApplicationController',
-        //authRequired: true
+      .state('application', {
+        abstract: true,
+        templateUrl: 'app/layout/application/application-master.tpl.html'
       })
+      .state('application.joblist', {
+        url: '/jobs/:businessSlug',
+        templateUrl: 'app/application/job-list.tpl.html',
+        controller: 'JobListController',
+      })
+      .state('application.apply', {
+        url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
+        templateUrl: 'app/application/job-application.tpl.html',
+        controller: 'JobApplicationController'
+      })
+      // .state('app.application', {
+      //   url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
+      //   templateUrl: 'app/application/job-application.html',
+      //   controller: 'JobApplicationController',
+      // })
 
 
     // if none of the above states are matched, use this as the fallback

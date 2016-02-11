@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('RegisterCtrl', ['$scope', '$rootScope', '$stateParams', '$uibModalInstance', 'AuthService', 'UserService', RegisterCtrl ]);
+    angular.module('hirelyApp.account').controller('RegisterController', ['$scope', '$rootScope', '$stateParams', '$uibModalInstance', 'AuthService', 'UserService', RegisterController ]);
 
-    function RegisterCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
+    function RegisterController($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
 
         var vm = this;
         var authService = AuthService;
