@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 var Q = require('q');
 
 var MatchService {
@@ -19,6 +20,8 @@ var MatchService {
     else if (monthCount > 3) { return 3 };
     else if (monthCount > 1) { return 1 };
 =======
+=======
+>>>>>>> a7d0fdda61c182ae85c1a53b3b66857d0536660e
 
 var UserService {
   var experienceLevels =  [0, 3, 6, 12, 24, 48, 64, 98, 124] // tiers of experience where level = num of months
@@ -33,7 +36,10 @@ var UserService {
     else if (rmonthCount > 6) { return 6 };
     else if (rmonthCount > 3) { return 3 };
     else if (rmonthCount > 1) { return 1 };
+<<<<<<< HEAD
 >>>>>>> 35dfa35... Matching Snapshot
+=======
+>>>>>>> a7d0fdda61c182ae85c1a53b3b66857d0536660e
     else { return 0 };
   }
 
@@ -43,10 +49,14 @@ var UserService {
     // Education
     user.educationMaxLvl = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
     user.education.forEach(function(program) {
 =======
     for program in user.education.forEach(function(program) {
 >>>>>>> 35dfa35... Matching Snapshot
+=======
+    for program in user.education.forEach(function(program) {
+>>>>>>> a7d0fdda61c182ae85c1a53b3b66857d0536660e
       // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
       if (program.programType > 1 && program.isCompleted == 0) {
         program.programType = 2;
@@ -55,10 +65,14 @@ var UserService {
         user.educationMaxLvl = program.programType;
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
     });
 =======
     })
 >>>>>>> 35dfa35... Matching Snapshot
+=======
+    })
+>>>>>>> a7d0fdda61c182ae85c1a53b3b66857d0536660e
       
 
     // Clear the old Ksa
@@ -67,6 +81,7 @@ var UserService {
     // Concat roles
     roles = {};
     totalWorkMonths = 0;
+<<<<<<< HEAD
 <<<<<<< HEAD
     occIds = [];
     user.workExperiences.forEach(function (workExperience) {
@@ -401,6 +416,8 @@ var UserService {
   };  // end getUserSuggestions
 
 =======
+=======
+>>>>>>> a7d0fdda61c182ae85c1a53b3b66857d0536660e
     oids = []
     user['workExperiences'].forEach(function (workExperience) {
       totalWorkMonths += workExperience['monthCount'];
@@ -779,5 +796,8 @@ function test() {;
                                                          lng_upper_bound=(user['address']['lng']+.5), ;
                                                          lat_lower_bound=(user['address']['lat']-.5), ;
                                                          lat_upper_bound=(user['address']['lat']+.5));
+<<<<<<< HEAD
 >>>>>>> 35dfa35... Matching Snapshot
+=======
+>>>>>>> a7d0fdda61c182ae85c1a53b3b66857d0536660e
 };
