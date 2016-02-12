@@ -1,4 +1,24 @@
-<div class="content">
-    <div ng-if="!isAuth && registerFrom" register-form></div>
-    <div ng-if="!isAuth && loginForm" login-form></div>
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loadding</p>
+    <div class="loader"></div>
+</div>
+<div class="content" ng-show="dataLoaded && !dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h4>Create a Hirely account to apply for "{{position.title}}" at {{business.name}}</h4>
+        </div>
+    </div>
+    <div class="inner">
+        <div ng-if="!isAuth && !dataError && registerFrom" register-form></div>
+        <div ng-if="!isAuth && !dataError && loginForm" login-form></div>
+    </div>
+</div>
+
+<div class="content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Position Not Found!</h4>
+        </div>
+    </div>
 </div>

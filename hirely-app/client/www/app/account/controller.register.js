@@ -4,9 +4,24 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('RegisterController', ['$scope', '$rootScope', '$stateParams', '$uibModalInstance', 'AuthService', 'UserService', RegisterController ]);
+    angular.module('hirelyApp.account')
+    .directive('validatePassword', function(){
+    return {
+      restrict:'A',
+      require:'ngModel',
+      link:function(scope, ele, attrs, ctrl){
+        ctrl.$parsers.unshift(function(value){
+          var pat = /^.{6,12}$/;
 
-    function RegisterController($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, UserService) {
+          ctrl.$setValidity('invalidPassword', pat.test(value));
+          return value;
+        });/// unshift
+      }//// fun. link
+    }/// return object
+  })/// validate date;
+    .controller('RegisterController', ['$scope', '$rootScope', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
+
+    function RegisterController($scope, $rootScope, $stateParams, AuthService, UserService) {
 
         var vm = this;
         var authService = AuthService;
@@ -14,114 +29,103 @@
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
-        vm.FbRegister = function () {
-            registerThirdPartyUser('facebook')
+
+        $scope.resetEmailValidity = function(){
+          $scope.registerForm.email.$setValidity('emailExists', true);
         }
 
-        vm.GoogleRegister = function () {
+        $scope.handleRgisterForm = function(){
+            if(!$scope.registerForm.$valid){
+                return null;
+            }
 
-            registerThirdPartyUser('google')
-        }
+            $scope.ajaxBusy = true;
 
-        vm.TwitterRegister = function () {
-
-            registerThirdPartyUser('twitter')
-        }
-
-        vm.registerNewUser = function() {
-            $scope.user.provider = 'password';
-            // $scope.user.email = Math.round(Math.random()*1000).toString() + $scope.user.email;
-            registerPasswordUser($scope.user)
-        }
-
-        vm.CloseModal = function (){
-            $uibModalInstance.close();
-        }
-
-        vm.goToLogin = function(event){
-            $uibModalInstance.close();
-            /**
-             * headerCtrl.js will listen to showLogin event
-             */
-            $rootScope.$emit('ShowLogin');
-        }
-
-        //this function registers user in 3rd party and
-        //and then creates Firebase db
-        function registerThirdPartyUser(provider, scope) {
-            authService.thirdPartyLogin(provider, scope)
-                .then(function(user) {
-                    userService.createUserfromThirdParty(provider, user)
-                        .then(function(fbUser){
-                            userService.setCurrentUser(fbUser, provider.uid);
-                            $uibModalInstance.close();
-                        }, function(err) {
-                            alert(err)
-                        });
-                }, function(err) {
-                    alert(err)
-                })
+            registerPasswordUser($scope.user);
         }
 
         function registerPasswordUser(registeredUser){
+
             //register new user
             userService.registerNewUser(registeredUser.email, registeredUser.password)
-                .then(function(user) {
-                    /**
-                     * User authentication is created successfully
-                     * Create user object in database
-                     */
+                .then(
+                    function(user) {
+                      /**
+                       * User authentication is created successfully
+                       * Create user object in database
+                       */
+                      console.log(user)
+                      return user;
+                  },
+                  function(err) {
+                      /**
+                       * User authentication couldn't be created
+                       */
+                      $scope.registerForm.email.$setValidity('emailExists', false);
+                      $scope.ajaxBusy = false;
+                  }
+                )
+                .then(
+                  function(user){
                     userService.createRegisteredNewUser(registeredUser, user.uid)
-                        .then(function(newUserData){
-                            /**
-                             * user object created successfully in DB
-                             * Login registered user
-                             */
-                            authService.passwordLogin(registeredUser.email, registeredUser.password)
-                                .then(function(auth){
-                                    // authService.setCurrentUser(newUserData, user.uid);
-                                    $uibModalInstance.close();
-                                }, function(err) {
-                                    /**
-                                     * Error in login for new registered user
-                                     */
-                                    alert(err)
-                                });
-                        }, function(err) {
-                            /**
-                             * user object couldn't be save in DB
-                             * Remove the user from authentication DB
-                             */
-                            userService.removeUser(registeredUser.email, registeredUser.password)
-                            .then(
-                                function(result){
-                                    if(true === result){
+                    .then(
+                      function(newUserData){
+                        console.log(newUserData)
+                        return newUserData;
+                      },
+                      function(err){
+                        console.log(err)
+                      }
+                    )
+                  },
+                  function(err){
+                    console.log(err)
+                  }
+                )
 
-                                    }
-                                    $uibModalInstance.close();
-                                },
-                                function(error){
-                                    // console.log('remove error');
-                                    // console.log(error);
-                                    $uibModalInstance.close();
-                                }
-                            );
-                            alert('System Error!\n\n' + err);
+        }//// fun. registerPasswrodUser
 
-                        });
-                }, function(err) {
-                    /**
-                     * User authentication couldn't be created
-                     */
-                    alert(err)
-                })
-
-        }
 
 
     }
 
 
+// userService.createRegisteredNewUser(registeredUser, user.uid)
+//                         .then(function(newUserData){
+//                             /**
+//                              * user object created successfully in DB
+//                              * Login registered user
+//                              */
+//                             authService.passwordLogin(registeredUser.email, registeredUser.password)
+//                                 .then(function(auth){
+//                                     // authService.setCurrentUser(newUserData, user.uid);
+//                                     console.log(auth);
+//                                 }, function(err) {
+//                                     /**
+//                                      * Error in login for new registered user
+//                                      */
+//                                     console.log(err)
+//                                 });
+//                         }, function(err) {
+//                             /**
+//                              * user object couldn't be save in DB
+//                              * Remove the user from authentication DB
+//                              */
+//                             userService.removeUser(registeredUser.email, registeredUser.password)
+//                             .then(
+//                                 function(result){
+//                                     if(true === result){
 
+//                                     }
+
+//                                 },
+//                                 function(error){
+//                                     // console.log('remove error');
+//                                     // console.log(error);
+//                                 }
+//                             );
+//                             alert('System Error!\n\n' + err);
+
+//                         });
 
 })();
