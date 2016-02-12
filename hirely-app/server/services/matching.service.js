@@ -10,6 +10,7 @@ var MatchService = {
     defaultExpWeight: .3,
     defaultEduWeight: .1,
     defaultPsyWeight: .3,
+    minimumSuggestionThreshold: 60,
 
     monthCountToExperienceLevel: function(monthCount) {
         if      (monthCount > 124) { return 124 }
@@ -258,7 +259,7 @@ var MatchService = {
 
         var position = business.positions[application.positionId];
 
-        CareerMatchCache.findOne(position.occId, userId).then(function(careerMatchCache) {
+        CareerMatchCache.findOne(occId=position.occId, userId=userId).then(function(careerMatchCache) {
 
             application.scores = careerMatchCache.scores[position.expLvl];
             application.scores.exp *= position.scoreWeights.exp;
@@ -307,74 +308,82 @@ var MatchService = {
     },  // end getUserSuggestions
 
 
-    // This should be an api endpoint
-    getPositionSuggestions: function(userId, distance, limit) {
-        limit = limit || 100;
-        // Not implemented yet
+    getUserSuggestionsForPosition: function(position) {
 
-        //var suggestions = [];
-        //var suggestionSortMap = [];
-        //
-        //// Get all businesses with open position positions within a lat-lon region;
-        //// TODO:  figure out how to do these filters
-        //if (lng_lower_bound !== null && lng_upper_bound !== null && lat_lower_bound !== null && lat_upper_bound !== null) {
-        //    businessQuery = Business.find(positions__openings__gt=0,
-        //        locations__lng__within=(lng_lower_bound, lng_upper_bound),
-        //        locations__lat__within=(lat_lower_bound, lat_upper_bound));
-        //} else {
-        //    businessQuery = Business.find(positions__openings__gt=0);
-        //}
-        //
-        //businessQuery.then(function(businesses) {
-        //
-        //    var promises = [];
-        //
-        //    businesses.forEach(function(business) {
-        //
-        //        // Now get match scores for every position and append to suggestions;
-        //        business.positions.forEach(function(position) {
-        //
-        //            if (position.openings > 0) {
-        //
-        //                promises.push(CareerMatchCache.findOne({occId:position.occId, userId:userId}).then(function(match) {
-        //
-        //                    scores = match.scores[position.expLvl];
-        //                    index = suggestions.push({businessId:business._id, positionId:position._id, scores:scores}) - 1;
-        //                    suggestionSortMap.push({index:index, score:scores.overallScore});
-        //
-        //                }));  // end CareerMatchCache.findOne
-        //
-        //            };  // end if position.openings
-        //
-        //        });  // end business.positions.foreach
-        //
-        //    });  // end businesses.foreach
-        //
-        //    // Wait until retrieves are done
-        //    Q.all(promises).then(function() {
-        //
-        //        // Inverse sort by suggestion['scores']['overallScore']
-        //        // Use the map to eval sort order to boost performance
-        //        // reference:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-        //        suggestionSortMap.sort(function(a, b) {return a.score - b.score;});
-        //        // Now apply the sort to suggestions
-        //        var suggestionsSorted = suggestionSortMap.map(function(element){
-        //            return suggestions[element.index];
-        //        });
-        //        // Finally limit
-        //        suggestionsSortedAndLimited = suggestionsSorted.slice(0, limit);
-        //        // TODO:  Figure out how to return this synchronously for api requests
-        //        return suggestionsSortedAndLimited
-        //
-        //    }  // end Q.all
-        //
-        //});  // end businessQuery.then
+        suggestions = [];
 
-    },  // end getPositionSuggestions
+        Applications.find({positionId:position._id}).then(function(applications) {
 
-    getUserSuggestions: function(positionId, limit) {
-        limit = limit || 100;
-        // Not implemented yet
-    }  // end getUserSuggestions
+            priorApplicationUserIds = [];
+            applications.forEach(function(application) {
+                priorApplicationUserIds.push(application.userId);
+            });
+
+            Users.find({city:position.city, state:position.state, userId:{$nin:priorApplicationUserIds}}).then(function(users) {
+
+                usersIndexedById = {};
+                users.forEach(function(user) {
+                    usersIndexedById[user._id] = user;
+                };
+
+                // Sort users by career match score and throw away users under minithres
+                CareerMatchScores.find({occId:position.occId,
+                    userId:{$in:Object.keys(usersIndexedById)},
+                    scores[position.expLvl].overallScore: {$gte, MatchService.minimumSuggestionThreshold},
+                    $sort:{scores[position.expLvl].overallScore: -1}
+            })
+                .then(function(careerMatchScores) {
+                    careerMatchScores.forEach(function(careerMatchScore) {
+                        user = usersIndexedById[careerMatchScore.userId];
+                        suggestions.push({user:user, careerMatchScore:careerMatchScore});
+                    });
+                    return suggestions;
+                });
+
+            });
+
+        });
+    }
+
+
+    getPositionSuggestionsForUser: function(user) {
+
+        Applications.find({userId:user._id}).then(function(applications) {
+
+            priorApplicationPositionIds = [];
+            applications.forEach(function(application) {
+                priorApplicationPositionIds.push(application.positionId);
+            });
+
+            businesses = Businesses.find({location.city:user.city, location.state:user.state}).then(function(businesses) {
+
+                businesses.forEach(function(business) {
+                    business.positions.forEach(function(position) {
+
+                        // Filter out positions already applied to
+                        if (priorApplicationPositionIds.indexOf(position._id) != -1) {
+
+                            // Note:  position specific filters are applied on front end
+                            // Sort positions by career match score and throw away positions under minimumSuggestionThreshold
+                            // TODO:  Catch cms in local function to avoid dup lookups
+                            CareerMatchScores.findOne({occId:position.occId, userId:userId}).then(function(careerMatchScore) {
+                                if (careerMatchScore.scores[position.expLvl].overallScore > MatchService.minimumSuggestionThreshold) {
+                                    suggestions.push({position:position, careerMatchScore:careerMatchScore});
+                                }
+                            });
+
+                        };
+
+                    });
+
+                });
+
+                // TODO: Need to sort by score
+                return suggestions;
+
+            });
+
+        });
+    }
 
 };
