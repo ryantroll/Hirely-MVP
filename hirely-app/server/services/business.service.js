@@ -5,7 +5,7 @@ var businessModel = require('../models/business.model');
  * @type {Array}
  */
 var privateFields = [
-    'locations.positions.variants.applications'
+    
 ];
 
 var businessService = {
@@ -39,6 +39,24 @@ var businessService = {
     },
 
     /**
+     * [getByPositionId will return a busniess object based on position ID that in positions array]
+     * @param  {string} positionId [id of position tha belong to requested business object ]
+     * @return {promise}           [description]
+     */
+    getByPositionId: function(positionId, reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+
+        return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }, returnFields).exec();
+        //return businessModel.find({})
+        //.where({positions:{$elemMatch:{_id:positionId}}})
+        //.exec();
+    },
+
+    /**
      * [createNewBusiness will create new business object in database]
      * @param  {[type]} businessObj [JS object with required field in business Model]
      * @return {[type]}         [promise with business basic info]
@@ -53,25 +71,8 @@ var businessService = {
             }//// then fun.
 
         );/// then
-    },
-
-    /**
-     * [getByVariantId will return a busniess object based on variant ID that in locations.positions.variants array]
-     * @param  {string} variantId [id of variant tha belong to requested business object ]
-     * @return {promise}           [description]
-     */
-    getByVariantId: function(variantId){
-        return businessModel.find({})
-        .where({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{_id:variantId}}}}}}})
-        .exec();
-    },
-
-    getByVariantSlug: function(variantSlug){
-        console.log(variantSlug)
-        return businessModel.find({})
-        .where({locations:{$elemMatch:{positions:{$elemMatch:{variants:{$elemMatch:{slug:variantSlug}}}}}}})
-        .exec();
     }
+    
 
 }/// businesss object
 
