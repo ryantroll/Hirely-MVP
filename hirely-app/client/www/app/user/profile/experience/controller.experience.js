@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var hirelyApp = angular.module('hirelyApp').controller('StepTwoController', ['$scope', '$stateParams', '$filter', 'GeocodeService', 'OccupationService', 'AuthService', 'UserService', 'StatesNames', StepTwoController]);
+  var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$scope', '$stateParams', '$filter', '$timeout', 'GeocodeService', 'OccupationService', 'AuthService', 'UserService', 'StatesNames', ProfileExperienceController]);
 
   hirelyApp.directive('validateMonth', function(){
     return {
@@ -43,7 +43,7 @@
 
   })/// validate year
 
-  function StepTwoController($scope, $stateParams, $filter, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
+  function ProfileExperienceController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
 
     var geocodeService = GeocodeService;
 
@@ -53,8 +53,6 @@
     var orderBy = $filter('orderBy');
 
     $scope.stepTwoLoaded = false;
-
-
 
     $scope.states = StatesNames;
 
@@ -82,7 +80,7 @@
      */
     $scope.xpItems = [];
 
-    UserService.getUserCompleteFields(AuthService.currentUserID, ['workExperience', 'education'])
+    UserService.getUserCompleteFields(AuthService.currentUserID, ['workExperience'])
     .then(
       function(founded){
         if(Array.isArray(founded.workExperience)){
@@ -96,17 +94,24 @@
             item.dateStart = new Date(item.dateStart);
             item.dateEnd = new Date(item.dateEnd);
             item.dateStartYear = item.dateStart.getFullYear();
-            item.dateStartMonth = item.dateStart.getMonth() + 1;
+            item.dateStartMonth = String(item.dateStart.getMonth() + 1);
             if(!isNaN(item.dateEnd.getTime()) ){
               item.dateEndYear = item.dateEnd.getFullYear();
-              item.dateEndMonth = item.dateEnd.getMonth() + 1;
+              item.dateEndMonth = String(item.dateEnd.getMonth() + 1);
+            }
+            else{
+              item.currentlyHere = true;
             }
           });
           $scope.xpItems = orderBy(founded.workExperience, 'dateStart', true);
         }//// if isArray(experience)
 
+        $timeout(function(){
+          if(!$scope.stepOneLoaded){
+            $scope.stepTwoLoaded = true;
+          }
+        }, 1000);/// $timeout
 
-        $scope.stepTwoLoaded = true;
       },
       function(err){
         //// console.log(err);
@@ -121,6 +126,33 @@
      */
     $scope.addJobXp = function () {
       if(!$scope.stepTwo.$valid) return null;
+
+      /**
+       * Check if edit
+       */
+      if(angular.isDefined($scope.editIndex)
+        && $scope.editIndex >=0
+        && $scope.editIndex < $scope.xpItems.length
+      ){
+        console.log($scope.editIndex, $scope.editIndex > 0);
+        $scope.occupation.dateStart = new Date(Number($scope.occupation.dateStartYear), Number($scope.occupation.dateStartMonth)-1, 1);
+
+        if(true !== $scope.occupation.currentlyHere){
+          $scope.occupation.dateEnd = new Date(Number($scope.occupation.dateEndYear), Number($scope.occupation.dateEndMonth)-1, 1);
+        }
+        angular.extend($scope.xpItems[$scope.editIndex], $scope.occupation);
+
+        $scope.occupation = {};
+        delete $scope.editIndex;
+
+        // $scope.xpItems = orderBy($scope.xpItems, 'dateStart', true);
+
+        $scope.stepTwo.$setUntouched();
+        $scope.stepTwo.$setPristine();
+
+        $scope.addWorkXpForm = false;
+        return;
+      }//// if edit;
 
       var newExp = angular.copy($scope.occupation);
       newExp.dateStart = new Date(Number(newExp.dateStartYear), Number(newExp.dateStartMonth)-1, 1);
@@ -138,11 +170,26 @@
       $scope.stepTwo.$setUntouched();
       $scope.stepTwo.$setPristine();
 
-      /**
-       * Update step validity
-       */
-      // $scope.$setValidity(true === $scope.eduItems.length > 0 && $scope.xpItems.length > 0);
+      $scope.addWorkXpForm = false;
     }//// fun. addJobXp
+
+    /**
+     * [fixFormDiv will set the form div to window height and scroll page to top
+     * form is shown as an overlay and should cover the whole screen]
+     * @return {null}
+     */
+    function fixFormDiv(){
+      var formDiv = $('#expFormDiv');
+      $(window).scrollTop(0);
+      /**
+       * Add some delay so we can read the height property after div is added to dom
+       */
+      setTimeout(function(){
+        if(formDiv.height() < $(document).height()){
+          formDiv.height($(document).height());
+        }
+      },100)
+    }
 
     /**
      * [removeJobXp will remove work wperience from the array]
@@ -151,96 +198,131 @@
      */
     $scope.removeJobXp = function(index){
       $scope.xpItems.splice(index, 1);
-
-      /**
-       * Update step validity
-       */
-      // $scope.$setValidity($scope.eduItems.length > 0 && $scope.xpItems.length > 0);
     }
 
-      var locations = [];
-      $scope.selectedLocation = undefined;
+    /**
+     * [editJobXp will show the form after setting the occupatin scope var to holde the edited item]
+     * @param  {number} index [index of edited item in xpItems array ]
+     * @return {null}       [description]
+     */
+    $scope.editJobXp = function(index){
+      $scope.occupation = angular.copy($scope.xpItems[index]);
+      $scope.editIndex = index;
+      $scope.addWorkXpForm = true;
 
-      /**
-       * [searchLocations used for the typeahead in company name, will get the matchin addrss based on entered query]
-       * @param  {string} query [text string to search google places for]
-       * @return {array}       [array of address objects from google places]
-       */
-      $scope.searchLocations = function(query){
-          if(!!query && query.trim() != ''){
+      fixFormDiv();
+    }
 
-              return geocodeService.placeSearch(query)
-                  .then(
-                      function(data){
-                          locations = [];
-                          if(data.statusCode == 200){
-                              data.results.predictions.forEach(function(prediction){
-                                  locations.push({address: prediction.description, placeId: prediction.place_id});
-                              });
-                              return locations;
-                          } //// if statusCode == 200
-                          else {
-                              console.dir('error', data.statusCode);
-                              return {};
-                          }
-                      },//// fun. reslove
-                      function(error){
-                          console.dir(error);
-                      }/// fun. reject
-                  );//// then
-          }//// if query
-      };/// fun. searchLocations
+    /**
+     * [cancelJobXp will be trigger when cancel is clicked in form, will reset the form and clear the required variables]
+     * @return {null} [description]
+     */
+    $scope.cancelJobXp = function(){
+      $scope.occupation={};
 
-      /**
-       * [setAddress will set the right address component in scop when user select one address form typeahead]
-       * @param {object} address [address object from selected item in typeahead]
-       */
-      $scope.setAddress = function(address){
-          $scope.occupation.formattedAddress = address.address;
-          $scope.occupation.googlePlaceId = address.placeId;
+      delete $scope.editIndex;
 
-          geocodeService.getPlaceDetails(address.placeId).then(function(data){
-              var place = data.results.result;
+      $scope.stepTwo.$setUntouched();
+      $scope.stepTwo.$setPristine();
 
-              if(place){
-                  /**
-                   * Loop throught  address components and take what is needed
-                   */
-                  for (var i = 0; i < place.address_components.length; i++) {
-                      var addressType = place.address_components[i].types[0];
+      $scope.addWorkXpForm=false;
+    }//// fun. cancelJobXp
 
-                      switch (addressType){
-                          // case "route":
-                              // $scope.occupation.street1 = place.address_components[i][addressComponents[addressType]] || false;
-                              // break;
+    /**
+     * [showJobXp will be triggered when "Add Experinece" clicked to show the form and set the required vars]
+     * @return {null} [description]
+     */
+    $scope.showJobXp = function(){
+      $scope.occupation={};
+      delete $scope.editIndex;
+      $scope.addWorkXpForm=true;
 
-                          // case "street_number":
-                          //   $scope.user.number = place.address_components[i][addressComponents[addressType]] || false;
-                          //   break;
+      fixFormDiv();
+    }//// fun. ShowJobXp
 
-                          // case "country":
-                          //     $scope.occupation.country = place.address_components[i][addressComponents[addressType]] || false;
-                          //     break;
+      // var locations = [];
+      // $scope.selectedLocation = undefined;
 
-                          case "administrative_area_level_1":
-                              $scope.occupation.state = place.address_components[i].short_name || null;
-                              break;
+      // /**
+      //  * [searchLocations used for the typeahead in company name, will get the matchin addrss based on entered query]
+      //  * @param  {string} query [text string to search google places for]
+      //  * @return {array}       [array of address objects from google places]
+      //  */
+      // $scope.searchLocations = function(query){
+      //     if(!!query && query.trim() != ''){
 
-                          case "locality":
-                              $scope.occupation.city = place.address_components[i].long_name || null;
-                              break;
+      //         return geocodeService.placeSearch(query)
+      //             .then(
+      //                 function(data){
+      //                     locations = [];
+      //                     if(data.statusCode == 200){
+      //                         data.results.predictions.forEach(function(prediction){
+      //                             locations.push({address: prediction.description, placeId: prediction.place_id});
+      //                         });
+      //                         return locations;
+      //                     } //// if statusCode == 200
+      //                     else {
+      //                         console.dir('error', data.statusCode);
+      //                         return {};
+      //                     }
+      //                 },//// fun. reslove
+      //                 function(error){
+      //                     console.dir(error);
+      //                 }/// fun. reject
+      //             );//// then
+      //     }//// if query
+      // };/// fun. searchLocations
 
-                          // case "postal_code":
-                          //     $scope.occupation.postalCode = place.address_components[i][addressComponents[addressType]] || false;
-                          //     break;
-                      }//// switch
-                  }//// for
+      // /**
+      //  * [setAddress will set the right address component in scop when user select one address form typeahead]
+      //  * @param {object} address [address object from selected item in typeahead]
+      //  */
+      // $scope.setAddress = function(address){
+      //     $scope.occupation.formattedAddress = address.address;
+      //     $scope.occupation.googlePlaceId = address.placeId;
 
-              }//// if place
+      //     geocodeService.getPlaceDetails(address.placeId).then(function(data){
+      //         var place = data.results.result;
 
-          });
+      //         if(place){
+      //             /**
+      //              * Loop throught  address components and take what is needed
+      //              */
+      //             for (var i = 0; i < place.address_components.length; i++) {
+      //                 var addressType = place.address_components[i].types[0];
 
-      }//// fun. setAddress
+      //                 switch (addressType){
+      //                     // case "route":
+      //                         // $scope.occupation.street1 = place.address_components[i][addressComponents[addressType]] || false;
+      //                         // break;
+
+      //                     // case "street_number":
+      //                     //   $scope.user.number = place.address_components[i][addressComponents[addressType]] || false;
+      //                     //   break;
+
+      //                     // case "country":
+      //                     //     $scope.occupation.country = place.address_components[i][addressComponents[addressType]] || false;
+      //                     //     break;
+
+      //                     case "administrative_area_level_1":
+      //                         $scope.occupation.state = place.address_components[i].short_name || null;
+      //                         break;
+
+      //                     case "locality":
+      //                         $scope.occupation.city = place.address_components[i].long_name || null;
+      //                         break;
+
+      //                     // case "postal_code":
+      //                     //     $scope.occupation.postalCode = place.address_components[i][addressComponents[addressType]] || false;
+      //                     //     break;
+      //                 }//// switch
+      //             }//// for
+
+      //         }//// if place
+
+      //     });
+
+      // }//// fun. setAddress
 
       /**
        * [searchPosition will be used in typeahead to query onet positions and return a list of matching position]
@@ -313,6 +395,7 @@
           /**
            * check if end date is less than start date
            */
+
           if( !isNaN(start.getTime() ) && !isNaN(end.getTime() ) ){
             $scope.stepTwo.workDateEndY.$setValidity('invalidEndDate', end > start);
             $scope.stepTwo.workDateEndM.$setValidity('invalidEndDate', end > start);
@@ -323,6 +406,12 @@
            */
           if(Array.isArray($scope.xpItems))
           for(var x=0; x<$scope.xpItems.length; x++){
+            /**
+             * Dont validate the range of the edit item with himself
+             */
+            if(!isNaN($scope.editIndex) && $scope.editIndex === x){
+              continue;
+            }
             /**
              * check if start date in a middle of range
              */

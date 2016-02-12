@@ -1,0 +1,261 @@
+<div class="form-loader" ng-show="!stepTwoLoaded">
+    <div class="loader"></div>
+</div>
+
+<div class="form-container user-profile-exp" ng-show="stepTwoLoaded">
+    <div class="row">
+        <div class="cards-wrapper">
+            <div class="card" ng-repeat="xpItem in xpItems">
+                <h3>{{xpItem.reportedJobName}}</h3>
+                <p>{{xpItem.formattedAddress}} - {{xpItem.city}}, {{xpItem.state}} </p>
+                <p ng-class="{'-xxxx-bg-danger':xpItem.conflict}">{{xpItem.dateStartMonth}}/{{xpItem.dateStartYear}} - <span ng-show="xpItem.dateEndMonth">{{xpItem.dateEndMonth}}/{{xpItem.dateEndYear}}</span><span ng-show="!xpItem.dateEndMonth">Current</span></p>
+                <div class="btn-group">
+                    <button class="btn blue" ng-click="editJobXp($index)">EDIT</button>
+                    <button class="btn red" ng-click="removeJobXp($index)">REMOVE</button>
+                </div>
+            </div>
+            <div class="card add-card">
+                <div class="add-group">
+                    <button class="btn btn-circle blue" ng-click="showJobXp()">+</button>
+                    <p>Add Experience</p>
+                </dvi>
+            </dvi>
+        </div><!--cards-wrapper-->
+    </div><!--row-->
+</div><!--user-profile-exp-->
+
+<div class="form-overlay" ng-show="addWorkXpForm" id="expFormDiv">
+    <header>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Experience</h3>
+                </div><!--col-xs-->
+            </div><!--row-->
+    </header>
+
+    <div class="form-container user-profile-exp hirely-form" ng-show="stepTwoLoaded">
+        <form name="stepTwo" novalidate form-step-validity>
+            <fieldset>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': !stepTwo.position.$valid && stepTwo.position.$dirty, 'valid' : stepTwo.position.$valid}">
+                            <label for="position">
+                                Position
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" id="position" name="position" class="text-field"
+                                ng-model="occupation.reportedJobName"
+                                uib-typeahead="position as position.reportedTitle for position in searchPosition($viewValue)"
+                                typeahead-loading="loadingPositions"
+                                typeahead-no-results="noResultsPos"
+                                typeahead-on-select="setPosition($item)"
+                                required
+                            />
+                            <div class="spinner" ng-show="loadingPositions">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="positionSub">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': !stepTwo.position.$valid && stepTwo.position.$dirty, 'valid' : stepTwo.position.$valid}">
+                            <label for="position">
+                                Occupation
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <div class="btn-group fullwidth" uib-dropdown keyboard-nav>
+                                <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default fullwidth" uib-dropdown-toggle>
+                                    Select right occupation <span class="caret"></span>
+                                </button>
+                                <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                                    <li role="menuitem" ng-repeat="sub in positionSub">
+                                        <a href="javascript:;" ng-click="setPositionSub(sub)">{{sub.occupationTitle}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': stepTwo.company.$error.required && stepTwo.company.$dirty, 'valid' : stepTwo.company.$valid}">
+                            <label for="company">
+                                Business
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" id="company" name="company"
+                                class="text-field"
+                                ng-model="occupation.formattedAddress"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workCity.$valid && stepTwo.workCity.$dirty, 'valid' : stepTwo.workCity.$valid}">
+                            <label for="workCity">
+                                City
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-field" id="workCity" name="workCity"
+                                ng-model="occupation.city"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workState.$valid && stepTwo.workState.$dirty, 'valid' : stepTwo.workState.$valid}">
+                            <label for="workState">
+                                State
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <select  class="form-control" id="workState" name="workState"
+                                ng-model="occupation.state"
+                                required
+                            >
+                                <option></option>
+                                <option ng-repeat="state in states" value="{{state.abbreviation}}">{{state.name}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workDateStartM.$valid && stepTwo.workDateStartM.$dirty, 'valid' : stepTwo.workDateStartM.$valid}">
+                            <label for="workDateStartM">
+                                Start Month
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <select  class="option-field" id="workDateStartM" name="workDateStartM"
+                                ng-model="occupation.dateStartMonth"
+                                ng-maxlength="2"
+                                required
+                                validate-month
+                            >
+                                <!-- <option>Select Month</option> -->
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workDateStartY.$valid && stepTwo.workDateStartY.$dirty, 'valid' : stepTwo.workDateStartY.$valid}">
+                            <label for="workDateStartY">
+                                Start Year
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-field" id="workDateStartY" name="workDateStartY"
+                                placeholder="YYYY"
+                                ng-model="occupation.dateStartYear"
+                                ng-minlength="4"
+                                ng-maxlenght="4"
+                                required
+                                validate-year
+                            />
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-col-padding">
+                        <div class="bg-danger error-label" ng-show="stepTwo.workDateStartY.$error.startDateConflict">Start date conflicting with one of previous entered experience dates</div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper checkbox">
+                            <label class="custom-option toggle" data-off="NO" data-on="YES">
+                                <input type="checkbox" id="workHere" name="workHere"
+                                    ng-model="occupation.currentlyHere"
+                                />
+                                <span class="button-checkbox"></span>
+                            </label>
+                            <label for="workHere">I currently work here</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="!occupation.currentlyHere">
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workDateEndM.$valid && stepTwo.workDateEndM.$dirty, 'valid' : stepTwo.workDateEndM.$valid}">
+                            <label for="workDateEndM">
+                                End Month
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <select type="text" class="option-field" id="workDateEndM" name="workDateEndM"
+                                ng-model="occupation.dateEndMonth"
+                                ng-required="!occupation.currentlyHere"
+                                validate-month
+                            >
+                                <!-- <option>Select Month</option> -->
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workDateEndY.$valid && stepTwo.workDateEndY.$dirty, 'valid' : stepTwo.workDateEndY.$valid}">
+                            <label for="workDateEndY">
+                                End Year
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-field" id="workDateEndY" name="workDateEndY"
+                                placeholder="YYYY"
+                                ng-model="occupation.dateEndYear"
+                                ng-required="!occupation.currentlyHere"
+                                validate-year
+                            />
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-col-padding">
+                        <div class="error-label bg-danger" ng-show="stepTwo.workDateEndY.$error.endDateConflict">End date conflicting with one of previous entered experience dates</div>
+                        <div class="error-label bg-danger" ng-show="stepTwo.workDateEndY.$error.invalidEndDate">End date should be greater than start date</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper text-center">
+                            <button class="btn btn-lg red" ng-disabled="!stepTwo.$valid" ng-click="addJobXp()">SAVE</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper text-center">
+                            <button class="btn btn-link" ng-click="cancelJobXp()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper text-center">
+                            Powerd by <a href="javascript:void(0);"><i>Hirely</i></a>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div><!--form-container-->
+</div><!--form-overlay-->
+
+

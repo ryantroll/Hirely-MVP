@@ -45,15 +45,15 @@ var applicationRoutes = {
             );
     },
 
-    getByVariantId: function(req, res){
-        applicationService.getByVariantId(req.params.variantId, req.query)
+    getByPositionId: function(req, res){
+        applicationService.getByPositionId(req.params.positionId, req.query)
             .then(
                 function(app){
                     res.status(200).json(apiUtil.generateResponse(200, "Application retrieved successfully", app));
                 },
                 function(error){
                     //// application couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(404, "No application found for this variant", null));
+                    res.status(500).json(apiUtil.generateResponse(404, "No application found for this position", null));
                 }
             );
     },

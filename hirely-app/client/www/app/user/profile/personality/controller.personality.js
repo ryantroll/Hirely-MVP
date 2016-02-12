@@ -9,10 +9,10 @@
 (function() {
 	'use strict';
 
-	angular.module('hirelyApp').controller('StepThreeController', ['$scope', '$stateParams', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', StepThreeController]);
+	angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$stateParams', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
 
 
-	function StepThreeController($scope, $stateParams, TraitifyService, AuthService, UserService, TRAITIFY_PUBLIC_KEY) {
+	function ProfilePersonalityController($scope, $stateParams, TraitifyService, AuthService, UserService, TRAITIFY_PUBLIC_KEY) {
 
 		$scope.stepThreeLoaded = false;
 
@@ -118,55 +118,64 @@
     				 * no assessment is been taken
     				 * get new assessment from traitify and move to next then()
     				 */
-    				return TraitifyService.getAssessmentId();
+                    $scope.stepThreeLoaded = true;
+                    return null;
     			}////
     		}//// fun.
     	)//// then()
-		.then(
-			function(data){
-				if(data){
-					assessmentId = data.id;
 
-					traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
-						results: {
-							target: ".personality-results"
-						},
-						personalityTypes: {
-							target: ".personality-types"
-						},
-						personalityTraits: {
-							target: ".personality-traits"
-						}
-					});
 
-					traitify.slideDeck.onInitialize(function() {
-						results.slides = traitify.slideDeck.data.get("Slides");
-						$scope.stepThreeLoaded = true;
-						$scope.$apply();
-					});
+        $scope.showAssessment = function(){
 
-					traitify.results.onInitialize(function() {
-				    	$scope.traitifyResultLoaded = true;
+            TraitifyService.getAssessmentId()
+            .then(
+                function(data){
+                    if(data){
+                        assessmentId = data.id;
 
-						Traitify.getPersonalityTypes(assessmentId).then(function(data) {
-							results.types = data.personality_types;
-							results.blend = data.personality_blend;
-				    		$scope.traitifyTypesLoaded = true;
+                        traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
+                            results: {
+                                target: ".personality-results"
+                            },
+                            personalityTypes: {
+                                target: ".personality-types"
+                            },
+                            personalityTraits: {
+                                target: ".personality-traits"
+                            }
+                        });
 
-							saveAssessment()
-						});
-						Traitify.getPersonalityTraits(assessmentId).then(function(data) {
-							results.traits = data;
-				    		$scope.traitifyTraitsLoaded = true;
+                        traitify.slideDeck.onInitialize(function() {
+                            results.slides = traitify.slideDeck.data.get("Slides");
+                            // $scope.stepThreeLoaded = true;
+                            $scope.personalityExam = true;
+                            $scope.$apply();
+                        });
 
-							saveAssessment()
-						});
-						$scope.resultsLoaded = true;
-						$scope.$apply();
-					});
-				}/// if new-assessment
-			}//// fun.
-		)//// then()
+                        traitify.results.onInitialize(function() {
+                            $scope.traitifyResultLoaded = true;
+                            $scope.personalityExam = false;
+
+                            Traitify.getPersonalityTypes(assessmentId).then(function(data) {
+                                results.types = data.personality_types;
+                                results.blend = data.personality_blend;
+                                $scope.traitifyTypesLoaded = true;
+
+                                saveAssessment()
+                            });
+                            Traitify.getPersonalityTraits(assessmentId).then(function(data) {
+                                results.traits = data;
+                                $scope.traitifyTraitsLoaded = true;
+
+                                saveAssessment()
+                            });
+                            $scope.resultsLoaded = true;
+                            $scope.$apply();
+                        });
+                    }/// if new-assessment
+                }//// fun.
+            )//// then()
+        }/// fun. showAssessment
 
 	}
 })();

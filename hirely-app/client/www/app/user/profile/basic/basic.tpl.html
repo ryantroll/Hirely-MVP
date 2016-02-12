@@ -1,0 +1,113 @@
+<div class="form-loader" ng-show="!stepOneLoaded">
+	<div class="loader"></div>
+</div>
+<div class="form-container user-profile-basic hirely-form" ng-show="stepOneLoaded">
+	<form class="form-horizontal" name="stepOne" novalidate form-step-validity>
+		<fieldset>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="text-center user-image">
+						<img class="img-circle" src="https://lh3.googleusercontent.com/-1p0-ELNl0mk/AAAAAAAAAAI/AAAAAAAAAAA/xeGC2Eu7i0o/photo.jpg"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="text-center image-links">
+						<a href="javascript:void(0);">Edit</a> | <a href="javascript:void(0);">Remove</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.firstname.$valid && stepOne.firstname.$dirty, 'valid' : stepOne.firstname.$valid}">
+						<label for="firstname">
+							First Name
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" id="firstname" name="firstname" ng-model="user.firstName" required/>
+						<!-- <input type="text" /> -->
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.lastname.$valid && stepOne.lastname.$dirty, 'valid' : stepOne.lastname.$valid}">
+						<label for="lastname">
+							Last Name
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" name="lastname" id="lastname" ng-model="user.lastName" required/>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper" ng-class="{'error': stepOne.email.$error.required && stepOne.email.$dirty, 'valid' : stepOne.email.$valid}">
+						<label for="email">
+							Email
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="email" class="text-field" name="email" id="email" ng-model="user.email" required disabled/>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper"  ng-class="{'error': !stepOne.mobile.$valid && stepOne.mobile.$dirty, 'valid' : stepOne.mobile.$valid}">
+						<label for="mobile">
+							Phone
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="phone" class="text-field" name="mobile" id="mobile"
+							ng-model="_mobile"
+							required
+							ng-change="formatPhone()"
+							validate-phone
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.dob.$valid && stepOne.dob.$dirty, 'valid' : stepOne.dob.$valid}">
+						<label>
+							Date of Birth
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" id="dob" name="dob" placeholder="MM/DD/YYYY"
+							ng-model="_dateOfBirth"
+							validate-date
+							required
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.zipcode.$valid && stepOne.zipcode.$dirty, 'valid' : stepOne.zipcode.$valid}">
+						<label>
+							Zipcode
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<input type="text" class="text-field" id="zipcode" name="zipcode"
+							ng-model="user.postalCode"
+							ng-pattern="/^\d{4,6}$/"
+							required
+						/>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div><!--user-profile-pasics

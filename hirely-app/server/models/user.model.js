@@ -7,7 +7,10 @@ function endDateValidator(value){
   /**
    * this here will refer to schema
    */
-  if(null != value && value.getTime() != 0){
+
+  if(null != value && !isNaN(value.getTime())
+    && this.dateStart && !isNaN(this.dateStart.getTime())
+  ){
     return value > this.dateStart;
   }
   else{
@@ -63,21 +66,19 @@ var educationSchema = new Schema({
                                       required:true,
                                       validate:{
                                         validator: function(v){
-                                          return /^(High School Equivalent|Associates|Bachelors|Masters|PhD)$/.test(v);
+                                          return /^(High School|Certificate|Associates Degree|Bachelors Degree|Master's Degree|Professional Degree|Doctoral Degree|Post-Doctoral Training)$/.test(v);
                                         },
                                         message:'{VALUE} is not valid education program type'
                                       }
                                     },
   degree                  :         {type:String, reqired:true},
 
-  dateStart               :         {type:Date, required:true},
   dateEnd                 :         {
                                       type:Date,
                                       required:false,
                                       validate:[endDateValidator, 'End date must be greater than start date']
                                     },
-  isCompleted             :         {type:Boolean, required:true},
-  isOnline                :         {type:Boolean, required:true}
+  isCompleted             :         {type:Boolean, required:true}
 });
 
 var userSchema = new Schema({
@@ -103,6 +104,7 @@ var userSchema = new Schema({
                           set: Utilities.toLower
                         },
   mobile                :     {type:String},
+  dateOfBirth           :     {type:Date},
   agreedToTerms         :     {type:Boolean},
   personalStatment      :     {type:String},
   profileImageURL       :     {type:String},
@@ -186,17 +188,6 @@ var userSchema = new Schema({
      * Availability
      */
     availability: {
-        seekerStatus        :       {//// 0 = inactive, 1 = active
-                                      type:Number,
-                                      required:true,
-                                      default: 1,
-                                      validate:{
-                                        validator: function(v){
-                                          return /^(0|1)$/.test(v.toString());
-                                        },
-                                        message:'{VALUE} is not a valid availability.seekerStatus'
-                                      }
-                                    },
         startAvailability   :       Number,
         hoursPerWeekMin     :       Number,
         hoursPerWeekMax     :       Number,

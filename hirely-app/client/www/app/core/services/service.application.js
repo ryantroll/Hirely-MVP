@@ -34,7 +34,7 @@
       /**
        * check if job app exists and set right create on date
        */
-      return isApplicationExists(jobApp.userId, jobApp.variantId)
+      return isApplicationExists(jobApp.userId, jobApp.positionId)
         .then(
             function(foundedApp){
                 /**
@@ -64,10 +64,10 @@
      * @param  {[string]}  jobID  [id of job]
      * @return {promise}        [usually promise will returned]
      */
-    function isApplicationExists(userId, variantId){
+    function isApplicationExists(userId, positionId){
         var deferred = $q.defer();
 
-        HirelyApiService.applications({userId:userId, variantId:variantId}).get()
+        HirelyApiService.applications({userId:userId, positionId:positionId}).get()
         .then(
             function(foundedApp){
                 if(angular.isArray(foundedApp) && foundedApp.length > 0){

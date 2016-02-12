@@ -7,22 +7,22 @@ var Schema = mongoose.Schema;
 // convert the existing sub-schemas to freeSchemas
 var freeSchema = new Schema({}, {strict:false, _id:false});
 
-var variantSchema = new Schema(
-  {
-    location_id       :     { type:Schema.ObjectId, required:true },
-    position_id       :     { type:Schema.ObjectId, required:true },
-    title             :     { type:String, required:true },
-    slug              :     {type: String},
+var positionSchema = new Schema({
+    location_id   :    {type: Schema.ObjectId, required:true},
+    title         :    {type: String, required:true},
+    slug          :    {type: String},
+    occId         :    {type: String, required:true},
+
     workType          :     {
-                              type:String,
-                              required:true,
-                              validate:{
-                                validator: function(v){
-                                  return /^(part\-time|full\-time)$/.test(v);
-                                },
-                                message:'{VALUE} is not valid work type'
-                              }
-                            },
+        type:String,
+        required:true,
+        validate:{
+            validator: function(v){
+                return /^(part\-time|full\-time)$/.test(v);
+            },
+            message:'{VALUE} is not valid work type'
+        }
+    },
 
     hoursPerWeekMin   :     Number,
     hoursPerWeekMax   :     Number,
@@ -31,46 +31,53 @@ var variantSchema = new Schema(
     minWeekdayShifts  :     Number,
     minWeekendShifts  :     Number,
     openings          :     Number,
-    experienceLvl     :     Number,
+    expLvl            :     Number,
+
+    scoreWeights      :     {
+        exp:  Number,
+        edu:  Number,
+        qual: Number,
+        psy: Number,
+    },
 
     compensation:
     {
-      wageType        :     {
-                              type:String,
-                              required:true,
-                              validate:{
-                                validator: function(v){
-                                  return /^(hourly)$/.test(v);
-                                },
-                                message:'{VALUE} is not valid work type'
-                              }
-                            },
-      wageAmount      :     {type:Number, required:true},
-      commission      :     Boolean,
-      tips            :     Boolean
+        wageType        :     {
+            type:String,
+            required:true,
+            validate:{
+                validator: function(v){
+                    return /^(hourly)$/.test(v);
+                },
+                message:'{VALUE} is not valid work type'
+            }
+        },
+        wageAmount      :     {type:Number, required:true},
+        commission      :     Boolean,
+        tips            :     Boolean
     }, //// ocmpensation object
 
     benefits:
     {
-      paidVacation    :     Boolean,
-      paidSickTime    :     Boolean,
-      flexibleSchedul :     Boolean,
-      healthInsurance :     Boolean,
-      dentalInsurance :     Boolean,
-      retirementPlan  :     Boolean,
-      discounts       :     Boolean
+        paidVacation    :     Boolean,
+        paidSickTime    :     Boolean,
+        flexibleSchedul :     Boolean,
+        healthInsurance :     Boolean,
+        dentalInsurance :     Boolean,
+        retirementPlan  :     Boolean,
+        discounts       :     Boolean
     }, //// benefites
 
     shifts:
     {
-      mon           :       [Number],
-      tue           :       [Number],
-      wed           :       [Number],
-      thu           :       [Number],
-      fri           :       [Number],
-      sat           :       [Number],
-      sun           :       [Number],
-      required      :       Boolean
+        mon           :       [Number],
+        tue           :       [Number],
+        wed           :       [Number],
+        thu           :       [Number],
+        fri           :       [Number],
+        sat           :       [Number],
+        sun           :       [Number],
+        required      :       Boolean
     },/// shift object
 
     prescreenQuestions:
@@ -90,22 +97,6 @@ var variantSchema = new Schema(
             operands: []
         }
     }
-
-
-    // applications:[ applicationSchema ]//// application array
-
-  }//// varients[] object
-);//// variantSchema
-/**
- * Add slug to variant schema
- */
-//variantSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
-
-var positionSchema = new Schema({
-        location_id   :    {type: Schema.ObjectId, required:true},
-        title         :    {type: String, required:true},
-        slug          :    {type: String},
-        onetClass     :    {type: String, required:true},
 
 });//// positionSchema
 /**
@@ -127,6 +118,8 @@ var locationSchema = new Schema({
         sat   : [Number],
         sun   : [Number]
       },
+
+      positionSlugs: {type:freeSchema, required:false},
 
       /**
        * Location Address
@@ -190,10 +183,6 @@ var businessSchema = new Schema({
   locationSlugs: {type:freeSchema, required:false},
 
   positions: {type:freeSchema, required:false},
-  positionSlugs: {type:freeSchema, required:false},
-
-  variants: {type:freeSchema, required:false},
-  variantSlugs: {type:freeSchema, required:false}
 
 });
 /**

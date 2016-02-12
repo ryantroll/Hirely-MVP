@@ -1,0 +1,162 @@
+<div class="form-loader" ng-show="!stepFiveLoaded">
+    <div class="loader"></div>
+</div>
+
+<div class="form-container hirely-form" ng-show="stepFiveLoaded">
+    <form class="form-horizontal" name="stepFive" novalidate form-step-validity>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="field-wrapper" ng-class="{'error': !stepFive.minHours.$valid && stepFive.minHours.$dirty, 'valid' : stepFive.minHours.$valid}">
+                        <label for="minHours">
+                            MIN HOURS PER WEEK
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="text" class="text-field" id="minHours" name="minHours" placeholder="XX"
+                            required
+                            ng-model="availability.hoursPerWeekMin"
+                            ng-change="updateValidity($event)"
+                            ng-pattern="/^[0-9]*$/"
+                        />
+                    </div>
+                </div><!--col-->
+
+                <div class="col-sm-6">
+                    <div class="field-wrapper" ng-class="{'error': !stepFive.maxHours.$valid && stepFive.maxHours.$dirty, 'valid' : stepFive.maxHours.$valid}">
+                        <label for="maxHours">
+                            MAX HOURS PER WEEK
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="text" class="text-field" id="maxHours" name="maxHours" placeholder="XX"
+                            required
+                            ng-model="availability.hoursPerWeekMax"
+                            ng-change="updateValidity($event)"
+                            ng-pattern="/^[0-9]*$/"
+                        />
+                    </div>
+                </div><!--col-->
+                <div class="col-sm-12 no-col-padding">
+                    <div class="error-label bg-danger" ng-show="availability.hoursPerWeekMax > 168">
+                        Max hours should not exceed 168 per week
+                    </div>
+                    <div class="error-label bg-danger" ng-show="stepFive.maxHours.$error.mismatch">
+                        Max hours should be greater than or equal to min hours
+                    </div>
+                    <div class="error-label bg-danger" ng-show="stepFive.minHours.$error.mismatch">
+                        Your number of selected availabil hours per week is less than min number of hours
+                    </div>
+                </div><!--col-->
+            </div><!--row-->
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper"  ng-class="{'error': !stepFive.howSoon.$valid && stepFive.howSoon.$dirty, 'valid' : stepFive.howSoon.$valid}">
+                        <label for="howSoon">
+                            HOW SOON CAN YOU START ONCE HIRED?
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <select class="form-control" id="howSoon" name="howSoon"
+                            ng-model="availability.startAvailability"
+                            required
+                        >
+                            <!-- <option></option> -->
+                            <option ng-repeat="item in startOptions" value="{{item.days}}">{{item.label}}</option>
+                        </select>
+                        <span class="glyphicon glyphicon-menu-down"></span>
+                    </div><!--field-wrapper-->
+                </div><!--col-->
+            </div><!--row-->
+
+            <div class="row">
+                <div class="cols-sm-12 text-center">
+                    <div class="copy-section"><p>CLICK A DAY TO START ADDING AVAILABILITY</p></div>
+                </div><!--col-->
+            </div><!--row-->
+        </fieldset>
+    </form>
+</div><!--user-profile-availability-->
+
+<div class="user-profile-availability container">
+    <div class="row">
+        <div class="col-xs-6 col-sm-15" ng-repeat="day in days">
+            <a href="javascript:void(0);" class="day-link" ng-class="{active:dayHours[day] > 0}" ng-click="showTimeTable(day, $index)"><span>{{day|uppercase}}</span></a>
+        </div>
+    </div>
+</div>
+
+<div class="form-overlay hirely-form" ng-show="addTimetable" id="expFormDiv">
+    <header>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>AVAILABILITY DETAILS</h3>
+                </div><!--col-xs-->
+            </div><!--row-->
+    </header>
+    <div class="timetable">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <div class="days-list">
+                    <ul>
+                        <li class="arrow"><a href="javascript:void(0);" ng-click="previousDay()"><i class="glyphicon glyphicon-menu-left"></i></a></li>
+                        <li ng-repeat="day in days" ng-class="{active:currentDayLabel === day}"><a href="javascript:void(0);" ng-click="showTimeTable(day)">{{day|uppercase}}</a></li>
+                        <li class="arrow"><a href="javascript:void(0);" ng-click="nextDay()"><i class="glyphicon glyphicon-menu-right"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-2"></div>
+        </div><!--row-->
+
+        <div class="row"><div class="col-sm-12 title"><p>SELECT ALL HOURS YOU ARE AVAILABLE</p></div></div>
+
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4">
+                <div class="hours">
+                    <h4>am</h4>
+                    <div class="hour-btns clearfix">
+                        <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'am'}" ng-class="{'active':h.active}" ng-click="hourClick($index)"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
+                    </div><!--hour-btns-->
+                </div><!--hours-->
+            </div><!--col-->
+
+            <div class="col-sm-4">
+                <div class="hours">
+                    <h4>pm</h4>
+                    <div class="hour-btns clearfix">
+                        <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'pm'}" ng-class="{'active':h.active}" ng-click="hourClick($index+12)"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
+                    </div><!--hour-btns-->
+                </div><!--hours-->
+            </div><!--col-->
+            <div class="col-sm-2"></div>
+        </div><!--row-->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="field-wrapper text-center">
+                    <button class="btn btn-lg red" ng-click="saveTimetable()">SAVE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="field-wrapper text-center">
+                    <button class="btn btn-link" ng-click="cancelTimetable()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="field-wrapper text-center">
+                    Powerd by <a href="javascript:void(0);"><i>Hirely</i></a>
+                </div>
+            </div>
+        </div>
+    </div><!--timetable-container-->
+</div><!--form-overlay-->
