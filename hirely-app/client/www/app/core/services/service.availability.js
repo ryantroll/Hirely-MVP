@@ -22,7 +22,7 @@
      * days is array of days short names
      * @type {Array}
      */
-    var days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    var days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
     /**
      * hours is array of hours names like 12AM, 1AM, ... with array index
@@ -31,18 +31,40 @@
     var hours = [];
     for(var h=0; h<24; h++){
       var hourLabel = '';
+      var dayHalf = 'am';
+      var hourName = h;
       if(0==h){
           hourLabel += '12AM';
+          hourName = 12;
       }
       else if(h<12){
           hourLabel += String(h) + 'AM';
       }
       else{
-          hourLabel += String(h-12 <= 0 ? 12 : h-12) + 'PM';
+          hourName = h-12 <= 0 ? 12 : h-12;
+          hourLabel += String(hourName) + 'PM';
+          dayHalf ='pm';
+
       }
 
-      hours.push({'hour':h, 'label':hourLabel});
+      hours.push({'hour':h, 'label':hourLabel, dayHalf:dayHalf, hourName:hourName});
     }//// for
+
+    /**
+     * [startOptions array to fill the dropdown in 'how soon can you start' question]
+     * @type {Array}
+     */
+    var startOptions = [
+      {days:0, label:'Immediatly'},
+      {days:1, label:'1 Day'},
+      {days:2, label:'2 Days'},
+      {days:3, label:'3 Days'},
+      {days:4, label:'4 Days'},
+      {days:5, label:'5 Days'},
+      {days:6, label:'6 Days'},
+      {days:7, label:'1 Week'},
+      {days:14, label:'2 Weeks'},
+    ];
 
     /**
      * Time Ranges
@@ -123,6 +145,19 @@
       return ret;
     }//// fun. getTotalHours
 
+    var getDayHours = function(dayArray){
+
+      var ret = 0;
+
+      for(var i=0; i<24; i++){
+          if(true === dayArray[i].active){
+            ++ret;
+          }
+      }//// for i<24
+
+      return ret;
+    }//// fun. getTotalHours
+
     /**
      * [service object that define angular service to be returned by factory function at the end of this code]
      * @type {Object}
@@ -132,7 +167,9 @@
       isAvailabilityExists: isAvailabilityExists,
       days:days,
       hours:hours,
+      startOptions:startOptions,
       getTotalHours:getTotalHours,
+      getDayHours:getDayHours,
       updateRanges:updateRanges
     };
 
@@ -145,8 +182,6 @@
     function save(availability, userId){
       var deferred = $q.defer();
       var data = toDBDataModel(availability);
-
-
 
       HirelyApiService.users(userId).patch({availability:data})
       .then(
@@ -202,7 +237,29 @@
       delete ret.weeklyTimetable;
 
       //// translate seekerStatus
-      console.log(obj.seekerStatus);
+      // console.log(obj.seekerStatus);
+      ret.startAvailability =  parseInt(ret.startAvailability, 10);
+
+      for(var d=0; d<7; d++){
+        var day = avail[days[d]];
+        ret[days[d]] = [];
+        for(var h=0; h<24; h++){
+          if(true === day[h].active) ret[days[d]].push(h);
+        }
+      }
+
+      return ret;
+    }//// fun. forntEndToDB
+
+    function toDBDataModelOldWireframe(obj){
+      var ret = angular.copy(obj);
+
+      //// copy the time table to a local object and work on it and delete it
+      var avail = ret.weeklyTimetable;
+      delete ret.weeklyTimetable;
+
+      //// translate seekerStatus
+      // console.log(obj.seekerStatus);
       ret.seekerStatus =  obj.seekerStatus ?  1 : 0;
 
       for(var i=0; i<24; i++){
@@ -226,6 +283,35 @@
      * @return {[fornt-end availablity object]}       [description]
      */
     function toFrontEndModel(dbObj){
+      var retObj = angular.extend({}, dbObj);
+
+      if(angular.isDefined(retObj.startAvailability)){
+        retObj.startAvailability = String(retObj.startAvailability);
+      }
+      // console.log(dbObj);
+
+      //// translate weeklyTimetable
+      var ret = {};
+      for(var d=0; d<7; d++){
+        ret[days[d]] = [];
+        var myDay = '|'+ dbObj[days[d]].join('|') + '|';
+        for(var h=0; h<24; h++){
+          var _h = angular.extend({}, hours[h]);
+          _h.active = myDay.indexOf('|'+h+'|') > -1;
+          ret[days[d]].push(_h)
+        }//// for h
+      }//// for d
+
+      retObj.weeklyTimetable = ret;
+
+
+      for(d=0; d<7; d++){
+        delete retObj[days[d]];
+      }
+      return retObj;
+    }//// fun. toFrondEndModel
+
+    function toFrontEndModelWireframe(dbObj){
       var retObj = angular.extend({}, dbObj);
 
       //// translate seekerStatus

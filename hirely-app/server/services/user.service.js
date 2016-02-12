@@ -13,7 +13,9 @@ var privateFields = [
     'businessesStaffOf',
     'personalityExams',
     'availability',
-    'preferences'
+    'preferences',
+    'workExperience',
+    'education'
 ];
 
 
@@ -195,7 +197,7 @@ var userService = {
                 /**
                  * User exists in DB, do the update
                  */
-
+                console.log(userData);
                 if(foundedUser){
 
                     /**

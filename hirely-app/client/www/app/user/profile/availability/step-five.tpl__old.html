@@ -1,0 +1,305 @@
+<form class="form-horizontal" name="stepFive" novalidate form-step-validity>
+    <fieldset>
+
+
+
+        <legend class="">Availability</legend>
+        <div class="form-content">
+            <div class="form-loader" ng-show="!stepFiveLoaded">
+                <div class="loader"></div>
+            </div>
+            <div class="form-fields-wrapper" ng-show="stepFiveLoaded">
+
+               <legend class="">Are you currently available?</legend>
+                <div class="form-group row">
+                    <div class="col-sm-9 col-md-6">
+                        <label class="custom-option toggle" data-off="OFF" data-on="ON">
+                            <input type="checkbox" id="seekerStatus" name="seekerStatus" ng-model="availability.seekerStatus"/>
+                            <span class="button-checkbox"></span>
+                        </label>
+                        <label for="seekerStatus">I'm currently <span ng-show="availability.seekerStatus">availabile</span> <span ng-show="!availability.seekerStatus">unavailable</span></label>
+                    </div><!--col-->
+                </div><!--form-group-->
+
+
+                <legend class="">How many hours per week can you work?</legend>
+                <div class="form-group row">
+                    <label for="min-hours" class="col-md-2 control-label">Min Hours<span class="required-field">*</span></label>
+                    <div class="col-md-3" >
+                        <div ng-class="{'has-feedback has-error': stepFive.minHours.$error.required && stepFive.minHours.$dirty, 'has-feedback has-success' : stepFive.minHours.$valid}">
+                            <input type="number" id="minHours" name="minHours" required min="1"  class="form-control" ng-model="availability.hoursPerWeekMin"  ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
+                            <span class="fa fa-close form-control-feedback" ng-show="stepFive.minHours.$error.required && stepFive.minHours.$dirty"></span>
+                            <span class="fa fa-check form-control-feedback" ng-show="stepFive.minHours.$valid"></span>
+                        </div><!--error-div-->
+                    </div>
+                    <div class="col-md-1 step-5-to">TO</div>
+                    <label for="max-hours" class="col-md-2 control-label">Max Hours<span class="required-field">*</span></label>
+                    <div class="col-md-3">
+                        <div ng-class="{'has-feedback has-error': stepFive.maxHours.$error.required && stepFive.maxHours.$dirty, 'has-feedback has-success' : stepFive.maxHours.$valid}">
+                            <input type="number" id="maxHours" name="maxHours" required min="1"  class="form-control" ng-model="availability.hoursPerWeekMax" ng-change="updateValidity($event)" ng-pattern="/^[0-9]*$/"/>
+                            <span class="fa fa-close form-control-feedback" ng-show="stepFive.maxHours.$error.required && stepFive.maxHours.$dirty"></span>
+                            <span class="fa fa-check form-control-feedback" ng-show="stepFive.maxHours.$valid"></span>
+                        </div><!--error-div-->
+                    </div>
+
+                    <div class="col-md-12 bg-danger step-5-error-label" ng-show="availability.hoursPerWeekMax > 168">
+                        You cannot work more than 168 hours per week!
+                    </div>
+                    <div class="col-md-12 bg-danger step-5-error-label" ng-show="stepFive.maxHours.$error.mismatch">
+                        Max hours should be greater than or equal to min hours
+                    </div>
+                    <div class="col-md-12 bg-danger step-5-error-label" ng-show="stepFive.minHours.$error.mismatch">
+                        Your number of selected hours on each week is less than min hours entered
+                    </div>
+                    <!--<div class="col-md-12 bg-danger step-5-error-label" ng-show="stepFive.maxHours.$error.mismatch">
+                        Your number of selected hours on each week is more than max hours entered
+                    </div> -->
+                </div>
+
+                <legend class="text-center">What hours can you work each week (select all that apply)?</legend>
+
+                        <!--tablet and desktop-->
+                <div class="form-group row hidden-xs">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered step-5-timetable">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Su</th>
+                                    <th>Mo</th>
+                                    <th>Tu</th>
+                                    <th>We</th>
+                                    <th>Th</th>
+                                    <th>Fr</th>
+                                    <th>Sa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="hour in availability.weeklyTimetable">
+                                    <th>{{hour.label}}</th>
+                                    <td ng-click="hourClick('sun', $index)"><span ng-class="{'active':hour.days.sun, 'inactive':!hour.days.sun}"></span></td>
+                                    <td ng-click="hourClick('mon', $index)"><span ng-class="{'active':hour.days.mon, 'inactive':!hour.days.mon}"></span></td>
+                                    <td ng-click="hourClick('tue', $index)"><span ng-class="{'active':hour.days.tue, 'inactive':!hour.days.tue}"></span></td>
+                                    <td ng-click="hourClick('wed', $index)"><span ng-class="{'active':hour.days.wed, 'inactive':!hour.days.wed}"></span></td>
+                                    <td ng-click="hourClick('thu', $index)"><span ng-class="{'active':hour.days.thu, 'inactive':!hour.days.thu}"></span></td>
+                                    <td ng-click="hourClick('fri', $index)"><span ng-class="{'active':hour.days.fri, 'inactive':!hour.days.fri}"></span></td>
+                                    <td ng-click="hourClick('sat', $index)"><span ng-class="{'active':hour.days.sat, 'inactive':!hour.days.sat}"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!--table-responsive-->
+                </div><!--end-tablet-and-desktop-->
+
+
+                <!--mobile-layout-->
+                <div class="row visible-xs-block">
+                    <div class="step-5-mob-day clearfix">
+                        <div class="item daylabel">Sunday</div>
+                        <div class="list">
+                            <div class="item" ng-hide="weeklyRanges.sun.length != 0">Unavailable</div>
+                            <div class="item" ng-repeat="range in weeklyRanges.sun ">
+                                {{range.startLabel}} - {{range.endLabel}} ({{range.hours}}hrs)
+                                <a href="javascript:void(0);" ng-click="removeRange(range.$$hashKey, 'sun', range.startHour, range.hours)" class="btn"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+
+                        </div><!--list-->
+                        <div class="form clearfix">
+                            <div class="col-xs-2"><label class="col-md-2 ">From:</label></div>
+                            <div class="col-xs-3">
+                                <select ng-model="formRanges.sun.min" ng-change="rangeMinChange('sun');">
+                                    <option ng-repeat="hour in hoursListMin" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-1"><label class="col-md-2 ">To:</label></div>
+                            <div class="col-xs-3">
+                                <!-- <input type="text" ng-model="rangeMax" class="form-control" name="time-range-to" placeholder="To: 1PM"/> -->
+                                <select ng-model="formRanges.sun.max" ng-change="rangeMaxChange('sun')">
+                                    <option ng-repeat="hour in hoursListMax" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <button class="btn center-block" ng-click="addRange('sun')">Add</button>
+                            </div>
+                        </div><!--form-->
+                    </div><!--day-->
+
+                    <div class="step-5-mob-day clearfix">
+                        <div class="item daylabel">Monday</div>
+                        <div class="list">
+                            <div class="item" ng-hide="weeklyRanges.mon.length != 0">Unavailable</div>
+                            <div class="item" ng-repeat="range in weeklyRanges.mon ">
+                                {{range.startLabel}} - {{range.endLabel}} ({{range.hours}}hrs)
+                                <a href="javascript:void(0);" ng-click="removeRange(range.$$hashKey, 'mon', range.startHour, range.hours)" class="btn"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+                        </div>
+                        <div class="form clearfix">
+                            <div class="col-xs-2"><label class="col-md-2 ">From:</label></div>
+                            <div class="col-xs-3">
+                                <select ng-model="formRanges.mon.min" ng-change="rangeMinChange('mon');">
+                                    <option ng-repeat="hour in hoursListMin" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-1"><label class="col-md-2 ">To:</label></div>
+                            <div class="col-xs-3">
+                                <!-- <input type="text" ng-model="rangeMax" class="form-control" name="time-range-to" placeholder="To: 1PM"/> -->
+                                <select ng-model="formRanges.mon.max" ng-change="rangeMaxChange('mon')">
+                                    <option ng-repeat="hour in hoursListMax" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <button class="btn center-block" ng-click="addRange('mon')">Add</button>
+                            </div>
+                        </div><!--form-->
+                    </div>
+
+                    <div class="step-5-mob-day clearfix">
+                        <div class="item daylabel">Tuesday</div>
+                        <div class="list">
+                            <div class="item" ng-hide="weeklyRanges.tue.length != 0">Unavailable</div>
+                            <div class="item" ng-repeat="range in weeklyRanges.tue">
+                                {{range.startLabel}} - {{range.endLabel}} ({{range.hours}}hrs)
+                                <a href="javascript:void(0);" ng-click="removeRange(range.$$hashKey, 'tue', range.startHour, range.hours)" class="btn"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+                        </div>
+                        <div class="form clearfix">
+                            <div class="col-xs-2"><label class="col-md-2 ">From:</label></div>
+                            <div class="col-xs-3">
+                                <select ng-model="formRanges.tue.min" ng-change="rangeMinChange('tue');">
+                                    <option ng-repeat="hour in hoursListMin" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-1"><label class="col-md-2 ">To:</label></div>
+                            <div class="col-xs-3">
+                                <!-- <input type="text" ng-model="rangeMax" class="form-control" name="time-range-to" placeholder="To: 1PM"/> -->
+                                <select ng-model="formRanges.tue.max" ng-change="rangeMaxChange('tue')">
+                                    <option ng-repeat="hour in hoursListMax" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <button class="btn center-block" ng-click="addRange('tue')">Add</button>
+                            </div>
+                        </div><!--form-->
+                    </div>
+
+                    <div class="step-5-mob-day clearfix">
+                        <div class="item daylabel">Wednesday</div>
+                        <div class="list">
+                            <div class="item" ng-hide="weeklyRanges.wed.length != 0">Unavailable</div>
+                            <div class="item" ng-repeat="range in weeklyRanges.wed ">
+                                {{range.startLabel}} - {{range.endLabel}} ({{range.hours}}hrs)
+                                <a href="javascript:void(0);" ng-click="removeRange(range.$$hashKey, 'wed', range.startHour, range.hours)" class="btn"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+                        </div>
+                        <div class="form clearfix">
+                            <div class="col-xs-2"><label class="col-md-2 ">From:</label></div>
+                            <div class="col-xs-3">
+                                <select ng-model="formRanges.wed.min" ng-change="rangeMinChange('wed');">
+                                    <option ng-repeat="hour in hoursListMin" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-1"><label class="col-md-2 ">To:</label></div>
+                            <div class="col-xs-3">
+                                <!-- <input type="text" ng-model="rangeMax" class="form-control" name="time-range-to" placeholder="To: 1PM"/> -->
+                                <select ng-model="formRanges.wed.max" ng-change="rangeMaxChange('wed')">
+                                    <option ng-repeat="hour in hoursListMax" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <button class="btn center-block" ng-click="addRange('wed')">Add</button>
+                            </div>
+                        </div><!--form-->
+                    </div>
+
+                    <div class="step-5-mob-day clearfix">
+                        <div class="item daylabel">Thursday</div>
+                        <div class="list">
+                            <div class="item" ng-hide="weeklyRanges.thu.length != 0">Unavailable</div>
+                            <div class="item" ng-repeat="range in weeklyRanges.thu ">
+                                {{range.startLabel}} - {{range.endLabel}} ({{range.hours}}hrs)
+                                <a href="javascript:void(0);" ng-click="removeRange(range.$$hashKey, 'thu', range.startHour, range.hours)" class="btn"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+                        </div>
+                        <div class="form clearfix">
+                            <div class="col-xs-2"><label class="col-md-2 ">From:</label></div>
+                            <div class="col-xs-3">
+                                <select ng-model="formRanges.thu.min" ng-change="rangeMinChange('thu');">
+                                    <option ng-repeat="hour in hoursListMin" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-1"><label class="col-md-2 ">To:</label></div>
+                            <div class="col-xs-3">
+                                <!-- <input type="text" ng-model="rangeMax" class="form-control" name="time-range-to" placeholder="To: 1PM"/> -->
+                                <select ng-model="formRanges.thu.max" ng-change="rangeMaxChange('thu')">
+                                    <option ng-repeat="hour in hoursListMax" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <button class="btn center-block" ng-click="addRange('thu')">Add</button>
+                            </div>
+                        </div><!--form-->
+                    </div>
+
+                    <div class="step-5-mob-day clearfix">
+                        <div class="item daylabel">Friday</div>
+                        <div class="list">
+                            <div class="item" ng-hide="weeklyRanges.fri.length != 0">Unavailable</div>
+                            <div class="item" ng-repeat="range in weeklyRanges.fri ">
+                                {{range.startLabel}} - {{range.endLabel}} ({{range.hours}}hrs)
+                                <a href="javascript:void(0);" ng-click="removeRange(range.$$hashKey, 'fri', range.startHour, range.hours)" class="btn"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+                        </div>
+                        <div class="form clearfix">
+                            <div class="col-xs-2"><label class="col-md-2 ">From:</label></div>
+                            <div class="col-xs-3">
+                                <select ng-model="formRanges.fri.min" ng-change="rangeMinChange('fri');">
+                                    <option ng-repeat="hour in hoursListMin" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-1"><label class="col-md-2 ">To:</label></div>
+                            <div class="col-xs-3">
+                                <!-- <input type="text" ng-model="rangeMax" class="form-control" name="time-range-to" placeholder="To: 1PM"/> -->
+                                <select ng-model="formRanges.fri.max" ng-change="rangeMaxChange('fri')">
+                                    <option ng-repeat="hour in hoursListMax" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <button class="btn center-block" ng-click="addRange('fri')">Add</button>
+                            </div>
+                        </div><!--form-->
+                    </div>
+
+                    <div class="step-5-mob-day clearfix">
+                        <div class="item daylabel">Saturday</div>
+                        <div class="list">
+                            <div class="item" ng-hide="weeklyRanges.sat.length != 0">Unavailable</div>
+                            <div class="item" ng-repeat="range in weeklyRanges.sat ">
+                                {{range.startLabel}} - {{range.endLabel}} ({{range.hours}}hrs)
+                                <a href="javascript:void(0);" ng-click="removeRange(range.$$hashKey, 'sat', range.startHour, range.hours)" class="btn"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+                        </div>
+                        <div class="form clearfix">
+                            <div class="col-xs-2"><label class="col-md-2 ">From:</label></div>
+                            <div class="col-xs-3">
+                                <select ng-model="formRanges.sat.min" ng-change="rangeMinChange('sat');">
+                                    <option ng-repeat="hour in hoursListMin" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-1"><label class="col-md-2 ">To:</label></div>
+                            <div class="col-xs-3">
+                                <!-- <input type="text" ng-model="rangeMax" class="form-control" name="time-range-to" placeholder="To: 1PM"/> -->
+                                <select ng-model="formRanges.sat.max" ng-change="rangeMaxChange('sat')">
+                                    <option ng-repeat="hour in hoursListMax" value="{{hour.hour}}">{{hour.label}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <button class="btn center-block" ng-click="addRange('sat')">Add</button>
+                            </div>
+                        </div><!--form-->
+                    </div>
+                </div><!--end-mobile-layout-->
+            </div><!--form-content-wrapper-->
+
+    </div><!--form-content-->
+    </fieldset>
+
+</form>

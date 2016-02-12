@@ -1,0 +1,249 @@
+<div class="form-loader" ng-show="!stepTwoLoaded">
+    <div class="loader"></div>
+</div>
+
+<div class="form-container user-profile-exp" ng-show="stepTwoLoaded">
+    <div class="row">
+        <div class="cards-wrapper">
+            <div class="card" ng-repeat="eduItem in eduItems">
+                <h3>{{eduItem.institutionName}}</h3>
+                <p>{{eduItem.degree}} / {{eduItem.programType}} </p>
+                <p><span ng-show="eduItem.isCompleted">{{eduItem.dateEndMonth}}/{{eduItem.dateEndYear}}</span><span ng-show="!eduItem.isCompleted">Currently Enrolled</span></p>
+                <div class="btn-group">
+                    <button class="btn blue" ng-click="editEducation($index)">EDIT</button>
+                    <button class="btn red" ng-click="removeEducation($index)">REMOVE</button>
+                </div>
+            </div>
+            <div class="card add-card">
+                <div class="add-group">
+                    <button class="btn btn-circle blue" ng-click="showEducation()">+</button>
+                    <p>Add Education</p>
+                </dvi>
+            </dvi>
+        </div><!--cards-wrapper-->
+    </div><!--row-->
+</div><!--user-profile-exp-->
+
+<div class="form-overlay" ng-show="addEducationForm" id="expFormDiv">
+    <header>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Education</h3>
+                </div><!--col-xs-->
+            </div><!--row-->
+    </header>
+
+    <div class="form-container user-profile-exp hirely-form" ng-show="stepTwoLoaded">
+        <form name="stepTwoE" novalidate form-step-validity>
+            <fieldset>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': !stepTwoE.programType.$valid && stepTwoE.programType.$dirty, 'valid' : stepTwoE.programType.$valid}">
+                            <label for="programType">
+                                Program Type
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <select class="" id="programType" name="programType"
+                                ng-model="education.programType"
+                                required>
+                                <option></option>
+                                <option ng-repeat="type in programTypes" value="{{type}}">{{type}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': stepTwoE.institution.$error.required && stepTwoE.institution.$dirty, 'valid' : stepTwoE.institution.$valid}">
+                            <label for="institution">
+                                School
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-field" id="institution" name="institution"
+                                ng-model="education.institutionName"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwoE.educationCity.$valid && stepTwoE.educationCity.$dirty, 'valid' : stepTwoE.educationCity.$valid}">
+                            <label for="educationCity">
+                                City
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-feild" id="educationCity" name="educationCity"
+                                ng-model="education.city"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwoE.educationState.$valid && stepTwoE.educationState.$dirty, 'valid' : stepTwoE.educationState.$valid}">
+                            <label for="educationState">
+                                State
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <select  class="form-control" id="educationState" name="educationState"
+                                ng-model="education.state"
+                                required
+                            >
+                                <option></option>
+                                <option ng-repeat="state in states" value="{{state.abbreviation}}">{{state.name}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': stepTwoE.degree.$error.required && stepTwoE.degree.$dirty, 'valid' : stepTwoE.degree.$valid}">
+                            <label for="degree">
+                                DEGREE OR CERTIFICATE
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label> <span class="info-label" uib-tooltip="Please provide the name or title of your degree or certificate. Example: GED or Bartending.">?</span>
+                            <input type="text" class="text-feild" id="degree" name="degree"
+                                ng-model="education.degree"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="row">
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwoE.workDateStartM.$valid && stepTwoE.workDateStartM.$dirty, 'valid' : stepTwoE.workDateStartM.$valid}">
+                            <label for="workDateStartM">
+                                Start Month
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <select  class="option-field" id="workDateStartM" name="workDateStartM"
+                                ng-model="occupation.dateStartMonth"
+                                ng-maxlength="2"
+                                required
+                                validate-month
+                            >
+
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwoE.workDateStartY.$valid && stepTwoE.workDateStartY.$dirty, 'valid' : stepTwoE.workDateStartY.$valid}">
+                            <label for="workDateStartY">
+                                Start Year
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-field" id="workDateStartY" name="workDateStartY"
+                                placeholder="YYYY"
+                                ng-model="occupation.dateStartYear"
+                                ng-minlength="4"
+                                ng-maxlenght="4"
+                                required
+                                validate-year
+                            />
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-col-padding">
+                        <div class="bg-danger error-label" ng-show="stepTwoE.workDateStartY.$error.startDateConflict">Start date conflicting with one of previous entered experience dates</div>
+                    </div>
+                </div> -->
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper checkbox">
+                            <label class="custom-option toggle" data-off="NO" data-on="YES">
+                                <input type="checkbox" id="eduEnrolled" name="eduEnrolled"
+                                    ng-model="education.currentlyEnrolled"
+                                />
+                                <span class="button-checkbox"></span>
+                            </label>
+                            <label for="eduEnrolled">currently attend</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="!education.currentlyEnrolled">
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwoE.eduDateEndM.$valid && stepTwoE.eduDateEndM.$dirty, 'valid' : stepTwoE.eduDateEndM.$valid}">
+                            <label for="eduDateEndM">
+                                COMPLETION MONTH
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <select class="form-control" id="eduDateEndM" name="eduDateEndM"
+                                ng-model="education.dateEndMonth"
+                                ng-required="!education.currentlyEnrolled"
+                                validate-month
+                            >
+                                <!-- <option></option> -->
+                                <option ng-repeat="month in months" value="{{month.order}}">{{month.name}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="field-wrapper"  ng-class="{'error': !stepTwoE.eduDateEndY.$valid && stepTwoE.eduDateEndY.$dirty, 'valid' : stepTwoE.eduDateEndY.$valid}">
+                            <label for="eduDateEndY">
+                                COMPLETION Year
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-feild" id="eduDateEndY" name="eduDateEndY"
+                                ng-model="education.dateEndYear"
+                                ng-required="!education.currentlyEnrolled"
+                                validate-year
+                            />
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-col-padding">
+                        <div class="error-label bg-danger" ng-show="stepTwoE.eduDateEndY.$error.endDateConflict">End date conflicting with one of previous entered experience dates</div>
+                        <div class="error-label bg-danger" ng-show="stepTwoE.eduDateEndY.$error.invalidEndDate">End date should be greater than start date</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper text-center">
+                            <button class="btn btn-lg red" ng-disabled="!stepTwoE.$valid" ng-click="addEducation()">SAVE</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper text-center">
+                            <button class="btn btn-link" ng-click="cancelEducation()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper text-center">
+                            Powerd by <a href="javascript:void(0);"><i>Hirely</i></a>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div><!--form-container-->
+</div><!--form-overlay-->
+
+

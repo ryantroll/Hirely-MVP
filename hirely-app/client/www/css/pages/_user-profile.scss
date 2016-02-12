@@ -1,0 +1,804 @@
+$header-height: 60px;
+$footer-height: 60px;
+$day-botton-size: 60px;
+
+.profile{
+	padding-bottom:$footer-height;
+
+	header{
+		width:100%;
+		// background-color:$c-hirely-gray;
+		.steps{
+			min-height: $header-height;
+			@include drop-shadow;
+
+			> ul{
+				list-style:none;
+				display: table;
+				width:auto;
+				margin: 0 auto;
+				padding-left:0;
+				@include transition-all();
+			}
+			> ul li{
+				display: inline-block;
+				float: left;
+				margin-right: 4em;
+				line-height:$header-height;
+				@include transition-all();
+				@media screen and (min-width:$screen-sm-min){
+					margin-right: 6em;
+				}
+
+			}
+			> ul li:last-child{
+				margin-right:0;
+			}
+			> ul li a{
+				color:$c-hirely-text-gray;
+				@include transition-all();
+			}
+			> ul li.active a{
+				color:$c-hirely-red;
+				font-weight: 700;
+				border-bottom: 1px double $c-hirely-red;
+				font-size:1.1em;
+
+			}
+			> ul li.remove{
+				width:0;
+				overflow: hidden;
+				margin-right: 0;
+			}
+		}
+	}//// header
+
+	footer{
+		background-color: $c-hirely-gray;
+		min-height: $footer-height;
+		position: fixed;
+		bottom:0;
+		width:100%;
+		z-index: 1000;
+
+		.left{
+			height: $footer-height;
+		}/// .left
+
+		.center{
+			display: table;
+			width:auto;
+			margin: 0 auto;
+			font-size: 0.9em;
+
+			> *{
+				display: block;
+				margin-top:4px;
+			}
+		}//// .center
+
+		.right{
+			height: $footer-height;
+			text-align: right;
+		}//// .right
+
+		button{
+			padding: 0.5em 1em;
+			@media screen and (min-width:$screen-sm-min){
+				padding: 0.5em 4em;
+			}
+		}
+
+		button.next{
+			background-color:$c-hirely-red;
+			color:$c-white;
+			@include vertical-align;
+		}
+		button.back{
+			// background-color:$c-hirely-mid-gray;
+			color:$c-white;
+			@include vertical-align;
+		}
+
+		.red{
+			color:$c-hirely-red;
+		}
+
+		.progress-bar{
+			width:100px;
+			height: 8px;
+			background-color:$c-hirely-text-gray;
+			@include border-radius(4px);
+			float:none;
+			@media screen and (min-width:$screen-sm-min){
+				width:200px;
+			}
+
+			> span{
+				display: block;
+				width:50%;
+				height: 8px;
+				background-color:$c-white;
+				@include border-radius(4px);
+				@include transition-all();
+			}
+		}
+	}//// footer
+}//// .profile
+.form-loader{
+	width:40px;
+	margin:0 auto;
+	padding: 15em 0 0 0;
+	min-height:400px;
+}
+.form-container{
+	width:90%;
+	margin:0 auto;
+	padding: 2em 0;
+	// background-color:#eee;
+	min-height:100px;
+	@media screen and (min-width:$screen-sm-min){
+		width:40%;
+	}
+}/// .form-container
+
+.user-profile-basic{
+
+	.user-image{
+		width:150px;
+		margin: 0 auto;
+		> img{
+			display: block;
+			max-width:100%;
+
+		}
+	}//// .user-image
+
+	.image-links{
+		padding-top:0.5em;
+		font-size:0.9em;
+	}
+}//// .user-profile-basic
+
+.hirely-form{
+
+	.field-wrapper{
+		padding-top:3em;
+		position:relative;
+	}//// field-wrapper
+
+	.feedback-valid{
+		display: none;
+		color:$light-grass-green;
+	}
+	.feedback-error{
+		display: none;
+		color:$c-hirely-red;
+	}
+
+	.field-wrapper.error{
+		.feedback-valid{
+			display:none;
+		}
+		.feedback-error{
+			display:inline-block;
+		}
+		.text-field{
+			border-color:$c-hirely-red;
+		}
+		label{
+			color:$c-hirely-red;
+		}
+	}
+
+	.field-wrapper.valid{
+		.feedback-valid{
+			display:inline-block;
+		}
+		.feedback-error{
+			display:none;
+		}
+		.text-field{
+			// border-color:$c-hirely-red;
+		}
+		label{
+			// color:$c-hirely-red;
+		}
+	}
+
+	.error-label{
+		margin:1em;
+		@include border-radius(5px);
+		padding:0.3em .5em;
+	}
+
+	label{
+		// display: block;
+		color:$c-hirely-mid-gray;
+		font-weight: 300;
+		text-transform:uppercase;
+		font-size:0.9em;
+		margin-bottom: 0;
+	}
+
+	input[type="text"],
+	input[type="password"],
+	input[type="number"],
+	input[type="date"],
+	input[type="phone"],
+	input[type="email"]{
+		border:none;
+		border-bottom:1px solid $c-hirely-text-gray;
+		color:#000;
+		padding:0.3em 0;
+		width:100%;
+		// background-color:#ccc;
+	}
+
+	select{
+		border:none;
+		border-bottom:1px solid $c-hirely-text-gray;
+		padding:0 0;
+		margin-top:0;
+		margin-bottom:0;
+		height: 29px;
+		@include border-radius(0);
+		border-color:$c-hirely-text-gray;
+		width:100%;
+		background-color:#fff;
+
+		option:first-child{
+			color:#ccc;
+		}
+	}
+	select + span { //// this style the caret down arrow
+		display: block;
+		width:20px;
+		height: 29px;
+		line-height: 29px;
+		content: " ";
+		position:absolute;
+		top:59px;
+		right:0;
+		text-align: center;
+		font-size:0.8em;
+		color:$c-hirely-text-gray;
+	}
+
+	input:focus,
+	select:focus,
+	textarea:focus{
+		outline:none;
+		border-color:$c-hirely-blue;
+	}
+	select:focus+span{
+		color:$c-hirely-blue;
+	}
+
+	/**
+	 * check box style copyed from css/modules/_forms.scsss
+	 */
+	.radio-inline,
+  .checkbox-inline {
+    padding: 0;
+  }
+
+  label.custom-option {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    height: 20px;
+    vertical-align: top;
+    @include border-radius(4px);
+  }
+
+  label.custom-option + label {
+    padding: 0 10px;
+  }
+
+  label.custom-option input[type="checkbox"],
+  label.custom-option input[type="radio"],
+  label.custom-option .button-checkbox,
+  label.custom-option .button-radio {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  label.custom-option input[type="checkbox"],
+  label.custom-option input[type="radio"] {
+    margin: 0;
+    opacity: 0;
+  }
+
+  label.custom-option .button-checkbox,
+  label.custom-option .button-radio {
+    border: 1px solid #ccc;
+    background: #fff;
+    @include border-radius(10px);
+  }
+
+  label.custom-option input[type="checkbox"]:checked + .button-checkbox,
+  label.custom-option input[type="radio"]:checked+ .button-radio {
+    border-color: $light-blue;
+    // @include border-radius(4px);
+  }
+
+  label.custom-option input[type="checkbox"] + .button-checkbox:after,
+  label.custom-option input[type="radio"] + .button-radio:after {
+    position: absolute;
+    content: '';
+    z-index: 2;
+    @include border-radius(10px);
+  }
+
+  label.custom-option .button-radio,
+  label.custom-option .button-radio:after {
+    -webkit-border-radius:	20px;
+    -moz-border-radius:		20px;
+    border-radius:			20px;
+  }
+
+  /* Checkbox and radio */
+  label.custom-option {
+    width: 20px;
+  }
+
+  label.custom-option.button input[type="checkbox"] + .button-checkbox:after,
+  label.custom-option.button input[type="radio"] + .button-radio:after {
+    display: none;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    width: 8px;
+    background: $light-blue;
+  }
+
+  label.custom-option.button input[type="checkbox"]:checked + .button-checkbox:after,
+  label.custom-option.button input[type="radio"]:checked + .button-radio:after {
+    display: block;
+  }
+
+  /* Toggles */
+  label.custom-option.toggle {
+    width: 46px;
+  }
+
+  label.custom-option.toggle:before,
+  label.custom-option.toggle:after {
+    position: absolute;
+    top: 1px;
+    width: 24px;
+    font-size: 8px;
+    line-height: 19px;
+    text-align: center;
+    color: #777;
+    z-index: 1;
+  }
+
+  label.custom-option.toggle:before {
+    content: attr(data-on);
+    left: 1px;
+    color: $light-blue;
+  }
+
+  label.custom-option.toggle:after {
+    content: attr(data-off);
+    right: 1px;
+  }
+
+  label.custom-option.toggle input[type="checkbox"] + .button-checkbox:after,
+  label.custom-option.toggle input[type="radio"] + .button-radio:after {
+    display: block;
+    top: 1px;
+    bottom: 1px;
+    left: 1px;
+    width: 20px;
+    background: #ccc;
+    -webkit-transition:	all 0.3s;
+    -moz-transition:	all 0.3s;
+    transition:			all 0.3s;
+  }
+
+  label.custom-option.toggle input[type="checkbox"]:checked + .button-checkbox:after,
+  label.custom-option.toggle input[type="radio"]:checked + .button-radio:after {
+    left: 23px;
+    background: $light-blue;
+  }
+
+  .info-label{
+  	display: inline;
+  	background-color:$c-hirely-text-gray;
+  	color:#fff;
+  	padding:0 5px;
+  	@include border-radius();
+  	cursor:help;
+  	font-size:0.8em;
+  	font-weight: 700;
+  }
+
+  .copy-section{
+  	padding:3em 0 0 0;
+
+  	*{
+  		font-size:0.9em;
+  	}
+  }
+}//// .hirely-form
+
+.user-profile-exp{
+	min-height:400px;
+}//// .user-profile-exp
+
+.cards-wrapper{
+	.card{
+		width:90%;
+		height:auto;
+		margin: 0 auto 2em auto;
+		border:1px solid $c-hirely-text-gray;
+		@include border-radius(5px);
+		position:relative;
+		padding:1em 1em 39px 1em;
+		overflow: hidden;
+
+		.btn-group{
+			position:absolute;
+			bottom:0;
+			width:102%; //// to hide the top right round corner
+			margin-left:-1.2em;/// to hide the top round corner
+
+			.btn{
+				width:50%;
+				outline: none;
+			}
+		}//// .btn-group
+	}//// .card
+
+	.add-card{
+		height:170px;
+		padding:0;
+
+		.add-group{
+			width:50%;
+			margin:0 auto;
+			text-align: center;
+			@include vertical-align;
+		}
+		.btn-circle {
+			width: 50px;
+			height: 50px;
+			padding: 10px 16px;
+			font-size: 18px;
+			line-height: 1.33;
+			border-radius: 25px;
+			clear:both;
+			background-color:#fff;
+			border-color:$c-hirely-text-gray;
+			color:$c-hirely-text-gray;
+			outline: none;
+		}
+		p{
+			font-size:0.8em;
+		}
+	}//// .add-card
+}//// .cards-wrapper
+
+.no-col-padding{
+	padding-left:0;
+	padding-right:0;
+}
+.btn.red{
+	background-color:$c-hirely-red;
+	color:#fff;
+}
+.btn.blue{
+	background-color:$c-hirely-blue;
+	color:#fff;
+}
+.btn.white{
+	background-color:#fff;
+}
+.fullwidth{
+	width:100%;
+}
+.form-overlay{
+	position:absolute;
+	z-index:1100;
+	top:0;
+	// bottom:0;
+	left:0;
+	right:0;
+	background-color:#fff;
+
+	header{
+		width:100%;
+		background-color:$c-hirely-navy;
+		min-height: $header-height;
+		@include drop-shadow;
+		color:#fff;
+		text-align: center;
+
+		h3{
+			line-height: $header-height;
+			padding-bottom:0;
+		}
+	}
+
+	.btn.red{
+		padding-left:3em;
+		padding-right:3em;
+	}
+}//// .form-overlay
+
+.user-profile-personality{
+	width:90%;
+	@media screen and (min-width:$screen-sm-min){
+		width:55%;
+	}
+
+	.first-time{
+		padding-top:5em;
+		h4{
+			margin-bottom: 2em;
+			font-size:1.5em;
+			line-height: 1.4em;
+		}
+		.btn{
+			width:100%;
+			padding:4em 0;
+			font-size:1.3em;
+			color:#fff;
+			outline: none;
+			word-wrap: normal;
+			@media screen and (min-width:$screen-sm-min){
+				width:auto;
+				padding:4em 4em;
+			}
+		}
+	}//// .first-time
+
+	.results{
+		h4{
+			margin-bottom: 0;
+		}
+
+		.tf-personality-types .personality-types-container{
+			background-color:$c-hirely-navy;
+			@include border-radius();
+		}
+		.tf-personality-types .personality-types-container-scroller{
+			height: auto;
+			margin-bottom: 1em;
+		}
+		.tf-personality-types .personality-types-container .personality-types{
+		    width:100%;
+		    height: auto;
+		    background-color:$c-hirely-navy;
+		}
+
+		.tf-personality-types .personality-types-container .personality-types  .personality-type{
+
+		}
+
+		/**
+		 * Hide esscription
+		 */
+		.tf-personality-types .description{
+		    display: none;
+		}
+
+		img.badge:empty{
+			display:inline-block;
+			background-color:transparent;
+			padding:none;
+		}
+	}
+
+}//// .user-profile-personality
+
+.user-profile-availability{
+	width:100%;
+	margin:0 auto;
+	min-height:300px;
+	@media screen and (min-width:$screen-sm-min){
+		width:75%;
+	}
+
+	.day-link{
+		display: block;
+		width:100%;
+		height: 100px;
+		background-color:$c-hirely-text-gray;
+		color:#fff;
+		text-align: center;
+		@include border-radius(4px);
+		margin-bottom:20px;
+		font-size:1.3em;
+
+		@media screen and (min-width:$screen-sm-min){
+			position:relative;
+			height: auto;
+		}
+	}
+	///trick to keep the height same as width and make it look like a square
+	/// onl on mobile layout
+	.day-link:before{
+		@media screen and (min-width:$screen-sm-min){
+			content:"";
+			display: block;
+			padding-top:100%;
+		}
+	}
+
+	.day-link > span{
+		position: inline;
+		line-height: 100px;
+		padding-top:0;
+
+		@media screen and (min-width:$screen-sm-min){
+			position:  absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			padding-top:40%;
+			line-height: inherit;
+		}
+
+	}/// .day-link
+	.day-link.active{
+		background-color:$light-grass-green;
+	}
+}//// .user-profile-availability
+
+.timetable{
+	padding:2em 0;
+
+	.days-list{
+
+		ul{
+			display: table;
+			width:auto;
+			margin: 0 auto;
+			list-style: none;
+			padding-left:0;
+
+			li{
+				display: none;
+				float:left;
+				width:$day-botton-size;
+				height: $day-botton-size;
+				margin-right: 0.8em;
+				line-height: $day-botton-size;
+				@media screen and (min-width:$screen-sm-min){
+					display: block;
+				}
+			}
+			li:last-child{
+				margin-right: 0;
+			}
+			li > a{
+				display: block;
+				width:100%;
+				height: $day-botton-size;
+				background-color:$c-hirely-text-gray;
+				color:#fff;
+				text-align: center;
+				@include border-radius(4px);
+				font-weight: 700;
+			}
+			li.active{
+				display: block!important;
+			}
+			li.active > a{
+				background-color:$c-hirely-mid-gray;
+			}
+			li.arrow{
+				display: block;
+				@media screen and (min-width:$screen-sm-min){
+					display: none;
+				}
+			}
+			li.arrow > a{
+				background-color:transparent;
+				color:$c-hirely-text-gray;
+				font-size:1.4em;
+			}
+		}//// ul
+
+	}///.day-list
+
+	.title{
+		text-align: center;
+		padding: 2em 0;
+	}
+	.hours{
+		width:50%;
+		margin:0 auto;
+		min-width: 300px;
+		@media screen and (min-width:$screen-sm-min){
+			width:95%;
+			min-width:auto;
+		}
+	}
+	.hour-btns{
+		width:100%;
+		display: table;
+		padding-bottom:2em;
+	}
+	.btn-hour{
+		position: relative;
+		border:1px solid $c-hirely-text-gray;
+		width:23.5%;
+		// height:23.5%;
+		background-color:#fff;
+		@include border-radius(50%);
+		float:left;
+		margin-right:2%;
+		margin-bottom: 1em;
+		padding:0;
+		outline: none;
+
+		> span{
+			text-align: center;
+			width:100%;
+			line-height: 1em;
+			display: block;
+			@include vertical-align(absolute);
+		}
+	}
+	.btn-hour:before{
+		// @media screen and (min-width:$screen-sm-min){
+			content:"";
+			display: block;
+			padding-top:100%;
+		// }
+	}
+	.btn-hour:nth-child(4n+4){
+		margin-right:0;
+		clear: right;
+	}
+
+	.btn-hour.active{
+		background-color:$light-grass-green;
+	}
+}
+
+/**
+ * Adding 5 col layout to bootstrap
+ */
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.col-xs-15 {
+    width: 20%;
+    float: left;
+}
+@media (min-width: 768px) {
+.col-sm-15 {
+        width: 20%;
+        float: left;
+    }
+}
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 20%;
+        float: left;
+    }
+}
+@media (min-width: 1200px) {
+    .col-lg-15 {
+        width: 20%;
+        float: left;
+    }
+}
+
+
