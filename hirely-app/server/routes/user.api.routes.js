@@ -42,6 +42,7 @@ var userRoutes = {
         userService.createNewUser(user)
         .then(
             function(user){
+                console.log(user);
                 res.status(200).json(apiUtil.generateResponse(200, "User created successfully", user));
             },
             function(error){

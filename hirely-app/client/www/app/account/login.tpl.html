@@ -1,56 +1,75 @@
-<div class="modal-login">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.CloseModal()">&times;</button>
-                <h4 id="loginModalLabel" class="modal-title text-center">Log in to your account</h4>
+<div class="user-profile-basic hirely-form" ng-class="{waiting:ajaxBusy}">
+    <ng-form class="form-horizontal" name="loginForm" novalidate>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper" ng-class="{'error': !loginForm.email.$valid && loginForm.email.$dirty, 'valid' : loginForm.email.$valid}">
+                        <label for="email">
+                            Email
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="text" class="text-field" id="email" name="email" ng-model="user.email"
+                            placeholder=""
+                            required
+                        />
+                        <!-- <input type="text" /> -->
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <div>
-                    <i class="fa fa-alert-icon"></i>
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper"  ng-class="{'error': !loginForm.password.$valid && loginForm.password.$dirty, 'valid' : loginForm.password.$valid}">
+                        <label for="password">
+                            Password
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="password" class="text-field" name="upassword" id="password"
+                            ng-model="user.password"
+                            placeholder=""
+                            required
+                            validate-password
+                        />
+                    </div>
                 </div>
-                <div class="social-login text-center">
-                    <ul class="list-unstyled social-login">
-                        <li><button class="facebook-btn btn" type="button" ng-click="vm.FbLogin()"><i class="fa fa-facebook"></i>Log in with Facebook</button></li>
-                        <li><button class="twitter-btn btn" type="button"><i class="fa fa-twitter"></i>Log in with Twitter</button></li>
-                        <li><button class="google-btn btn" type="button" ng-click="vm.GoogleLogin()"><i class="fa fa-google-plus"></i>Log in with Google</button></li>
-                    </ul>
+                <div class="col-sm-12 no-col-padding">
+                    <div class="bg-danger error-label" ng-show="loginForm.password.$error.invalidPassword">Password should be between 6 and 12 characters</div>
                 </div>
-                <div class="divider"><span>Or</span></div>
-                <div class="login-form-container">
-                    <form class="login-form" name="loginForm" ng-submit="vm.PasswordLogin()">
-                        <div class="form-group email">
-                            <label class="sr-only" for="loginEmail">Your email</label>
-                            <input id="loginEmail" name="loginEmail" type="email" class="form-control login-email" placeholder="Your email" required ng-model="user.email">
-                            <div role="alert">
-                              <span class="error" ng-show="loginForm.loginEmail.$error.required && !loginForm.loginEmail.$pristine">
-                                Email is required</span>
-                              <span class="error" ng-show="loginForm.loginEmail.$error.email">
-                                Invalid email format</span>
-                            </div>
-                        </div><!--//form-group-->
-                        <div class="form-group password">
-                            <label class="sr-only" for="loginPassword">Password</label>
-                            <input id="loginPassword" name="loginPassword" type="password" class="form-control login-password" placeholder="Password" required ng-minlength="6" ng-maxlength="20"
-                                   ng-model="user.password">
-                            <div role="alert">
-                              <span class="error" ng-show="loginForm.loginPassword.$error.required  && !loginForm.loginPassword.$pristine">
-                                Password is required</span>
-                              <span class="error" ng-show="loginForm.loginPassword.$error.minlength || loginForm.loginPassword.$error.maxlength">
-                                Password should be between 6 and 12 characters</span>
-                            </div>
-                            <p class="forgot-password">
-                                <a href="javascript:;" id="resetpass-link" ng-click="vm.forgotPassword()">Forgot password?</a>
-                            </p>
-                        </div><!--//form-group-->
-                        <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="!loginForm.$valid">Log in</button>
-                        <div class="checkbox remember">
-                            <label>
-                                <input type="checkbox"> Remember me
-                            </label>
-                        </div><!--//checkbox-->
-                    </form>
-                </div><!--//login-form-container-->
-            </div><!--//modal-body-->
-            <div class="modal-footer">
-                <p>New to hirely? <a class="signup-link" id="signup-link" href="javascript:;" ng-click="vm.signupClick()">Sign up now</a></p>
-            </div><!--//modal-footer-->
-</div><!--//modal-->
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="copy-section text-center">
+                        <p>New to Hirely? <a href="javascript:void(0);" ng-click="showRegister()">Reigster now</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="copy-section text-center">
+                        <p>Forgot your password? <a href="javascript:void(0);" ng-click="showForgotPassword()">Reset password</a></p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper text-center">
+                        <button class="btn btn-lg red" ng-disabled="!loginForm.$valid" ng-click="PasswordLogin()">Login</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </fieldset>
+    </ng-form>
+</div>

@@ -22,9 +22,9 @@
             transclude : false
         };
     })
-    .controller('ApplicationMasterController', ['$stateParams', '$scope', 'AuthService', 'UserService', ApplicationMasterController ])
+    .controller('ApplicationMasterController', ['$stateParams', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController ])
 
-    function ApplicationMasterController($stateParams, $scope, AuthService, UserService) {
+    function ApplicationMasterController($stateParams, $scope, $rootScope, AuthService, UserService) {
 
         // $scope.authService = AuthService;
 
@@ -44,5 +44,12 @@
                     console.log('No user is logged in');
                 }
             )/// Auth then
+
+        $scope.$on('UserLoggedIn', function(event, user){
+          $scope.userLoggedIn = true;
+        })
+
+        $scope.layoutModel = {business:null};
+
     };
 })();

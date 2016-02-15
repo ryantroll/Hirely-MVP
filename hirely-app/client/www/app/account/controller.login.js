@@ -4,57 +4,37 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', 'UserService', LoginController ]);
+    angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$stateParams', 'AuthService', 'UserService', LoginController ]);
 
 
-    function LoginController($scope, $rootScope, $stateParams, $uibModalInstance, AuthService, userService) {
+    function LoginController($scope, $rootScope, $stateParams, AuthService, userService) {
         var authService = AuthService;
         var vm = this;
         $scope.error = '';
         $scope.user = {email: '', password:''};
 
-        vm.FbLogin = function(){
-           authService.thirdPartyLogin('facebook')
-               .then(function(data){
-                   $uibModalInstance.close();
-               }, function(err) {
-
-                   $scope.error = errMessage(err);
-               }
-           );
-
-        };
-
-        vm.GoogleLogin = function(){
-            authService.thirdPartyLogin('google')
-                .then(function(data){
-                    $uibModalInstance.close();
-
-                }, function(err) {
-
-                    $scope.error = errMessage(err);
-                }
-            );
-
-        };
 
 
-        vm.PasswordLogin = function() {
+
+        $scope.PasswordLogin = function() {
+            $scope.ajaxBusy = true;
             authService.passwordLogin($scope.user.email, $scope.user.password)
-                .then(function(auth){
-                    $uibModalInstance.close();
-                }, function(err) {
-                    alert(err)
-                });
+                .then(
+                    function(auth){
+                        console.log(auth);
+                        $scope.ajaxBusy = false;
+                    },
+                    function(err) {
+                        alert(err);
+                        $scope.ajaxBusy = false;
+                    }
+                );
         };
 
 
-        vm.CloseModal = function (){
-            $uibModalInstance.close();
-        };
 
-        vm.signupClick = function(){
-            $uibModalInstance.close();
+
+        $scope.showRegister = function(){
             /**
              * headerCtrl.js will listen to ShowRegister
              */
@@ -62,8 +42,8 @@
         };
 
 
-        vm.forgotPassword = function(){
-            $uibModalInstance.close();
+        $scope.showForgotPassword = function(){
+
             /**
              * headerCtrl.js will listen to ShowRegister
              */

@@ -235,8 +235,12 @@
         /**
          * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
          */
-        $scope._mobile = UserService.formatPhone($scope.user.mobile.split('+1.').join(''));
-        $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
+        if($scope.user.mobile){
+          $scope._mobile = UserService.formatPhone($scope.user.mobile.split('+1.').join(''));
+        }
+        if($scope.user.dateOfBirth){
+          $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
+        }
 
         $scope.stepOneLoaded = true;
       }

@@ -29,6 +29,9 @@
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
+        $scope.showLogin = function(){
+          $rootScope.$emit('ShowLogin');
+        }
 
         $scope.resetEmailValidity = function(){
           $scope.registerForm.email.$setValidity('emailExists', true);
@@ -40,7 +43,7 @@
             }
 
             $scope.ajaxBusy = true;
-
+            $scope.user.provider = 'password';
             registerPasswordUser($scope.user);
         }
 
@@ -54,7 +57,6 @@
                        * User authentication is created successfully
                        * Create user object in database
                        */
-                      console.log(user)
                       return user;
                   },
                   function(err) {
@@ -67,11 +69,29 @@
                 )
                 .then(
                   function(user){
+                    /**
+                     * Save users data
+                     */
                     userService.createRegisteredNewUser(registeredUser, user.uid)
                     .then(
                       function(newUserData){
-                        console.log(newUserData)
-                        return newUserData;
+                        /**
+                         * user data saved log new user in
+                         */
+                        authService.passwordLogin(registeredUser.email, registeredUser.password)
+                        .then(
+                          function(auth){
+                            // authService.setCurrentUser(newUserData, user.uid);
+                            console.log(auth);
+
+                          },
+                          function(err) {
+                            /**
+                             * Error in login for new registered user
+                             */
+                            console.log(err)
+                          }
+                        )//// then authService
                       },
                       function(err){
                         console.log(err)
@@ -84,48 +104,6 @@
                 )
 
         }//// fun. registerPasswrodUser
-
-
-
     }
-
-
-// userService.createRegisteredNewUser(registeredUser, user.uid)
-//                         .then(function(newUserData){
-//                             /**
-//                              * user object created successfully in DB
-//                              * Login registered user
-//                              */
-//                             authService.passwordLogin(registeredUser.email, registeredUser.password)
-//                                 .then(function(auth){
-//                                     // authService.setCurrentUser(newUserData, user.uid);
-//                                     console.log(auth);
-//                                 }, function(err) {
-//                                     /**
-//                                      * Error in login for new registered user
-//                                      */
-//                                     console.log(err)
-//                                 });
-//                         }, function(err) {
-//                             /**
-//                              * user object couldn't be save in DB
-//                              * Remove the user from authentication DB
-//                              */
-//                             userService.removeUser(registeredUser.email, registeredUser.password)
-//                             .then(
-//                                 function(result){
-//                                     if(true === result){
-
-//                                     }
-
-//                                 },
-//                                 function(error){
-//                                     // console.log('remove error');
-//                                     // console.log(error);
-//                                 }
-//                             );
-//                             alert('System Error!\n\n' + err);
-
-//                         });
 
 })();
