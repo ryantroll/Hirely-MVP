@@ -15,13 +15,14 @@ function validateIds(userId, positionId){
                 /**
                  * User existes check if position is there with it's business object
                  */
+
                 businessService.getByPositionId(positionId)
                 .then(
                     function(business){
                         /**
                          * position ID exists is list of returned business more than 0
                          */
-                        if(null !== business && business.length > 0){
+                        if(null !== business){
                             /**
                              * position is found announce
                              */
@@ -35,7 +36,10 @@ function validateIds(userId, positionId){
                             deferred.reject('position ID doesn\'t exists');
                         }
 
-                    }//// getByPositionIid().then()
+                    },//// getByPositionIid().then()
+                    function(err){
+                        console.log(err)
+                    }
                 )
             }//// if null !== user
             else{
@@ -115,6 +119,7 @@ var applicationService = {
         validateIds(newApplication.userId, newApplication.positionId)
         .then(
             function(isValid){
+
                 if(true === isValid){
                     /**
                      * IDs of user and position are valid go ahead and save

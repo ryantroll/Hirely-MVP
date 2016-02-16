@@ -2,16 +2,16 @@ $application-header-height: 60px;
 $application-footer-height: 60px;
 .job-application{
     .job-title{
-        height: $application-header-height;
+        // height: $application-header-height;
         background-color:$c-hirely-navy;
 
         color:#fff;
         text-align: center;
-        padding:1.5em 0 1em 0;
+        padding:1.5em 0 1.5em 0;
         h4{
             margin-top:0;
             margin-bottom:0;
-            // line-height:$application-header-height;
+            line-height: 1.5em;
         }
     }
     header{
@@ -48,7 +48,7 @@ $application-footer-height: 60px;
                 .menu{
                     display:none;
                     position:absolute;
-                    top:$application-header-height - 2px;
+                    top:$application-header-height;
                     right:0;
                     width:200px;
 

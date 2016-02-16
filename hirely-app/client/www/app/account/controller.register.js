@@ -29,6 +29,13 @@
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
+        /**
+         * Let the parent scope know it not a new user so far
+         * untill user click "Create Account"
+         */
+        $scope.jobApplication.isNewUser = false;
+
+
         $scope.showLogin = function(){
           $rootScope.$emit('ShowLogin');
         }
@@ -48,6 +55,10 @@
         }
 
         function registerPasswordUser(registeredUser){
+            /**
+             * Let the parent scope know it is a new regitered user
+             */
+            $scope.jobApplication.isNewUser = true;
 
             //register new user
             userService.registerNewUser(registeredUser.email, registeredUser.password)
@@ -69,6 +80,7 @@
                 )
                 .then(
                   function(user){
+                    if(!user) return null;
                     /**
                      * Save users data
                      */
@@ -81,7 +93,7 @@
                         authService.passwordLogin(registeredUser.email, registeredUser.password)
                         .then(
                           function(auth){
-                            // authService.setCurrentUser(newUserData, user.uid);
+
                             console.log(auth);
 
                           },

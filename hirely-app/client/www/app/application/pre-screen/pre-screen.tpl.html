@@ -1,0 +1,25 @@
+<div class="form-loader" ng-show="!stepFourLoaded">
+    <div class="loader"></div>
+</div>
+<div class="form-container user-profile-basic hirely-form" ng-show="stepFourLoaded">
+    <form class="form-horizontal" name="stepFour" novalidate form-step-validity>
+        <fieldset>
+
+            <div class="row" ng-repeat="q in model.prescreenAnswers">
+                <div class="col-sm-12">
+                    <div class="field-wrapper" ng-class="{'error': questionForm.question.$error.required && questionForm.question.$dirty, 'valid' : questionForm.question.$valid}">
+                        <ng-form name="questionForm">
+                            <label for="q_{{$index}}">
+                                {{q.question}}
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <textarea class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" required></textarea>
+                        </ng-form>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</div><!--user-profile-pasics

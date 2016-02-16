@@ -159,7 +159,7 @@
                                 }
                             },
                             function(error){
-
+                                logout();
                                 deferred.reject(error);
                             }
                         )/// then

@@ -14,13 +14,17 @@
         $scope.user = {email: '', password:''};
 
 
-
+        /**
+         * Let the parent scope know it is NOT a new user
+         */
+        $scope.jobApplication.isNewUser = false;
 
         $scope.PasswordLogin = function() {
             $scope.ajaxBusy = true;
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(
                     function(auth){
+
                         console.log(auth);
                         $scope.ajaxBusy = false;
                     },

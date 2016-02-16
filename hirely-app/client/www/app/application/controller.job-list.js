@@ -12,6 +12,11 @@
 
   function JobListController($scope, $stateParams, $state, AuthService, UserService, JobApplicationService, HirelyApiService) {
 
+    delete $scope.layoutModel.noHeader;
+    delete $scope.layoutModel.business;
+    delete $scope.layoutModel.location;
+    delete $scope.layoutModel.position;
+
     HirelyApiService.businesses($stateParams.businessSlug).get()
     .then(
         function(business) {

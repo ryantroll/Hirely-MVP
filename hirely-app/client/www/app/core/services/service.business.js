@@ -19,7 +19,7 @@
               }
             }
           }
-          businessRef.push(obj);
+          // businessRef.push(obj);
         }
 
         this.getBySlug = function(slug){

@@ -230,6 +230,7 @@ $day-botton-size: 60px;
 	input[type="number"],
 	input[type="date"],
 	input[type="phone"],
+    input[type="tel"],
 	input[type="email"]{
 		border:none;
 		border-bottom:1px solid $c-hirely-text-gray;
@@ -238,6 +239,13 @@ $day-botton-size: 60px;
 		width:100%;
 		// background-color:#ccc;
 	}
+
+    textarea{
+        width:100%;
+        height: 100px;
+        padding:0.3em;
+        border:1px solid $c-hirely-text-gray;
+    }
 
 	select{
 		border:none;
