@@ -242,7 +242,95 @@ var userService = {
         );//// then
 
         return deferred.promise;
-    }//// fun. saveUser
+    },  //// fun. saveUser
+
+
+    updateUserMetrics: function(user) {
+
+        // Education
+        user.educationMaxLvl = 0;
+        user.education.forEach(function(program) {
+            // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
+            if (program.programType > 1 && program.isCompleted == 0) {
+                program.programType = 2;
+            }
+            if (program.programType > educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
+                user.educationMaxLvl = program.programType;
+            }
+        });
+
+
+        // Clear the old Ksa
+        user.knowledges = user.skills = user.abilities = user.workActivities = [];
+
+        // Concat roles
+        var roles = {};
+        var totalWorkMonths = 0;
+        var occIds = [];
+        user.workExperiences.forEach(function (workExperience) {
+            totalWorkMonths += workExperience.monthCount;
+            occIds.push(workExperience.occId);
+
+            // If role doesn't already exist, create it
+            if (roles.indexOf(workExperience.occId) == -1) {
+                roles[workExperience.occId] = {"monthCount": 0};
+            }
+            var role = roles[workExperience.occId];
+            role.monthCount += workExperience.monthCount;
+            role.expLvl = this.monthCountToExperienceLevel(role.monthCount)
+        });
+
+
+        // Retrieve the role occupations from OnetScore
+        var promises = [];
+        Object.keys(roles).forEach(function(key) {
+            promises.push(OnetScore.findOne(key))
+        });
+
+        // Wait until retrieves are done
+        return Q.all(promises).then(function(occupations) {
+
+            // Extend roles with onet metrics
+            occupations.forEach(function(occupation) {
+                var role = roles[occupation.occId]
+                    ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
+                    role[category] = data[role.expLvl][category]
+                });
+            });
+
+
+            // Calc master KSAs;
+            roles.forEach(function(role) {
+                // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
+                var weight = role.expLvl / totalWorkMonths;
+
+                ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
+                    role[category].forEach(function(value, name) {
+                        var weighted = weight * value;
+                        if (user[category] === null) {
+                            user[category][name] = weighted;
+                        } else {
+                            user[category][name] += weighted;
+                        }
+                    });
+                });
+
+            });  // end roles.forEach
+
+            return user.save().then(
+                function(user) {
+                   return MatchService.generateCareerMatchScoresForUser(user);
+                },
+                function(error){
+                    console.log(error);
+                }
+            );
+
+        }).catch(function(error) {
+            // Do whatever happens if one or more errored
+        });  // end Q.all()
+
+    },  // end updateUserMetrics
 
 }/// users object
 
