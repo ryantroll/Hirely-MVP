@@ -7,6 +7,20 @@
      function BusinessService( $q, HirelyApiService) {
 
         // var deferred = $q.defer();
+        //
+        this.testObj = function testObj(){
+
+          var obj = {
+            name : 'zouhir',
+            testObje: {
+              anotherName: [{name: 'zouuhir'}, {name2: 'zouhir2'}],
+              ObjectNested: {
+                againName: 'Zouhir'
+              }
+            }
+          }
+          businessRef.push(obj);
+        }
 
         this.getBySlug = function(slug){
           var deferred = $q.defer();
