@@ -130,6 +130,10 @@ $day-botton-size: 60px;
 	margin:0 auto;
 	padding: 15em 0 0 0;
 	min-height:400px;
+
+    p{
+        font-size:0.7em;
+    }
 }
 .form-container{
 	width:90%;
@@ -425,8 +429,32 @@ $day-botton-size: 60px;
   	*{
   		font-size:0.9em;
   	}
+    .narrow{
+        padding: 0 20%;
+
+    }
+    .small{
+        font-size: 0.8em;
+    }
   }
 }//// .hirely-form
+
+.hirely-form.waiting{
+    position:relative;
+    :before{
+        display: block;
+        content: '';
+        position: absolute;
+        top:0;
+        right:0;
+        bottom: 0;
+        left:0;
+        z-index: 100;
+        background-color:#fff;
+        opacity:0.1;
+    }
+}
+
 
 .user-profile-exp{
 	min-height:400px;
@@ -491,7 +519,7 @@ $day-botton-size: 60px;
 }
 .btn.red{
 	background-color:$c-hirely-red;
-	color:#fff;
+	color:#fff!important;
 }
 .btn.blue{
 	background-color:$c-hirely-blue;

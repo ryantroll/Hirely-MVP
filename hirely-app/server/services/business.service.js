@@ -15,7 +15,7 @@ var businessService = {
      */
     getAll : function(reqQuery){
         // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -')
+        var returnFields = '-' + privateFields.join(' -');
         if(undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }

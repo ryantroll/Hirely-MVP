@@ -84,6 +84,7 @@
 						</label>
 						<input type="text" class="text-field" id="dob" name="dob" placeholder="MM/DD/YYYY"
 							ng-model="_dateOfBirth"
+							ng-change="formatDate()"
 							validate-date
 							required
 						/>

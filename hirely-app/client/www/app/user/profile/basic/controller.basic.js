@@ -22,7 +22,7 @@
           valid = valid && pat.test(value);
           if(false === valid){
             ctrl.$setValidity('invalidDate', false)
-            return null;
+            return value;
           }
 
           var dateParts = value.split('/');
@@ -31,18 +31,18 @@
 
           if(isNaN(D)){
             ctrl.$setValidity('invalidDate', false)
-            return null;
+            return value;
           }
 
           D = new Date(D);
 
           if(D >= now){
             ctrl.$setValidity('invalidDate', false)
-            return null;
+            return value;
           }
 
           ctrl.$setValidity('invalidDate', true);
-          return dateParts;
+          return value;
         });/// unshift
       }//// fun. link
     }/// return object
@@ -117,6 +117,27 @@
 
       $scope._mobile = UserService.formatPhone(newVal);
     };
+
+    $scope.formatDate = function(){
+      var newVal = angular.copy($scope._dateOfBirth);
+      if(newVal === null || angular.isUndefined(newVal)) return;
+
+      //// clear date format
+      newVal = newVal.split('/').join('');
+
+      var formated = '';
+      if(newVal.length >= 2){
+        formated += newVal.slice(0,2) + '/';
+        newVal = newVal.slice(2);
+      }
+      if(newVal.length >= 2){
+        formated += newVal.slice(0,2) + '/';
+        newVal = newVal.slice(2);
+      }
+      formated += newVal;
+
+      $scope._dateOfBirth = formated;
+    }//// fun. formatDate
 
     /**
      *
@@ -214,8 +235,12 @@
         /**
          * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
          */
-        $scope._mobile = UserService.formatPhone($scope.user.mobile.split('+1.').join(''));
-        $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
+        if($scope.user.mobile){
+          $scope._mobile = UserService.formatPhone($scope.user.mobile.split('+1.').join(''));
+        }
+        if($scope.user.dateOfBirth){
+          $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
+        }
 
         $scope.stepOneLoaded = true;
       }

@@ -1,0 +1,13 @@
+<div class="job-application" ng-controller="ApplicationMasterController">
+    <div class="wrapper">
+        <div class="job-title" ng-show="layoutModel.business">
+            <h4>Applyin for {{layoutModel.position}} position at {{layoutModel.business}} - {{layoutModel.location}}</h4>
+        </div>
+        <div ng-show="!userLoggedIn" application-header></div>
+
+        <div ui-view><!--main content--> </div>
+
+        <div ng-show="!userLoggedIn" application-footer></div>
+    </div>
+
+</div>

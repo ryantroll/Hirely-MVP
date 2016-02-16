@@ -80,7 +80,7 @@
     </form>
 </div><!--user-profile-availability-->
 
-<div class="user-profile-availability container">
+<div class="user-profile-availability container" ng-show="stepFiveLoaded">
     <div class="row">
         <div class="col-xs-6 col-sm-15" ng-repeat="day in days">
             <a href="javascript:void(0);" class="day-link" ng-class="{active:dayHours[day] > 0}" ng-click="showTimeTable(day, $index)"><span>{{day|uppercase}}</span></a>
