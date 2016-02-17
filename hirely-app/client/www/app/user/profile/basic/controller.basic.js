@@ -265,8 +265,12 @@
               /**
                * do some data clean up
                */
-              $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
-              $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+              if($scope.user.dateOfBirth){
+                $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
+              }
+              if($scope.user.mobile){
+                $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+              }
 
               /**
                * Save only basic information

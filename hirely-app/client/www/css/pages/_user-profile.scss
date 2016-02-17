@@ -445,22 +445,30 @@ $day-botton-size: 60px;
         font-size: 0.8em;
     }
   }
+
+  .form-loader{
+        display: none;
+    }
 }//// .hirely-form
 
 .hirely-form.waiting{
     position:relative;
-    :before{
-        display: block;
-        content: '';
-        position: absolute;
-        top:0;
-        right:0;
-        bottom: 0;
-        left:0;
-        z-index: 100;
-        background-color:#fff;
-        opacity:0.1;
-    }
+
+
+}
+.hirely-form.waiting:before{
+    display: block;
+    content: '';
+    position: absolute;
+    top:0;
+    right:0;
+    bottom: 0;
+    left:0;
+    z-index: 100;
+    background-color:#fff;
+    opacity:0.7;
+
+
 }
 
 

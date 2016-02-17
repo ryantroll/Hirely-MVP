@@ -26,8 +26,8 @@
     </div>
 </div>
 
-<section class="profile" ng-if="isAuth">
-    <multi-step-container steps="steps" class="simple-prev-next" >
+<section class="profile" ng-if="dataLoaded && isAuth">
+    <multi-step-container steps="steps" class="simple-prev-next" initial-step="setInitialStep()">
     <header>
             <div class="row">
                 <div class="col-xs-12">
@@ -52,12 +52,15 @@
             <div class="row">
                 <div class="col-xs-3">
                     <div class="left">
-                        <button ng-hide="$isFirst()" ng-click="$previousStep()" class="btn back">Back</button>
+                        <button ng-hide="$isFirst()" ng-click="$previousStep()" class="btn back">
+                            <span ng-hide="!jobApplication.isNewUser && $getActiveIndex(step) == 6">Back</span>
+                            <span ng-show="!jobApplication.isNewUser && $getActiveIndex(step) == 6">Edit Profile</span>
+                        </button>
                     </div>
                 </div><!--col-sm-3-->
                 <div class="col-xs-6">
                     <div class="center">
-                        <div class="red">{{100 * ($getActiveIndex(step)-1) / steps.length}}% Completed</div>
+                        <div class="red">{{100 * ($getActiveIndex(step)-1) / steps.length | round}}% Completed</div>
                         <div class="progress-bar"><span style="width:{{100 * ($getActiveIndex(step)-1) / steps.length}}%;">&nbsp;</span></div>
                         <div class="text-center">Powerd by <a href="javascript:void(0);"><i>Hirely</i></a></div>
                     </div>

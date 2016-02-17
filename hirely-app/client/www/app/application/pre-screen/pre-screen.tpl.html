@@ -4,7 +4,11 @@
 <div class="form-container user-profile-basic hirely-form" ng-show="stepFourLoaded">
     <form class="form-horizontal" name="stepFour" novalidate form-step-validity>
         <fieldset>
-
+            <div class="row" ng-show="jobApplication.application">
+                <div class="col-sm-12">
+                        <div class="error-label bg-warning">You Already Applied for this job! You can still update your pre-screen answers</div>
+                </div>
+            </div>
             <div class="row" ng-repeat="q in model.prescreenAnswers">
                 <div class="col-sm-12">
                     <div class="field-wrapper" ng-class="{'error': questionForm.question.$error.required && questionForm.question.$dirty, 'valid' : questionForm.question.$valid}">

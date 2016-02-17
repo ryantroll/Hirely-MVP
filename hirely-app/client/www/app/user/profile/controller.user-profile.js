@@ -56,7 +56,7 @@
 
 
       /**
-       * Monitro is user is logged out and reload the current state
+       * Monitor is user is logged out and reload the current state
        */
       $scope.$on('UserLoggedOut', function(){
         if($scope.application){

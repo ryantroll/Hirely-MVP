@@ -35,10 +35,15 @@
           transclude : false
       };
   })
-  .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+  .filter('round', function(){
+    return function(value){
+      return Math.round(value);
+    }
+  })
+  .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', 'multiStepForm', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $rootScope, $stateParams, $state, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, BusinessService) {
+  function JobApplicationController($scope, $rootScope, $stateParams, $state, multiStepForm, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, BusinessService) {
 
     $scope.isAuth = null;
     /**
@@ -78,16 +83,34 @@
     )
     .then(
       function(isAuth){
-
-        setSteps();
         $scope.isAuth = isAuth;
-        initialize();
+        return JobApplicationService.isApplicationExists(AuthService.currentUser._id, $scope.position._id)
       },
       function(err){
         $scope.isAuth = false;
+        // initialize();
+      }
+    )//// .then
+    .then(
+      function(app){
+        if(app){
+          $scope.jobApplication.application = app;
+        }
+      },
+      function(err){
+        /**
+         * Application doesn't exists
+         */
+        console.log(err)
+      }
+    )
+    .finally(
+      function(){
+        setSteps();
         initialize();
       }
-    );//// .then
+    )
+
 
     function setSteps(){
 
@@ -96,7 +119,7 @@
         {
           templateUrl: '/app/user/profile/basic/basic.tpl.html',
           controller: 'ProfileBasicController',
-          hasForm: true
+          hasForm: false
         },
         {
           templateUrl: '/app/user/profile/experience/experience.tpl.html',
@@ -128,13 +151,12 @@
     function initialize(){
 
       $scope.$on('UserLoggedIn', function(event, user){
+        return;
         $scope.registerFrom = false;
         $scope.loginForm = false;
 
         setSteps();
         $scope.isAuth = true;
-
-
 
       })
 
@@ -144,6 +166,12 @@
         $scope.registerFrom = false;
         $scope.loginForm = true;
       })
+
+
+
+      if($scope.jobApplication.isNewUser === false){
+        // multiStepForm().setInitialIndex(2)
+      }
 
       $scope.dataError = !$scope.business || !$scope.location || !$scope.position;
       $scope.dataLoaded = true;
@@ -162,7 +190,6 @@
         $scope.layoutModel.noHeader = true;
       }//// if!dataError
 
-
     }//// fun. initialize
 
     $rootScope.$on('ShowLogin', function(){
@@ -174,6 +201,15 @@
       $scope.registerFrom = true;
       $scope.loginForm = false;
     })
+
+    $scope.setInitialStep = function(){
+      return $scope.jobApplication.isNewUser ? 1 : 6;
+    }
+
+    $scope.finish = function(){
+      delete $scope.layoutModel.noHeader;
+      $state.go('application.done', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
+    }
 
   }
 })();
