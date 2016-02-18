@@ -26,11 +26,11 @@
           transclude : false
       };
   })
-  .directive("applicationWorkflow", function() {
+  .directive("resetPasswordForm", function() {
       return {
           restrict: 'A',
-          templateUrl: 'app/user/profile/user-profile.html',
-          controller: 'UserProfileController',
+          templateUrl: 'app/account/password.tpl.html',
+          controller: 'PasswordController',
           scope: true,
           transclude : false
       };
@@ -151,7 +151,7 @@
     function initialize(){
 
       $scope.$on('UserLoggedIn', function(event, user){
-        return;
+
         $scope.registerFrom = false;
         $scope.loginForm = false;
 
@@ -177,6 +177,7 @@
       $scope.dataLoaded = true;
       $scope.registerFrom = true;
       $scope.loginForm = false;
+      $scope.passwordForm = false;
 
       if(!$scope.dataError){
         /**
@@ -194,12 +195,20 @@
 
     $rootScope.$on('ShowLogin', function(){
       $scope.registerFrom = false;
+      $scope.passwordForm = false;
       $scope.loginForm = true;
     })
 
     $rootScope.$on('ShowRegister', function(){
       $scope.registerFrom = true;
+      $scope.passwordForm = false;
       $scope.loginForm = false;
+    })
+
+    $rootScope.$on('ShowForgotPassword', function(){
+      $scope.registerFrom = false;
+      $scope.loginForm = false;
+      $scope.passwordForm = true;
     })
 
     $scope.setInitialStep = function(){

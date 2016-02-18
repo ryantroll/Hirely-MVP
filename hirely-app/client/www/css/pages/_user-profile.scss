@@ -446,14 +446,24 @@ $day-botton-size: 60px;
     }
   }
 
-  .form-loader{
+  .in-form-loader{
         display: none;
+
     }
 }//// .hirely-form
 
 .hirely-form.waiting{
     position:relative;
 
+    .in-form-loader{
+        display: block;
+        position:absolute;
+        z-index: 101;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+    }
 
 }
 .hirely-form.waiting:before{
@@ -467,8 +477,6 @@ $day-botton-size: 60px;
     z-index: 100;
     background-color:#fff;
     opacity:0.7;
-
-
 }
 
 
@@ -558,15 +566,18 @@ $day-botton-size: 60px;
 
 	header{
 		width:100%;
-		background-color:$c-hirely-navy;
-		min-height: $header-height;
+		background-color:$c-hirely-navy!important;
+		min-height: none;
+        height:auto!important;
 		@include drop-shadow;
 		color:#fff;
 		text-align: center;
+        padding:1em 0 1em 0;
 
 		h3{
-			line-height: $header-height;
+			// line-height: $header-height;
 			padding-bottom:0;
+            margin-bottom: 0;
 		}
 	}
 

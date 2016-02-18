@@ -12,7 +12,7 @@
         var vm = this;
         $scope.error = '';
         $scope.user = {email: '', password:''};
-
+        $scope.loginError = false;
 
         /**
          * Let the parent scope know it is NOT a new user
@@ -26,10 +26,11 @@
                     function(auth){
 
                         console.log(auth);
+                        $scope.loginError = false;
                         $scope.ajaxBusy = false;
                     },
                     function(err) {
-                        alert(err);
+                        $scope.loginError = true;
                         $scope.ajaxBusy = false;
                     }
                 );
@@ -40,7 +41,7 @@
 
         $scope.showRegister = function(){
             /**
-             * headerCtrl.js will listen to ShowRegister
+             * app/application/controller.job-application.js will listen to ShowRegister
              */
             $rootScope.$emit('ShowRegister');
         };
@@ -49,7 +50,7 @@
         $scope.showForgotPassword = function(){
 
             /**
-             * headerCtrl.js will listen to ShowRegister
+             * app/application/controller.job-application.js will listen to ShowRegister
              */
             $rootScope.$emit('ShowForgotPassword');
         };

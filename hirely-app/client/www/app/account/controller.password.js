@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('PasswordCtrl', ['$scope', '$rootScope', '$stateParams','$uibModalInstance', 'AuthService', PasswordCtrl ]);
+    angular.module('hirelyApp.account').controller('PasswordController', ['$scope', '$rootScope', '$stateParams', 'AuthService', PasswordController ]);
 
 
-    function PasswordCtrl($scope, $rootScope, $stateParams, $uibModalInstance, AuthService) {
+    function PasswordController($scope, $rootScope, $stateParams, AuthService) {
 
         /**
          * [error variable initiated to nothing]
@@ -15,6 +15,7 @@
          */
         $scope.error = '';
         $scope.success = false;
+        $scope.user = {};
 
         /**
          * Submit event of passwor reset form
@@ -22,30 +23,36 @@
         $scope.passwordReset = function(){
             $scope.errorMsg = '';
             $scope.success = false;
-            AuthService.resetPassword($scope.email).then(
+
+            $scope.ajaxBusy = true;
+            AuthService.resetPassword($scope.user.email).then(
                 function(){
                     $scope.errorMsg = '';
                     $scope.success = true;
-                    $scope.email = '';
+                    $scope.user.email = '';
                     /**
                      * reset for validation
                      */
-                    $scope.passwordForm.$setPristine()
-                    $scope.passwordForm.$setUntouched()
+                    $scope.resetForm.$setPristine()
+                    $scope.resetForm.$setUntouched()
+                    $scope.ajaxBusy = false;
                 },
                 function(error){
-
                     $scope.errorMsg = error;
                     $scope.success = false;
+                    $scope.ajaxBusy = false;
                 }
             )/// resetPassrod.then
         }//// fun. passwordReset
 
-        /**
-         * click event for close button to close the modal
-         */
-        $scope.closeModal = function(){
-            $uibModalInstance.close();
+        $scope.cancelClick = function(){
+            $rootScope.$emit('ShowLogin');
         }
+
+        $scope.resetErrors = function(){
+            $scope.errorMsg = '';
+            $scope.success = false;
+        }
+
     }
 })();
