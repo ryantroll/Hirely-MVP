@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 mongoose.set('debug', true);
 var Schema = mongoose.Schema;
 
+var freeSchema = new Schema({}, {strict:false, _id:false});
+
 function endDateValidator(value){
   /**
    * this here will refer to schema
@@ -19,11 +21,11 @@ function endDateValidator(value){
 }
 
 /**
- * [customeId schema with disabled auto _id to be used in arrays of personalityExam schema where the "name" is used as _id]
+ * [customId schema with disabled auto _id to be used in arrays of personalityExam schema where the "name" is used as _id]
  * @type {Schema}
  */
-var customeId = new Schema({
-  _id:{type:String, requireed:true},
+var customId = new Schema({
+  _id:{type:String, required:true},
   score:{type:Number, required:false}
 }
 ,{strict:false, _id:false});
@@ -31,11 +33,11 @@ var customeId = new Schema({
 var personalitySchema = new Schema({
   extId               :       {type:String, required:true},
   createdAt           :       {type:Date, required:true, default:Date.now},
-  personalityTypes    :       [customeId],
-  personalityTraits   :       [customeId],
+  personalityTypes    :       [customId],
+  personalityTraits   :       [customId],
   personalityBlend    :       {
                                 name:String,
-                                personalityTypes:[customeId]
+                                personalityTypes:[customId]
                               }
 
 });
@@ -175,7 +177,8 @@ var userSchema = new Schema({
         healthInsurance     :       Boolean,
         dentalInsurance     :       Boolean,
         retirementPlan      :       Boolean,
-        discounts           :       Boolean
+        discounts           :       Boolean,
+        optOutOfSuggestionsFromEmployers:   {type:Boolean, default:false},
     },
 
 
@@ -188,6 +191,7 @@ var userSchema = new Schema({
      * Availability
      */
     availability: {
+        isAvailable        :       {type:Boolean, default:true},
         startAvailability   :       Number,
         hoursPerWeekMin     :       Number,
         hoursPerWeekMax     :       Number,
@@ -216,7 +220,20 @@ var userSchema = new Schema({
     /**
      * Education
      */
-    education           :       [educationSchema]
+    education           :       [educationSchema],
+
+    /**
+     * KSAW scores
+     */
+    // TODO:  Explicitly specify each ksaw
+    scores              : {
+        knowledges          :       {type:freeSchema, required:false},
+        skills              :       {type:freeSchema, required:false},
+        abilities           :       {type:freeSchema, required:false},
+        workActivities      :       {type:freeSchema, required:false}
+    },
+
+    isVetted            : {type:String, default:false}
 
 });
 

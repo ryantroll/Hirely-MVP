@@ -24,6 +24,7 @@ db.once('open', function(){
         website:'http://compasscoffee.com',
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
         agreedToTerms:true,
+        hasOpenings: true,
         photoUrl:  "http://assets.inhabitat.com/wp-content/blogs.dir/1/files/2013/12/starbucks-canal-street-NOLA-store-6.jpg",
         locations: {
             tmpLocationId: {
@@ -104,7 +105,7 @@ db.once('open', function(){
                 minClosingShifts: 3,
                 minWeekdayShifts: 3,
                 minWeekendShifts: 3,
-                openings: 3,
+                openingsCount: 3,
                 expLvl: 2,
 
                 scoreWeights: {
@@ -161,7 +162,7 @@ db.once('open', function(){
                 minClosingShifts  :     3,
                 minWeekdayShifts  :     3,
                 minWeekendShifts  :     3,
-                openings          :     3,
+                openingsCount     :     3,
                 expLvl: 3,
                 scoreWeights: {
                     exp: .2,

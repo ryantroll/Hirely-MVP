@@ -12,6 +12,7 @@ var positionSchema = new Schema({
     title         :    {type: String, required:true},
     slug          :    {type: String},
     occId         :    {type: String, required:true},
+    hasOpenings   :    {type:Boolean, default:false},  // this field should be updated whenever positions are updated
 
     workType          :     {
         type:String,
@@ -30,7 +31,7 @@ var positionSchema = new Schema({
     minClosingShifts  :     Number,
     minWeekdayShifts  :     Number,
     minWeekendShifts  :     Number,
-    openings          :     Number,
+    openingsCount     :     Number,
     expLvl            :     Number,
 
     scoreWeights      :     {
@@ -172,7 +173,7 @@ var businessSchema = new Schema({
   locations: {type:freeSchema, required:false},
   locationSlugs: {type:freeSchema, required:false},
 
-  positions: {type:freeSchema, required:false},
+  positions: {type:freeSchema, required:false}
 
 });
 /**
