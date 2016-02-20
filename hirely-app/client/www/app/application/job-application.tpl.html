@@ -61,7 +61,7 @@
                 </div><!--col-sm-3-->
                 <div class="col-xs-6">
                     <div class="center">
-                        <div class="red">{{100 * ($getActiveIndex(step)-1) / steps.length | round}}% Completed</div>
+                        <div class="red">{{100 * ($getActiveIndex(step)-1) / steps.length | numberRound}}% Completed</div>
                         <div class="progress-bar"><span style="width:{{100 * ($getActiveIndex(step)-1) / steps.length}}%;">&nbsp;</span></div>
                         <div class="text-center">Powerd by <a href="javascript:void(0);"><i>Hirely</i></a></div>
                     </div>

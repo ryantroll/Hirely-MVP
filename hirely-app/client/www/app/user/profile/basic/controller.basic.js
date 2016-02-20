@@ -265,10 +265,10 @@
               /**
                * do some data clean up
                */
-              if($scope.user.dateOfBirth){
+              if($scope._dateOfBirth){
                 $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
               }
-              if($scope.user.mobile){
+              if($scope._mobile){
                 $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
               }
 

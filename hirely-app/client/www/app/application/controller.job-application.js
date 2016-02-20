@@ -35,15 +35,15 @@
           transclude : false
       };
   })
-  .filter('round', function(){
+  .filter('numberRound', function(){
     return function(value){
       return Math.round(value);
     }
   })
-  .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', 'multiStepForm', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+  .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', '$q', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $rootScope, $stateParams, $state, multiStepForm, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, BusinessService) {
+  function JobApplicationController($scope, $rootScope, $stateParams, $state, $q, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, BusinessService) {
 
     $scope.isAuth = null;
     /**
@@ -61,6 +61,7 @@
       application: null, //// applicatin object after it get saved in db
       isNewUser: false //// this variable will be set in register form controller or login form congroller to identify new user from old logged in user
     };
+
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -84,33 +85,62 @@
     .then(
       function(isAuth){
         $scope.isAuth = isAuth;
-        return JobApplicationService.isApplicationExists(AuthService.currentUser._id, $scope.position._id)
+        /**
+         * user is logged in continue data loading
+         */
+        return getApplicationData();
       },
       function(err){
         $scope.isAuth = false;
-        // initialize();
+        /**
+         * breack the promise chain as user is not logged id
+         */
+        return $q.reject();
       }
     )//// .then
-    .then(
-      function(app){
-        if(app){
-          $scope.jobApplication.application = app;
-        }
-      },
-      function(err){
-        /**
-         * Application doesn't exists
-         */
-        console.log(err)
-      }
-    )
     .finally(
       function(){
-        setSteps();
+        /**
+         * Set the steps if only user is logedin
+         */
+        if(true === $scope.isAuth){
+           setSteps();
+        }
         initialize();
       }
-    )
+    );/// .finally
 
+    /**
+     * [getApplicationData this function created to separate the promise chain,
+     * if user not logged in there is not need to load application data and user profile fileds
+     * this function will be called again inside UserLoggedIn event below to continue data loading]
+     * @return {promise} [description]
+     */
+    function getApplicationData(){
+      return JobApplicationService.isApplicationExists(AuthService.currentUser._id, $scope.position._id)
+      .then(
+        function(app){
+          if(app){
+            $scope.jobApplication.application = app;
+          }
+          return UserService.getUserCompleteFields(AuthService.currentUserID, ['availability', 'education', 'workExperience', 'personalityExams'])
+        },
+        function(err){
+          /**
+           * Application doesn't exists
+           */
+          console.log(err)
+        }
+      )
+      .then(
+        function(userData){
+          $scope.userData = userData;
+        },
+        function(err){
+          console.log(err);
+        }
+      )
+    }//// fun. getApplicationData
 
     function setSteps(){
 
@@ -155,24 +185,29 @@
         $scope.registerFrom = false;
         $scope.loginForm = false;
 
-        setSteps();
-        $scope.isAuth = true;
+        /**
+         * after user logged in continue data loading
+         */
+        getApplicationData()
+        .finally(
+          function(){
+            setSteps();
+            $scope.isAuth = true;
+          }
+        );/// .finally
 
-      })
+      });
 
       $scope.$on('UserLoggedOut', function(event){
         $scope.isAuth = false;
 
         $scope.registerFrom = false;
         $scope.loginForm = true;
-      })
+      });
 
-
-
-      if($scope.jobApplication.isNewUser === false){
-        // multiStepForm().setInitialIndex(2)
-      }
-
+      /**
+       * initiate layout template variables
+       */
       $scope.dataError = !$scope.business || !$scope.location || !$scope.position;
       $scope.dataLoaded = true;
       $scope.registerFrom = true;
@@ -211,10 +246,43 @@
       $scope.passwordForm = true;
     })
 
+    /**
+     * [setInitialStep used inside the template in multiStepForm directive
+     * to set the initiale step based on user profile]
+     */
     $scope.setInitialStep = function(){
-      return $scope.jobApplication.isNewUser ? 1 : 6;
+      // var initialStep = 1;
+      if(
+        !(angular.isDefined(AuthService.currentUser.mobile) && AuthService.currentUser.mobile &&
+        angular.isDefined(AuthService.currentUser.dateOfBirth) && AuthService.currentUser.dateOfBirth &&
+        angular.isDefined(AuthService.currentUser.postalCode) && AuthService.currentUser.postalCode)
+      ){
+        return 1;
+      }
+
+      if( !(Array.isArray($scope.userData.workExperience) && $scope.userData.workExperience.length > 0) ){
+        return 2;
+      }
+
+      if( !(Array.isArray($scope.userData.education) && $scope.userData.education.length > 0) ){
+        return 3;
+      }
+
+      if( !(Array.isArray($scope.userData.personalityExams) && $scope.userData.personalityExams.length > 0) ){
+        return 4;
+      }
+
+      if( !(angular.isDefined($scope.userData.availability.hoursPerWeekMin) && $scope.userData.availability.hoursPerWeekMin > 0) ){
+        return 5;
+      }
+
+      return 6;
     }
 
+    /**
+     * [finish trigger when user get to the last step pre-screen and click finish button, will reidrect the user to thank you page]
+     * @return {[type]} [description]
+     */
     $scope.finish = function(){
       delete $scope.layoutModel.noHeader;
       $state.go('application.done', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
