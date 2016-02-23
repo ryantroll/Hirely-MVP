@@ -28,5 +28,13 @@
 
         .constant('RESPONSE', {success: {code: '1', status: 'ok'}, error: {code: '0', status: 'error'}})
 
-        .constant('TRAITIFY_PUBLIC_KEY', "vjcprrh344sj6d5jbs80b4tjns");
+        .constant('TRAITIFY_PUBLIC_KEY', "vjcprrh344sj6d5jbs80b4tjns")
+
+        .constant('AMAZON_S3_CREDS', {
+            bucket_url:'http://hirely.io.s3-website-us-east-1.amazonaws.com',
+            // bucket:'arn:aws:s3:::hirely.io',
+            bucket:'hirely.io',
+            'access_key': 'AKIAJGQYT2PTNFUBUJ2Q',
+            'secret_key': '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'
+        });
 })();
