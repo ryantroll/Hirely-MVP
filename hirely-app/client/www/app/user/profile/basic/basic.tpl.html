@@ -7,15 +7,16 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="text-center user-image">
-						<img class="img-circle" src="{{user.profileImageURL}}"/>
+						<span class="image-loader"></span>
+						<img src="{{user.profileImageURL}}"/>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="text-center image-links">
-						<a href="javascript:void(0);" ng-click="selectFile()">Edit</a> | <a href="javascript:void(0);">Remove</a>
-						<input id="photoFile" name="file" type="file" file />
+						<a href="javascript:void(0);" ng-click="selectFile()">Edit</a> | <a href="javascript:void(0);" ng-click="removeImage()">Remove</a>
+						<input id="photoFile" name="file" type="file" class="profile-image" file />
 					</div>
 				</div>
 			</div>

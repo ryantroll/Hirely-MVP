@@ -5,7 +5,9 @@
 
     <div class="user pull-right">
         <div class="details" ng-show="auth.currentUser">
-            <img class="img-circle" src="https://lh3.googleusercontent.com/-1p0-ELNl0mk/AAAAAAAAAAI/AAAAAAAAAAA/xeGC2Eu7i0o/photo.jpg"/>
+            <div class="image">
+                <img class="img-circle" src="{{auth.currentUser.profileImageURL || defaultImage}}"/>
+            </div>
             <div class="name">{{auth.currentUser.firstName}}</div>
             <div class="menu">
                 <ul>

@@ -128,8 +128,10 @@
         function(err){
           /**
            * Application doesn't exists
+           * get the complete filed of user no matter what the result is
            */
-          console.log(err)
+          console.log(err);
+          return UserService.getUserCompleteFields(AuthService.currentUserID, ['availability', 'education', 'workExperience', 'personalityExams'])
         }
       )
       .then(
@@ -260,15 +262,15 @@
         return 1;
       }
 
-      if( !(Array.isArray($scope.userData.workExperience) && $scope.userData.workExperience.length > 0) ){
+      if( !(angular.isDefined($scope.userData) && Array.isArray($scope.userData.workExperience) && $scope.userData.workExperience.length > 0) ){
         return 2;
       }
 
-      if( !(Array.isArray($scope.userData.education) && $scope.userData.education.length > 0) ){
+      if( !(angular.isDefined($scope.userData) && Array.isArray($scope.userData.education) && $scope.userData.education.length > 0) ){
         return 3;
       }
 
-      if( !(Array.isArray($scope.userData.personalityExams) && $scope.userData.personalityExams.length > 0) ){
+      if( !(angular.isDefined($scope.userData) && Array.isArray($scope.userData.personalityExams) && $scope.userData.personalityExams.length > 0) ){
         return 4;
       }
 

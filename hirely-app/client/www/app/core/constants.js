@@ -36,5 +36,8 @@
             bucket:'hirely.io',
             'access_key': 'AKIAJGQYT2PTNFUBUJ2Q',
             'secret_key': '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'
-        });
+        })
+
+        .constant('DEFAULT_PROFILE_IMAGE', 'https://lh3.googleusercontent.com/-1p0-ELNl0mk/AAAAAAAAAAI/AAAAAAAAAAA/xeGC2Eu7i0o/photo.jpg');
+
 })();

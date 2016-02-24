@@ -150,18 +150,50 @@ $day-botton-size: 60px;
 
 	.user-image{
 		width:150px;
+        height: 150px;
 		margin: 0 auto;
+        overflow: hidden;
+        position:relative;
+        @include border-radius(50%);
+        // border:5px solid #fff;
+
 		> img{
 			display: block;
-			max-width:100%;
-
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
 		}
+
+        .image-loader{
+            display: none;
+            content:' ';
+            width:150px;
+            height: 150px;
+            position:absolute;
+            top:0;
+            left:0;
+            line-height: 150px;
+            text-align: center;
+            font-size:1em;
+            font-weight: 700;
+            color:$c-hirely-red;
+            background-color:rgba(255, 255, 255, 0.8);
+            z-index: 3;
+        }
 	}//// .user-image
+
+
 
 	.image-links{
 		padding-top:0.5em;
 		font-size:0.9em;
 	}
+
+    .profile-image{
+        height: 0;
+        width:0;
+        visibility: hidden;
+    }
 }//// .user-profile-basic
 
 .hirely-form{
