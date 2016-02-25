@@ -187,12 +187,18 @@ $day-botton-size: 60px;
 	.image-links{
 		padding-top:0.5em;
 		font-size:0.9em;
+        position:relative;
 	}
 
     .profile-image{
-        height: 0;
-        width:0;
-        visibility: hidden;
+        height: 20px;
+        width:25%;
+        height: 30px;
+        position:absolute;
+        left:-50000px;
+        top:0px;
+        opacity: 0.5;
+        z-index:10;
     }
 }//// .user-profile-basic
 
@@ -201,6 +207,12 @@ $day-botton-size: 60px;
 	.field-wrapper{
 		padding-top:3em;
 		position:relative;
+
+        p{
+            font-size:0.85em;
+            margin-bottom: .5em;
+            color:$c-hirely-mid-gray;
+        }
 	}//// field-wrapper
 
 	.feedback-valid{
@@ -289,7 +301,7 @@ $day-botton-size: 60px;
 		@include border-radius(0);
 		border-color:$c-hirely-text-gray;
 		width:100%;
-		background-color:#fff;
+		background-color:$c-hirely-gray;
 
 		option:first-child{
 			color:#ccc;
@@ -302,8 +314,8 @@ $day-botton-size: 60px;
 		line-height: 29px;
 		content: " ";
 		position:absolute;
-		top:59px;
-		right:0;
+		top:61px;
+		right:8px;
 		text-align: center;
 		font-size:0.8em;
 		color:$c-hirely-text-gray;

@@ -342,7 +342,7 @@
     });
 
     $scope.selectFile = function(){
-      angular.element('#photoFile').click();
+      angular.element('#photoFile').show().focus().click();
     }//// selectFile
 
     $rootScope.$on('UploadProgress', function(event, per){
@@ -397,7 +397,7 @@
       UserService.saveUser(userToSave, AuthService.currentUserID)
       .then(
         function(savedUser){
-          console.log(savedUser);
+          // console.log(savedUser);
           AuthService.updateCurrentUser(savedUser);
         },
         function(err){

@@ -61,7 +61,7 @@
                     </div>
                 </div>
 
-                <div class="row" ng-show="positionSub">
+                <div class="row" ng-show="positionSub || true">
                     <div class="col-sm-12">
                         <div class="field-wrapper" ng-class="{'error': !stepTwo.position.$valid && stepTwo.position.$dirty, 'valid' : stepTwo.position.$valid}">
                             <label for="position">
@@ -69,6 +69,7 @@
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
+                            <p>Please help us refine your position choice by choosing a parent occupation</p>
                             <div class="btn-group fullwidth" uib-dropdown keyboard-nav>
                                 <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default fullwidth" uib-dropdown-toggle>
                                     Select right occupation <span class="caret"></span>
@@ -249,7 +250,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="field-wrapper text-center">
-                            Powerd by <a href="javascript:void(0);"><i>Hirely</i></a>
+                            Powered by <a href="javascript:void(0);"><i>Hirely</i></a>
                         </div>
                     </div>
                 </div>
