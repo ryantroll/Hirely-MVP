@@ -150,18 +150,50 @@ $day-botton-size: 60px;
 
 	.user-image{
 		width:150px;
+        height: 150px;
 		margin: 0 auto;
+        overflow: hidden;
+        position:relative;
+        @include border-radius(50%);
+        // border:5px solid #fff;
+
 		> img{
 			display: block;
-			max-width:100%;
-
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
 		}
+
+        .image-loader{
+            display: none;
+            content:' ';
+            width:150px;
+            height: 150px;
+            position:absolute;
+            top:0;
+            left:0;
+            line-height: 150px;
+            text-align: center;
+            font-size:1em;
+            font-weight: 700;
+            color:$c-hirely-red;
+            background-color:rgba(255, 255, 255, 0.8);
+            z-index: 3;
+        }
 	}//// .user-image
+
+
 
 	.image-links{
 		padding-top:0.5em;
 		font-size:0.9em;
 	}
+
+    .profile-image{
+        height: 0;
+        width:0;
+        visibility: hidden;
+    }
 }//// .user-profile-basic
 
 .hirely-form{
@@ -230,6 +262,7 @@ $day-botton-size: 60px;
 	input[type="number"],
 	input[type="date"],
 	input[type="phone"],
+    input[type="tel"],
 	input[type="email"]{
 		border:none;
 		border-bottom:1px solid $c-hirely-text-gray;
@@ -238,6 +271,13 @@ $day-botton-size: 60px;
 		width:100%;
 		// background-color:#ccc;
 	}
+
+    textarea{
+        width:100%;
+        height: 100px;
+        padding:0.3em;
+        border:1px solid $c-hirely-text-gray;
+    }
 
 	select{
 		border:none;
@@ -437,22 +477,38 @@ $day-botton-size: 60px;
         font-size: 0.8em;
     }
   }
+
+  .in-form-loader{
+        display: none;
+
+    }
 }//// .hirely-form
 
 .hirely-form.waiting{
     position:relative;
-    :before{
+
+    .in-form-loader{
         display: block;
-        content: '';
-        position: absolute;
+        position:absolute;
+        z-index: 101;
         top:0;
-        right:0;
-        bottom: 0;
         left:0;
-        z-index: 100;
-        background-color:#fff;
-        opacity:0.1;
+        bottom:0;
+        right:0;
     }
+
+}
+.hirely-form.waiting:before{
+    display: block;
+    content: '';
+    position: absolute;
+    top:0;
+    right:0;
+    bottom: 0;
+    left:0;
+    z-index: 100;
+    background-color:#fff;
+    opacity:0.7;
 }
 
 
@@ -542,15 +598,18 @@ $day-botton-size: 60px;
 
 	header{
 		width:100%;
-		background-color:$c-hirely-navy;
-		min-height: $header-height;
+		background-color:$c-hirely-navy!important;
+		min-height: none;
+        height:auto!important;
 		@include drop-shadow;
 		color:#fff;
 		text-align: center;
+        padding:1em 0 1em 0;
 
 		h3{
-			line-height: $header-height;
+			// line-height: $header-height;
 			padding-bottom:0;
+            margin-bottom: 0;
 		}
 	}
 

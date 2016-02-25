@@ -45,11 +45,9 @@
                 }
             )/// Auth then
 
-        $scope.$on('UserLoggedIn', function(event, user){
-          $scope.userLoggedIn = true;
-        })
 
-        $scope.layoutModel = {business:null};
+
+        $scope.layoutModel = {business:null, noHeader:null};
 
     };
 })();

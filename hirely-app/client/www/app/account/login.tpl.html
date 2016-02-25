@@ -1,4 +1,9 @@
 <div class="user-profile-basic hirely-form" ng-class="{waiting:ajaxBusy}">
+    <div class="in-form-loader">
+        <div class="form-loader">
+            <div class="loader"></div>
+        </div>
+    </div>
     <ng-form class="form-horizontal" name="loginForm" novalidate>
         <fieldset>
 
@@ -33,12 +38,14 @@
                             ng-model="user.password"
                             placeholder=""
                             required
-                            validate-password
                         />
                     </div>
                 </div>
-                <div class="col-sm-12 no-col-padding">
-                    <div class="bg-danger error-label" ng-show="loginForm.password.$error.invalidPassword">Password should be between 6 and 12 characters</div>
+                <div class="col-sm-12 no-col-padding" ng-show="loginForm.password.$error.invalidPassword">
+                    <div class="bg-danger error-label">Password should be between 6 and 12 characters</div>
+                </div>
+                <div class="col-sm-12 no-col-padding" ng-show="loginError">
+                    <div class="bg-danger error-label">Your email or password is not correct</div>
                 </div>
             </div>
 

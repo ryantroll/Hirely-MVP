@@ -2,16 +2,16 @@ $application-header-height: 60px;
 $application-footer-height: 60px;
 .job-application{
     .job-title{
-        height: $application-header-height;
+        // height: $application-header-height;
         background-color:$c-hirely-navy;
 
         color:#fff;
         text-align: center;
-        padding:1.5em 0 1em 0;
+        padding:1.5em 0 1.5em 0;
         h4{
             margin-top:0;
             margin-bottom:0;
-            // line-height:$application-header-height;
+            line-height: 1.5em;
         }
     }
     header{
@@ -33,12 +33,23 @@ $application-footer-height: 60px;
             .details{
                 position: relative;
                 height: $application-header-height;
-                img{
-                    width: $application-header-height - 10px;
-                    height: auto;
-                    margin-top:5px;
-                    float:left;
+                .image{
+                    width:$application-header-height - 10px;
+                    height: $application-header-height - 10px;
+                    margin: 5px auto 0 auto;
+                    overflow: hidden;
+                    position:relative;
+                    float: left;
+                    @include border-radius(50%);
+                    > img{
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
                 }
+
+
                 .name{
                     float:left;
                     display: inline-block;
@@ -48,7 +59,7 @@ $application-footer-height: 60px;
                 .menu{
                     display:none;
                     position:absolute;
-                    top:$application-header-height - 2px;
+                    top:$application-header-height;
                     right:0;
                     width:200px;
 
@@ -57,21 +68,24 @@ $application-footer-height: 60px;
                         width:200px;
                         list-style: none;
                         padding:0;
+                        @include drop-shadow();
                     }
                     ul > li{
                         display: block;
                         width:100%;
-                        height: 40px;
-                        line-height: 40px;
+
+
                     }
                     ul > li > a{
                         display: block;
                         width:100%;
-                        height: 40px;
-                        line-height: 40px;
-                        background-color:$c-hirely-red;
-                        color:#fff;
-                        padding:0 1em;
+                        background-color:$c-hirely-gray;
+
+                        padding:0.5em 1em 0.5em 1em;
+
+                    }
+                    ul > li > a:hover{
+                        background-color:#fff;
                     }
                 }
             }//// details

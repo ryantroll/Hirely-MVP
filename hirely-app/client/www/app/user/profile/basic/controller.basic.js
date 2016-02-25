@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('ProfileBasicController', ['$scope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService', '$timeout', ProfileBasicController])
+  angular.module('hirelyApp').controller('ProfileBasicController', ['$scope', '$rootScope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService', '$timeout', 'FileUpload', 'DEFAULT_PROFILE_IMAGE', ProfileBasicController])
   .directive('validateDate', function(){
     return {
       restrict:'A',
@@ -86,9 +86,27 @@
       }//// fun. link
     }/// return object
   })/// validate date;
+  .directive('file', function() {
+    return {
+      restrict: 'AE',
+      scope: {
+        file: '@'
+      },
+      link: function(scope, el, attrs){
+        el.bind('change', function(event){
+          var files = event.target.files;
+          var file = files[0];
+          scope.file = file;
+          scope.$parent.file = file;
+          scope.$apply();
+          scope.$parent.uploadPhoto();
+        });
+      }
+    };
+  });
 
 
-  function ProfileBasicController($scope, $stateParams, multiStepFormInstance, GeocodeService, UserService, AuthService, $timeout) {
+  function ProfileBasicController($scope, $rootScope, $stateParams, multiStepFormInstance, GeocodeService, UserService, AuthService, $timeout, FileUpload, DEFAULT_PROFILE_IMAGE) {
 
     var geocodeService = GeocodeService;
 
@@ -102,6 +120,8 @@
       country: 'long_name',
       postal_code: 'short_name'
     };
+
+
 
     $scope.$watch('stepOne.$valid', function(state) {
       multiStepFormInstance.setValidity(state);
@@ -242,9 +262,15 @@
           $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
         }
 
+        if(!$scope.user.profileImageURL){
+          $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
+        }
+
         $scope.stepOneLoaded = true;
       }
     }, 1000);/// $timeout
+
+
 
 
     //// wait for destroy event to update data
@@ -265,8 +291,12 @@
               /**
                * do some data clean up
                */
-              $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
-              $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+              if($scope._dateOfBirth){
+                $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
+              }
+              if($scope._mobile){
+                $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+              }
 
               /**
                * Save only basic information
@@ -310,6 +340,72 @@
       );/// getAuth promise
 
     });
+
+    $scope.selectFile = function(){
+      angular.element('#photoFile').click();
+    }//// selectFile
+
+    $rootScope.$on('UploadProgress', function(event, per){
+      var percent = Math.round(per * 100);
+      angular.element('.image-loader').text(percent);
+    })
+
+    $scope.uploadPhoto = function(){
+      angular.element('.image-loader').show();
+
+      if(angular.isUndefined($scope.file)){
+        return null;
+      }
+
+      var fileName = $scope.file.name.split('.');
+      var ext = fileName.pop();
+      fileName = fileName.join('.');
+      fileName += '-pofile-' + AuthService.currentUserID + '.' + ext;
+
+      FileUpload.putFile($scope.file, fileName, 'profile-photos')
+      .then(
+        function(fileUrl){
+          $scope.user.profileImageURL = fileUrl;
+          var userToSave = angular.copy(AuthService.currentUser);
+          userToSave.profileImageURL = fileUrl;
+          return UserService.saveUser(userToSave, AuthService.currentUserID)
+        },
+        function(err){
+          console.log(err);
+          return null;
+        }
+      )///
+      .then(
+        function(savedUser){
+          console.log(savedUser);
+          AuthService.updateCurrentUser(savedUser);
+
+          delete $scope.file;
+          angular.element('#photoFile').val(null);
+          angular.element('.image-loader').hide();
+        },
+        function(err){
+          console.log(err)
+        }
+      )
+    }//// fun. uploadPhoto
+
+    $scope.removeImage = function(){
+      var userToSave = angular.copy(AuthService.currentUser);
+      userToSave.profileImageURL = null;
+      $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
+      UserService.saveUser(userToSave, AuthService.currentUserID)
+      .then(
+        function(savedUser){
+          console.log(savedUser);
+          AuthService.updateCurrentUser(savedUser);
+        },
+        function(err){
+          console.log(err)
+        }
+      );/// .then
+    }//// fun. removeImage
+
 
   }
 })();

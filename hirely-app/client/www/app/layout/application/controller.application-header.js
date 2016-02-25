@@ -6,10 +6,11 @@
 
     angular.module('hirelyApp.layout')
 
-    .controller('ApplicationHeaderController', ['$stateParams', '$scope', 'AuthService', 'UserService', ApplicationHeaderController ])
+    .controller('ApplicationHeaderController', ['$stateParams', '$scope', 'AuthService', 'UserService', 'DEFAULT_PROFILE_IMAGE', ApplicationHeaderController ])
 
-    function ApplicationHeaderController($stateParams, $scope, AuthService, UserService) {
+    function ApplicationHeaderController($stateParams, $scope, AuthService, UserService, DEFAULT_PROFILE_IMAGE) {
         $scope.auth = AuthService;
+        $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
         /**
          * Listen to change in user login status to set local $scope variable

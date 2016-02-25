@@ -5,7 +5,7 @@ var businessModel = require('../models/business.model');
  * @type {Array}
  */
 var privateFields = [
-    
+
 ];
 
 var businessService = {
@@ -44,9 +44,11 @@ var businessService = {
      * @return {promise}           [description]
      */
     getByPositionId: function(positionId, reqQuery){
+
         // Determine what fields to return based on reqQuery.
         var returnFields = '-' + privateFields.join(' -')
-        if(undefined !== reqQuery.complete) {
+
+        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }
 
@@ -72,7 +74,7 @@ var businessService = {
 
         );/// then
     }
-    
+
 
 }/// businesss object
 

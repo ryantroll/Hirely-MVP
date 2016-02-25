@@ -171,6 +171,11 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/application/job-application.tpl.html',
         controller: 'JobApplicationController'
       })
+      .state('application.done', {
+        url: '/:businessSlug/:locationSlug/:positionSlug/done',
+        templateUrl: 'app/application/thank-you.tpl.html',
+        controller: 'ThankYouApplicationController'
+      })
       // .state('app.application', {
       //   url: '/:businessSlug/:locationSlug/:positionSlug/:variantSlug/apply',
       //   templateUrl: 'app/application/job-application.html',

@@ -50,6 +50,7 @@
                 /**
                  * application doesn't exists do post
                  */
+
                 return HirelyApiService.applications().post(jobApp);
             }
         )/// then

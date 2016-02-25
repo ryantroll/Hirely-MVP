@@ -7,11 +7,12 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('UserProfileController', ['$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', UserProfileController]);
+  angular.module('hirelyApp').controller('UserProfileController', ['$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', UserProfileController])
+
+
 
 
   function UserProfileController($scope, $stateParams, $state, AuthService, UserService, JobApplicationService, HirelyApiService) {
-
 
     $scope.availability = {};
 
@@ -56,7 +57,7 @@
 
 
       /**
-       * Monitro is user is logged out and reload the current state
+       * Monitor is user is logged out and reload the current state
        */
       $scope.$on('UserLoggedOut', function(){
         if($scope.application){
