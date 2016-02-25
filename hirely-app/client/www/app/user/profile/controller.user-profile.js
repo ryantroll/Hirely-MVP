@@ -45,7 +45,8 @@
         },
         {
           templateUrl: '/app/user/profile/personality/personality.tpl.html',
-          controller: 'ProfilePersonalityController'
+          controller: 'ProfilePersonalityController',
+          hasForm: true
         },
         {
           templateUrl: '/app/user/profile/availability/availability.tpl.html',

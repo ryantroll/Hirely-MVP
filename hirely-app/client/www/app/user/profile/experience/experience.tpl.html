@@ -61,7 +61,7 @@
                     </div>
                 </div>
 
-                <div class="row" ng-show="positionSub || true">
+                <div class="row" ng-show="positionSub">
                     <div class="col-sm-12">
                         <div class="field-wrapper" ng-class="{'error': !stepTwo.position.$valid && stepTwo.position.$dirty, 'valid' : stepTwo.position.$valid}">
                             <label for="position">
@@ -164,8 +164,7 @@
                             <input type="text" class="text-field" id="workDateStartY" name="workDateStartY"
                                 placeholder="YYYY"
                                 ng-model="occupation.dateStartYear"
-                                ng-minlength="4"
-                                ng-maxlenght="4"
+                                maxlength="4"
                                 required
                                 validate-year
                             />
@@ -219,6 +218,7 @@
                             </label>
                             <input type="text" class="text-field" id="workDateEndY" name="workDateEndY"
                                 placeholder="YYYY"
+                                maxlength="4"
                                 ng-model="occupation.dateEndYear"
                                 ng-required="!occupation.currentlyHere"
                                 validate-year

@@ -26,11 +26,20 @@
 
 		var results = {};
 
+        /**
+         * Enable next button but default
+         * it will be disabled only when user is taking the test
+         */
+        $scope.enableNextButton = true;
+
+
     	Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
 		Traitify.setHost("api-sandbox.traitify.com");
 		Traitify.setVersion("v1");
 
 		$scope.assessment = {};
+
+
 
         // TraitifyService.getTest()
         // .then(
@@ -52,6 +61,7 @@
 				TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId);
 			}
 		}//// fun. saveAssessment
+
 
 		/**
 		 * Start by checking if user taken the personality assessment before
@@ -127,6 +137,11 @@
 
         $scope.showAssessment = function(){
 
+            /**
+             * Disable next button
+             */
+            delete $scope.enableNextButton;
+
             TraitifyService.getAssessmentId()
             .then(
                 function(data){
@@ -149,12 +164,17 @@
                             results.slides = traitify.slideDeck.data.get("Slides");
                             // $scope.stepThreeLoaded = true;
                             $scope.personalityExam = true;
+
                             $scope.$apply();
                         });
 
                         traitify.results.onInitialize(function() {
                             $scope.traitifyResultLoaded = true;
                             $scope.personalityExam = false;
+                            /**
+                             * Enable next button after result is displayed
+                             */
+                            $scope.enableNextButton = true;
 
                             Traitify.getPersonalityTypes(assessmentId).then(function(data) {
                                 results.types = data.personality_types;
