@@ -377,7 +377,7 @@
       )///
       .then(
         function(savedUser){
-          console.log(savedUser);
+          // console.log(savedUser);
           AuthService.updateCurrentUser(savedUser);
 
           delete $scope.file;
