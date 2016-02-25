@@ -87,6 +87,16 @@ var positionSchema = new Schema({
         }
     ], /// prescreen array
 
+    qualificationSpecification: {
+        formulas: {
+            name: String,
+            dateCreated: String,
+            type: String,
+            importance: String,
+            operator: String,
+            operands: []
+        }
+    }
 
 });//// positionSchema
 /**
