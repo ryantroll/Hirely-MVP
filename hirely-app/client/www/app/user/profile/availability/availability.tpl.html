@@ -2,6 +2,19 @@
     <div class="loader"></div>
 </div>
 
+<div class="user-profile-availability container hirely-form" ng-show="stepFiveLoaded">
+    <div class="row">
+        <div class="cols-sm-12 text-center">
+            <div class="copy-section"><p>CLICK A DAY TO START ADDING AVAILABILITY</p></div>
+        </div><!--col-->
+    </div><!--row-->
+    <div class="row">
+        <div class="col-xs-6 col-sm-15" ng-repeat="day in days">
+            <a href="javascript:void(0);" class="day-link" ng-class="{active:dayHours[day] > 0}" ng-click="showTimeTable(day, $index)"><span>{{day|uppercase}}</span></a>
+        </div>
+    </div>
+</div>
+
 <div class="form-container hirely-form" ng-show="stepFiveLoaded">
     <form name="stepFive" novalidate form-step-validity>
         <fieldset>
@@ -71,22 +84,12 @@
                 </div><!--col-->
             </div><!--row-->
 
-            <div class="row">
-                <div class="cols-sm-12 text-center">
-                    <div class="copy-section"><p>CLICK A DAY TO START ADDING AVAILABILITY</p></div>
-                </div><!--col-->
-            </div><!--row-->
+
         </fieldset>
     </form>
 </div><!--user-profile-availability-->
 
-<div class="user-profile-availability container" ng-show="stepFiveLoaded">
-    <div class="row">
-        <div class="col-xs-6 col-sm-15" ng-repeat="day in days">
-            <a href="javascript:void(0);" class="day-link" ng-class="{active:dayHours[day] > 0}" ng-click="showTimeTable(day, $index)"><span>{{day|uppercase}}</span></a>
-        </div>
-    </div>
-</div>
+
 
 <div class="form-overlay hirely-form" ng-show="addTimetable" id="expFormDiv">
     <header>

@@ -4,14 +4,18 @@
     </a><!--//logo-->
 
     <div class="user pull-right">
-        <div class="details" ng-show="auth.currentUser">
+        <div class="details" ng-show="auth.currentUser" ng-click="toggleUserMenu()">
             <div class="image">
                 <img class="img-circle" src="{{auth.currentUser.profileImageURL || defaultImage}}"/>
             </div>
-            <div class="name">{{auth.currentUser.firstName}}</div>
-            <div class="menu">
+            <div class="name">{{auth.currentUser.firstName}} <i class="glyphicon glyphicon-menu-down"></i></div>
+            <div class="menu" ng-show="showUserMenu">
                 <ul>
-                    <li><a href="javascript:void(0);" class="" ng-click="userLogout()">logout</a></li>
+                    <li><a ui-sref="user.profile"><i class="fa fa-user" ng-click="showUserMenu = false;"></i> My Profile</a></li>
+                    <li><a href="javascript:void(0);"><i class="fa fa-files-o" ng-click="showUserMenu = false;"></i> Applications</a></li>
+                    <li><a href="javascript:void(0);"><i class="fa fa-heart" ng-click="showUserMenu = false;"></i> Favorites</a></li>
+                    <li><a ui-sref="application.joblist({businessSlug: 'compass-coffee'})" href="javascript:void(0);" ng-click="showUserMenu = false;"><i class="fa fa-heart"></i> Test Job Apply</a></li>
+                    <li><a href="javascript:void(0);" class="" ng-click="showUserMenu = false; userLogout()"><i class="fa fa-lock"></i> Logout</a></li>
                 </ul>
             </div>
         </div>

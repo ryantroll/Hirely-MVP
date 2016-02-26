@@ -11,6 +11,7 @@
     function ApplicationHeaderController($stateParams, $scope, AuthService, UserService, DEFAULT_PROFILE_IMAGE) {
         $scope.auth = AuthService;
         $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
+        $scope.showUserMenu = false;
 
         /**
          * Listen to change in user login status to set local $scope variable
@@ -37,6 +38,20 @@
 
         $scope.userLogout = function(){
             AuthService.logout();
+        }
+
+        $scope.toggleUserMenu = function(){
+            if(false === $scope.showUserMenu){
+                $scope.showUserMenu = true;
+                var win = angular.element(document).bind('click', function(e){
+                    $scope.showUserMenu = false;
+                    win.unbind('click');
+                    console.log('lcick')
+                })
+            }
+            else{
+                $scope.showUserMenu = false;
+            }
         }
 
     };
