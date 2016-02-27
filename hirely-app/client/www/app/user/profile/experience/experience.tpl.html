@@ -70,7 +70,16 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <p>Please help us refine your position choice by choosing a parent occupation</p>
-                            <div class="btn-group fullwidth" uib-dropdown keyboard-nav>
+                            <select  class="form-control" id="workState" name="workState"
+                                ng-model="selectedSub"
+                                ng-change="setPositionSub()"
+                                required
+                            >
+                                <option></option>
+                                <option ng-repeat="sub in positionSub" value="{{$index}}">{{sub.occupationTitle}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                            <!-- <div class="btn-group fullwidth" uib-dropdown keyboard-nav>
                                 <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default fullwidth" uib-dropdown-toggle>
                                     Select right occupation <span class="caret"></span>
                                 </button>
@@ -79,7 +88,7 @@
                                         <a href="javascript:;" ng-click="setPositionSub(sub)">{{sub.occupationTitle}}</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -116,7 +125,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workState.$valid && stepTwo.workState.$dirty, 'valid' : stepTwo.workState.$valid}">
+                        <div class="field-wrapper clearfix" ng-class="{'error': !stepTwo.workState.$valid && stepTwo.workState.$dirty, 'valid' : stepTwo.workState.$valid}">
                             <label for="workState">
                                 State
                                 <span class="fa fa-check feedback-valid"></span>

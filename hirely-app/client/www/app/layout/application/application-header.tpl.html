@@ -4,7 +4,7 @@
     </a><!--//logo-->
 
     <div class="user pull-right">
-        <div class="details" ng-show="auth.currentUser" ng-click="toggleUserMenu()">
+        <div class="details" ng-show="auth.currentUser" ng-click="toggleUserMenu($event)">
             <div class="image">
                 <img class="img-circle" src="{{auth.currentUser.profileImageURL || defaultImage}}"/>
             </div>

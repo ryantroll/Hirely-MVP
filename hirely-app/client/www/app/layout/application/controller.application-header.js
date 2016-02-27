@@ -40,17 +40,26 @@
             AuthService.logout();
         }
 
-        $scope.toggleUserMenu = function(){
-            if(false === $scope.showUserMenu){
-                $scope.showUserMenu = true;
-                var win = angular.element(document).bind('click', function(e){
+
+        $scope.toggleUserMenu = function(event){
+            var handleMenuClick = function(e){
+                if(true === $scope.showUserMenu){
                     $scope.showUserMenu = false;
-                    win.unbind('click');
-                    console.log('lcick')
-                })
-            }
-            else{
-                $scope.showUserMenu = false;
+                    $scope.$apply();
+                    //// unbind when menu closed no need to check for click
+                    $('body').unbind('click', handleMenuClick);
+                }
+                else{
+                    $scope.showUserMenu = true;
+                    $scope.$apply();
+                }
+            };
+            /**
+             * the event will bubble up to body so do the work on body click \ only if menu is closed
+             * this to make sure the menu is closed when click outside the menu
+             */
+            if(false === $scope.showUserMenu){
+                $('body').bind('click', handleMenuClick);
             }
         }
 

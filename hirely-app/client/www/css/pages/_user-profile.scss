@@ -294,7 +294,8 @@ $day-botton-size: 60px;
 	select{
 		border:none;
 		border-bottom:1px solid $c-hirely-text-gray;
-		padding:0 0;
+		// padding:0 0;
+        padding:0 30px 0 10px;
 		margin-top:0;
 		margin-bottom:0;
 		height: 29px;
@@ -314,8 +315,9 @@ $day-botton-size: 60px;
 		line-height: 29px;
 		content: " ";
 		position:absolute;
-		top:61px;
+		bottom:0;
 		right:8px;
+        top:auto!important;//// style conflict fix
 		text-align: center;
 		font-size:0.8em;
 		color:$c-hirely-text-gray;
