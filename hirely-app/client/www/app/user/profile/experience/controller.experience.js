@@ -364,11 +364,11 @@
         if(reported.occupations.length === 1){
           $scope.occupation.occupationJobName = reported.occupations[0].occupationTitle;
           $scope.occupation.onetOccupationId = reported.occupations[0].onetId;
-          $scope.stepTwo.position.$setValidity('occupationRequired', true);
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', true);
         }
         else{
           $scope.positionSub = reported.occupations;
-          $scope.stepTwo.position.$setValidity('occupationRequired', false);
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', false);
         }
 
       }
@@ -382,11 +382,11 @@
         if( angular.isDefined($scope.selectedSub) && $scope.selectedSub < $scope.positionSub.length){
           $scope.occupation.occupationJobName = $scope.positionSub[$scope.selectedSub].occupationTitle;
           $scope.occupation.onetOccupationId  = $scope.positionSub[$scope.selectedSub].onetId;
-          $scope.stepTwo.position.$setValidity('occupationRequired', true);
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', true);
           // delete $scope.positionSub;
         }
         else{
-          $scope.stepTwo.position.$setValidity('occupationRequired', false);
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', false);
         }
       }
 
