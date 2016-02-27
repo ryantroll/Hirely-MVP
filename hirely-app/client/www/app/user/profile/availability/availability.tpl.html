@@ -2,8 +2,21 @@
     <div class="loader"></div>
 </div>
 
+<div class="user-profile-availability container hirely-form" ng-show="stepFiveLoaded">
+    <div class="row">
+        <div class="cols-sm-12 text-center">
+            <div class="copy-section"><p>CLICK A DAY TO START ADDING AVAILABILITY</p></div>
+        </div><!--col-->
+    </div><!--row-->
+    <div class="row">
+        <div class="col-xs-6 col-sm-15" ng-repeat="day in days">
+            <a href="javascript:void(0);" class="day-link" ng-class="{active:dayHours[day] > 0}" ng-click="showTimeTable(day, $index)"><span>{{day|uppercase}}</span></a>
+        </div>
+    </div>
+</div>
+
 <div class="form-container hirely-form" ng-show="stepFiveLoaded">
-    <form class="form-horizontal" name="stepFive" novalidate form-step-validity>
+    <form name="stepFive" novalidate form-step-validity>
         <fieldset>
 
             <div class="row">
@@ -14,7 +27,7 @@
                             <span class="fa fa-check feedback-valid"></span>
                             <span class="fa fa-close feedback-error"></span>
                         </label>
-                        <input type="text" class="text-field" id="minHours" name="minHours" placeholder="XX"
+                        <input type="text" class="text-field" id="minHours" name="minHours" placeholder="XX" maxlength="2"
                             required
                             ng-model="availability.hoursPerWeekMin"
                             ng-change="updateValidity($event)"
@@ -30,7 +43,7 @@
                             <span class="fa fa-check feedback-valid"></span>
                             <span class="fa fa-close feedback-error"></span>
                         </label>
-                        <input type="text" class="text-field" id="maxHours" name="maxHours" placeholder="XX"
+                        <input type="text" class="text-field" id="maxHours" name="maxHours" placeholder="XX" maxlength="2"
                             required
                             ng-model="availability.hoursPerWeekMax"
                             ng-change="updateValidity($event)"
@@ -39,14 +52,14 @@
                     </div>
                 </div><!--col-->
                 <div class="col-sm-12 no-col-padding">
-                    <div class="error-label bg-danger" ng-show="availability.hoursPerWeekMax > 168">
+                    <div class="error-label bg-danger" ng-show="stepFive.maxHours.$dirty && availability.hoursPerWeekMax > 168">
                         Max hours should not exceed 168 per week
                     </div>
-                    <div class="error-label bg-danger" ng-show="stepFive.maxHours.$error.mismatch">
+                    <div class="error-label bg-danger" ng-show="stepFive.maxHours.$dirty && stepFive.maxHours.$error.mismatch">
                         Max hours should be greater than or equal to min hours
                     </div>
-                    <div class="error-label bg-danger" ng-show="stepFive.minHours.$error.mismatch">
-                        Your number of selected availabil hours per week is less than min number of hours
+                    <div class="error-label bg-danger" ng-show="stepFive.minHours.$dirty && stepFive.minHours.$error.mismatch">
+                        Your number of selected available hours per week is less than min number of hours. Please click on one of the days button below and select your hours of availability
                     </div>
                 </div><!--col-->
             </div><!--row-->
@@ -71,22 +84,12 @@
                 </div><!--col-->
             </div><!--row-->
 
-            <div class="row">
-                <div class="cols-sm-12 text-center">
-                    <div class="copy-section"><p>CLICK A DAY TO START ADDING AVAILABILITY</p></div>
-                </div><!--col-->
-            </div><!--row-->
+
         </fieldset>
     </form>
 </div><!--user-profile-availability-->
 
-<div class="user-profile-availability container">
-    <div class="row">
-        <div class="col-xs-6 col-sm-15" ng-repeat="day in days">
-            <a href="javascript:void(0);" class="day-link" ng-class="{active:dayHours[day] > 0}" ng-click="showTimeTable(day, $index)"><span>{{day|uppercase}}</span></a>
-        </div>
-    </div>
-</div>
+
 
 <div class="form-overlay hirely-form" ng-show="addTimetable" id="expFormDiv">
     <header>
@@ -154,7 +157,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="field-wrapper text-center">
-                    Powerd by <a href="javascript:void(0);"><i>Hirely</i></a>
+                    Powered by <a href="javascript:void(0);"><i>Hirely</i></a>
                 </div>
             </div>
         </div>

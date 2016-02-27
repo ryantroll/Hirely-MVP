@@ -88,6 +88,16 @@ var positionSchema = new Schema({
         }
     ], /// prescreen array
 
+    qualificationSpecification: {
+        formulas: {
+            name: String,
+            dateCreated: String,
+            type: String,
+            importance: String,
+            operator: String,
+            operands: []
+        }
+    }
 
 });//// positionSchema
 /**
@@ -123,9 +133,10 @@ var locationSchema = new Schema({
       street3           :   String,
       neighbourhood     :   String,
       postalCode        :   {type:String, required:true},
-      formattedAddress  :   {type:String, required:true},
+      formattedAddress  :   {type:String, required:false},
+      googlePlaceId     :   {type:String, required:false},
       lat               :   Number,
-      lng               :   Number,
+      lng               :   Number
 
     }///location object
 );/// locationSchema

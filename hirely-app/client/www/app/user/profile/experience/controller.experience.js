@@ -360,13 +360,15 @@
        */
       $scope.setPosition = function(reported){
         $scope.occupation.reportedJobName = reported.reportedTitle;
+        delete $scope.positionSub;//// reset the sub list of occupations
         if(reported.occupations.length === 1){
           $scope.occupation.occupationJobName = reported.occupations[0].occupationTitle;
           $scope.occupation.onetOccupationId = reported.occupations[0].onetId;
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', true);
         }
         else{
           $scope.positionSub = reported.occupations;
-          $scope.stepTwo.position.$setValidity('occupationRequired', false);
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', false);
         }
 
       }
@@ -376,12 +378,15 @@
        * occupation list will show only if user select reported title related to multi job occupations in onet  ]
        * @param {object} sub [job occupation object selected by user]
        */
-      $scope.setPositionSub = function(sub){
-        if(sub){
-          $scope.occupation.occupationJobName = sub.occupationTitle;
-          $scope.occupation.onetOccupationId  = sub.onetId;
-          $scope.stepTwo.position.$setValidity('occupationRequired', true);
-          delete $scope.positionSub;
+      $scope.setPositionSub = function(){
+        if( angular.isDefined($scope.selectedSub) && $scope.selectedSub < $scope.positionSub.length){
+          $scope.occupation.occupationJobName = $scope.positionSub[$scope.selectedSub].occupationTitle;
+          $scope.occupation.onetOccupationId  = $scope.positionSub[$scope.selectedSub].onetId;
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', true);
+          // delete $scope.positionSub;
+        }
+        else{
+          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', false);
         }
       }
 

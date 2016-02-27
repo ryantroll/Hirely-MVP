@@ -39,6 +39,7 @@ db.once('open', function(){
                 postalCode: '07012',
                 phone: '+1.222.222.2222',
                 formattedAddress: '24 Kenter Pl, Montclair, NJ 07012',
+                googlePlaceId: 'dslkjflsdk',
                 lng: -77.0576414,
                 lat: 38.9340854,
                 neighborhood: 'Shaw',
@@ -69,6 +70,7 @@ db.once('open', function(){
                 postalCode: '07012',
                 phone: '+1.222.222.2222',
                 formattedAddress: '24 Kenter Pl, Montclair, NJ 07012',
+                googlePlaceId:  'sdlkfjsdlkjf',
                 lng: -77.0576414,
                 lat: 38.9340854,
                 neighborhood: 'Shaw',
@@ -83,7 +85,7 @@ db.once('open', function(){
                     sun   : [8, 9 ,10, 11, 12, 13, 14, 15, 16, 17]
                 },
                 positionSlugs: {
-                    'barista': positionId2,
+                    'web-developer': positionId2,
                 }
             }
         }, //// location array
@@ -154,7 +156,7 @@ db.once('open', function(){
                 location_id: locationId2,
                 title: 'Web Developer',
                 occId: '11-1011.03',
-                slug: 'barista',
+                slug: 'web-developer',
                 workType          :     'part-time',
                 hoursPerWeekMin   :     1,
                 hoursPerWeekMax   :     2,
@@ -211,7 +213,7 @@ db.once('open', function(){
         }, // positions array
     };
 
-    
+
     // Now replace tmp ids with unique
     bdata['locations'][locationId] = bdata['locations']['tmpLocationId'];
     delete bdata['locations']['tmpLocationId'];

@@ -130,6 +130,10 @@ $day-botton-size: 60px;
 	margin:0 auto;
 	padding: 15em 0 0 0;
 	min-height:400px;
+
+    p{
+        font-size:0.7em;
+    }
 }
 .form-container{
 	width:90%;
@@ -146,18 +150,56 @@ $day-botton-size: 60px;
 
 	.user-image{
 		width:150px;
+        height: 150px;
 		margin: 0 auto;
+        overflow: hidden;
+        position:relative;
+        @include border-radius(50%);
+        // border:5px solid #fff;
+
 		> img{
 			display: block;
-			max-width:100%;
-
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
 		}
+
+        .image-loader{
+            display: none;
+            content:' ';
+            width:150px;
+            height: 150px;
+            position:absolute;
+            top:0;
+            left:0;
+            line-height: 150px;
+            text-align: center;
+            font-size:1em;
+            font-weight: 700;
+            color:$c-hirely-red;
+            background-color:rgba(255, 255, 255, 0.8);
+            z-index: 3;
+        }
 	}//// .user-image
+
+
 
 	.image-links{
 		padding-top:0.5em;
 		font-size:0.9em;
+        position:relative;
 	}
+
+    .profile-image{
+        height: 20px;
+        width:25%;
+        height: 30px;
+        position:absolute;
+        left:-50000px;
+        top:0px;
+        opacity: 0.5;
+        z-index:10;
+    }
 }//// .user-profile-basic
 
 .hirely-form{
@@ -165,6 +207,12 @@ $day-botton-size: 60px;
 	.field-wrapper{
 		padding-top:3em;
 		position:relative;
+
+        p{
+            font-size:0.85em;
+            margin-bottom: .5em;
+            color:$c-hirely-mid-gray;
+        }
 	}//// field-wrapper
 
 	.feedback-valid{
@@ -226,6 +274,7 @@ $day-botton-size: 60px;
 	input[type="number"],
 	input[type="date"],
 	input[type="phone"],
+    input[type="tel"],
 	input[type="email"]{
 		border:none;
 		border-bottom:1px solid $c-hirely-text-gray;
@@ -235,17 +284,25 @@ $day-botton-size: 60px;
 		// background-color:#ccc;
 	}
 
+    textarea{
+        width:100%;
+        height: 100px;
+        padding:0.3em;
+        border:1px solid $c-hirely-text-gray;
+    }
+
 	select{
 		border:none;
 		border-bottom:1px solid $c-hirely-text-gray;
-		padding:0 0;
+		// padding:0 0;
+        padding:0 30px 0 10px;
 		margin-top:0;
 		margin-bottom:0;
 		height: 29px;
 		@include border-radius(0);
 		border-color:$c-hirely-text-gray;
 		width:100%;
-		background-color:#fff;
+		background-color:$c-hirely-gray;
 
 		option:first-child{
 			color:#ccc;
@@ -258,8 +315,9 @@ $day-botton-size: 60px;
 		line-height: 29px;
 		content: " ";
 		position:absolute;
-		top:59px;
-		right:0;
+		bottom:0;
+		right:8px;
+        top:auto!important;//// style conflict fix
 		text-align: center;
 		font-size:0.8em;
 		color:$c-hirely-text-gray;
@@ -425,8 +483,48 @@ $day-botton-size: 60px;
   	*{
   		font-size:0.9em;
   	}
+    .narrow{
+        padding: 0 20%;
+
+    }
+    .small{
+        font-size: 0.8em;
+    }
   }
+
+  .in-form-loader{
+        display: none;
+
+    }
 }//// .hirely-form
+
+.hirely-form.waiting{
+    position:relative;
+
+    .in-form-loader{
+        display: block;
+        position:absolute;
+        z-index: 101;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+    }
+
+}
+.hirely-form.waiting:before{
+    display: block;
+    content: '';
+    position: absolute;
+    top:0;
+    right:0;
+    bottom: 0;
+    left:0;
+    z-index: 100;
+    background-color:#fff;
+    opacity:0.7;
+}
+
 
 .user-profile-exp{
 	min-height:400px;
@@ -491,7 +589,7 @@ $day-botton-size: 60px;
 }
 .btn.red{
 	background-color:$c-hirely-red;
-	color:#fff;
+	color:#fff!important;
 }
 .btn.blue{
 	background-color:$c-hirely-blue;
@@ -514,15 +612,18 @@ $day-botton-size: 60px;
 
 	header{
 		width:100%;
-		background-color:$c-hirely-navy;
-		min-height: $header-height;
+		background-color:$c-hirely-navy!important;
+		min-height: none;
+        height:auto!important;
 		@include drop-shadow;
 		color:#fff;
 		text-align: center;
+        padding:1em 0 1em 0;
 
 		h3{
-			line-height: $header-height;
+			// line-height: $header-height;
 			padding-bottom:0;
+            margin-bottom: 0;
 		}
 	}
 

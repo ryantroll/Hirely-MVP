@@ -7,14 +7,16 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="text-center user-image">
-						<img class="img-circle" src="https://lh3.googleusercontent.com/-1p0-ELNl0mk/AAAAAAAAAAI/AAAAAAAAAAA/xeGC2Eu7i0o/photo.jpg"/>
+						<span class="image-loader"></span>
+						<img src="{{user.profileImageURL}}"/>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="text-center image-links">
-						<a href="javascript:void(0);">Edit</a> | <a href="javascript:void(0);">Remove</a>
+						<a href="javascript:void(0);" ng-click="selectFile()">Edit</a> | <a href="javascript:void(0);" ng-click="removeImage()">Remove</a>
+						<input id="photoFile" name="file" type="file" class="profile-image" file />
 					</div>
 				</div>
 			</div>
@@ -64,7 +66,7 @@
 							<span class="fa fa-check feedback-valid"></span>
 							<span class="fa fa-close feedback-error"></span>
 						</label>
-						<input type="phone" class="text-field" name="mobile" id="mobile"
+						<input type="tel" class="text-field" name="mobile" id="mobile" placeholder="(xxx) xxx-xxxx"
 							ng-model="_mobile"
 							required
 							ng-change="formatPhone()"
@@ -103,11 +105,13 @@
 						<input type="text" class="text-field" id="zipcode" name="zipcode"
 							ng-model="user.postalCode"
 							ng-pattern="/^\d{4,6}$/"
-							required
+							required maxlength="5"
 						/>
 					</div>
 				</div>
 			</div>
+
+
 
 		</fieldset>
 	</form>

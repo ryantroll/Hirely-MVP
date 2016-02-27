@@ -10,37 +10,26 @@
 	'use strict';
 
 	angular.module('hirelyApp')
-	.controller('StepFourController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', 'JobApplicationService', StepFourController]);
+	.controller('PreScreenController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', 'JobApplicationService', PreScreenController]);
 
 
-	function StepFourController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout, JobApplicationService) {
-
-		/**
-		 * vaiant to hold the vaiant object
-		 * this is out of scope as it is only for reading
-		 */
-		var variant;
-
-		// /**
-		//  * Wait for daddy scope to finish loading data and then start initalize                                 [description]
-		//  */
-		// var eventUnbinder = $scope.$on('data-loaded', function(){
-		// 	/**
-		// 	 * Remove listener
-		// 	 */
-		// 	eventUnbinder();
-		// });/// $on
+	function PreScreenController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout, JobApplicationService) {
 
 		/**
-		 * bring the vaiant object to me from grandfather
+		 * $scope.business, postion is inhereated from controller.job-application.js
 		 */
-		variant = angular.copy($scope.variant);
 
 
-		if(angular.isDefined($scope.application) && null !== $scope.application){
+		/**
+		 * bring the vaiant object to me from parent scope contoller.job-application.js
+		 */
+		var position = angular.copy($scope.position);
+
+
+		if(angular.isDefined($scope.jobApplication.application) && null !== $scope.jobApplication.application){
 
 			$scope.model = {
-				prescreenAnswers: angular.copy($scope.application.prescreenAnswers)
+				prescreenAnswers: angular.copy($scope.jobApplication.application.prescreenAnswers)
 			}
 
 		}//// if application in granddaddy
@@ -50,15 +39,18 @@
 			 * @type {Object}
 			 */
 			$scope.model = {
-				prescreenAnswers: angular.copy(variant.prescreenQuestions)
+				prescreenAnswers: angular.copy(position.prescreenQuestions)
 			};
-			/**
-			 * Remove the _id property from answers array, if kept and sent with post request will create problem
-			 */
-			for(var x=0; x<$scope.model.prescreenAnswers.length; x++){
-				delete $scope.model.prescreenAnswers[x]._id;
-			}
+
+
 		}/// if applicaiton in granddaddy else
+
+		/**
+		 * Remove the _id property from answers array, if kept and sent with post request will create problem
+		 */
+		for(var x=0; x<$scope.model.prescreenAnswers.length; x++){
+			delete $scope.model.prescreenAnswers[x]._id;
+		}
 
 
 
@@ -73,12 +65,6 @@
 			}
 
 		}, 1000);/// $timeout
-
-		/**
-		 * [grandParent to reference the grand parent in destroy event below
-		 * it seems it get removed before destory event triggered]
-		 */
-		var grandParent = $scope.$parent.$parent;
 
 		//// wait for destroy event to update data
 		$scope.$on('$destroy', function(event){
@@ -98,7 +84,7 @@
 
 						var application = new JobApplication(
 							AuthService.currentUserID,
-							variant._id,
+							position._id,
 							 1, //// set status to 1
 							 angular.copy($scope.model.prescreenAnswers)
 						);
@@ -108,9 +94,11 @@
 							function(savedApp){
 								/**
 								 * application saved
-								 * Update the the grandparent scope
+								 * Update the parent scope
+								 * $scope.jobApplication.application  defined in parent controller.job-application.js
 								 */
-								grandParent.application = savedApp;
+								$scope.jobApplication.application = savedApp;
+
 							},//// save resolve
 							function(err){
 								alert(err);

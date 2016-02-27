@@ -89,6 +89,7 @@ var userService = {
                 /**
                  * Add Mapping entry if external user id is sent with userObject
                  */
+
                 if(undefined !== userObj.externalId && '' !== userObj.externalId){
                     var idMap = new idMapModel({localId:user._id, externalId:userObj.externalId});
                     /**
@@ -104,6 +105,7 @@ var userService = {
                             return idMap.save()
                             .then(
                                 function(map){
+                                    console.log(map)
                                     return userModel.findById(map.localId).exec();
                                 },/// fun. idMap.save reslove
                                 function(err){
@@ -132,7 +134,10 @@ var userService = {
                     return userModel.findById(user._id).exec();
                 }
             }//// then fun.
-        );/// then
+        )/// then
+        .then(
+
+        )
     },
 
     /**

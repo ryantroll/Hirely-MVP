@@ -50,6 +50,9 @@
 
 <body data-ng-app="hirelyApp">
 <div ui-view></div>
+<a href="javascript:pageDown()" id="more-arrow">
+    <div></div>
+</a>
 <!-- build:js js/lib.js -->
 <!-- bower:js -->
 <script src="../../lib/jquery/dist/jquery.js"></script>
@@ -87,6 +90,7 @@
 <script src="../../lib/angucomplete-alt/angucomplete-alt.js"></script>
 <script src="../../lib/angular-loading-bar/build/loading-bar.js"></script>
 <script src="../../lib/angular-multi-step-form/dist/browser/angular-multi-step-form.js"></script>
+<script src="js/aws/aws-sdk-s3.min.js"></script>
 <!-- <script src="../../lib/moment/moment.js"></script> -->
 <!-- endbower -->
 <!-- endbuild -->
@@ -111,6 +115,7 @@
 <script src="js/animations.js"></script>
 <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="js/main.js"></script>
+<script src="js/more-arrow.js"></script>
 <script src="js/underscore-min.js"></script>
 <script src="app/account/account.module.js"></script>
 <script src="app/candidate/candidate.module.js"></script>
@@ -122,9 +127,9 @@
 <script src="app/manager/manager.module.js"></script>
 <script src="app/shared/shared.module.js"></script>
 <script src="app/app.js"></script>
-<script src="app/account/loginCtrl.js"></script>
-<script src="app/account/passwordCtrl.js"></script>
-<script src="app/account/registerCtrl.js"></script>
+<script src="app/account/controller.login.js"></script>
+<script src="app/account/controller.password.js"></script>
+<script src="app/account/controller.register.js"></script>
 
 <script src="app/candidate/candidateCtrl.js"></script>
 <script src="app/candidate/candidateDashboardCtrl.js"></script>
@@ -141,16 +146,20 @@
 <script src="app/layout/headerCtrl.js"></script>
 <script src="app/layout/header_directive.js"></script>
 <script src="app/layout/masterCtrl.js"></script>
+
+<script src="app/layout/application/controller.application-master.js"></script>
+<script src="app/layout/application/controller.application-header.js"></script>
+<script src="app/layout/application/controller.application-footer.js"></script>
+
 <script src="app/manager/autoFillableField.js"></script>
 <script src="app/manager/hmregisterCtrl.js"></script>
 <script src="app/shared/flexslider_directive.js"></script>
 <script src="app/shared/googlePlacesAutocomplete_directive.js"></script>
-<!-- <script src="app/application/step-1/controller.step-one.js"></script>
-<script src="app/application/step-2/controller.step-two.js"></script>
-<script src="app/application/step-3/controller.step-three.js"></script>
-<script src="app/application/step-4/controller.step-four.js"></script>
-<script src="app/application/step-6/controller.step-six.js"></script>
-<script src="app/application/step-5/controller.step-five.js"></script> -->
+
+<script src="app/application/controller.job-application.js"></script>
+<script src="app/application/controller.job-list.js"></script>
+<script src="app/application/controller.thank-you.js"></script>
+<script src="app/application/pre-screen/controller.pre-screen.js"></script>
 
 <script src="app/user/controller.user.js"></script>
 <script src="app/user/profile/controller.user-profile.js"></script>
@@ -180,6 +189,7 @@
 <script src="app/core/services/service.traitify.js"></script>
 <script src="app/core/services/service.us-states.js"></script>
 <script src="app/core/services/service.user.js"></script>
+<script src="app/core/services/service.file-upload.js"></script>
 <script src="app/manager/company/autoFillableField.js"></script>
 <script src="app/manager/company/hmCompanyCtrl.js"></script>
 <script src="app/core/services/models/address.js"></script>

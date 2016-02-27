@@ -63,13 +63,23 @@
 
                 <div class="row" ng-show="positionSub">
                     <div class="col-sm-12">
-                        <div class="field-wrapper" ng-class="{'error': !stepTwo.position.$valid && stepTwo.position.$dirty, 'valid' : stepTwo.position.$valid}">
-                            <label for="position">
+                        <div class="field-wrapper" ng-class="{'error': !stepTwo.workOccupation.$valid , 'valid' : stepTwo.workOccupation.$valid}">
+                            <label for="workOccupation">
                                 Occupation
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
-                            <div class="btn-group fullwidth" uib-dropdown keyboard-nav>
+                            <p>Please help us refine your position choice by choosing a parent occupation</p>
+                            <select  class="form-control" id="workOccupation" name="workOccupation"
+                                ng-model="selectedSub"
+                                ng-change="setPositionSub()"
+                                required
+                            >
+                                <option></option>
+                                <option ng-repeat="sub in positionSub" value="{{$index}}">{{sub.occupationTitle}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                            <!-- <div class="btn-group fullwidth" uib-dropdown keyboard-nav>
                                 <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default fullwidth" uib-dropdown-toggle>
                                     Select right occupation <span class="caret"></span>
                                 </button>
@@ -78,7 +88,7 @@
                                         <a href="javascript:;" ng-click="setPositionSub(sub)">{{sub.occupationTitle}}</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -115,7 +125,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="field-wrapper"  ng-class="{'error': !stepTwo.workState.$valid && stepTwo.workState.$dirty, 'valid' : stepTwo.workState.$valid}">
+                        <div class="field-wrapper clearfix" ng-class="{'error': !stepTwo.workState.$valid && stepTwo.workState.$dirty, 'valid' : stepTwo.workState.$valid}">
                             <label for="workState">
                                 State
                                 <span class="fa fa-check feedback-valid"></span>
@@ -163,8 +173,7 @@
                             <input type="text" class="text-field" id="workDateStartY" name="workDateStartY"
                                 placeholder="YYYY"
                                 ng-model="occupation.dateStartYear"
-                                ng-minlength="4"
-                                ng-maxlenght="4"
+                                maxlength="4"
                                 required
                                 validate-year
                             />
@@ -218,6 +227,7 @@
                             </label>
                             <input type="text" class="text-field" id="workDateEndY" name="workDateEndY"
                                 placeholder="YYYY"
+                                maxlength="4"
                                 ng-model="occupation.dateEndYear"
                                 ng-required="!occupation.currentlyHere"
                                 validate-year
@@ -249,7 +259,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="field-wrapper text-center">
-                            Powerd by <a href="javascript:void(0);"><i>Hirely</i></a>
+                            Powered by <a href="javascript:void(0);"><i>Hirely</i></a>
                         </div>
                     </div>
                 </div>

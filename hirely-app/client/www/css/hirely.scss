@@ -7,6 +7,7 @@
 @import "theme/style";
 @import "theme/base";
 @import "theme/responsive";
+@import "theme/more-arrow";
 
 //pages & Hirely modules
 @import "modules/custom";
@@ -22,6 +23,7 @@
 
 @import "modules/spinner";
 
-@import 'pages/user-profile'
+@import 'pages/user-profile';
+@import 'pages/application';
 // @import "pages/job-application";
 

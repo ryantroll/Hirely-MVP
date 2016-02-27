@@ -1,0 +1,121 @@
+<div class="user-profile-basic hirely-form" ng-class="{waiting:ajaxBusy}">
+    <div class="in-form-loader">
+        <div class="form-loader">
+            <div class="loader"></div>
+        </div>
+    </div>
+    <ng-form class="form-horizontal" name="registerForm" novalidate>
+        <fieldset>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="field-wrapper" ng-class="{'error': !registerForm.firstname.$valid && registerForm.firstname.$dirty, 'valid' : registerForm.firstname.$valid}">
+                        <label for="firstname">
+                            First Name
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="text" class="text-field" id="firstname" name="firstname" ng-model="user.firstName" required/>
+                        <!-- <input type="text" /> -->
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="field-wrapper" ng-class="{'error': !registerForm.lastname.$valid && registerForm.lastname.$dirty, 'valid' : registerForm.lastname.$valid}">
+                        <label for="lastname">
+                            Last Name
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="text" class="text-field" name="lastname" id="lastname" ng-model="user.lastName" required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper" ng-class="{'error': !registerForm.email.$valid && registerForm.email.$dirty, 'valid' : registerForm.email.$valid}">
+                        <label for="email">
+                            Email
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="email" class="text-field" name="email" id="email"
+                            ng-model="user.email"
+                            ng-pattern='/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+                            ng-change="resetEmailValidity()"
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-12 no-col-padding">
+                    <div class="bg-danger error-label" ng-show="registerForm.email.$error.emailExists">The email you uses is already registered</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper"  ng-class="{'error': !registerForm.password.$valid && registerForm.password.$dirty, 'valid' : registerForm.password.$valid}">
+                        <label for="password">
+                            Password
+                            <span class="fa fa-check feedback-valid"></span>
+                            <span class="fa fa-close feedback-error"></span>
+                        </label>
+                        <input type="password" class="text-field" name="upassword" id="password"
+                            ng-model="user.password"
+                            required
+                            validate-password
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-12 no-col-padding">
+                    <div class="bg-danger error-label" ng-show="registerForm.password.$error.invalidPassword">Password should be between 6 and 12 characters</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="copy-section text-center">
+                        <p>Already have an Account? <a href="javascript:void(0);" ng-click="showLogin()">Log in</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="copy-section">
+                        <div class="text-center">
+                            <p>
+                                By signing up, you agree to HIRELY’s<br>
+                                <a href="javascript:void(0)">Terms of Service</a> &amp; <a href="javascript:void(0)">Privacy Policy</a>.
+                            </p>
+                        </div>
+                        <div class="narrow">
+                            <ul>
+                                <li>A legal resident of the United States or one of its territories</li>
+                                <li>Legally be allowed to work or conduct business in the United States</li>
+                                <li>At least 16 years old</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper text-center">
+                        <button class="btn btn-lg red" ng-disabled="!registerForm.$valid" ng-click="handleRgisterForm()">Create Account</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper text-center">
+                        <button class="btn btn-link">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </ng-form>
+</div>

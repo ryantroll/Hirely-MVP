@@ -18,9 +18,9 @@
    * Controller Definition ********************************************************
    * ******************************************************************************
    */
-  step5App.controller('ProfileAvailabilityController', ['$scope', '$stateParams', '$filter', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', ProfileAvailabilityController])
+  step5App.controller('ProfileAvailabilityController', ['$scope', '$stateParams', '$filter', '$timeout', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', ProfileAvailabilityController])
 
-  function ProfileAvailabilityController($scope, $stateParams, $filter, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService) {
+  function ProfileAvailabilityController($scope, $stateParams, $filter, $timeout, multiStepFormInstance, GeocodeService, $q, AvailabilityService, AuthService) {
 
     /**
      * [availability this object will hold the data that need bot saved in database
@@ -126,14 +126,19 @@
         $q.all()
           .then(function() {
             //At this point all data is available for angular to render
-            // $scope.updateValidity();
+
 
             /**
              * [stepFiveLoaded set to true to remove loader and show form]
              * @type {Boolean}
              */
 
-            $scope.stepFiveLoaded = true;
+            $timeout(function(){
+              if(!$scope.stepOneLoaded){
+                $scope.updateValidity();
+                $scope.stepFiveLoaded = true;
+              }
+            }, 1000);
           });
 
       } //// fun. initializeScope
@@ -157,8 +162,8 @@
         //// set validity for max and min hours
         // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.hoursPerWeekMax);
         // console.log($scope.totalHours.total, $scope.availability.hoursPerWeekMin)
-        $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours >= $scope.availability.hoursPerWeekMin);
-        $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.availability.hoursPerWeekMin <= $scope.availability.hoursPerWeekMax);
+        $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours >= parseInt($scope.availability.hoursPerWeekMin, 10) );
+        $scope.stepFive.maxHours.$setValidity( 'mismatch', parseInt($scope.availability.hoursPerWeekMin,10) <= parseInt($scope.availability.hoursPerWeekMax,10));
       }
 
       /**

@@ -3,6 +3,8 @@
 </div>
 
 <div class="form-container user-profile-personality" ng-show="stepThreeLoaded">
+    <form name="personalityForm" novalidate form-step-validity>
+        <input type="hidden" name="forNextButton" ng-model="enableNextButton" required/>
     <div class="row">
         <div class="col-sm-12">
             <div class="first-time text-center" ng-show="!resultsLoaded">
@@ -27,10 +29,11 @@
             </div>
         </div><!--col-->
     </div><!--row-->
+    </form>
 </div><!--user-profile-exp-->
 
 <div class="form-overlay" ng-show="personalityExam" id="expFormDiv">
-    <header>
+    <header class="clearfix">
             <div class="row">
                 <div class="col-xs-12">
                     <h3>Personality</h3>
