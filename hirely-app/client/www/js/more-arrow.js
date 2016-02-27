@@ -2,8 +2,8 @@
  * Created by bdombro on 2/27/16.
  */
 
-var body = document.getElementsByTagName("BODY")[0];
 var more_arrow = $("#more-arrow");
+var body = getBody();
 setInterval(function(){
     if( body.scrollHeight - body.scrollTop - body.clientHeight < 2) {
         more_arrow.hide();
@@ -20,3 +20,18 @@ setInterval(function(){
     }
 
 }, 100);
+
+function isFirefox() {
+    return window.navigator.userAgent.indexOf("Firefox") !== -1;
+}
+
+function getBody() {
+    if (isFirefox()) {
+        return document.documentElement;
+    }
+    return document.body;
+}
+
+function scrollToBottom() {
+    body.scrollTop = body.scrollHeight;
+}
