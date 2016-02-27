@@ -33,5 +33,9 @@ function getBody() {
 }
 
 function scrollToBottom() {
-    body.scrollTop = body.scrollHeight;
+    body.scrollTop = body.scrollTop + body.scrollHeight;
+}
+
+function pageDown() {
+    body.scrollTop = body.scrollTop + window.innerHeight;
 }
