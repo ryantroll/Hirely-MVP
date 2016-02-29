@@ -1,0 +1,14 @@
+<div class="content">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1>{{business.name}}</h1>
+            <h2>{{location.formattedAddress}}</h2>
+            <h3>{{position.title}}</h3>
+        </div>
+    </div>
+    <div class="inner">
+        <div ng-if="!isAuth && !dataError && registerFrom" register-form></div>
+        <div ng-if="!isAuth && !dataError && loginForm" login-form></div>
+        <div ng-if="!isAuth && !dataError && passwordForm" reset-password-form></div>
+    </div>
+</div>
