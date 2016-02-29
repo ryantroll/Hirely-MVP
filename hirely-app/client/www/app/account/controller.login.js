@@ -17,7 +17,7 @@
         /**
          * Let the parent scope know it is NOT a new user
          */
-        $scope.jobApplication.isNewUser = false;
+        // $scope.jobApplication.isNewUser = false;
 
         $scope.PasswordLogin = function() {
             $scope.ajaxBusy = true;

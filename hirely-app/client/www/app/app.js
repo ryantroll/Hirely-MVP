@@ -45,11 +45,7 @@ var myApp = angular.module('hirelyApp',
 
         controller: 'HomeCtrl'
       })
-      // .state('app.login', {
-      //   url: '/login',
-      //   templateUrl: 'app/account/login.html',
-      //   controller: 'LoginCtrl'
-      // })
+
       // .state('app.job', {
       //   url: '/job?placeId&distance&occupationId&wage',
       //   parent: 'app',
@@ -171,17 +167,27 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/application/job-application.tpl.html',
         controller: 'JobApplicationController'
       })
+
       .state('application.done', {
         url: '/:businessSlug/:locationSlug/:positionSlug/done',
         templateUrl: 'app/application/thank-you.tpl.html',
         controller: 'ThankYouApplicationController'
+      })
+      .state('account', {
+        abstract: true,
+        templateUrl: 'app/layout/account/account-master.tpl.html',
+      })
+      .state('account.login', {
+        url: '/login',
+        templateUrl: 'app/account/login.tpl.html',
+        controller: 'LoginController'
       })
       .state('job', {
         abstract: true,
         templateUrl: 'app/layout/job/job-master.tpl.html',
       })
       .state('job.position', {
-        url: '/business/:businessSlug/:locationSlug/:positionSlug',
+        url: '/:businessSlug/:locationSlug/:positionSlug',
         templateUrl: 'app/job/job-position.tpl.html',
         controller: 'JobPositionController'
       })
