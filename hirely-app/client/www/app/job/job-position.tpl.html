@@ -1,14 +1,66 @@
-<div class="content">
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loadding</p>
+    <div class="loader"></div>
+</div>
+<div class="position" ng-show="dataLoaded && !dataError">
     <div class="row">
         <div class="col-sm-12 text-center">
-            <h1>{{business.name}}</h1>
-            <h2>{{location.formattedAddress}}</h2>
-            <h3>{{position.title}}</h3>
+            <div class="hero">
+                <img src="/img/banners/barber.jpg"/>
+            </div>
         </div>
     </div>
-    <div class="inner">
-        <div ng-if="!isAuth && !dataError && registerFrom" register-form></div>
-        <div ng-if="!isAuth && !dataError && loginForm" login-form></div>
-        <div ng-if="!isAuth && !dataError && passwordForm" reset-password-form></div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="header padding">
+                <div class="logo">
+                    <div class="circle"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="title">
+                            <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                            <h1>Sales Associate</h1>
+                            <h2>Revolution Cycles</h2>
+                            <h3>Arlington, VA</h3>
+                        </div>
+                    </div><!--col-->
+                    <div class="col-sm-6">
+                        <div class="features clearfix">
+                            <ul>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                                    0.5M from me
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                                    Seasonal
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                                    4 Openings
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                                    10 Benefits
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!--col-->
+                </div>
+            </div><!--header-->
+        </div><!--col-->
+
+
+    </div>
+</div>
+<div class="content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Position Not Found!</h4>
+        </div>
     </div>
 </div>

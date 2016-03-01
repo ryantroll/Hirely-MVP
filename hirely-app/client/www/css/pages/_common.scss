@@ -1,0 +1,16 @@
+.form-content{
+    width:100%;
+    margin:0 auto;
+    min-height: 200px;
+    padding:1em 0;
+
+    .inner{
+        width:100%;
+        margin: 0 auto;
+        padding:0 1em;
+        @media screen and (min-width:$screen-sm-min){
+            width:50%;
+            padding:0 0;
+        }
+    }
+}////.content

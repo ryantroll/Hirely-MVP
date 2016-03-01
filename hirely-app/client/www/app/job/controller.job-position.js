@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$state', '$stateParams', 'BusinessService', JobPositionController]);
+  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$state', '$stateParams', '$timeout', 'BusinessService', JobPositionController]);
 
-  function JobPositionController($scope, $state, $stateParams, BusinessService) {
+  function JobPositionController($scope, $state, $stateParams, $timeout, BusinessService) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -17,8 +17,8 @@
 
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business)
 
-        console.log($scope.business, $scope.location, $scope.position)
 
+        initialize();
         /**
          * Check if user is logged in and move to next promise
          */
@@ -28,6 +28,15 @@
         console.log(err)
       }
     )
+
+    function initialize(){
+
+      $timeout(function() {
+        $scope.dataLoaded = true;
+        $scope.dataError = false;
+      }, 200);
+
+    }
   }//// fun. JobController
 
  })();
