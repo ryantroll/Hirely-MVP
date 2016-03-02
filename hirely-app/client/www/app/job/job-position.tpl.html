@@ -2,18 +2,21 @@
     <p>Loadding</p>
     <div class="loader"></div>
 </div>
+
 <div class="position" ng-show="dataLoaded && !dataError">
+    <!--hero-image-->
     <div class="row">
-        <div class="col-sm-12 text-center">
+        <div class="col-sm-12">
             <div class="hero">
                 <img src="/img/banners/barber.jpg"/>
             </div>
         </div>
-    </div>
+    </div><!--hero-image-row-->
 
+    <!--position-header-->
     <div class="row">
         <div class="col-sm-12">
-            <div class="header padding">
+            <div class="pos-header padding">
                 <div class="logo">
                     <div class="circle"></div>
                 </div>
@@ -21,41 +24,207 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="title">
-                            <span class="icon glyphicon glyphicon-thumbs-up"></span>
-                            <h1>Sales Associate</h1>
-                            <h2>Revolution Cycles</h2>
-                            <h3>Arlington, VA</h3>
+                            <span class="icon icon-coffe-cup text-blue"></span>
+                            <h1>{{position.title}}</h1>
+                            <h2>{{business.name}}</h2>
+                            <h3>{{location.city}}, {{location.state}}</h3>
                         </div>
                     </div><!--col-->
                     <div class="col-sm-6">
                         <div class="features clearfix">
                             <ul>
                                 <li>
-                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
-                                    0.5M from me
+                                    <span class="icon icon-map-pin"></span>
+                                    0.5M From Me
                                 </li>
                                 <li>
-                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                                    <span class="icon icon-stop-watch"></span>
                                     Seasonal
                                 </li>
                                 <li>
-                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                                    <span class="icon icon-exit"></span>
                                     4 Openings
                                 </li>
                                 <li>
-                                    <span class="icon glyphicon glyphicon-thumbs-up"></span>
+                                    <span class="icon icon-money-bag"></span>
                                     10 Benefits
                                 </li>
                             </ul>
-                        </div>
+                        </div><!--features-->
                     </div><!--col-->
                 </div>
             </div><!--header-->
         </div><!--col-->
+    </div><!--position-header-row-->
 
+    <!--position-details-->
+    <div class="details padding">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="box">
+                    <div class="title">
+                        <h3><i class="icon-info"></i>ABOUT POSITION</h3>
+                    </div>
+                    <div class="copy box-inner">
+                        <p>Cycles' Sales Associates are passionate about bikes and dedicated to the people that ride them. We love to teach, so if you love to learn about bicycles and share your expertise with others, and you are devoted to providing an exceptional customer service experience, learn more about becoming a Sales Associate at Revolution Cycles.</p>
+                    </div>
+                </div><!--box-->
 
-    </div>
-</div>
+                <div class="box">
+                    <div class="title">
+                        <h3><i class="icon-money-bag"></i>COMPENSATION &amp; BENEFITS</h3>
+                    </div>
+                    <div class="copy box-inner">
+                        <ul>
+                            <li>$9.00 Per Hour</li>
+                        </ul>
+                    </div>
+                    <div class="benefites  box-inner clearfix">
+                        <div class="item">
+                            <div class="icon icon-percentage"></div>
+                            <div class="title">COMMISSION</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-money-collection"></div>
+                            <div class="title">Tips</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-gift-solid"></div>
+                            <div class="title">Bonus</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-sun"></div>
+                            <div class="title">Paid Vacation</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-thermometer"></div>
+                            <div class="title">Paid Sick Time</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-insurance"></div>
+                            <div class="title">Health Insurance</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-piggy-bank"></div>
+                            <div class="title">401K</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-calendar"></div>
+                            <div class="title">Flexible Schedule</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon icon-sales-tag"></div>
+                            <div class="title">Discount</div>
+                        </div>
+                    </div>
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h3><i class="icon-stop-watch"></i>AVAILABILITY</h3>
+                    </div>
+                    <div class="copy box-inner">
+                        <ul>
+                            <li>12 Hours Minimum Per Week</li>
+                            <li>40 Hours Maximum Per Week</li>
+                        </ul>
+                    </div>
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h3><i class="icon-to-do"></i>QUALIFICATIONS</h3>
+                    </div>
+                    <div class="copy box-inner">
+                        <ul>
+                            <li>High School Education</li>
+                            <li>Prior Sales Experience (Optional)</li>
+                        </ul>
+                    </div>
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h3><i class="icon-id-badge"></i>ON THE JOB</h3>
+                    </div>
+                    <div class="copy box-inner">
+                        <ul>
+                            <li>Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training</li>
+                            <li>Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store</li>
+                            <li>Perform bike fittings for bikes of all makes and models</li>
+                            <li>Learn from your coworkers and share knowledge regarding new products and events</li>
+                            <li>Perform other tasks assigned by management</li>
+                            <li>Learn, understand and adhere to company policy, programs and standards</li>
+                        </ul>
+                    </div>
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h3><i class="icon-favorite"></i>IDEAL CNDIDATE</h3>
+                    </div>
+                    <div class="copy  box-inner">
+                        <ul>
+                            <li>Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn’t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.</li>
+                            <li>Is comfortable working as part of a commission-based system where sales performance is measured</li>
+                            <li>Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience</li>
+                            <li>Is capable of safely lifting and carrying 40lbs on a regular basis</li>
+                            <li>Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment</li>
+                        </ul>
+                    </div>
+                </div><!--box-->
+
+            </div><!--col-->
+
+            <div class="col-sm-4">
+                <div class="box">
+                    <div class="title dark-blue">
+                        <h3>$9.00 <span class="pull-right">Hourly</span></h3>
+                    </div>
+                    <div class="buttons box-inner">
+                        <button class="btn btn-lrg red">APPLY</button>
+                        <button class="btn btn-secondary"><i class="icon-share"></i>SHARE</button>
+                        <button class="btn btn-secondary"><i class="icon-favorite"></i>FAVORITE</button>
+                    </div>
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title gray">
+                        <h3>OTHER Positions at location</h3>
+                    </div>
+                    <div class="positions-list">
+                        <ul>
+                            <li>
+                                <div class="icon icon-tie text-red"></div>
+                                <div class="copy">
+                                    <h4>Store Manager</h4>
+                                    <p>$40,000 Annual - Exempt</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="icon icon-settings text-purple"></div>
+                                <div class="copy">
+                                    <h4>Store Manager</h4>
+                                    <p>$40,000 Annual - Exempt</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="icon icon-bag text-blue"></div>
+                                <div class="copy">
+                                    <h4>Store Manager</h4>
+                                    <p>$40,000 Annual - Exempt</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!--box-->
+
+            </div><!--col-->
+        </div>
+    </div><!--details-->
+
+</div><!--position-->
+
 <div class="content" ng-show="dataLoaded && dataError">
     <div class="row">
         <div class="col-sm-12 text-center">

@@ -1,3 +1,116 @@
+$application-header-height: 60px;
+header.hi-header{
+    height: $application-header-height;
+    background-color:$c-hirely-gray;
+    @include drop-shadow;
+    border-bottom:1px solid rgba(0,0,0,0.25);
+
+    .logo{
+        padding-top:1em;
+        padding-left:1em;
+        /**
+         * below is to fix conflict with .logo class in different css file
+         */
+        @media screen and (max-width:$screen-sm-min){
+            padding-left:1em!important;
+        }
+    }
+
+    .user{
+        display: table;
+        width:auto;
+        height: $application-header-height;
+        padding-right:1em;
+
+        .details{
+            position: relative;
+            height: $application-header-height;
+            cursor:pointer;
+
+            .image{
+                width:$application-header-height - 10px;
+                height: $application-header-height - 10px;
+                margin: 5px auto 0 auto;
+                overflow: hidden;
+                position:relative;
+                float: left;
+                @include border-radius(50%);
+                > img{
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+
+            .name{
+                float:left;
+                display: inline-block;
+                padding-left:1em;
+                line-height: $application-header-height;
+                i {
+                    font-size:0.7em;
+                }
+            }
+
+            .menu{
+                // display:none;
+                position:absolute;
+                top:$application-header-height + 10px;
+                right:-10px;
+                width:200px;
+                z-index: 1000;
+                @include drop-shadow();
+                ul{
+                    display:table;
+                    width:200px;
+                    list-style: none;
+                    padding:0;
+                    margin-bottom: 0;
+
+                }
+                ul > li{
+                    display: block;
+                    width:100%;
+
+
+                }
+                ul > li > a{
+                    display: block;
+                    width:100%;
+                    background-color:$c-hirely-gray;
+
+                    padding:0.5em 1em 0.5em 1em;
+
+                }
+                ul > li > a:hover{
+                    background-color:#fff;
+                }
+            }
+        }
+        .menu:before{
+            display: block;
+            content: ' ';
+            width:20px;
+            height: 20px;
+            position:absolute;
+            top:-20px;
+            z-index: 100;
+
+            right:5px;
+            // margin-left:-30px;
+
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid $c-hirely-gray;
+        }
+
+        .buttons{
+            padding-top:10px;
+        }
+    }//// .user
+}//// header
 .form-content{
     width:100%;
     margin:0 auto;
@@ -14,3 +127,18 @@
         }
     }
 }////.content
+
+.btn-secondary{
+    background-color:#fff;
+    border:1px solid $c-hirely-dark-gray;
+}
+
+.text-red{
+    color:$c-hirely-red;
+}
+.text-blue{
+    color:$c-hirely-blue;
+}
+.text-purple{
+    color:$c-hirely-purple;
+}

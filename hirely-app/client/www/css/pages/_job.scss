@@ -1,5 +1,7 @@
 
 .position{
+    overflow: hidden;
+
     .padding{
         padding-left:2em;
         padding-right:2em;
@@ -14,16 +16,20 @@
             height: auto;
         }
     }
-    .header{
+    .pos-header{
         padding-top:2em;
         padding-bottom:1em;
         position:relative;
+        @include drop-shadow(0,0,0,0,0); //// conflict fix
+        border-bottom:1px solid $c-hirely-text-gray;
 
         .logo{
             display: none;
             width:100%;
-            top:-180px;
+            top:-160px;
             position:absolute;
+            padding-left:0; //// conflict fix
+            padding-top:0; //// conflict fis
             @media screen and (min-width:$screen-sm-min){
                 display: block;
             }
@@ -69,7 +75,6 @@
                 height:80px;
                 text-align: center;
                 line-height: 80px;
-                color:$c-hirely-blue;
                 @media screen and (min-width:$screen-sm-min){
                     float:left;
                     margin-right: 10px;
@@ -103,9 +108,10 @@
                 width:25%;
                 padding-left: 5px;
                 padding-right:5px;
+                font-size:0.8em;
                 .icon{
                     display:block;
-                    font-size:3em;
+                    font-size:4em;
                     width:60px;
                     height: 60px;
                     line-height: 60px;
@@ -116,5 +122,176 @@
                 padding-right:0;
             }
         }//// .features
-    }
+    }//// .header
+
+    .details{
+        background-color:$c-hirely-gray;
+        min-height: 200px;
+        padding-top:2em;
+        padding-bottom:2em;
+
+        .box{
+            background-color:#fff;
+            padding-bottom:1em;
+            border:none;
+            width:100%;
+            margin:0;
+            padding:0;
+            margin-bottom:2em;
+            @include drop-shadow();
+            @include border-radius();
+            overflow: hidden;
+
+            .title{
+                width:100%;
+                margin-bottom: 1em;
+                padding:1em 1em 1em 1em;
+                margin-bottom: 0;
+
+                h3{
+                    font-weight: normal;
+                    margin-top:0;
+                    margin-bottom: 0;
+                    font-size:1.3em;
+                    line-height: 1.45em;
+                    text-transform: uppercase;
+
+                    i{
+                        margin-right:0.3em;
+                        display:inline-block;
+                        float:left;
+                        font-size:1.45em;
+                    }
+                }/// .h3
+            }//// .title
+            .title.dark-blue{
+                background-color:$c-hirely-navy;
+                color:#fff;
+            }
+            .title.gray{
+                background-color:$c-hirely-light-gray;
+                color:#fff;
+            }
+
+            .box-inner{
+                padding:1em 1em 1em 1em;
+            }
+
+            .copy{
+                ul, ol{
+                    padding-left:28px;
+                }
+            }//// copy
+
+            .benefites{
+
+                .item{
+                    width:100%;
+                    float:left;
+                    margin-right:0;
+                    border:1px solid $c-hirely-navy;
+                    line-height: 40px;
+                    margin-bottom:1em;
+                    @include border-radius();
+                    overflow: hidden;
+                    @media screen and (min-width:$screen-sm-min){
+                        width:45%;
+                        margin-right:10%;
+                    }
+                }
+                .item:nth-child(2n+2){
+                    margin-right:0;
+                }
+                .icon{
+                    float:left;
+                    width:20%;
+                    background-color:$c-hirely-navy;
+                    color:#fff;
+                    text-align: center;
+                    line-height: 40px;
+                    font-size: 2em;
+                    // @media screen and (min-width:$screen-sm-min){
+                    //     width:20%;
+                    // }
+                }
+                .title{
+                    float:left;
+                    width:80%;
+                    padding:0;
+                    text-align: center;
+                    margin-bottom: 0;
+                    text-transform: uppercase;
+                    // @media screen and (min-width:$screen-sm-min){
+                    //     width:80%;
+                    // }
+                }
+            }//// .benefits
+
+            .buttons{
+
+                .btn{
+                    width:100%;
+                    margin-bottom:1em;
+                    font-size:1.5em;
+                    // line-height: 0.9em;
+                    i{
+                        margin-right:0.5em;
+                        font-size:0.9em;
+                    }
+                }
+                .bth:last-child{
+                    margin-bottom: 0;
+                }
+            }//// .buttons
+
+            .positions-list{
+
+                > ul{
+                    list-style:none;
+                    padding-left:0;
+                    margin-bottom: 0;
+                }
+                li{
+                    display: block;
+                    width:100%;
+                    border-bottom:1px solid $c-hirely-gray;
+                    padding:1em 1em 1em 0;
+                    .icon{
+                        width:20%;
+                        float:left;
+                        text-align: center;
+                        font-size:2.5em;
+                        line-height: 1.5em;
+                    }
+                    .copy{
+                        width:80%;
+                        float:left;
+
+                        h4{
+                            padding:0;
+                            margin:0;
+                            margin-bottom: 3px;
+                            font-size:1.5em;
+                            font-weight: normal;
+                        }
+                        p{
+                            margin:0;
+                        }
+                    }
+                }
+                li:after{
+                    content:' ';
+                    display: block;
+                    clear: both;
+                }
+                li:last-child{
+                    border-bottom: none;
+                }
+            }//// .positions-list
+        }/// box
+
+        .box:last-child{
+            margin-bottom: 0;
+        }
+    }//// .details
 }/// .job

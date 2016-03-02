@@ -1,0 +1,171 @@
+@font-face {
+    font-family: 'hirely-icons';
+    src:    url('fonts/hirely-icons.eot?upnxue');
+    src:    url('fonts/hirely-icons.eot?upnxue#iefix') format('embedded-opentype'),
+        url('fonts/hirely-icons.ttf?upnxue') format('truetype'),
+        url('fonts/hirely-icons.woff?upnxue') format('woff'),
+        url('fonts/hirely-icons.svg?upnxue#hirely-icons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'hirely-icons' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-coffe-cup:before {
+    content: "\e903";
+}
+.icon-calendar:before {
+    content: "\e904";
+}
+.icon-money-collection:before {
+    content: "\e905";
+}
+.icon-tie:before {
+    content: "\e906";
+}
+.icon-sun:before {
+    content: "\e907";
+}
+.icon-hard-hat:before {
+    content: "\e908";
+}
+.icon-code:before {
+    content: "\e909";
+}
+.icon-police:before {
+    content: "\e90a";
+}
+.icon-share:before {
+    content: "\e90b";
+}
+.icon-info:before {
+    content: "\e90c";
+}
+.icon-money-bag-solid:before {
+    content: "\e90d";
+}
+.icon-share-arrow-right:before {
+    content: "\e90e";
+}
+.icon-tractor:before {
+    content: "\e90f";
+}
+.icon-toolbox:before {
+    content: "\e910";
+}
+.icon-medical:before {
+    content: "\e911";
+}
+.icon-cookie-jar:before {
+    content: "\e912";
+}
+.icon-percentage:before {
+    content: "\e913";
+}
+.icon-share-arrow-up:before {
+    content: "\e914";
+}
+.icon-books:before {
+    content: "\e915";
+}
+.icon-exit:before {
+    content: "\e916";
+}
+.icon-building:before {
+    content: "\e917";
+}
+.icon-settings:before {
+    content: "\e918";
+}
+.icon-insurance:before {
+    content: "\e919";
+}
+.icon-gift-solid:before {
+    content: "\e91a";
+}
+.icon-thermometer:before {
+    content: "\e91b";
+}
+.icon-building-solid:before {
+    content: "\e91c";
+}
+.icon-sales-tag:before {
+    content: "\e91d";
+}
+.icon-chef-hat:before {
+    content: "\e91e";
+}
+.icon-piggy-bank:before {
+    content: "\e91f";
+}
+.icon-money-bag:before {
+    content: "\e920";
+}
+.icon-bill:before {
+    content: "\e921";
+}
+.icon-stop-watch:before {
+    content: "\e922";
+}
+.icon-bag:before {
+    content: "\e923";
+}
+.icon-percentage-solid:before {
+    content: "\e924";
+}
+.icon-gift:before {
+    content: "\e925";
+}
+.icon-desk-bel:before {
+    content: "\e926";
+}
+.icon-factory:before {
+    content: "\e927";
+}
+.icon-to-do:before {
+    content: "\e928";
+}
+.icon-map-pin:before {
+    content: "\e929";
+}
+.icon-badge:before {
+    content: "\e92a";
+}
+.icon-drawing-compass:before {
+    content: "\e92b";
+}
+.icon-cube:before {
+    content: "\e92c";
+}
+.icon-medical-center:before {
+    content: "\e92d";
+}
+.icon-clinic:before {
+    content: "\e92e";
+}
+.icon-id-badge:before {
+    content: "\e92f";
+}
+.icon-stop-watch-2:before {
+    content: "\e900";
+}
+.icon-info-solid:before {
+    content: "\e901";
+}
+.icon-favorite:before {
+    content: "\e902";
+}
+
