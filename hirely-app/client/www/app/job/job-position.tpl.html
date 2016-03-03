@@ -4,11 +4,28 @@
 </div>
 
 <div class="position" ng-show="dataLoaded && !dataError">
+    <!--sticky-header-->
+    <div class="sticky-header padding" id="stickyHeader">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                <div class="title">
+                    <h3>{{business.name}}, {{location.city}} / {{position.title}}</h3>
+                </div>
+            </div>
+            <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
+                <div class="wage">
+                    <h3>$9.00 <span class="pull-right">HOURLY</span></h3>
+                </div>
+            </div>
+        </div>
+    </div><!--sticky-header-->
+
     <!--hero-image-->
     <div class="row">
         <div class="col-sm-12">
             <div class="hero">
                 <img src="/img/banners/barber.jpg"/>
+                <div class="tag">$9.00</div>
             </div>
         </div>
     </div><!--hero-image-row-->
@@ -24,7 +41,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="title">
-                            <span class="icon icon-coffe-cup text-blue"></span>
+                            <span class="icon icon-coffee-cup text-blue"></span>
                             <h1>{{position.title}}</h1>
                             <h2>{{business.name}}</h2>
                             <h3>{{location.city}}, {{location.state}}</h3>
@@ -60,7 +77,7 @@
     <!--position-details-->
     <div class="details padding">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8" id="posDetails">
                 <div class="box">
                     <div class="title">
                         <h3><i class="icon-info"></i>ABOUT POSITION</h3>
@@ -177,51 +194,67 @@
             </div><!--col-->
 
             <div class="col-sm-4">
-                <div class="box">
-                    <div class="title dark-blue">
-                        <h3>$9.00 <span class="pull-right">Hourly</span></h3>
-                    </div>
-                    <div class="buttons box-inner">
-                        <button class="btn btn-lrg red">APPLY</button>
-                        <button class="btn btn-secondary"><i class="icon-share"></i>SHARE</button>
-                        <button class="btn btn-secondary"><i class="icon-favorite"></i>FAVORITE</button>
-                    </div>
-                </div><!--box-->
+                <div class="sidebar" id="sideBar">
+                    <div class="box visible-sm-block visible-md-block visible-lg-block" id="wageBox">
+                        <div class="title dark-blue">
+                            <h3>$9.00 <span class="pull-right">Hourly</span></h3>
+                        </div>
+                        <div class="buttons box-inner">
+                            <button class="btn btn-lrg red">APPLY</button>
+                            <button class="btn btn-secondary"><i class="icon-share"></i>SHARE</button>
+                            <button class="btn btn-secondary"><i class="icon-favorite"></i>FAVORITE</button>
+                        </div>
+                    </div><!--box-->
 
-                <div class="box">
-                    <div class="title gray">
-                        <h3>OTHER Positions at location</h3>
-                    </div>
-                    <div class="positions-list">
-                        <ul>
-                            <li>
-                                <div class="icon icon-tie text-red"></div>
-                                <div class="copy">
-                                    <h4>Store Manager</h4>
-                                    <p>$40,000 Annual - Exempt</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="icon icon-settings text-purple"></div>
-                                <div class="copy">
-                                    <h4>Store Manager</h4>
-                                    <p>$40,000 Annual - Exempt</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="icon icon-bag text-blue"></div>
-                                <div class="copy">
-                                    <h4>Store Manager</h4>
-                                    <p>$40,000 Annual - Exempt</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div><!--box-->
-
+                    <div class="box">
+                        <div class="title gray">
+                            <h3>OTHER Positions at location</h3>
+                        </div>
+                        <div class="positions-list">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0);">
+                                        <div class="icon icon-tie text-red"></div>
+                                        <div class="copy">
+                                            <h4>Store Manager</h4>
+                                            <p>$40,000 Annual - Exempt</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">
+                                        <div class="icon icon-settings text-purple"></div>
+                                        <div class="copy">
+                                            <h4>Master Mechanic</h4>
+                                            <p>$12 - $15 Hourly - Part Time</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">
+                                        <div class="icon icon-bag text-blue"></div>
+                                        <div class="copy">
+                                            <h4>Sales Associate</h4>
+                                            <p>$9 Hourly - Part Time</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+                </div><!--sidebar-->
             </div><!--col-->
         </div>
     </div><!--details-->
+
+    <!--mobile-footer-->
+    <div class="mobile-footer visible-xs-block">
+        <div class="buttons">
+            <button class="btn red"><i class="icon-share"></i></button>
+            <button class="btn btn-lrg red">APPLY</button>
+            <button class="btn red"><i class="icon-favorite"></i></button>
+        </div>
+    </div><!--mobile-footer-->
 
 </div><!--position-->
 

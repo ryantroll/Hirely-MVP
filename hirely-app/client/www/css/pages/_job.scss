@@ -1,4 +1,6 @@
-
+/**
+ * Created by Iyad Bitar on 2/29/16.
+ */
 .position{
     overflow: hidden;
 
@@ -8,12 +10,29 @@
     }
 
     .hero{
-
+        position:relative;
         img{
             display: block;
             width:100%;
             margin:0 auto;
             height: auto;
+        }
+        .tag{
+            display: table;
+            width:auto;
+            background-color:$c-hirely-navy;
+            color:$c-white;
+            font-weight: 600;
+            font-size:1.5em;
+            position:absolute;
+            right:0;
+            bottom:10%;
+            padding:0.5em 1.5em;
+            border: 1px solid $c-hirely-mid-gray;
+
+            @media screen and (min-width:$screen-sm-min){
+                display: none;
+            }
         }
     }
     .pos-header{
@@ -28,6 +47,7 @@
             width:100%;
             top:-160px;
             position:absolute;
+            margin-left:-2em;
             padding-left:0; //// conflict fix
             padding-top:0; //// conflict fis
             @media screen and (min-width:$screen-sm-min){
@@ -246,7 +266,7 @@
 
             .positions-list{
 
-                > ul{
+                ul{
                     list-style:none;
                     padding-left:0;
                     margin-bottom: 0;
@@ -256,6 +276,12 @@
                     width:100%;
                     border-bottom:1px solid $c-hirely-gray;
                     padding:1em 1em 1em 0;
+                    a{
+                        color:$c-hirely-dark-gray;
+                    }
+                    a:hover{
+                        color:$c-hirely-blue;
+                    }
                     .icon{
                         width:20%;
                         float:left;
@@ -276,6 +302,7 @@
                         }
                         p{
                             margin:0;
+                            font-size:1em;
                         }
                     }
                 }
@@ -291,7 +318,79 @@
         }/// box
 
         .box:last-child{
-            margin-bottom: 0;
+            // margin-bottom: 0;
+        }
+
+        .sidebar{
+            position:relative;
         }
     }//// .details
+
+    .mobile-footer{
+        width:100%;
+        position:fixed;
+        bottom:0;
+        left:0;
+        z-index: 100;
+         background-color: $c-white;
+        width:100%;
+        padding:2px;
+        @include drop-shadow();
+
+        .buttons{
+            display:table;
+            width:100%;
+            margin: 0 auto;
+
+            .btn{
+                border: 1px solid $c-white;
+                margin:0;
+                padding-top:0.5em;
+                padding-bottom:0.5em;
+                font-weight: 600;
+                font-size:1.3em;
+            }
+
+            .btn:nth-child(3n+1){
+                width:20%;
+            }
+            .btn:nth-child(3n+2){
+                width:60%;
+                // margin-left:-2px;
+            }
+            .btn:nth-child(3n+3){
+                width:20%;
+                // margin-left: -2px;
+            }
+
+        }//// .buttons
+    }//// .mobile-footer
+
+    .sticky-header{
+        background-color:$c-hirely-navy;
+        color:$c-white;
+        position:fixed;
+        top:-60px;
+        z-index: 100;
+        width:100%;
+
+        .title{
+            padding:1em;
+        }
+        .wage{
+            padding:1em;
+            border-left:1px solid $c-hirely-gray;
+            border-right:1px solid $c-hirely-gray;
+        }
+
+        h3{
+            font-weight: normal;
+            margin:0;
+            font-size:1.3em;
+            line-height: 1.45em;
+        }
+    }//// .sticky-header
+    .sticky-header.show{
+        top:0;
+    }
 }/// .job
