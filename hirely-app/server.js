@@ -5,18 +5,18 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var errorHandler = require('./utils/errorHandler')();
+var errorHandler = require('./server/utils/errorHandler')();
 var logger = require('morgan');
 var tinylr  = require('tiny-lr');
 
-var config = require('./config');
+var config = require('./server/config');
 
 /** MongoDB **/
 var mongoose = require('mongoose');
 var connectMongo = require('connect-mongo');
 mongoose.connect(config.mongoUri);
 
-var port =  process.env.LR_PORT || process.env.PORT || 7200;
+var port =  process.env.LR_PORT || process.env.PORT || 3000;
 var routes;
 
 var environment = process.env.NODE_ENV;
@@ -28,26 +28,26 @@ app.use(cors());                // enable ALL CORS requests
 app.use(errorHandler.init);
 
 
-routes = require('./routes')(app);
+routes = require('./server/routes')(app);
 
 switch (environment){
     case 'production':
         console.log('** PRODUCTION ON Modulus **');
-        console.log('serving from ' + './dist/');
+        console.log('serving from ' + './server/dist/');
 
-        app.use('/', express.static('./dist/'));
+        app.use('/', express.static('./server/dist/'));
         break;
     case 'stage':
     case 'build':
         console.log('** BUILD **');
-        console.log('serving from ' + './dist/');
-        app.use('/', express.static('./dist/'));
+        console.log('serving from ' + './server/dist/');
+        app.use('/', express.static('./server/dist/'));
         break;
     default:
         console.log('** DEV **');
-        console.log('serving from ' + './src/client/ and ./');
-        app.use('/', express.static(__dirname +'/../client/www/')); //ded
-        app.use('/', express.static(__dirname + '/../'));
+        console.log('serving from ' + './server/src/client/ and ./');
+        app.use('/', express.static(__dirname +'/client/www/')); //ded
+        app.use('/', express.static(__dirname + '/'));
 
         break;
 }
