@@ -393,4 +393,72 @@
     .sticky-header.show{
         top:0;
     }
-}/// .job
+
+    .business{
+        min-height: 200px;
+        background-color:$c-white;
+
+        .box{
+            background-color:$c-white;
+            padding-bottom:1em;
+            border:none;
+            width:100%;
+            margin:0;
+            padding:0;
+            margin-bottom:2em;
+
+            .title{
+                width:100%;
+                margin-bottom: 1em;
+                padding:1em 1em 1em 1em;
+                margin-bottom: 0;
+
+                h3{
+                    font-weight: normal;
+                    margin-top:0;
+                    margin-bottom: 0;
+                    font-size:1.3em;
+                    line-height: 1.45em;
+                    text-transform: uppercase;
+
+                    i{
+                        margin-right:0.3em;
+                        display:inline-block;
+                        float:left;
+                        font-size:1.45em;
+                    }
+                }/// .h3
+            }//// .title
+
+            .box-inner{
+                padding:1em 6em 1em 6em;
+            }
+
+            .copy{
+                ul, ol{
+                    padding-left:28px;
+                }
+            }//// copy
+
+            .availability{
+                ul{
+                    list-style:none;
+                    display: table;
+                    width: auto;
+                    margin:0 auto;
+                    padding:0;
+                    margin-bottom: 1em;
+                    li{
+                        text-align: left;
+
+                        b{
+                            display:inline-block;
+                            width:70px;
+                        }
+                    }
+                }
+            }
+        }//// .box
+
+    }//// .business
+}/// .position
