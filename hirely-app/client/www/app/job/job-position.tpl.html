@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="hero">
-                <img src="/img/banners/barber.jpg"/>
+                <img src="{{business.heroImageURL}}"/>
                 <div class="tag">$9.00</div>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="col-sm-12">
             <div class="pos-header padding">
                 <div class="logo">
-                    <div class="circle"></div>
+                    <div class="circle"><img src="{{business.logoImageURL}}"/></div>
                 </div>
 
                 <div class="row">
@@ -83,7 +83,9 @@
                         <h3><i class="icon-info"></i>ABOUT POSITION</h3>
                     </div>
                     <div class="copy box-inner">
-                        <p>Cycles' Sales Associates are passionate about bikes and dedicated to the people that ride them. We love to teach, so if you love to learn about bicycles and share your expertise with others, and you are devoted to providing an exceptional customer service experience, learn more about becoming a Sales Associate at Revolution Cycles.</p>
+                        <p>
+                            {{position.description}}
+                        </p>
                     </div>
                 </div><!--box-->
 
@@ -97,42 +99,47 @@
                         </ul>
                     </div>
                     <div class="benefites  box-inner clearfix">
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.commission">
                             <div class="icon icon-percentage"></div>
                             <div class="title">COMMISSION</div>
                         </div>
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.tips">
                             <div class="icon icon-money-collection"></div>
                             <div class="title">Tips</div>
                         </div>
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.bonus">
                             <div class="icon icon-gift-solid"></div>
                             <div class="title">Bonus</div>
                         </div>
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.paidVacation">
                             <div class="icon icon-sun"></div>
                             <div class="title">Paid Vacation</div>
                         </div>
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.paidSickTime">
                             <div class="icon icon-thermometer"></div>
                             <div class="title">Paid Sick Time</div>
                         </div>
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.healthInsurance">
                             <div class="icon icon-insurance"></div>
                             <div class="title">Health Insurance</div>
                         </div>
-                        <div class="item">
-                            <div class="icon icon-piggy-bank"></div>
-                            <div class="title">401K</div>
+                        <div class="item" ng-if="position.benefits.dentalInsurance">
+                            <div class="icon icon-dental"></div>
+                            <div class="title">Dental Insurance</div>
                         </div>
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.retirementPlan">
+                            <div class="icon icon-piggy-bank"></div>
+                            <div class="title">Retirement Plan</div>
+                        </div>
+                        <div class="item" ng-if="position.benefits.flexibleSchedul">
                             <div class="icon icon-calendar"></div>
                             <div class="title">Flexible Schedule</div>
                         </div>
-                        <div class="item">
+                        <div class="item" ng-if="position.benefits.discounts">
                             <div class="icon icon-sales-tag"></div>
-                            <div class="title">Discount</div>
+                            <div class="title">Discounts</div>
                         </div>
+
                     </div>
                 </div><!--box-->
 
@@ -252,7 +259,7 @@
             <div class="col-sm-12">
                 <div class="box">
                     <div class="title">
-                        <h3><i class="icon-building"></i> ABOUT BUSINESS & LOCATION</h3>
+                        <h3><i class="icon-building"></i> ABOUT BUSINESS &amp; LOCATION</h3>
                     </div>
                     <div class="copy  box-inner text-center">
                         <p>Local bicycle shop chain that is focused on customer service and satisfaction serving all cyclists from casual beginners to experienced enthusiasts</p>
@@ -261,10 +268,6 @@
                             <ul>
                                 <li><b>Mon-Fri:</b> 11:00am to 8:00pm</li>
                                 <li><b>Sun:</b> 10:00am to 6:00pm</li>
-                                <!-- <li><b>Tus:</b> 10:00am to 6:00pm</li>
-                                <li><b>Wed:</b> 10:00am to 6:00pm</li>
-                                <li><b>Thu:</b> 10:00am to 6:00pm</li>
-                                <li><b>Fri:</b> 10:00am to 6:00pm</li> -->
                                 <li><b>Sat:</b> 10:00am to 6:00pm</li>
                             </ul>
                         </div>

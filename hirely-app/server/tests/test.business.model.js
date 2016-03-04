@@ -25,7 +25,9 @@ db.once('open', function(){
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
         agreedToTerms:true,
         hasOpenings: true,
-        photoUrl:  "http://assets.inhabitat.com/wp-content/blogs.dir/1/files/2013/12/starbucks-canal-street-NOLA-store-6.jpg",
+        heroImageURL: 'http://compasscoffee.com/assets/img/compassbackground.jpg',
+        logoImageURL: 'http://compasscoffee.com/assets/img/compasslogo.png',
+        // photoUrl:  "http://compasscoffee.com/assets/img/compassbackground.jpg",
         locations: {
             tmpLocationId: {
                 _id: locationId,
@@ -101,6 +103,7 @@ db.once('open', function(){
                 occId: '11-1011.03',
                 slug: 'barista',
                 workType: 'part-time',
+                description: 'Compass Coffee Barista are passionate about bikes and dedicated to the people that ride them. We love to teach, so if you love to learn about bicycles and share your expertise with others, and you are devoted to providing an exceptional customer service experience, learn more about becoming a Sales Associate at Revolution Cycles.',
                 hoursPerWeekMin: 1,
                 hoursPerWeekMax: 2,
                 minOpeningShifts: 2,
@@ -126,12 +129,15 @@ db.once('open', function(){
 
                 benefits: {
                     paidVacation: true,
-                    paidSickTime: false,
-                    flexibleSchedul: false,
-                    healthInsurance: false,
+                    paidSickTime: true,
+                    flexibleSchedul: true,
+                    healthInsurance: true,
                     dentalInsurance: true,
                     retirementPlan: true,
-                    discounts: false
+                    discounts: true,
+                    commission: true,
+                    tips: true,
+                    bonus: true
                 },
 
                 shifts: {

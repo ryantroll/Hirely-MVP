@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'hirely-icons';
-    src:    url('fonts/hirely-icons.eot?upnxue');
-    src:    url('fonts/hirely-icons.eot?upnxue#iefix') format('embedded-opentype'),
-        url('fonts/hirely-icons.ttf?upnxue') format('truetype'),
-        url('fonts/hirely-icons.woff?upnxue') format('woff'),
-        url('fonts/hirely-icons.svg?upnxue#hirely-icons') format('svg');
+    src:    url('fonts/hirely-icons.eot?oxdwfj');
+    src:    url('fonts/hirely-icons.eot?oxdwfj#iefix') format('embedded-opentype'),
+        url('fonts/hirely-icons.ttf?oxdwfj') format('truetype'),
+        url('fonts/hirely-icons.woff?oxdwfj') format('woff'),
+        url('fonts/hirely-icons.svg?oxdwfj#hirely-icons') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -24,6 +24,9 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-dental:before {
+    content: "\e930";
+}
 .icon-coffee-cup:before {
     content: "\e903";
 }
