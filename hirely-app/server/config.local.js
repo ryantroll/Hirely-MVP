@@ -9,7 +9,7 @@ config.traitify = {
 };
 
 
-//config.mongoUri = 'mongodb://ip-172-31-25-53.ec2.internal:27000/hirely';
+// config.mongoUri = 'mongodb://ip-172-31-25-53.ec2.internal:27000/hirely';
 //config.mongoUri = 'mongodb://db:27017/hirely';
 config.mongoUri = 'mongodb://localhost:27017/hirely';
 
