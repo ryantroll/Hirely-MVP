@@ -2,7 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var careerMatchScoresSchema = new Schema({
-    _id:{type:String, required:true},  // This id is an onetId
+    _id:{type:String, required:true},
+    onnId:{type:String, required:true},
+    userId:{type:String, required:true},
     // TODO:  Explicitly specify each ksaw
     maxOverallScore: {type:Number, required:true},
     scores: {

@@ -38,6 +38,7 @@ module.exports = function(app) {
     app.get('/api/v1/traitify/assessment-id', traitifyApiRoutes.getAssessmentId);
     app.post('/api/v1/traitify/', traitifyApiRoutes.createNewAssessment);
     app.get('/api/v1/traitify/test', traitifyApiRoutes.getTest);
+    app.get('/api/v1/traitify/getAssessmentCareerMatchesById/:id', traitifyApiRoutes.getAssessmentCareerMatchesById);
 
     /**
      * Adding routes for local mongoDB users

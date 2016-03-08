@@ -23,7 +23,7 @@
     "mongoose": "^4.3.4",
     "morgan": "^1.6.1",
     "node-geocoder": "^3.4.1",
-    "traitify": "^2.2.0",
+    "traitify": "git://github.com/bdombro/traitify-node.git#5bc59ac8237db6e48fd77dae2e79c6c2d7657255",
     "q": "*",
     "tiny-lr": "^0.2.0"
   },

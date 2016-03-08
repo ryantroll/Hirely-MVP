@@ -72,9 +72,7 @@ var MatchService = {
                         careerMatchScoresInstance.scores[expLvl].edu = eduScore;
 
                         // Personality calcs
-                        // TODO:  un-hardcode this when we figure out traitify agreement
-                        //var psyScore = user.personalityCareerScores[occId];
-                        var psyScore = 50;
+                        var psyScore = user.personalityExams.careerScores[occId.replace('.', ',')];
                         careerMatchScoresInstance.scores[expLvl].psy = psyScore;
 
                         // Grand overallScore calcs;

@@ -32,7 +32,23 @@ var traitifyRoutes = {
 
     getTest: function(req, res){
         res.status(200).json(apiUtil.generateResponse(200, "Assesment Id retrieved", testResponse));
-    }
+    },
+
+    getAssessmentCareerMatchesById: function (req, res){
+        /**
+         * Send public info if all is not requested
+         */
+        traitifyService.getAssessmentCareerMatchesById(req.params.id, req.query)
+            .then(
+                function(matches){
+                    res.status(200).json(apiUtil.generateResponse(200, "Matches retrieved successfully", matches));
+                },
+                function(error){
+                    //// user couldn't be found 404
+                    res.status(500).json(apiUtil.generateResponse(404, "Matches couldn't be located", null));
+                }
+            );
+    },
 
 }/// users object
 

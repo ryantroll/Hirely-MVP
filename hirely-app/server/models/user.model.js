@@ -38,7 +38,8 @@ var personalitySchema = new Schema({
   personalityBlend    :       {
                                 name:String,
                                 personalityTypes:[customId]
-                              }
+                              },
+  careerScores        :       {type:freeSchema, required:false}
 
 });
 
