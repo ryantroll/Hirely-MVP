@@ -22,6 +22,24 @@
           // businessRef.push(obj);
         }
 
+        this.getWorkTypeTitle = function(type){
+          var types = [
+            {name:'part-time', title:'Part Time'},
+            {name:'full-time', title:'Full Time'},
+            {name:'seasonal', title:'Seasonal'},
+            {name:'exempt', title:'Exempt'}
+          ];
+          var ret = null;
+          var limit = types.length;
+          for(var x=0; x < limit; x++){
+            if(types[x].name === type){
+              ret = types[x].title;
+              break;
+            }
+          }
+          return ret;
+        }//// fun. getWorkTypeTitle
+
         this.getBySlug = function(slug){
           var deferred = $q.defer();
           HirelyApiService.businesses(slug).get()

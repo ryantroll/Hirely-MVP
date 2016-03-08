@@ -14,7 +14,7 @@
             </div>
             <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
                 <div class="wage">
-                    <h3>$9.00 <span class="pull-right">HOURLY</span></h3>
+                    <h3>${{position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="col-sm-12">
             <div class="hero">
                 <img src="{{business.heroImageURL}}"/>
-                <div class="tag">$9.00</div>
+                <div class="tag">${{position.compensation.wageAmount}}</div>
             </div>
         </div>
     </div><!--hero-image-row-->
@@ -50,21 +50,21 @@
                     <div class="col-sm-6">
                         <div class="features clearfix">
                             <ul>
-                                <li>
+                                <li ng-show="isAuth && distance">
                                     <span class="icon icon-map-pin"></span>
                                     0.5M From Me
                                 </li>
                                 <li>
                                     <span class="icon icon-stop-watch"></span>
-                                    Seasonal
+                                    {{workTypeTitle}}
                                 </li>
                                 <li>
                                     <span class="icon icon-exit"></span>
-                                    4 Openings
+                                    {{position.openingsCount}} Openings
                                 </li>
                                 <li>
                                     <span class="icon icon-money-bag"></span>
-                                    10 Benefits
+                                    {{numOfBenefits}} Benefits
                                 </li>
                             </ul>
                         </div><!--features-->
@@ -95,7 +95,7 @@
                     </div>
                     <div class="copy box-inner">
                         <ul>
-                            <li>$9.00 Per Hour</li>
+                            <li>${{position.compensation.wageAmount}} {{position.compensation.wageType}}</li>
                         </ul>
                     </div>
                     <div class="benefites  box-inner clearfix">
@@ -149,13 +149,13 @@
                     </div>
                     <div class="copy box-inner">
                         <ul>
-                            <li>12 Hours Minimum Per Week</li>
-                            <li>40 Hours Maximum Per Week</li>
+                            <li>{{position.hoursPerWeekMin}} Hours Minimum Per Week</li>
+                            <li>{{position.hoursPerWeekMax}} Hours Maximum Per Week</li>
                         </ul>
                     </div>
                 </div><!--box-->
 
-                <div class="box">
+                <div class="box" ng-show="position.qualifications">
                     <div class="title">
                         <h3><i class="icon-to-do"></i>Qualifications</h3>
                     </div>
@@ -167,35 +167,18 @@
                     </div>
                 </div><!--box-->
 
-                <div class="box">
+                <div class="box" ng-show="position.jobDuties">
                     <div class="title">
                         <h3><i class="icon-id-badge"></i>ON THE JOB</h3>
                     </div>
-                    <div class="copy box-inner">
-                        <ul>
-                            <li>Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training</li>
-                            <li>Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store</li>
-                            <li>Perform bike fittings for bikes of all makes and models</li>
-                            <li>Learn from your coworkers and share knowledge regarding new products and events</li>
-                            <li>Perform other tasks assigned by management</li>
-                            <li>Learn, understand and adhere to company policy, programs and standards</li>
-                        </ul>
-                    </div>
+                    <div class="copy box-inner" ng-bind-html="position.jobDuties"></div>
                 </div><!--box-->
 
-                <div class="box">
+                <div class="box" ng-show="position.idealCandidate">
                     <div class="title">
                         <h3><i class="icon-favorite"></i>ideal candidate</h3>
                     </div>
-                    <div class="copy  box-inner">
-                        <ul>
-                            <li>Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn’t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.</li>
-                            <li>Is comfortable working as part of a commission-based system where sales performance is measured</li>
-                            <li>Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience</li>
-                            <li>Is capable of safely lifting and carrying 40lbs on a regular basis</li>
-                            <li>Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment</li>
-                        </ul>
-                    </div>
+                    <div class="copy  box-inner" ng-bind-html="position.idealCandidate"></div>
                 </div><!--box-->
 
             </div><!--col-->
@@ -204,45 +187,27 @@
                 <div class="sidebar" id="sideBar">
                     <div class="box visible-sm-block visible-md-block visible-lg-block" id="wageBox">
                         <div class="title dark-blue">
-                            <h3>$9.00 <span class="pull-right">Hourly</span></h3>
+                            <h3>${{position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
                         </div>
                         <div class="buttons box-inner">
-                            <button class="btn btn-lrg red">APPLY</button>
+                            <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
                             <button class="btn btn-secondary"><i class="icon-share"></i>SHARE</button>
                             <button class="btn btn-secondary"><i class="icon-favorite"></i>FAVORITE</button>
                         </div>
                     </div><!--box-->
 
-                    <div class="box">
+                    <div class="box" ng-show="otherPositions.length > 1">
                         <div class="title gray">
                             <h3>OTHER Positions at location</h3>
                         </div>
                         <div class="positions-list">
                             <ul>
-                                <li>
+                                <li ng-repeat="_pos in otherPositions">
                                     <a href="javascript:void(0);">
                                         <div class="icon icon-tie text-red"></div>
                                         <div class="copy">
-                                            <h4>Store Manager</h4>
-                                            <p>$40,000 Annual - Exempt</p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="icon icon-settings text-purple"></div>
-                                        <div class="copy">
-                                            <h4>Master Mechanic</h4>
-                                            <p>$12 - $15 Hourly - Part Time</p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="icon icon-bag text-blue"></div>
-                                        <div class="copy">
-                                            <h4>Sales Associate</h4>
-                                            <p>$9 Hourly - Part Time</p>
+                                            <h4>{{_pos.title}}</h4>
+                                            <p>${{_pos.compensation.wageAmount}} {{_pos.compensation.wageType}} - {{getWorkTypeTitle(_pos.workType)}}</p>
                                         </div>
                                     </a>
                                 </li>
@@ -262,19 +227,17 @@
                         <h3><i class="icon-building"></i> ABOUT BUSINESS &amp; LOCATION</h3>
                     </div>
                     <div class="copy  box-inner text-center">
-                        <p>Local bicycle shop chain that is focused on customer service and satisfaction serving all cyclists from casual beginners to experienced enthusiasts</p>
+                        <div>{{business.description}}</div>
                         <h4>{{business.name}} - {{location.city}}</h4>
                         <div class="availability">
                             <ul>
-                                <li><b>Mon-Fri:</b> 11:00am to 8:00pm</li>
-                                <li><b>Sun:</b> 10:00am to 6:00pm</li>
-                                <li><b>Sat:</b> 10:00am to 6:00pm</li>
+                                <li ng-repeat="range in aggregatedWeekTimes"><b>{{range.label}}:</b> {{range.hoursRanges.join(' | ')}}</li>
                             </ul>
                         </div>
-                        <p>
+                        <div>
                             {{location.formattedAddress}}<br>
-                            0.5 mi from my location (change)
-                        </p>
+                            <!-- 0.5 mi from my location (change) -->
+                        </div>
                     </div>
                 </div><!--box-->
             </div><!--col-sm-12-->
@@ -285,7 +248,7 @@
     <div class="mobile-footer visible-xs-block">
         <div class="buttons">
             <button class="btn red"><i class="icon-share"></i></button>
-            <button class="btn btn-lrg red">APPLY</button>
+            <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
             <button class="btn red"><i class="icon-favorite"></i></button>
         </div>
     </div><!--mobile-footer-->

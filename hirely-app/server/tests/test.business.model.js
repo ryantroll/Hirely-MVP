@@ -47,13 +47,13 @@ db.once('open', function(){
                 neighborhood: 'Shaw',
                 slug: 'dc-washington-shaw',
                 hoursOfOperation: {
-                    mon   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    mon   : [6, 7, 8, 9 ,10, 11,  13, 14, 15, 16, 17, 18],
                     tue   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
                     wed   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
                     thu   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
-                    fri   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    fri   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 16, 17, 18],
                     sat   : [6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 16, 17, 18],
-                    sun   : [8, 9 ,10, 11, 12, 13, 14, 15, 16, 17]
+                    sun   : [6, 7, 8, 9 ,10, 11, 12, 13, 15, 16, 18]
                 },
                 positionSlugs: {
                     'barista': positionId,
@@ -156,6 +156,9 @@ db.once('open', function(){
                         question: 'what\'s up?',
                     }
                 ],
+
+                jobDuties:'<ul><li>Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training</li>                            <li>Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store</li>                            <li>Perform bike fittings for bikes of all makes and models</li>                            <li>Learn from your coworkers and share knowledge regarding new products and events</li>                            <li>Perform other tasks assigned by management</li>                            <li>Learn, understand and adhere to company policy, programs and standards</li>                        </ul>',
+                idealCandidate:'<ul><li>Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn\u2019t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.</li>                            <li>Is comfortable working as part of a commission-based system where sales performance is measured</li>                            <li>Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience</li>                            <li>Is capable of safely lifting and carrying 40lbs on a regular basis</li>                            <li>Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment</li></ul>'
             },
             tmpPositionId2: {
                 _id: positionId2,
@@ -215,6 +218,9 @@ db.once('open', function(){
                         question:'what\'s up?',
                     }
                 ],
+
+                jobDuties:'<ul><li>Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training</li>                            <li>Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store</li>                            <li>Perform bike fittings for bikes of all makes and models</li>                            <li>Learn from your coworkers and share knowledge regarding new products and events</li>                            <li>Perform other tasks assigned by management</li>                            <li>Learn, understand and adhere to company policy, programs and standards</li>                        </ul>',
+                idealCandidate:'<ul><li>Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn\u2019t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.</li>                            <li>Is comfortable working as part of a commission-based system where sales performance is measured</li>                            <li>Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience</li>                            <li>Is capable of safely lifting and carrying 40lbs on a regular basis</li>                            <li>Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment</li></ul>'
             }
         }, // positions array
     };
