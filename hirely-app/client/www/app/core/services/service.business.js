@@ -91,6 +91,22 @@
             return null;
           }
         }//// fun. positionBySlug
+
+        this.getPositionDisplayData = function(onetId){
+          var deferred = $q.defer();
+
+          HirelyApiService.businesses('positionIcon', {occId:onetId}).get()
+          .then(
+            function(iconObject){
+              deferred.resolve(iconObject);
+            },
+            function(err){
+              deferred.reject(err)
+            }
+          );
+
+          return deferred.promise;
+        }
     }//// BsunessService
 
 

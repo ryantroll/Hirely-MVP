@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="title">
-                            <span class="icon icon-coffee-cup text-blue"></span>
+                            <span class="icon icon-{{positionIcon.cssClass}}" style="color:{{positionIcon.iconColor}}"></span>
                             <h1>{{position.title}}</h1>
                             <h2>{{business.name}}</h2>
                             <h3>{{location.city}}, {{location.state}}</h3>
@@ -50,21 +50,21 @@
                     <div class="col-sm-6">
                         <div class="features clearfix">
                             <ul>
-                                <li ng-show="isAuth && distance">
-                                    <span class="icon icon-map-pin"></span>
-                                    0.5M From Me
-                                </li>
                                 <li>
-                                    <span class="icon icon-stop-watch"></span>
+                                    <span class="icon icon-clock_outlone_icon"></span>
                                     {{workTypeTitle}}
                                 </li>
                                 <li>
-                                    <span class="icon icon-exit"></span>
+                                    <span class="icon icon-exit_icon"></span>
                                     {{position.openingsCount}} Openings
                                 </li>
                                 <li>
-                                    <span class="icon icon-money-bag"></span>
+                                    <span class="icon icon-moneybag_outline_icon"></span>
                                     {{numOfBenefits}} Benefits
+                                </li>
+                                <li ng-show="isAuth && distance">
+                                    <span class="icon icon-location_outline_icon"></span>
+                                    0.5M From Me
                                 </li>
                             </ul>
                         </div><!--features-->
@@ -80,7 +80,7 @@
             <div class="col-sm-8" id="posDetails">
                 <div class="box">
                     <div class="title">
-                        <h3><i class="icon-info"></i>ABOUT POSITION</h3>
+                        <h3><i class="icon-info_outline_icon"></i>ABOUT POSITION</h3>
                     </div>
                     <div class="copy box-inner">
                         <p>
@@ -91,7 +91,7 @@
 
                 <div class="box">
                     <div class="title">
-                        <h3><i class="icon-money-bag"></i>COMPENSATION &amp; BENEFITS</h3>
+                        <h3><i class="icon-moneybag_outline_icon"></i>COMPENSATION &amp; BENEFITS</h3>
                     </div>
                     <div class="copy box-inner">
                         <ul>
@@ -100,43 +100,43 @@
                     </div>
                     <div class="benefites  box-inner clearfix">
                         <div class="item" ng-if="position.benefits.commission">
-                            <div class="icon icon-percentage"></div>
+                            <div class="icon icon-commission_icon"></div>
                             <div class="title">COMMISSION</div>
                         </div>
                         <div class="item" ng-if="position.benefits.tips">
-                            <div class="icon icon-money-collection"></div>
+                            <div class="icon icon-tipjar_outline_icon"></div>
                             <div class="title">Tips</div>
                         </div>
                         <div class="item" ng-if="position.benefits.bonus">
-                            <div class="icon icon-gift-solid"></div>
+                            <div class="icon icon-bonus_outline_icon"></div>
                             <div class="title">Bonus</div>
                         </div>
                         <div class="item" ng-if="position.benefits.paidVacation">
-                            <div class="icon icon-sun"></div>
+                            <div class="icon icon-vacation_outline_icon"></div>
                             <div class="title">Paid Vacation</div>
                         </div>
                         <div class="item" ng-if="position.benefits.paidSickTime">
-                            <div class="icon icon-thermometer"></div>
+                            <div class="icon icon-sick_outline_icon"></div>
                             <div class="title">Paid Sick Time</div>
                         </div>
                         <div class="item" ng-if="position.benefits.healthInsurance">
-                            <div class="icon icon-insurance"></div>
+                            <div class="icon icon-insurance_outline_icon"></div>
                             <div class="title">Health Insurance</div>
                         </div>
                         <div class="item" ng-if="position.benefits.dentalInsurance">
-                            <div class="icon icon-dental"></div>
+                            <div class="icon icon-insurance_outline_icon"></div>
                             <div class="title">Dental Insurance</div>
                         </div>
                         <div class="item" ng-if="position.benefits.retirementPlan">
-                            <div class="icon icon-piggy-bank"></div>
+                            <div class="icon icon-piggbank_outline_icon"></div>
                             <div class="title">Retirement Plan</div>
                         </div>
                         <div class="item" ng-if="position.benefits.flexibleSchedul">
-                            <div class="icon icon-calendar"></div>
+                            <div class="icon icon-calendar_outline_icon"></div>
                             <div class="title">Flexible Schedule</div>
                         </div>
                         <div class="item" ng-if="position.benefits.discounts">
-                            <div class="icon icon-sales-tag"></div>
+                            <div class="icon icon-discount_outline_icon"></div>
                             <div class="title">Discounts</div>
                         </div>
 
@@ -145,7 +145,7 @@
 
                 <div class="box">
                     <div class="title">
-                        <h3><i class="icon-stop-watch"></i>Availability</h3>
+                        <h3><i class="icon-clock_outlone_icon"></i>Availability</h3>
                     </div>
                     <div class="copy box-inner">
                         <ul>
@@ -157,7 +157,7 @@
 
                 <div class="box" ng-show="position.qualifications">
                     <div class="title">
-                        <h3><i class="icon-to-do"></i>Qualifications</h3>
+                        <h3><i class="icon-checklist_outline_icon"></i>Qualifications</h3>
                     </div>
                     <div class="copy box-inner">
                         <ul>
@@ -169,14 +169,14 @@
 
                 <div class="box" ng-show="position.jobDuties">
                     <div class="title">
-                        <h3><i class="icon-id-badge"></i>ON THE JOB</h3>
+                        <h3><i class="icon-employeebadge_outline_icon"></i>ON THE JOB</h3>
                     </div>
                     <div class="copy box-inner" ng-bind-html="position.jobDuties"></div>
                 </div><!--box-->
 
                 <div class="box" ng-show="position.idealCandidate">
                     <div class="title">
-                        <h3><i class="icon-favorite"></i>ideal candidate</h3>
+                        <h3><i class="icon-heart_outline_icon"></i>ideal candidate</h3>
                     </div>
                     <div class="copy  box-inner" ng-bind-html="position.idealCandidate"></div>
                 </div><!--box-->
@@ -191,12 +191,12 @@
                         </div>
                         <div class="buttons box-inner">
                             <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
-                            <button class="btn btn-secondary"><i class="icon-share"></i>SHARE</button>
-                            <button class="btn btn-secondary"><i class="icon-favorite"></i>FAVORITE</button>
+                            <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button>
+                            <button class="btn btn-secondary"><i class="icon-heart_outline_icon"></i>FAVORITE</button>
                         </div>
                     </div><!--box-->
 
-                    <div class="box" ng-show="otherPositions.length > 1">
+                    <div class="box" ng-show="otherPositions.length > 1 || true">
                         <div class="title gray">
                             <h3>OTHER Positions at location</h3>
                         </div>
@@ -204,7 +204,7 @@
                             <ul>
                                 <li ng-repeat="_pos in otherPositions">
                                     <a href="javascript:void(0);">
-                                        <div class="icon icon-tie text-red"></div>
+                                        <div class="icon icon-management_icon" style="color:{{_pos.displayData.iconColor}}"></div>
                                         <div class="copy">
                                             <h4>{{_pos.title}}</h4>
                                             <p>${{_pos.compensation.wageAmount}} {{_pos.compensation.wageType}} - {{getWorkTypeTitle(_pos.workType)}}</p>
@@ -224,7 +224,7 @@
             <div class="col-sm-12">
                 <div class="box">
                     <div class="title">
-                        <h3><i class="icon-building"></i> ABOUT BUSINESS &amp; LOCATION</h3>
+                        <h3><i class="icon-building_outline_icon"></i> ABOUT BUSINESS &amp; LOCATION</h3>
                     </div>
                     <div class="copy  box-inner text-center">
                         <div>{{business.description}}</div>
@@ -247,9 +247,9 @@
     <!--mobile-footer-->
     <div class="mobile-footer visible-xs-block">
         <div class="buttons">
-            <button class="btn red"><i class="icon-share"></i></button>
+            <button class="btn red"><i class="icon-share_icon"></i></button>
             <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
-            <button class="btn red"><i class="icon-favorite"></i></button>
+            <button class="btn red"><i class="icon-heart_outline_icon"></i></button>
         </div>
     </div><!--mobile-footer-->
 

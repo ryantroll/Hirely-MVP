@@ -1,5 +1,5 @@
 var businessModel = require('../models/business.model');
-
+var onetIconsModel = require('../models/onetIcons.model');
 /**
  * [privateFields array to define the names of extended fields in user objects]
  * @type {Array}
@@ -73,7 +73,13 @@ var businessService = {
             }//// then fun.
 
         );/// then
+    },
+
+    getPositionDisplayData : function(onetId){
+        var arr = onetId.split('|');
+        return onetIconsModel.find({occId:{$in:arr}}).exec();
     }
+
 
 
 }/// businesss object

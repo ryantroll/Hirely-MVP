@@ -75,6 +75,22 @@ var businessRoutes = {
 
     },
 
+    getPositionDisplayData : function(req, res){
+        console.log(req.query.occId);
+        businessService.getPositionDisplayData(req.query.occId)
+        .then(
+            function(data){
+                console.log(data);
+                res.status(200).json(apiUtil.generateResponse(200, "Icon found", data));
+            },
+            function(error){
+                console.log(error);
+                res.status(500).json(apiUtil.generateResponse(error.code, error.message, null));
+            }
+        )
+
+    },
+
 
 }/// businesss object
 

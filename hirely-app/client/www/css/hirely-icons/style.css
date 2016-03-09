@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'hirely-icons';
-    src:    url('fonts/hirely-icons.eot?oxdwfj');
-    src:    url('fonts/hirely-icons.eot?oxdwfj#iefix') format('embedded-opentype'),
-        url('fonts/hirely-icons.ttf?oxdwfj') format('truetype'),
-        url('fonts/hirely-icons.woff?oxdwfj') format('woff'),
-        url('fonts/hirely-icons.svg?oxdwfj#hirely-icons') format('svg');
+    src:    url('fonts/hirely-icons.eot?k7ar11');
+    src:    url('fonts/hirely-icons.eot?k7ar11#iefix') format('embedded-opentype'),
+        url('fonts/hirely-icons.ttf?k7ar11') format('truetype'),
+        url('fonts/hirely-icons.woff?k7ar11') format('woff'),
+        url('fonts/hirely-icons.svg?k7ar11#hirely-icons') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -24,151 +24,130 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-dental:before {
-    content: "\e930";
-}
-.icon-coffee-cup:before {
-    content: "\e903";
-}
-.icon-calendar:before {
+.icon-personal_services_icon:before {
     content: "\e904";
 }
-.icon-money-collection:before {
+.icon-production_icon:before {
     content: "\e905";
 }
-.icon-tie:before {
+.icon-protective_services_icon:before {
     content: "\e906";
 }
-.icon-sun:before {
+.icon-repair_icon:before {
     content: "\e907";
 }
-.icon-hard-hat:before {
+.icon-maintenance_icon:before {
     content: "\e908";
 }
-.icon-code:before {
+.icon-management_icon:before {
     content: "\e909";
 }
-.icon-police:before {
+.icon-media_icon:before {
     content: "\e90a";
 }
-.icon-share:before {
+.icon-military_icon:before {
     content: "\e90b";
 }
-.icon-info:before {
+.icon-operations_icon:before {
     content: "\e90c";
 }
-.icon-money-bag-solid:before {
+.icon-transportation_icon:before {
     content: "\e90d";
 }
-.icon-share-arrow-right:before {
+.icon-sales_icon:before {
     content: "\e90e";
 }
-.icon-tractor:before {
+.icon-social_service_icon:before {
     content: "\e90f";
 }
-.icon-toolbox:before {
+.icon-technology_icon:before {
     content: "\e910";
 }
-.icon-medical:before {
+.icon-food_services_icon:before {
     content: "\e911";
 }
-.icon-cookie-jar:before {
+.icon-healthcare_icon:before {
     content: "\e912";
 }
-.icon-percentage:before {
+.icon-healthcare_support_icon:before {
     content: "\e913";
 }
-.icon-share-arrow-up:before {
+.icon-legal_icon:before {
     content: "\e914";
 }
-.icon-books:before {
+.icon-life_social_science_icon:before {
     content: "\e915";
 }
-.icon-exit:before {
+.icon-administrative_icon:before {
     content: "\e916";
 }
-.icon-building:before {
-    content: "\e917";
-}
-.icon-settings:before {
-    content: "\e918";
-}
-.icon-insurance:before {
-    content: "\e919";
-}
-.icon-gift-solid:before {
-    content: "\e91a";
-}
-.icon-thermometer:before {
-    content: "\e91b";
-}
-.icon-building-solid:before {
-    content: "\e91c";
-}
-.icon-sales-tag:before {
-    content: "\e91d";
-}
-.icon-chef-hat:before {
-    content: "\e91e";
-}
-.icon-piggy-bank:before {
-    content: "\e91f";
-}
-.icon-money-bag:before {
-    content: "\e920";
-}
-.icon-bill:before {
-    content: "\e921";
-}
-.icon-stop-watch:before {
-    content: "\e922";
-}
-.icon-bag:before {
-    content: "\e923";
-}
-.icon-percentage-solid:before {
-    content: "\e924";
-}
-.icon-gift:before {
-    content: "\e925";
-}
-.icon-desk-bel:before {
-    content: "\e926";
-}
-.icon-factory:before {
-    content: "\e927";
-}
-.icon-to-do:before {
-    content: "\e928";
-}
-.icon-map-pin:before {
-    content: "\e929";
-}
-.icon-badge:before {
-    content: "\e92a";
-}
-.icon-drawing-compass:before {
-    content: "\e92b";
-}
-.icon-cube:before {
-    content: "\e92c";
-}
-.icon-medical-center:before {
-    content: "\e92d";
-}
-.icon-clinic:before {
-    content: "\e92e";
-}
-.icon-id-badge:before {
-    content: "\e92f";
-}
-.icon-stop-watch-2:before {
+.icon-construction_icon:before {
     content: "\e900";
 }
-.icon-info-solid:before {
+.icon-education_icon:before {
     content: "\e901";
 }
-.icon-favorite:before {
+.icon-engineering_icon:before {
     content: "\e902";
+}
+.icon-farming_icon:before {
+    content: "\e903";
+}
+.icon-exit_icon:before {
+    content: "\e929";
+}
+.icon-piggbank_outline_icon:before {
+    content: "\e917";
+}
+.icon-share_icon:before {
+    content: "\e918";
+}
+.icon-sick_outline_icon:before {
+    content: "\e919";
+}
+.icon-tipjar_outline_icon:before {
+    content: "\e91a";
+}
+.icon-vacation_outline_icon:before {
+    content: "\e91b";
+}
+.icon-heart_outline_icon:before {
+    content: "\e91c";
+}
+.icon-info_outline_icon:before {
+    content: "\e91d";
+}
+.icon-insurance_outline_icon:before {
+    content: "\e91e";
+}
+.icon-location_outline_icon:before {
+    content: "\e91f";
+}
+.icon-moneybag_outline_icon:before {
+    content: "\e920";
+}
+.icon-commission_icon:before {
+    content: "\e921";
+}
+.icon-discount_outline_icon:before {
+    content: "\e922";
+}
+.icon-employeebadge_outline_icon:before {
+    content: "\e923";
+}
+.icon-calendar_outline_icon:before {
+    content: "\e924";
+}
+.icon-checklist_outline_icon:before {
+    content: "\e925";
+}
+.icon-clock_outlone_icon:before {
+    content: "\e926";
+}
+.icon-building_outline_icon:before {
+    content: "\e927";
+}
+.icon-bonus_outline_icon:before {
+    content: "\e928";
 }
 

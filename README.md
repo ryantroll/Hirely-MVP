@@ -59,6 +59,9 @@ unzip WeightedScores.json.zip
 mongoimport --db hirely --drop --type=json --jsonArray --collection=onetScores  --file=WeightedScores.json
 ```
 
+Importing ONET occupation icons
+cd seeddata
+mongoimport --db hirely --type csv --headerline --file onetIcons.csv
 
 ----------
 

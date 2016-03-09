@@ -15,7 +15,8 @@
         $scope.business = business;
         $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
 
-        $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business)
+        $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
+
 
         /**
          * Check if user is logged in and move to next promise
@@ -26,6 +27,7 @@
         console.log(err);
         // $scope.dataLoaded = true;
         $scope.dataError = true;
+        return AuthService.getAuth();
       }
     )
     .then(
@@ -94,12 +96,28 @@
       $scope.aggregatedWeekTimes = AvailabilityService.getWeeklyAggregatedArray($scope.location.hoursOfOperation);
 
       $scope.otherPositions = [];
+      var strOccIds = [];
       for(var pos in $scope.business.positions){
+        strOccIds.push($scope.business.positions[pos].occId);
         //// add position in same location only
         if($scope.business.positions[pos].location_id === $scope.location._id ){
           $scope.otherPositions.push($scope.business.positions[pos]);
         }
       }
+
+      BusinessService.getPositionDisplayData(strOccIds.join('|'))
+      .then(
+        function(iconData){
+          console.log(iconData)
+          for(var x=0; x<iconData.legnth; x++){
+
+          }
+        },
+        function(error){
+
+        }
+      )
+
       console.log($scope.otherPositions)
       $timeout(function() {
         $scope.dataLoaded = true;
