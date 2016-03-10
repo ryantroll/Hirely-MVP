@@ -23,7 +23,7 @@ config.urlSeparator = '-';
  * [extractTraitifyMeta congiration option if set to false will stop the code from proccessing the meta of traitify with each assessment save]
  * @type {Boolean}
  */
-config.extractTraitifyMeta = true;
+config.extractTraitifyMeta = false;
 /**
  * [saveTraitifyFamousPeople if set to true will add the famous people to traitify meta processing]
  * @type {Boolean}

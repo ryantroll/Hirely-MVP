@@ -248,44 +248,45 @@ var traitifySevice = {
     var summary = extractPersonalitySummary(data);
     summary.extId = examId;
 
-    // Add career match scores
+    console.log("Getting career matches for "+examId);
     this.getAssessmentCareerMatchesById(examId).then(function(matches) {
+        try {
+            console.log("Got career matches for " + examId);
 
-        // Note:  Mongo will group occIds by parts, separated by '.', so
-        // replace with ','
-        var matches2 = {};
-        Object.keys(matches).forEach(function(occId) {
-            matches2[occId.replace('.', ',')] = matches[occId];
-        });
-        summary.careerScores = matches2;
+            // Note:  Mongo will group occIds by parts, separated by '.', so
+            // replace with ','
+            var matches2 = {};
+            Object.keys(matches).forEach(function (occId) {
+                matches2[occId.replace('.', ',')] = matches[occId];
+            });
+            summary.careerScores = matches2;
 
-        /**
-         * Save summary to user profile
-         */
-        userModel.findById(userId).exec()
-            .then(
-                function(user){
-                    /**
-                     * User found update personality exam
-                     */
-                    user.personalityExams = [summary];
+        } catch(err) {
+            console.log("Error getting career matches: " + matches);
+        }
 
-                    user.save(function(err, obj){
-                        if(err){
-                            deferred.reject(err);
-                        }
-                        else{
-                            deferred.resolve(obj.personalityExams[0]);
-                        }
-                    })
-
-                },//// fun. Resolve
-                function(err){
-                    deferred.reject(err);
-                }//// fun. reject
-        )//// findById.then
-
+        console.log("Updating Personality Summary");
+        userModel.findById(userId).exec().then(
+            function(user){
+                user.personalityExams = [summary];
+                user.save(function(err, obj){
+                    if(err){
+                        console.log("User save failed");
+                        deferred.reject(err);
+                    }
+                    else{
+                        deferred.resolve(obj.personalityExams[0]);
+                    }
+                });
+            },
+            function(err){
+                console.log("User find failed");
+                deferred.reject(err);
+            }
+        );
     });
+
+    //});
 
     /**
      * end this method if config option set to stop extracting traitify meta
