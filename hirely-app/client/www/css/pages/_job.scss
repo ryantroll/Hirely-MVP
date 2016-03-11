@@ -286,10 +286,13 @@
                     border-bottom:1px solid $c-hirely-gray;
                     padding:1em 1em 1em 0;
                     a{
-                        color:$c-hirely-dark-gray;
+                        // color:$c-hirely-dark-gray;
                     }
                     a:hover{
                         color:$c-hirely-blue;
+                        h4{
+                            color:inherit;
+                        }
                     }
                     .icon{
                         width:20%;
@@ -308,6 +311,7 @@
                             margin-bottom: 3px;
                             font-size:1.5em;
                             font-weight: normal;
+                            color:$c-hirely-dark-gray;
                         }
                         p{
                             margin:0;

@@ -43,11 +43,12 @@
          * User in not logged in
          */
         $scope.isAuth = false;
-        console.log(AuthService.currentUserID)
+
       }
     )
     .finally(
       function(){
+
         initialize();
       }
     );
@@ -57,6 +58,7 @@
     var sideBar = angular.element('#sideBar');
     var stickyHeader = angular.element('#stickyHeader');
     var posDetails = angular.element('#posDetails');
+
 
     function posWindowScroll(e){
       var diff = posDetails.offset().top - $(e.target).scrollTop();
@@ -89,37 +91,74 @@
 
     function initialize(){
 
+      /**
+       * Check for data error first of all
+       */
+      $scope.dataError = !$scope.business || !$scope.location || !$scope.position;
+
+      /**
+       * don't continue if there is a data error
+       */
+      if($scope.dataError){
+        $scope.dataLoaded = true;
+        return;
+      }
+
 
       $scope.numOfBenefits = getNumOfBenefits();
       $scope.workTypeTitle = BusinessService.getWorkTypeTitle($scope.position.workType);
 
+      /**
+       * [aggregatedWeekTimes will hold array of location operation hours]
+       * @type {[Array]}
+       */
       $scope.aggregatedWeekTimes = AvailabilityService.getWeeklyAggregatedArray($scope.location.hoursOfOperation);
 
+      /**
+       * [otherPositions this will hold an array of position be be displayed in sidebar]
+       * @type {Array}
+       */
       $scope.otherPositions = [];
+
+      /**
+       * [strOccIds will hold an array of ALL occupations that we need to retrieve the display data form them icon and color ]
+       * @type {Array}
+       */
       var strOccIds = [];
+
+      /**
+       * Loop through the positions and build the other position array and array of occupations IDs
+       */
       for(var pos in $scope.business.positions){
         strOccIds.push($scope.business.positions[pos].occId);
         //// add position in same location only
-        if($scope.business.positions[pos].location_id === $scope.location._id ){
+        if(
+          $scope.business.positions[pos].location_id === $scope.location._id
+          && $scope.business.positions[pos]._id !== $scope.position._id
+        ){
           $scope.otherPositions.push($scope.business.positions[pos]);
         }
       }
 
+      /**
+       * Get the icons and colors data for all occupations needed for this page
+       */
       BusinessService.getPositionDisplayData(strOccIds.join('|'))
       .then(
         function(iconData){
-          console.log(iconData)
-          for(var x=0; x<iconData.legnth; x++){
-
-          }
+          $scope.iconData = iconData;
         },
         function(error){
-
+          console.log(error)
         }
       )
 
-      console.log($scope.otherPositions)
+
+      /**
+       * Wait for some time and before showing the page
+       */
       $timeout(function() {
+
         $scope.dataLoaded = true;
       }, 200);
 
@@ -148,9 +187,17 @@
         // });//// uiGmapGoogleMapApi.them
       }//// if isAuth
 
+
+      /**
+       * Bind the scroll event of the page
+       */
       angular.element(window).on('scroll', posWindowScroll)
     }//// fun. initialize
 
+    /**
+     * [getNumOfBenefits will return the number of benefits that is set to true]
+     * @return {[Number]} [description]
+     */
     var getNumOfBenefits = function(){
       var numOfBenefits = 0;
       for(var ben in $scope.position.benefits){
@@ -164,10 +211,43 @@
       $state.go('application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
     }
 
+    $scope.otherPositionClick = function(slug){
+      $state.go('job.position', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:slug});
+    }
 
+    /**
+     * [getWorkTypeTitle will return the work type in a displayable way like part-time -> Part Time]
+     * @param  {[String]} type [the work type that is saved in DB]
+     * @return {[String]}      [description]
+     */
     $scope.getWorkTypeTitle = function(type){
       return BusinessService.getWorkTypeTitle(type);
     }
+
+    /**
+     * [getPositionIcon this function will be called from template to get the display property needed for each position based on occupation id]
+     * @param  {[String]} occId    [onet occupation id for the position ]
+     * @param  {[String]} property [the property of display object needed e.g. icon, cssClass, iconColor]
+     * @return {[String]}          [description]
+     */
+    $scope.getPositionIcon = function(occId, property){
+
+      if(!occId || !Array.isArray($scope.iconData)){
+        return null;
+      }
+      var icon;
+      for(var x=0; x<$scope.iconData.length; x++){
+          if($scope.iconData[x].occId == occId){
+            icon = $scope.iconData[x];
+            break;
+          }
+      }/// for
+
+      if(angular.isDefined(icon) && angular.isDefined(icon[property])){
+        return icon[property];
+      }
+      return null;
+    }//// fun. getIcon
 
   }//// fun. JobController
 

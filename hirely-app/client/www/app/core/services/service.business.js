@@ -92,8 +92,14 @@
           }
         }//// fun. positionBySlug
 
+        /**
+         * [getPositionDisplayData will retrieve the icon data for a list of occupations by their ids]
+         * @param  {[String]} onetId [String contains the occupations IDs separated by | character]
+         * @return {[Promise]}        [description]
+         */
         this.getPositionDisplayData = function(onetId){
           var deferred = $q.defer();
+
 
           HirelyApiService.businesses('positionIcon', {occId:onetId}).get()
           .then(

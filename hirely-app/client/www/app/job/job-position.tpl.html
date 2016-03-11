@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="title">
-                            <span class="icon icon-{{positionIcon.cssClass}}" style="color:{{positionIcon.iconColor}}"></span>
+                            <span class="icon icon-{{getPositionIcon(position.occId, 'cssClass')}}" style="color:{{getPositionIcon(position.occId, 'iconColor')}}"></span>
                             <h1>{{position.title}}</h1>
                             <h2>{{business.name}}</h2>
                             <h3>{{location.city}}, {{location.state}}</h3>
@@ -196,15 +196,15 @@
                         </div>
                     </div><!--box-->
 
-                    <div class="box" ng-show="otherPositions.length > 1 || true">
+                    <div class="box" ng-show="otherPositions.length > 1">
                         <div class="title gray">
                             <h3>OTHER Positions at location</h3>
                         </div>
                         <div class="positions-list">
                             <ul>
                                 <li ng-repeat="_pos in otherPositions">
-                                    <a href="javascript:void(0);">
-                                        <div class="icon icon-management_icon" style="color:{{_pos.displayData.iconColor}}"></div>
+                                    <a href="javascript:void(0);" ng-click="otherPositionClick(_pos.slug)" style="color:{{getPositionIcon(_pos.occId, 'iconColor')}}">
+                                        <div class="icon icon-{{getPositionIcon(_pos.occId, 'cssClass')}}" style="color:{{getPositionIcon(_pos.occId, 'iconColor')}}"></div>
                                         <div class="copy">
                                             <h4>{{_pos.title}}</h4>
                                             <p>${{_pos.compensation.wageAmount}} {{_pos.compensation.wageType}} - {{getWorkTypeTitle(_pos.workType)}}</p>
