@@ -1,6 +1,10 @@
-var userModel = require('../models/user.model');
-var idMapModel = require('../models/useridmap.model');
+'use strict';
 var q = require('q');
+var userModel = require('../models/user.model');
+var onetScoresService = require('../services/onetScores.service');
+var idMapModel = require('../models/useridmap.model');
+var matchingService = require('../services/matching.service');
+
 
 /**
  * [privateFields array to define the names of private fields in user objects]
@@ -17,6 +21,14 @@ var privateFields = [
     'workExperience',
     'education'
 ];
+
+function monthDiff(d1, d2) {
+    var months;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth() + 1;
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
+}
 
 
 var userService = {
@@ -249,94 +261,131 @@ var userService = {
         return deferred.promise;
     },  //// fun. saveUser
 
+    monthCountToExperienceLevel: function(monthCount) {
+        if      (monthCount > 124) { return 124; }
+        else if (monthCount > 98) { return 98; }
+        else if (monthCount > 64) { return 64; }
+        else if (monthCount > 48) { return 48; }
+        else if (monthCount > 24) { return 24; }
+        else if (monthCount > 12) { return 12; }
+        else if (monthCount > 6) { return 6; }
+        else if (monthCount > 3) { return 3; }
+        else if (monthCount > 1) { return 1; }
+        else { return 0; }
+    },
 
-    updateUserMetrics: function(user) {
+    updateUserMetrics: function(userId) {
+        console.log("257");
 
-        // Education
-        user.educationMaxLvl = 0;
-        user.education.forEach(function(program) {
-            // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
-            if (program.programType > 1 && program.isCompleted == 0) {
-                program.programType = 2;
-            }
-            if (program.programType > educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
-                user.educationMaxLvl = program.programType;
-            }
-        });
+        return userModel.findById(userId).then(function(user) {
+            console.log("258");
 
-
-        // Clear the old Ksa
-        user.knowledges = user.skills = user.abilities = user.workActivities = [];
-
-        // Concat roles
-        var roles = {};
-        var totalWorkMonths = 0;
-        var occIds = [];
-        user.workExperiences.forEach(function (workExperience) {
-            totalWorkMonths += workExperience.monthCount;
-            occIds.push(workExperience.occId);
-
-            // If role doesn't already exist, create it
-            if (roles.indexOf(workExperience.occId) == -1) {
-                roles[workExperience.occId] = {"monthCount": 0};
-            }
-            var role = roles[workExperience.occId];
-            role.monthCount += workExperience.monthCount;
-            role.expLvl = this.monthCountToExperienceLevel(role.monthCount)
-        });
-
-
-        // Retrieve the role occupations from OnetScore
-        var promises = [];
-        Object.keys(roles).forEach(function(key) {
-            promises.push(OnetScore.findOne(key))
-        });
-
-        // Wait until retrieves are done
-        return Q.all(promises).then(function(occupations) {
-
-            // Extend roles with onet metrics
-            occupations.forEach(function(occupation) {
-                var role = roles[occupation.occId]
-                    ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
-                    role[category] = data[role.expLvl][category]
-                });
+            // Education
+            user.educationMaxLvl = 0;
+            user.education.forEach(function (program) {
+                // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
+                if (program.programType > 1 && program.isCompleted == 0) {
+                    program.programType = 2;
+                }
+                if (program.programType > educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
+                    user.educationMaxLvl = program.programType;
+                }
             });
 
 
-            // Calc master KSAs;
-            roles.forEach(function(role) {
-                // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
-                var weight = role.expLvl / totalWorkMonths;
+            // Clear the old Ksa
+            console.log("259");
+            ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function (category) {
+                user.scores[category] = {};
+            });
 
-                ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function(category) {
-                    role[category].forEach(function(value, name) {
-                        var weighted = weight * value;
-                        if (user[category] === null) {
-                            user[category][name] = weighted;
-                        } else {
-                            user[category][name] += weighted;
-                        }
-                    });
-                });
+            // Concat roles
+            var roles = {};
+            var totalWorkMonths = 0;
+            for (let workExperience of user.workExperience) {
+                var occId = workExperience.onetOccupationId;
+                console.log("260");
+                var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
+                totalWorkMonths += monthCount;
 
-            });  // end roles.forEach
-
-            return user.save().then(
-                function(user) {
-                   return MatchService.generateCareerMatchScoresForUser(user);
-                },
-                function(error){
-                    console.log(error);
+                // If role doesn't already exist, create it
+                if (!(occId in roles)) {
+                    roles[occId] = {"monthCount": 0, "expLvl": 0};
                 }
-            );
 
-        }).catch(function(error) {
-            // Do whatever happens if one or more errored
-        });  // end Q.all()
+                roles[occId].monthCount += monthCount;
+                roles[occId].expLvl = userService.monthCountToExperienceLevel(roles[occId].monthCount)
+            }
 
-    },  // end updateUserMetrics
 
-}/// users object
+            // Retrieve the role occupations from OnetScore
+            console.log("261");
+            var promises = [];
+            for (var key in roles) {
+                promises.push(onetScoresService.findById(key));
+            }
+
+            // Wait until retrieves are done
+            return q.all(promises).then(function (occScoresArray) {
+                console.log("262");
+
+                // Extend roles with onet metrics
+                for (let occScores of occScoresArray) {
+                    var occScoresExpLvl = onetScoresService.internalExperienceLevelToOnetScoresExperienceLvl(roles[occScores._id].expLvl);
+                    var occScoresForExp = occScores.scores[occScoresExpLvl].toObject();
+                    for (let cat of ['knowledges', 'skills', 'abilities', 'workActivities']) {
+                        var onetScoreCat = onetScoresService.getOnetScoreCategoryFromInternalCategory(cat);
+                        roles[occScores._id][cat] = occScoresForExp[onetScoreCat];
+                    }
+                }
+
+
+                // Calc master KSAs
+                console.log("263");
+                var scores = {'knowledges': {}, 'skills': {}, 'abilities': {}, 'workActivities': {}};
+                for (var occId in roles) {
+                    console.log("264");
+                    // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
+                    var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(2);
+
+                    for (var category in roles[occId]) {
+                        console.log("265");
+                        for (var key in roles[occId][category]) {
+                            console.log("266");
+                            var weighted = weight * roles[occId][category][key].toFixed(2);
+                            if (key in scores[category]) {
+                                console.log("267");
+                                scores[category][key] += weighted;
+                            } else {
+                                console.log("268");
+                                scores[category][key] = weighted;
+                            }
+                        }
+                    }
+                }  // end roles.forEach
+                user.scores = scores;
+
+                console.log("265");
+                return user.save().then(
+                    function (user) {
+                        return matchingService.generateCareerMatchScoresForUser(user);
+                    },
+                    function (error) {
+                        console.log(error);
+                    }
+                );
+
+
+            }).catch(function (error) {
+                console.dir(error);
+                raise(error);
+                // Do whatever happens if one or more errored
+            });  // end q.all()
+
+        }); // end find user
+
+    }  // end updateUserMetrics
+
+}; /// users object
 
 module.exports = userService;

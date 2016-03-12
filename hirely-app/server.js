@@ -1,6 +1,3 @@
-/**
- * Created by labrina.loving on 9/18/2015.
- */
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -10,6 +7,8 @@ var logger = require('morgan');
 var tinylr  = require('tiny-lr');
 
 var config = require('./server/config');
+
+var onetScoresService = require('./server/services/onetScores.service');
 
 /** MongoDB **/
 var mongoose = require('mongoose');
@@ -57,3 +56,14 @@ app.listen(port, function() {
         '\n__dirname = ' + __dirname  +
         '\nprocess.cwd = ' + process.cwd());
 });
+
+if (config.primeOnetScoresCache) {
+    onetScoresService.getAll().then(
+        function(onetScoresCache) {
+            console.log("onetScoresCache is primed");
+        },
+        function(err) {
+            console.log("onetScoresCache error: " +err);
+        }
+    );
+}

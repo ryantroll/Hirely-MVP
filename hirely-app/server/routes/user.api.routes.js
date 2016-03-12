@@ -81,6 +81,18 @@ var userRoutes = {
     }, //// fun. saveUser
 
 
+    updateUserMetrics: function(req, res){
+        userService.updateUserMetrics(req.params.id).then(
+            function(user) {
+                res.status(200).json(apiUtil.generateResponse(200, "User updated successfully", user));
+            },
+            function(error){
+                //// user couldn't be saved 404
+                res.status(404).json(apiUtil.generateResponse(404, error, null));
+            }
+        );
+    }
+
 }/// users object
 
 module.exports = userRoutes;

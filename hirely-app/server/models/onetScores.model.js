@@ -65,6 +65,6 @@ var onetScoresSchema = new Schema({
 });
 
 
-var onetScores = mongoose.model('OnetScores', onetScoresSchema, "onetScores");
+var onetScoresModel = mongoose.model('OnetScores', onetScoresSchema, "onetScores");
 
-module.exports = onetScores;
+module.exports = onetScoresModel;

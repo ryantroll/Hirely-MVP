@@ -30,5 +30,11 @@ config.extractTraitifyMeta = false;
  */
 config.saveTraitifyFamousPeople = false;
 
+/**
+ * [primeOnetScoresCache if set to true will prime the onetScoresCache in onetScoresService]
+ * @type {Boolean}
+ */
+config.primeOnetScoresCache = true;
+
 
 module.exports = config;
