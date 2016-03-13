@@ -56,7 +56,7 @@ for occScore in arr:
 			for ksaw_name, ksaw_set  in expLvl_scores.iteritems():
 				ksaw_set2 = {}
 				for elem_comp in ksaw_set:
-					ksaw_set2[elem_comp['Element Component']] = round(float(elem_comp['Values']), 2)
+					ksaw_set2[elem_comp['Element Component']] = round(float(elem_comp['Values']), 4)
 
 				scores2['scores'][expLvlByMonth][ksaw_name] = ksaw_set2
 
