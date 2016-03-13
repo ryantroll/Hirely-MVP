@@ -19,7 +19,7 @@ var MatchService = {
     expLvls: [0, 3, 6, 12, 24, 48, 64, 98, 124], // tiers of experience where level = num of months
     defaultExpWeight: .3,
     //defaultEduWeight: .1,
-    defaultPsyWeight: .3,
+    defaultPsyWeight: .7,
     minimumSuggestionThreshold: 60,
 
     // This should be an api endpoint;
@@ -51,8 +51,6 @@ var MatchService = {
                         // Calc std deviation of ksaw
                         if (expLvl != 0) {
                             for (var category in userScores) {
-                                var onetScoreCat = onetScoresService.getOnetScoreCategoryFromInternalCategory(category);
-                                var onetScorExpLvl = onetScoresService.internalExperienceLevelToOnetScoresExperienceLvl(expLvl);
                                 try {
                                     userScores[category] = userScores[category].toObject();
                                 } catch(err) {
@@ -60,9 +58,9 @@ var MatchService = {
                                 }
                                 //console.log("44");
                                 for (var key in userScores[category]) {
-                                    var oScore = onetScoresInstance.scores[onetScorExpLvl][onetScoreCat][key];
+                                    var oScore = onetScoresInstance.scores[expLvl][category][key];
                                     ss_user_all.push(Math.pow(userScores[category][key] - oScore, 2));
-                                    ss_occ_all.push(Math.pow(onetScoresInstance.scores[onetScorExpLvl][onetScoreCat][key], 2));
+                                    ss_occ_all.push(Math.pow(onetScoresInstance.scores[expLvl][category][key], 2));
                                 }
                             }
                         }
@@ -72,9 +70,9 @@ var MatchService = {
                         if (ss_user_all.length === 0) {
                             expScore = 0;
                         } else {
-                            var ss_user_all_sum = Number(ss_user_all.reduce(function(a, b) {return a + b;})).toFixed(2);
-                            var ss_occ_all_sum = Number(ss_occ_all.reduce(function (a, b) {return a + b;})).toFixed(2);
-                            var expScore = 1 - Number(Math.sqrt(ss_user_all_sum / ss_occ_all_sum)).toFixed(2);
+                            var ss_user_all_sum = Number(ss_user_all.reduce(function(a, b) {return a + b;})).toFixed(4);
+                            var ss_occ_all_sum = Number(ss_occ_all.reduce(function (a, b) {return a + b;})).toFixed(4);
+                            var expScore = 1 - Number(Math.sqrt(ss_user_all_sum / ss_occ_all_sum)).toFixed(4);
                             // TODO:  Ask Dave why we need to do this?  Won't expScore always be > 0?
                             expScore = Math.max(expScore, 0);
                         }

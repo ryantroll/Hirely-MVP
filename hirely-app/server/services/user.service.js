@@ -295,7 +295,7 @@ var userService = {
 
             // Clear the old Ksa
             console.log("259");
-            ['knowledges', 'skills', 'abilities', 'workActivities'].forEach(function (category) {
+            ['Knowledge', 'Skills', 'Abilities', 'WorkActivities'].forEach(function (category) {
                 user.scores[category] = {};
             });
 
@@ -331,33 +331,31 @@ var userService = {
 
                 // Extend roles with onet metrics
                 for (let occScores of occScoresArray) {
-                    var occScoresExpLvl = onetScoresService.internalExperienceLevelToOnetScoresExperienceLvl(roles[occScores._id].expLvl);
-                    var occScoresForExp = occScores.scores[occScoresExpLvl].toObject();
-                    for (let cat of ['knowledges', 'skills', 'abilities', 'workActivities']) {
-                        var onetScoreCat = onetScoresService.getOnetScoreCategoryFromInternalCategory(cat);
-                        roles[occScores._id][cat] = occScoresForExp[onetScoreCat];
+                    var occScoresForExp = occScores.scores[roles[occScores._id].expLvl].toObject();
+                    for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
+                        roles[occScores._id][cat] = occScoresForExp[cat].toObject();
                     }
                 }
 
 
                 // Calc master KSAs
                 console.log("263");
-                var scores = {'knowledges': {}, 'skills': {}, 'abilities': {}, 'workActivities': {}};
+                var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
                 for (var occId in roles) {
                     console.log("264");
                     // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
-                    var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(2);
+                    var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
 
                     for (var category in roles[occId]) {
-                        console.log("265");
+                        //console.log("265");
                         for (var key in roles[occId][category]) {
-                            console.log("266");
-                            var weighted = weight * roles[occId][category][key].toFixed(2);
+                            //console.log("266");
+                            var weighted = Number(weight * roles[occId][category][key]).toFixed(4);
                             if (key in scores[category]) {
-                                console.log("267");
+                                //console.log("267");
                                 scores[category][key] += weighted;
                             } else {
-                                console.log("268");
+                                //console.log("268");
                                 scores[category][key] = weighted;
                             }
                         }
@@ -365,7 +363,7 @@ var userService = {
                 }  // end roles.forEach
                 user.scores = scores;
 
-                console.log("265");
+                console.log("269");
                 return user.save().then(
                     function (user) {
                         return matchingService.generateCareerMatchScoresForUser(user);

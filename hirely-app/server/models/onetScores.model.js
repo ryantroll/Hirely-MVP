@@ -8,58 +8,58 @@ var onetScoresSchema = new Schema({
     // TODO:  Explicitly specify each ksaw
     scores: {
         0: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         3: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         6: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         12: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         24: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         48: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         64: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         98: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         },
         124: {
-            knowledges          :       {type:freeSchema, required:false},
-            skills              :       {type:freeSchema, required:false},
-            abilities           :       {type:freeSchema, required:false},
-            workActivities      :       {type:freeSchema, required:false}
+            Knowledge          :       {type:freeSchema, required:false},
+            Skills              :       {type:freeSchema, required:false},
+            Abilities           :       {type:freeSchema, required:false},
+            WorkActivities      :       {type:freeSchema, required:false}
         }
     }
 });

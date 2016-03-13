@@ -230,7 +230,7 @@ var traitifySevice = {
     traitify.getCareerMatches(assessmentId, params, function (matchesRaw) {
         var matches = {};
         matchesRaw.forEach(function (match) {
-            matches[match.career.id] = match.score.toFixed(2);
+            matches[match.career.id] = match.score.toFixed(4);
         });
         console.log("Career Match Count: "+Object.keys(matches).length);
         deferred.resolve(matches);
