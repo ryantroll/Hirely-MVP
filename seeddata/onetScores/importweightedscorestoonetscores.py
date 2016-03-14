@@ -24,16 +24,17 @@ arr = json.loads(f.read())
 
 def getExpLvlByMonth(expLvl):
     lookup = {
-        '0': '0',
-        '1': '1',
-        '2': '3',
-        '3': '6',
-        '4': '12',
-        '5': '24',
-        '6': '48',
-        '7': '64',
-        '8': '98',
-        '9': '124'
+        '1': '0',
+        '2': '0',
+        '3': '1',
+        '4': '3',
+        '5': '6',
+        '6': '12',
+        '7': '24',
+        '8': '48',
+        '9': '72',
+        '10': '96',
+        '11': '120'
     };
     return lookup[expLvl];
 
@@ -48,7 +49,7 @@ for occScore in arr:
 		scores2 = {'_id': occId, 'scores': {}}
 		
 		for expLvl, expLvl_scores in scores.iteritems():
-			if int(expLvl) > 9:
+			if int(expLvl) == 2:
 				continue
 			expLvlByMonth = getExpLvlByMonth(expLvl)
 			scores2['scores'][expLvlByMonth] = {}
