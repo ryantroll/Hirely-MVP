@@ -262,9 +262,9 @@ var userService = {
     },  //// fun. saveUser
 
     monthCountToExperienceLevel: function(monthCount) {
-        if      (monthCount > 124) { return 124; }
-        else if (monthCount > 98) { return 98; }
-        else if (monthCount > 64) { return 64; }
+        if      (monthCount > 120) { return 120; }
+        else if (monthCount > 96) { return 96; }
+        else if (monthCount > 72) { return 72; }
         else if (monthCount > 48) { return 48; }
         else if (monthCount > 24) { return 24; }
         else if (monthCount > 12) { return 12; }
@@ -275,10 +275,10 @@ var userService = {
     },
 
     updateUserMetrics: function(userId) {
-        console.log("257");
+        //console.log("257");
 
         return userModel.findById(userId).then(function(user) {
-            console.log("258");
+            //console.log("258");
 
             // Education
             user.educationMaxLvl = 0;
@@ -294,17 +294,17 @@ var userService = {
 
 
             // Clear the old Ksa
-            console.log("259");
-            ['Knowledge', 'Skills', 'Abilities', 'WorkActivities'].forEach(function (category) {
-                user.scores[category] = {};
-            });
+            //console.log("259");
+            for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
+                user.scores[cat] = {};
+            };
 
             // Concat roles
             var roles = {};
             var totalWorkMonths = 0;
             for (let workExperience of user.workExperience) {
                 var occId = workExperience.onetOccupationId;
-                console.log("260");
+                //console.log("260");
                 var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
                 totalWorkMonths += monthCount;
 
@@ -319,7 +319,7 @@ var userService = {
 
 
             // Retrieve the role occupations from OnetScore
-            console.log("261");
+            //console.log("261");
             var promises = [];
             for (var key in roles) {
                 promises.push(onetScoresService.findById(key));
@@ -327,7 +327,7 @@ var userService = {
 
             // Wait until retrieves are done
             return q.all(promises).then(function (occScoresArray) {
-                console.log("262");
+                //console.log("262");
 
                 // Extend roles with onet metrics
                 for (let occScores of occScoresArray) {
@@ -339,10 +339,10 @@ var userService = {
 
 
                 // Calc master KSAs
-                console.log("263");
+                //console.log("263");
                 var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
                 for (var occId in roles) {
-                    console.log("264");
+                    //console.log("264");
                     // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
                     var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
 
@@ -363,7 +363,7 @@ var userService = {
                 }  // end roles.forEach
                 user.scores = scores;
 
-                console.log("269");
+                //console.log("269");
                 return user.save().then(
                     function (user) {
                         return matchingService.generateCareerMatchScoresForUser(user);

@@ -16,7 +16,7 @@ var Applications = require('../models/application.model');
 
 var MatchService = {
     // I have this list, when you are ready;
-    expLvls: [0, 3, 6, 12, 24, 48, 64, 98, 124], // tiers of experience where level = num of months
+    expLvls: [0, 1, 3, 6, 12, 24, 48, 72, 96, 120], // tiers of experience where level = num of months
     defaultExpWeight: .3,
     //defaultEduWeight: .1,
     defaultPsyWeight: .7,
@@ -33,7 +33,7 @@ var MatchService = {
             return onetScoresService.getAll().then(function(onetScoresAll) {
                 //console.log("40");
                 var careerMatchScoresArray = [];
-                var careerScores = user.personalityExams[0].careerScores.toObject();
+                var careerScores = user.personalityExams[0].careerMatchScores.toObject();
                 var userScores = user.scores.toObject();
                 for (var occId in onetScoresAll) {
                     var onetScoresInstance = onetScoresAll[occId].toObject();
@@ -74,7 +74,7 @@ var MatchService = {
                             var ss_occ_all_sum = Number(ss_occ_all.reduce(function (a, b) {return a + b;})).toFixed(4);
                             var expScore = 1 - Number(Math.sqrt(ss_user_all_sum / ss_occ_all_sum)).toFixed(4);
                             // TODO:  Ask Dave why we need to do this?  Won't expScore always be > 0?
-                            expScore = Math.max(expScore, 0);
+                            expScore = Math.max(expScore, 0) * 100;
                         }
                         scores[expLvl].exp = Number(expScore).toFixed(2);
 
@@ -89,11 +89,10 @@ var MatchService = {
                         var occIdTrans = onetScoresInstance._id.replace('.', ',');
                         var psyScore = careerScores[occIdTrans];
                         if (!psyScore) {
-                            // TODO:  Confirm this doesn't happen anymore
-                            //console.log("Career Score missing from traitify:  "+onetScoresInstance._id);
+                            console.log("Career Score missing from traitify:  "+onetScoresInstance._id);
                             psyScore = 0;
                         }
-                        scores[expLvl].psy = psyScore;
+                        scores[expLvl].psy = Number(psyScore).toFixed(2);
 
                         // Grand overallScore calcs;
                         //console.log("50");

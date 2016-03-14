@@ -39,7 +39,7 @@ var personalitySchema = new Schema({
                                 name:String,
                                 personalityTypes:[customId]
                               },
-  careerScores        :       {type:freeSchema, required:false}
+  careerMatchScores        :       {type:freeSchema, required:false}
 
 });
 

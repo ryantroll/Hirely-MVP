@@ -34,8 +34,8 @@ var traitifyRoutes = {
         res.status(200).json(apiUtil.generateResponse(200, "Assesment Id retrieved", testResponse));
     },
 
-    getAssessmentCareerMatchesById: function (req, res){
-        traitifyService.getAssessmentCareerMatchesById(req.params.id, req.query)
+    getAssessmentCareerMatchScoresById: function (req, res){
+        traitifyService.getAssessmentCareerMatchScoresById(req.params.id, req.query)
             .then(
                 function(matches){
                     res.status(200).json(apiUtil.generateResponse(200, "Matches retrieved successfully", matches));
@@ -48,15 +48,15 @@ var traitifyRoutes = {
     },
 
     // This function for testing
-    updateAssessmentCareerMatchesByUserId: function (req, res){
-        traitifyService.updateAssessmentCareerMatchesByUserId(req.params.id, req.query)
+    updateAssessmentCareerMatchScoresByUserId: function (req, res){
+        traitifyService.updateAssessmentCareerMatchScoresByUserId(req.params.id, req.query)
             .then(
                 function(matches){
                     res.status(200).json(apiUtil.generateResponse(200, "Matches retrieved successfully", matches));
                 },
                 function(error){
                     //// user couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(404, "Matches couldn't be located", null));
+                    res.status(500).json(apiUtil.generateResponse(500, "Matches couldn't be located: "+error, null));
                 }
             );
     }

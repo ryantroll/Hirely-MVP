@@ -13,6 +13,12 @@ var careerMatchScoresSchema = new Schema({
             psy      :       {type:Number, required:true},
             overall  :       {type:Number, required:true}
         },
+        1: {
+            exp      :       {type:Number, required:true},
+            // edu      :       {type:Number, required:true},
+            psy      :       {type:Number, required:true},
+            overall  :       {type:Number, required:true}
+        },
         3: {
             exp      :       {type:Number, required:true},
             // edu      :       {type:Number, required:true},
@@ -43,19 +49,13 @@ var careerMatchScoresSchema = new Schema({
             psy      :       {type:Number, required:true},
             overall  :       {type:Number, required:true}
         },
-        64: {
+        72: {
             exp      :       {type:Number, required:true},
             // edu      :       {type:Number, required:true},
             psy      :       {type:Number, required:true},
             overall  :       {type:Number, required:true}
         },
-        98: {
-            exp      :       {type:Number, required:true},
-            // edu      :       {type:Number, required:true},
-            psy      :       {type:Number, required:true},
-            overall  :       {type:Number, required:true}
-        },
-        124: {
+        120: {
             exp      :       {type:Number, required:true},
             // edu      :       {type:Number, required:true},
             psy      :       {type:Number, required:true},
