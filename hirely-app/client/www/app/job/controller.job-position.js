@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$state', '$stateParams', '$timeout', 'AuthService', 'UserService', 'BusinessService', 'AvailabilityService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobPositionController]);
+  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'AuthService', 'UserService', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobPositionController]);
 
-  function JobPositionController($scope, $state, $stateParams, $timeout, AuthService, UserService, BusinessService, AvailabilityService, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, AuthService, UserService, BusinessService, AvailabilityService, FavoritesService, uiGmapGoogleMapApi, uiGmapIsReady) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -89,6 +89,13 @@
 
     }//// fun. posWindowScroll
 
+    /**
+     * Watch for user log out event
+     */
+    $scope.$on('UserLoggedOut', function(){
+      delete $scope.thisPositionFav;
+    })
+
     function initialize(){
 
       /**
@@ -151,14 +158,15 @@
         function(error){
           console.log(error)
         }
-      )
+      );
+
+
 
 
       /**
        * Wait for some time and before showing the page
        */
       $timeout(function() {
-
         $scope.dataLoaded = true;
       }, 200);
 
@@ -185,6 +193,22 @@
         //     optimizeWaypoints: true
         //   };
         // });//// uiGmapGoogleMapApi.them
+
+        /**
+         * find if user favorite this job
+         */
+        FavoritesService.getFavorite({type:'position', userId:AuthService.currentUserID, positionId: $scope.position._id})
+        .then(
+          function(found){
+            if(Array.isArray(found) && found.length > 0){
+              $scope.thisPositionFav = found[0];
+            }
+          },
+          function(err){
+            console.log(err)
+          }
+        );//// .then
+
       }//// if isAuth
 
 
@@ -248,6 +272,44 @@
       }
       return null;
     }//// fun. getIcon
+
+    $scope.favoriteClick = function(ev){
+      var me = angular.element(ev.target);
+      if($scope.isAuth && AuthService.currentUserID){
+        var favObj = {userId:AuthService.currentUserID};
+        favObj.positionId = $scope.position._id;
+        favObj.locationId = $scope.location._id;
+        favObj.businessId = $scope.business._id;
+        favObj.type = 'position';
+
+        me.attr('disabled', true);
+        FavoritesService.updateFavorite(favObj)
+        .then(
+          function(obj){
+            if(angular.isDefined(obj._id)){
+              //// favorite is added
+              $scope.thisPositionFav = obj;
+            }
+            else if(angular.isDefined(obj.deleted)){
+              //// favorite is deleted
+              delete $scope.thisPositionFav;
+            }
+            me.attr('disabled', false);
+          },
+          function(err){
+            me.attr('disabled', false);
+          }
+        );/// .then
+      }//// if CurrrentId
+      else{
+        /**
+         * user is not logged in redirect to login page after saving the current state in rootScope
+         * LoginController will detect this rootScope object and redirect back after login
+         */
+        $rootScope.nextState = {state:$state.current.name, params:$state.params};
+        $state.go('account.login');
+      }
+    }//// fun. favorite click
 
   }//// fun. JobController
 

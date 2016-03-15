@@ -204,6 +204,7 @@
 
             .box-inner{
                 padding:1em 1em 1em 1em;
+                width:100%;
             }
 
             .copy{
@@ -266,6 +267,11 @@
                     i{
                         margin-right:0.5em;
                         font-size: 1em;
+                    }
+                }
+                .btn.fav-active{
+                    i{
+                        color:$c-hirely-green;
                     }
                 }
                 .bth:last-child{
@@ -363,7 +369,7 @@
                 font-weight: 600;
                 font-size:1.3em;
                 i{
-                    font-size:1.3em;
+                    font-size:1.2em;
                     // height: 1em!important;
                     overflow: hidden;
                     display: inline-block;
@@ -372,10 +378,12 @@
             }
 
             .btn:nth-child(3n+1){
-                width:20%;
+                // width:20%;
+                width:80%
             }
             .btn:nth-child(3n+2){
-                width:60%;
+                // width:60%;
+                width:20%;
                 // margin-left:-2px;
             }
             .btn:nth-child(3n+3){

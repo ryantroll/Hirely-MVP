@@ -19,6 +19,7 @@ module.exports = function(app) {
     var businessApiRoutes = require('./routes/business.api.routes');
     var applicationApiRoutes = require('./routes/application.api.routes');
     var traitifyApiRoutes = require('./routes/traitify.api.routes');
+    var favoriteApiRoutes = require('./routes/favorite.api.routes');
 
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
@@ -64,6 +65,12 @@ module.exports = function(app) {
     app.get('/api/v1/applications/:id', applicationApiRoutes.getById);
     app.post('/api/v1/applications/', applicationApiRoutes.createNewApplication);
     app.patch('/api/v1/applications/:appId', applicationApiRoutes.saveApplication);
+
+    /**
+     * Adding routs for favorite
+     */
+    app.get('/api/v1/favorites', favoriteApiRoutes.getFavorites);
+    app.post('/api/v1/favorites', favoriteApiRoutes.updateFavorite);
 
     function getGooglePlacebyId(req, res) {
         var placeId = req.params.placeId;

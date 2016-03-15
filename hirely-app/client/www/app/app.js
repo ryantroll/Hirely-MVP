@@ -182,6 +182,11 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/account/login.tpl.html',
         controller: 'LoginController'
       })
+      .state('account.register', {
+        url: '/register',
+        templateUrl: 'app/account/register.tpl.html',
+        controller: 'RegisterController'
+      })
       .state('job', {
         abstract: true,
         templateUrl: 'app/layout/job/job-master.tpl.html',

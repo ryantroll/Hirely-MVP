@@ -34,7 +34,8 @@ function HirelyApiService($http, $q) {
     users:setUsersEndpoint,
     businesses:setBusinessesEndpoint,
     applications:setApplicationsEndpoint,
-    traitify:setTraitifyEndpoint
+    traitify:setTraitifyEndpoint,
+    favorites:setFavoritesEndpoint
   }
 
   /**
@@ -54,7 +55,7 @@ function HirelyApiService($http, $q) {
    * @type {Object}
    */
   var businesses = {
-    post:createNewUser,
+    post:createNewBusiness,
     get:getBusinesses,
     patch:saveBusiness
   }
@@ -78,6 +79,16 @@ function HirelyApiService($http, $q) {
   var traitify = {
     post:createTraitifyAssessment,
     get:getTraifityAssessment
+  }
+
+  /**
+   * [favorite child object to hold favorite endpoint functions and allow function call chain
+   * this object will be returned by .favorite() endpoint setter function to expose the http verbs function e.g. .favorite().get(), .favorite().post()]
+   * @type {Object}
+   */
+  var favorites = {
+    post:updateFavorites,
+    get:getFavorites
   }
 
   /**
@@ -114,6 +125,12 @@ function HirelyApiService($http, $q) {
     setEndpoint('traitify', arguments);
 
     return traitify;
+  }
+
+function setFavoritesEndpoint(){
+    setEndpoint('favorites', arguments);
+
+    return favorites;
   }
 
   /**
@@ -231,10 +248,10 @@ function HirelyApiService($http, $q) {
    * @param  {object} business [business object with business Model data]
    * @return {[promis]}      [description]
    */
-  function createNewBusiness(userData){
+  function createNewBusiness(bData){
     var deferred = $q.defer();
 
-    $http.post(baseURL + endpointUrl, userData).then(
+    $http.post(baseURL + endpointUrl, bData).then(
         function(payload){
           var res = payload.data;
           if(res.statusCode = 200){
@@ -456,6 +473,50 @@ function HirelyApiService($http, $q) {
 
     return deferred.promise;
   }//// fun. createTraitifyAssessment
+
+  function updateFavorites(data){
+    var deferred = $q.defer();
+
+    $http.post(baseURL + endpointUrl, data).then(
+        function(payload){
+          var res = payload.data;
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(error.message);
+          }
+        }, //// fun. resolve
+        function(error){
+          var res = error.data;
+          deferred.reject(res.message);
+        }//// fun. reject
+    )
+
+    return deferred.promise;
+  }/// fun. updateFavorite
+
+  function getFavorites(){
+    var deferred = $q.defer();
+
+    $http.get(baseURL + endpointUrl).then(
+        function(payload){
+          var res = payload.data;
+
+          if(res.statusCode = 200){
+            deferred.resolve(res.results);
+          }
+          else{
+            deferred.reject(res.message);
+          }
+        },
+        function(error){
+          deferred.reject(error);
+        }
+    )
+
+    return deferred.promise;
+  }
 
   return service;
 }//// fun. HirelyApiService

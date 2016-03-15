@@ -22,7 +22,7 @@ function generateSlug(list, sep){
 function addSlug(schema, opt){
 
     /**
-     * this function will be cexecuted before the data is save to DB
+     * this function will be executed before the data is save to DB
      * and it will be executed under the schema context which mean 'this' keyword refer the schema instance
      */
     schema.pre('save', function(next){
@@ -94,6 +94,7 @@ function addSlug(schema, opt){
 
     })
 }//// fun. addSlug
+
 
 var utilites = {
     toLower: toLower,

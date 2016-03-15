@@ -112,7 +112,9 @@
           );
 
           return deferred.promise;
-        }
+        }/// fun. getPositionDisplayData
+
+
     }//// BsunessService
 
 

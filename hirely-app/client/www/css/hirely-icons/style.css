@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'hirely-icons';
-    src:    url('fonts/hirely-icons.eot?k7ar11');
-    src:    url('fonts/hirely-icons.eot?k7ar11#iefix') format('embedded-opentype'),
-        url('fonts/hirely-icons.ttf?k7ar11') format('truetype'),
-        url('fonts/hirely-icons.woff?k7ar11') format('woff'),
-        url('fonts/hirely-icons.svg?k7ar11#hirely-icons') format('svg');
+    src:    url('fonts/hirely-icons.eot?d6xv3');
+    src:    url('fonts/hirely-icons.eot?d6xv3#iefix') format('embedded-opentype'),
+        url('fonts/hirely-icons.ttf?d6xv3') format('truetype'),
+        url('fonts/hirely-icons.woff?d6xv3') format('woff'),
+        url('fonts/hirely-icons.svg?d6xv3#hirely-icons') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -92,6 +92,9 @@
 }
 .icon-farming_icon:before {
     content: "\e903";
+}
+.icon-heart_tick_icon:before {
+    content: "\e92a";
 }
 .icon-exit_icon:before {
     content: "\e929";

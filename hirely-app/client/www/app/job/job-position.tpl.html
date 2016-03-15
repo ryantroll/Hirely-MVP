@@ -191,8 +191,8 @@
                         </div>
                         <div class="buttons box-inner">
                             <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
-                            <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button>
-                            <button class="btn btn-secondary"><i class="icon-heart_outline_icon"></i>FAVORITE</button>
+                            <!-- <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button> -->
+                            <button class="btn btn-secondary" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>
                         </div>
                     </div><!--box-->
 
@@ -247,9 +247,9 @@
     <!--mobile-footer-->
     <div class="mobile-footer visible-xs-block">
         <div class="buttons">
-            <button class="btn red"><i class="icon-share_icon"></i></button>
+            <!-- <button class="btn red"><i class="icon-share_icon"></i></button> -->
             <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
-            <button class="btn red"><i class="icon-heart_outline_icon"></i></button>
+            <button class="btn red" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i></button>
         </div>
     </div><!--mobile-footer-->
 
