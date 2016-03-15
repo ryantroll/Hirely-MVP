@@ -22,7 +22,7 @@
           return valid ? value : undefined;
         });/// unshift
       }//// fun. link
-    }/// return object
+    }; /// return object
 
   })/// validate month
   .directive('validateYear', function(){
@@ -39,9 +39,9 @@
           return valid ? value : undefined;
         });/// unshift
       }//// fun. link
-    }/// return object
+    }; /// return object
 
-  })/// validate year
+  }); /// validate year
 
   function ProfileExperienceController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
 
@@ -171,7 +171,7 @@
       $scope.stepTwo.$setPristine();
 
       $scope.addWorkXpForm = false;
-    }//// fun. addJobXp
+    }; //// fun. addJobXp
 
     /**
      * [fixFormDiv will set the form div to window height and scroll page to top
@@ -198,7 +198,7 @@
      */
     $scope.removeJobXp = function(index){
       $scope.xpItems.splice(index, 1);
-    }
+    };
 
     /**
      * [editJobXp will show the form after setting the occupatin scope var to holde the edited item]
@@ -211,7 +211,7 @@
       $scope.addWorkXpForm = true;
 
       fixFormDiv();
-    }
+    };
 
     /**
      * [cancelJobXp will be trigger when cancel is clicked in form, will reset the form and clear the required variables]
@@ -226,7 +226,7 @@
       $scope.stepTwo.$setPristine();
 
       $scope.addWorkXpForm=false;
-    }//// fun. cancelJobXp
+    }; //// fun. cancelJobXp
 
     /**
      * [showJobXp will be triggered when "Add Experinece" clicked to show the form and set the required vars]
@@ -238,7 +238,7 @@
       $scope.addWorkXpForm=true;
 
       fixFormDiv();
-    }//// fun. ShowJobXp
+    }; //// fun. ShowJobXp
 
       // var locations = [];
       // $scope.selectedLocation = undefined;
@@ -324,6 +324,10 @@
 
       // }//// fun. setAddress
 
+      $scope.$watch('occupation.reportedJobName', function(newValue, oldValue){
+        $scope.selectedSub = null;
+      });
+
       /**
        * [searchPosition will be used in typeahead to query onet positions and return a list of matching position]
        * @param  {string} query [string from typeahead text field]
@@ -352,7 +356,7 @@
         else{
           return [];
         }
-      }//// fun. searchPositions
+      }; //// fun. searchPositions
 
       /**
        * [setPosition used in typeahead and triggered when user select one of the position in typeahead list]
@@ -364,14 +368,14 @@
         if(reported.occupations.length === 1){
           $scope.occupation.occupationJobName = reported.occupations[0].occupationTitle;
           $scope.occupation.onetOccupationId = reported.occupations[0].onetId;
-          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', true);
+          $scope.selectedSub = 0;
         }
         else{
           $scope.positionSub = reported.occupations;
-          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', false);
+          $scope.selectedSub = null;
         }
 
-      }
+      };
 
       /**
        * [setPositionSub will be called when user select occupation,
@@ -382,13 +386,12 @@
         if( angular.isDefined($scope.selectedSub) && $scope.selectedSub < $scope.positionSub.length){
           $scope.occupation.occupationJobName = $scope.positionSub[$scope.selectedSub].occupationTitle;
           $scope.occupation.onetOccupationId  = $scope.positionSub[$scope.selectedSub].onetId;
-          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', true);
           // delete $scope.positionSub;
         }
         else{
-          $scope.stepTwo.workOccupation.$setValidity('occupationRequired', false);
+          alert("You somehow selected an invalid parent occupation.  Please try again.");
         }
-      }
+      };
 
       /**
        * Watch dates to make sure end data is greater than start date
@@ -506,7 +509,7 @@
                   //)
                 },
                 function(err){
-                  alert("Error!\nYour data was not saved, please try again.")
+                  alert("Error!\nYour data was not saved, please try again.");
                   console.log(err);
                 }
               )
@@ -515,8 +518,8 @@
 
             }//// if isAuth else
           }//// reslove
-        )//// getAuth.then()
-      })/// $on.$destroy
+        );//// getAuth.then()
+      });/// $on.$destroy
 
   }
 })();
