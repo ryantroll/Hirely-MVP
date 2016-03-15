@@ -100,7 +100,7 @@ db.once('open', function(){
                 _id: positionId,
                 location_id: locationId,
                 title: 'Barista',
-                occId: '13-1022.00',
+                occId: '35-3022.01',
                 slug: 'barista',
                 workType: 'part-time',
                 description: 'Compass Coffee Barista are passionate about bikes and dedicated to the people that ride them. We love to teach, so if you love to learn about bicycles and share your expertise with others, and you are devoted to providing an exceptional customer service experience, learn more about becoming a Sales Associate at Revolution Cycles.',

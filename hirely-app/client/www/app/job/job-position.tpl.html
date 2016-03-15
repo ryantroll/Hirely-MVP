@@ -93,12 +93,16 @@
                     <div class="title">
                         <h3><i class="icon-moneybag_outline_icon"></i>COMPENSATION &amp; BENEFITS</h3>
                     </div>
-                    <div class="copy box-inner">
-                        <ul>
-                            <li>${{position.compensation.wageAmount}} {{position.compensation.wageType}}</li>
-                        </ul>
-                    </div>
+                    <!--<div class="copy box-inner">-->
+                        <!--<ul>-->
+                            <!--<li>${{position.compensation.wageAmount}} {{position.compensation.wageType}}</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
                     <div class="benefites  box-inner clearfix">
+                        <div class="item" ng-if="position.compensation.wageAmount">
+                            <div class="icon icon-moneybag_outline_icon"></div>
+                            <div class="title">${{position.compensation.wageAmount}} {{position.compensation.wageType}}</div>
+                        </div>
                         <div class="item" ng-if="position.benefits.commission">
                             <div class="icon icon-commission_icon"></div>
                             <div class="title">COMMISSION</div>
