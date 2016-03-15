@@ -45,8 +45,7 @@ function HirelyApiService($http, $q) {
   var users = {
     post:createNewUser,
     get:getUsers,
-    patch:saveUser,
-    updateUserMetrics:updateUserMetrics
+    patch:saveUser
   }
 
   /**
@@ -325,29 +324,6 @@ function HirelyApiService($http, $q) {
 
     return deferred.promise;
   }//// fun. saveUser
-
-  function updateUserMetrics(){
-        var deferred = $q.defer();
-
-        $http.post(baseURL + endpointUrl + "/updateUserMetrics")
-            .then(
-                function(payload){
-                    var res = payload.data;
-                    if(res.statusCode = 200){
-                        deferred.resolve(res.results);
-                    }
-                    else{
-                        deferred.reject(res.message);
-                    }
-                },
-                function(error){
-                    deferred.reject(error);
-                }
-            );/// patch.then
-
-        return deferred.promise;
-  }//// fun. updateUserMetrics
-
 
   function saveBusiness(userData){
     var deferred = $q.defer();

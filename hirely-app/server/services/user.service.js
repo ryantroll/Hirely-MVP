@@ -214,27 +214,24 @@ var userService = {
                 /**
                  * User exists in DB, do the update
                  */
-                console.log(userData);
+                //console.log(userData);
                 if(foundedUser){
+                    //console.log("Found user");
 
                     /**
                      * Loop through sent properties and set them
                      */
-                    for(prop in userData){
+                    for(var prop in userData){
+                        console.log(prop);
                         foundedUser[prop] = userData[prop];
                     }//// for
 
-                    /**
-                     * Save the new user document after setting lastModifiedOn date to now
-                     */
                     foundedUser.lastModifiedOn = new Date();
+                    //console.log("Saving user");
                     foundedUser.save()
                     .then(
                         function(user){
-                            /**
-                             * User saved successfully
-                             */
-
+                            console.log("User save success");
                             deferred.resolve(user);
                         },//// save() resolve
                         function(err){
@@ -245,7 +242,7 @@ var userService = {
                             console.log('Error: user couldn\'t be updated');
                             deferred.reject(err);
                         }
-                    )/// .save().then
+                    ) /// .save().then
 
                 }//// if user._id
 

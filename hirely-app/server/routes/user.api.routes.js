@@ -75,7 +75,7 @@ var userRoutes = {
             },
             function(error){
                 //// user couldn't be saved 404
-                res.status(500).json(apiUtil.generateResponse(404, error, null));
+                res.status(500).json(apiUtil.generateResponse(500, error, null));
             }
         );
     }, //// fun. saveUser
