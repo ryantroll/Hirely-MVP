@@ -1,4 +1,4 @@
-<header>
+<header class="hi-header">
     <a class="logo pull-left" ui-sref="app.home">
         <img src="img/hirely_logo_small.png" alt="Hirely"/>
     </a><!--//logo-->
@@ -15,13 +15,14 @@
                     <li><a href="javascript:void(0);"><i class="fa fa-files-o" ng-click="showUserMenu = false;"></i> Applications</a></li>
                     <li><a href="javascript:void(0);"><i class="fa fa-heart" ng-click="showUserMenu = false;"></i> Favorites</a></li>
                     <li><a ui-sref="application.joblist({businessSlug: 'compass-coffee'})" href="javascript:void(0);" ng-click="showUserMenu = false;"><i class="fa fa-heart"></i> Test Job Apply</a></li>
+                    <li><a ui-sref="job.position({businessSlug: 'compass-coffee', locationSlug:'dc-washington-shaw', positionSlug:'barista'})" href="javascript:void(0);" ng-click="showUserMenu = false;"><i class="fa fa-heart"></i> Test Position Page</a></li>
                     <li><a href="javascript:void(0);" class="" ng-click="showUserMenu = false; userLogout()"><i class="fa fa-lock"></i> Logout</a></li>
                 </ul>
             </div>
         </div>
         <div class="buttons" ng-show="!auth.currentUser">
-            <!-- <button class="btn red">Register</button>
-            <button class="btn red">Login</button> -->
+            <button class="btn red" ui-sref="account.register">Register</button>
+            <button class="btn red" ui-sref="account.login">Login</button>
 
         </div>
 

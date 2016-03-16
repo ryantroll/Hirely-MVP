@@ -12,7 +12,7 @@ setInterval(function(){
         more_arrow.show();
     }
 
-    if (window.location.href.indexOf('apply') !== -1) {
+    if (window.location.href.indexOf('apply') !== -1 || $('.position .mobile-footer').css('display') === 'block') {
         more_arrow.addClass('more-arrow-raised');
     }
     else {

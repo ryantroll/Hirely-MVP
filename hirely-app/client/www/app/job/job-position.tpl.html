@@ -1,0 +1,283 @@
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loadding</p>
+    <div class="loader"></div>
+</div>
+
+<div class="position" ng-show="dataLoaded && !dataError">
+    <!--sticky-header-->
+    <div class="sticky-header padding" id="stickyHeader">
+        <div class="max-width clearfix">
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                    <div class="title">
+                        <h3>{{business.name}}, {{location.city}} / {{position.title}}</h3>
+                    </div>
+                </div>
+                <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
+                    <div class="wage">
+                        <h3>${{position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
+                    </div>
+                </div>
+            </div><!--row-->
+        </div><!--max-width-->
+    </div><!--sticky-header-->
+
+    <!--hero-image-->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="hero">
+                <img src="{{business.heroImageURL}}"/>
+                <div class="tag">${{position.compensation.wageAmount}}</div>
+            </div>
+        </div>
+    </div><!--hero-image-row-->
+
+    <!--position-header-->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pos-header padding">
+                <div class="logo">
+                    <div class="circle"><img src="{{business.logoImageURL}}"/></div>
+                </div>
+
+                <div class="row">
+                    <div class="max-width clearfix">
+                        <div class="col-sm-6">
+                            <div class="title">
+                                <span class="icon icon-{{getPositionIcon(position.occId, 'cssClass')}}" style="color:{{getPositionIcon(position.occId, 'iconColor')}}"></span>
+                                <h1>{{position.title}}</h1>
+                                <h2>{{business.name}}</h2>
+                                <h3>{{location.city}}, {{location.state}}</h3>
+                            </div>
+                        </div><!--col-->
+                        <div class="col-sm-6">
+                            <div class="features clearfix">
+                                <ul>
+                                    <li>
+                                        <span class="icon icon-clock_outlone_icon"></span>
+                                        {{workTypeTitle}}
+                                    </li>
+                                    <li>
+                                        <span class="icon icon-exit_icon"></span>
+                                        {{position.openingsCount}} Openings
+                                    </li>
+                                    <li>
+                                        <span class="icon icon-moneybag_outline_icon"></span>
+                                        {{numOfBenefits}} Benefits
+                                    </li>
+                                    <li ng-show="isAuth && distance">
+                                        <span class="icon icon-location_outline_icon"></span>
+                                        0.5M From Me
+                                    </li>
+                                </ul>
+                            </div><!--features-->
+                        </div><!--col-->
+                    </div><!--max-width-->
+                </div><!--row-->
+            </div><!--header-->
+        </div><!--col-->
+    </div><!--position-header-row-->
+
+    <!--position-details-->
+    <div class="details padding">
+        <div class="max-width">
+            <div class="row">
+                <div class="col-sm-8" id="posDetails">
+                    <div class="box">
+                        <div class="title">
+                            <h3><i class="icon-info_outline_icon"></i>ABOUT POSITION</h3>
+                        </div>
+                        <div class="copy box-inner">
+                            <p>
+                                {{position.description}}
+                            </p>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box">
+                        <div class="title">
+                            <h3><i class="icon-moneybag_outline_icon"></i>COMPENSATION &amp; BENEFITS</h3>
+                        </div>
+                        <!--<div class="copy box-inner">-->
+                            <!--<ul>-->
+                                <!--<li>${{position.compensation.wageAmount}} {{position.compensation.wageType}}</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                        <div class="benefites  box-inner clearfix">
+                            <div class="item" ng-if="position.compensation.wageAmount">
+                                <div class="icon icon-moneybag_outline_icon"></div>
+                                <div class="title">${{position.compensation.wageAmount}} {{position.compensation.wageType}}</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.commission">
+                                <div class="icon icon-commission_icon"></div>
+                                <div class="title">COMMISSION</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.tips">
+                                <div class="icon icon-tipjar_outline_icon"></div>
+                                <div class="title">Tips</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.bonus">
+                                <div class="icon icon-bonus_outline_icon"></div>
+                                <div class="title">Bonus</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.paidVacation">
+                                <div class="icon icon-vacation_outline_icon"></div>
+                                <div class="title">Paid Vacation</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.paidSickTime">
+                                <div class="icon icon-sick_outline_icon"></div>
+                                <div class="title">Paid Sick Time</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.healthInsurance">
+                                <div class="icon icon-insurance_outline_icon"></div>
+                                <div class="title">Health Insurance</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.dentalInsurance">
+                                <div class="icon icon-insurance_outline_icon"></div>
+                                <div class="title">Dental Insurance</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.retirementPlan">
+                                <div class="icon icon-piggbank_outline_icon"></div>
+                                <div class="title">Retirement Plan</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.flexibleSchedul">
+                                <div class="icon icon-calendar_outline_icon"></div>
+                                <div class="title">Flexible Schedule</div>
+                            </div>
+                            <div class="item" ng-if="position.benefits.discounts">
+                                <div class="icon icon-discount_outline_icon"></div>
+                                <div class="title">Discounts</div>
+                            </div>
+
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box">
+                        <div class="title">
+                            <h3><i class="icon-clock_outlone_icon"></i>Availability</h3>
+                        </div>
+                        <div class="copy box-inner">
+                            <ul>
+                                <li>{{position.hoursPerWeekMin}} Hours Minimum Per Week</li>
+                                <li>{{position.hoursPerWeekMax}} Hours Maximum Per Week</li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box" ng-show="position.qualifications">
+                        <div class="title">
+                            <h3><i class="icon-checklist_outline_icon"></i>Qualifications</h3>
+                        </div>
+                        <div class="copy box-inner">
+                            <ul>
+                                <li>High School Education</li>
+                                <li>Prior Sales Experience (Optional)</li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box" ng-show="position.jobDuties.length > 0">
+                        <div class="title">
+                            <h3><i class="icon-employeebadge_outline_icon"></i>ON THE JOB</h3>
+                        </div>
+                        <div class="copy box-inner">
+                            <ul>
+                                <li ng-repeat="duty in position.jobDuties">{{duty}}</li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box" ng-show="position.idealCandidate.length > 0">
+                        <div class="title">
+                            <h3><i class="icon-heart_outline_icon"></i>ideal candidate</h3>
+                        </div>
+                        <div class="copy  box-inner">
+                            <ul>
+                                <li ng-repeat="item in position.idealCandidate">{{item}}</li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                </div><!--col-->
+
+                <div class="col-sm-4">
+                    <div class="sidebar" id="sideBar">
+                        <div class="box visible-sm-block visible-md-block visible-lg-block" id="wageBox">
+                            <div class="title dark-blue">
+                                <h3>${{position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
+                            </div>
+                            <div class="buttons box-inner">
+                                <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
+                                <!-- <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button> -->
+                                <button class="btn btn-secondary" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>
+                            </div>
+                        </div><!--box-->
+
+                        <div class="box" ng-show="otherPositions.length > 1">
+                            <div class="title gray">
+                                <h3>OTHER Positions at location</h3>
+                            </div>
+                            <div class="positions-list">
+                                <ul>
+                                    <li ng-repeat="_pos in otherPositions">
+                                        <a href="javascript:void(0);" ng-click="otherPositionClick(_pos.slug)" style="color:{{getPositionIcon(_pos.occId, 'iconColor')}}">
+                                            <div class="icon icon-{{getPositionIcon(_pos.occId, 'cssClass')}}" style="color:{{getPositionIcon(_pos.occId, 'iconColor')}}"></div>
+                                            <div class="copy">
+                                                <h4>{{_pos.title}}</h4>
+                                                <p>${{_pos.compensation.wageAmount}} {{_pos.compensation.wageType}} - {{getWorkTypeTitle(_pos.workType)}}</p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!--box-->
+                    </div><!--sidebar-->
+                </div><!--col-->
+            </div>
+        </div><!--max-width-->
+    </div><!--details-->
+
+    <div class="business padding max-width">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="text-center title">
+                        <h3><i class="icon icon-building_outline_icon" style="float:none"></i> ABOUT BUSINESS &amp; LOCATION</h3>
+                    </div>
+                    <div class="copy box-inner text-center">
+                        <div>{{business.description}}</div>
+                        <h4>{{business.name}} - {{location.city}}</h4>
+                        <div class="availability">
+                            <ul>
+                                <li ng-repeat="range in aggregatedWeekTimes"><b>{{range.label}}:</b> {{range.hoursRanges.join(' | ')}}</li>
+                            </ul>
+                        </div>
+                        <div>
+                            {{location.formattedAddress}}<br>
+                            <!-- 0.5 mi from my location (change) -->
+                        </div>
+                    </div>
+                </div><!--box-->
+            </div><!--col-sm-12-->
+        </div><!--row-->
+    </div><!--business-->
+
+    <!--mobile-footer-->
+    <div class="mobile-footer visible-xs-block">
+        <div class="buttons">
+            <!-- <button class="btn red"><i class="icon-share_icon"></i></button> -->
+            <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
+            <button class="btn red" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i></button>
+        </div>
+    </div><!--mobile-footer-->
+
+</div><!--position-->
+
+<div class="content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Position Not Found!</h4>
+        </div>
+    </div>
+</div>

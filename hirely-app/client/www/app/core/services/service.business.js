@@ -22,6 +22,24 @@
           // businessRef.push(obj);
         }
 
+        this.getWorkTypeTitle = function(type){
+          var types = [
+            {name:'part-time', title:'Part Time'},
+            {name:'full-time', title:'Full Time'},
+            {name:'seasonal', title:'Seasonal'},
+            {name:'exempt', title:'Exempt'}
+          ];
+          var ret = null;
+          var limit = types.length;
+          for(var x=0; x < limit; x++){
+            if(types[x].name === type){
+              ret = types[x].title;
+              break;
+            }
+          }
+          return ret;
+        }//// fun. getWorkTypeTitle
+
         this.getBySlug = function(slug){
           var deferred = $q.defer();
           HirelyApiService.businesses(slug).get()
@@ -73,6 +91,30 @@
             return null;
           }
         }//// fun. positionBySlug
+
+        /**
+         * [getPositionDisplayData will retrieve the icon data for a list of occupations by their ids]
+         * @param  {[String]} onetId [String contains the occupations IDs separated by | character]
+         * @return {[Promise]}        [description]
+         */
+        this.getPositionDisplayData = function(onetId){
+          var deferred = $q.defer();
+
+
+          HirelyApiService.businesses('positionIcon', {occId:onetId}).get()
+          .then(
+            function(iconObject){
+              deferred.resolve(iconObject);
+            },
+            function(err){
+              deferred.reject(err)
+            }
+          );
+
+          return deferred.promise;
+        }/// fun. getPositionDisplayData
+
+
     }//// BsunessService
 
 

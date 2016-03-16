@@ -12,7 +12,8 @@ var positionSchema = new Schema({
     title         :    {type: String, required:true},
     slug          :    {type: String},
     occId         :    {type: String, required:true},
-    hasOpenings   :    {type:Boolean, default:false},  // this field should be updated whenever positions are updated
+    description   :    {type: String, required:false},
+    hasOpenings   :    {type: Boolean, default:false},  // this field should be updated whenever positions are updated
 
     workType          :     {
         type:String,
@@ -60,14 +61,17 @@ var positionSchema = new Schema({
 
     benefits:
     {
+        commission      :     Boolean,
         paidVacation    :     Boolean,
         paidSickTime    :     Boolean,
+        tips            :     Boolean,
+        bonus           :     Boolean,
         flexibleSchedul :     Boolean,
         healthInsurance :     Boolean,
         dentalInsurance :     Boolean,
         retirementPlan  :     Boolean,
         discounts       :     Boolean
-    }, //// benefites
+    }, //// benefits
 
     shifts:
     {
@@ -152,7 +156,8 @@ var businessSchema = new Schema({
   name            :       {type:String, required:true},
   slug            :       {type:String, required:false, unique:true, index:true},
   description     :       {type:String},
-  photoUrl        :       {type:String},
+  heroImageURL    :       {type:String},
+  logoImageURL    :       {type:String},
   email           :       {
                             type:String,
                             required:true,
@@ -176,6 +181,7 @@ var businessSchema = new Schema({
                             }
                           },
   agreedToTerms   :       {type:Boolean, required:true},
+
 
   /**
    * Locations
