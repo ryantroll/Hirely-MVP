@@ -157,8 +157,21 @@ db.once('open', function(){
                     }
                 ],
 
-                jobDuties:'<ul><li>Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training</li>                            <li>Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store</li>                            <li>Perform bike fittings for bikes of all makes and models</li>                            <li>Learn from your coworkers and share knowledge regarding new products and events</li>                            <li>Perform other tasks assigned by management</li>                            <li>Learn, understand and adhere to company policy, programs and standards</li>                        </ul>',
-                idealCandidate:'<ul><li>Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn\u2019t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.</li>                            <li>Is comfortable working as part of a commission-based system where sales performance is measured</li>                            <li>Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience</li>                            <li>Is capable of safely lifting and carrying 40lbs on a regular basis</li>                            <li>Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment</li></ul>'
+                jobDuties: [
+                    'Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training',
+                    'Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store',
+                    'Perform bike fittings for bikes of all makes and models',
+                    'Learn from your coworkers and share knowledge regarding new products and events',
+                    'Perform other tasks assigned by management',
+                    'Learn, understand and adhere to company policy, programs and standards'
+                ],
+                idealCandidate:[
+                    'Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn’t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.',
+                    'Is comfortable working as part of a commission-based system where sales performance is measured',
+                    'Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience',
+                    'Is capable of safely lifting and carrying 40lbs on a regular basis',
+                    'Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment'
+                ]
             },
             tmpPositionId2: {
                 _id: positionId2,
@@ -219,8 +232,21 @@ db.once('open', function(){
                     }
                 ],
 
-                jobDuties:'<ul><li>Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training</li>                            <li>Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store</li>                            <li>Perform bike fittings for bikes of all makes and models</li>                            <li>Learn from your coworkers and share knowledge regarding new products and events</li>                            <li>Perform other tasks assigned by management</li>                            <li>Learn, understand and adhere to company policy, programs and standards</li>                        </ul>',
-                idealCandidate:'<ul><li>Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn\u2019t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.</li>                            <li>Is comfortable working as part of a commission-based system where sales performance is measured</li>                            <li>Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience</li>                            <li>Is capable of safely lifting and carrying 40lbs on a regular basis</li>                            <li>Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment</li></ul>'
+                jobDuties: [
+                    'Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training',
+                    'Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store',
+                    'Perform bike fittings for bikes of all makes and models',
+                    'Learn from your coworkers and share knowledge regarding new products and events',
+                    'Perform other tasks assigned by management',
+                    'Learn, understand and adhere to company policy, programs and standards'
+                ],
+                idealCandidate:[
+                    'Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn’t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.',
+                    'Is comfortable working as part of a commission-based system where sales performance is measured',
+                    'Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience',
+                    'Is capable of safely lifting and carrying 40lbs on a regular basis',
+                    'Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment'
+                ]
             }
         }, // positions array
     };
