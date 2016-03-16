@@ -128,6 +128,29 @@ header.hi-header{
     }
 }////.content
 
+.row-no-padding {
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+.max-width{
+    max-width: $screen-xs-min;
+    margin-left:auto;
+    margin-right:auto;
+
+    @media screen and (min-width:$screen-sm-min){
+        max-width: $screen-sm-min;
+    }
+    @media screen and (min-width:$screen-md-min){
+        max-width: $screen-md-min;
+    }
+    @media screen and (min-width:$screen-lg-min){
+        max-width: $screen-lg-min;
+    }
+}
+
 .btn-secondary{
     background-color:#fff;
     border:1px solid $c-hirely-dark-gray;

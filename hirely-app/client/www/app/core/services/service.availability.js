@@ -1,8 +1,6 @@
 /**
  * Created by Iyad Bitar
  *
- * Traitify Personality Analysis - more info: https://developer.traitify.com
- *
  */
 (function () {
   'use strict';
@@ -345,7 +343,7 @@
       return retObj;
     }//// fun. toFrondEndModel
 
-    function getWeeklyAggregatedArray(obj){
+    function getWeeklyAggregatedArray(obj, groupSimilarDays){
       var label = null;
       var ret = [];
       var daysInRange = 0;
@@ -388,47 +386,58 @@
         return ranges;
       }//// fun. getHorusRanges
 
-
-      for(var d=0; d<7; d++){
-        var dayName = days[d];
-        var preDayName = d > 0 ? days[d-1] : null;
-        var ranges;
-
-        if(d > 0){
-          if( obj[dayName].toString() !== obj[preDayName].toString()){
-            if(daysInRange > 1){
-              label += ' - ' + preDayName;
-            }
-            ret.push({label:label, hoursRanges: getRanges(obj[preDayName])});
-            label = dayName;
-            daysInRange = 1;
-          }
-          else{
-            daysInRange++;
-          }
-        }//// if d >0
-        else {
-
-        }
-
-        // /// first day
-        if(null === label){
-          label = dayName;
-          daysInRange++;
-        }
-
+      if(true === groupSimilarDays){
         /**
-         * last range
+         * group similar days
          */
-        if(d === 6){
-          if(daysInRange > 1){
-            label += ' - ' + dayName;
+        for(var d=0; d<7; d++){
+          var dayName = days[d];
+          var preDayName = d > 0 ? days[d-1] : null;
+          var ranges;
+
+          if(d > 0){
+            if( obj[dayName].toString() !== obj[preDayName].toString()){
+              if(daysInRange > 1){
+                label += ' - ' + preDayName;
+              }
+              ret.push({label:label, hoursRanges: getRanges(obj[preDayName])});
+              label = dayName;
+              daysInRange = 1;
+            }
+            else{
+              daysInRange++;
+            }
+          }//// if d >0
+          else {
+
           }
-          ret.push({label:label, hoursRanges: getRanges(obj[dayName])});
-        }
 
+          // /// first day
+          if(null === label){
+            label = dayName;
+            daysInRange++;
+          } //// if null === label
 
-      }//// for d
+          /**
+           * last range
+           */
+          if(d === 6){
+            if(daysInRange > 1){
+              label += ' - ' + dayName;
+            }
+            ret.push({label:label, hoursRanges: getRanges(obj[dayName])});
+          }//// if d === 6
+        }//// for d
+      }//// if groupSimilarDays
+      else{
+        /**
+         * don't group similar days
+         */
+         for(var d=0; d<7; d++){
+          var dayName = days[d];
+          ret.push({label:dayName, hoursRanges: getRanges(obj[dayName])});
+        }//// for d<7
+      }//// if else groupSimilarDays
 
 
       return ret;
