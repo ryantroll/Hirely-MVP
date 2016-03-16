@@ -47,7 +47,7 @@ db.once('open', function(){
         personalityExams:[
             {
               extId: 'tritify-exam-id',
-              skills: []
+              scores: {}
             }
         ],
 

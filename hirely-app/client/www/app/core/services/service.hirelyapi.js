@@ -342,7 +342,6 @@ function setFavoritesEndpoint(){
     return deferred.promise;
   }//// fun. saveUser
 
-
   function saveBusiness(userData){
     var deferred = $q.defer();
 

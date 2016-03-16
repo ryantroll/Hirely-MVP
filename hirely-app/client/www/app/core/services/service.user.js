@@ -195,6 +195,25 @@
       return deferred.promise;
     }//// fun. saveUser
 
+    /**
+     * [updateUserMetrics will update a users ksaw scores based on experience]
+     * @param  {string} userId   [id of user to be updated]
+     * @return {promiss}          [description]
+     */
+    this.updateUserMetrics = function(userId){
+      var deferred = $q.defer();
+      HirelyApiService.users(userId, "updateUserMetrics").post()
+          .then(
+              function(newData){
+                deferred.resolve(newData);
+              },
+              function(err){
+                deferred.reject(err);
+              }
+          );
+      return deferred.promise;
+    }//// fun. updateUserMetrics
+
     this.clearPhoneFormat = function(val){
       return val.split(/[\(|\)| |\-|\+|\.]/).join('');
     }

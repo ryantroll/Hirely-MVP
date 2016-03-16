@@ -61,31 +61,31 @@ module.exports = function() {
         var applicantOccupations = getApplicantOccupations(occupations).then(function(applicantOccupations){
             //abilities
             var applicantAbilities = _.map(applicantOccupations, function(item){
-                    return {id: item.occupationId, elements: item.abilities}
+                    return {id: item.occupationId, elements: item.Abilities}
                 }
             );
-            var abilitiesScore = getElementsScore(applicantAbilities, position.onetData.abilities);
+            var abilitiesScore = getElementsScore(applicantAbilities, position.onetData.Abilities);
 
             //knowledge
             var applicantKnowledge = _.map(applicantOccupations, function(item){
-                    return {id: item.occupationId, elements: item.knowledge}
+                    return {id: item.occupationId, elements: item.Knowledge}
                 }
             );
-            var knowledgeScore = getElementsScore(applicantKnowledge, position.onetData.knowledge);
+            var knowledgeScore = getElementsScore(applicantKnowledge, position.onetData.Knowledge);
 
             //skills
             var applicantSkills = _.map(applicantOccupations, function(item){
-                    return {id: item.occupationId, elements: item.skills}
+                    return {id: item.occupationId, elements: item.Skills}
                 }
             );
-            var skillsScore = getElementsScore(applicantSkills, position.onetData.skills);
+            var skillsScore = getElementsScore(applicantSkills, position.onetData.Skills);
 
             //work activities
             var applicantWorkActivities = _.map(applicantOccupations, function(item){
-                    return {id: item.occupationId, elements: item.workActivities}
+                    return {id: item.occupationId, elements: item.WorkActivities}
                 }
             );
-            var workActivitiesScore = getElementsScore(applicantWorkActivities, position.onetData.workActivities);
+            var workActivitiesScore = getElementsScore(applicantWorkActivities, position.onetData.WorkActivities);
 
             //work context
             var applicantWorkContext = _.map(applicantOccupations, function(item){
@@ -236,10 +236,10 @@ module.exports = function() {
     function getOccupationOnetData(occupationId){
         var onetData = {
             occupationId: '',
-            skills: {},
-            abilities: {},
-            knowledge: {},
-            workActivities: {},
+            Skills: {},
+            Abilities: {},
+            Knowledge: {},
+            WorkActivities: {},
             workContext: {},
             toolsTech: {}
         };
@@ -254,10 +254,10 @@ module.exports = function() {
             getOccupation(occupationId)
         ]).then(function(data){
             onetData.occupationId = occupationId;
-            onetData.skills = data[0];
-            onetData.abilities = data[1];
-            onetData.knowledge = data[2];
-            onetData.workActivities = data[3];
+            onetData.Skills = data[0];
+            onetData.Abilities = data[1];
+            onetData.Knowledge = data[2];
+            onetData.WorkActivities = data[3];
             onetData.workContext = data[4];
             onetData.toolsTech = data[5];
             onetData.occupation = data[6];

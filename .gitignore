@@ -10,6 +10,7 @@ hirely-app/dist/
 hirely-app/lib/
 hirely-app/tmp/
 hirely-app/deploy/
+hirely-app/aws-package.zip
 .idea
 
 *.log

@@ -38,7 +38,8 @@ var personalitySchema = new Schema({
   personalityBlend    :       {
                                 name:String,
                                 personalityTypes:[customId]
-                              }
+                              },
+  careerMatchScores        :       {type:freeSchema, required:false}
 
 });
 
@@ -227,10 +228,10 @@ var userSchema = new Schema({
      */
     // TODO:  Explicitly specify each ksaw
     scores              : {
-        knowledges          :       {type:freeSchema, required:false},
-        skills              :       {type:freeSchema, required:false},
-        abilities           :       {type:freeSchema, required:false},
-        workActivities      :       {type:freeSchema, required:false}
+        Knowledge          :       {type:freeSchema, required:false},
+        Skills              :       {type:freeSchema, required:false},
+        Abilities           :       {type:freeSchema, required:false},
+        WorkActivities      :       {type:freeSchema, required:false}
     },
 
     isVetted            : {type:String, default:false}

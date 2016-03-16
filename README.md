@@ -124,6 +124,54 @@ What's going on?
 
 ----------
 
+# How to push code to cloud
+-------------
+
+ 1. Run hirely-app/server/package-for-aws.command to create aws-package.zip
+ 2. Go to the following link.  Note the current version. https://console.aws.amazon.com/elasticbeanstalk/home?region=us-east-1#/environment/dashboard?applicationName=Hirely-EB7&environmentId=e-zmmmrtfdnk
+ 3. Upload aws-package.zip using the "Upload and Deploy" button, and increment the version by one from the prior.
+ 4. Elastic beanstalk will push the code to the server(s).  Babysit the deployment to ensure that it went smoothly.
+
+Note:  The .ebextensions folder is the aws magic that gets the app working with elastic beanstalk.
+
+
+----------
+
+# How to access/ssh the cloud mongo
+-------------
+
+The cloud mongo server is on EC2 and managed by https://cloud.mongodb.com.  The current server can always be reached with the cloud.mongodb supplied dns:
+
+ssh -i mms_key.pem mms-user@hirely-mongo-0.hirely.9550.mongodbdns.com
+
+Also, aws is configured to allow inbound mongo ports from the elastic beanstalk VPC (virtual private network).  This includes all of our app servers:
+
+```
+mongo --port 27000 --host hirely-mongo-0.hirely.9550.mongodbdns.com hirely
+```
+
+
+----------
+
+# How to dump/export and import all mongo dbs
+-------------
+
+This should only be done on testing databases!  It's a big time-saver though for deploying demos.  Note:  this has been done once using tarballs instead of zips, but I think zips should work too and are easier to manage.
+
+ 1. Stop mongod if running:  pkill mongod
+ 2. Zip your local mongo db:  zip -r db.zip /data/db
+ 3. SCP the zip to the mongo server:  scp -i mms_key.pem db.tgz mms-user@hhirely-mongo-0.hirely.9550.mongodbdns.com:
+ 4. SSH to the mongo server:  ssh -i mms_key.pem mms-user@hirely-mongo-0.hirely.9550.mongodbdns.com
+ 5. Stop mongod if running:  pkill mongod
+ 6. Backup the current db if desired:  zip -r db-bak.zip /data/hirely-mongo-1
+ 7. Delete current db:  sudo rm -rf /data/hirely-mongo-1
+ 8. Unzip the new db:  unzip db.zip
+ 9. move the db into position:  mv db /data/hirely-mongo-1
+ 10. Restart the server
+
+
+----------
+
 Users and Authentication
 -------------
 

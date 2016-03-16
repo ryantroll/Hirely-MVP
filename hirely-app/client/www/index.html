@@ -91,8 +91,7 @@
 <script src="../../lib/angucomplete-alt/angucomplete-alt.js"></script>
 <script src="../../lib/angular-loading-bar/build/loading-bar.js"></script>
 <script src="../../lib/angular-multi-step-form/dist/browser/angular-multi-step-form.js"></script>
-<script src="js/aws/aws-sdk-s3.min.js"></script>
-<!-- <script src="../../lib/moment/moment.js"></script> -->
+<script src="../../lib/moment/moment.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -118,35 +117,39 @@
 <script src="js/main.js"></script>
 <script src="js/more-arrow.js"></script>
 <script src="js/underscore-min.js"></script>
+<script src="js/aws/aws-sdk-s3.js"></script>
+<script src="js/aws/aws-sdk-s3.min.js"></script>
 <script src="app/account/account.module.js"></script>
-<script src="app/candidate/candidate.module.js"></script>
 <script src="app/core/core.module.js"></script>
+<script src="app/candidate/candidate.module.js"></script>
 <script src="app/home/home.module.js"></script>
 <script src="app/jobdetails/jobDetails.module.js"></script>
-<script src="app/job/job.module.js"></script>
 <script src="app/layout/layout.module.js"></script>
+<script src="app/job/job.module.js"></script>
 <script src="app/manager/manager.module.js"></script>
 <script src="app/shared/shared.module.js"></script>
 <script src="app/app.js"></script>
 <script src="app/account/controller.login.js"></script>
 <script src="app/account/controller.password.js"></script>
 <script src="app/account/controller.register.js"></script>
-
-<script src="app/candidate/candidateCtrl.js"></script>
-<script src="app/candidate/candidateDashboardCtrl.js"></script>
 <script src="app/core/config.js"></script>
 <script src="app/core/constants.js"></script>
 <script src="app/core/firebase.utils.js"></script>
 <script src="app/core/security.js"></script>
 <script src="app/core/states.js"></script>
+<script src="app/application/controller.job-application.js"></script>
+<script src="app/application/controller.job-list.js"></script>
+<script src="app/application/controller.thank-you.js"></script>
+<script src="app/candidate/candidateCtrl.js"></script>
+<script src="app/candidate/candidateDashboardCtrl.js"></script>
 <script src="app/home/homeCtrl.js"></script>
 <script src="app/jobdetails/jobDetailCtrl.js"></script>
-<script src="app/job/jobSearchCtrl.js"></script>
 <script src="app/layout/footerCtrl.js"></script>
 <script src="app/layout/footer_directive.js"></script>
 <script src="app/layout/headerCtrl.js"></script>
 <script src="app/layout/header_directive.js"></script>
 <script src="app/layout/masterCtrl.js"></script>
+<<<<<<< HEAD
 
 <script src="app/layout/application/controller.application-master.js"></script>
 <script src="app/layout/application/controller.application-header.js"></script>
@@ -155,10 +158,15 @@
 <script src="app/layout/job/controller.job-master.js"></script>
 <script src="app/layout/account/controller.account-master.js"></script>
 
+=======
+<script src="app/job/jobSearchCtrl.js"></script>
+<script src="app/user/controller.user.js"></script>
+>>>>>>> master
 <script src="app/manager/autoFillableField.js"></script>
 <script src="app/manager/hmregisterCtrl.js"></script>
 <script src="app/shared/flexslider_directive.js"></script>
 <script src="app/shared/googlePlacesAutocomplete_directive.js"></script>
+<<<<<<< HEAD
 
 <script src="app/application/controller.job-application.js"></script>
 <script src="app/application/controller.job-list.js"></script>
@@ -181,12 +189,16 @@
 <script src="app/candidate/profile/candidateProfileExperienceCtrl.js"></script>
 <script src="app/candidate/profile/candidateProfilePersonalityCtrl.js"></script> -->
 <script src="app/core/directives/ngCloak-directive.js"></script>
+=======
+>>>>>>> master
 <script src="app/core/filters/jobSearchFilter.js"></script>
+<script src="app/core/directives/ngCloak-directive.js"></script>
 <script src="app/core/services/service.application.js"></script>
 <script src="app/core/services/service.auth.js"></script>
 <script src="app/core/services/service.availability.js"></script>
 <script src="app/core/services/service.business.js"></script>
 <script src="app/core/services/service.candidate.js"></script>
+<script src="app/core/services/service.file-upload.js"></script>
 <script src="app/core/services/service.filePicker.js"></script>
 <script src="app/core/services/service.geocode.js"></script>
 <script src="app/core/services/service.hirelyapi.js"></script>
@@ -196,7 +208,16 @@
 <script src="app/core/services/service.favorites.js"></script>
 <script src="app/core/services/service.us-states.js"></script>
 <script src="app/core/services/service.user.js"></script>
-<script src="app/core/services/service.file-upload.js"></script>
+<script src="app/application/pre-screen/controller.pre-screen.js"></script>
+<script src="app/candidate/profile/candidateProfileAvailabilityCtrl.js"></script>
+<script src="app/candidate/profile/candidateProfileBasicsCtrl.js"></script>
+<script src="app/candidate/profile/candidateProfileCtrl.js"></script>
+<script src="app/candidate/profile/candidateProfileExperienceCtrl.js"></script>
+<script src="app/candidate/profile/candidateProfilePersonalityCtrl.js"></script>
+<script src="app/layout/application/controller.application-footer.js"></script>
+<script src="app/layout/application/controller.application-header.js"></script>
+<script src="app/layout/application/controller.application-master.js"></script>
+<script src="app/user/profile/controller.user-profile.js"></script>
 <script src="app/manager/company/autoFillableField.js"></script>
 <script src="app/manager/company/hmCompanyCtrl.js"></script>
 <script src="app/core/services/models/address.js"></script>
@@ -205,6 +226,12 @@
 <script src="app/core/services/models/contact.js"></script>
 <script src="app/core/services/models/model.js"></script>
 <script src="app/core/services/models/user.js"></script>
+<script src="app/user/profile/availability/controller.availability.js"></script>
+<script src="app/user/profile/basic/controller.basic.js"></script>
+<script src="app/user/profile/education/controller.education.js"></script>
+<script src="app/user/profile/experience/controller.experience.js"></script>
+<script src="app/user/profile/personality/controller.personality.js"></script>
+<script src="app/user/profile/step-4_pre_screen/controller.step-four.js"></script>
 <!-- endinject -->
 <!-- inject:templates:js -->
 <!-- endinject -->

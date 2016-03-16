@@ -39,6 +39,8 @@ module.exports = function(app) {
     app.get('/api/v1/traitify/assessment-id', traitifyApiRoutes.getAssessmentId);
     app.post('/api/v1/traitify/', traitifyApiRoutes.createNewAssessment);
     app.get('/api/v1/traitify/test', traitifyApiRoutes.getTest);
+    app.get('/api/v1/traitify/getAssessmentCareerMatchScoresById/:id', traitifyApiRoutes.getAssessmentCareerMatchScoresById);
+    app.post('/api/v1/traitify/updateAssessmentCareerMatchScoresByUserId/:id', traitifyApiRoutes.updateAssessmentCareerMatchScoresByUserId);
 
     /**
      * Adding routes for local mongoDB users
@@ -48,6 +50,7 @@ module.exports = function(app) {
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
     app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
     app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
+    app.post('/api/v1/users/:id/updateUserMetrics', userApiRoutes.updateUserMetrics);
 
     /**
      * Adding routes for local mongoDB businesses

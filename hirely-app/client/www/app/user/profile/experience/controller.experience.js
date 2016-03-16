@@ -490,7 +490,20 @@
               UserService.saveUser(toSave, AuthService.currentUserID)
               .then(
                 function(user){
-                  // console.log(user);
+                  console.log("1");
+                  // Update user metrics now
+                  return user;
+                  //UserService.updateUserMetrics(AuthService.currentUserID).then(
+                  //    function(user){
+                  //      console.log("2");
+                  //      console.dir(user.scores.knowledges);
+                  //    },
+                  //    function(err){
+                  //      console.log("3");
+                  //      alert("Error!\nYour scoring data was not saved, please try again.")
+                  //      console.log(err);
+                  //    }
+                  //)
                 },
                 function(err){
                   alert("Error!\nYour data was not saved, please try again.")

@@ -9,9 +9,9 @@ config.traitify = {
 };
 
 
-//config.mongoUri = 'mongodb://ip-172-31-25-53.ec2.internal:27000/hirely';
+config.mongoUri = 'mongodb://ip-172-31-25-53.ec2.internal:27000/hirely';
 //config.mongoUri = 'mongodb://db:27017/hirely';
-config.mongoUri = 'mongodb://localhost:27017/hirely';
+//config.mongoUri = 'mongodb://localhost:27017/hirely';
 
 /**
  * [urlSeparator this will be used in slug generating as word separator]
@@ -23,7 +23,7 @@ config.urlSeparator = '-';
  * [extractTraitifyMeta congiration option if set to false will stop the code from proccessing the meta of traitify with each assessment save]
  * @type {Boolean}
  */
-config.extractTraitifyMeta = false;
+config.extractTraitifyMeta = true;
 /**
  * [saveTraitifyFamousPeople if set to true will add the famous people to traitify meta processing]
  * @type {Boolean}
@@ -34,7 +34,6 @@ config.saveTraitifyFamousPeople = false;
  * [primeOnetScoresCache if set to true will prime the onetScoresCache in onetScoresService]
  * @type {Boolean}
  */
-config.primeOnetScoresCache = false;
-
+config.primeOnetScoresCache = true;
 
 module.exports = config;

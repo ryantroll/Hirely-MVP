@@ -39,5 +39,8 @@
     "hover": "Hover#~2.0.2",
     "angular-multi-step-form": "~1.2.4",
     "moment": "~2.10.6"
+  },
+  "resolutions": {
+    "angular": ">=1.4.0"
   }
 }
