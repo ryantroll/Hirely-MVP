@@ -57,8 +57,12 @@ cd seeddata
 curl -L https://www.dropbox.com/s/sr32h1spoyp8dy2/WeightedValueFiles1.zip?dl=0 -o WeightedScores.json.zip
 unzip WeightedScores.json.zip
 mongoimport --db hirely --drop --type=json --jsonArray --collection=onetScores  --file=WeightedScores.json
+mongoimport --db hirely --drop --type csv --headerline onetIcons.csv
 ```
 
+Importing ONET occupation icons
+cd seeddata
+mongoimport --db hirely --type csv --headerline --file onetIcons.csv
 
 ----------
 

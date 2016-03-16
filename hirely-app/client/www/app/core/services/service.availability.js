@@ -1,8 +1,6 @@
 /**
  * Created by Iyad Bitar
  *
- * Traitify Personality Analysis - more info: https://developer.traitify.com
- *
  */
 (function () {
   'use strict';
@@ -55,7 +53,7 @@
      * @type {Array}
      */
     var startOptions = [
-      {days:0, label:'Immediatly'},
+      {days:0, label:'Immediately'},
       {days:1, label:'1 Day'},
       {days:2, label:'2 Days'},
       {days:3, label:'3 Days'},
@@ -170,7 +168,8 @@
       startOptions:startOptions,
       getTotalHours:getTotalHours,
       getDayHours:getDayHours,
-      updateRanges:updateRanges
+      updateRanges:updateRanges,
+      getWeeklyAggregatedArray:getWeeklyAggregatedArray
     };
 
     /**
@@ -343,6 +342,106 @@
 
       return retObj;
     }//// fun. toFrondEndModel
+
+    function getWeeklyAggregatedArray(obj, groupSimilarDays){
+      var label = null;
+      var ret = [];
+      var daysInRange = 0;
+
+      function getRanges(hArr){
+        var ranges = [];
+        var rangeStart = null;
+        var rangeEnd = null;
+
+        for(var h=0; h<hArr.length; h++){
+
+          if(rangeStart === null){
+            rangeStart = hours[ hArr[h] ].label;
+          }
+          else {
+            if(hArr[h] != hArr[h-1] + 1){
+              rangeEnd = hours[ (hArr[h-1] + 1) % 24 ].label;
+              // rangeStart = hours[ hArr[h] ].label
+            }
+          }
+
+          /**
+           * find the end of range
+           */
+          if(null !== rangeEnd){
+            ranges.push(rangeStart + ' - ' + rangeEnd);
+            rangeEnd = null;
+            rangeStart = hours[ hArr[h] ].label;
+          }
+
+          /**
+           * Don't forget the last range
+           */
+          if(h == hArr.length-1){
+            rangeEnd = hours[ (hArr[h] + 1) % 24 ].label;
+            ranges.push(rangeStart + ' - ' + rangeEnd);
+          }
+
+        }//// for
+        return ranges;
+      }//// fun. getHorusRanges
+
+      if(true === groupSimilarDays){
+        /**
+         * group similar days
+         */
+        for(var d=0; d<7; d++){
+          var dayName = days[d];
+          var preDayName = d > 0 ? days[d-1] : null;
+          var ranges;
+
+          if(d > 0){
+            if( obj[dayName].toString() !== obj[preDayName].toString()){
+              if(daysInRange > 1){
+                label += ' - ' + preDayName;
+              }
+              ret.push({label:label, hoursRanges: getRanges(obj[preDayName])});
+              label = dayName;
+              daysInRange = 1;
+            }
+            else{
+              daysInRange++;
+            }
+          }//// if d >0
+          else {
+
+          }
+
+          // /// first day
+          if(null === label){
+            label = dayName;
+            daysInRange++;
+          } //// if null === label
+
+          /**
+           * last range
+           */
+          if(d === 6){
+            if(daysInRange > 1){
+              label += ' - ' + dayName;
+            }
+            ret.push({label:label, hoursRanges: getRanges(obj[dayName])});
+          }//// if d === 6
+        }//// for d
+      }//// if groupSimilarDays
+      else{
+        /**
+         * don't group similar days
+         */
+         for(var d=0; d<7; d++){
+          var dayName = days[d];
+          ret.push({label:dayName, hoursRanges: getRanges(obj[dayName])});
+        }//// for d<7
+      }//// if else groupSimilarDays
+
+
+      return ret;
+    }//// fun. getWeeklyAgregatedArray
 
     /**
      * Return server object

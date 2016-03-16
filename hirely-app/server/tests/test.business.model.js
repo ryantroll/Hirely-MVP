@@ -25,7 +25,9 @@ db.once('open', function(){
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
         agreedToTerms:true,
         hasOpenings: true,
-        photoUrl:  "http://assets.inhabitat.com/wp-content/blogs.dir/1/files/2013/12/starbucks-canal-street-NOLA-store-6.jpg",
+        heroImageURL: 'http://compasscoffee.com/assets/img/compassbackground.jpg',
+        logoImageURL: 'http://compasscoffee.com/assets/img/compasslogo.png',
+        // photoUrl:  "http://compasscoffee.com/assets/img/compassbackground.jpg",
         locations: {
             tmpLocationId: {
                 _id: locationId,
@@ -98,9 +100,10 @@ db.once('open', function(){
                 _id: positionId,
                 location_id: locationId,
                 title: 'Barista',
-                occId: '11-1011.03',
+                occId: '35-3022.01',
                 slug: 'barista',
                 workType: 'part-time',
+                description: 'Compass Coffee Barista are passionate about bikes and dedicated to the people that ride them. We love to teach, so if you love to learn about bicycles and share your expertise with others, and you are devoted to providing an exceptional customer service experience, learn more about becoming a Sales Associate at Revolution Cycles.',
                 hoursPerWeekMin: 1,
                 hoursPerWeekMax: 2,
                 minOpeningShifts: 2,
@@ -126,12 +129,15 @@ db.once('open', function(){
 
                 benefits: {
                     paidVacation: true,
-                    paidSickTime: false,
-                    flexibleSchedul: false,
-                    healthInsurance: false,
+                    paidSickTime: true,
+                    flexibleSchedul: true,
+                    healthInsurance: true,
                     dentalInsurance: true,
                     retirementPlan: true,
-                    discounts: false
+                    discounts: true,
+                    commission: true,
+                    tips: true,
+                    bonus: true
                 },
 
                 shifts: {
@@ -150,12 +156,28 @@ db.once('open', function(){
                         question: 'what\'s up?',
                     }
                 ],
+
+                jobDuties: [
+                    'Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training',
+                    'Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store',
+                    'Perform bike fittings for bikes of all makes and models',
+                    'Learn from your coworkers and share knowledge regarding new products and events',
+                    'Perform other tasks assigned by management',
+                    'Learn, understand and adhere to company policy, programs and standards'
+                ],
+                idealCandidate:[
+                    'Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn’t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.',
+                    'Is comfortable working as part of a commission-based system where sales performance is measured',
+                    'Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience',
+                    'Is capable of safely lifting and carrying 40lbs on a regular basis',
+                    'Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment'
+                ]
             },
             tmpPositionId2: {
                 _id: positionId2,
                 location_id: locationId2,
                 title: 'Web Developer',
-                occId: '11-1011.03',
+                occId: '15-1199.09',
                 slug: 'web-developer',
                 workType          :     'part-time',
                 hoursPerWeekMin   :     1,
@@ -209,6 +231,22 @@ db.once('open', function(){
                         question:'what\'s up?',
                     }
                 ],
+
+                jobDuties: [
+                    'Complete an industry-leading 30 day training program which involves in-store training as well as paid, at-home internet-based training',
+                    'Interact with customers and provide exemplary customer service; educate customers about bicycles, bicycle accessories and clothing, and any other cycling-related products in the store',
+                    'Perform bike fittings for bikes of all makes and models',
+                    'Learn from your coworkers and share knowledge regarding new products and events',
+                    'Perform other tasks assigned by management',
+                    'Learn, understand and adhere to company policy, programs and standards'
+                ],
+                idealCandidate:[
+                    'Should be passionate about cycling as well as promoting the benefits of a cycling lifestyle and culture. Candidate doesn’t necessarily need to have prior sales or bicycle retail experience, but must be willing to learn about bicycles, cycling accessories, and cycling culture.',
+                    'Is comfortable working as part of a commission-based system where sales performance is measured',
+                    'Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience',
+                    'Is capable of safely lifting and carrying 40lbs on a regular basis',
+                    'Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment'
+                ]
             }
         }, // positions array
     };

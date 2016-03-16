@@ -1,6 +1,6 @@
 $header-height: 60px;
 $footer-height: 60px;
-$day-botton-size: 60px;
+$day-button-size: 60px;
 
 .profile{
 	padding-bottom:$footer-height;
@@ -769,10 +769,10 @@ $day-botton-size: 60px;
 			li{
 				display: none;
 				float:left;
-				width:$day-botton-size;
-				height: $day-botton-size;
+				width:$day-button-size;
+				height: $day-button-size;
 				margin-right: 0.8em;
-				line-height: $day-botton-size;
+				line-height: $day-button-size;
 				@media screen and (min-width:$screen-sm-min){
 					display: block;
 				}
@@ -783,7 +783,7 @@ $day-botton-size: 60px;
 			li > a{
 				display: block;
 				width:100%;
-				height: $day-botton-size;
+				height: $day-button-size;
 				background-color:$c-hirely-text-gray;
 				color:#fff;
 				text-align: center;

@@ -29,12 +29,6 @@
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
 
-        /**
-         * Let the parent scope know it not a new user so far
-         * untill user click "Create Account"
-         */
-        $scope.jobApplication.isNewUser = false;
-
 
         $scope.showLogin = function(){
           $rootScope.$emit('ShowLogin');

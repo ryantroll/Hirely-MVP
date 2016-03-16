@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$stateParams', 'AuthService', 'UserService', LoginController ]);
+    angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', LoginController ]);
 
 
-    function LoginController($scope, $rootScope, $stateParams, AuthService, userService) {
+    function LoginController($scope, $rootScope, $state, $stateParams, AuthService, userService) {
         var authService = AuthService;
         var vm = this;
         $scope.error = '';
@@ -17,17 +17,26 @@
         /**
          * Let the parent scope know it is NOT a new user
          */
-        $scope.jobApplication.isNewUser = false;
+        // $scope.jobApplication.isNewUser = false;
 
         $scope.PasswordLogin = function() {
             $scope.ajaxBusy = true;
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(
                     function(auth){
-
-                        console.log(auth);
                         $scope.loginError = false;
                         $scope.ajaxBusy = false;
+
+                        /**
+                         * Check if nextState is set in rootScope and redirect user to it
+                         */
+                        if(angular.isDefined($rootScope.nextState)){
+                            $state.go($rootScope.nextState.state, $rootScope.nextState.params);
+                            delete $rootScope.nextState;
+                        }
+                        else{
+                            $state.go('user.profile')
+                        }
                     },
                     function(err) {
                         $scope.loginError = true;
