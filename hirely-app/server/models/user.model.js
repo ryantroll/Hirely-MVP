@@ -112,6 +112,7 @@ var userSchema = new Schema({
   personalStatment      :     {type:String},
   profileImageURL       :     {type:String},
   eligibleToWorkInUS    :     {type:Boolean},
+  tenureAvg             :     {type:Number, required:false},
 
 
   /**

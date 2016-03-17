@@ -358,9 +358,12 @@ var userService = {
                         }
                     }
                 }  // end roles.forEach
-                user.scores = scores;
 
+                // Update user
                 //console.log("269");
+                user.scores = scores;
+                user.tenureAvg = Math.ceil(totalWorkMonths / user.workExperience.length);
+                //console.log("270");
                 return user.save().then(
                     function (user) {
                         return matchingService.generateCareerMatchScoresForUser(user);
