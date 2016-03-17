@@ -196,6 +196,15 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/job/job-position.tpl.html',
         controller: 'JobPositionController'
       })
+      .state('business', {
+        abstract: true,
+        templateUrl: 'app/layout/business/business-master.tpl.html',
+      })
+      .state('business.candidateList', {
+        url: '/:businessSlug/:locationSlug/:positionSlug/applicants',
+        templateUrl: 'app/business/candidate-list.tpl.html',
+        controller: 'CandidateListController'
+      })
 
 
 

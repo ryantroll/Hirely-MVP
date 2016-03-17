@@ -155,7 +155,10 @@ header.hi-header{
     background-color:#fff;
     border:1px solid $c-hirely-dark-gray;
 }
-
+.btn.gray{
+    background-color:$c-hirely-gray;
+    color:$c-hirely-mid-gray
+}
 .text-red{
     color:$c-hirely-red;
 }
