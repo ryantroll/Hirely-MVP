@@ -53,7 +53,7 @@ $candidat-menu-height:40px;
                 padding:0;
                 position:absolute;
                 left:0;
-                top:1.8em;
+                top:60px;
                 z-index: 10;
 
                 li{
@@ -179,6 +179,9 @@ $candidat-menu-height:40px;
             @include box-shadow(0);
             @include drop-shadow(0, 0, 0, 0);
             padding:1em 1em 0.7em 1em;
+            overflow: visible;
+            // height: 300px;
+
 
             h3{
                 margin-top:0;
@@ -202,6 +205,80 @@ $candidat-menu-height:40px;
                 color:$c-hirely-mid-gray;
                 float:right;
             }
+
+            .drop-down{
+                width:100px;
+                float:right;
+                position:absolute; //// absolute is to fix the overflow hidden set on .box
+                height: 30px;
+                @include border-radius();
+                overflow: visible;
+                top:9px;
+                right:26px;
+
+                a{
+                    display: block;
+                    width:100%;
+                    height: 30px;
+                    line-height: 30px;
+                    background-color:$c-white;
+                    padding:0 0 0 10px;
+                }
+                .value{
+                    float:left;
+                }
+                .icon{
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    float:right;
+                }
+
+                ul{
+                    display: block;
+                    padding-left:0;
+                    list-style: none;
+                    width:100px;
+                    position:absolute;
+                    top:31px;
+                    left:0;
+                    z-index: 10000;
+                    @include drop-shadow();
+
+                    li{
+                        display: block;
+                        width:100%;
+                        height: 30px;
+
+
+                        a{
+                            display: block;
+                            width:100%;
+                            height: 30px;
+                            line-height: 30px;
+                            padding: 0 10px;
+                            background-color:$c-white;
+                            border-bottom:1px solid $c-hirely-light-gray;
+                        }
+                        a:hover{
+                            background-color: $c-hirely-light-gray;
+                            color:$c-hirely-red;
+                        }
+                    }
+                    li:last-child{
+                        a{
+                            border-bottom:none;
+                        }
+                    }
+                    li.active{
+                        a{
+                            background-color:$c-hirely-red;
+                            color:$c-white;
+                        }
+                    }
+                }//// ul
+            }//// .drop-down
         }//// .header
 
         .inner{
@@ -266,7 +343,10 @@ $candidat-menu-height:40px;
             position:relative;
             margin-bottom: 1em;
 
+
+
             .image{
+                // @include vertical-align();
 
                 .image-wrapper{
                     width:80px;
@@ -311,13 +391,23 @@ $candidat-menu-height:40px;
                 h4{
                     font-size:1.5em;
                     font-weight: 600;
+                    text-align:center;
+                    @media screen and (min-width:$screen-sm-min){
+                        text-align: inherit;
+                    }
                 }
 
                 .fit-scale{
                     display:table;
                     width:auto;
                     height: 15px;
+                    margin: 0 auto;
                     margin-bottom: 1em;
+
+                    @media screen and (min-width:$screen-sm-min){
+                        margin: 0 0;
+                        margin-bottom: 1em;
+                    }
 
                     i{
                         display: block;
@@ -348,18 +438,49 @@ $candidat-menu-height:40px;
                     }
                 } //// .fit-scale
 
+                .traits{
+                    font-weight: 600;
+                    strong{
+                        display: block;
+                        clear: both;
+                        font-weight: normal;
+
+                        @media screen and (min-width:$screen-sm-min){
+                            display: inline-block;
+                            width:100px;
+                        }
+                    }
+                }//// .traits
+
+                .more-link{
+                    text-align:center;
+                    @media screen and (min-width:$screen-sm-min){
+                        text-align: left;
+                    }
+                }
+
             }//// .details
 
             .menu{
                 width:auto;
-                display: table;
+                display: none;
                 height: $candidat-menu-height;
-                background-color:#f00;
                 position:absolute;
                 top:0;
                 right:0;
-                @include border-radius();
-                overflow: hidden;
+
+                z-index: 100;
+
+
+                @media screen and (min-width:$screen-sm-min){
+                    display: table;
+                }
+
+                .inner{
+                    height: $candidat-menu-height;
+                    @include border-radius();
+                    overflow: hidden;
+                }
 
                 .action{
                     height: $candidat-menu-height;
@@ -370,7 +491,7 @@ $candidat-menu-height:40px;
                     line-height: $candidat-menu-height;
                     float:left;
                 }
-                > a{
+                a{
                     float:left;
                     display: block;
                     width:$candidat-menu-height;
@@ -378,14 +499,59 @@ $candidat-menu-height:40px;
                     line-height: $candidat-menu-height;
                     text-align: center;
                     color:$c-white;
-                    font-size:1.3em;
+
                 }
                 .drop{
                     background-color:$c-hirely-light-gray;
+                    font-size:1.3em;
                 }
                 .execlude{
                     background-color:$c-hirely-red;
+                    font-size:1.6em;
                 }
+                ul{
+                    display: block;
+                    padding-left:0;
+                    list-style: none;
+                    width:120px;
+                    position:absolute;
+                    top:$candidat-menu-height;
+                    left:0;
+                    z-index: 101;
+                    @include drop-shadow();
+
+                    li{
+                        display: block;
+                        width:100%;
+                        height: $candidat-menu-height;
+
+                        a{
+                            display: block;
+                            width:100%;
+                            height: $candidat-menu-height;
+                            line-height: $candidat-menu-height;
+                            padding: 0 10px;
+                            background-color:$c-hirely-light-gray;
+                            color:$c-hirely-mid-gray;
+                            border-bottom:1px solid $c-white;
+                        }
+                        a:hover{
+                            background-color: $c-white;
+                            color:$c-hirely-red;
+                        }
+                    }
+                    li:last-child{
+                        a{
+                            border-bottom:none;
+                        }
+                    }
+                    li.active{
+                        a{
+                            background-color:$c-hirely-red;
+                            color:$c-white;
+                        }
+                    }
+                }//// ul
             }//// .menu
         }//// .candidate
     }//// .candidates-list

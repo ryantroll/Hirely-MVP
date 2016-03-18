@@ -59,7 +59,7 @@
 
         <div class="body">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3><i class="icon glyphicon glyphicon-filter"></i> Filters</h3>
@@ -125,21 +125,38 @@
                     </div><!--box-->
 
                 </div><!--col-->
+
                 <div class="col-sm-8">
 
                     <div class="box clearfix">
                         <div class="header clearfix">
-                            <h3><i class="icon glyphicon glyphicon-filter"></i> Candidates <span>(25)</span></h3>
-                            <a href="javascript:void(0);"><i class="icon glyphicon glyphicon-remove"></i> Clear All Filters</a>
+                            <h3><i class="icon icon-users_group_icon"></i> Candidates <span>(25)</span></h3>
+                            <div class="drop-down">
+                                <a href="javascript:void(0);" ng-click="toggleSortMenu($event)">
+                                    <span class="value">{{sortByLabel}}</span>
+                                    <i class="icon glyphicon glyphicon-menu-down"></i>
+                                </a>
+                                <ul ng-show="showSortMenu" id="sortMenu">
+                                    <li><a href="javascript:void(0);" data-value="rank">Rank</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div><!--box-->
 
                     <div class="candidates-list">
                         <div class="candidate">
                             <div class="menu">
-                                <div class="action">Contact</div>
-                                <a class="drop"><i class="glyphicon glyphicon-menu-down"></i></a>
-                                <a class="execlude"><i class="glyphicon glyphicon-thumbs-down"></i></a>
+                                <div class="inner">
+                                    <a href="javascript:void(0);" class="action">Contact</a>
+                                    <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, 'one')"><i class="glyphicon glyphicon-menu-down"></i></a>
+                                    <a class="execlude" href="javascript:void(0);"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+                                <ul class="hidden" id="menu_one">
+                                    <li><a href="javascript:void(0);" data-value="applied">APPLIED</a></li>
+                                    <li><a href="javascript:void(0);" data-value="contact">CONTACT</a></li>
+                                    <li><a href="javascript:void(0);" data-value="hire">HIRE</a></li>
+                                    <li><a href="javascript:void(0);" data-value="dismiss">DISMISS</a></li>
+                                </ul>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -170,9 +187,9 @@
                                         </div>
                                         <p>I want to work at CampassCoffee because I grow up in coffee farm and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee</p>
                                         <p class="traits">
-                                            <strong>Top Traits: </strong> Competitive, Leader, Confident, Process-Oriented, Realistic
+                                            <strong>Top Traits </strong> Competitive, Leader, Confident, Process-Oriented, Realistic
                                         </p>
-                                        <p><a href="javascript:void(0);">View Details</a></p>
+                                        <div class="more-link"><a href="javascript:void(0);">View Details</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -180,9 +197,17 @@
 
                         <div class="candidate">
                             <div class="menu">
-                                <div class="action">Contact</div>
-                                <a class="drop" href="javascript:void(0);"><i class="glyphicon glyphicon-menu-down"></i></a>
-                                <a class="execlude" href="javascript:void(0);"><i class="glyphicon glyphicon-thumbs-down"></i></a>
+                                <div class="inner">
+                                    <a href="javascript:void(0);" class="action">Contact</a>
+                                    <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, 'two')"><i class="glyphicon glyphicon-menu-down"></i></a>
+                                    <a class="execlude" href="javascript:void(0);"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+                                <ul class="hidden" id="menu_two">
+                                    <li><a href="javascript:void(0);" data-value="applied">APPLIED</a></li>
+                                    <li><a href="javascript:void(0);" data-value="contact">CONTACT</a></li>
+                                    <li><a href="javascript:void(0);" data-value="hire">HIRE</a></li>
+                                    <li><a href="javascript:void(0);" data-value="dismiss">DISMISS</a></li>
+                                </ul>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -213,9 +238,9 @@
                                         </div>
                                         <p>I want to work at CampassCoffee because I grow up in coffee farm and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee</p>
                                         <p class="traits">
-                                            <strong>Top Traits: </strong> Competitive, Leader, Confident, Process-Oriented, Realistic
+                                            <strong>Top Traits </strong> Competitive, Leader, Confident, Process-Oriented, Realistic
                                         </p>
-                                        <p><a href="javascript:void(0);">View Details</a></p>
+                                        <div class="more-link"><a href="javascript:void(0);">View Details</a></div>
                                     </div>
                                 </div>
                             </div>
