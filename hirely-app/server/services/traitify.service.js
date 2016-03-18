@@ -7,6 +7,7 @@ var config = require('../config');
 var http = require('http');
 var querystring = require('querystring');
 var userModel = require('../models/user.model');
+var userService = require('../services/user.service');
 var traitifyModel = require('../models/traitify.meta.model');
 var q = require('q');
 var _ = require('lodash');
@@ -284,7 +285,9 @@ var traitifySevice = {
                        careerMatchScores2[occId.replace('.', ',')] = careerMatchScores[occId];
                    }
                    user.personalityExams[0].careerMatchScores = careerMatchScores2;
-                   return user.save();
+                   return user.save().then(function(user) {
+                       return userService.updateUserMetrics(user);
+                   });
                }
            )
         });

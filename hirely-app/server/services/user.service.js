@@ -24,6 +24,9 @@ var privateFields = [
 
 function monthDiff(d1, d2) {
     var months;
+    if (isNaN(d2) || !d2) {
+        d2 = new Date();
+    }
     months = (d2.getFullYear() - d1.getFullYear()) * 12;
     months -= d1.getMonth() + 1;
     months += d2.getMonth();
@@ -193,7 +196,7 @@ var userService = {
      * @return {promise}          [promise]
      */
     saveUser: function(userId, userData){
-        var deferred = q.defer()
+        var deferred = q.defer();
 
         var user = new userModel(userData);
 
@@ -214,9 +217,9 @@ var userService = {
                 /**
                  * User exists in DB, do the update
                  */
-                //console.log(userData);
+                console.log(userData);
                 if(foundedUser){
-                    //console.log("Found user");
+                    console.log("Found user");
 
                     /**
                      * Loop through sent properties and set them
@@ -227,7 +230,7 @@ var userService = {
                     }//// for
 
                     foundedUser.lastModifiedOn = new Date();
-                    //console.log("Saving user");
+                    console.log("Saving user");
                     foundedUser.save()
                     .then(
                         function(user){
@@ -271,118 +274,152 @@ var userService = {
         else { return 0; }
     },
 
-    updateUserMetrics: function(userId) {
-        //console.log("257");
-
+    updateUserMetricsById: function(userId) {
+        console.log("257");
+        var self = this;
         return userModel.findById(userId).then(function(user) {
-            //console.log("258");
+            return self.updateUserMetrics(user);
+        });
+    },
 
-            // Education
-            user.educationMaxLvl = 0;
-            user.education.forEach(function (program) {
-                // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
-                if (program.programType > 1 && program.isCompleted == 0) {
-                    program.programType = 2;
-                }
-                if (program.programType > educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
-                    user.educationMaxLvl = program.programType;
-                }
-            });
+    updateUserMetrics: function(user) {
+        console.log("258");
+
+        // Education
+        user.educationMaxLvl = 0;
+        user.education.forEach(function (program) {
+            // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
+            if (program.programType > 1 && program.isCompleted == 0) {
+                program.programType = 2;
+            }
+            if (program.programType > educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
+                user.educationMaxLvl = program.programType;
+            }
+        });
 
 
-            // Clear the old Ksa
-            //console.log("259");
-            for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
-                user.scores[cat] = {};
-            };
+        // Clear the old Ksa
+        console.log("259");
+        for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
+            user.scores[cat] = {};
+        }
 
-            // Concat roles
-            var roles = {};
-            var totalWorkMonths = 0;
-            for (let workExperience of user.workExperience) {
-                var occId = workExperience.onetOccupationId;
-                //console.log("260");
-                var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
-                totalWorkMonths += monthCount;
+        // Concat roles
+        var roles = {};
+        var totalWorkMonths = 0;
+        for (let workExperience of user.workExperience) {
+            var occId = workExperience.onetOccupationId;
+            console.log("260");
+            var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
+            totalWorkMonths += monthCount;
 
-                // If role doesn't already exist, create it
-                if (!(occId in roles)) {
-                    roles[occId] = {"monthCount": 0, "expLvl": 0};
-                }
-
-                roles[occId].monthCount += monthCount;
-                roles[occId].expLvl = userService.monthCountToExperienceLevel(roles[occId].monthCount)
+            // If role doesn't already exist, create it
+            console.log("261.1");
+            if (!(occId in roles)) {
+                roles[occId] = {"monthCount": 0, "expLvl": 0};
             }
 
+            console.log("261.2");
+            roles[occId].monthCount += monthCount;
+            roles[occId].expLvl = userService.monthCountToExperienceLevel(roles[occId].monthCount)
+        }
 
-            // Retrieve the role occupations from OnetScore
-            //console.log("261");
-            var promises = [];
-            for (var key in roles) {
-                promises.push(onetScoresService.findById(key));
-            }
 
-            // Wait until retrieves are done
-            return q.all(promises).then(function (occScoresArray) {
-                //console.log("262");
+        // Retrieve the role occupations from OnetScore
+        console.log("262");
+        var promises = [];
+        for (var key in roles) {
+            promises.push(onetScoresService.findById(key));
+        }
 
-                // Extend roles with onet metrics
-                for (let occScores of occScoresArray) {
-                    var occScoresForExp = occScores.scores[roles[occScores._id].expLvl].toObject();
-                    for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
-                        roles[occScores._id][cat] = occScoresForExp[cat].toObject();
+        // Wait until retrieves are done
+        return q.all(promises).then(function (occScoresArray) {
+            console.log("262.5");
+
+            // Extend roles with onet metrics
+            for (let occScores of occScoresArray) {
+                console.log("expLvl: "+ roles[occScores._id].expLvl);
+                console.log("occId: "+ occScores._id);
+                //console.dir(occScores.scores);
+
+                //console.dir("")
+                var scores = occScores.scores;
+                try {
+                    scores = scores.toObject()
+                } catch (err) {
+                    console.log("Warning:  occScores.scores.toObject failed.  This is known to happen and usually indicates it's already an object")
+                }
+                var occScoresForExp = scores[roles[occScores._id].expLvl];
+                try {
+                    occScoresForExp = occScoresForExp.toObject();
+                } catch (err) {
+                    console.log("Warning:  occScoresForExp.toObject failed.  This is known to happen and usually indicates it's already an object")
+                }
+                for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
+                    roles[occScores._id][cat] = occScoresForExp[cat];
+                    try {
+                        roles[occScores._id][cat] = roles[occScores._id][cat].toObject();
+                    } catch (err) {
+                        console.log("Warning:  roles[occScores._id][cat].toObject failed.  This is known to happen and usually indicates it's already an object")
                     }
                 }
+            }
 
 
-                // Calc master KSAs
-                //console.log("263");
-                var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
-                for (var occId in roles) {
-                    //console.log("264");
-                    // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
-                    var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
+            // Calc master KSAs
+            console.log("263");
+            var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
+            for (var occId in roles) {
+                console.log("264");
+                // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
+                var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
 
-                    for (var category in roles[occId]) {
-                        //console.log("265");
-                        for (var key in roles[occId][category]) {
-                            //console.log("266");
-                            var weighted = Number(weight * roles[occId][category][key]).toFixed(4);
-                            if (key in scores[category]) {
-                                //console.log("267");
-                                scores[category][key] += weighted;
-                            } else {
-                                //console.log("268");
-                                scores[category][key] = weighted;
-                            }
+                for (var category in roles[occId]) {
+                    console.log("265");
+                    for (var key in roles[occId][category]) {
+                        console.log("266");
+                        var weighted = Number(weight * roles[occId][category][key]).toFixed(4);
+                        if (key in scores[category]) {
+                            console.log("267");
+                            scores[category][key] += weighted;
+                        } else {
+                            console.log("268");
+                            scores[category][key] = weighted;
                         }
                     }
-                }  // end roles.forEach
+                }
+            }  // end roles.forEach
 
-                // Update user
-                //console.log("269");
-                user.scores = scores;
+            // Update user
+            console.log("269");
+            user.scores = scores;
+            user.tenureAvg = 0;
+            if (totalWorkMonths !== 0) {
                 user.tenureAvg = Math.ceil(totalWorkMonths / user.workExperience.length);
-                //console.log("270");
-                return user.save().then(
-                    function (user) {
+            }
+            console.log("270");
+            return user.save().then(
+                function (user) {
+                    if (user.personalityExams.length > 0) {
                         return matchingService.generateCareerMatchScoresForUser(user);
-                    },
-                    function (error) {
-                        console.log(error);
+                    } else {
+                        return user;
                     }
-                );
+                },
+                function (error) {
+                    console.log(error);
+                }
+            );
 
 
-            }).catch(function (error) {
-                console.dir(error);
-                raise(error);
-                // Do whatever happens if one or more errored
-            });  // end q.all()
+        })
+        //    .catch(function (error) {
+        //    console.dir(error);
+        //    raise(error);
+        //    // Do whatever happens if one or more errored
+        //});  // end q.all()
 
-        }); // end find user
-
-    }  // end updateUserMetrics
+    }  // end updateUserMetricsById
 
 }; /// users object
 

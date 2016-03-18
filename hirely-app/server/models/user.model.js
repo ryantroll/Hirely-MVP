@@ -48,6 +48,7 @@ var experienceSchema = new Schema({
   city                    :         {type:String, required:true},
   state                   :         {type:String, required:true},
   googlePlaceId           :         {type:String, required:false},
+  currentlyHere           :         {type:Boolean, required:false},
   dateStart               :         {type:Date, required:true},
   dateEnd                 :         {
                                       type:Date,

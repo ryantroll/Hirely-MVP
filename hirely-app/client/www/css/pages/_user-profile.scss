@@ -605,7 +605,7 @@ $day-button-size: 60px;
 	position:absolute;
 	z-index:1100;
 	top:0;
-	// bottom:0;
+	 bottom:0;
 	left:0;
 	right:0;
 	background-color:#fff;
@@ -884,11 +884,15 @@ $day-button-size: 60px;
     float: left;
 }
 @media (min-width: 768px) {
-.col-sm-15 {
-        width: 20%;
-        float: left;
+	.col-sm-15 {
+		width: 20%;
+		float: left;
     }
+	#already-have-account-link-mobile {
+		display: none;
+	}
 }
+
 @media (min-width: 992px) {
     .col-md-15 {
         width: 20%;

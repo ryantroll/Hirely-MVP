@@ -41,11 +41,61 @@
       }//// fun. link
     }; /// return object
 
+  }) /// validate year
+  .directive('validateWorkOccupation', function(){
+    return {
+      //restrict:'A',
+      require:'ngModel',
+      link: function(scope, elm, attrs, ctrl) {
+        ctrl.$validators.validateWorkOccupation = function(modelValue, viewValue) {
+          //console.dir(ctrl.occupation);
+          ////var scope2 = angular.element($("#workOccupation")).scope();
+          var scope2 = angular.element($("[name=stepTwo]")).scope();
+          if (scope2.requireWorkOccupationValidation == true) {
+            if ($("#workOccupationRow").hasClass("ng-hide")) {
+              console.log("hidden");
+              return true;
+            }
+            else if ($.isNumeric(modelValue)) {
+              console.log("numeric");
+              return true;
+            }
+            else {
+              console.log("invalid");
+              return false;
+            }
+          }
+          return true;
+
+          //console.dir(Object.keys(scope2);
+          //if (!scope2) {
+          //  console.log("noscope");
+          //  return true;
+          //}
+          //else if ($("#workOccupationRow").hasClass("ng-hide")) {
+          //  console.log("hidden");
+          //  return true;
+          //}
+          //else if ($.isNumeric(modelValue)) {
+          //  console.log("numeric");
+          //  return true;
+          //}
+          //else {
+          //  console.log("invalid");
+          //  return false;
+          //}
+
+        };
+      }
+    }; /// return object
+
   }); /// validate year
 
   function ProfileExperienceController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
 
     var geocodeService = GeocodeService;
+
+    $scope.requireWorkOccupationValidation = false;
 
     /**
      * [orderBy this filter will be used to order the work experience and education array by dateStart]
@@ -92,16 +142,13 @@
              * do some dates clenaing and fixing
              */
             item.dateStart = new Date(item.dateStart);
-            item.dateEnd = new Date(item.dateEnd);
             item.dateStartYear = item.dateStart.getFullYear();
             item.dateStartMonth = String(item.dateStart.getMonth() + 1);
-            if(!isNaN(item.dateEnd.getTime()) ){
-              item.dateEndYear = item.dateEnd.getFullYear();
-              item.dateEndMonth = String(item.dateEnd.getMonth() + 1);
+
+            if (item.currentlyHere != true) {
+              item.dateEnd = new Date(item.dateEnd);
             }
-            else{
-              item.currentlyHere = true;
-            }
+
           });
           $scope.xpItems = orderBy(founded.workExperience, 'dateStart', true);
         }//// if isArray(experience)
@@ -222,6 +269,9 @@
 
       delete $scope.editIndex;
 
+      $scope.requireWorkOccupationValidation = false;
+      delete $scope.positionSub;
+
       $scope.stepTwo.$setUntouched();
       $scope.stepTwo.$setPristine();
 
@@ -326,7 +376,15 @@
 
       $scope.$watch('occupation.reportedJobName', function(newValue, oldValue){
         $scope.selectedSub = null;
+          //$("#selectedSub").prop("required", true);
+          //$scope.stepTwo.workOccupation.$setValidity('required', true);
       });
+
+      $scope.handleReportedJobNameChange = function() {
+        $scope.requireWorkOccupationValidation = true;
+        console.log('requireWorkOccupationValidation');
+
+      };
 
       /**
        * [searchPosition will be used in typeahead to query onet positions and return a list of matching position]
@@ -405,6 +463,7 @@
            */
 
           if( !isNaN(start.getTime() ) && !isNaN(end.getTime() ) ){
+            console.log("end date is less than start date");
             $scope.stepTwo.workDateEndY.$setValidity('invalidEndDate', end > start);
             $scope.stepTwo.workDateEndM.$setValidity('invalidEndDate', end > start);
           }
@@ -418,18 +477,21 @@
              * Dont validate the range of the edit item with himself
              */
             if(!isNaN($scope.editIndex) && $scope.editIndex === x){
+              console.log("range of the edit item with himself");
               continue;
             }
             /**
              * check if start date in a middle of range
              */
             if(start >= $scope.xpItems[x].dateStart && start < $scope.xpItems[x].dateEnd){
+              console.log("start date in a middle of range");
               $scope.stepTwo.workDateStartY.$setValidity('startDateConflict', false);
               $scope.stepTwo.workDateStartM.$setValidity('startDateConflict', false);
               $scope.xpItems[x].conflict = true;
               break;
             }
             else{
+              console.log("start date not in a middle of range");
               $scope.stepTwo.workDateStartY.$setValidity('startDateConflict', true);
               $scope.stepTwo.workDateStartM.$setValidity('startDateConflict', true);
               $scope.xpItems[x].conflict = false;
@@ -439,21 +501,24 @@
              * check if end date in a middle of range
              */
             if(end > $scope.xpItems[x].dateStart && end <= $scope.xpItems[x].dateEnd){
+              console.log("end date in a middle of range");
               $scope.stepTwo.workDateEndY.$setValidity('endDateConflict', false);
               $scope.stepTwo.workDateEndM.$setValidity('endDateConflict', false);
               $scope.xpItems[x].conflict = true;
               break;
             }
             else{
+              console.log("end date not in a middle of range");
               $scope.stepTwo.workDateEndY.$setValidity('endDateConflict', true);
               $scope.stepTwo.workDateEndM.$setValidity('endDateConflict', true);
               $scope.xpItems[x].conflict = false;
             }
 
             /**
-             * Check if new rang is overlap one old rag
+             * Check if new rang is overlap one old range
              */
             if(start <= $scope.xpItems[x].dateStart && end >= $scope.xpItems[x].dateEnd){
+              console.log("new rang is overlap one old range");
               $scope.stepTwo.workDateEndY.$setValidity('endDateConflict', false);
               $scope.stepTwo.workDateEndM.$setValidity('endDateConflict', false);
               $scope.stepTwo.workDateStartY.$setValidity('startDateConflict', false);
@@ -462,6 +527,7 @@
               break;
             }
             else{
+              console.log("new rang is not overlap one old range");
               $scope.stepTwo.workDateEndY.$setValidity('endDateConflict', true);
               $scope.stepTwo.workDateEndM.$setValidity('endDateConflict', true);
               $scope.stepTwo.workDateStartY.$setValidity('startDateConflict', true);
@@ -495,18 +561,17 @@
                 function(user){
                   console.log("1");
                   // Update user metrics now
-                  return user;
-                  //UserService.updateUserMetrics(AuthService.currentUserID).then(
-                  //    function(user){
-                  //      console.log("2");
-                  //      console.dir(user.scores.knowledges);
-                  //    },
-                  //    function(err){
-                  //      console.log("3");
-                  //      alert("Error!\nYour scoring data was not saved, please try again.")
-                  //      console.log(err);
-                  //    }
-                  //)
+                  return UserService.updateUserMetricsById(AuthService.currentUserID).then(
+                      function(user){
+                        console.log("2");
+                        return user;
+                      },
+                      function(err){
+                        console.log("3");
+                        alert("Error!\nYour scoring data was not saved, please try again. ")
+                        console.log(err);
+                      }
+                  )
                 },
                 function(err){
                   alert("Error!\nYour data was not saved, please try again.");
