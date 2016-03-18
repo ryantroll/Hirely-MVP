@@ -68,6 +68,7 @@ module.exports = function(app) {
     app.get('/api/v1/applications/:id', applicationApiRoutes.getById);
     app.post('/api/v1/applications/', applicationApiRoutes.createNewApplication);
     app.patch('/api/v1/applications/:appId', applicationApiRoutes.saveApplication);
+    app.get('/api/v1/applicationsByPositionId/:id', applicationApiRoutes.getByPositionId);
 
     /**
      * Adding routs for favorite
