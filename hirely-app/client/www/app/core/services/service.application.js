@@ -18,7 +18,9 @@
      */
     var service = {
       save:save,
-      isApplicationExists: isApplicationExists
+      isApplicationExists: isApplicationExists,
+      getByPositionId: getByPositionId,
+      getStatistics: getStatistics
     };
 
     /**
@@ -85,6 +87,48 @@
 
         return deferred.promise;
     }
+
+    function getByPositionId(posId){
+        var deferred = $q.defer();
+        HirelyApiService.applications('byPositionId', posId).get()
+        .then(
+            function(found){
+
+                if(
+                    angular.isDefined(found.applications)
+                    && angular.isArray(found.applications)
+                    && angular.isDefined(found.users)
+                    && angular.isArray(found.users)
+                ){
+                    found.users = applicantsArrayToObject(found.users);
+                    deferred.resolve(found);
+                }
+                else{
+                    deferred.reject('No application found');
+                }
+            },
+            function(err){
+                deferred.reject(err);
+            }
+        )//// .get().then()
+        return deferred.promise;
+    }//// getPositionById
+
+    function getStatistics(list){
+        var ret = {};
+        ret.total = list.length;
+        return ret;
+    }//// fun. getStatistics
+
+    function applicantsArrayToObject(app){
+        var ret = {};
+        if(Array.isArray(app) && app.length > 0){
+            for(var x=0; x<app.length; x++){
+                ret[app[x]._id] = app[x];
+            }
+        }
+        return ret;
+    }//// fun. applicantsArrayToObject
 
     /**
      * Return server object

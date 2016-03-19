@@ -139,9 +139,11 @@ header.hi-header{
     max-width: $screen-xs-min;
     margin-left:auto;
     margin-right:auto;
+    padding:0 1em;
 
     @media screen and (min-width:$screen-sm-min){
         max-width: $screen-sm-min;
+        padding:0;
     }
     @media screen and (min-width:$screen-md-min){
         max-width: $screen-md-min;
@@ -149,6 +151,10 @@ header.hi-header{
     @media screen and (min-width:$screen-lg-min){
         max-width: $screen-lg-min;
     }
+}
+
+.page-error{
+    padding: 4em 0;
 }
 
 .btn-secondary{

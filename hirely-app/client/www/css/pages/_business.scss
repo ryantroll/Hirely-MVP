@@ -438,6 +438,15 @@ $candidat-menu-height:40px;
                     }
                 } //// .fit-scale
 
+                .answers{
+                    .answer{
+                        b{
+                            font-weight: normal;
+                            text-transform:uppercase;
+                        }
+                    }
+                }//// .answers
+
                 .traits{
                     font-weight: 600;
                     strong{

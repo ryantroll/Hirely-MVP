@@ -1,4 +1,18 @@
-<div class="sub-header">
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loadding</p>
+    <div class="loader"></div>
+</div>
+
+<div class="content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Location Not Found!</h4>
+        </div>
+    </div>
+</div>
+
+<div class="sub-header" ng-show="dataLoaded && !dataError">
     <div class="max-width clearfix">
         <div class="row">
             <div class="col-xs-12 col-sm-10">
@@ -41,17 +55,29 @@
     </div><!--mac-width-->
 </div><!--sub-header-->
 
-<div class="content">
-    <div class="max-width">
+<div class="content" ng-show="dataLoaded && !dataError">
 
+    <!--No applications message-->
+    <div class="max-width" ng-show="applications.length < 1">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="page-error">
+                    <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+                    <h4>No applications submitted for this position yet</h4>
+                </div>
+            </div>
+        </div>
+    </div><!--max-width-->
+
+    <div class="max-width" ng-show="applications.length > 0">
         <div class="status-bar">
             <div class="row">
                 <div class="col-sm-12">
                     <ul>
-                        <li><button class="btn red">Applied <span>(30)</span></button></li>
-                        <li><button class="btn white">Contacted <span>(30)</span></button></li>
-                        <li><button class="btn white">Hired <span>(30)</span></button></li>
-                        <li><button class="btn white">Declined <span>(30)</span></button></li>
+                        <li><button class="btn red">Applied <span  ng-show="statistics.total > 0">({{statistics.total}})</span></button></li>
+                        <li><button class="btn white">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
+                        <li><button class="btn white">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
+                        <li><button class="btn white">Declined <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
                     </ul>
                 </div><!--col-->
             </div><!--row-->
@@ -74,52 +100,50 @@
 
                     <div class="box clearfix">
                         <div class="header clearfix">
-                            <h3>VIEW</h3>
-                            <a href="javascript:void(0);"><i class="icon glyphicon glyphicon-menu-down"></i></a>
-                        </div>
-                        <div class="inner list clearfix">
-                            <ul>
-                                <li><a href="javascript:void(0);">New (5)</a></li>
-                                <li><a href="javascript:void(0);">Viewed (5)</a></li>
-                                <li><a href="javascript:void(0);">Aging</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="header clearfix">
-                            <h3>Candidate Fit</h3>
-                            <a href="javascript:void(0);"><i class="icon glyphicon glyphicon-menu-down"></i></a>
-                        </div>
-                        <div class="inner list clearfix">
-                            <ul>
-                                <li><a href="javascript:void(0);">Great Fit</a></li>
-                                <li><a href="javascript:void(0);">Good Fit</a></li>
-                                <li><a href="javascript:void(0);">OK Fit</a></li>
-                                <li><a href="javascript:void(0);">Poor Fit</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="header clearfix">
                             <h3>Availability</h3>
-                            <a href="javascript:void(0);"><i class="icon glyphicon glyphicon-menu-down"></i></a>
+                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
                         </div>
                         <div class="inner list clearfix">
                             <ul>
-                                <li><a href="javascript:void(0);">Week Days</a></li>
-                                <li><a href="javascript:void(0);">Weekends (3)</a></li>
-                                <li><a href="javascript:void(0);">Mornings (4)</a></li>
-                                <li><a href="javascript:void(0);">Afternoons (4)</a></li>
-                                <li><a href="javascript:void(0);">Evenings (4)</a></li>
+                                <li><a href="javascript:void(0);">Weekdays</a></li>
+                                <li><a href="javascript:void(0);">Weekends</a></li>
+                                <li><a href="javascript:void(0);">Mornings</a></li>
+                                <li><a href="javascript:void(0);">Days</a></li>
+                                <li><a href="javascript:void(0);">Nights</a></li>
                             </ul>
                         </div>
+                    </div><!--box-->
 
+                    <div class="box clearfix">
                         <div class="header clearfix">
-                            <h3>Qualifications</h3>
-                            <a href="javascript:void(0);"><i class="icon glyphicon glyphicon-menu-down"></i></a>
+                            <h3>Seasonal</h3>
+                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
                         </div>
                         <div class="inner list clearfix">
                             <ul>
-                                <li><a href="javascript:void(0);">Hospitality Experience (5)</a></li>
-                                <li><a href="javascript:void(0);">Flexible Schedule (3)</a></li>
+                                <li><a href="javascript:void(0);">Winter</a></li>
+                                <li><a href="javascript:void(0);">Spring</a></li>
+                                <li><a href="javascript:void(0);">Summer</a></li>
+                                <li><a href="javascript:void(0);">Fall</a></li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box clearfix">
+                        <div class="header clearfix">
+                            <h3>Education</h3>
+                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
+                        </div>
+                        <div class="inner list clearfix">
+                            <ul>
+                                <li><a href="javascript:void(0);">No Education</a></li>
+                                <li><a href="javascript:void(0);">Hight School</a></li>
+                                <li><a href="javascript:void(0);">Certificate</a></li>
+                                <li><a href="javascript:void(0);">Associate Degree</a></li>
+                                <li><a href="javascript:void(0);">Master Degree</a></li>
+                                <li><a href="javascript:void(0);">Professional Degree</a></li>
+                                <li><a href="javascript:void(0);">Doctoral Degree</a></li>
+                                <li><a href="javascript:void(0);">Post Doctoral Degree</a></li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -130,7 +154,7 @@
 
                     <div class="box clearfix">
                         <div class="header clearfix">
-                            <h3><i class="icon icon-users_group_icon"></i> Candidates <span>(25)</span></h3>
+                            <h3><i class="icon icon-users_group_icon"></i> Candidates <span ng-show="statistics.total > 0">({{statistics.total}})</span></h3>
                             <div class="drop-down">
                                 <a href="javascript:void(0);" ng-click="toggleSortMenu($event)">
                                     <span class="value">{{sortByLabel}}</span>
@@ -138,20 +162,22 @@
                                 </a>
                                 <ul ng-show="showSortMenu" id="sortMenu">
                                     <li><a href="javascript:void(0);" data-value="rank">Rank</a></li>
+                                    <li><a href="javascript:void(0);" data-value="date">Date</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div><!--box-->
 
                     <div class="candidates-list">
-                        <div class="candidate">
+
+                        <div class="candidate" ng-repeat="app in applications">
                             <div class="menu">
                                 <div class="inner">
                                     <a href="javascript:void(0);" class="action">Contact</a>
-                                    <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, 'one')"><i class="glyphicon glyphicon-menu-down"></i></a>
+                                    <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, app._id)"><i class="glyphicon glyphicon-menu-down"></i></a>
                                     <a class="execlude" href="javascript:void(0);"><i class="icon-thumb_down_icon"></i></a>
                                 </div>
-                                <ul class="hidden" id="menu_one">
+                                <ul class="hidden" id="menu_{{app._id}}">
                                     <li><a href="javascript:void(0);" data-value="applied">APPLIED</a></li>
                                     <li><a href="javascript:void(0);" data-value="contact">CONTACT</a></li>
                                     <li><a href="javascript:void(0);" data-value="hire">HIRE</a></li>
@@ -162,16 +188,16 @@
                                 <div class="col-sm-3">
                                     <div class="image">
                                         <div class="image-wrapper">
-                                            <img src="{{defaultImage}}" />
+                                            <img src="{{applicants[app.userId].profileImageURL || defaultImage}}" />
                                         </div>
-                                        <div class="tag">New</div>
-                                        <div class="date">Applied: 3/1/2016</div>
+                                        <div class="tag">{{getViewStatus(app._id, $index)}}</div>
+                                        <div class="date">Applied: {{app.createdAt | date:'MM/dd/yyyy'}}</div>
                                     </div>
 
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="details">
-                                        <h4>Ryan Troll</h4>
+                                        <h4>{{applicants[app.userId].firstName}} {{applicants[app.userId].lastName}}</h4>
                                         <div class="fit-scale">
                                             <i class="great"></i>
                                             <i class="great"></i>
@@ -185,60 +211,14 @@
                                             <i class="great"></i>
                                             <span class="legend">Great Fit</span>
                                         </div>
-                                        <p>I want to work at CampassCoffee because I grow up in coffee farm and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee</p>
-                                        <p class="traits">
-                                            <strong>Top Traits </strong> Competitive, Leader, Confident, Process-Oriented, Realistic
-                                        </p>
-                                        <div class="more-link"><a href="javascript:void(0);">View Details</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--candidate-->
-
-                        <div class="candidate">
-                            <div class="menu">
-                                <div class="inner">
-                                    <a href="javascript:void(0);" class="action">Contact</a>
-                                    <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, 'two')"><i class="glyphicon glyphicon-menu-down"></i></a>
-                                    <a class="execlude" href="javascript:void(0);"><i class="icon-thumb_down_icon"></i></a>
-                                </div>
-                                <ul class="hidden" id="menu_two">
-                                    <li><a href="javascript:void(0);" data-value="applied">APPLIED</a></li>
-                                    <li><a href="javascript:void(0);" data-value="contact">CONTACT</a></li>
-                                    <li><a href="javascript:void(0);" data-value="hire">HIRE</a></li>
-                                    <li><a href="javascript:void(0);" data-value="dismiss">DISMISS</a></li>
-                                </ul>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <div class="image">
-                                        <div class="image-wrapper">
-                                            <img src="{{defaultImage}}" />
+                                        <div class="answers">
+                                            <div class="answer" ng-repeat="answer in app.prescreenAnswers">
+                                                <b>{{answer.question}}</b>
+                                                <p>{{answer.answer}}</p>
+                                            </div>
                                         </div>
-                                        <div class="tag">New</div>
-                                        <div class="date">Applied: 3/1/2016</div>
-                                    </div>
-
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="details">
-                                        <h4>Ryan Troll</h4>
-                                        <div class="fit-scale">
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <span class="legend">Great Fit</span>
-                                        </div>
-                                        <p>I want to work at CampassCoffee because I grow up in coffee farm and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee and love coffee</p>
-                                        <p class="traits">
-                                            <strong>Top Traits </strong> Competitive, Leader, Confident, Process-Oriented, Realistic
+                                        <p class="traits" ng-show="applicants[app.userId].personalityExams.length > 0">
+                                            <strong>Top Traits</strong> <span ng-repeat="trait in applicants[app.userId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
                                         </p>
                                         <div class="more-link"><a href="javascript:void(0);">View Details</a></div>
                                     </div>
@@ -251,3 +231,5 @@
                 </div><!--col-->
             </div><!--row-->
         </div><!--body-->
+    </div><!--max-width-->
+</div><!--content-->

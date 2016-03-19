@@ -16,6 +16,16 @@ var applicationSchema = new Schema({
                           message:'{VALUE} is not valid value for application status'
                         }
                       },
+  viewStatus  :       {
+                        type:Number, //// 0 or undefined close, 1 viewed, 2 aging /// aging option might not be used as it calculated based on date
+                        required:false,
+                        validate:{
+                          validator: function(v){
+                            return /^(2|1|0)$/.test(v.toString());
+                          },
+                          message:'{VALUE} is not valid value for application status'
+                        }
+                      },
   prescreenAnswers  :
   [
     {
