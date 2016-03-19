@@ -73,7 +73,6 @@ var MatchService = {
                             var ss_user_all_sum = Number(ss_user_all.reduce(function(a, b) {return a + b;})).toFixed(4);
                             var ss_occ_all_sum = Number(ss_occ_all.reduce(function (a, b) {return a + b;})).toFixed(4);
                             var expScore = 1 - Number(Math.sqrt(ss_user_all_sum / ss_occ_all_sum)).toFixed(4);
-                            // TODO:  Ask Dave why we need to do this?  Won't expScore always be > 0?
                             expScore = Math.max(expScore, 0) * 100;
                         }
                         scores[expLvl].exp = Number(expScore).toFixed(2);

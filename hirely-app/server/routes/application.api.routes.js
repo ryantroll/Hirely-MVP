@@ -46,14 +46,14 @@ var applicationRoutes = {
     },
 
     getByPositionId: function(req, res){
-        applicationService.getByPositionId(req.params.positionId, req.query)
+        applicationService.getByPositionId(req.params.id, req.query)
             .then(
                 function(app){
                     res.status(200).json(apiUtil.generateResponse(200, "Application retrieved successfully", app));
                 },
                 function(error){
                     //// application couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(404, "No application found for this position", null));
+                    res.status(404).json(apiUtil.generateResponse(404, "No application found for this position or error. "+error, null));
                 }
             );
     },

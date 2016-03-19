@@ -32,6 +32,7 @@ db.once('open', function(){
         businessesOwned: [],
         locationsManaged: [],
         businessesStaffOf: [],
+        tenureAvg: 0,
 
         preferences: {
             desiredWageMin      :       10,

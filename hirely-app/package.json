@@ -25,7 +25,8 @@
     "node-geocoder": "^3.4.1",
     "traitify": "git://github.com/bdombro/traitify-node.git#5bc59ac8237db6e48fd77dae2e79c6c2d7657255",
     "q": "*",
-    "tiny-lr": "^0.2.0"
+    "tiny-lr": "^0.2.0",
+    "lodash": "*"
   },
   "devDependencies": {
     "bower": "^1.3.3",

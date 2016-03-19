@@ -1,5 +1,7 @@
+'use strict'
 var applicationModel = require('../models/application.model');
 var userService = require('./user.service');
+var userModel = require('../models/user.model');
 var businessService = require('./business.service');
 var q = require('q');
 
@@ -94,13 +96,28 @@ var applicationService = {
     },
 
     /**
-     * [getByPositionId will get applications list that match a position id]
+     * [getByPositionId will get applications and related users list that match a position id]
      * @param  {string} positionId [id of position]
      * @param  {object} reqQuery  [query string parameters]
      * @return {promise}           [description]
      */
     getByPositionId: function(positionId, reqQuery){
-        return applicationModel.find({positionId:positionId}).exec();
+        return applicationModel.find({'positionId':positionId}).then(function(applications) {
+
+            var userIds = [];
+            for (let application of applications) {
+                userIds.push(application.userId);
+            }
+
+            return userModel.find({_id: {$in:userIds}}).then(function(users) {
+                var returnObj = {
+                    applications: applications,
+                    users: users
+                };
+                return returnObj;
+            })
+
+        });
     },
 
     /**
@@ -181,7 +198,7 @@ var applicationService = {
                                  * Loop through sent properties and set them
                                  */
                                 // delete foundedApp.prescreenAnswers;
-                                for(prop in appObj){
+                                for(var prop in appObj){
                                     foundedApp[prop] = appObj[prop];
                                 }//// for
 
