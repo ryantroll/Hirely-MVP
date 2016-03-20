@@ -255,7 +255,16 @@ db.once('open', function(){
         type: "computation",
         importance: 1,
         operator: "<",
-        operands: ["user.tenureAvg", 10]
+        operands: [
+            {
+                type: "attribute",
+                value: "user.tenureAvg"
+            },
+            {
+                type: "number",
+                value: 10
+            }
+        ]
     };
 
     bdata['locations'][locationId2] = bdata['locations']['tmpLocationId2'];
