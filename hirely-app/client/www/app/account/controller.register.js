@@ -52,7 +52,7 @@
             /**
              * Let the parent scope know it is a new regitered user
              */
-            $scope.jobApplication.isNewUser = true;
+            // $scope.jobApplication.isNewUser = true;
 
             //register new user
             userService.registerNewUser(registeredUser.email, registeredUser.password)

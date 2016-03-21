@@ -170,7 +170,7 @@
 
                     <div class="candidates-list">
 
-                        <div class="candidate" ng-repeat="app in applications">
+                        <div class="candidate" ng-repeat="app in filtered">
                             <div class="menu">
                                 <div class="inner">
                                     <a href="javascript:void(0);" class="action">Contact</a>
@@ -199,17 +199,17 @@
                                     <div class="details">
                                         <h4>{{applicants[app.userId].firstName}} {{applicants[app.userId].lastName}}</h4>
                                         <div class="fit-scale">
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <i class="great"></i>
-                                            <span class="legend">Great Fit</span>
+                                            <i ng-class="getFitClass(0, app.score)"></i>
+                                            <i ng-class="getFitClass(1, app.score)"></i>
+                                            <i ng-class="getFitClass(2, app.score)"></i>
+                                            <i ng-class="getFitClass(3, app.score)"></i>
+                                            <i ng-class="getFitClass(4, app.score)"></i>
+                                            <i ng-class="getFitClass(5, app.score)"></i>
+                                            <i ng-class="getFitClass(6, app.score)"></i>
+                                            <i ng-class="getFitClass(7, app.score)"></i>
+                                            <i ng-class="getFitClass(8, app.score)"></i>
+                                            <i ng-class="getFitClass(9, app.score)"></i>
+                                            <span class="legend">{{app.scoreLabel | uppercase}} Fit</span>
                                         </div>
                                         <div class="answers">
                                             <div class="answer" ng-repeat="answer in app.prescreenAnswers">

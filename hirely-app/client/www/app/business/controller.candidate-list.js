@@ -142,6 +142,22 @@
       return ret;
     }
 
+    function applyFilters(){
+      var ret = [];
+      var list = $scope.applications;
+      for(var x=0; x<list.length; x++){
+        if(true === $scope.filterEngine( list[x] ) ){
+          var scoreObj = $scope.scores[list[x].userId];
+
+          list[x].score = scoreObj.scores[$scope.position.expLvl].overall;
+          list[x].scoreLabel = 'great';
+          ret.push(list[x]);
+        }
+      }
+      // console.log(ret)
+      $scope.filtered =  ret;
+    }
+
 
 
     /**
@@ -193,8 +209,10 @@
     )
     .then(
       function(data){
+        console.log(data)
         $scope.applications = data.applications
         $scope.applicants = data.users;
+        $scope.scores = data.careerMatchScoress;
       },
       function(err){
         console.log(err)
@@ -229,6 +247,8 @@
         $scope.dataLoaded = true;
         return;
       }
+
+      applyFilters();
 
       /**
        * set statistic variables
@@ -279,6 +299,7 @@
         .then(
           function(saved){
             $scope.updateStats();
+            applyFilters();
           },
           function(err){
             console.log(err)
@@ -289,8 +310,24 @@
 
     $scope.setFilter = function(filter){
       angular.extend($scope.filters, filter);
-      console.log($scope.filter);
+      applyFilters();
     }
+
+    $scope.getFitClass = function(i, score){
+
+      var label = 'great';
+      if(score < 90 && score >=70){
+        label = 'good';
+      }else if(score < 70 && score >= 50){
+        label = 'ok';
+      }else if(score < 50){
+        label = 'poor';
+      }
+      // console.log(Math.round(score/10)-1, label, i)
+      return i <= Math.round(score/10)-1 ? label : '';
+    }
+
+
 
   }//// controller
 })();

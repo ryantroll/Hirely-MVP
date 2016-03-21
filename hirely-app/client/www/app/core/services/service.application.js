@@ -106,6 +106,7 @@
                     && angular.isArray(found.users)
                 ){
                     found.users = applicantsArrayToObject(found.users);
+                    found.careerMatchScoress = scoreArrayToObject(found.careerMatchScoress)
                     deferred.resolve(found);
                 }
                 else{
@@ -155,6 +156,16 @@
         }
         return ret;
     }//// fun. applicantsArrayToObject
+
+    function scoreArrayToObject(score){
+      var ret = {};
+      if(Array.isArray(score) && score.length > 0){
+        for(var x=0; x<score.length; x++){
+          ret[score[x].userId] = score[x];
+        }
+      }
+      return ret;
+    }
 
 
 
