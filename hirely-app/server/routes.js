@@ -60,6 +60,7 @@ module.exports = function(app) {
     app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);
     app.get('/api/v1/businessByPositionId/:pid', businessApiRoutes.getByPositionId);
     app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
+    app.get('/api/v1/positions/:pid/isUserFiltered/:uid', businessApiRoutes.isUserFilteredForPosition);
 
     /**
      * Adding routs for local monogoDB applicaion

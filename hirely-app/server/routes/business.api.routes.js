@@ -46,7 +46,20 @@ var businessRoutes = {
                 },
                 function(error){
                     //// business couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
+                    res.status(404).json(apiUtil.generateResponse(404, "Business couldn't be located", null));
+                }
+            );
+    },
+
+    isUserFilteredForPosition: function(req, res){
+        businessService.isUserIdFilteredForPositionId(req.params.uid, req.params.pid, req.query)
+            .then(
+                function(bool){
+                    res.status(200).json(apiUtil.generateResponse(200, bool));
+                },
+                function(error){
+                    //// business couldn't be found 404
+                    res.status(404).json(apiUtil.generateResponse(404, "Position or user not found or error. "+error, null));
                 }
             );
     },

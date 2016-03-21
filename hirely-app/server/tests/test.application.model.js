@@ -10,8 +10,8 @@ db.on('error', console.error.bind(console, 'connection error:') );
 
 db.once('open', function(){
     var a = new ApplicationModel({
-        userId: mongoose.Types.ObjectId('568fde202127fa312543f50e'),
-        positionId: mongoose.Types.ObjectId('56952b8f0c3d16003e49a3e2'),
+        userId: '568fde202127fa312543f50e',
+        positionId: '56952b8f0c3d16003e49a3e2',
         status:1,
         prescreenAnswers:[
             {

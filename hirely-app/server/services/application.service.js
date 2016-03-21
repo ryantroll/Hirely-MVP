@@ -2,6 +2,8 @@
 var applicationModel = require('../models/application.model');
 var userService = require('./user.service');
 var userModel = require('../models/user.model');
+var businessModel = require('../models/business.model');
+var careerMatchScoresModel = require('../models/careerMatchScores.model');
 var businessService = require('./business.service');
 var q = require('q');
 
@@ -102,23 +104,32 @@ var applicationService = {
      * @return {promise}           [description]
      */
     getByPositionId: function(positionId, reqQuery){
-        return applicationModel.find({'positionId':positionId}).then(function(applications) {
+        return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
+            var businessObj = business.toObject();
+            var position = businessObj.positions[positionId];
 
-            var userIds = [];
-            for (let application of applications) {
-                userIds.push(application.userId);
-            }
+            return applicationModel.find({'positionId': positionId}).then(function (applications) {
 
-            return userModel.find({_id: {$in:userIds}}).then(function(users) {
-                var returnObj = {
-                    applications: applications,
-                    users: users
-                };
-                return returnObj;
-            })
+                var userIds = [];
+                for (let application of applications) {
+                    userIds.push(application.userId);
+                }
 
+                return userModel.find({_id: {$in: userIds}}).then(function (users) {
+                    return careerMatchScoresModel.find({userId: {$in: userIds}, occId: position.occId}).then(function (careerMatchScoress) {
+                        var returnObj = {
+                            applications: applications,
+                            users: users,
+                            careerMatchScoress: careerMatchScoress
+                        };
+                        return returnObj;
+                    });
+
+                });
+
+            });
         });
-    },
+    },  // end getByPositionId
 
     /**
      * [createNewApplication will insert a new application after it make sure user id and position id are valid by checking existance in database]

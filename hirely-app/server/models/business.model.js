@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var freeSchema = new Schema({}, {strict:false, _id:false});
 
 var positionSchema = new Schema({
-    location_id   :    {type: Schema.ObjectId, required:true},
+    locationId   :    {type: String, required:true},
     title         :    {type: String, required:true},
     slug          :    {type: String},
     occId         :    {type: String, required:true},
@@ -92,16 +92,7 @@ var positionSchema = new Schema({
         }
     ], /// prescreen array
 
-    qualificationSpecification: {
-        formulas: {
-            name: String,
-            dateCreated: String,
-            type: String,
-            importance: String,
-            operator: String,
-            operands: []
-        }
-    }
+    filters: {type:freeSchema, required:false},
 
 });//// positionSchema
 /**

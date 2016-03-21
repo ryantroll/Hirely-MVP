@@ -14,8 +14,10 @@ db.once('open', function(){
     // Now replace tmp ids with unique
     var locationId = new mongoose.Types.ObjectId().toHexString();
     var positionId = new mongoose.Types.ObjectId().toHexString();
+    var filterId = new mongoose.Types.ObjectId().toHexString();
     var locationId2 = new mongoose.Types.ObjectId().toHexString();
     var positionId2 = new mongoose.Types.ObjectId().toHexString();
+    var filterId2 = new mongoose.Types.ObjectId().toHexString();
 
     var bdata = {
         name: 'Compass Coffee',
@@ -98,7 +100,7 @@ db.once('open', function(){
         positions: {
             tmpPositionId: {
                 _id: positionId,
-                location_id: locationId,
+                locationId: locationId,
                 title: 'Barista',
                 occId: '35-3022.01',
                 slug: 'barista',
@@ -112,13 +114,6 @@ db.once('open', function(){
                 minWeekendShifts: 3,
                 openingsCount: 3,
                 expLvl: 2,
-
-                scoreWeights: {
-                    exp: .2,
-                    edu: .1,
-                    qual: .2,
-                    psy: .5
-                },
 
                 compensation: {
                     wageType: 'hourly',
@@ -175,7 +170,7 @@ db.once('open', function(){
             },
             tmpPositionId2: {
                 _id: positionId2,
-                location_id: locationId2,
+                locationId: locationId2,
                 title: 'Web Developer',
                 occId: '15-1199.09',
                 slug: 'web-developer',
@@ -188,13 +183,7 @@ db.once('open', function(){
                 minWeekendShifts  :     3,
                 openingsCount     :     3,
                 expLvl: 3,
-                scoreWeights: {
-                    exp: .2,
-                    edu: .1,
-                    qual: .2,
-                    psy: .5
-                },
-
+                
                 compensation:
                 {
                     wageType        :     'hourly',
@@ -258,6 +247,25 @@ db.once('open', function(){
 
     bdata['positions'][positionId] = bdata['positions']['tmpPositionId'];
     delete bdata['positions']['tmpPositionId'];
+
+    bdata['positions'][positionId].filters = {};
+    bdata['positions'][positionId].filters[filterId] = {
+        name: "Average Tenure > 10",
+        dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "<",
+        operands: [
+            {
+                type: "attribute",
+                value: "user.tenureAvg"
+            },
+            {
+                type: "number",
+                value: 10
+            }
+        ]
+    };
 
     bdata['locations'][locationId2] = bdata['locations']['tmpLocationId2'];
     delete bdata['locations']['tmpLocationId2'];
