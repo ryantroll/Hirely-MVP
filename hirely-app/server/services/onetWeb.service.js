@@ -43,9 +43,9 @@ var onetOccSearchService = {
         url += separator + 'client=app_hirely_us_compas';
         return this.request('GET', host, url);
     },
-    
+
     keywordSearch: function (query, full) {
-        return this.onetCall("online/search?keyword=architect").then(function (matchesRaw) {
+        return this.onetCall("online/search?keyword="+query.replace(' ', '%20')).then(function (matchesRaw) {
             var matches = [];
             for (let matchRaw of matchesRaw.occupations.occupation) {
                 var match = {
