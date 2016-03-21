@@ -287,12 +287,13 @@ var userService = {
 
         // Education
         user.educationMaxLvl = 0;
+
         user.education.forEach(function (program) {
             // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
             if (program.programType > 1 && program.isCompleted == 0) {
                 program.programType = 2;
             }
-            if (program.programType > educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
+            if (program.programType > user.educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
                 user.educationMaxLvl = program.programType;
             }
         });

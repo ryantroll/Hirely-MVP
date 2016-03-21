@@ -1,8 +1,8 @@
 /**
  *
- * Job Application Workflow Main Controller
+ * Applicant List Main Controller
  *
- * Develoopers - Hirely 2015
+ * Iyad Bitar
  */
 (function () {
   'use strict';
@@ -112,6 +112,37 @@
      * End of layout interactivity code *************************************************
      */
 
+    $scope.filters = {};
+    $scope.filters.application = {status:{value:1, op:'=='}};
+
+    $scope.filterEngine = function(item){
+
+      var ret = true;
+
+      for(var key in $scope.filters){
+        var str = '';
+        if(key === 'application'){
+          str += 'item';
+        }
+        for(var prop in $scope.filters[key]){
+
+          str += "['" + prop + "']";
+          str += $scope.filters[key][prop].op;
+          str += $scope.filters[key][prop].value;
+        }
+        var result = eval(str);
+
+        ret = ret && result
+
+        if(false === ret){
+          break;
+        }
+      }//// for
+
+      return ret;
+    }
+
+
 
     /**
      * Get Authentication
@@ -194,6 +225,7 @@
        * if no applicants don't bother and continue
        */
       if($scope.applications.length < 1 ){
+
         $scope.dataLoaded = true;
         return;
       }
@@ -201,20 +233,21 @@
       /**
        * set statistic variables
        */
-      $scope.statistics = JobApplicationService.getStatistics($scope.applications);
-
-      console.log($scope.business)
+      $scope.updateStats = function (){
+        $scope.statistics = JobApplicationService.getStatistics($scope.applications);
+      }
 
       /**
        * Wait for some time and before showing the page
        */
       $timeout(function() {
+        $scope.updateStats();
         $scope.dataLoaded = true;
       }, 200);
     }//// initialize
 
     $scope.getViewStatus = function(id, index){
-      var states = ['New', 'Viewed'];
+
       var app = $scope.applications[index];
       var now = Date.now();
       var appDate = new Date(app.createdAt);
@@ -222,9 +255,42 @@
       if(appDate.getTime() <= now - (86400 * 1000 * 6) ){
         return 'Aging';
       }
-      return angular.isDefined(app.viewStatus) ? states[app.viewStatus] : 'New';
+      return angular.isDefined(app.viewStatus) ? JobApplicationService.viewStatusLabels[app.viewStatus] : 'New';
     }
 
+    function findAppById(appId){
+      var ret;
+
+      for(var x=0; x<$scope.applications.length; x++){
+        if($scope.applications[x]._id === appId){
+          ret = $scope.applications[x];
+          break;
+        }
+      }
+
+      return ret;
+    }
+
+    $scope.updateAppStatus = function(ev, appId, status){
+      var app = findAppById(appId);
+      if(app){
+        app.status = status;
+        JobApplicationService.save(app)
+        .then(
+          function(saved){
+            $scope.updateStats();
+          },
+          function(err){
+            console.log(err)
+          }
+        )
+      }//// if app
+    }
+
+    $scope.setFilter = function(filter){
+      angular.extend($scope.filters, filter);
+      console.log($scope.filter);
+    }
 
   }//// controller
 })();

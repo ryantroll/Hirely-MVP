@@ -20,8 +20,13 @@
       save:save,
       isApplicationExists: isApplicationExists,
       getByPositionId: getByPositionId,
-      getStatistics: getStatistics
+      getStatistics: getStatistics,
+      viewStatusLabels: viewStatusLabels,
+      statusLabels: statusLabels
     };
+
+    var viewStatusLabels = ['New', 'Viewed'];
+    var statusLabels = ['Declined', 'Open', 'Contacted', 'Hired'];
 
     /**
      * [addNewApplication this will create a new job application object in DB]
@@ -117,6 +122,27 @@
     function getStatistics(list){
         var ret = {};
         ret.total = list.length;
+        ret.applied = 0;
+        ret.contacted = 0;
+        ret.hired = 0;
+        ret.declined = 0;
+
+        for(var x=0; x<ret.total; x++){
+          switch (list[x].status){
+            case 1:
+              ++ret.applied;
+              break;
+            case 0:
+              ++ret.declined;
+              break;
+            case 2:
+              ++ret.contacted;
+              break;
+            case 3:
+              ++ret.hired;
+              break;
+          }
+        }/// for
         return ret;
     }//// fun. getStatistics
 
@@ -129,6 +155,8 @@
         }
         return ret;
     }//// fun. applicantsArrayToObject
+
+
 
     /**
      * Return server object

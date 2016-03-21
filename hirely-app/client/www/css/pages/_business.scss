@@ -201,7 +201,7 @@ $candidat-menu-height:40px;
             }
 
             a{
-                line-height: 2em;
+                // line-height: 2em;
                 color:$c-hirely-mid-gray;
                 float:right;
             }
@@ -449,6 +449,7 @@ $candidat-menu-height:40px;
 
                 .traits{
                     font-weight: 600;
+                    font-size:0.8em;
                     strong{
                         display: block;
                         clear: both;

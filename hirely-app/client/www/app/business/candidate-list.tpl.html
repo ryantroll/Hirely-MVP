@@ -74,10 +74,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul>
-                        <li><button class="btn red">Applied <span  ng-show="statistics.total > 0">({{statistics.total}})</span></button></li>
-                        <li><button class="btn white">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
-                        <li><button class="btn white">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
-                        <li><button class="btn white">Declined <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:filters.application.status.value == 1, white:filters.application.status.value != 1}" ng-click="setFilter({application:{status:{value:1, op:'=='}}})" ng-disabled="statistics.applied == 0">Applied <span  ng-show="statistics.applied > 0">({{statistics.applied}})</span></button></li>
+                        <li><button class="btn white" ng-class="{red:filters.application.status.value == 2, white:filters.application.status.value != 2}" ng-click="setFilter({application:{status:{value:2, op:'=='}}})" ng-disabled="statistics.contacted == 0">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
+                        <li><button class="btn white" ng-class="{red:filters.application.status.value == 3, white:filters.application.status.value != 3}" ng-click="setFilter({application:{status:{value:3, op:'=='}}})" ng-disabled="statistics.hired == 0">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
+                        <li><button class="btn white" ng-class="{red:filters.application.status.value == 0, white:filters.application.status.value != 0}" ng-click="setFilter({application:{status:{value:0, op:'=='}}})" ng-disabled="statistics.declined == 0">Declined <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
                     </ul>
                 </div><!--col-->
             </div><!--row-->
@@ -175,13 +175,13 @@
                                 <div class="inner">
                                     <a href="javascript:void(0);" class="action">Contact</a>
                                     <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, app._id)"><i class="glyphicon glyphicon-menu-down"></i></a>
-                                    <a class="execlude" href="javascript:void(0);"><i class="icon-thumb_down_icon"></i></a>
+                                    <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, app._id, 0)"><i class="icon-thumb_down_icon"></i></a>
                                 </div>
                                 <ul class="hidden" id="menu_{{app._id}}">
-                                    <li><a href="javascript:void(0);" data-value="applied">APPLIED</a></li>
-                                    <li><a href="javascript:void(0);" data-value="contact">CONTACT</a></li>
-                                    <li><a href="javascript:void(0);" data-value="hire">HIRE</a></li>
-                                    <li><a href="javascript:void(0);" data-value="dismiss">DISMISS</a></li>
+                                    <li ng-if="app.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, app._id, 1)">APPLIED</a></li>
+                                    <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 2)">CONTACT</a></li>
+                                    <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, app._id, 3)">HIRE</a></li>
+                                    <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, app._id, 0)">DECLINE</a></li>
                                 </ul>
                             </div>
                             <div class="row">
