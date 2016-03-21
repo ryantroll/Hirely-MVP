@@ -2,6 +2,8 @@
 var businessModel = require('../models/business.model');
 var userModel = require('../models/user.model');
 var onetIconsModel = require('../models/onetIcons.model');
+var applicationModel = require('../models/application.model');
+var careerMatchScoresModel = require('../models/careerMatchScores.model');
 /**
  * [privateFields array to define the names of extended fields in user objects]
  * @type {Array}
@@ -111,15 +113,54 @@ var businessService = {
                 return Math.pow(left, right);
             case ">":
                 return left > right;
+            case ">=":
+                return left >= right;
             case "<":
                 return left < right;
-            case "within":
+            case "<=":
+                return left <= right;
+            case "==":
+                return left == right;
+            case "!=":
+                return left != right;
+            case "indexOf":
+                return left.indexOf(right);
+            
+            // Special within for availability
+            // Checks to see if left is completely within right
+            // TODO: not even using this right now, consider removing
+            case "availWithin":
                 left.forEach(function(element) {
                     if (right.indexOf(element) == -1) {
                         return 0;
                     }
                 });
                 return 1;
+            
+            // Normal array ops
+            case "len":
+                return left.length
+            case "sum":
+                var sum = 0;
+                for (let e of left) {
+                    sum += e;
+                }
+                return sum;
+            case "avg":
+                var sum = 0;
+                for (let e of left) {
+                    sum += e;
+                }
+                return sum / left.length;
+            case "slice":
+                var arr = left;
+                if (right.start != null && right.stop !== null) {
+                    arr = arr.slice(right.start)
+                }
+                if (right.start != null && right.stop !== null) {
+                    arr = arr.slice(0, right.stop)
+                }
+                return arr
         }
     },
 
@@ -129,9 +170,10 @@ var businessService = {
         switch (filter.type) {
             case 'number':
             case 'string':
+            case 'array':
                 // Filter is reduced to a const
                 return filter.value;
-            case 'attribute':
+            case 'attr':
                 // Filter is reduced to a const
                 // const = attribute of a variable, resolve attribute
                 var parts = filter.value.split('.');
@@ -143,52 +185,36 @@ var businessService = {
             case 'computation':
                 // Note:  An operand can be nested filter.
                 result = this.filterCompoundCalculator(filter.operands[0], context);
-                for (let operand of filter.operands.slice(1)) {
-                    var intermediateResult = this.filterCompoundCalculator(operand, context);
-                    result = this.filterBasicCalculator(filter.operator, result, intermediateResult);
+                if (filter.operands.length == 1) {
+                    // Is an array operation, like sum or avg
+                    return this.filterBasicCalculator(filter.operator, result, filter.options);
+                } else {
+                    for (let operand of filter.operands.slice(1)) {
+                        var intermediateResult = this.filterCompoundCalculator(operand, context);
+                        result = this.filterBasicCalculator(filter.operator, result, intermediateResult);
+                    }
                 }
         }
         console.log("CPBSQFE9");
         return result;
     },
-
-    // This is not currently being used, but may be used in the future
-    // getQualificationScore: function(user, business, position) {
-    //
-    //     var location = business.locations[position.locationId];
-    //     var fScoreSum = 0;
-    //     var fScoreMaxSum = 0;
-    //
-    //     position.filters.forEach(function(filter) {
-    //         var fScore = MatchService.filterCompoundCalculator(filter, business, location, position, user);
-    //         if (fScore > 0) {
-    //             fScore = 1;
-    //         }
-    //
-    //         fScoreMaxSum += filter.importance;
-    //         fScoreSum += fScore * filter.importance;
-    //     });
-    //
-    //     if (fScoreMaxSum == 0) {
-    //         return 1;
-    //     } else {
-    //         return fScoreSum / fScoreMaxSum;
-    //     }
-    //
-    // },  // end getQualificationScore
-
-    // TODO:  Move this to frontend when ready
+    
     isUserIdFilteredForPositionId: function(userId, positionId, reqQuery) {
         return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
+            var businessObj = business.toObject();
+            var position = businessObj.positions[positionId];
             return userModel.findById(userId).then(function(user) {
-                return businessService.isUserFilteredForPosition(user, business.toObject(), positionId);
+                return applicationModel.findOne({userId: user._id, positionId: positionId}).then(function(application) {
+                    return careerMatchScoresModel.findOne({userId: user._id, occId: position.occId}).then(function(careerMatchScores) {
+                        return businessService.isUserFilteredForPosition(user, businessObj, positionId, application, careerMatchScores);
+                    });
+                })
             });
         });
 
     },  // end isUserIdFilteredForPositionId
-
-    // TODO:  Move this to frontend when ready
-    isUserFilteredForPosition: function(user, business, positionId, disqualifyThreshold) {
+    
+    isUserFilteredForPosition: function(user, business, positionId, application, careerMatchScores, disqualifyThreshold) {
         disqualifyThreshold = disqualifyThreshold || 0;  // 0 is least important
 
         console.log("CPBSUF1");
@@ -208,11 +234,15 @@ var businessService = {
             return true
         }
 
+        var careerMatchScoresExpLvlSpecific = careerMatchScores.scores[position.expLvl];
+
         var context = {
             'business': business,
             'location': location,
             'position': position,
-            'user': user
+            'user': user,
+            'application': application,
+            'careerMatchScore': careerMatchScores.scores[position.expLvl]
         };
 
         console.log("CPBSUF2");
@@ -230,7 +260,7 @@ var businessService = {
         console.log("CPBSUF10");
         return false;
 
-    },  // end isUserFiltered
+    }  // end isUserFiltered
 
 
 

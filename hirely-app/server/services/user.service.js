@@ -33,6 +33,8 @@ function monthDiff(d1, d2) {
     return months <= 0 ? 0 : months;
 }
 
+var educationProgramTypes = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
+
 
 var userService = {
     /**
@@ -186,6 +188,7 @@ var userService = {
         )//// then
 
     }, //// fun. getUserByExternalId
+    
 
     /**
      * [saveUser will update user in database after checking the existance of user by his id
@@ -227,6 +230,37 @@ var userService = {
                     for(var prop in userData){
                         console.log(prop);
                         foundedUser[prop] = userData[prop];
+                        // TODO:  If prop = experience, do updateUserMetrics now isntead of requiring the front end to call separately
+
+                        // Calc educationMax if education changed
+                        // Calc if currently in school also
+                        try {
+                            if (prop == "education") {
+                                foundedUser['educationStatus'] = "completed";
+                                
+                                if (userData['education'].length > 0) {
+                                    var educationSortedByRank = userData['education'];
+                                    educationSortedByRank.sort(function (a, b) {
+                                        return educationProgramTypes.indexOf(a.programType) - educationProgramTypes.indexOf(b.programType)
+                                    });
+                                    foundedUser['educationMax'] = educationSortedByRank.pop();
+                                    
+                                    for (let program of userData['education']) {
+                                        if (program.isCompleted == false) {
+                                            foundedUser['educationStatus'] = "attending";
+                                        }
+                                    }
+                                } else {
+                                    // set to null so that filters work
+                                    foundedUser['educationMax'] = {programType: null}
+                                }
+
+                            }
+                        } catch (error) {
+                            console.log("Error calcing educationMax: "+error);
+                            foundedUser['educationMax'] = {programType: null}
+                        }
+
                     }//// for
 
                     foundedUser.lastModifiedOn = new Date();
@@ -245,7 +279,7 @@ var userService = {
                             console.log('Error: user couldn\'t be updated');
                             deferred.reject(err);
                         }
-                    ) /// .save().then
+                    ); /// .save().then
 
                 }//// if user._id
 
