@@ -54,7 +54,7 @@
 
     $scope.stepTwoLoaded = false;
 
-    $scope.programTypes = ['High School', 'Certificate', 'Associates Degree', 'Bachelors Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
+    $scope.programTypes = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
     $scope.states = StatesNames;
 
@@ -253,9 +253,7 @@
              * do save
              */
             if(isAuth){
-              var toSave = {
-                education:angular.copy($scope.eduItems)
-              };
+              var toSave = {education:angular.copy($scope.eduItems)};
               UserService.saveUser(toSave, AuthService.currentUserID)
               .then(
                 function(user){

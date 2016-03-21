@@ -236,26 +236,36 @@ var traitifySevice = {
       }
 
       console.log("Getting "+onetIds.length+" career matches for "+assessmentId+". Depth = "+this.getAssessmentCareerMatchScoresByIdDepth[assessmentId]+"/"+this.getAssessmentCareerMatchScoresByIdDepthMax);
+
       traitify.getCareerMatches(assessmentId, onetIds, function (matchesRaw) {
-          console.log("Got "+matchesRaw.length+" career matches for "+assessmentId+". Depth = "+self.getAssessmentCareerMatchScoresByIdDepth[assessmentId]+"/"+self.getAssessmentCareerMatchScoresByIdDepthMax);
-            var matches = {};
-            var matchOnetIds = [];
-            for (let match of matchesRaw) {
-                matchOnetIds.push(match.career.id);
-                matches[match.career.id] = match.score.toFixed(4);
-            }
-            var missingOnetIds = _.xor(onetIds, matchOnetIds);
-            if (missingOnetIds.length > 0) {
-                self.getAssessmentCareerMatchScoresByIdWithParams(assessmentId, missingOnetIds).then(function(matches2) {
-                    for (var onetId in matches2) {
-                        matches[onetId] = matches2[onetId];
-                    }
-                    deferred.resolve(matches);
-                });
-            } else {
-                deferred.resolve(matches);
-            }
-        });
+          try {
+
+              console.log("Got " + matchesRaw.length + " career matches for " + assessmentId + ". Depth = " + self.getAssessmentCareerMatchScoresByIdDepth[assessmentId] + "/" + self.getAssessmentCareerMatchScoresByIdDepthMax);
+
+              var matches = {};
+              var matchOnetIds = [];
+              for (let match of matchesRaw) {
+                  matchOnetIds.push(match.career.id);
+                  matches[match.career.id] = match.score.toFixed(4);
+              }
+              var missingOnetIds = _.xor(onetIds, matchOnetIds);
+              if (missingOnetIds.length > 0) {
+                  self.getAssessmentCareerMatchScoresByIdWithParams(assessmentId, missingOnetIds).then(function (matches2) {
+                      for (var onetId in matches2) {
+                          matches[onetId] = matches2[onetId];
+                      }
+                      deferred.resolve(matches);
+                  });
+              } else {
+                  deferred.resolve(matches);
+              }
+
+          } catch (error) {
+              console.log("Error:  getCareerMatches failed:  " + error);
+              deferred.resolve({});
+          }
+      });
+
 
         return deferred.promise;
 
@@ -277,6 +287,11 @@ var traitifySevice = {
            return traitifySevice.getAssessmentCareerMatchScoresById(user.personalityExams[0].extId).then(
                function(careerMatchScores) {
                    console.log("Career Match Count actual/expected: "+Object.keys(careerMatchScores).length+"/"+onetIdsAll.length);
+
+                   if (Object.keys(careerMatchScores).length == 0) {
+                        console.log("Warning:  Skipping update user with career match scores because traitify call failed.");
+                       return user;
+                   }
 
                    // Note:  Mongo will group occIds by parts, separated by '.', so
                    // replace with ','

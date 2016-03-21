@@ -70,7 +70,7 @@ var educationSchema = new Schema({
                                       required:true,
                                       validate:{
                                         validator: function(v){
-                                          return /^(High School|Certificate|Associates Degree|Bachelors Degree|Master's Degree|Professional Degree|Doctoral Degree|Post-Doctoral Training)$/.test(v);
+                                          return /^(High School|Certificate|Associate's Degree|Bachelor's Degree|Master's Degree|Professional Degree|Doctoral Degree|Post-Doctoral Training)$/.test(v);
                                         },
                                         message:'{VALUE} is not valid education program type'
                                       }
@@ -194,10 +194,13 @@ var userSchema = new Schema({
      * Availability
      */
     availability: {
-        isAvailable        :       {type:Boolean, default:true},
+        isAvailable         :       {type:Boolean, default:true},
         startAvailability   :       Number,
         hoursPerWeekMin     :       Number,
         hoursPerWeekMax     :       Number,
+        season              :       String,
+        dateStart           :       Date,
+        dateEnd             :       Date,
         mon                 :       [Number],
         tue                 :       [Number],
         wed                 :       [Number],
@@ -224,6 +227,8 @@ var userSchema = new Schema({
      * Education
      */
     education           :       [educationSchema],
+    educationMax        :       {type:freeSchema, required:false},
+    educationStatus     :       String,
 
     /**
      * KSAW scores
