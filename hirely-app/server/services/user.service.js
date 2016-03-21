@@ -251,8 +251,8 @@ var userService = {
                                         }
                                     }
                                 } else {
-                                    // set to null so that filters work
-                                    foundedUser['educationMax'] = {programType: null}
+                                    // set to blank so that filters work
+                                    foundedUser['educationMax'] = {}
                                 }
 
                             }

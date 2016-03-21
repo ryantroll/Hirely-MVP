@@ -227,7 +227,7 @@ var userSchema = new Schema({
      * Education
      */
     education           :       [educationSchema],
-    educationMax        :       educationSchema,
+    educationMax        :       {type:freeSchema, required:false},
     educationStatus     :       String,
 
     /**

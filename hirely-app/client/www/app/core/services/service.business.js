@@ -173,12 +173,12 @@
                  case "slice":
                      var arr = left;
                      if (right.start != null) {
-                         arr = arr.slice(right.start)
+                         arr = arr.slice(right.start);
                      }
                      if (right.stop !== null) {
-                         arr = arr.slice(0, right.stop)
+                         arr = arr.slice(0, right.stop);
                      }
-                     return arr
+                     return arr;
 
                  // A special slice for availability arrays, which slices based on value instead of index
                  case "sliceAvail":
