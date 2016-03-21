@@ -20,6 +20,7 @@ module.exports = function(app) {
     var applicationApiRoutes = require('./routes/application.api.routes');
     var traitifyApiRoutes = require('./routes/traitify.api.routes');
     var favoriteApiRoutes = require('./routes/favorite.api.routes');
+    var onetWebApiRoutes = require('./routes/onetWeb.api.routes');
 
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
@@ -29,6 +30,7 @@ module.exports = function(app) {
     app.get('/api/placeSearch/:query', placeAutocomplete);
     app.get('/api/places/:placeId', getPlaceDetailsByPlaceId);
     app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
+    app.get('/api/v1/occupations/searchByKeyword/:keywords', onetWebApiRoutes.keywordSearch);
 
     // app.get('/api/onet/titles/search/:titleName', searchOnetTitles);
 

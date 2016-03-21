@@ -36,5 +36,6 @@ config.saveTraitifyFamousPeople = false;
  */
 config.primeOnetScoresCache = false;
 
+config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
 
 module.exports = config;
