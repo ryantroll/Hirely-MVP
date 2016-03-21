@@ -219,7 +219,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     stop: 10
                                 },
@@ -240,7 +240,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     stop: 10
                                 },
@@ -261,7 +261,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     stop: 10
                                 },
@@ -282,7 +282,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     stop: 10
                                 },
@@ -303,7 +303,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     stop: 10
                                 },
@@ -324,7 +324,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     stop: 10
                                 },
@@ -345,7 +345,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     stop: 10
                                 },
@@ -386,7 +386,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 10,
                                     stop: 18
@@ -408,7 +408,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 10,
                                     stop: 18
@@ -430,7 +430,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 10,
                                     stop: 18
@@ -452,7 +452,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 10,
                                     stop: 18
@@ -474,7 +474,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 10,
                                     stop: 18
@@ -496,7 +496,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 10,
                                     stop: 18
@@ -518,7 +518,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 10,
                                     stop: 18
@@ -560,7 +560,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 14
                                 }
@@ -581,7 +581,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 14
                                 }
@@ -602,7 +602,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 14
                                 }
@@ -623,7 +623,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 14
                                 }
@@ -644,7 +644,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 14
                                 }
@@ -665,7 +665,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 14
                                 }
@@ -686,7 +686,7 @@ filterBank = [
                         operands: [
                             {
                                 type: "computation",
-                                operator: "slice",
+                                operator: "sliceAvail",
                                 options: {
                                     start: 14
                                 }

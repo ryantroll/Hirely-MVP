@@ -154,13 +154,27 @@ var businessService = {
                 return sum / left.length;
             case "slice":
                 var arr = left;
-                if (right.start != null && right.stop !== null) {
-                    arr = arr.slice(right.start)
+                if (right.start != null) {
+                    arr = arr.slice(right.start);
                 }
-                if (right.start != null && right.stop !== null) {
-                    arr = arr.slice(0, right.stop)
+                if (right.stop !== null) {
+                    arr = arr.slice(0, right.stop);
                 }
-                return arr
+                return arr;
+
+            // A special slice for availability arrays, which slices based on value instead of index
+            case "sliceAvail":
+                var avail = [];
+                for (let hour of avail) {
+                    if (right.start != null && hour < right.start) {
+                        continue;
+                    }
+                    if (right.stop != null && hour >= right.stop) {
+                        continue;
+                    }
+                    avail.push(hour);
+                }
+                return avail;
         }
     },
 
