@@ -53,7 +53,7 @@ var onetOccSearchService = {
                     occId: matchRaw.code,
                     occTitle: matchRaw.title
                 };
-                if (full == undefined) {
+                if (full != undefined) {
                     match.tags = matchRaw.tags;
                 }
                 matches.push(match)
