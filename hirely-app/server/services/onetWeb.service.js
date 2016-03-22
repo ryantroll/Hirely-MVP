@@ -49,11 +49,11 @@ var onetOccSearchService = {
             var matches = [];
             for (let matchRaw of matchesRaw.occupations.occupation) {
                 var match = {
-                    fit: Number(matchRaw.relevance_score),
                     occId: matchRaw.code,
                     occTitle: matchRaw.title
                 };
                 if (full != undefined) {
+                    match.fit = Number(matchRaw.relevance_score);
                     match.tags = matchRaw.tags;
                 }
                 matches.push(match)

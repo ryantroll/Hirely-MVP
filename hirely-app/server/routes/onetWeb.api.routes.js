@@ -9,7 +9,7 @@ var onetWebRoutes = {
                 res.status(200).json(apiUtil.generateResponse(200, "Matches retrieved", matches));
             },
             function(err){
-                res.status(500).json(apiUtil.generateResponse(500, err, null));
+                res.status(404).json(apiUtil.generateResponse(404, err, null));
             }
         );///. getAll().then()
     },

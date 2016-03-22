@@ -55,9 +55,9 @@ var experienceSchema = new Schema({
                                       required:false,
                                       validate:[endDateValidator, 'End date must be greater than start date']
                                     },
-  reportedJobName         :         {type:String, required:true},
-  occupationJobName       :         {type:String, required:true},
-  onetOccupationId        :         {type:String, required:false},
+  reportedOccTitle         :         {type:String, required:true},
+  occTitle       :         {type:String, required:true},
+  occId        :         {type:String, required:false},
   accomplishments         :         {type:String, required:false}
 });
 

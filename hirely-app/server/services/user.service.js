@@ -330,7 +330,7 @@ var userService = {
         var roles = {};
         var totalWorkMonths = 0;
         for (let workExperience of user.workExperience) {
-            var occId = workExperience.onetOccupationId;
+            var occId = workExperience.occId;
             console.log("260");
             var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
             totalWorkMonths += monthCount;

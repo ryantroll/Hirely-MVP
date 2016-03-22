@@ -172,7 +172,7 @@
      * @return {null}
      */
     function fixFormDiv(){
-      var formDiv = $('#expFormDiv');
+      var formDiv = $('#availFormDiv');
       $(window).scrollTop(0);
       /**
        * Add some delay so we can read the height property after div is added to dom
