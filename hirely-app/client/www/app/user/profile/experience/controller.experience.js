@@ -41,54 +41,6 @@
       }//// fun. link
     }; /// return object
 
-  }) /// validate year
-  .directive('validateWorkOccupation', function(){
-    return {
-      //restrict:'A',
-      require:'ngModel',
-      link: function(scope, elm, attrs, ctrl) {
-        ctrl.$validators.validateWorkOccupation = function(modelValue, viewValue) {
-          //console.dir(ctrl.occupation);
-          ////var scope2 = angular.element($("#workOccupation")).scope();
-          var scope2 = angular.element($("[name=stepTwo]")).scope();
-          if (scope2.requireWorkOccupationValidation == true) {
-            if ($("#workOccupationRow").hasClass("ng-hide")) {
-              console.log("hidden");
-              return true;
-            }
-            else if ($.isNumeric(modelValue)) {
-              console.log("numeric");
-              return true;
-            }
-            else {
-              console.log("invalid");
-              return false;
-            }
-          }
-          return true;
-
-          //console.dir(Object.keys(scope2);
-          //if (!scope2) {
-          //  console.log("noscope");
-          //  return true;
-          //}
-          //else if ($("#workOccupationRow").hasClass("ng-hide")) {
-          //  console.log("hidden");
-          //  return true;
-          //}
-          //else if ($.isNumeric(modelValue)) {
-          //  console.log("numeric");
-          //  return true;
-          //}
-          //else {
-          //  console.log("invalid");
-          //  return false;
-          //}
-
-        };
-      }
-    }; /// return object
-
   }); /// validate year
 
   function ProfileExperienceController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
@@ -105,6 +57,8 @@
     $scope.stepTwoLoaded = false;
 
     $scope.states = StatesNames;
+
+    $scope.occupation = {};
 
     $scope.months = [
       {order:1, name:'Jan'},
@@ -167,6 +121,18 @@
     );//// then
 
 
+    /**
+     * [customDebounce is used to debounce inputs, thereby waiting to call a callback until the activity stops X ms.
+     * Can be called like so:  $scope.customDebounce(callback, ms)]
+     */
+    $scope.customDebounce = (function(){
+      var timer = 0;
+      return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+      };
+    })();
+
 
     /**
      * [addJobXp will add new work experience object to array after setting dataStart and dataEnd]
@@ -225,8 +191,8 @@
      * form is shown as an overlay and should cover the whole screen]
      * @return {null}
      */
-    function fixFormDiv(){
-      var formDiv = $('#expFormDiv');
+    function fixFormDiv(divId){
+      var formDiv = $(divId);
       $(window).scrollTop(0);
       /**
        * Add some delay so we can read the height property after div is added to dom
@@ -257,7 +223,7 @@
       $scope.editIndex = index;
       $scope.addWorkXpForm = true;
 
-      fixFormDiv();
+      fixFormDiv('#expFormDiv');
     };
 
     /**
@@ -268,9 +234,6 @@
       $scope.occupation={};
 
       delete $scope.editIndex;
-
-      $scope.requireWorkOccupationValidation = false;
-      delete $scope.positionSub;
 
       $scope.stepTwo.$setUntouched();
       $scope.stepTwo.$setPristine();
@@ -287,7 +250,7 @@
       delete $scope.editIndex;
       $scope.addWorkXpForm=true;
 
-      fixFormDiv();
+      fixFormDiv('#expFormDiv');
     }; //// fun. ShowJobXp
 
       // var locations = [];
@@ -374,82 +337,45 @@
 
       // }//// fun. setAddress
 
-      $scope.$watch('occupation.reportedJobName', function(newValue, oldValue){
-        $scope.selectedSub = null;
-          //$("#selectedSub").prop("required", true);
-          //$scope.stepTwo.workOccupation.$setValidity('required', true);
-      });
+    /**
+     * [searchOccupations will be used in typeahead to query occs and return a list of matching]
+     * @param  {string} query [string from typeahead text field]
+     * @return {array}       [array of matched occupations]
+     */
+    $scope.occupationChoices = [];
+    $scope.occupationChoicesDisabled = true;
+    $scope.occupationSaveDisabled = true;
+    $scope.searchOccupations = function(){
+      if( $scope.occupation.reportedOccTitle != undefined &&
+          $scope.occupation.reportedOccTitle.trim().length > 2){
+        return OccupationService.searchOccupations($scope.occupation.reportedOccTitle).then(function(matches){
+          $scope.occupationChoices = matches.slice(0,5);
+        });
+      }//// if query
+      else{
+        return [];
+      }
+    }; //// fun. searchOccupations
 
-      $scope.handleReportedJobNameChange = function() {
-        $scope.requireWorkOccupationValidation = true;
-        console.log('requireWorkOccupationValidation');
+    $scope.chooseOccupation = function(occupationChoice, $event) {
+      $scope.occupation.occTitle = occupationChoice.occTitle;
+      $scope.occupation.occId = occupationChoice.occId;
+      $scope.occupationChoices = [occupationChoice];
+      $scope.occupationSaveDisabled = false;
+      $event.preventDefault();
+    };
 
-      };
+    $scope.clearOccupationChoices = function() {
+      $scope.occupation.occTitle = "";
+      $scope.occupation.occId = "";
+      $scope.occupationChoices = [];
+      $scope.occupationSaveDisabled = true;
+    };
 
-      /**
-       * [searchPosition will be used in typeahead to query onet positions and return a list of matching position]
-       * @param  {string} query [string from typeahead text field]
-       * @return {array}       [array of matched position form onet api]
-       */
-      $scope.searchPosition = function(query){
-        if(query.trim().length > 1){
-          return OccupationService.getOccupations(query)
-          .then(
-            function(data){
-              if(200 === data.statusCode){
-                var occupations = data.results;
-                return occupations;
-              }
-              else{
-                console.log(data.statusCode);
-                return [];
-              }
-            },
-            function(err){
-              console.log(err);
-              return [];
-            }
-          )
-        }//// if query
-        else{
-          return [];
-        }
-      }; //// fun. searchPositions
-
-      /**
-       * [setPosition used in typeahead and triggered when user select one of the position in typeahead list]
-       * @param {Object} position [description]
-       */
-      $scope.setPosition = function(reported){
-        $scope.occupation.reportedJobName = reported.reportedTitle;
-        delete $scope.positionSub;//// reset the sub list of occupations
-        if(reported.occupations.length === 1){
-          $scope.occupation.occupationJobName = reported.occupations[0].occupationTitle;
-          $scope.occupation.onetOccupationId = reported.occupations[0].onetId;
-          $scope.selectedSub = 0;
-        }
-        else{
-          $scope.positionSub = reported.occupations;
-          $scope.selectedSub = null;
-        }
-
-      };
-
-      /**
-       * [setPositionSub will be called when user select occupation,
-       * occupation list will show only if user select reported title related to multi job occupations in onet  ]
-       * @param {object} sub [job occupation object selected by user]
-       */
-      $scope.setPositionSub = function(){
-        if( angular.isDefined($scope.selectedSub) && $scope.selectedSub < $scope.positionSub.length){
-          $scope.occupation.occupationJobName = $scope.positionSub[$scope.selectedSub].occupationTitle;
-          $scope.occupation.onetOccupationId  = $scope.positionSub[$scope.selectedSub].onetId;
-          // delete $scope.positionSub;
-        }
-        else{
-          alert("You somehow selected an invalid parent occupation.  Please try again.");
-        }
-      };
+    $scope.searchOccupationsWithDebounce = function() {
+      $scope.clearOccupationChoices();
+      $scope.customDebounce($scope.searchOccupations, 1500);
+    };
 
       /**
        * Watch dates to make sure end data is greater than start date

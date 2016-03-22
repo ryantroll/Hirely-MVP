@@ -31,8 +31,8 @@ db.once('open', function(){
                 googlePlaceId:'google-palce-good-id',
                 dateStart: '01-mar-2015',
                 dateEnd: '01-Jun-2015',
-                reportedJobName:'Developer',
-                onetOccupationId:'11-1011.00',
+                reportedOccTitle:'Developer',
+                occId:'11-1011.00',
                 accomplishments:'some good work'
             };
 

@@ -6,7 +6,7 @@
     <div class="row">
         <div class="cards-wrapper">
             <div class="card" ng-repeat="xpItem in xpItems">
-                <h3>{{xpItem.reportedJobName}}</h3>
+                <h3>{{xpItem.reportedOccTitle}}</h3>
                 <p>{{xpItem.formattedAddress}} - {{xpItem.city}}, {{xpItem.state}} </p>
                 <p ng-class="{'-xxxx-bg-danger':xpItem.conflict}">{{xpItem.dateStartMonth}}/{{xpItem.dateStartYear}} - <span ng-show="!xpItem.currentlyHere">{{xpItem.dateEndMonth}}/{{xpItem.dateEndYear}}</span><span ng-show="xpItem.currentlyHere">Current</span></p>
                 <div class="btn-group">
@@ -37,62 +37,67 @@
         <form name="stepTwo" novalidate form-step-validity>
             <fieldset>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="field-wrapper" ng-class="{'error': !stepTwo.position.$valid && stepTwo.position.$dirty, 'valid' : stepTwo.position.$valid}">
-                            <label for="position">
-                                Position
+                <div class="position-title">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="positionTitle">
+                                Position Title
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
-                            <input type="text" id="position" name="position" class="text-field"
-                                ng-model="occupation.reportedJobName"
-                                uib-typeahead="position as position.reportedTitle for position in searchPosition($viewValue)"
-                                typeahead-loading="loadingPositions"
-                                typeahead-no-results="noResultsPos"
-                                typeahead-on-select="setPosition($item)"
-                                required
-                                ng-change="handleReportedJobNameChange()"
+                            <input type="text" id="positionTitle" name="positionTitle" class="text-field"
+                                   ng-model="occupation.reportedOccTitle"
+                                   ng-change="searchOccupationsWithDebounce()"
+                                   required
                             />
-                            <div class="spinner" ng-show="loadingPositions">
-                                <div class="double-bounce1"></div>
-                                <div class="double-bounce2"></div>
+                            <input type="text" id="occId" name="occId" class="text-field"
+                                   ng-model="occupation.occId"
+                                   required
+                                   disabled
+                                   hidden
+                            />
+                            <input type="text" id="occTitle" name="occTitle" class="text-field"
+                                   ng-model="occupation.occTitle"
+                                   required
+                                   disabled
+                                   hidden
+                            />
+                        </div>
+                    </div><!--row-->
+
+                </div>
+
+
+                <div class="row occupationChoices">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper clearfix">
+                            <label for="occupationChoicesSelect">
+                                Occupation (select one)
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <div class="row occupationChoices" id="occupationChoicesSelect">
+                                <div class="col-sm-12">
+                                    <div class="occupationChoice" ng-repeat="occupationChoice in occupationChoices">
+                                        <!--<div class="text-center">-->
+                                        <button class="text-center fullwidth" ng-click="chooseOccupation(occupationChoice, $event)">{{occupationChoice.occTitle}}</button>
+                                        <!--</div>-->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row" id=workOccupationRow" ng-show="positionSub">
-                    <div class="col-sm-12">
-                        <div class="field-wrapper" ng-class="{'error': !stepTwo.workOccupation.$valid , 'valid' : stepTwo.workOccupation.$valid}">
-                            <label for="workOccupation">
-                                Occupation
-                                <span class="fa fa-check feedback-valid"></span>
-                                <span class="fa fa-close feedback-error"></span>
-                            </label>
-                            <p>Please help us refine your position choice by choosing a parent occupation</p>
-                            <select  class="form-control" id="workOccupation" name="workOccupation"
-                                ng-model="selectedSub"
-                                ng-change="setPositionSub()"
-                                validate-work-occupation
-                            >
-                                <option></option>
-                                <option ng-repeat="sub in positionSub" value="{{$index}}">{{sub.occupationTitle}}</option>
-                            </select>
-                            <span class="glyphicon glyphicon-menu-down"></span>
-                            <!-- <div class="btn-group fullwidth" uib-dropdown keyboard-nav>
-                                <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default fullwidth" uib-dropdown-toggle>
-                                    Select right occupation <span class="caret"></span>
-                                </button>
-                                <ul uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
-                                    <li role="menuitem" ng-repeat="sub in positionSub">
-                                        <a href="javascript:;" ng-click="setPositionSub(sub)">{{sub.occupationTitle}}</a>
-                                    </li>
-                                </ul>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
+                <!--<div class="row">-->
+                    <!--<div class="col-sm-12">-->
+                        <!--<div class="field-wrapper" ng-class="{'error': !stepTwo.position.$valid && stepTwo.position.$dirty, 'valid' : stepTwo.position.$valid}">-->
+                            <!--<button class="btn btn-md" ng-click="showOccupationForm()">Pick Position</button>-->
+                            <!--<div>Position: {{occupation.reportedOccTitle}}</div>-->
+                            <!--<div>Occupation: {{occupation.occTitle}}</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -268,5 +273,3 @@
         </form>
     </div><!--form-container-->
 </div><!--form-overlay-->
-
-
