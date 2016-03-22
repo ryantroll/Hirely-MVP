@@ -471,45 +471,37 @@
         /**
          * Make sure user is authenticated
          */
-        AuthService.getAuth()
-        .then(
-          function(isAuth){
-            /**
-             * User is authenticated
-             * do save
-             */
-            if(isAuth){
-              var toSave = {
-                workExperience:angular.copy($scope.xpItems)
-              };
-              UserService.saveUser(toSave, AuthService.currentUserID)
-              .then(
-                function(user){
-                  console.log("1");
-                  // Update user metrics now
-                  return UserService.updateUserMetricsById(AuthService.currentUserID).then(
-                      function(user){
-                        console.log("2");
-                        return user;
-                      },
-                      function(err){
-                        console.log("3");
-                        alert("Error!\nYour scoring data was not saved, please try again. ")
-                        console.log(err);
-                      }
-                  )
-                },
-                function(err){
-                  alert("Error!\nYour data was not saved, please try again.");
-                  console.log(err);
-                }
+        /**
+         * User is authenticated
+         * do save
+         */
+        if(AuthService.isUserLoggedIn()){
+          var toSave = {
+            workExperience:angular.copy($scope.xpItems)
+          };
+          UserService.saveUser(toSave, AuthService.currentUserID)
+          .then(
+            function(user){
+              console.log("1");
+              // Update user metrics now
+              return UserService.updateUserMetricsById(AuthService.currentUserID).then(
+                  function(user){
+                    console.log("2");
+                    return user;
+                  },
+                  function(err){
+                    console.log("3");
+                    alert("Error!\nYour scoring data was not saved, please try again. ")
+                    console.log(err);
+                  }
               )
-            }//// if isAuth
-            else{
-
-            }//// if isAuth else
-          }//// reslove
-        );//// getAuth.then()
+            },
+            function(err){
+              alert("Error!\nYour data was not saved, please try again.");
+              console.log(err);
+            }
+          )
+        }//// if isAuth
       });/// $on.$destroy
 
   }

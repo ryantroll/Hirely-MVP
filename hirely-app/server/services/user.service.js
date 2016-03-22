@@ -4,6 +4,7 @@ var userModel = require('../models/user.model');
 var onetScoresService = require('../services/onetScores.service');
 var idMapModel = require('../models/useridmap.model');
 var matchingService = require('../services/matching.service');
+var bcrypt = require('bcrypt');
 
 
 /**
@@ -95,6 +96,8 @@ var userService = {
      * @return {[type]}         [promise with user basic info]
      */
     createNewUser : function(userObj){
+        var salt = bcrypt.genSaltSync(10);
+        userObj.password = bcrypt.hashSync(userObj.password, salt);
         var newUser = new userModel(userObj);
 
         /**
@@ -150,11 +153,16 @@ var userService = {
                 else{
                     return userModel.findById(user._id).exec();
                 }
-            }//// then fun.
-        )/// then
-        .then(
-
+            }
         )
+    },
+    
+    passwordLogin: function(email, password) {
+        return userModel.findOne({email: email}).then(function(user) {
+            if(bcrypt.compareSync('B4c0/\/', user.password)) {
+                return user;
+            }
+        });
     },
 
     /**

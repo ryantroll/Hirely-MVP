@@ -27,7 +27,8 @@
     "q": "*",
     "tiny-lr": "^0.2.0",
     "lodash": "*",
-    "xml2json": "*"
+    "xml2json": "*",
+    "bcrypt": "*"
   },
   "devDependencies": {
     "bower": "^1.3.3",

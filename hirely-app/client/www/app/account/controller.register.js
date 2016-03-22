@@ -27,7 +27,7 @@
         var authService = AuthService;
         var userService = UserService;
         $scope.error = '';
-        $scope.user = {email: '', password: '', firstName: '', lastName: '', userType: 'JS'}
+        $scope.user = {email: '', password: '', firstName: '', lastName: ''}
 
 
         $scope.showLogin = function(){
@@ -44,7 +44,6 @@
             }
 
             $scope.ajaxBusy = true;
-            $scope.user.provider = 'password';
             registerPasswordUser($scope.user);
         }
 
@@ -57,59 +56,28 @@
             }
 
             //register new user
-            userService.registerNewUser(registeredUser.email, registeredUser.password)
+            authService.registerNewUser(registeredUser)
                 .then(
                     function(user) {
-                      /**
-                       * User authentication is created successfully
-                       * Create user object in database
-                       */
-                      return user;
+                      if (user) {
+                          $scope.registerForm.email.$setValidity('emailExists', false);
+                          $scope.ajaxBusy = false;
+                          return user;
+                      } else {
+                          $scope.registerForm.email.$setValidity('emailExists', true);
+                          $scope.ajaxBusy = false;
+                          alert("A user is already registered with that email.");
+                      }
                   },
                   function(err) {
                       /**
                        * User authentication couldn't be created
                        */
-                      $scope.registerForm.email.$setValidity('emailExists', false);
-                      $scope.ajaxBusy = false;
+                      alert("A user is already registered with that email address.");
+
                   }
                 )
-                .then(
-                  function(user){
-                    if(!user) return null;
-                    /**
-                     * Save users data
-                     */
-                    userService.createRegisteredNewUser(registeredUser, user.uid)
-                    .then(
-                      function(newUserData){
-                        /**
-                         * user data saved log new user in
-                         */
-                        authService.passwordLogin(registeredUser.email, registeredUser.password)
-                        .then(
-                          function(auth){
 
-                            console.log(auth);
-
-                          },
-                          function(err) {
-                            /**
-                             * Error in login for new registered user
-                             */
-                            console.log(err)
-                          }
-                        )//// then authService
-                      },
-                      function(err){
-                        console.log(err)
-                      }
-                    )
-                  },
-                  function(err){
-                    console.log(err)
-                  }
-                )
 
         }//// fun. registerPasswrodUser
     }

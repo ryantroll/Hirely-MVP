@@ -94,10 +94,8 @@
             firstName : 'Hanu',
             lastName: 'Hanna',
             email : 'hani.hanna@gmail.com',
-            userType : '1',
             profileImageUrl : 'www.hani.com/pic/hehe.jpg',
             personalStatement : 'work hard in silence let success make the noise',
-            provider : 'password',
             createdOn : '25-11-2015',
             lastModifiedOn : '28-11-2015'
         };

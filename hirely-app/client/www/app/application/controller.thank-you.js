@@ -17,15 +17,9 @@
     // delete $scope.layoutModel.location;
     // delete $scope.layoutModel.position;
 
-    AuthService.getAuth()
-    .then(
-      function(isAuth){
-        initialize();
-      },
-      function(err){
-
-      }
-    )
+    if (AuthService.isUserLoggedIn()) {
+      initialize();
+    }
 
     function initialize(){
       $scope.name = AuthService.currentUser.firstName;

@@ -2,45 +2,11 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .service('UserService', ['$rootScope', '$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', '$firebaseAuth', 'HirelyApiService', UserService]);
+    .service('UserService', ['$rootScope', '$q', 'HirelyApiService', UserService]);
 
-  function UserService($rootScope, $q, FIREBASE_URL, $firebaseObject, fbutil, $firebaseAuth, HirelyApiService) {
+  function UserService($rootScope, $q, HirelyApiService) {
     var self = this;
-    var baseRef = new Firebase(FIREBASE_URL);
-    var ref = new Firebase(FIREBASE_URL + "/users");
-    var auth = $firebaseAuth(baseRef);
 
-
-    this.createUserfromThirdParty = function createUserfromThirdParty(provider, authData) {
-      var deferred = $q.defer();
-      var user;
-
-      //get proper user for provider
-      switch (provider) {
-        case 'facebook':
-          user = createFacebookUser(authData);
-          break;
-        case 'google':
-          user = createGoogleUser(authData);
-          break;
-      }
-
-      //check if user previously exists
-      this.getUserByKey(authData.uid)
-        .then(function (snapshot) {
-          var exists = (snapshot.val() != null);
-          if (!exists) {
-            self.createUserinFirebase(user, authData.uid)
-
-          }
-          deferred.resolve(user);
-        }, function (err) {
-          deferred.reject(err);
-        });
-
-      return deferred.promise;
-
-    };
 
 
     /**
@@ -51,63 +17,47 @@
      * @param  {string} userID   [the auth id of user returned by registerNewUser function]
      * @return {promise}          [the resolve will return the new suser object created in DB]
      */
-    this.createRegisteredNewUser = function createRegisteredNewUser(userData, userID) {
+    this.createNewUser = function createRegisteredNewUser(userData, userID) {
 
-      var deferred = $q.defer();
+      // var user = new User(userData.firstName, userData.lastName, userData.email, userData.mobile,
+      //   userData.country, userData.state, userData.city, userData.street1, userData.street2, userData.street3, userData.postalCode, userData.formattedAddress, userData.lng, userData.lat,
+      //   userData.createdOn, userData.lastModifiedOn);
 
-      var user = new User(userData.firstName, userData.lastName, userData.email, userData.mobile,
-        userData.userType, userData.provider,
-        userData.country, userData.state, userData.city, userData.street1, userData.street2, userData.street3, userData.postalCode, userData.formattedAddress, userData.lng, userData.lat,
-        userData.createdOn, userData.lastModifiedOn);
+      return HirelyApiService.users().post( userData );
 
-      self.createNewUser(user, userID)
-      .then(
-        function(user){
-          deferred.resolve(user)
-        },
-        function(error){
-          deferred.reject(error)
-        }
-      );
-
-      return deferred.promise;
     };
 
-    /**
-     * [registerNewUser will add a new user in auth DB ]
-     * @param  {string} email    [email of user to be added]
-     * @param  {string} password [password of user to be added]
-     * @return {promise}          [a promsie, reslove function will return an object of new created user in auth DB ]
-     */
-    this.registerNewUser = function registerNewUser(email, password) {
 
+    /**
+     * [saveUser will update a user information by callin api]
+     * @param  {object} userData [hold the fields of user object to be updated]
+     * @param  {string} userId   [id of user to be updated]
+     * @return {promiss}          [description]
+     */
+    this.saveUser = function(userData, userId){
       var deferred = $q.defer();
-      auth.$createUser({
-        email: email,
-        password: password
-      })
-      .then(function (user) {
-        deferred.resolve(user);
-      }, function (err) {
-        deferred.reject(err);
-      });
-
-
+      HirelyApiService.users(userId).patch( userData )
+          .then(
+              function(newData){
+                deferred.resolve(newData);
+              },
+              function(err){
+                deferred.reject(err);
+              }
+          );
       return deferred.promise;
-    };
-
-    /**
-     * [createNewUser will create a new user data object in DB]
-     * @param  {[object]} userData [Refer to user model in www/app/core/services/models/user.js]
-     * @param  {[string]} authId   [user id retreved from DB]
-     * @return {[true]}          [true if user is successfully created / String as error desctiption in case of error]
-     */
-    this.createNewUser = function(userData, authId) {
-
-      var id = authId;
-
-      return HirelyApiService.users().post( angular.extend({externalId:authId}, userData) );
-
+    };//// fun. saveUser
+    
+    this.passwordLogin = function(email, password) {
+      return HirelyApiService.users("passwordLogin").post({email: email, password: password})
+          .then(
+              function(user) {
+                return user;
+              },
+              function(err) {
+                console.log("Error logging in: "+err)
+              }
+          );
     };
 
 
@@ -147,53 +97,6 @@
 
       return HirelyApiService.users(id, fields).get();
     };
-
-    /**
-     * [removeAuthUser will remove user from auth database]
-     * @param  {string} email    [email of user to be removed]
-     * @param  {string} password [password of user to be removed]
-     * @return {promise}          [description]
-     */
-    this.removeAuthUser = function(email, password){
-      var deferred = $q.defer();
-      auth.$removeUser({
-        password: password,
-        email: email
-
-      })
-      .then(
-        function (user) {
-          deferred.resolve(true);
-        },
-        function (err) {
-          console.log('error removing');
-          console.log(err);
-          deferred.reject(err);
-        }
-      );
-
-      return deferred.promise;
-    }//// fun. removeUser
-
-    /**
-     * [saveUser will update a user information by callin api]
-     * @param  {object} userData [hold the fields of user object to be updated]
-     * @param  {string} userId   [id of user to be updated]
-     * @return {promiss}          [description]
-     */
-    this.saveUser = function(userData, userId){
-      var deferred = $q.defer();
-      HirelyApiService.users(userId).patch( userData )
-      .then(
-        function(newData){
-          deferred.resolve(newData);
-        },
-        function(err){
-          deferred.reject(err);
-        }
-      );
-      return deferred.promise;
-    }//// fun. saveUser
 
     /**
      * [updateUserMetricsById will update a users ksaw scores based on experience]
@@ -248,56 +151,6 @@
 
       return ret;
     }
-
-
-
-
-    function createFacebookUser(fbAuthData) {
-      var timestamp = Firebase.ServerValue.TIMESTAMP;
-      var firstName = fbAuthData.facebook.cachedUserProfile.first_name;
-      var lastName = fbAuthData.facebook.cachedUserProfile.last_name;
-      var email = fbAuthData.facebook.email;
-      var userType = '';
-      var profileImageUrl = "http://graph.facebook.com/" + fbAuthData.facebook.id + "/picture?width=300&height=300";
-      var provider = fbAuthData.provider;
-      var createdOn = timestamp;
-      var lastModifiedOn = timestamp;
-      var personalStatement = '';
-      var address = new Address(fbAuthData.facebook.address);
-      var experience = {};
-      var education = {};
-
-      var user = new User(firstName, lastName, email, userType,
-        profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address, experience, education);
-
-
-      return user;
-
-    };
-
-    function createGoogleUser(googleAuthData) {
-      var timestamp = Firebase.ServerValue.TIMESTAMP;
-      var firstName = googleAuthData.google.cachedUserProfile.given_name;
-      var lastName = googleAuthData.google.cachedUserProfile.family_name;
-      var email = googleAuthData.google.email;
-      var userType = '';
-      var profileImageUrl = googleAuthData.google.profileImageURL;
-      var provider = fbAuthData.provider;
-      var createdOn = timestamp;
-      var lastModifiedOn = timestamp;
-      var personalStatement = '';
-      var address = new Address(googleAuthData.google.address);
-      var experience = {};
-      var education = {};
-
-      var user = new User(firstName, lastName, email, userType,
-        profileImageUrl, personalStatement,
-        provider, createdOn, lastModifiedOn, address, experience, education);
-
-      return user;
-
-    };
 
   }
 

@@ -21,13 +21,13 @@
         /**
          * Check if user is logged in and move to next promise
          */
-        return AuthService.getAuth();
+        return AuthService.isUserLoggedIn();
       },
       function(err){
         console.log(err);
         // $scope.dataLoaded = true;
         $scope.dataError = true;
-        return AuthService.getAuth();
+        return AuthService.isUserLoggedIn();
       }
     )
     .then(

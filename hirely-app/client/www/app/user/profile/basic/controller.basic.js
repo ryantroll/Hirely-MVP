@@ -251,7 +251,12 @@
      */
     $timeout(function(){
       if(!$scope.stepOneLoaded){
-        $scope.user = angular.copy(AuthService.currentUser);
+        $scope.user = angular.copy(AuthService.getCurrentUser());
+
+        if (!$scope.user) {
+          return;
+        }
+        
         /**
          * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
          */
@@ -278,66 +283,52 @@
       /**
        * Make sure user is logged in before you do update
        */
-      AuthService.getAuth().then(
+      if(AuthService.isUserLoggedIn()){
         /**
-         * user is logged in go ahead and do data update
+         * User is authenticated update user data
          */
-        function(result){
-            if(true === result){
-              /**
-               * User is authenticated update user data
-               */
-              // TODO:  Upsert application to business once BusinessService is ready
-              /**
-               * do some data clean up
-               */
-              if($scope._dateOfBirth){
-                $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
-              }
-              if($scope._mobile){
-                $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
-              }
+        // TODO:  Upsert application to business once BusinessService is ready
+        /**
+         * do some data clean up
+         */
+        if($scope._dateOfBirth){
+          $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
+        }
+        if($scope._mobile){
+          $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+        }
 
-              /**
-               * Save only basic information
-               */
+        /**
+         * Save only basic information
+         */
 
 
-              UserService.saveUser($scope.user, AuthService.currentUserID)
-              .then(
-                function(savedUser){
-                  /**
-                   * User data updated successfully
-                   */
+        UserService.saveUser($scope.user, AuthService.currentUserID)
+        .then(
+          function(savedUser){
+            /**
+             * User data updated successfully
+             */
 
-                  //// make sure the AuthService data is synced
-                  AuthService.updateCurrentUser($scope.user);
-                },//// fun. resolve
-                function(err){
-                  /**
-                   * Error in updateing user data
-                   */
+            //// make sure the AuthService data is synced
+            AuthService.updateCurrentUser($scope.user);
+          },//// fun. resolve
+          function(err){
+            /**
+             * Error in updateing user data
+             */
 
-                  alert('Error!\nSomething wrong happened while saving data.');
-                }//// fun. reject
-              );//// saveUser then
-            }//// if getAuth
-            else{
-              /**
-               * Error in getAuth
-               */
-              console.log(result);
-              alert(result);
-            }//// if true else
-
-        },///// resolve funtion
-        function(err){
-          /**
-           * User is not logged id do do anything
-           */
-
-        }//// fun. getAuth Reject
-      );/// getAuth promise
+            alert('Error!\nSomething wrong happened while saving data.');
+          }//// fun. reject
+        );//// saveUser then
+      }//// if isUserLoggedIn
+      else{
+        /**
+         * Error in isUserLoggedIn
+         */
+        console.log(result);
+        alert(result);
+      }//// if true else
 
     });
 

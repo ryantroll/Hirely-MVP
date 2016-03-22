@@ -5,112 +5,92 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .factory('AuthService', ['$firebaseAuth', 'fbutil', '$q', '$rootScope', 'UserService', AuthService]);
+        .factory('AuthService', ['$q', '$rootScope', '$cookies', 'UserService', AuthService]);
 
-    function AuthService($firebaseAuth, fbutil, $q, $rootScope, UserService) {
+    function AuthService($q, $rootScope, $cookies, userService) {
         var self = this;
-        var firebaseRef = $firebaseAuth(fbutil.ref());
         var authData = '';
         var currentUser;
         var currentUserID;
 
         var service =  {
-            thirdPartyLogin: thirdPartyLogin,
-            AuthRef: AuthRef,
             passwordLogin: passwordLogin,
+            registerNewUser: registerNewUser,
             logout: logout,
             currentUser: currentUser,
             currentUserID: currentUserID,
+            getCurrentUser: getCurrentUser,
             setCurrentUser: setCurrentUser,
             updateCurrentUser: updateCurrentUser,
-            getAuth: getAuth,
             isUserLoggedIn: isUserLoggedIn,
             onAuth: onAuth,
             resetPassword: resetPassword
         };
         return service;
 
-        // Handle third party login providers
-        // returns a promise
-        function thirdPartyLogin(provider) {
+        function getCurrentUser() {
+            if (service.currentUser) {
+                return service.currentUser;
+            }
 
-            var deferred = $q.defer();
-            firebaseRef.$authWithOAuthPopup(provider)
-                .then(function(user) {
-                   deferred.resolve(user);
-                }, function(err) {
-                    if (err.code === "TRANSPORT_UNAVAILABLE") {
-                        // fall-back to browser redirects, and pick up the session
-                        // automatically when we come back to the origin page
-                        ref.authWithOAuthRedirect.then(function(user) {
-                            deferred.resolve(user);
-                        }, function(err) {
-                            deferred.reject(err);
-                            });
-                    }
-                });
+            //// Set currentUser cookie
+            var user = $cookies.get("currentUser");
+            if (user) {
+                user = JSON.parse(user);
+                service.currentUser = user;
+                service.currentUserID = user._id;
+                return user;
+            }
 
-
-          return deferred.promise;
-        };
-
-        function passwordLogin(email, password) {
-
-            var deferred = $q.defer();
-            firebaseRef.$authWithPassword({
-                email    : email,
-                password : password
-                })
-                .then(function(auth) {
-                    fillUserData(auth.uid)
-                    .then(
-                        function(user){
-                            setCurrentUser(user, user._id);
-                            deferred.resolve(auth);
-                        },
-                        function(error){
-                            deferred.reject(error);
-                        }
-                    )/// then
-
-                }, function(err) {
-                    deferred.reject(err);
-                });
-
-
-            return deferred.promise;
-        };
-
-
-
-        function AuthRef(){
-            return firebaseRef;
+            return null;
         }
 
+        function passwordLogin(email, password) {
+            return userService.passwordLogin(email, password).then(function(user) {
+                if (user) {
+                    setCurrentUser(user);
+                    return user;
+                } else {
+
+                }
+            });
+        }
+
+        function registerNewUser(userData) {
+            return userService.createNewUser(userData).then(function(user) {
+                if (user) {
+                    setCurrentUser(user);
+                    return user;
+                }
+            });
+        }
+
+
         function logout(){
-            firebaseRef.$unauth();
             removeCurrentUser();
         }
 
-        function setCurrentUser(user, userID){
-          /// add the id to user object
-          var newUser = angular.extend({}, user);
-          delete newUser._id;
-          delete newUser.__v;
+        function setCurrentUser(user){
 
           //// set the rootScope currentUser
-          service.currentUser = newUser;
-          service.currentUserID = userID;
+          service.currentUser = user;
+          service.currentUserID = user._id;
+
+          //// Set currentUser cookie
+          $cookies.put("currentUser", JSON.stringify(user));
 
           //// if any of children scopes need to now whos logged in
           //// let them know
-          $rootScope.$emit('UserLoggedIn', newUser);
-          $rootScope.$broadcast('UserLoggedIn', newUser);
+          $rootScope.$emit('UserLoggedIn', user);
+          $rootScope.$broadcast('UserLoggedIn', user);
         }
 
         function removeCurrentUser(){
           service.currentUser = undefined;
           service.currentUserID = undefined;
+
+          //// Set currentUser cookie
+          $cookies.remove("currentUser");
 
           /// let all scopes the user is logged out
           $rootScope.$emit('UserLoggedOut');
@@ -126,91 +106,30 @@
         function updateCurrentUser(user){
             service.currentUser = user;
 
+            $cookies.put("currentUser", JSON.stringify(user));
+
             $rootScope.$emit('UserDataChange', service.currentUser);
             $rootScope.$broadcast('UserDataChange', service.currentUser);
         }
-        /**
-         * [getAuth this function will determin if there is authenticated user by sending true to promise resolve function
-         * If the user is authenticated and there is no user data object in service the function will try to fill current user object
-         * if the authenticated user is there but data cannot be retrived then user will be forced to log-off]
-         * @return {promise} [description]
-         */
-        function getAuth(){
-
-            var deferred = $q.defer();
-
-            var auth = firebaseRef.$getAuth();
-
-            if(auth){
-                //// user is authenticated
-
-                //// fill current user if not exists
-                if(angular.isUndefined(service.currentUser)){
-                    fillUserData(auth.uid)
-                        .then(
-                            function(user){
-                                if(null !== user){
-                                    setCurrentUser(user, user._id);
-                                    deferred.resolve(true);
-                                }
-                                else{
-                                    logout();
-                                    deferred.resolve('User data cannot be retrived');
-                                }
-                            },
-                            function(error){
-                                logout();
-                                deferred.reject(error);
-                            }
-                        )/// then
-                }
-                else{
-                    //// current user exists
-                    deferred.resolve(true);
-                }
-            }
-            else{
-                //// no authenticated user make sure there is not user id
-                removeCurrentUser();
-                deferred.reject('User is not authenticated');
-            }
-            return deferred.promise;
-        }/// fun. getAuth
-
-        function fillUserData(userID){
-            var deferred = $q.defer();
-
-            UserService.getUserById(userID)
-                .then(
-                    function(user){
-                        deferred.resolve(user);
-                    },
-                    function(error){
-                        deferred.reject(error);
-                    }
-                )/// .then
-            return deferred.promise;
-        }//// fun.. fillUserData
-
-        function isUserLoggedIn(){
-            return !angular.isUndefined(service.currentUser)
-                && !angular.isUndefined(service.currentUserID);
+        
+        function isUserLoggedIn() {
+            return service.getCurrentUser() != null;
         }//// fun. isUserLoggedIn
 
-        function onAuth(callBack){
-            firebaseRef.$onAuth(callBack);
+        function onAuth(callback){
+            callback(service.currentUser);
         }//// fun. onAuth
 
         function resetPassword(email){
             var deferred = $q.defer();
 
-            firebaseRef.$resetPassword({'email':email})
-                .then(function(){
-                    deferred.resolve();
-                })
-                .catch(function(error){
-                    deferred.reject(error);
-                });
+            // firebaseRef.$resetPassword({'email':email})
+            //     .then(function(){
+            //         deferred.resolve();
+            //     })
+            //     .catch(function(error){
+            //         deferred.reject(error);
+            //     });
 
 
             return deferred.promise;

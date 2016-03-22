@@ -12,6 +12,7 @@
     * Endpoint: /api/onet/titles/search/:query
     * Return: Promise with 1 to 5 matching results
     * */
+    // This function is deprecated
     this.getOccupations = function getOccupations(query) {
       var deferred = $q.defer();
 

@@ -53,6 +53,7 @@ module.exports = function(app) {
     app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
     app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
     app.post('/api/v1/users/:id/updateUserMetricsById', userApiRoutes.updateUserMetricsById);
+    app.post('/api/v1/users/passwordLogin', userApiRoutes.passwordLogin);
 
     /**
      * Adding routes for local mongoDB businesses
