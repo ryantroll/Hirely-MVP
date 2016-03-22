@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', CandidateListController]);
+  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
 
 
-  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, AuthService, UserService) {
+  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, AuthService, UserService, PositionFiltersService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     /**
@@ -20,7 +20,6 @@
     $scope.showPositionMenu = false;
     $scope.showSortMenu = false;
     $scope.sortByLabel = 'Sort By';
-
 
     $scope.togglePositionMenu = function(event){
 
@@ -112,51 +111,7 @@
      * End of layout interactivity code *************************************************
      */
 
-    $scope.filters = {};
-    $scope.filters.application = {status:{value:1, op:'=='}};
 
-    $scope.filterEngine = function(item){
-
-      var ret = true;
-
-      for(var key in $scope.filters){
-        var str = '';
-        if(key === 'application'){
-          str += 'item';
-        }
-        for(var prop in $scope.filters[key]){
-
-          str += "['" + prop + "']";
-          str += $scope.filters[key][prop].op;
-          str += $scope.filters[key][prop].value;
-        }
-        var result = eval(str);
-
-        ret = ret && result
-
-        if(false === ret){
-          break;
-        }
-      }//// for
-
-      return ret;
-    }
-
-    function applyFilters(){
-      var ret = [];
-      var list = $scope.applications;
-      for(var x=0; x<list.length; x++){
-        if(true === $scope.filterEngine( list[x] ) ){
-          var scoreObj = $scope.scores[list[x].userId];
-
-          list[x].score = scoreObj.scores[$scope.position.expLvl].overall;
-          list[x].scoreLabel = 'great';
-          ret.push(list[x]);
-        }
-      }
-      // console.log(ret)
-      $scope.filtered =  ret;
-    }
 
 
 
@@ -243,28 +198,46 @@
        * if no applicants don't bother and continue
        */
       if($scope.applications.length < 1 ){
-
         $scope.dataLoaded = true;
         return;
       }
 
       applyFilters();
 
-      /**
-       * set statistic variables
-       */
-      $scope.updateStats = function (){
-        $scope.statistics = JobApplicationService.getStatistics($scope.applications);
-      }
+
 
       /**
        * Wait for some time and before showing the page
        */
       $timeout(function() {
-        $scope.updateStats();
+        // $scope.updateStats();
         $scope.dataLoaded = true;
       }, 200);
     }//// initialize
+
+    PositionFiltersService.addFilter('applied');
+
+    function applyFilters(){
+      var ret = [];
+      var list = $scope.applications;
+      for(var x=0; x<list.length; x++){
+
+        if( true === PositionFiltersService.test(list[x], $scope.applicants[list[x].userId], $scope.scores[list[x].userId]) ){
+          var scoreObj = $scope.scores[list[x].userId];
+          list[x].score = scoreObj.scores[$scope.position.expLvl].overall;
+          ret.push(list[x]);
+        }
+      }
+      $scope.filtered =  ret;
+      updateStats();
+    }
+
+    /**
+     * set statistic variables
+     */
+    function updateStats(){
+      $scope.statistics = JobApplicationService.getStatistics($scope.applications);
+    }
 
     $scope.getViewStatus = function(id, index){
 
@@ -298,7 +271,7 @@
         JobApplicationService.save(app)
         .then(
           function(saved){
-            $scope.updateStats();
+            // $scope.updateStats();
             applyFilters();
           },
           function(err){
@@ -309,8 +282,37 @@
     }
 
     $scope.setFilter = function(filter){
-      angular.extend($scope.filters, filter);
+      PositionFiltersService.addFilter(filter);
       applyFilters();
+    }
+
+    $scope.isFilterActive = function(filter){
+      return PositionFiltersService.isFilterActive(filter);
+    }
+
+    $scope.setSideFilter = function(ev, filter){
+      var filtersDiv = angular.element('#filtersDiv');
+      var aTag = angular.element(ev.currentTarget);
+      var exp = $interpolate('<div class="filter-item" id="{{label}}">{{label2}} <a href="javascript:void(0);" data-id="{{label}}" class="icon glyphicon glyphicon-remove"></a></div>');
+      var item = angular.element( exp({label:filter, label2:aTag.text()}) );
+      item.find('a').off('click').on('click', function(ce){
+        ce.preventDefault();
+        var me = angular.element(ce.currentTarget);
+        var filterName = me.attr('data-id');
+        var toRemove = '#' + filterName;
+        filtersDiv.find(toRemove).remove();
+
+        PositionFiltersService.removeFilter(filterName);
+        applyFilters();
+        $scope.$apply();
+      })
+      if(filtersDiv.find('#'+filter).length < 1){
+        filtersDiv.append(item);
+
+        PositionFiltersService.addFilter(filter);
+        applyFilters();
+      }
+
     }
 
     $scope.getFitClass = function(i, score){
@@ -325,6 +327,19 @@
       }
       // console.log(Math.round(score/10)-1, label, i)
       return i <= Math.round(score/10)-1 ? label : '';
+    }
+
+    $scope.clearSideFilters = function(){
+      var filtersDiv = angular.element('#filtersDiv');
+      filtersDiv.children().each(function(){
+        var item = angular.element(this);
+        var filterName = item.attr('id');
+        var toRemove = '#' + filterName;
+        filtersDiv.find(toRemove).remove();
+
+        PositionFiltersService.removeFilter(filterName);
+      });
+      applyFilters();
     }
 
 

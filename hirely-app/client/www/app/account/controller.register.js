@@ -19,9 +19,9 @@
       }//// fun. link
     }/// return object
   })/// validate date;
-    .controller('RegisterController', ['$scope', '$rootScope', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
+    .controller('RegisterController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
 
-    function RegisterController($scope, $rootScope, $stateParams, AuthService, UserService) {
+    function RegisterController($scope, $rootScope, $state, $stateParams, AuthService, UserService) {
 
         var vm = this;
         var authService = AuthService;
@@ -91,7 +91,7 @@
                           function(auth){
 
                             console.log(auth);
-
+                            $state.go('app.home');
                           },
                           function(err) {
                             /**

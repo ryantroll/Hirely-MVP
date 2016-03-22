@@ -74,10 +74,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul>
-                        <li><button class="btn" ng-class="{red:filters.application.status.value == 1, white:filters.application.status.value != 1}" ng-click="setFilter({application:{status:{value:1, op:'=='}}})" ng-disabled="statistics.applied == 0">Applied <span  ng-show="statistics.applied > 0">({{statistics.applied}})</span></button></li>
-                        <li><button class="btn white" ng-class="{red:filters.application.status.value == 2, white:filters.application.status.value != 2}" ng-click="setFilter({application:{status:{value:2, op:'=='}}})" ng-disabled="statistics.contacted == 0">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
-                        <li><button class="btn white" ng-class="{red:filters.application.status.value == 3, white:filters.application.status.value != 3}" ng-click="setFilter({application:{status:{value:3, op:'=='}}})" ng-disabled="statistics.hired == 0">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
-                        <li><button class="btn white" ng-class="{red:filters.application.status.value == 0, white:filters.application.status.value != 0}" ng-click="setFilter({application:{status:{value:0, op:'=='}}})" ng-disabled="statistics.declined == 0">Declined <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('applied'), white:!isFilterActive('applied')}" ng-click="setFilter('applied')" ng-disabled="statistics.applied == 0">Applied <span  ng-show="statistics.applied > 0">({{statistics.applied}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('contacted'), white:!isFilterActive('contacted')}" ng-click="setFilter('contacted')" ng-disabled="statistics.contacted == 0">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('hired'), white:!isFilterActive('hired')}" ng-click="setFilter('hired')" ng-disabled="statistics.hired == 0">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('declined'), white:!isFilterActive('declined')}" ng-click="setFilter('declined')" ng-disabled="statistics.declined == 0">Declined <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
                     </ul>
                 </div><!--col-->
             </div><!--row-->
@@ -89,12 +89,12 @@
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3><i class="icon glyphicon glyphicon-filter"></i> Filters</h3>
-                            <a href="javascript:void(0);"><i class="icon glyphicon glyphicon-remove"></i> Clear All Filters</a>
+                            <a href="javascript:void(0);" ng-click="clearSideFilters()"><i class="icon glyphicon glyphicon-remove"></i> Clear Filters</a>
                         </div>
-                        <div class="inner padding clearfix">
-                            <div class="filter-item">Great Fit <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div>
+                        <div class="inner padding clearfix" id="filtersDiv">
+                            <!-- <div class="filter-item">Great Fit <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div>
                             <div class="filter-item">Weekends <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div>
-                            <div class="filter-item">Hospitality <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div>
+                            <div class="filter-item">Hospitality <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div> -->
                         </div>
                     </div><!--box-->
 
@@ -105,11 +105,11 @@
                         </div>
                         <div class="inner list clearfix">
                             <ul>
-                                <li><a href="javascript:void(0);">Weekdays</a></li>
-                                <li><a href="javascript:void(0);">Weekends</a></li>
-                                <li><a href="javascript:void(0);">Mornings</a></li>
-                                <li><a href="javascript:void(0);">Days</a></li>
-                                <li><a href="javascript:void(0);">Nights</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'weekdays')">Weekdays</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'weekends')">Weekends</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'mornings')">Mornings</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'days')">Days</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'nights')">Nights</a></li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -121,10 +121,10 @@
                         </div>
                         <div class="inner list clearfix">
                             <ul>
-                                <li><a href="javascript:void(0);">Winter</a></li>
-                                <li><a href="javascript:void(0);">Spring</a></li>
-                                <li><a href="javascript:void(0);">Summer</a></li>
-                                <li><a href="javascript:void(0);">Fall</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'winter')">Winter</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'spring')">Spring</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'summer')">Summer</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'fall')">Fall</a></li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -136,14 +136,9 @@
                         </div>
                         <div class="inner list clearfix">
                             <ul>
-                                <li><a href="javascript:void(0);">No Education</a></li>
-                                <li><a href="javascript:void(0);">Hight School</a></li>
-                                <li><a href="javascript:void(0);">Certificate</a></li>
-                                <li><a href="javascript:void(0);">Associate Degree</a></li>
-                                <li><a href="javascript:void(0);">Master Degree</a></li>
-                                <li><a href="javascript:void(0);">Professional Degree</a></li>
-                                <li><a href="javascript:void(0);">Doctoral Degree</a></li>
-                                <li><a href="javascript:void(0);">Post Doctoral Degree</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'noEducaiton')">No Education</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'highSchool')">Hight School</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'collage')">Collage</a></li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -154,7 +149,7 @@
 
                     <div class="box clearfix">
                         <div class="header clearfix">
-                            <h3><i class="icon icon-users_group_icon"></i> Candidates <span ng-show="statistics.total > 0">({{statistics.total}})</span></h3>
+                            <h3><i class="icon icon-users_group_icon"></i> Candidates <span ng-show="filtered.length > 0">({{filtered.length}})</span></h3>
                             <div class="drop-down">
                                 <a href="javascript:void(0);" ng-click="toggleSortMenu($event)">
                                     <span class="value">{{sortByLabel}}</span>
@@ -188,7 +183,7 @@
                                 <div class="col-sm-3">
                                     <div class="image">
                                         <div class="image-wrapper">
-                                            <img src="{{applicants[app.userId].profileImageURL || defaultImage}}" />
+                                            <img ng-if="applicants[app.userId].profileImageURL || defaultImage" src="{{applicants[app.userId].profileImageURL || defaultImage}}" />
                                         </div>
                                         <div class="tag">{{getViewStatus(app._id, $index)}}</div>
                                         <div class="date">Applied: {{app.createdAt | date:'MM/dd/yyyy'}}</div>
@@ -209,7 +204,7 @@
                                             <i ng-class="getFitClass(7, app.score)"></i>
                                             <i ng-class="getFitClass(8, app.score)"></i>
                                             <i ng-class="getFitClass(9, app.score)"></i>
-                                            <span class="legend">{{app.scoreLabel | uppercase}} Fit</span>
+                                            <span class="legend">{{getFitClass(-1, app.score) | uppercase}} Fit</span>
                                         </div>
                                         <div class="answers">
                                             <div class="answer" ng-repeat="answer in app.prescreenAnswers">

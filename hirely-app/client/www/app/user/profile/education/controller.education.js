@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$scope', '$stateParams', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', ProfileEducationController]);
+  var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$scope', '$stateParams', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', 'JobApplicationService', ProfileEducationController]);
 
   hirelyApp.directive('validateMonth', function(){
     return {
@@ -43,7 +43,7 @@
 
   })/// validate year
 
-  function ProfileEducationController($scope, $stateParams, $filter, $timeout, AuthService, UserService, StatesNames) {
+  function ProfileEducationController($scope, $stateParams, $filter, $timeout, AuthService, UserService, StatesNames, JobApplicationService) {
 
 
 
@@ -54,7 +54,8 @@
 
     $scope.stepTwoLoaded = false;
 
-    $scope.programTypes = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
+    $scope.programTypes = JobApplicationService.educationPrograms;
+
 
     $scope.states = StatesNames;
 

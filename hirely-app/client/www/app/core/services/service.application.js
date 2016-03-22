@@ -12,6 +12,10 @@
 
   function JobApplicationService( $q, HirelyApiService) {
 
+    var viewStatusLabels = ['New', 'Viewed'];
+    var statusLabels = ['Declined', 'Open', 'Contacted', 'Hired'];
+    var educationPrograms = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
+
     /**
      * [service object that define angular service to be returned by factory function at the end of this code]
      * @type {Object}
@@ -22,11 +26,11 @@
       getByPositionId: getByPositionId,
       getStatistics: getStatistics,
       viewStatusLabels: viewStatusLabels,
-      statusLabels: statusLabels
+      statusLabels: statusLabels,
+      educationPrograms: educationPrograms
     };
 
-    var viewStatusLabels = ['New', 'Viewed'];
-    var statusLabels = ['Declined', 'Open', 'Contacted', 'Hired'];
+
 
     /**
      * [addNewApplication this will create a new job application object in DB]
@@ -129,6 +133,7 @@
         ret.declined = 0;
 
         for(var x=0; x<ret.total; x++){
+
           switch (list[x].status){
             case 1:
               ++ret.applied;
