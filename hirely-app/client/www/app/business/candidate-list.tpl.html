@@ -197,8 +197,7 @@
                                             <span class="legend">{{getFitClass(-1, app.score) | uppercase}} Fit</span>
                                         </div>
                                         <div class="answers">
-                                            <div class="answer" ng-repeat="answer in app.prescreenAnswers">
-                                                <b>{{answer.question}}</b>
+                                            <div class="answer" ng-repeat="answer in app.prescreenAnswers | limitTo : 1">
                                                 <p>{{answer.answer}}</p>
                                             </div>
                                         </div>
