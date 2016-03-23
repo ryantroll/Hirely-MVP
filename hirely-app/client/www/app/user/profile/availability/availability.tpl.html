@@ -27,7 +27,7 @@
                             <span class="fa fa-check feedback-valid"></span>
                             <span class="fa fa-close feedback-error"></span>
                         </label>
-                        <input type="text" class="text-field" id="minHours" name="minHours" placeholder="XX" maxlength="2"
+                        <input type="tel" class="text-field" id="minHours" name="minHours" placeholder="XX" maxlength="2"
                             required
                             ng-model="availability.hoursPerWeekMin"
                             ng-change="updateValidity($event)"
@@ -43,7 +43,7 @@
                             <span class="fa fa-check feedback-valid"></span>
                             <span class="fa fa-close feedback-error"></span>
                         </label>
-                        <input type="text" class="text-field" id="maxHours" name="maxHours" placeholder="XX" maxlength="2"
+                        <input type="tel" class="text-field" id="maxHours" name="maxHours" placeholder="XX" maxlength="2"
                             required
                             ng-model="availability.hoursPerWeekMax"
                             ng-change="updateValidity($event)"
