@@ -42,9 +42,21 @@
             if(!$scope.registerForm.$valid){
                 return null;
             }
-
             $scope.ajaxBusy = true;
             registerPasswordUser($scope.user);
+        }
+
+        $scope.cancelRegistration = function() {
+            console.log("IN cancel");
+            if(angular.isDefined($rootScope.nextState)){
+                console.log("1");
+                $state.go($rootScope.nextState.state, $rootScope.nextState.params);
+                delete $rootScope.nextState;
+            }
+            else{
+                console.log("2");
+                $state.go('user.profile')
+            }
         }
 
         function registerPasswordUser(registeredUser){
@@ -91,6 +103,10 @@
 
 
         }//// fun. registerPasswrodUser
-    }
+
+
+    } // end ctrl
+
+
 
 })();

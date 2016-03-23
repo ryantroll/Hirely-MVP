@@ -41,7 +41,7 @@
                             delete $rootScope.nextState;
                         }
                         else{
-                            $state.go('user.profile')
+                            $state.go('app.home')
                         }
                     },
                     function(err) {
@@ -70,6 +70,19 @@
              * app/application/controller.job-application.js will listen to ShowRegister
              */
             $rootScope.$emit('ShowForgotPassword');
+        };
+
+        $scope.cancelRegistration = function() {
+            console.log("IN cancel");
+            if(angular.isDefined($rootScope.nextState)){
+                console.log("1");
+                $state.go($rootScope.nextState.state, $rootScope.nextState.params);
+                delete $rootScope.nextState;
+            }
+            else{
+                console.log("2");
+                $state.go('user.profile')
+            }
         };
 
     }
