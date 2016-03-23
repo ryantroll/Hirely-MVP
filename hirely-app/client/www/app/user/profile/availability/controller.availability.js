@@ -109,7 +109,7 @@
       else{
         //// initalize scope immediatly if weeklyTimetable exists
 
-        $timeout($scope.initScope());
+        initializeScope();
       }
 
 
@@ -117,7 +117,7 @@
        * [initializeScope this function will called afer the availabiliyt.weeklyTimetable is been set by above code]
        * @return {[type]} [description]
        */
-      $scope.initScope = function(){
+      function initializeScope(){
 
         /**
          * Need to wait untill all views and data is been loaded to update the validity of form
@@ -136,12 +136,11 @@
             $timeout(function(){
               if(!$scope.stepOneLoaded){
                 $scope.updateValidity();
+                $(window).scrollTop(0);
                 $scope.stepFiveLoaded = true;
               }
             }, 1000);
           });
-
-        $(window).scrollTop(0);
 
       } //// fun. initializeScope
 

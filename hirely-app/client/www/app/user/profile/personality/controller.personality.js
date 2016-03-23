@@ -60,8 +60,8 @@
 		function saveAssessment() {
 			if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
       			saved = true;
-				TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId).then(function() {
-					
+				TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId).then(function(personalityExam) {
+					AuthService.updateCurrentUserPropInCache('personalityExams', [personalityExam])
 				});
 			}
 		}//// fun. saveAssessment
@@ -106,7 +106,7 @@
 			} else {
 				$scope.stepThreeLoaded = true;
 			}
-		}
+		};
 		$timeout($scope.init);
 
 
@@ -116,6 +116,10 @@
              * Disable next button
              */
             delete $scope.enableNextButton;
+
+			$("header").hide();
+			$("footer").hide();
+			$(window).scrollTop(0);
 
             TraitifyService.getAssessmentId()
             .then(
@@ -166,6 +170,8 @@
                                 saveAssessment()
                             });
                             $scope.resultsLoaded = true;
+							$("header").show();
+							$("footer").show();
                             $scope.$apply();
                         });
                     }/// if new-assessment

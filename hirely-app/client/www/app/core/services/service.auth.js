@@ -22,9 +22,11 @@
             getCurrentUser: getCurrentUser,
             syncCurrentUserFromDb: syncCurrentUserFromDb,
             setCurrentUser: setCurrentUser,
+            updateCurrentUserCookie: updateCurrentUserCookie,
             updateCurrentUser: updateCurrentUser,
             isUserLoggedIn: isUserLoggedIn,
             onAuth: onAuth,
+            updateCurrentUserPropInCache: updateCurrentUserPropInCache,
             resetPassword: resetPassword
         };
         return service;
@@ -86,6 +88,14 @@
             removeCurrentUser();
         }
 
+        function updateCurrentUserCookie() {
+            //// Set currentUser cookie
+            var userStripped = angular.copy(service.currentUser);
+            delete userStripped.personalityExams;
+            delete userStripped.scores;
+            $cookies.put("currentUser", JSON.stringify(userStripped));
+        }
+
         function setCurrentUser(user){
 
           //// set the rootScope currentUser
@@ -97,11 +107,7 @@
           $rootScope.$emit('UserLoggedIn', user);
           $rootScope.$broadcast('UserLoggedIn', user);
 
-          //// Set currentUser cookie
-          var userStripped = angular.copy(user);
-          delete userStripped.personalityExams;
-          delete userStripped.scores;
-          $cookies.put("currentUser", JSON.stringify(userStripped));
+          service.updateCurrentUserCookie();
         }
 
         function removeCurrentUser(){
@@ -124,13 +130,7 @@
          */
         function updateCurrentUser(user){
             service.currentUser = user;
-
-            //// Set currentUser cookie
-            var userStripped = angular.copy(user);
-            delete userStripped.personalityExams;
-            delete userStripped.scores;
-            $cookies.put("currentUser", JSON.stringify(userStripped));
-
+            service.updateCurrentUserCookie();
             $rootScope.$emit('UserDataChange', service.currentUser);
             $rootScope.$broadcast('UserDataChange', service.currentUser);
         }
@@ -142,6 +142,11 @@
         function onAuth(callback){
             callback(service.currentUser);
         }//// fun. onAuth
+
+        function updateCurrentUserPropInCache(propname, prop) {
+            service.currentUser[propname] = prop;
+            service.updateCurrentUserCookie();
+        }
 
         function resetPassword(email){
             var deferred = $q.defer();

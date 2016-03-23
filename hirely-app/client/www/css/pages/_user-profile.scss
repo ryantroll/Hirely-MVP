@@ -144,6 +144,14 @@ $day-button-size: 60px;
 	}
 }/// .form-container
 
+.form-container.user-profile-personality {
+	padding: 0;
+}
+
+.tf-slide-deck-container .progress-bar {
+	display: none !important;
+}
+
 .user-profile-basic{
 
 	.user-image{
@@ -900,6 +908,10 @@ $day-button-size: 60px;
     }
 	#already-have-account-link-mobile {
 		display: none;
+	}
+
+	.tf-slide-deck-container .progress-bar {
+		display: block !important;
 	}
 }
 

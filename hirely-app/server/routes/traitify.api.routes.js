@@ -28,6 +28,15 @@ var traitifyRoutes = {
 
     createNewAssessment: function(req, res){
         traitifyService.createNewAssessment(req.query.userId, req.query.assessmentId, req.body)
+            .then(
+                function(personalityExam){
+                    res.status(200).json(apiUtil.generateResponse(200, "personalityExam saved successfully", personalityExam));
+                },
+                function(error){
+                    //// user couldn't be found 404
+                    res.status(500).json(apiUtil.generateResponse(404, "personalityExam failed to save", null));
+                }
+            );
     },//// fun. createNewAssessment
 
     getTest: function(req, res){
