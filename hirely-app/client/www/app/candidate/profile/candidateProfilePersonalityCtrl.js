@@ -17,7 +17,7 @@
         var retrieveAssessment = function(){
             var assessmentId = $scope.personality.results.id;
             Traitify.setPublicKey("cbt6fmp5dfq4t2iqa8r28b7bp2"); // Example Public Key
-            Traitify.setHost("api-sandbox.traitify.com"); // Example host url (Defaults to api.traitify.com)
+            Traitify.setHost("api.traitify.com"); // Example host url (Defaults to api.traitify.com)
             Traitify.setVersion("v1"); // Example Version
             var results = Traitify.ui.load("results", assessmentId, ".results");
             var personalityTypes = Traitify.ui.load("personalityTypes", assessmentId, ".personality-types");
@@ -29,7 +29,7 @@
             candidateService.createTraitifyAssessment().then(function(assessmentObj) {
                 var assessment = assessmentObj;
                 Traitify.setPublicKey("cbt6fmp5dfq4t2iqa8r28b7bp2"); // Example Public Key
-                Traitify.setHost("api-sandbox.traitify.com"); // Example host url (Defaults to api.traitify.com)
+                Traitify.setHost("api.traitify.com"); // Example host url (Defaults to api.traitify.com)
                 Traitify.setVersion("v1"); // Example Version
                 var assessmentId = assessmentObj.id; // Example Assessment id
 

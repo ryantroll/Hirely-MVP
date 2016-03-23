@@ -34,7 +34,7 @@
 
 
     	Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
-		Traitify.setHost("api-sandbox.traitify.com");
+		Traitify.setHost("api.traitify.com");
 		Traitify.setVersion("v1");
 
 		$scope.assessment = {};
