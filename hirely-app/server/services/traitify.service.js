@@ -271,7 +271,6 @@ var traitifySevice = {
 
   },
   getAssessmentCareerMatchScoresById: function (assessmentId) {
-      console.log("assessmentId: "+assessmentId);
       this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] = 0;
       var self = this;
       return this.getAssessmentCareerMatchScoresByIdWithParams(assessmentId, onetIdsAll).then(function(matches) {
@@ -312,6 +311,8 @@ var traitifySevice = {
     var deferred = q.defer();
     var self = this;
 
+      console.log("assessmentId: "+examId);
+
     /**
      * Get summary for user
      */
@@ -324,8 +325,8 @@ var traitifySevice = {
             user.personalityExams = [summary];
             user.save().then(
                 function(user){
-                    //deferred.resolve(user.personalityExams[0]);
-                    return self.updateAssessmentCareerMatchScoresByUserId(user._id);
+                    deferred.resolve(user.personalityExams[0]);
+                    // return self.updateAssessmentCareerMatchScoresByUserId(user._id);
                 },
                 function(err) {
                     console.log("User save failed");

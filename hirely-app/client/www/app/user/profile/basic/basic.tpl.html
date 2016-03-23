@@ -84,12 +84,20 @@
 							<span class="fa fa-check feedback-valid"></span>
 							<span class="fa fa-close feedback-error"></span>
 						</label>
-						<input type="text" class="text-field" id="dob" name="dob" placeholder="MM/DD/YYYY"
-							ng-model="_dateOfBirth"
-							ng-change="formatDate()"
-							validate-date
-							required
+						<input type="tel" class="text-field" id="dob" name="dob" placeholder="MM/DD/YYYY"
+						       ng-model="_dateOfBirth"
+						       validate-date
+						       required
 						/>
+						<!--<input type="tel" class="text-field inline" id="mm" name="mm" placeholder="MM"-->
+							<!--ng-model="mm" maxlength="2"-->
+						<!--/> /-->
+						<!--<input type="tel" class="text-field inline" id="dd" name="dd" placeholder="DD"-->
+					       <!--ng-model="dd" maxlength="2"-->
+						<!--/> /-->
+						<!--<input type="tel" class="text-field inline" id="yyyy" name="yyyy" placeholder="YYYY"-->
+						       <!--ng-model="yyyy" maxlength="4"-->
+						<!--/>-->
 					</div>
 				</div>
 			</div>
@@ -102,7 +110,7 @@
 							<span class="fa fa-check feedback-valid"></span>
 							<span class="fa fa-close feedback-error"></span>
 						</label>
-						<input type="text" class="text-field" id="zipcode" name="zipcode"
+						<input type="tel" class="text-field" id="zipcode" name="zipcode"
 							ng-model="user.postalCode"
 							ng-pattern="/^\d{4,6}$/"
 							required maxlength="5"

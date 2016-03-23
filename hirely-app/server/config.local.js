@@ -3,7 +3,7 @@ var config = {};
 config.googleMapsAPIKey = 'AIzaSyDXt_V8OyuoNph540_ZBTUSjx66QKLUuJc';
 
 config.traitify = {
-  host: 'api-sandbox.traitify.com',
+  host: 'api.traitify.com',
   version: 'v1',
   secretKey: 'jlktk03vvsduai7dq4angojl0l'
 };

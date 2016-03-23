@@ -24,7 +24,8 @@ var myApp = angular.module('hirelyApp',
     'hirelyApp.candidate',
     'hirelyApp.manager',
     'ngSanitize',
-    'multiStepForm'
+    'multiStepForm', 
+    'ngCookies'
 
   ])
 

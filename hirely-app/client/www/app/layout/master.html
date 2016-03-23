@@ -1,25 +1,37 @@
 <div class="master-wrapper" ng-controller="MasterCtrl as vm">
     <nav id="mobile-nav" ng-class="userType">
         <header>
-            <div ng-show="currentUser">
-                <img alt="" class="img-circle" src="{{currentUser.profileImageUrl || 'img/avatar.jpg' }}">
-                <span class="username">
-                Hi <span ng-bind="currentUser.firstName"> </span>
-                </span>!
-            </div>
-            <div ng-show="!currentUser" class="nav-logo">
+            <div class="nav-logo">
                 <img src="img/hirely_logo_small.png" alt="Hirely"/>
             </div>
+
+
+            <!--<div ng-show="currentUser">-->
+                <!--<img alt="" class="img-circle" src="{{currentUser.profileImageUrl || 'img/avatar.jpg' }}">-->
+                <!--<span class="username">-->
+                <!--Hi <span ng-bind="currentUser.firstName"> </span>-->
+                <!--</span>!-->
+            <!--</div>-->
+            <!--<div ng-show="!currentUser" class="nav-logo">-->
+                <!--<img src="img/hirely_logo_small.png" alt="Hirely"/>-->
+            <!--</div>-->
         </header>
         <ul>
-            <li><a><i class="fa fa-home"></i>Home</a></li>
-            <li ng-show="!currentUser"><a href="javascript:void(0)" ng-click="vm.login()"><i class="fa fa-sign-in"></i>Login</a></li>
-            <li ng-show="currentUser"><a ui-sref="app.candidate.dashboard"><i class="fa fa-user"></i>My Profile</a></li>
-            <li ng-show="currentUser"><a><i class="fa fa-files-o"></i>Applications</a></li>
-            <li ng-show="currentUser"><a><i class="fa fa-heart"></i>Favorites</a></li>
-            <li ng-show="!currentUser"><a><i class="fa fa-plus-square"></i>Get Started</a></li>
-            <li><a href="javascript:void(0)" ng-click="vm.hmregister()"><i class="fa fa-users"></i>Start Hiring</a></li>
-            <li ng-show="currentUser"><a href="javascript:void(0)" ng-click="vm.logout()"><i class="fa fa-lock"></i>Log Out</a></li>
+            <li><a ui-sref="app.home"><i class="fa fa-home"></i>Home</a></li>
+            <li ng-show="!currentUser"><a ui-sref="account.login"><i class="fa fa-sign-in"></i>Login</a></li>
+            <li ng-show="!currentUser"><a ui-sref="account.register"><i class="fa fa-users"></i>Register</a></li>
+
+            <li ng-show="currentUser"><a ui-sref="user.profile"><i class="fa fa-users"></i>Edit Profile</a></li>
+            <li ng-show="currentUser"><a href="javascript:void(0)" ng-click="vm.logout()"><i class="fa fa-lock"></i>Logout</a></li>
+
+
+            <!--<li ng-show="!currentUser"><a href="javascript:void(0)" ng-click="vm.login()"><i class="fa fa-sign-in"></i>Login</a></li>-->
+            <!--<li ng-show="currentUser"><a ui-sref="app.candidate.dashboard"><i class="fa fa-user"></i>My Profile</a></li>-->
+            <!--<li ng-show="currentUser"><a><i class="fa fa-files-o"></i>Applications</a></li>-->
+            <!--<li ng-show="currentUser"><a><i class="fa fa-heart"></i>Favorites</a></li>-->
+            <!--<li ng-show="!currentUser"><a><i class="fa fa-plus-square"></i>Get Started</a></li>-->
+            <!--<li><a href="javascript:void(0)" ng-click="vm.hmregister()"><i class="fa fa-users"></i>Start Hiring</a></li>-->
+            <!--<li ng-show="currentUser"><a href="javascript:void(0)" ng-click="vm.logout()"><i class="fa fa-lock"></i>Log Out</a></li>-->
         </ul>
     </nav>
     <div class="wrapper" id="hirely-content">

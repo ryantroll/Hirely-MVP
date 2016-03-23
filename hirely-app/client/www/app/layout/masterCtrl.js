@@ -10,12 +10,7 @@
 
         var vm = this;
         var geocodeService = GeocodeService;
-
-        //$scope.userType = "visitor";
-        //$scope.userType = "hiring-manager-nav";
-        $scope.userType = "candidate-nav";
-
-        $scope.authRef = AuthService.AuthRef();
+        
         $scope.userService = UserService;
         $scope.currentUser = null;
         $scope.location = {};
@@ -23,23 +18,11 @@
 
         /**
          * check on loged in user
-         * getAuth method will do the needfull and set all the required variabls
+         * isUserLoggedIn method will do the needfull and set all the required variabls
          */
 
-        var auth = AuthService.getAuth()
-            .then(
-                function(isAuth){
-                    if(isAuth){
-                        console.log('User ' + AuthService.currentUser.firstName + ' is logged in');
-                    }
-                },
-                function(error){
-                    /// no authenticated user
-                    /// do nothing
-                    console.log('No user is logged in');
-                }
-            )/// Auth then
-
+        var auth = AuthService.isUserLoggedIn();
+        AuthService.syncCurrentUserFromDb();
 
 
         //

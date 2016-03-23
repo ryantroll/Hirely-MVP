@@ -246,32 +246,23 @@
         /**
          * Make sure user is authenticated
          */
-        AuthService.getAuth()
-        .then(
-          function(isAuth){
-            /**
-             * User is authenticated
-             * do save
-             */
-            if(isAuth){
-              var toSave = {education:angular.copy($scope.eduItems)};
-              UserService.saveUser(toSave, AuthService.currentUserID)
-              .then(
-                function(user){
-                  // console.log(user);
-                },
-                function(err){
-                  alert("Error!\nYour data was not saved, please try again.")
-                  console.log(err);
-                }
-              )
-            }//// if isAuth
-            else{
+        if(AuthService.isUserLoggedIn()){
+          var toSave = {education:angular.copy($scope.eduItems)};
+          UserService.saveUser(toSave, AuthService.currentUserID)
+          .then(
+            function(user){
+              // console.log(user);
+            },
+            function(err){
+              alert("Error!\nYour data was not saved, please try again.")
+              console.log(err);
+            }
+          )
+        }//// if isAuth
+        else{
 
-            }//// if isAuth else
-          }//// reslove
-        )//// getAuth.then()
-      })/// $on.$destroy
+        }//// if isAuth else
+      });/// $on.$destroy
 
   }
 })();

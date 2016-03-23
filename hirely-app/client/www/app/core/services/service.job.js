@@ -7,11 +7,10 @@
   'use strict';
 
   angular.module('hirelyApp.manager')
-    .service('JobService', ['$q', 'FIREBASE_URL', '$firebaseObject', 'fbutil', JobService]);
+    .service('JobService', ['$q',  JobService]);
 
-  function JobService($q, FIREBASE_URL, $firebaseObject, fbutil, JobService) {
+  function JobService($q, JobService) {
     var self = this;
-    var ref = new Firebase(FIREBASE_URL + '/job');
 
     /*
     var onComplete = function (error) {
@@ -57,17 +56,17 @@
     // retrieve job by its ID
      this.getJobById = function getJobById(id)
     { 
-      var deferred = $q.defer();
-      var user = {};
-      var url = new Firebase(FIREBASE_URL + "/business/" + id);
-      url.on("value", function(snapshot) {
-        user = snapshot.val();
-        deferred.resolve(user);
-      }, function (err) {
-      deferred.reject(err);
-      });
-
-      return deferred.promise;
+      // var deferred = $q.defer();
+      // var user = {};
+      // var url = new Firebase(FIREBASE_URL + "/business/" + id);
+      // url.on("value", function(snapshot) {
+      //   user = snapshot.val();
+      //   deferred.resolve(user);
+      // }, function (err) {
+      // deferred.reject(err);
+      // });
+      //
+      // return deferred.promise;
     }
 
 

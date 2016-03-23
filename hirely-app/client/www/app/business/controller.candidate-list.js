@@ -67,7 +67,7 @@
 
           list.off('click').on('click', function(e){
             var me = angular.element(e.currentTarget);
-            me.parent().addClass('active').siblings().removeClass('active');
+            // me.parent().addClass('active').siblings().removeClass('active');
             $scope.sortBy = me.attr('data-value');
             $scope.sortByLabel = me.text();
 
@@ -132,41 +132,21 @@
         /**
          * Check if user is logged in and move to next promise
          */
-        return AuthService.getAuth();
+        $scope.isAuth = AuthService.isUserLoggedIn();
+
+        return JobApplicationService.getByPositionId($scope.position._id);
       },
       function(err){
 
         $scope.dataError = true;
-        return AuthService.getAuth();
-      }
-    )
-    .then(
-      function(isAuth){
-        /**
-         * user is logged in
-         */
-        $scope.isAuth = isAuth;
-
-        return JobApplicationService.getByPositionId($scope.position._id);
-
-      },
-      function(err){
-        /**
-         * User in not logged in redirect to login
-         */
         $scope.isAuth = false;
-
-        /**
-         * Save the current state to bring user back after login
-         */
-        $rootScope.nextState = {state:$state.current.name, params:$state.params};
-        $state.go('account.login');
 
       }
     )
     .then(
       function(data){
-        console.log(data)
+
+        // console.log(data)
         $scope.applications = data.applications
         $scope.applicants = data.users;
         $scope.scores = data.careerMatchScoress;
@@ -177,6 +157,7 @@
     )
     .finally(
       function(){
+
         initialize();
       }
     );
@@ -187,6 +168,16 @@
        * Check for data error first of all
        */
       $scope.dataError = !$scope.business || !$scope.location || !$scope.position;
+
+      /**
+       * Save the current state to bring user back after login
+       */
+      if(false === $scope.isAuth){
+        $rootScope.nextState = {state:$state.current.name, params:$state.params};
+        $state.go('account.login');
+        return;
+      }
+
 
       /**
        * don't continue if there is a data error
@@ -214,23 +205,26 @@
       $timeout(function() {
         // $scope.updateStats();
         $scope.dataLoaded = true;
+
       }, 200);
     }//// initialize
 
     PositionFiltersService.addFilter('applied');
-    $scope.sortBy = 'date';
+    $scope.sortBy = 'rank';
+    $scope.sortByLabel = 'Rank';
 
     function applyFilters(){
+
       var ret = [];
       var list = $scope.applications;
       for(var x=0; x<list.length; x++){
-
         if( true === PositionFiltersService.test(list[x], $scope.applicants[list[x].userId], $scope.scores[list[x].userId]) ){
           var scoreObj = $scope.scores[list[x].userId];
           list[x].score = scoreObj.scores[$scope.position.expLvl].overall;
           ret.push(list[x]);
         }
       }
+
       $scope.filtered =  ret;
       updateStats();
       applySort();
@@ -367,6 +361,14 @@
       $state.go('business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
     }
 
+    $scope.goToPosition = function(){
+      $state.go('job.position', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:$scope.position.slug})
+    }
+
+    $scope.copyPositionURL = function(){
+      var url = angular.element('#positionURL').val();
+      window.prompt("Copy to clipboard: Press Ctrl+C or Cmd+C on Mac then Enter", url);
+    }
 
   }//// controller
 })();

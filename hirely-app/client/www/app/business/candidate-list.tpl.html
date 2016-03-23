@@ -29,14 +29,14 @@
                 </div><!--title-->
 
                 <div class="buttons visible-sm-block visible-md-block visible-lg-block">
-                    <input type="text" name="positionURL" id="positionURL" value="http://hirely.io/#/compass-coffee/dc-washington-shaw/barista" />
-                    <button class="btn">Copy</button>
+                    <input type="text" name="positionURL" id="positionURL" value="http://hirely.io/#/{{business.slug}}/{{location.slug}}/{{position.slug}}" />
+                    <button class="btn blue" ng-click="copyPositionURL()">Copy</button>
                     <button class="btn red">Promote</button>
                 </div>
             </div><!--col-->
             <div class="col-sm-2 visible-sm-block visible-md-block visible-lg-block">
                 <div class="buttons">
-                    <button class="btn gray">View Details</button>
+                    <button class="btn gray" ng-click="goToPosition()">View Details</button>
                 </div>
             </div>
         </div><!--row-->
@@ -125,8 +125,8 @@
                         <div class="inner list clearfix">
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'noEducaiton')">No Education</a></li>
-                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'highSchool')">Hight School</a></li>
-                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'collage')">Collage</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'highSchool')">High School</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'collage')">College</a></li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -144,8 +144,8 @@
                                     <i class="icon glyphicon glyphicon-menu-down"></i>
                                 </a>
                                 <ul ng-show="showSortMenu" id="sortMenu">
-                                    <li><a href="javascript:void(0);" data-value="rank">Rank</a></li>
-                                    <li><a href="javascript:void(0);" data-value="date">Date</a></li>
+                                    <li ng-class="{active: sortBy == 'rank'}"><a href="javascript:void(0);" data-value="rank">Rank</a></li>
+                                    <li ng-class="{active: sortBy == 'date'}"><a href="javascript:void(0);" data-value="date">Date</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                                 <div class="inner">
                                     <a href="javascript:void(0);" class="action" ng-if="app.status === 1" ng-click="updateAppStatus($event, app._id, 2)">Contact</a>
                                     <a href="javascript:void(0);" class="action" ng-if="app.status === 2" ng-click="updateAppStatus($event, app._id, 3)">Hire</a>
-                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 3" ng-click="updateAppStatus($event, app._id, 1)">Applied</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 3 || app.status === 0" ng-click="updateAppStatus($event, app._id, 1)">Applied</a>
                                     <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, app._id)"><i class="glyphicon glyphicon-menu-down"></i></a>
                                     <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, app._id, 0)"><i class="icon-thumb_down_icon"></i></a>
                                 </div>

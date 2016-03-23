@@ -778,17 +778,14 @@
       return found !== null && found > -1;
     }
 
-    function setOrderBy(orderObj){
-      console.log(orderObj);
-    }
+
 
     var service = {
       filters:filters,
       test:test,
       addFilter:addFilter,
       removeFilter:removeFilter,
-      isFilterActive:isFilterActive,
-      setOrderBy:setOrderBy
+      isFilterActive:isFilterActive
     };
 
     return service;

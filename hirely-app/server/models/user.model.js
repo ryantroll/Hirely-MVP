@@ -107,13 +107,14 @@ var userSchema = new Schema({
                            */
                           set: Utilities.toLower
                         },
+  password              :     String,
   mobile                :     {type:String},
   dateOfBirth           :     {type:Date},
   agreedToTerms         :     {type:Boolean},
   personalStatment      :     {type:String},
   profileImageURL       :     {type:String},
   eligibleToWorkInUS    :     {type:Boolean},
-  tenureAvg             :     {type:Number, required:false},
+  tenureAvg             :     {type:Number},
 
 
   /**
@@ -123,51 +124,9 @@ var userSchema = new Schema({
   lastModifiedOn:       {type: Date,    default: Date.now},
 
   /**
-   * User object meta fields
-   */
-  provider      :       {
-                          type:String,
-                          required:true,
-                          validate:{
-                            validator: function(v){
-                              return /^(password|twitter|facebook|google)$/.test(v);
-                            },
-                            message:'{VALUE} is not valid provider name'
-                          }
-                        },
-  userType      :       {
-                          type:String,
-                          required:true,
-                          validate:{
-                            validator: function(v){
-                              return /^(JS|IOS|ANDROID)$/.test(v);
-                            },
-                            message:'{VALUE} is not valid userType'
-                          }
-                        },
-
-  /**
    * Address fields
    */
-  country           :   String,
-  state             :   String,
-  city              :   String,
-  street1           :   String,
-  street2           :   String,
-  street3           :   String,
   postalCode        :   String,
-  googlePlaceId     :   String,
-  formattedAddress  :   String,
-  lat               :   Number,
-  lng               :   Number,
-
-  /**
-   * Job Application related fields
-   */
-    businessesAppliedTo: [],
-    businessesOwned: [],
-    locationsManaged: [],
-    businessesStaffOf: [],
 
     /**
      * Preferences object
@@ -208,14 +167,6 @@ var userSchema = new Schema({
         fri                 :       [Number],
         sat                 :       [Number],
         sun                 :       [Number]
-    },
-
-    /**
-     * Languages
-     */
-    spokenLanguages: {
-        English         :       Boolean,
-        Spanish         :       Boolean
     },
 
     /**

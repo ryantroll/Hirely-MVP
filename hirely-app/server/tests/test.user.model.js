@@ -15,9 +15,6 @@ db.once('open', function(){
         email: 'bdombro@gmail.com',
         mobile: '90909009',
 
-        provider: 'facebook',
-        userType: 'JS',
-
         country:'USA',
         state:'NJ',
         city:'Clifton',

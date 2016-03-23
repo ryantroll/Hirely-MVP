@@ -76,7 +76,7 @@
         /**
          * Check if user is logged in and move to next promise
          */
-        return AuthService.getAuth();
+        return AuthService.isUserLoggedIn();
       },
       function(err){
         console.log(err)
@@ -117,31 +117,20 @@
      * @return {promise} [description]
      */
     function getApplicationData(){
+        if (!AuthService.isUserLoggedIn()) {
+            return;
+        }
+        $scope.userData = AuthService.currentUser;
+
       return JobApplicationService.isApplicationExists(AuthService.currentUser._id, $scope.position._id)
       .then(
         function(app){
           if(app){
             $scope.jobApplication.application = app;
           }
-          return UserService.getUserCompleteFields(AuthService.currentUserID, ['availability', 'education', 'workExperience', 'personalityExams'])
-        },
-        function(err){
-          /**
-           * Application doesn't exists
-           * get the complete filed of user no matter what the result is
-           */
-          console.log(err);
-          return UserService.getUserCompleteFields(AuthService.currentUserID, ['availability', 'education', 'workExperience', 'personalityExams'])
         }
       )
-      .then(
-        function(userData){
-          $scope.userData = userData;
-        },
-        function(err){
-          console.log(err);
-        }
-      )
+
     }//// fun. getApplicationData
 
     function setSteps(){

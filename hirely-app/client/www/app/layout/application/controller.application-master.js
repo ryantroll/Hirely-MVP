@@ -31,21 +31,10 @@
         // console.log($scope.Auth.currentUser)
         /**
          * check on loged in user
-         * getAuth method will do the needfull and set all the required variabls
+         * isUserLoggedIn method will do the needfull and set all the required variabls
          */
-        var auth = AuthService.getAuth()
-            .then(
-                function(isAuth){
-                    if(isAuth){
-                        console.log('User ' + AuthService.currentUser.firstName + ' is logged in');
-                    }
-                },
-                function(error){
-                    console.log('No user is logged in');
-                }
-            )/// Auth then
-
-
+        var auth = AuthService.isUserLoggedIn();
+        AuthService.syncCurrentUserFromDb();
 
         $scope.layoutModel = {business:null, noHeader:null};
 

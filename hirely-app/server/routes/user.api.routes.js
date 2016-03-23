@@ -39,21 +39,40 @@ var userRoutes = {
 
         var user = req.body;
 
+        if (!(user.email && user.password)) {
+            res.status(404).json(apiUtil.generateResponse(404, "email and password are required", null));
+            return;
+        }
+
+
         userService.createNewUser(user)
-        .then(
-            function(user){
-                console.log(user);
-                res.status(200).json(apiUtil.generateResponse(200, "User created successfully", user));
-            },
-            function(error){
-                res.status(500).json(apiUtil.generateResponse(error.code, error.message, null));
-            }
-        )
+            .then(
+                function(user){
+                    console.log(user);
+                    res.status(200).json(apiUtil.generateResponse(200, "User created successfully", user));
+                },
+                function(error){
+                    res.status(200).json(apiUtil.generateResponse(200, "Email already registered", null));
+                }
+            )
+
+    },
+
+    passwordLogin : function(req, res) {
+        userService.passwordLogin(req.body.email, req.body.password)
+            .then(
+                function(user) {
+                    res.status(200).json(apiUtil.generateResponse(200, "Password login results", user));
+                },
+                function(error) {
+                    res.status(error.code).json(apiUtil.generateResponse(error.code, error.message, null));
+                }
+            )
 
         //res.json(apiUtil.generateResponse(200, "New user created successfully", result));
     },
 
-    getUserByExternalId: function(req, res){
+    getUserByExternalId: function(req, res) {
         userService.getUserByExternalId(req.params.extId, req.query)
         .then(
             function(user){

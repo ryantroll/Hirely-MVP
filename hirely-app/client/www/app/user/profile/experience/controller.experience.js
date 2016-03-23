@@ -60,6 +60,8 @@
 
     $scope.occupation = {};
 
+    $scope.workExperienceChanged = false;
+
     $scope.months = [
       {order:1, name:'Jan'},
       {order:2, name:'Feb'},
@@ -164,6 +166,7 @@
         $scope.stepTwo.$setPristine();
 
         $scope.addWorkXpForm = false;
+        $scope.workExperienceChanged = true;
         return;
       }//// if edit;
 
@@ -184,6 +187,7 @@
       $scope.stepTwo.$setPristine();
 
       $scope.addWorkXpForm = false;
+      $scope.workExperienceChanged = true;
     }; //// fun. addJobXp
 
     /**
@@ -211,6 +215,7 @@
      */
     $scope.removeJobXp = function(index){
       $scope.xpItems.splice(index, 1);
+      $scope.workExperienceChanged = true;
     };
 
     /**
@@ -471,45 +476,27 @@
         /**
          * Make sure user is authenticated
          */
-        AuthService.getAuth()
-        .then(
-          function(isAuth){
-            /**
-             * User is authenticated
-             * do save
-             */
-            if(isAuth){
-              var toSave = {
-                workExperience:angular.copy($scope.xpItems)
-              };
-              UserService.saveUser(toSave, AuthService.currentUserID)
-              .then(
-                function(user){
-                  console.log("1");
-                  // Update user metrics now
-                  return UserService.updateUserMetricsById(AuthService.currentUserID).then(
-                      function(user){
-                        console.log("2");
-                        return user;
-                      },
-                      function(err){
-                        console.log("3");
-                        alert("Error!\nYour scoring data was not saved, please try again. ")
-                        console.log(err);
-                      }
-                  )
-                },
-                function(err){
-                  alert("Error!\nYour data was not saved, please try again.");
-                  console.log(err);
-                }
-              )
-            }//// if isAuth
-            else{
-
-            }//// if isAuth else
-          }//// reslove
-        );//// getAuth.then()
+        /**
+         * User is authenticated
+         * do save
+         */
+        if(AuthService.isUserLoggedIn() && $scope.workExperienceChanged){
+          var toSave = {
+            workExperience:angular.copy($scope.xpItems)
+          };
+          UserService.saveUser(toSave, AuthService.currentUserID)
+          .then(
+            function(user){
+              console.log("User data updated");
+              // Update user metrics now
+              return user;
+            },
+            function(err){
+              alert("Error!\nYour data was not saved, please try again.");
+              console.log(err);
+            }
+          )
+        }//// if isAuth
       });/// $on.$destroy
 
   }

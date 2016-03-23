@@ -9,11 +9,8 @@
 
 User = Model({
 
-  initialize: function (firstName, lastName, email, mobile,
-                        userType, provider,
-                        country, state, city, street1, street2, street3, postalCode, formattedAddress, lng, lat,
-                        spokenLanguages,
-                        createdOn, lastModifiedOn, googlePlaceId
+  initialize: function (firstName, lastName, email, mobile, postalCode, passwordHash,
+                        createdOn, lastModifiedOn
                         )
   {
 
@@ -21,23 +18,9 @@ User = Model({
     this.lastName = lastName;
     if(mobile) this.mobile = mobile;
     this.email = email;
-    this.userType = userType;
-    this.provider = provider;
+    this.passwordHash = passwordHash;
 
-    if(googlePlaceId) this.googlePlaceId = googlePlaceId;
-    if(country) this.country = country;
-    if(state) this.state = state;
-    if(city) this.city = city;
-    if(street1) this.street1 = street1;
-    if(street2) this.street2 = street2;
-    if(street3) this.street3 = street3;
     if(postalCode) this.postalCode = postalCode;
-    if(formattedAddress) this.formattedAddress = formattedAddress
-    if(lng && lat) {
-        this.lng = lng;
-        this.lat = lat;
-    }
-    if(spokenLanguages) this.spokenLanguages = spokenLanguages
 
     if(createdOn) this.createdOn = createdOn;
     if(lastModifiedOn) this.lastModifiedOn = lastModifiedOn;

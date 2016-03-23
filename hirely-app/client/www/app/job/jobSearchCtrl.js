@@ -5,11 +5,11 @@
     'use strict';
 
     angular.module('hirelyApp.job').controller('JobSearchCtrl', ['$scope', '$http', '$state', '$stateParams',
-        'FIREBASE_URL', 'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout' ,JobSearchCtrl]);
+        'PositionService', 'GeocodeService', 'OccupationService','UserService', 'CandidateService','Notification', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout' ,JobSearchCtrl]);
 
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, FIREBASE_URL, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
+  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
@@ -40,62 +40,62 @@
       $scope.placeId = $stateParams.placeId;
 
 
-      var getJobs = function() {
-
-          geocodeService.getPlacebyPlaceId($scope.placeId)
-              .then(function (place) {
-                  if (place) {
-                     initializeMap();
-                      $scope.results = place.formatted_address;
-                      $scope.details = place;
-                      //TODO:  move this to a seperate service
-                      var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
-                      var geoFire = new GeoFire(firebaseRef);
-                      var geoQuery = geoFire.query({
-                          center: [$scope.details.geometry.location.lat, $scope.details.geometry.location.lng],
-                          radius: $scope.filter.distance * 1.60934
-                      });
-
-
-                      var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
-                          positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId)
-                              .then(function (positions) {
-                                  if(positions)
-                                  {
-                                      angular.forEach(positions, function (openPosition, id) {
-                                          $scope.positions.push(createPosition(openPosition, distance, id));
-                                          $scope.mapmarkers.push(createMarker(id, location[0], location[1], openPosition.businessSite));
-                                      });
-                                  }
-
-
-                          }, function (err) {
-
-                          });
-                      });
-
-                      var onKeyExitedRegistration = geoQuery.on("key_exited", function (key, location, distance) {
-                          //remove items from position arrray and remove markers
-                          var positions = $scope.positions;
-                          var markers = $scope.mapmarkers;
-                          $scope.positions = _.reject(positions,
-                              function (position) {
-                                  return position.siteId == key;
-                              }
-                          );
-
-                          $scope.mapmarkers = _.reject(markers,
-                              function (marker) {
-                                  return marker["id"] == key;
-                              }
-                          );
-                      });
-                  }
-
-              }, function (err) {
-                  //TODO:  add error handling
-              });
-      }
+      // var getJobs = function() {
+      //
+      //     geocodeService.getPlacebyPlaceId($scope.placeId)
+      //         .then(function (place) {
+      //             if (place) {
+      //                initializeMap();
+      //                 $scope.results = place.formatted_address;
+      //                 $scope.details = place;
+      //                 //TODO:  move this to a seperate service
+      //                 var firebaseRef = new Firebase(FIREBASE_URL + '/businessSiteLocation');
+      //                 var geoFire = new GeoFire(firebaseRef);
+      //                 var geoQuery = geoFire.query({
+      //                     center: [$scope.details.geometry.location.lat, $scope.details.geometry.location.lng],
+      //                     radius: $scope.filter.distance * 1.60934
+      //                 });
+      //
+      //
+      //                 var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
+      //                     positionService.getOpenPositionsForLocation(key, $scope.filter.minWage,  $scope.filter.occupationId)
+      //                         .then(function (positions) {
+      //                             if(positions)
+      //                             {
+      //                                 angular.forEach(positions, function (openPosition, id) {
+      //                                     $scope.positions.push(createPosition(openPosition, distance, id));
+      //                                     $scope.mapmarkers.push(createMarker(id, location[0], location[1], openPosition.businessSite));
+      //                                 });
+      //                             }
+      //
+      //
+      //                     }, function (err) {
+      //
+      //                     });
+      //                 });
+      //
+      //                 var onKeyExitedRegistration = geoQuery.on("key_exited", function (key, location, distance) {
+      //                     //remove items from position arrray and remove markers
+      //                     var positions = $scope.positions;
+      //                     var markers = $scope.mapmarkers;
+      //                     $scope.positions = _.reject(positions,
+      //                         function (position) {
+      //                             return position.siteId == key;
+      //                         }
+      //                     );
+      //
+      //                     $scope.mapmarkers = _.reject(markers,
+      //                         function (marker) {
+      //                             return marker["id"] == key;
+      //                         }
+      //                     );
+      //                 });
+      //             }
+      //
+      //         }, function (err) {
+      //             //TODO:  add error handling
+      //         });
+      // }
 
 
       //var getOccupations = function(){

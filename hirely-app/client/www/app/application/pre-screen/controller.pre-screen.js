@@ -71,57 +71,42 @@
 			/**
 			 * Make sure user is logged in before you do update
 			 */
-			AuthService.getAuth().then(
+			if(AuthService.isUserLoggedIn()){
 				/**
-				 * user is logged in go ahead and do data update
+				 * User is authenticated create application data
 				 */
 
-				function(result){
-					if(true === result){
+				var application = new JobApplication(
+					AuthService.currentUserID,
+					position._id,
+					 1, //// set status to 1
+					 angular.copy($scope.model.prescreenAnswers)
+				);
+
+				JobApplicationService.save(application)
+				.then(
+					function(savedApp){
 						/**
-						 * User is authenticated create application data
+						 * application saved
+						 * Update the parent scope
+						 * $scope.jobApplication.application  defined in parent controller.job-application.js
 						 */
+						$scope.jobApplication.application = savedApp;
 
-						var application = new JobApplication(
-							AuthService.currentUserID,
-							position._id,
-							 1, //// set status to 1
-							 angular.copy($scope.model.prescreenAnswers)
-						);
+					},//// save resolve
+					function(err){
+						alert(err);
+					}//// save reject
+				);//// save().then()
 
-						JobApplicationService.save(application)
-						.then(
-							function(savedApp){
-								/**
-								 * application saved
-								 * Update the parent scope
-								 * $scope.jobApplication.application  defined in parent controller.job-application.js
-								 */
-								$scope.jobApplication.application = savedApp;
-
-							},//// save resolve
-							function(err){
-								alert(err);
-							}//// save reject
-						);//// save().then()
-
-						// return deferred.promise;
-					}//// if getAuth
-					else{
-						/**
-						 * Error in getAuth
-						 */
-						alert(result);
-					}//// if true else
-
-				},///// resolve funtion
-				function(err){
-					/**
-					 * User is not logged in don't do anything
-					 */
-
-				}//// fun. getAuth Reject
-			);/// getAuth promise
+				// return deferred.promise;
+			}//// if isUserLoggedIn
+			else{
+				/**
+				 * Error in isUserLoggedIn
+				 */
+				alert(result);
+			}//// if true else
 
 		});
 

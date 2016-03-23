@@ -4,6 +4,7 @@ var userModel = require('../models/user.model');
 var onetScoresService = require('../services/onetScores.service');
 var idMapModel = require('../models/useridmap.model');
 var matchingService = require('../services/matching.service');
+var bcrypt = require('bcrypt');
 
 
 /**
@@ -95,66 +96,33 @@ var userService = {
      * @return {[type]}         [promise with user basic info]
      */
     createNewUser : function(userObj){
+        var salt = bcrypt.genSaltSync(10);
+        userObj.password = bcrypt.hashSync(userObj.password, salt);
         var newUser = new userModel(userObj);
 
         /**
          * make sure basic info of user returned by the promise.
          */
-        return newUser.save()
-        .then(
-            function(user){
-                /**
-                 * Add Mapping entry if external user id is sent with userObject
-                 */
-
-                if(undefined !== userObj.externalId && '' !== userObj.externalId){
-                    var idMap = new idMapModel({localId:user._id, externalId:userObj.externalId});
-                    /**
-                     * make sure there is one map for each local user id
-                     */
-                    idMapModel.remove({localId:user._id})
-                    .then(
-                        function(){
-                            /**
-                             * Id Map removed successfully before insterting new one
-                             * go ahead and insert new one
-                             */
-                            return idMap.save()
-                            .then(
-                                function(map){
-                                    console.log(map)
-                                    return userModel.findById(map.localId).exec();
-                                },/// fun. idMap.save reslove
-                                function(err){
-                                    /**
-                                     * Error in updateing ID map entry
-                                     */
-                                    return userModel.findById(map.localId).exec();
-                                    console.log('Error in saving idMap for new user');
-                                    console.log(err);
-                                } /// fun. idMap.save reject
-                            );//// then
-                        },/// fun. remove reslove
-                        function(err){
-                            /**
-                             * Error in remving idMap
-                             * still find the user object and return it
-                             */
-                            return userModel.findById(user._id).exec();
-                            console.log('error in removing idMap in prepration for new insert');
-                            console.log(err);
-                        }//// fun. remove reject
-                    );/// remove then
-
-                }
-                else{
-                    return userModel.findById(user._id).exec();
-                }
-            }//// then fun.
-        )/// then
-        .then(
-
-        )
+        return newUser.save();
+    },
+    
+    passwordLogin: function(email, password) {
+        return userModel.findOne({email: email}).then(function(user) {
+            if (!user) {
+                console.log("passwordLogin: user not found for "+email);
+                return null;
+            }
+            if (!user.password) {
+                console.log("passwordLogin: user does not have a password");
+                return null;
+            }
+            if(bcrypt.compareSync(password, user.password)) {
+                return user;
+            } else {
+                console.log("passwordLogin: bad password for "+email);
+                return null;
+            }
+        });
     },
 
     /**
@@ -214,7 +182,7 @@ var userService = {
         /**
          * is the user exists in DB
          */
-        userModel.findOne({_id:userId})
+        userModel.findById(userId)
         .then(
             function(foundedUser){
                 /**
@@ -230,7 +198,6 @@ var userService = {
                     for(var prop in userData){
                         console.log(prop);
                         foundedUser[prop] = userData[prop];
-                        // TODO:  If prop = experience, do updateUserMetrics now isntead of requiring the front end to call separately
 
                         // Calc educationMax if education changed
                         // Calc if currently in school also
@@ -270,6 +237,11 @@ var userService = {
                         function(user){
                             console.log("User save success");
                             deferred.resolve(user);
+                            console.dir(userData);
+                            // if (userData.hasOwnProperty("workExperience")) {
+                            //     console.log("Experience was updated, so updating user metrics");
+                            //     userService.updateUserMetrics(user);
+                            // }
                         },//// save() resolve
                         function(err){
                             /**
