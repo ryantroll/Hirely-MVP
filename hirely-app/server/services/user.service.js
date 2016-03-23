@@ -156,7 +156,7 @@ var userService = {
         )//// then
 
     }, //// fun. getUserByExternalId
-    
+
 
     /**
      * [saveUser will update user in database after checking the existance of user by his id
@@ -204,14 +204,14 @@ var userService = {
                         try {
                             if (prop == "education") {
                                 foundedUser['educationStatus'] = "completed";
-                                
+
                                 if (userData['education'].length > 0) {
                                     var educationSortedByRank = userData['education'];
                                     educationSortedByRank.sort(function (a, b) {
                                         return educationProgramTypes.indexOf(a.programType) - educationProgramTypes.indexOf(b.programType)
                                     });
                                     foundedUser['educationMax'] = educationSortedByRank.pop();
-                                    
+
                                     for (let program of userData['education']) {
                                         if (program.isCompleted == false) {
                                             foundedUser['educationStatus'] = "attending";
@@ -290,6 +290,21 @@ var userService = {
 
     updateUserMetrics: function(user) {
         console.log("258");
+
+
+        // Education
+        user.educationMaxLvl = 0;
+
+        user.education.forEach(function (program) {
+            // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
+            if (program.programType > 1 && program.isCompleted == 0) {
+                program.programType = 2;
+            }
+            if (program.programType > user.educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
+                user.educationMaxLvl = program.programType;
+            }
+        });
+
 
 
         // Clear the old Ksa

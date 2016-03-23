@@ -139,9 +139,11 @@ header.hi-header{
     max-width: $screen-xs-min;
     margin-left:auto;
     margin-right:auto;
+    padding:0 1em;
 
     @media screen and (min-width:$screen-sm-min){
         max-width: $screen-sm-min;
+        padding:0;
     }
     @media screen and (min-width:$screen-md-min){
         max-width: $screen-md-min;
@@ -151,11 +153,22 @@ header.hi-header{
     }
 }
 
+.page-error{
+    padding: 4em 0;
+}
+
 .btn-secondary{
     background-color:#fff;
     border:1px solid $c-hirely-dark-gray;
 }
-
+.btn.gray{
+    background-color:$c-hirely-gray;
+    color:$c-hirely-mid-gray
+}
+.btn.blue{
+    background-color:$c-hirely-navy;
+    color:$c-white;
+}
 .text-red{
     color:$c-hirely-red;
 }

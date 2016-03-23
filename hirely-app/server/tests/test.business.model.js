@@ -113,7 +113,7 @@ db.once('open', function(){
                 minWeekdayShifts: 3,
                 minWeekendShifts: 3,
                 openingsCount: 3,
-                expLvl: 2,
+                expLvl: 3,
 
                 compensation: {
                     wageType: 'hourly',
@@ -183,7 +183,7 @@ db.once('open', function(){
                 minWeekendShifts  :     3,
                 openingsCount     :     3,
                 expLvl: 3,
-                
+
                 compensation:
                 {
                     wageType        :     'hourly',

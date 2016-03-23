@@ -1,0 +1,220 @@
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loadding</p>
+    <div class="loader"></div>
+</div>
+
+<div class="content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Location Not Found!</h4>
+        </div>
+    </div>
+</div>
+
+<div class="sub-header" ng-show="dataLoaded && !dataError">
+    <div class="max-width clearfix">
+        <div class="row">
+            <div class="col-xs-12 col-sm-10">
+                <div class="title">
+                    <h2><a href="javascript:void(0);" ng-click="togglePositionMenu($event)">Barista - Shaw <i class="icon glyphicon glyphicon-menu-down" ng-show="positionsList.length > 0"></i></a></h2>
+                    <ul class="menu" ng-show="showPositionMenu">
+                        <li class="active" ng-repeat="pos in positionsList">
+                            <a href="javascript:void(0);" ng-click="changePosition(pos.slug)">
+                                {{pos.title}} - {{location.neighborhood}}
+                                <span>{{business.name}}, {{location.city}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div><!--title-->
+
+                <div class="buttons visible-sm-block visible-md-block visible-lg-block">
+                    <input type="text" name="positionURL" id="positionURL" value="http://hirely.io/#/{{business.slug}}/{{location.slug}}/{{position.slug}}" />
+                    <button class="btn blue" ng-click="copyPositionURL()">Copy</button>
+                    <button class="btn red">Promote</button>
+                </div>
+            </div><!--col-->
+            <div class="col-sm-2 visible-sm-block visible-md-block visible-lg-block">
+                <div class="buttons">
+                    <button class="btn gray" ng-click="goToPosition()">View Details</button>
+                </div>
+            </div>
+        </div><!--row-->
+    </div><!--mac-width-->
+</div><!--sub-header-->
+
+<div class="content" ng-show="dataLoaded && !dataError">
+
+    <!--No applications message-->
+    <div class="max-width" ng-show="applications.length < 1">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="page-error">
+                    <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+                    <h4>No applications submitted for this position yet</h4>
+                </div>
+            </div>
+        </div>
+    </div><!--max-width-->
+
+    <div class="max-width" ng-show="applications.length > 0">
+        <div class="status-bar">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul>
+                        <li><button class="btn" ng-class="{red:isFilterActive('applied'), white:!isFilterActive('applied')}" ng-click="setFilter('applied')" ng-disabled="statistics.applied == 0">Applied <span  ng-show="statistics.applied > 0">({{statistics.applied}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('contacted'), white:!isFilterActive('contacted')}" ng-click="setFilter('contacted')" ng-disabled="statistics.contacted == 0">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('hired'), white:!isFilterActive('hired')}" ng-click="setFilter('hired')" ng-disabled="statistics.hired == 0">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('declined'), white:!isFilterActive('declined')}" ng-click="setFilter('declined')" ng-disabled="statistics.declined == 0">Declined <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
+                    </ul>
+                </div><!--col-->
+            </div><!--row-->
+        </div><!--status-bar-->
+
+        <div class="body">
+            <div class="row">
+                <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
+                    <div class="box clearfix">
+                        <div class="header clearfix">
+                            <h3><i class="icon glyphicon glyphicon-filter"></i> Filters</h3>
+                            <a href="javascript:void(0);" ng-click="clearSideFilters()"><i class="icon glyphicon glyphicon-remove"></i> Clear Filters</a>
+                        </div>
+                        <div class="inner padding clearfix" id="filtersDiv">
+                            <!-- <div class="filter-item">Great Fit <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div>
+                            <div class="filter-item">Weekends <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div>
+                            <div class="filter-item">Hospitality <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div> -->
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box clearfix">
+                        <div class="header clearfix">
+                            <h3>Availability</h3>
+                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
+                        </div>
+                        <div class="inner list clearfix">
+                            <ul>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'weekdays')">Weekdays</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'weekends')">Weekends</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'mornings')">Mornings</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'days')">Days</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'nights')">Nights</a></li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box clearfix">
+                        <div class="header clearfix">
+                            <h3>Seasonal</h3>
+                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
+                        </div>
+                        <div class="inner list clearfix">
+                            <ul>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'winter')">Winter</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'spring')">Spring</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'summer')">Summer</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'fall')">Fall</a></li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box clearfix">
+                        <div class="header clearfix">
+                            <h3>Education</h3>
+                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
+                        </div>
+                        <div class="inner list clearfix">
+                            <ul>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'noEducaiton')">No Education</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'highSchool')">High School</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'collage')">College</a></li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                </div><!--col-->
+
+                <div class="col-sm-8">
+
+                    <div class="box clearfix">
+                        <div class="header clearfix">
+                            <h3><i class="icon icon-users_group_icon"></i> Candidates <span ng-show="filtered.length > 0">({{filtered.length}})</span></h3>
+                            <div class="drop-down">
+                                <a href="javascript:void(0);" ng-click="toggleSortMenu($event)">
+                                    <span class="value">{{sortByLabel}}</span>
+                                    <i class="icon glyphicon glyphicon-menu-down"></i>
+                                </a>
+                                <ul ng-show="showSortMenu" id="sortMenu">
+                                    <li ng-class="{active: sortBy == 'rank'}"><a href="javascript:void(0);" data-value="rank">Rank</a></li>
+                                    <li ng-class="{active: sortBy == 'date'}"><a href="javascript:void(0);" data-value="date">Date</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="candidates-list">
+
+                        <div class="candidate" ng-repeat="app in filtered">
+                            <div class="menu">
+                                <div class="inner">
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 1" ng-click="updateAppStatus($event, app._id, 2)">Contact</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 2" ng-click="updateAppStatus($event, app._id, 3)">Hire</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 3 || app.status === 0" ng-click="updateAppStatus($event, app._id, 1)">Applied</a>
+                                    <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, app._id)"><i class="glyphicon glyphicon-menu-down"></i></a>
+                                    <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, app._id, 0)"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+                                <ul class="hidden" id="menu_{{app._id}}">
+                                    <li ng-if="app.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, app._id, 1)">APPLIED</a></li>
+                                    <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 2)">CONTACT</a></li>
+                                    <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, app._id, 3)">HIRE</a></li>
+                                    <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, app._id, 0)">DECLINE</a></li>
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="image">
+                                        <div class="image-wrapper">
+                                            <img ng-if="applicants[app.userId].profileImageURL || defaultImage" src="{{applicants[app.userId].profileImageURL || defaultImage}}" />
+                                        </div>
+                                        <div class="tag">{{getViewStatus(app._id, $index)}}</div>
+                                        <div class="date">Applied: {{app.createdAt | date:'MM/dd/yyyy'}}</div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="details">
+                                        <h4>{{applicants[app.userId].firstName}} {{applicants[app.userId].lastName}}</h4>
+                                        <div class="fit-scale">
+                                            <i ng-class="getFitClass(0, app.score)"></i>
+                                            <i ng-class="getFitClass(1, app.score)"></i>
+                                            <i ng-class="getFitClass(2, app.score)"></i>
+                                            <i ng-class="getFitClass(3, app.score)"></i>
+                                            <i ng-class="getFitClass(4, app.score)"></i>
+                                            <i ng-class="getFitClass(5, app.score)"></i>
+                                            <i ng-class="getFitClass(6, app.score)"></i>
+                                            <i ng-class="getFitClass(7, app.score)"></i>
+                                            <i ng-class="getFitClass(8, app.score)"></i>
+                                            <i ng-class="getFitClass(9, app.score)"></i>
+                                            <span class="legend">{{getFitClass(-1, app.score) | uppercase}} Fit</span>
+                                        </div>
+                                        <div class="answers">
+                                            <div class="answer" ng-repeat="answer in app.prescreenAnswers">
+                                                <b>{{answer.question}}</b>
+                                                <p>{{answer.answer}}</p>
+                                            </div>
+                                        </div>
+                                        <p class="traits" ng-show="applicants[app.userId].personalityExams.length > 0">
+                                            <strong>Top Traits</strong> <span ng-repeat="trait in applicants[app.userId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
+                                        </p>
+                                        <div class="more-link"><a href="javascript:void(0);">View Details</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--candidate-->
+
+                    </div><!--candidates-list-->
+
+                </div><!--col-->
+            </div><!--row-->
+        </div><!--body-->
+    </div><!--max-width-->
+</div><!--content-->
