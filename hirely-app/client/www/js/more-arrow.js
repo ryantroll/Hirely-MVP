@@ -11,13 +11,13 @@ setInterval(function(){
     else {
         more_arrow.show();
     }
-
-    if (window.location.href.indexOf('apply') !== -1 || $('.position .mobile-footer').css('display') === 'block') {
-        more_arrow.addClass('more-arrow-raised');
-    }
-    else {
+    //
+    // if (window.location.href.indexOf('apply') !== -1 || $('.position .mobile-footer').css('display') === 'block') {
+    //     more_arrow.addClass('more-arrow-raised');
+    // }
+    // else {
         more_arrow.removeClass('more-arrow-raised');
-    }
+    // }
 
 }, 100);
 
