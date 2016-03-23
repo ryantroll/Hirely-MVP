@@ -300,7 +300,8 @@ var traitifySevice = {
                    }
                    user.personalityExams[0].careerMatchScores = careerMatchScores2;
                    return user.save().then(function(user) {
-                       return userService.updateUserMetrics(user);
+                       // return userService.updateUserMetrics(user);
+                       return user;
                    });
                }
            )

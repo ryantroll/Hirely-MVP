@@ -227,10 +227,10 @@ var userService = {
                             console.log("User save success");
                             deferred.resolve(user);
                             console.dir(userData);
-                            if (userData.hasOwnProperty("workExperience")) {
-                                console.log("Experience was updated, so updating user metrics");
-                                userService.updateUserMetrics(user);
-                            }
+                            // if (userData.hasOwnProperty("workExperience")) {
+                            //     console.log("Experience was updated, so updating user metrics");
+                            //     userService.updateUserMetrics(user);
+                            // }
                         },//// save() resolve
                         function(err){
                             /**
