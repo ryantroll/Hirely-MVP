@@ -178,3 +178,12 @@ header.hi-header{
 .text-purple{
     color:$c-hirely-purple;
 }
+
+.modal-dialog.modal-full{
+    width:95%;
+}
+.gray{
+    .modal-content{
+        background-color:$c-hirely-gray;
+    }
+}

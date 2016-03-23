@@ -1,0 +1,39 @@
+<div class="candidate-details clearfix">
+    <header>
+        <div class="menu clearfix">
+            <ul>
+                <li><a href="javascript:void(0);">Pre-Screen</a></li>
+                <li><a href="javascript:void(0);">Personality</a></li>
+                <li><a href="javascript:void(0);">Pre-Screen</a></li>
+                <li><a href="javascript:void(0);">Availability</a></li>
+                <li><a href="javascript:void(0);">Experience</a></li>
+                <li><a href="javascript:void(0);">Education</a></li>
+                <li><a href="javascript:void(0);">Activity</a></li>
+            </ul>
+        </div>
+    </header>
+    <article>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="image">
+                                <div class="image-wrapper">
+                                    <img src="{{applicants[detailsUserId].profileImageURL || defaultImage}}" />
+                                </div>
+                                <div class="date">Applied: {{detailsApp.createdAt | date:'MM/dd/yyyy'}}</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <h4>{{applicants[detailsUserId].firstName}} {{applicants[detailsUserId].lastName}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                &nbsp;
+            </div>
+        </div>
+    </article>
+</div><!--candidate-details

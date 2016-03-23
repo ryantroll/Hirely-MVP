@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
+  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
 
 
-  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, AuthService, UserService, PositionFiltersService) {
+  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, AuthService, UserService, PositionFiltersService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     /**
@@ -368,6 +368,30 @@
     $scope.copyPositionURL = function(){
       var url = angular.element('#positionURL').val();
       window.prompt("Copy to clipboard: Press Ctrl+C or Cmd+C on Mac then Enter", url);
+    }
+
+    $scope.showDetails = function(index, userId, app){
+      $scope.detailsUserId = userId;
+      $scope.detailsIndex = index;
+      $scope.detailsApp = app;
+
+      var detailsModal  = $uibModal.open({
+        size:'full',
+        controller: 'CandidateDetailsController',
+        templateUrl: 'app/business/candidate-details-tpl.html',
+        windowClass: 'gray',
+        scope:$scope
+      })
+
+      detailsModal.result
+      .then(
+        function(d){
+          console.log(d);
+        },
+        function(err){
+          console.log(err)
+        }
+      )
     }
 
   }//// controller

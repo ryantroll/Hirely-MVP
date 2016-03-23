@@ -126,7 +126,7 @@
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'noEducaiton')">No Education</a></li>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'highSchool')">High School</a></li>
-                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'collage')">College</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'college')">College</a></li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -204,7 +204,7 @@
                                         <p class="traits" ng-show="applicants[app.userId].personalityExams.length > 0">
                                             <strong>Top Traits</strong> <span ng-repeat="trait in applicants[app.userId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
                                         </p>
-                                        <div class="more-link"><a href="javascript:void(0);">View Details</a></div>
+                                        <div class="more-link"><a href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)">View Details</a></div>
                                     </div>
                                 </div>
                             </div>
