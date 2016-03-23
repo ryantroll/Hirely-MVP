@@ -52,6 +52,9 @@
      */
     $scope.availability = {};
 
+    $scope.destroyDirection = 0;
+    $scope.blockFinished = false;
+
     /**
      * [jobApplication a parent object to hold variables to be set by child scope
      * if child scope set direct variable of scope the will be overwriten]

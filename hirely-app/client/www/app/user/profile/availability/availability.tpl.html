@@ -84,6 +84,26 @@
                 </div><!--col-->
             </div><!--row-->
 
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="field-wrapper">
+                        ARE YOU LOOKING FOR SEASONAL WORK?<br>
+                        <button id="isSeasonalBtn" class="btn isSeasonalBtn" ng-class="{active:isSeasonal}" ng-click="isSeasonal=true">Yes</button>
+                        <button id="notSeasonalBtn" class="btn isSeasonalBtn pull-right red" ng-class="{active:!isSeasonal}" ng-click="isSeasonal=false">No</button>
+                    </div><!--field-wrapper-->
+                </div><!--col-->
+            </div><!--row-->
+
+            <div class="row" ng-show="isSeasonal">
+                <div class="col-sm-12">
+                    <!--<div class="field-wrapper"  ng-class="{'error': !stepFive.howSoon.$valid && stepFive.howSoon.$dirty, 'valid' : stepFive.howSoon.$valid}">-->
+                    <div class="field-wrapper">
+                        WHICH SEASON?<br>
+                        <button type="button" ng-repeat="season in seasonOptions" value="{{season}}" id="{{season}}" class="btn seasonBtn" ng-class="{active:season==availability.season}" ng-click="availability.season=season">{{season}}</button>
+                    </div><!--field-wrapper-->
+                </div><!--col-->
+            </div><!--row-->
+
 
         </fieldset>
     </form>

@@ -54,15 +54,12 @@
      */
     var startOptions = [
       {days:0, label:'Immediately'},
-      {days:1, label:'1 Day'},
-      {days:2, label:'2 Days'},
-      {days:3, label:'3 Days'},
-      {days:4, label:'4 Days'},
-      {days:5, label:'5 Days'},
-      {days:6, label:'6 Days'},
-      {days:7, label:'1 Week'},
-      {days:14, label:'2 Weeks'},
+      {days:7, label:'Within a week'},
+      {days:14, label:'Within two weeks'},
+      {days:21, label:'More than two weeks'},
     ];
+
+    var seasonOptions = ['Winter', 'Spring', 'Summer', 'Fall'];
 
     /**
      * Time Ranges
@@ -166,6 +163,7 @@
       days:days,
       hours:hours,
       startOptions:startOptions,
+      seasonOptions: seasonOptions,
       getTotalHours:getTotalHours,
       getDayHours:getDayHours,
       updateRanges:updateRanges,

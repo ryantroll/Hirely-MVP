@@ -25,12 +25,45 @@
 		 */
 		var position = angular.copy($scope.position);
 
+		$scope.dayDiff = function (d1, d2) {
+			var months;
+			if (isNaN(d2) || !d2) {
+				d2 = new Date();
+			}
+			if (angular.isString(d1)) {
+				d1 = new Date(d1);
+			}
+			if (angular.isString(d2)) {
+				d2 = new Date(d2);
+			}
+			return Math.round((d2.getHours() - d1.getHours()) / 24)
+		};
+
+		$scope.daysUntilReapply = function() {
+			if ($scope.jobApplication.application) {
+				var dayDiff = $scope.dayDiff($scope.jobApplication.application.createdAt)
+				var daysUntilReapply = 30 - dayDiff;
+				if (daysUntilReapply < 0) {
+					daysUntilReapply = 0;
+				}
+				return daysUntilReapply;
+			} else {
+				return 0;
+			}
+		}();
+
+		$scope.isApplyEligible = function() {
+			return $scope.daysUntilReapply == 0;
+		}();
+
+		$scope.$parent.blockFinished = !$scope.isApplyEligible;
 
 		if(angular.isDefined($scope.jobApplication.application) && null !== $scope.jobApplication.application){
 
 			$scope.model = {
 				prescreenAnswers: angular.copy($scope.jobApplication.application.prescreenAnswers)
 			}
+
 
 		}//// if application in granddaddy
 		else{
@@ -52,11 +85,9 @@
 			delete $scope.model.prescreenAnswers[x]._id;
 		}
 
-		$timeout($scope.initScope());
-
-		$scope.initScope = function() {
-			$(window).scrollTop(0);
-		};
+		$timeout(function() {
+			window.scrollTo(0 ,0);
+		});
 
 		/**
 		 * Waite for 1 sec to check the stepOnLoaded
@@ -72,6 +103,11 @@
 
 		//// wait for destroy event to update data
 		$scope.$on('$destroy', function(event){
+			// Submit if submitting
+			if (!$scope.$parent.destroyDirection) {
+				return;
+			}
+
 			/**
 			 * Make sure user is logged in before you do update
 			 */

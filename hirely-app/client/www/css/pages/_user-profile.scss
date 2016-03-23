@@ -290,6 +290,24 @@ $day-button-size: 60px;
 		// background-color:#ccc;
 	}
 
+	button.isSeasonalBtn,
+	button.seasonBtn {
+		width: 48%;
+		background-color:$c-hirely-text-gray;
+		color:#fff;
+	}
+	button.isSeasonalBtn.active,
+	button.seasonBtn.active {
+		background-color:$light-grass-green;
+	}
+	button.seasonBtn {
+		margin-bottom: 8px;
+	}
+	button#Spring,
+	button#Fall {
+		float: right;
+	}
+
     textarea{
         width:100%;
         height: 100px;
