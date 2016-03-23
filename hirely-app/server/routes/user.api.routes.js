@@ -58,14 +58,13 @@ var userRoutes = {
 
     },
 
-    passwordLogin : function(req, res){
+    passwordLogin : function(req, res) {
         userService.passwordLogin(req.body.email, req.body.password)
             .then(
-                function(user){
-                    console.log(user);
+                function(user) {
                     res.status(200).json(apiUtil.generateResponse(200, "Password login results", user));
                 },
-                function(error){
+                function(error) {
                     res.status(error.code).json(apiUtil.generateResponse(error.code, error.message, null));
                 }
             )
@@ -73,7 +72,7 @@ var userRoutes = {
         //res.json(apiUtil.generateResponse(200, "New user created successfully", result));
     },
 
-    getUserByExternalId: function(req, res){
+    getUserByExternalId: function(req, res) {
         userService.getUserByExternalId(req.params.extId, req.query)
         .then(
             function(user){

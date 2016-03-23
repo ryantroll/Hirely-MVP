@@ -19,9 +19,9 @@
       }//// fun. link
     }/// return object
   })/// validate date;
-    .controller('RegisterController', ['$scope', '$rootScope', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
+    .controller('RegisterController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
 
-    function RegisterController($scope, $rootScope, $stateParams, AuthService, UserService) {
+    function RegisterController($scope, $rootScope, $state, $stateParams, AuthService, UserService) {
 
         var vm = this;
         var authService = AuthService;
@@ -60,14 +60,25 @@
                 .then(
                     function(user) {
                       if (user) {
-                          $scope.registerForm.email.$setValidity('emailExists', false);
-                          $scope.ajaxBusy = false;
-                          return user;
-                      } else {
                           $scope.registerForm.email.$setValidity('emailExists', true);
-                          $scope.ajaxBusy = false;
-                          alert("A user is already registered with that email.");
+                          /**
+                           * Check if nextState is set in rootScope and redirect user to it
+                           */
+                          if(angular.isDefined($rootScope.nextState)){
+                              $state.go($rootScope.nextState.state, $rootScope.nextState.params);
+                              delete $rootScope.nextState;
+                          }
+                          else{
+                              $state.go('user.profile')
+                          }
+                      } else {
+                          $scope.registerForm.email.$setValidity('emailExists', false);
                       }
+
+
+
+                        $scope.ajaxBusy = false;
+                        return user;
                   },
                   function(err) {
                       /**

@@ -108,8 +108,15 @@ var userService = {
     
     passwordLogin: function(email, password) {
         return userModel.findOne({email: email}).then(function(user) {
-            if(bcrypt.compareSync('B4c0/\/', user.password)) {
+            if (!user) {
+                console.log("passwordLogin: user not found for "+email);
+                return null;
+            }
+            if(bcrypt.compareSync(password, user.password)) {
                 return user;
+            } else {
+                console.log("passwordLogin: bad password for "+email);
+                return null;
             }
         });
     },
