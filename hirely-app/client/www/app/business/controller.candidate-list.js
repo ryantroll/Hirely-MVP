@@ -67,9 +67,11 @@
 
           list.off('click').on('click', function(e){
             var me = angular.element(e.currentTarget);
-            me.parent().addClass('active');
+            me.parent().addClass('active').siblings().removeClass('active');
             $scope.sortBy = me.attr('data-value');
             $scope.sortByLabel = me.text();
+
+            applySort();
           })
       }
     }//// fun. showSortMenu
@@ -204,7 +206,7 @@
 
       applyFilters();
 
-
+      $scope.positionsList = BusinessService.getPositionsByLocation($scope.business, $scope.location._id, $scope.position._id);
 
       /**
        * Wait for some time and before showing the page
@@ -216,6 +218,7 @@
     }//// initialize
 
     PositionFiltersService.addFilter('applied');
+    $scope.sortBy = 'date';
 
     function applyFilters(){
       var ret = [];
@@ -230,6 +233,7 @@
       }
       $scope.filtered =  ret;
       updateStats();
+      applySort();
     }
 
     /**
@@ -263,6 +267,23 @@
 
       return ret;
     }
+
+    function applySort(){
+
+      $scope.filtered.sort(function(a, b){
+        if($scope.sortBy === 'date'){
+          var aScore = Number($scope.scores[a.userId].scores[$scope.position.expLvl].overall);
+          var bScore = Number($scope.scores[b.userId].scores[$scope.position.expLvl].overall);
+          return bScore - aScore;
+        }
+        else{
+          var aTime = new Date(a.createdAt).getTime();
+          var bTime = new Date(b.createdAt).getTime();
+          return bTime - aTime;
+        }
+
+      });
+    }//// fun. applyOrder
 
     $scope.updateAppStatus = function(ev, appId, status){
       var app = findAppById(appId);
@@ -342,6 +363,9 @@
       applyFilters();
     }
 
+    $scope.changePosition = function(posSlug){
+      $state.go('business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
+    }
 
 
   }//// controller

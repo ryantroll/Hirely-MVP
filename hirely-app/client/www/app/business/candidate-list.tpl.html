@@ -17,24 +17,12 @@
         <div class="row">
             <div class="col-xs-12 col-sm-10">
                 <div class="title">
-                    <h2><a href="javascript:void(0);" ng-click="togglePositionMenu($event)">Barista - Shaw <i class="icon glyphicon glyphicon-menu-down"></i></a></h2>
+                    <h2><a href="javascript:void(0);" ng-click="togglePositionMenu($event)">Barista - Shaw <i class="icon glyphicon glyphicon-menu-down" ng-show="positionsList.length > 0"></i></a></h2>
                     <ul class="menu" ng-show="showPositionMenu">
-                        <li class="active">
-                            <a href="javascript:void(0);">
-                                Barista - Shaw
-                                <span>CampassCoffee, Washington DC</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                Barista - Shaw
-                                <span>CampassCoffee, Washington DC</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                Barista - Shaw
-                                <span>CampassCoffee, Washington DC</span>
+                        <li class="active" ng-repeat="pos in positionsList">
+                            <a href="javascript:void(0);" ng-click="changePosition(pos.slug)">
+                                {{pos.title}} - {{location.neighborhood}}
+                                <span>{{business.name}}, {{location.city}}</span>
                             </a>
                         </li>
                     </ul>
@@ -168,7 +156,9 @@
                         <div class="candidate" ng-repeat="app in filtered">
                             <div class="menu">
                                 <div class="inner">
-                                    <a href="javascript:void(0);" class="action">Contact</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 1" ng-click="updateAppStatus($event, app._id, 2)">Contact</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 2" ng-click="updateAppStatus($event, app._id, 3)">Hire</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 3" ng-click="updateAppStatus($event, app._id, 1)">Applied</a>
                                     <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, app._id)"><i class="glyphicon glyphicon-menu-down"></i></a>
                                     <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, app._id, 0)"><i class="icon-thumb_down_icon"></i></a>
                                 </div>

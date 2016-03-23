@@ -92,6 +92,25 @@
           }
         }; //// fun. positionBySlug
 
+        this.getPositionsByLocation = function(business, locationId, excludeId){
+            var ret = [];
+
+            for(var pos in business.locations[locationId].positionSlugs){
+                var posId = business.locations[locationId].positionSlugs[pos];
+                if(angular.isDefined(excludeId) ){
+                    if(posId !== excludeId){
+                        ret.push(business.positions[posId]);
+                    }
+
+                }
+                else{
+                    ret.push(business.positions[posId]);
+                }
+
+            }
+            return ret;
+        }
+
         /**
          * [getPositionDisplayData will retrieve the icon data for a list of occupations by their ids]
          * @param  {[String]} onetId [String contains the occupations IDs separated by | character]
@@ -160,13 +179,13 @@
                      return left.length
                  case "sum":
                      var sum = 0;
-                     for (let e of left) {
+                     for (var e of left) {
                          sum += e;
                      }
                      return sum;
                  case "avg":
                      var sum = 0;
-                     for (let e of left) {
+                     for (var e of left) {
                          sum += e;
                      }
                      return sum / left.length;
@@ -183,7 +202,7 @@
                  // A special slice for availability arrays, which slices based on value instead of index
                  case "sliceAvail":
                      var avail = [];
-                     for (let hour of avail) {
+                     for (var hour of avail) {
                          if (right.start != null && hour < right.start) {
                              continue;
                          }
@@ -210,7 +229,7 @@
                      // const = attribute of a variable, resolve attribute
                      var parts = filter.value.split('.');
                      var result = context[parts.shift()];
-                     for (let part of parts) {
+                     for (var part of parts) {
                          result = result[part];
                      }
                      return result;
@@ -221,7 +240,7 @@
                          // Is an array operation, like sum or avg
                          return this.filterBasicCalculator(filter.operator, result, filter.options);
                      } else {
-                         for (let operand of filter.operands.slice(1)) {
+                         for (var operand of filter.operands.slice(1)) {
                              var intermediateResult = this.filterCompoundCalculator(operand, context);
                              result = this.filterBasicCalculator(filter.operator, result, intermediateResult);
                          }

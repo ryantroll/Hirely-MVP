@@ -609,7 +609,7 @@
         dateCreated: new Date(),
         type: "computation",
         importance: 1,
-        operator: "<=",
+        operator: ">=",
         operands: [
             {
                 type: "attr",
@@ -778,12 +778,17 @@
       return found !== null && found > -1;
     }
 
+    function setOrderBy(orderObj){
+      console.log(orderObj);
+    }
+
     var service = {
       filters:filters,
       test:test,
       addFilter:addFilter,
       removeFilter:removeFilter,
-      isFilterActive:isFilterActive
+      isFilterActive:isFilterActive,
+      setOrderBy:setOrderBy
     };
 
     return service;
