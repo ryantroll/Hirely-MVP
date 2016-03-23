@@ -300,8 +300,7 @@ var traitifySevice = {
                    }
                    user.personalityExams[0].careerMatchScores = careerMatchScores2;
                    return user.save().then(function(user) {
-                       // return userService.updateUserMetrics(user);
-                       return user;
+                       return userService.updateUserMetrics(user);
                    });
                }
            )
@@ -326,8 +325,8 @@ var traitifySevice = {
             user.personalityExams = [summary];
             user.save().then(
                 function(user){
-                    //deferred.resolve(user.personalityExams[0]);
-                    return self.updateAssessmentCareerMatchScoresByUserId(user._id);
+                    deferred.resolve(user.personalityExams[0]);
+                    // return self.updateAssessmentCareerMatchScoresByUserId(user._id);
                 },
                 function(err) {
                     console.log("User save failed");
