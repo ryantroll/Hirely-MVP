@@ -136,7 +136,37 @@
       if(newVal === false || angular.isUndefined(newVal)) return;
 
       $scope._mobile = UserService.formatPhone(newVal);
+
+      // Android doesn't move the cursor to the end of the input when we change it, so re-focus
+      $("#dob").focus();
+      $("#mobile").focus();
+
     };
+
+    $scope.$watchCollection('_dateOfBirth', function(newValue, oldValue){
+      console.log("Old" + oldValue);
+      console.log("New" + newValue);
+      if (!(newValue && oldValue)) return;
+      console.log("Check passed");
+      if ((newValue.length == 2 || newValue.length == 5) && (oldValue.length == 1 || oldValue.length == 4)) {
+        console.log("Adding slash");
+        $scope._dateOfBirth += '/';
+
+        // Android doesn't move the cursor to the end of the input when we change it, so re-focus
+        $("#mobile").focus();
+        $("#dob").focus();
+      }
+
+    });
+
+    // $scope.$watchCollection('mm', function(newValue, oldValue){
+    //   if (newValue == oldValue) {
+    //     return;
+    //   }
+    //   if (newValue.length == 2) {
+    //     $("#mm").focus();
+    //   }
+    // });
 
     $scope.formatDate = function(){
       var newVal = angular.copy($scope._dateOfBirth);
