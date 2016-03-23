@@ -3,7 +3,7 @@ $footer-height: 60px;
 $day-button-size: 60px;
 
 .profile{
-	padding-bottom:$footer-height;
+	//padding-bottom:$footer-height;
 
 	header{
 		width:100%;
@@ -56,8 +56,6 @@ $day-button-size: 60px;
 	footer{
 		background-color: $c-hirely-gray;
 		min-height: $footer-height;
-		position: fixed;
-		bottom:0;
 		width:100%;
 		z-index: 1000;
 
@@ -95,7 +93,7 @@ $day-button-size: 60px;
 			@include vertical-align;
 		}
 		button.back{
-			// background-color:$c-hirely-mid-gray;
+			 background-color:$c-hirely-mid-gray;
 			color:$c-white;
 			@include vertical-align;
 		}

@@ -52,7 +52,11 @@
 			delete $scope.model.prescreenAnswers[x]._id;
 		}
 
+		$timeout($scope.initScope());
 
+		$scope.initScope = function() {
+			$(window).scrollTop(0);
+		};
 
 		/**
 		 * Waite for 1 sec to check the stepOnLoaded

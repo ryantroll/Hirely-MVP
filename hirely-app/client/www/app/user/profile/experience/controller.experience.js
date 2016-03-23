@@ -78,7 +78,9 @@
     ];
 
 
-
+    $timeout(function() {
+      window.scrollTo(0 ,0);
+    });
 
     /**
      * [xpItems will hold the work experience data]

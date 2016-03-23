@@ -121,7 +121,9 @@
       postal_code: 'short_name'
     };
 
-
+    $timeout(function() {
+      window.scrollTo(0 ,0);
+    });
 
     $scope.$watch('stepOne.$valid', function(state) {
       multiStepFormInstance.setValidity(state);
@@ -144,12 +146,8 @@
     };
 
     $scope.$watchCollection('_dateOfBirth', function(newValue, oldValue){
-      console.log("Old" + oldValue);
-      console.log("New" + newValue);
       if (!(newValue && oldValue)) return;
-      console.log("Check passed");
       if ((newValue.length == 2 || newValue.length == 5) && (oldValue.length == 1 || oldValue.length == 4)) {
-        console.log("Adding slash");
         $scope._dateOfBirth += '/';
 
         // Android doesn't move the cursor to the end of the input when we change it, so re-focus

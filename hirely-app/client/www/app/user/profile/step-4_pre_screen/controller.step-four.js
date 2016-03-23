@@ -80,6 +80,10 @@
 		 */
 		var grandParent = $scope.$parent.$parent;
 
+		$timeout(function() {
+			window.scrollTo(0 ,0);
+		});
+
 		//// wait for destroy event to update data
 		$scope.$on('$destroy', function(event){
 			/**

@@ -39,7 +39,9 @@
 
 		$scope.assessment = {};
 
-
+		$timeout(function() {
+			window.scrollTo(0 ,0);
+		});
 
         // TraitifyService.getTest()
         // .then(
@@ -105,7 +107,7 @@
 				$scope.stepThreeLoaded = true;
 			}
 		}
-		$timeout($scope.init)
+		$timeout($scope.init);
 
 
         $scope.showAssessment = function(){
