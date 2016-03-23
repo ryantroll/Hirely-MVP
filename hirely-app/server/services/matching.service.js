@@ -120,7 +120,8 @@ var MatchService = {
                 }  // end onetScores.forEach
 
                 //return Q.all(promises);
-                return CareerMatchScores.insertMany(careerMatchScoresArray).then(
+                // return CareerMatchScores.insertMany(careerMatchScoresArray).then(
+                return CareerMatchScores.create(careerMatchScoresArray).then(
                     function(docs) {
                         return true;
                     },

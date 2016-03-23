@@ -7,11 +7,21 @@ var applicationSchema = new Schema({
   positionId   :       {type:String, required:true, index:true},
   createdAt   :       {type:Date, required:true, default:Date.now},
   status      :       {
-                        type:Number, //// 0 close, 1 open
+                        type:Number, //// 0 Declined, 1 open or new, 2 contacted, 3 hired.
                         required:true,
                         validate:{
                           validator: function(v){
-                            return /^(1|0)$/.test(v.toString());
+                            return /^(3|2|1|0)$/.test(v.toString());
+                          },
+                          message:'{VALUE} is not valid value for application status'
+                        }
+                      },
+  viewStatus  :       {
+                        type:Number, //// 0 or undefined close, 1 viewed, 2 aging /// aging option might not be used as it calculated based on date
+                        required:false,
+                        validate:{
+                          validator: function(v){
+                            return /^(2|1|0)$/.test(v.toString());
                           },
                           message:'{VALUE} is not valid value for application status'
                         }
