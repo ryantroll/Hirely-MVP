@@ -31,6 +31,7 @@ var customId = new Schema({
 ,{strict:false, _id:false});
 
 var personalitySchema = new Schema({
+  extId               :       {type:String, required:true},
   createdAt           :       {type:Date, required:true, default:Date.now},
   personalityTypes    :       [customId],
   personalityTraits   :       [customId],

@@ -271,7 +271,6 @@ var traitifySevice = {
 
   },
   getAssessmentCareerMatchScoresById: function (assessmentId) {
-      console.log("assessmentId: "+assessmentId);
       this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] = 0;
       var self = this;
       return this.getAssessmentCareerMatchScoresByIdWithParams(assessmentId, onetIdsAll).then(function(matches) {
@@ -311,6 +310,8 @@ var traitifySevice = {
   createNewAssessment: function(userId, examId, data){
     var deferred = q.defer();
     var self = this;
+
+      console.log("assessmentId: "+examId);
 
     /**
      * Get summary for user

@@ -22,6 +22,7 @@
          */
 
         var auth = AuthService.isUserLoggedIn();
+        AuthService.syncCurrentUserFromDb();
 
 
         //

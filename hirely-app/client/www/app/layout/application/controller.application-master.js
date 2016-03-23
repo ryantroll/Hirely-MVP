@@ -34,6 +34,7 @@
          * isUserLoggedIn method will do the needfull and set all the required variabls
          */
         var auth = AuthService.isUserLoggedIn();
+        AuthService.syncCurrentUserFromDb();
 
         $scope.layoutModel = {business:null, noHeader:null};
 

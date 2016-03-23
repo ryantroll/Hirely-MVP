@@ -34,9 +34,18 @@
      * @param  {string} userId   [id of user to be updated]
      * @return {promiss}          [description]
      */
-    this.saveUser = function(userData, userId){
+    this.saveUser = function(userData, uid){
       var deferred = $q.defer();
-      HirelyApiService.users(userId).patch( userData )
+      if (!uid) {
+        if (!userData._id){
+          var err = "Error:  trying to save a user without an id";
+          console.log(err);
+          deferred.reject(err);
+          return deferred.promise;
+        }
+        uid = userData._id;
+      }
+      HirelyApiService.users(uid).patch( userData )
           .then(
               function(newData){
                 deferred.resolve(newData);
@@ -66,7 +75,7 @@
      * @param  {string} id [id of user this id can b]
      * @return {promise}    [description]
      */
-    this.getUserById = function getUserById(id) {
+    this.getUserById = function getUserById(id, complete) {
       var deferred = $q.defer();
       var user = {};
 
@@ -76,9 +85,8 @@
        * e.g. firebase 93306b91-d5ba-4e06-838c-0ab85fd58783
        * e.g. mongoDB 568fde202127fa312543f50f
        */
-      if(id.indexOf('-') > -1 && id.length > 30){
-        //// firebase id is used set get user from external api
-        return HirelyApiService.users(id, 'external').get();
+      if(complete){
+        return HirelyApiService.users(id, ['complete']).get();
       }
       else{
         return HirelyApiService.users(id).get();

@@ -8,11 +8,9 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .factory('TraitifyService', ['$http', '$q', 'HirelyApiService', 'FIREBASE_URL', TraitifyService]);
+    .factory('TraitifyService', ['$http', '$q', 'HirelyApiService', TraitifyService]);
 
-  function TraitifyService($http, $q, HirelyApiService, FIREBASE_URL) {
-
-    var traitifyRef = new Firebase(FIREBASE_URL + '/personality');
+  function TraitifyService($http, $q, HirelyApiService) {
 
     function getAssessmentId(){
       return HirelyApiService.traitify('assessment-id').get();

@@ -256,7 +256,7 @@
         if (!$scope.user) {
           return;
         }
-        
+
         /**
          * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
          */
@@ -283,7 +283,7 @@
       /**
        * Make sure user is logged in before you do update
        */
-      if(AuthService.isUserLoggedIn()){
+      if(AuthService.isUserLoggedIn() && $scope.stepOneLoaded){
         /**
          * User is authenticated update user data
          */
@@ -303,7 +303,14 @@
          */
 
 
-        UserService.saveUser($scope.user, AuthService.currentUserID)
+        var toSave = {
+          _id: $scope.user._id,
+          profileImageURL: $scope.user.profileImageURL,
+          mobile: $scope.user.mobile,
+          dateOfBirth: $scope.user.dateOfBirth,
+          postalCode: $scope.user.postalCode
+        };
+        UserService.saveUser(toSave)
         .then(
           function(savedUser){
             /**
@@ -321,14 +328,7 @@
             alert('Error!\nSomething wrong happened while saving data.');
           }//// fun. reject
         );//// saveUser then
-      }//// if isUserLoggedIn
-      else{
-        /**
-         * Error in isUserLoggedIn
-         */
-        console.log(result);
-        alert(result);
-      }//// if true else
+      }////
 
     });
 
@@ -357,9 +357,9 @@
       .then(
         function(fileUrl){
           $scope.user.profileImageURL = fileUrl;
-          var userToSave = angular.copy(AuthService.currentUser);
+          var userToSave = angular.copy(AuthService.getCurrentUser());
           userToSave.profileImageURL = fileUrl;
-          return UserService.saveUser(userToSave, AuthService.currentUserID)
+          return UserService.saveUser(userToSave)
         },
         function(err){
           console.log(err);
@@ -385,7 +385,7 @@
       var userToSave = angular.copy(AuthService.currentUser);
       userToSave.profileImageURL = null;
       $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
-      UserService.saveUser(userToSave, AuthService.currentUserID)
+      UserService.saveUser(userToSave)
       .then(
         function(savedUser){
           // console.log(savedUser);

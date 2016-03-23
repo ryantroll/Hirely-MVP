@@ -20,6 +20,7 @@
             currentUser: currentUser,
             currentUserID: currentUserID,
             getCurrentUser: getCurrentUser,
+            syncCurrentUserFromDb: syncCurrentUserFromDb,
             setCurrentUser: setCurrentUser,
             updateCurrentUser: updateCurrentUser,
             isUserLoggedIn: isUserLoggedIn,
@@ -27,6 +28,7 @@
             resetPassword: resetPassword
         };
         return service;
+
 
         function getCurrentUser() {
             if (service.currentUser) {
@@ -45,13 +47,27 @@
             return null;
         }
 
+        function syncCurrentUserFromDb() {
+            if (service.isUserLoggedIn()) {
+                console.log("User synced from db");
+                return userService.getUserById(service.currentUserID, true).then(function (userNew) {
+                    setCurrentUser(userNew);
+                    return userNew;
+                });
+            } else {
+                var deferred = $q.defer();
+                var err = "warning:  syncCurrentUserFromDb failed because no user is logged in";
+                deferred.reject(err);
+                console.log(err);
+                return deferred.promise;
+            }
+        }
+
         function passwordLogin(email, password) {
             return userService.passwordLogin(email, password).then(function(user) {
                 if (user) {
                     setCurrentUser(user);
                     return user;
-                } else {
-
                 }
             });
         }
@@ -76,13 +92,16 @@
           service.currentUser = user;
           service.currentUserID = user._id;
 
-          //// Set currentUser cookie
-          $cookies.put("currentUser", JSON.stringify(user));
-
           //// if any of children scopes need to now whos logged in
           //// let them know
           $rootScope.$emit('UserLoggedIn', user);
           $rootScope.$broadcast('UserLoggedIn', user);
+
+          //// Set currentUser cookie
+          var userStripped = angular.copy(user);
+          delete userStripped.personalityExams;
+          delete userStripped.scores;
+          $cookies.put("currentUser", JSON.stringify(userStripped));
         }
 
         function removeCurrentUser(){
@@ -106,7 +125,11 @@
         function updateCurrentUser(user){
             service.currentUser = user;
 
-            $cookies.put("currentUser", JSON.stringify(user));
+            //// Set currentUser cookie
+            var userStripped = angular.copy(user);
+            delete userStripped.personalityExams;
+            delete userStripped.scores;
+            $cookies.put("currentUser", JSON.stringify(userStripped));
 
             $rootScope.$emit('UserDataChange', service.currentUser);
             $rootScope.$broadcast('UserDataChange', service.currentUser);

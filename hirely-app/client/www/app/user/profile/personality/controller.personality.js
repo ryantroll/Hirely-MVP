@@ -9,10 +9,10 @@
 (function() {
 	'use strict';
 
-	angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$stateParams', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
+	angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$stateParams', '$timeout', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
 
 
-	function ProfilePersonalityController($scope, $stateParams, TraitifyService, AuthService, UserService, TRAITIFY_PUBLIC_KEY) {
+	function ProfilePersonalityController($scope, $stateParams, $timeout, TraitifyService, AuthService, UserService, TRAITIFY_PUBLIC_KEY) {
 
 		$scope.stepThreeLoaded = false;
 
@@ -58,7 +58,9 @@
 		function saveAssessment() {
 			if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
       			saved = true;
-				TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId);
+				TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId).then(function() {
+					
+				});
 			}
 		}//// fun. saveAssessment
 
@@ -66,73 +68,44 @@
 		/**
 		 * Start by checking if user taken the personality assessment before
 		 */
-    	UserService.getUserCompleteFields(AuthService.currentUserID, ['personalityExams'])
-    	.then(
-    		function(founded){
-    			if(founded){
-    				if(Array.isArray(founded.personalityExams) && founded.personalityExams.length > 0){
-    					/**
-    					 * user is taken the exam before
-    					 */
-    					return founded.personalityExams[0].extId;
-    				}
-    				else{
-    					/**
-    					 * Send null to next then() function if user has no assessment
-    					 */
-    					return null;
-    				}
-    			}
-    		}
-    	)////// getUserCompleteFields
-    	.then(
-    		function(extId){
-    			if(null !== extId){
-    				/**
-    				 * Show result wedget
-    				 */
-    				assessmentId = extId;
+		$scope.init = function() {
+			var user = AuthService.getCurrentUser();
+			if (user.personalityExams && user.personalityExams.length) {
+				$scope.stepThreeLoaded = true;
+				var assessmentId = user.personalityExams[0].extId;
+				$scope.assessmentId = assessmentId;
+				/**
+				 * Load the result
+				 * @type {[type]}
+				 */
+				var traitifyResults = Traitify.ui.load("results", assessmentId, ".personality-results"); // Example selector for widget target
+				traitifyResults.onInitialize(function () {
+					$scope.traitifyResultLoaded = true;
+					$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
+					$scope.$apply();
+				});
 
-    				/**
-    				 * Load the result
-    				 * @type {[type]}
-    				 */
-	    			var traitifyResults = Traitify.ui.load("results", assessmentId, ".personality-results"); // Example selector for widget target
-				    traitifyResults.onInitialize(function(){
-				    	$scope.traitifyResultLoaded = true;
-				    	$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
-				    	$scope.$apply();
-				    });
+				/**
+				 * Load Traitify personality types
+				 */
+				var traitifyTypes = Traitify.ui.load("personalityTypes", assessmentId, ".personality-types"); // Example selector for widget target
+				traitifyTypes.onInitialize(function () {
+					$scope.traitifyTypesLoaded = true;
+					$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
+					$scope.$apply();
+				});
 
-				    /**
-				     * Load Traitify personality types
-				     */
-	    			var traitifyTypes = Traitify.ui.load("personalityTypes", assessmentId, ".personality-types"); // Example selector for widget target
-				    traitifyTypes.onInitialize(function(){
-				    	$scope.traitifyTypesLoaded = true;
-				    	$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
-				    	$scope.$apply();
-				    });
-
-				    var traitifyTraits = Traitify.ui.load("personalityTraits", assessmentId, ".personality-traits"); // Example selector for widget target
-				    traitifyTraits.onInitialize(function(){
-				    	$scope.traitifyTraitsLoaded = true;
-				    	$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
-				    	$scope.$apply();
-				    });
-
-				    return null;
-    			}/// if extId !== null
-    			else{
-    				/**
-    				 * no assessment is been taken
-    				 * get new assessment from traitify and move to next then()
-    				 */
-                    $scope.stepThreeLoaded = true;
-                    return null;
-    			}////
-    		}//// fun.
-    	)//// then()
+				var traitifyTraits = Traitify.ui.load("personalityTraits", assessmentId, ".personality-traits"); // Example selector for widget target
+				traitifyTraits.onInitialize(function () {
+					$scope.traitifyTraitsLoaded = true;
+					$scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
+					$scope.$apply();
+				});
+			} else {
+				$scope.stepThreeLoaded = true;
+			}
+		}
+		$timeout($scope.init)
 
 
         $scope.showAssessment = function(){
@@ -147,6 +120,7 @@
                 function(data){
                     if(data){
                         assessmentId = data.id;
+						$scope.assessmentId = assessmentId;
 
                         traitify = Traitify.ui.load(assessmentId, ".personality-analysis", {
                             results: {
