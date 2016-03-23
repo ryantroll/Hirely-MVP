@@ -59,6 +59,7 @@ $day-button-size: 60px;
 		width:100%;
 		z-index: 1000;
 
+
 		.left{
 			height: $footer-height;
 		}/// .left
@@ -122,6 +123,11 @@ $day-button-size: 60px;
 			}
 		}
 	}//// footer
+
+	footer.fixedBottom {
+		position: fixed;
+		bottom: 0;
+	}
 }//// .profile
 .form-loader{
 	width:40px;

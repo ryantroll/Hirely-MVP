@@ -280,7 +280,20 @@
     $scope.finish = function(){
       delete $scope.layoutModel.noHeader;
       $state.go('application.done', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
+    };
+
+    function semiFixedFooter() {
+        var windowHeight = getBody().clientHeight;
+        var docHeight = $("body > .ng-scope").height();
+
+        if (windowHeight > docHeight) {
+            $(".multi-step-container footer").addClass("fixedBottom");
+        } else {
+            $(".multi-step-container footer").removeClass("fixedBottom");
+        }
     }
+
+    setInterval(semiFixedFooter, 100);
 
   }
 })();
