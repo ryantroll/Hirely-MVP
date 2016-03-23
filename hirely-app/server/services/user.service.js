@@ -112,6 +112,10 @@ var userService = {
                 console.log("passwordLogin: user not found for "+email);
                 return null;
             }
+            if (!user.password) {
+                console.log("passwordLogin: user does not have a password");
+                return null;
+            }
             if(bcrypt.compareSync(password, user.password)) {
                 return user;
             } else {

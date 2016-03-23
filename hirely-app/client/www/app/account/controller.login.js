@@ -21,6 +21,7 @@
 
         $scope.passwordLogin = function() {
             $scope.ajaxBusy = true;
+            console.log("logging in...");
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(
                     function(user){
