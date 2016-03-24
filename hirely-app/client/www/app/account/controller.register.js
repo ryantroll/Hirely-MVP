@@ -81,7 +81,7 @@
                               delete $rootScope.nextState;
                           }
                           else{
-                              $state.go('user.profile')
+                              $state.go('app.home')
                           }
                       } else {
                           $scope.registerForm.email.$setValidity('emailExists', false);
@@ -98,44 +98,6 @@
                        */
                       $scope.registerForm.email.$setValidity('emailExists', false);
                       $scope.ajaxBusy = false;
-                  }
-                )
-                .then(
-                  function(user){
-                    if(!user) return null;
-                    /**
-                     * Save users data
-                     */
-                    userService.createRegisteredNewUser(registeredUser, user.uid)
-                    .then(
-                      function(newUserData){
-                        /**
-                         * user data saved log new user in
-                         */
-                        authService.passwordLogin(registeredUser.email, registeredUser.password)
-                        .then(
-                          function(auth){
-
-                            console.log(auth);
-                            $state.go('app.home');
-                          },
-                          function(err) {
-                            /**
-                             * Error in login for new registered user
-                             */
-                            console.log(err)
-                          }
-                        )//// then authService
-                      },
-                      function(err){
-                        console.log(err)
-                      }
-                    )
-                  },
-                  function(err){
-                    console.log(err)
-
-                      alert("A user is already registered with that email address.");
                   }
                 )
 
