@@ -169,7 +169,8 @@
       getTotalHours:getTotalHours,
       getDayHours:getDayHours,
       updateRanges:updateRanges,
-      getWeeklyAggregatedArray:getWeeklyAggregatedArray
+      getWeeklyAggregatedArray:getWeeklyAggregatedArray,
+      toFrontEndModel: toFrontEndModel
     };
 
     /**

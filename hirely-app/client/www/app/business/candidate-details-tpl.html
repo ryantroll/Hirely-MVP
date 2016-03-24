@@ -1,4 +1,5 @@
 <div class="candidate-details clearfix">
+    <a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a>
     <header>
         <div class="menu clearfix">
             <ul>
@@ -14,7 +15,7 @@
     </header>
     <article>
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-sm-12">
                 <div class="box">
                     <div class="row">
                         <div class="col-sm-3">
@@ -26,14 +27,168 @@
                             </div>
                         </div>
                         <div class="col-sm-9">
-                            <h4>{{applicants[detailsUserId].firstName}} {{applicants[detailsUserId].lastName}}</h4>
+                            <div class="details">
+                                <h4>{{applicants[detailsUserId].firstName}} {{applicants[detailsUserId].lastName}}</h4>
+                                <div class="fit-scale">
+                                    <i ng-class="getFitClass(0, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(1, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(2, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(3, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(4, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(5, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(6, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(7, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(8, detailsApp.score)"></i>
+                                    <i ng-class="getFitClass(9, detailsApp.score)"></i>
+                                    <span class="legend">{{getFitClass(-1, detailsApp.score) | uppercase}} Fit</span>
+                                </div>
+                                <div class="answers">
+                                    <div class="answer" ng-repeat="answer in detailsApp.prescreenAnswers | limitTo : 1">
+                                        <p>{{answer.answer}}</p>
+                                    </div>
+                                </div>
+                                <p class="traits" ng-show="applicants[detailsUserId].personalityExams.length > 0">
+                                    <strong>Top Traits</strong> <span ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
+                                </p>
+                            </div><!--details-->
+                        </div><!--col-->
+                    </div><!--row-->
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h5>Pre-Screening</h5>
+                    </div>
+                    <div class="prescreen">
+                        <ul>
+                            <li ng-repeat="answer in detailsApp.prescreenAnswers">
+                                <b>{{answer.question}}</b>
+                                <p>
+                                    {{answer.answer}}
+                                </p>
+                            </li>
+                        </ul>
+                    </div><!--prescreen-->
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h5>Personality <a href="javascript:void(0)" class="info">?</a></h5>
+
+                    </div>
+                    <div class="personality">
+                        <div class="head">{{applicants[detailsUserId].firstName}} is a <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div>
+                        <div class="traits">
+                            <div class="col">
+                                <strong>Strongest Traits</strong>
+                                <div ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}</div>
+                            </div>
+                            <div class="col">
+                                <strong>Weakest Traits</strong>
+                                <div ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5 : 51">{{trait._id}}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
+
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h5>Availability</h5>
+                    </div>
+                    <div class="details">
+                        <p>I'm available to start <span ng-show="getAvailabilityByDays() != 'Immediately'">in</span> <b>{{getAvailabilityByDays()}}</b> upon hire</p>
+                        <p>I'm looking for <b>{{applicants[detailsUserId].availability.hoursPerWeekMin}}</b> to <b>{{applicants[detailsUserId].availability.hoursPerWeekMax}}</b> hours per week</p>
+                        <p>My current availability for shifts is as follows</p>
+                    </div>
+
+                    <div class="timetable">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <div class="days-list">
+                                    <ul>
+                                        <li class="arrow"><a href="javascript:void(0);" ng-click="previousDay()"><i class="glyphicon glyphicon-menu-left"></i></a></li>
+                                        <li ng-repeat="day in days" ng-class="{active:currentDayLabel === day}"><a href="javascript:void(0);" ng-click="showTimeTable(day)">{{day|uppercase}}</a></li>
+                                        <li class="arrow"><a href="javascript:void(0);" ng-click="nextDay()"><i class="glyphicon glyphicon-menu-right"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div><!--row-->
+
+
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-5">
+                                <div class="hours">
+                                    <h4>am</h4>
+                                    <div class="hour-btns clearfix">
+                                        <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'am'}" ng-class="{'active':h.active}"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
+                                    </div><!--hour-btns-->
+                                </div><!--hours-->
+                            </div><!--col-->
+
+                            <div class="col-sm-5">
+                                <div class="hours">
+                                    <h4>pm</h4>
+                                    <div class="hour-btns clearfix">
+                                        <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'pm'}" ng-class="{'active':h.active}"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
+                                    </div><!--hour-btns-->
+                                </div><!--hours-->
+                            </div><!--col-->
+                            <div class="col-sm-1"></div>
+                        </div><!--row-->
+                    </div>
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h5>Experience</h5>
+                    </div>
+                    <div class="experience">
+                        <ul>
+                            <li class="clearfix" ng-repeat="work in applicants[detailsUserId].workExperience">
+                                <div class="icon icon-{{getPositionIcon(work.occId, 'cssClass')}}" style="color:{{getPositionIcon(work.occId, 'iconColor')}}"></div>
+                                <div class="exp">
+                                    <h6>{{work.occTitle}} <span>{{getDateDif($index)}}</span></h6>
+                                    <div class="address"><p>{{work.formattedAddress}} - {{work.city}}, {{work.state}}</p></div>
+                                    <div class="date"><p>{{work.dateStart | date : 'MMM yyyy'}} to <span ng-if="!work.dateEnd">Present</span><span ng-if="work.dateEnd">{{work.dateEnd | date : 'MMM yyyy'}}</p></span></div>
+                                </exp>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!--box-->
+
+                <div class="box">
+                    <div class="title">
+                        <h5>Education</h5>
+                    </div>
+                    <div class="experience">
+                        <ul>
+                            <li class="clearfix" ng-repeat="edu in applicants[detailsUserId].education">
+
+                                <div class="exp">
+                                    <h6>{{edu.institutionName}}</span></h6>
+                                    <div class="address">
+                                        <p>{{edu.degree}}
+                                        <br>
+                                        {{edu.programType}}</p>
+                                    </div>
+                                    <div class="address"></div>
+                                    <div class="date">{{edu.dateEnd | date : 'MMM yyyy'}}</div>
+                                </exp>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!--box-->
+
+            </div><!--col-->
+
+
+            <!-- <div class="col-sm-3">
                 &nbsp;
-            </div>
-        </div>
+            </div> --><!--col-->
+        </div><!--row-->
     </article>
 </div><!--candidate-details

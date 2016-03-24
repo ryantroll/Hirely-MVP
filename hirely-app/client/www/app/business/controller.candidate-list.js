@@ -375,6 +375,9 @@
       $scope.detailsIndex = index;
       $scope.detailsApp = app;
 
+      var scoreObj = $scope.scores[userId];
+      $scope.detailsApp.score = scoreObj.scores[$scope.position.expLvl].overall;
+
       var detailsModal  = $uibModal.open({
         size:'full',
         controller: 'CandidateDetailsController',
