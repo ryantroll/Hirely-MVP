@@ -8,33 +8,6 @@
   'use strict';
 
   angular.module('hirelyApp')
-  .directive("registerForm", function() {
-      return {
-          restrict: 'A',
-          templateUrl: 'app/account/register.tpl.html',
-          controller: 'RegisterController',
-          scope: true,
-          transclude : false
-      };
-  })
-  .directive("loginForm", function() {
-      return {
-          restrict: 'A',
-          templateUrl: 'app/account/login.tpl.html',
-          controller: 'LoginController',
-          scope: true,
-          transclude : false
-      };
-  })
-  .directive("resetPasswordForm", function() {
-      return {
-          restrict: 'A',
-          templateUrl: 'app/account/password.tpl.html',
-          controller: 'PasswordController',
-          scope: true,
-          transclude : false
-      };
-  })
   .filter('numberRound', function(){
     return function(value){
       return Math.round(value);
@@ -75,43 +48,12 @@
 
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business)
 
-
-        /**
-         * Check if user is logged in and move to next promise
-         */
-        return AuthService.isUserLoggedIn();
+        initialize();
       },
       function(err){
         console.log(err)
       }
-    )
-    .then(
-      function(isAuth){
-        $scope.isAuth = isAuth;
-        /**
-         * user is logged in continue data loading
-         */
-        return getApplicationData();
-      },
-      function(err){
-        $scope.isAuth = false;
-        /**
-         * breack the promise chain as user is not logged id
-         */
-        return $q.reject();
-      }
-    )//// .then
-    .finally(
-      function(){
-        /**
-         * Set the steps if only user is logedin
-         */
-        if(true === $scope.isAuth){
-           setSteps();
-        }
-        initialize();
-      }
-    );/// .finally
+    );
 
     /**
      * [getApplicationData this function created to separate the promise chain,
@@ -121,7 +63,7 @@
      */
     function getApplicationData(){
         if (!AuthService.isUserLoggedIn()) {
-            return;
+            return q.reject();
         }
         $scope.userData = AuthService.currentUser;
 
@@ -174,30 +116,15 @@
 
     function initialize(){
 
-      $scope.$on('UserLoggedIn', function(event, user){
+        $scope.isAuth = AuthService.isUserLoggedIn();
 
-        $scope.registerFrom = false;
-        $scope.loginForm = false;
+        if (!$scope.isAuth) {
+            $rootScope.nextState = {state:'application.apply', params:{businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug}};
+            $state.go('account.register');
+        }
 
-        /**
-         * after user logged in continue data loading
-         */
-        getApplicationData()
-        .finally(
-          function(){
-            setSteps();
-            $scope.isAuth = true;
-          }
-        );/// .finally
+        setSteps();
 
-      });
-
-      $scope.$on('UserLoggedOut', function(event){
-        $scope.isAuth = false;
-
-        $scope.registerFrom = false;
-        $scope.loginForm = true;
-      });
 
       /**
        * initiate layout template variables
@@ -222,25 +149,7 @@
 
     }//// fun. initialize
 
-    $rootScope.$on('ShowLogin', function(){
-      $scope.registerFrom = false;
-      $scope.passwordForm = false;
-      $scope.loginForm = true;
-    })
-
-    $rootScope.$on('ShowRegister', function(){
-      $scope.registerFrom = true;
-      $scope.passwordForm = false;
-      $scope.loginForm = false;
-    })
-
-    $rootScope.$on('ShowForgotPassword', function(){
-      $scope.registerFrom = false;
-      $scope.loginForm = false;
-      $scope.passwordForm = true;
-    })
-
-    /**
+   /**
      * [setInitialStep used inside the template in multiStepForm directive
      * to set the initiale step based on user profile]
      */

@@ -209,7 +209,7 @@
                             <div class="buttons box-inner">
                                 <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
                                 <!-- <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button> -->
-                                <button class="btn btn-secondary" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>
+                                <button class="btn btn-secondary" id="favButton" ng-click="favoriteClick()" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>
                             </div>
                         </div><!--box-->
 

@@ -30,10 +30,6 @@
         $scope.user = {email: '', password: '', firstName: '', lastName: ''}
 
 
-        $scope.showLogin = function(){
-          $rootScope.$emit('ShowLogin');
-        }
-
         $scope.resetEmailValidity = function(){
           $scope.registerForm.email.$setValidity('emailExists', true);
         }
@@ -47,14 +43,11 @@
         }
 
         $scope.cancelRegistration = function() {
-            console.log("IN cancel");
             if(angular.isDefined($rootScope.nextState)){
-                console.log("1");
                 $state.go($rootScope.nextState.state, $rootScope.nextState.params);
                 delete $rootScope.nextState;
             }
             else{
-                console.log("2");
                 $state.go('user.profile')
             }
         }
