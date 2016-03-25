@@ -11,7 +11,8 @@ config.traitify = {
 
 //config.mongoUri = 'mongodb://ip-172-31-25-53.ec2.internal:27000/hirely';
 //config.mongoUri = 'mongodb://db:27017/hirely';
-config.mongoUri = 'mongodb://localhost:27017/hirely';
+// config.mongoUri = 'mongodb://localhost:27017/hirely';
+config.mongoUri = 'mongodb://ec2-54-173-108-137.compute-1.amazonaws.com:27000/hirely';
 
 /**
  * [urlSeparator this will be used in slug generating as word separator]
@@ -34,7 +35,7 @@ config.saveTraitifyFamousPeople = false;
  * [primeOnetScoresCache if set to true will prime the onetScoresCache in onetScoresService]
  * @type {Boolean}
  */
-config.primeOnetScoresCache = false;
+config.primeOnetScoresCache = true;
 
 config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
 
