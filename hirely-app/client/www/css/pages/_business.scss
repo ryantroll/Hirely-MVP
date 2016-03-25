@@ -618,9 +618,10 @@ $candidat-menu-height:40px;
             width:100%;
             @include border-radius(4px);
             overflow: hidden;
-            padding:1em;
+            // padding:1em;
 
             .image{
+                padding: 1em 0 1em 1em;
                 .image-wrapper{
                     width:80px;
                     height: 80px;
@@ -641,6 +642,7 @@ $candidat-menu-height:40px;
             }//// .image
 
             .details{
+                padding:1em 1em 1em 1em;
                 h4{
                     font-size:1.5em;
                     font-weight: 600;
@@ -717,12 +719,13 @@ $candidat-menu-height:40px;
             }//// .details
 
             .title{
-                padding-bottom:1em;
+                padding:1em;
                 h5{
                     font-weight: 600;
                     font-size:1.2em;
                     text-transform: uppercase;
                     margin-top:0;
+                    margin-bottom: 0;
                 }
                 .info{
                         display: block;
@@ -738,9 +741,17 @@ $candidat-menu-height:40px;
                         line-height: 22px;
                     }
             }//// .title
+            .title.blue{
+                background-color:$c-hirely-blue;
+                color:$c-white;
+                h5{
+                    font-weight:normal;
+                    font-size:1em;
+                }
+            }
 
             .prescreen{
-
+                padding: 0 1em 1em 1em;
                 ul{
                     list-style: none;
                 }
@@ -757,7 +768,7 @@ $candidat-menu-height:40px;
             }//// .prescreen
 
             .personality{
-
+                padding: 0 1em 1em 1em;
                 .head{
                     text-align: center;
                     font-size: 1.4em;
@@ -809,6 +820,7 @@ $candidat-menu-height:40px;
             }//// .personality
 
             .timetable{
+                padding: 0 1em 1em 1em;
                 .days-list{
 
                     li{
@@ -840,7 +852,7 @@ $candidat-menu-height:40px;
             }//// .timetable
 
             .experience{
-                padding:0 0;
+                padding: 0 1em 1em 1em;
                 ul{
                     width:100%;
                     list-style: none;
@@ -888,7 +900,108 @@ $candidat-menu-height:40px;
                     margin-bottom: 0;
                 }
             }//// .experience
+
+            .actions{
+                padding:1em;
+                min-height: 67px;
+
+                .menu{
+                    width:auto;
+                    display: none;
+                    height: $candidat-menu-height;
+                    position:absolute;
+                    left:50%;
+                    margin-left:-80px;
+
+                    @media screen and (min-width:$screen-sm-min){
+                        display: table;
+                    }
+
+                    .inner{
+                        height: $candidat-menu-height;
+                        @include border-radius();
+                        overflow: hidden;
+                    }
+
+                    .action{
+                        height: $candidat-menu-height;
+                        width:80px;
+                        background-color:$c-hirely-green;
+                        color:$c-white;
+                        text-align: center;
+                        line-height: $candidat-menu-height;
+                        float:left;
+                    }
+                    a{
+                        float:left;
+                        display: block;
+                        width:$candidat-menu-height;
+                        height: $candidat-menu-height;
+                        line-height: $candidat-menu-height;
+                        text-align: center;
+                        color:$c-white;
+
+                    }
+                    .drop{
+                        background-color:$c-hirely-light-gray;
+                        font-size:1.3em;
+                    }
+                    .execlude{
+                        background-color:$c-hirely-red;
+                        font-size:1.6em;
+                    }
+                    ul{
+                        display: block;
+                        padding-left:0;
+                        list-style: none;
+                        width:120px;
+                        position:absolute;
+                        top:$candidat-menu-height;
+                        left:0;
+                        z-index: 101;
+                        @include drop-shadow();
+
+                        li{
+                            display: block;
+                            width:100%;
+                            height: $candidat-menu-height;
+
+                            a{
+                                display: block;
+                                width:100%;
+                                height: $candidat-menu-height;
+                                line-height: $candidat-menu-height;
+                                padding: 0 10px;
+                                background-color:$c-hirely-light-gray;
+                                color:$c-hirely-mid-gray;
+                                border-bottom:1px solid $c-white;
+                            }
+                            a:hover{
+                                background-color: $c-white;
+                                color:$c-hirely-red;
+                            }
+                        }
+                        li:last-child{
+                            a{
+                                border-bottom:none;
+                            }
+                        }
+                        li.active{
+                            a{
+                                background-color:$c-hirely-red;
+                                color:$c-white;
+                            }
+                        }
+                    }//// ul
+                }//// .menu
+            }//// .actions
         }//// .box
+
+        .arrows{
+            button{
+                width:46%;
+            }
+        }//// .arrows
     }//// article
 }//// candidate-details
 

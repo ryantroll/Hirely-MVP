@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', CandidateDetailsController]);
+  angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', CandidateDetailsController]);
 
 
-  function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService) {
+  function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     $scope.days = AvailabilityService.days;
@@ -18,6 +18,8 @@
     $scope.hours = AvailabilityService.hours;
 
     $scope.availability = AvailabilityService.toFrontEndModel($scope.applicants[$scope.detailsUserId].availability);
+
+    $scope.statusLabels = JobApplicationService.statusLabels;
 
     /**
      * get experience icons
@@ -32,7 +34,6 @@
     BusinessService.getPositionDisplayData(strOccIds.join('|'))
     .then(
       function(iconData){
-        console.log(iconData)
         $scope.iconData = iconData;
       },
       function(error){
@@ -131,6 +132,26 @@
       $scope.closeModal = function(){
         $uibModalInstance.close();
       }
+
+      $scope.nextApplication = function(){
+        var newIndex = $scope.detailsIndex + 1;
+
+        if(newIndex < $scope.applications.length){
+          $scope.detailsIndex = newIndex;
+          $scope.detailsApp = $scope.applications[newIndex];
+          $scope.detailsUserId = $scope.detailsApp.userId;
+        }
+      }//// fun. nextApplication
+
+      $scope.preApplication = function(){
+        var newIndex = $scope.detailsIndex -1;
+
+        if(newIndex > 0){
+          $scope.detailsIndex = newIndex;
+          $scope.detailsApp = $scope.applications[newIndex];
+          $scope.detailsUserId = $scope.detailsApp.userId;
+        }
+      }//// fun. previousApplication
 
       /**
        * initiate the availability table to monday

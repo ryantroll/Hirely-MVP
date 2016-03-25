@@ -15,7 +15,7 @@
     </header>
     <article>
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <div class="box">
                     <div class="row">
                         <div class="col-sm-3">
@@ -74,9 +74,8 @@
                 <div class="box">
                     <div class="title">
                         <h5>Personality <a href="javascript:void(0)" class="info">?</a></h5>
-
                     </div>
-                    <div class="personality">
+                    <div class="personality clearfix">
                         <div class="head">{{applicants[detailsUserId].firstName}} is a <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div>
                         <div class="traits">
                             <div class="col">
@@ -186,9 +185,36 @@
             </div><!--col-->
 
 
-            <!-- <div class="col-sm-3">
-                &nbsp;
-            </div> --><!--col-->
+            <div class="col-sm-3 visible-sm-block visible-md-block visible-lg-block">
+                <div class="box">
+                    <div class="title blue">
+                        <h5>Candidate Status: {{statusLabels[detailsApp.status]}}</h5>
+                    </div>
+                    <div class="actions clearfix">
+                        <div class="menu">
+                            <div class="inner">
+                                <a href="javascript:void(0);" class="action" ng-if="detailsApp.status === 1" ng-click="updateAppStatus($event, detailsApp._id, 2)">Contact</a>
+                                <a href="javascript:void(0);" class="action" ng-if="detailsApp.status === 2" ng-click="updateAppStatus($event, detailsApp._id, 3)">Hire</a>
+                                <a href="javascript:void(0);" class="action" ng-if="detailsApp.status === 3 || detailsApp.status === 0" ng-click="updateAppStatus($event, detailsApp._id, 1)">Applied</a>
+                                <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, 'detailsAction')"><i class="glyphicon glyphicon-menu-down"></i></a>
+                                <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, detailsApp._id, 0)"><i class="icon-thumb_down_icon"></i></a>
+                            </div>
+                            <ul class="hidden" id="menu_detailsAction">
+                                <li ng-if="app.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, detailsApp._id, 1)">APPLIED</a></li>
+                                <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, detailsApp._id, 2)">CONTACT</a></li>
+                                <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, detailsApp._id, 3)">HIRE</a></li>
+                                <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, detailsApp._id, 0)">DECLINE</a></li>
+                            </ul>
+                        </div><!--menu-->
+                    </div><!--actions-->
+                </div><!--box-->
+
+                <div class="arrows clearfix">
+                    <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-disabled="detailsIndex === 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
+                    <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-disabled="detailsIndex <= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
+                </dvi><!--arrows-->
+            </div><!--col-->
+
         </div><!--row-->
     </article>
 </div><!--candidate-details
