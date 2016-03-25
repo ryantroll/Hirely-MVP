@@ -128,8 +128,8 @@ var MatchService = {
 
                     // console.log("ms52");
                     var careerMatchScoresDoc = {
-                        userId: user._id,
-                        occId: onetScoresInstance._id,
+                        userId: String(user._id),
+                        occId: String(onetScoresInstance._id),
                         maxOverallScore: Number(maxOverallScore).toFixed(2),
                         scores: scores
                     };

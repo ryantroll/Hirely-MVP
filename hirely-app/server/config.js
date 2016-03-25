@@ -35,7 +35,7 @@ config.saveTraitifyFamousPeople = false;
  * [primeOnetScoresCache if set to true will prime the onetScoresCache in onetScoresService]
  * @type {Boolean}
  */
-config.primeOnetScoresCache = true;
+config.primeOnetScoresCache = false;
 
 config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
 
