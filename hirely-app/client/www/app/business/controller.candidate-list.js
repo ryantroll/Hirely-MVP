@@ -214,12 +214,22 @@
     $scope.sortByLabel = 'Rank';
 
     function applyFilters(){
-
       var ret = [];
       var list = $scope.applications;
-      for(var x=0; x<list.length; x++){
-        if( true === PositionFiltersService.test(list[x], $scope.applicants[list[x].userId], $scope.scores[list[x].userId]) ){
-          var scoreObj = $scope.scores[list[x].userId];
+      for(var x=0; x<list.length; x++) {
+        var scoreObj = $scope.scores[list[x].userId];
+        var userObj = $scope.applicants[list[x].userId];
+
+        if (!scoreObj) {
+          console.log("Error: user "+list[x].userId+" was not found in $scope.scores.  AppId: " + list[x]._id);
+          continue;
+        }
+        if (!userObj) {
+          console.log("Error: user "+list[x].userId+" was not found in $scope.applicants.  AppId: " + list[x]._id);
+          continue;
+        }
+
+        if( true === PositionFiltersService.test(list[x], userObj, scoreObj) ){
           list[x].score = scoreObj.scores[$scope.position.expLvl].overall;
           ret.push(list[x]);
         }
