@@ -202,7 +202,10 @@
         }
     }
 
-    setInterval(semiFixedFooter, 100);
+    semiFixedFooter();
+    $(window).resize(function(){
+        semiFixedFooter();
+    });
 
   }
 })();
