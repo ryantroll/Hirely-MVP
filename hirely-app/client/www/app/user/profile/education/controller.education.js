@@ -43,7 +43,7 @@
 
   })/// validate year
 
-  function ProfileEducationController($scope, $stateParams, $filter, $timeout, AuthService, UserService, StatesNames, JobApplicationService) {
+  function ProfileEducationController($scope, $stateParams, $filter, $timeout, authService, userService, StatesNames, JobApplicationService) {
 
 
 
@@ -87,7 +87,7 @@
      */
     $scope.education = {};
 
-    UserService.getUserCompleteFields(AuthService.currentUserID, ['education'])
+    userService.getUserCompleteFields(authService.currentUserID, ['education'])
     .then(
       function(founded){
 
@@ -246,9 +246,9 @@
         /**
          * Make sure user is authenticated
          */
-        if(AuthService.isUserLoggedIn()){
+        if(authService.isUserLoggedIn()){
           var toSave = {education:angular.copy($scope.eduItems)};
-          UserService.saveUser(toSave, AuthService.currentUserID)
+          userService.saveUser(toSave, authService.currentUserID)
           .then(
             function(user){
               // console.log(user);

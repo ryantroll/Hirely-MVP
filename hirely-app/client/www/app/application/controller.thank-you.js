@@ -10,19 +10,19 @@
   angular.module('hirelyApp').controller('ThankYouApplicationController', ['$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', ThankYouApplicationController]);
 
 
-  function ThankYouApplicationController($scope, $stateParams, $state, AuthService, UserService, JobApplicationService, HirelyApiService) {
+  function ThankYouApplicationController($scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
 
     // delete $scope.layoutModel.noHeader;
     // delete $scope.layoutModel.business;
     // delete $scope.layoutModel.location;
     // delete $scope.layoutModel.position;
 
-    if (AuthService.isUserLoggedIn()) {
+    if (authService.isUserLoggedIn()) {
       initialize();
     }
 
     function initialize(){
-      $scope.name = AuthService.currentUser.firstName;
+      $scope.name = authService.currentUser.firstName;
     }
 
   }

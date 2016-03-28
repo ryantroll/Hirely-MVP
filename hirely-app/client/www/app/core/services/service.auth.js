@@ -37,7 +37,7 @@
                 return service.currentUser;
             }
 
-            //// Set currentUser cookie
+            //// Get currentUser cookie
             var user = $cookies.get("currentUser");
             if (user) {
                 user = JSON.parse(user);

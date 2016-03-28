@@ -43,7 +43,7 @@
 
   }); /// validate year
 
-  function ProfileExperienceController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, AuthService, UserService, StatesNames) {
+  function ProfileExperienceController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, authService, userService, StatesNames) {
 
     var geocodeService = GeocodeService;
 
@@ -88,7 +88,7 @@
      */
     $scope.xpItems = [];
 
-    UserService.getUserCompleteFields(AuthService.currentUserID, ['workExperience'])
+    userService.getUserCompleteFields(authService.currentUserID, ['workExperience'])
     .then(
       function(founded){
         if(Array.isArray(founded.workExperience)){
@@ -482,11 +482,11 @@
          * User is authenticated
          * do save
          */
-        if(AuthService.isUserLoggedIn() && $scope.workExperienceChanged){
+        if(authService.isUserLoggedIn() && $scope.workExperienceChanged){
           var toSave = {
             workExperience:angular.copy($scope.xpItems)
           };
-          UserService.saveUser(toSave, AuthService.currentUserID)
+          userService.saveUser(toSave, authService.currentUserID)
           .then(
             function(user){
               console.log("User data updated");

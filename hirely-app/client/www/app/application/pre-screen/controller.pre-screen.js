@@ -13,7 +13,7 @@
 	.controller('PreScreenController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', 'JobApplicationService', PreScreenController]);
 
 
-	function PreScreenController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout, JobApplicationService) {
+	function PreScreenController($scope, $stateParams, multiStepFormInstance, userService, authService, $timeout, JobApplicationService) {
 
 		/**
 		 * $scope.business, postion is inhereated from controller.job-application.js
@@ -95,7 +95,7 @@
 		 */
 		$timeout(function(){
 			if(!$scope.stepFourLoaded){
-				// $scope.user = angular.copy(AuthService.currentUser);
+				// $scope.user = angular.copy(authService.currentUser);
 				$scope.stepFourLoaded = true;
 			}
 
@@ -111,13 +111,13 @@
 			/**
 			 * Make sure user is logged in before you do update
 			 */
-			if(AuthService.isUserLoggedIn()){
+			if(authService.isUserLoggedIn()){
 				/**
 				 * User is authenticated create application data
 				 */
 
 				var application = new JobApplication(
-					AuthService.currentUserID,
+					authService.currentUserID,
 					position._id,
 					 1, //// set status to 1
 					 angular.copy($scope.model.prescreenAnswers)

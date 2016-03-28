@@ -61,11 +61,7 @@ var myApp = angular.module('hirelyApp',
       //   templateUrl: 'app/account/register.html',
       //   controller: 'RegisterCtrl'
       // })
-      .state('app.hmregister', {
-        url: '/hmregister',
-        templateUrl: 'app/manager/hmRegister.html',
-        controller: 'HMRegisterCtrl'
-      })
+
       .state('app.busDashboard', {
         url: '/busDashboard',
         templateUrl: 'app/manager/hmDashboard.html',
@@ -174,34 +170,34 @@ var myApp = angular.module('hirelyApp',
         templateUrl: 'app/application/thank-you.tpl.html',
         controller: 'ThankYouApplicationController'
       })
-      .state('account', {
+      .state('app.account', {
         abstract: true,
         templateUrl: 'app/layout/account/account-master.tpl.html',
       })
-      .state('account.login', {
+      .state('app.account.login', {
         url: '/login',
         templateUrl: 'app/account/login.tpl.html',
         controller: 'LoginController'
       })
-      .state('account.register', {
+      .state('app.account.register', {
         url: '/register',
         templateUrl: 'app/account/register.tpl.html',
         controller: 'RegisterController'
       })
-      .state('job', {
+      .state('app.job', {
         abstract: true,
         templateUrl: 'app/layout/job/job-master.tpl.html',
       })
-      .state('job.position', {
+      .state('app.job.position', {
         url: '/:businessSlug/:locationSlug/:positionSlug',
         templateUrl: 'app/job/job-position.tpl.html',
         controller: 'JobPositionController'
       })
-      .state('business', {
+      .state('app.business', {
         abstract: true,
         templateUrl: 'app/layout/business/business-master.tpl.html',
       })
-      .state('business.candidateList', {
+      .state('app.business.candidateList', {
         url: '/:businessSlug/:locationSlug/:positionSlug/applicants',
         templateUrl: 'app/business/candidate-list.tpl.html',
         controller: 'CandidateListController'

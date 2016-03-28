@@ -25,7 +25,7 @@
             $scope.success = false;
 
             $scope.ajaxBusy = true;
-            AuthService.resetPassword($scope.user.email).then(
+            authService.resetPassword($scope.user.email).then(
                 function(){
                     $scope.errorMsg = '';
                     $scope.success = true;

@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 'UserService', '$parse', function(GeocodeService, UserService, $parse) {
+angular.module('hirelyApp.core').directive('ngAutocomplete', ['GeocodeService', 'UserService', '$parse', function(GeocodeService, userService, $parse) {
     return {
         require: 'ngModel',
         scope: {

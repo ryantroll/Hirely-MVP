@@ -7,14 +7,14 @@
    var app = angular.module('hirelyApp.manager').controller('HMCompanyCtrl', ['$scope', '$state', '$modal',  '$firebaseArray', 'FBURL', '$stateParams', 'FilePickerService', 'filePickerKey', 
         'GeocodeService', 'UserService', 'OccupationService', 'CandidateService', 'BusinessService', 'Notification', 'PositionService', HMCompanyCtrl]);
 
-    function HMCompanyCtrl($scope, $state, $modal, $firebaseArray, FBURL, $stateParams, FilePickerService, filePickerKey, GeocodeService, UserService, OccupationService, CandidateService, BusinessService, Notification, PositionService) {
+    function HMCompanyCtrl($scope, $state, $modal, $firebaseArray, FBURL, $stateParams, FilePickerService, filePickerKey, GeocodeService, userService, OccupationService, CandidateService, BusinessService, Notification, PositionService) {
         var managerId = '';
         var businessRef = new Firebase(FBURL + '/business');
         var businessSiteRef = new Firebase(FBURL + '/businessSite');
         var photoRef = new Firebase(FBURL + '/businessPhotos');
         var positionRef = new Firebase(FBURL + '/position');
         var occupationRef = new Firebase(FBURL + "/onetOccupation")
-        var vm = this;
+        
         var currentUser = BusinessService;
         var businessService = BusinessService;
         var candidateService = CandidateService;
@@ -22,7 +22,7 @@
         var geocodeService = GeocodeService;
         var occupationService = OccupationService;
         var positionService = PositionService;
-        var userService = UserService;
+        
 
         $scope.occupations = [];
         $scope.occupations = occupationRef;

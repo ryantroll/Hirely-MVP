@@ -24,17 +24,17 @@
     })
     .controller('ApplicationMasterController', ['$stateParams', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController ])
 
-    function ApplicationMasterController($stateParams, $scope, $rootScope, AuthService, UserService) {
+    function ApplicationMasterController($stateParams, $scope, $rootScope, authService, UserService) {
 
-        // $scope.authService = AuthService;
+        // $scope.AuthService = AuthService;
 
         // console.log($scope.Auth.currentUser)
         /**
          * check on loged in user
          * isUserLoggedIn method will do the needfull and set all the required variabls
          */
-        var auth = AuthService.isUserLoggedIn();
-        AuthService.syncCurrentUserFromDb();
+        var auth = authService.isUserLoggedIn();
+        authService.syncCurrentUserFromDb();
 
         $scope.layoutModel = {business:null, noHeader:null};
 

@@ -12,7 +12,7 @@
 	angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$stateParams', '$timeout', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
 
 
-	function ProfilePersonalityController($scope, $stateParams, $timeout, TraitifyService, AuthService, UserService, TRAITIFY_PUBLIC_KEY) {
+	function ProfilePersonalityController($scope, $stateParams, $timeout, TraitifyService, authService, userService, TRAITIFY_PUBLIC_KEY) {
 
 		$scope.stepThreeLoaded = false;
 
@@ -53,15 +53,15 @@
         //         data.traits = test.personalityTraits;
         //         data.blend = test.personalityBlend;
 
-        //         return TraitifyService.saveAssessment(data, AuthService.currentUserID, test.extId );
+        //         return TraitifyService.saveAssessment(data, authService.currentUserID, test.extId );
         //     }
         // )
 
 		function saveAssessment() {
 			if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
       			saved = true;
-				TraitifyService.saveAssessment(results, AuthService.currentUserID, assessmentId).then(function(personalityExam) {
-					AuthService.updateCurrentUserPropInCache('personalityExams', [personalityExam])
+				TraitifyService.saveAssessment(results, authService.currentUserID, assessmentId).then(function(personalityExam) {
+					authService.updateCurrentUserPropInCache('personalityExams', [personalityExam])
 				});
 			}
 		}//// fun. saveAssessment
@@ -71,7 +71,7 @@
 		 * Start by checking if user taken the personality assessment before
 		 */
 		$scope.init = function() {
-			var user = AuthService.getCurrentUser();
+			var user = authService.getCurrentUser();
 			if (user.personalityExams && user.personalityExams.length) {
 				$scope.stepThreeLoaded = true;
 				var assessmentId = user.personalityExams[0].extId;

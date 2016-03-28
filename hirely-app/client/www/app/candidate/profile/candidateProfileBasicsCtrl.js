@@ -8,12 +8,12 @@
     angular.module('hirelyApp.candidate').controller('CandidateProfileBasicsCtrl', ['$scope','$state','$stateParams', 'FilePickerService', 'filePickerKey','UserService', 'CandidateService', CandidateProfileBasicsCtrl ]);
 
 
-    function CandidateProfileBasicsCtrl($scope, $state,$stateParams, FilePickerService, filePickerKey, UserService, CandidateService) {
-        var userService = UserService;
+    function CandidateProfileBasicsCtrl($scope, $state,$stateParams, FilePickerService, filePickerKey, userService, CandidateService) {
+        
         var filePickerService = FilePickerService;
         var candidateService = CandidateService;
 
-        var vm = this;
+        
         $scope.results = '';
         $scope.options = {
             types: '(regions)'

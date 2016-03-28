@@ -9,8 +9,8 @@
 
 
     function CandidateCtrl($scope, $stateParams, UserService) {
-        var userService = UserService;
-        var vm = this;
+        
+        
 
         $scope.user = userService.getCurrentUser();
 

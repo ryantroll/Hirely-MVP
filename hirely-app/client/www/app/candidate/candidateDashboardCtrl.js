@@ -9,7 +9,7 @@
 
     function CandidateDashboardCtrl($scope, $stateParams) {
 
-        var vm = this;
+        
         $scope.uiGridOptions  = {
             data: 'recentApps',
             columnDefs: [{

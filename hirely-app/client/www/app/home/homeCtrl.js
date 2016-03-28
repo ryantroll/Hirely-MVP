@@ -128,11 +128,11 @@
         $scope.company.photo = $scope.photo;
 
         /*
-        $scope.user = UserService.getUserById('hani-hanna-89%40gmail-com').then(function(user){
+        $scope.user = userService.getUserById('hani-hanna-89%40gmail-com').then(function(user){
             console.log(user.firstName);
         });*/
 
-        //UserService.createNewUser($scope.userData,589-676);
+        //userService.createNewUser($scope.userData,589-676);
         BusinessService.testObj();
 
 

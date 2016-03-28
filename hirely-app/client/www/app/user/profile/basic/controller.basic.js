@@ -106,7 +106,7 @@
   });
 
 
-  function ProfileBasicController($scope, $rootScope, $stateParams, multiStepFormInstance, GeocodeService, UserService, AuthService, $timeout, FileUpload, DEFAULT_PROFILE_IMAGE) {
+  function ProfileBasicController($scope, $rootScope, $stateParams, multiStepFormInstance, GeocodeService, userService, authService, $timeout, FileUpload, DEFAULT_PROFILE_IMAGE) {
 
     var geocodeService = GeocodeService;
 
@@ -137,7 +137,7 @@
 
       if(newVal === false || angular.isUndefined(newVal)) return;
 
-      $scope._mobile = UserService.formatPhone(newVal);
+      $scope._mobile = userService.formatPhone(newVal);
 
       // Android doesn't move the cursor to the end of the input when we change it, so re-focus
       $("#dob").focus();
@@ -279,7 +279,7 @@
      */
     $timeout(function(){
       if(!$scope.stepOneLoaded){
-        $scope.user = angular.copy(AuthService.getCurrentUser());
+        $scope.user = angular.copy(authService.getCurrentUser());
 
         if (!$scope.user) {
           return;
@@ -289,10 +289,10 @@
          * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
          */
         if($scope.user.mobile){
-          $scope._mobile = UserService.formatPhone($scope.user.mobile.split('+1.').join(''));
+          $scope._mobile = userService.formatPhone($scope.user.mobile.split('+1.').join(''));
         }
         if($scope.user.dateOfBirth){
-          $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
+          $scope._dateOfBirth = userService.formatDate($scope.user.dateOfBirth);
         }
 
         if(!$scope.user.profileImageURL){
@@ -311,7 +311,7 @@
       /**
        * Make sure user is logged in before you do update
        */
-      if(AuthService.isUserLoggedIn() && $scope.stepOneLoaded){
+      if(authService.isUserLoggedIn() && $scope.stepOneLoaded){
         /**
          * User is authenticated update user data
          */
@@ -323,7 +323,7 @@
           $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
         }
         if($scope._mobile){
-          $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+          $scope.user.mobile = '+1.' + userService.clearPhoneFormat($scope._mobile);
         }
 
         /**
@@ -338,7 +338,7 @@
           dateOfBirth: $scope.user.dateOfBirth,
           postalCode: $scope.user.postalCode
         };
-        UserService.saveUser(toSave)
+        userService.saveUser(toSave)
         .then(
           function(savedUser){
             /**
@@ -346,7 +346,7 @@
              */
 
             //// make sure the AuthService data is synced
-            AuthService.updateCurrentUser($scope.user);
+            authService.updateCurrentUser($scope.user);
           },//// fun. resolve
           function(err){
             /**
@@ -379,15 +379,15 @@
       var fileName = $scope.file.name.split('.');
       var ext = fileName.pop();
       fileName = fileName.join('.');
-      fileName += '-pofile-' + AuthService.currentUserID + '.' + ext;
+      fileName += '-pofile-' + authService.currentUserID + '.' + ext;
 
       FileUpload.putFile($scope.file, fileName, 'profile-photos')
       .then(
         function(fileUrl){
           $scope.user.profileImageURL = fileUrl;
-          var userToSave = angular.copy(AuthService.getCurrentUser());
+          var userToSave = angular.copy(authService.getCurrentUser());
           userToSave.profileImageURL = fileUrl;
-          return UserService.saveUser(userToSave)
+          return userService.saveUser(userToSave)
         },
         function(err){
           console.log(err);
@@ -397,7 +397,7 @@
       .then(
         function(savedUser){
           // console.log(savedUser);
-          AuthService.updateCurrentUser(savedUser);
+          authService.updateCurrentUser(savedUser);
 
           delete $scope.file;
           angular.element('#photoFile').val(null);
@@ -410,14 +410,14 @@
     }//// fun. uploadPhoto
 
     $scope.removeImage = function(){
-      var userToSave = angular.copy(AuthService.currentUser);
+      var userToSave = angular.copy(authService.currentUser);
       userToSave.profileImageURL = null;
       $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
-      UserService.saveUser(userToSave)
+      userService.saveUser(userToSave)
       .then(
         function(savedUser){
           // console.log(savedUser);
-          AuthService.updateCurrentUser(savedUser);
+          authService.updateCurrentUser(savedUser);
         },
         function(err){
           console.log(err)

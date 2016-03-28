@@ -66,7 +66,7 @@
 
         //// availability table dose not exits in scope
         //// check if availability for this user exists in DB
-        AvailabilityService.isAvailabilityExists(AuthService.currentUserID)
+        AvailabilityService.isAvailabilityExists(authService.currentUserID)
         .then(
           function(retObj){
             //// the availability exists in DB
@@ -267,11 +267,11 @@
           /**
            * Save to DB After checking authentication
            */
-          if(AuthService.isUserLoggedIn()){
+          if(authService.isUserLoggedIn()){
             /**
              * user is logged in do availability saving
              */
-            AvailabilityService.save( angular.copy($scope.availability), AuthService.currentUserID)
+            AvailabilityService.save( angular.copy($scope.availability), authService.currentUserID)
               .then(
                 function(isSave){
                   /**
@@ -279,7 +279,7 @@
                    */
 
                   // var jobApp = new JobApplication($scope.availability.startDate, $scope.availability.hoursPerWeekMin, $scope.availability.hoursPerWeekMax);
-                  // JobApplicationService.save(jobApp, AuthService.currentUserID, $scope.jobID)
+                  // JobApplicationService.save(jobApp, authService.currentUserID, $scope.jobID)
                 },//// .save resolve
                 function(error){
                   /**

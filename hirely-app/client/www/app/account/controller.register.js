@@ -21,11 +21,11 @@
   })/// validate date;
     .controller('RegisterController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
 
-    function RegisterController($scope, $rootScope, $state, $stateParams, AuthService, UserService) {
+    function RegisterController($scope, $rootScope, $state, $stateParams, authService, UserService) {
 
-        var vm = this;
-        var authService = AuthService;
-        var userService = UserService;
+        
+
+        
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: ''}
 

@@ -13,7 +13,7 @@
 	.controller('StepFourController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', 'JobApplicationService', StepFourController]);
 
 
-	function StepFourController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout, JobApplicationService) {
+	function StepFourController($scope, $stateParams, multiStepFormInstance, userService, authService, $timeout, JobApplicationService) {
 
 		/**
 		 * vaiant to hold the vaiant object
@@ -68,7 +68,7 @@
 		 */
 		$timeout(function(){
 			if(!$scope.stepFourLoaded){
-				// $scope.user = angular.copy(AuthService.currentUser);
+				// $scope.user = angular.copy(authService.currentUser);
 				$scope.stepFourLoaded = true;
 			}
 
@@ -89,13 +89,13 @@
 			/**
 			 * Make sure user is logged in before you do update
 			 */
-			if(AuthService.isUserLoggedIn()){
+			if(authService.isUserLoggedIn()){
 				/**
 				 * User is authenticated create application data
 				 */
 
 				var application = new JobApplication(
-					AuthService.currentUserID,
+					authService.currentUserID,
 					variant._id,
 					 1, //// set status to 1
 					 angular.copy($scope.model.prescreenAnswers)

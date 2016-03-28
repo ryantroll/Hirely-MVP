@@ -10,7 +10,7 @@
   angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
 
 
-  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, AuthService, UserService, PositionFiltersService) {
+  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, authService, userService, PositionFiltersService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     /**
@@ -132,7 +132,7 @@
         /**
          * Check if user is logged in and move to next promise
          */
-        $scope.isAuth = AuthService.isUserLoggedIn();
+        $scope.isAuth = authService.isUserLoggedIn();
 
         return JobApplicationService.getByPositionId($scope.position._id);
       },
@@ -174,7 +174,7 @@
        */
       if(false === $scope.isAuth){
         $rootScope.nextState = {state:$state.current.name, params:$state.params};
-        $state.go('account.login');
+        $state.go('app.account.login');
         return;
       }
 
@@ -368,11 +368,11 @@
     }
 
     $scope.changePosition = function(posSlug){
-      $state.go('business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
+      $state.go('app.business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
     }
 
     $scope.goToPosition = function(){
-      $state.go('job.position', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:$scope.position.slug})
+      $state.go('app.job.position', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:$scope.position.slug})
     }
 
     $scope.copyPositionURL = function(){

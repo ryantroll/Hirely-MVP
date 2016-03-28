@@ -111,6 +111,12 @@ header.hi-header{
         }
     }//// .user
 }//// header
+
+header.hi-header.logged-in-header {
+    background-color: $c-hirely-mid-gray;
+    color:$c-white;
+}
+
 .form-content{
     width:100%;
     margin:0 auto;

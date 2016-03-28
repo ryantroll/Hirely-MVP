@@ -16,7 +16,7 @@
   .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', '$q', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $rootScope, $stateParams, $state, $q, uiGmapGoogleMapApi, uiGmapIsReady, AuthService, UserService, JobApplicationService, BusinessService) {
+  function JobApplicationController($scope, $rootScope, $stateParams, $state, $q, uiGmapGoogleMapApi, uiGmapIsReady, authService, userService, JobApplicationService, BusinessService) {
 
     $scope.isAuth = null;
     /**
@@ -62,12 +62,12 @@
      * @return {promise} [description]
      */
     function getApplicationData(){
-        if (!AuthService.isUserLoggedIn()) {
+        if (!authService.isUserLoggedIn()) {
             return q.reject();
         }
-        $scope.userData = AuthService.currentUser;
+        $scope.userData = authService.currentUser;
 
-      return JobApplicationService.isApplicationExists(AuthService.currentUser._id, $scope.position._id)
+      return JobApplicationService.isApplicationExists(authService.currentUser._id, $scope.position._id)
       .then(
         function(app){
           if(app){
@@ -116,11 +116,11 @@
 
     function initialize(){
 
-        $scope.isAuth = AuthService.isUserLoggedIn();
+        $scope.isAuth = authService.isUserLoggedIn();
 
         if (!$scope.isAuth) {
             $rootScope.nextState = {state:'application.apply', params:{businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug}};
-            $state.go('account.register');
+            $state.go('app.account.register');
         }
 
         setSteps();
@@ -156,9 +156,9 @@
     $scope.setInitialStep = function(){
       // var initialStep = 1;
       if(
-        !(angular.isDefined(AuthService.currentUser.mobile) && AuthService.currentUser.mobile &&
-        angular.isDefined(AuthService.currentUser.dateOfBirth) && AuthService.currentUser.dateOfBirth &&
-        angular.isDefined(AuthService.currentUser.postalCode) && AuthService.currentUser.postalCode)
+        !(angular.isDefined(authService.currentUser.mobile) && authService.currentUser.mobile &&
+        angular.isDefined(authService.currentUser.dateOfBirth) && authService.currentUser.dateOfBirth &&
+        angular.isDefined(authService.currentUser.postalCode) && authService.currentUser.postalCode)
       ){
         return 1;
       }
