@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp.manager')
+  angular.module('hirelyApp.job')
     .service('JobService', ['$q',  JobService]);
 
   function JobService($q, JobService) {
