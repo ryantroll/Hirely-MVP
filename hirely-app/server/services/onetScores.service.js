@@ -31,6 +31,16 @@ var onetScoresService = {
         return this.getCache().then(function(onetScoresCache) {
             return onetScoresCache[occId];
         });
+    },
+
+    findByIds: function(occIds){
+        return this.getCache().then(function(onetScoresCache) {
+            var result = [];
+            for (let occId of occIds) {
+                result.push(onetScoresCache[occId]);
+            }
+            return result;
+        });
     }
 }/// users object
 

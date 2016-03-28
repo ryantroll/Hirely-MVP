@@ -114,7 +114,9 @@
                                 DEGREE OR CERTIFICATE
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
-                            </label> <span class="info-label" uib-tooltip="Please provide the name or title of your degree or certificate. Example: GED or Bartending.">?</span>
+                            </label>
+                            <span class="info-label" ng-click="tipVisibility=!tipVisibility" uib-tooltip="Please provide the name or title of your degree or certificate. Example: GED or Bartending.">?</span>
+                            <div ng-show="tipVisibility">Please provide the name or title of your degree or certificate. Example: GED or Bartending.</div>
                             <input type="text" class="text-feild" id="degree" name="degree"
                                 ng-model="education.degree"
                                 required
@@ -205,7 +207,7 @@
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
-                            <input type="text" class="text-feild" id="eduDateEndY" name="eduDateEndY"
+                            <input type="tel" class="text-feild" id="eduDateEndY" name="eduDateEndY"
                                 maxlength="4"
                                 ng-model="education.dateEndYear"
                                 ng-required="!education.currentlyEnrolled"

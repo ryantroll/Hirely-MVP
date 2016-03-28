@@ -17,37 +17,11 @@
 
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
+        $scope.isAuth = AuthService.isUserLoggedIn();
 
-        /**
-         * Check if user is logged in and move to next promise
-         */
-        return AuthService.isUserLoggedIn();
-      },
-      function(err){
-        console.log(err);
-        // $scope.dataLoaded = true;
-        $scope.dataError = true;
-        return AuthService.isUserLoggedIn();
-      }
-    )
-    .then(
-      function(isAuth){
-        /**
-         * user is logged in
-         */
-        $scope.isAuth = isAuth;
-
-      },
-      function(err){
-        /**
-         * User in not logged in
-         */
-        $scope.isAuth = false;
-
-      }
-    )
-    .finally(
-      function(){
+        if ($scope.isAuth && $rootScope.addFavoriteAfterLogin == true) {
+          $scope.favoriteClick();
+        }
 
         initialize();
       }
@@ -273,16 +247,16 @@
       return null;
     }//// fun. getIcon
 
-    $scope.favoriteClick = function(ev){
-      var me = angular.element(ev.target);
+    $scope.favoriteClick = function(){
       if($scope.isAuth && AuthService.currentUserID){
-        var favObj = {userId:AuthService.currentUserID};
-        favObj.positionId = $scope.position._id;
-        favObj.locationId = $scope.location._id;
-        favObj.businessId = $scope.business._id;
-        favObj.type = 'position';
+        var favObj = {
+          userId: AuthService.currentUserID,
+          positionId: $scope.position._id,
+          locationId: $scope.location._id,
+          businessId: $scope.business._id,
+          type: 'position'
+        };
 
-        me.attr('disabled', true);
         FavoritesService.updateFavorite(favObj)
         .then(
           function(obj){
@@ -294,12 +268,10 @@
               //// favorite is deleted
               delete $scope.thisPositionFav;
             }
-            me.attr('disabled', false);
-          },
-          function(err){
-            me.attr('disabled', false);
           }
         );/// .then
+
+        $rootScope.addFavoriteAfterLogin = false;
       }//// if CurrrentId
       else{
         /**
@@ -307,6 +279,7 @@
          * LoginController will detect this rootScope object and redirect back after login
          */
         $rootScope.nextState = {state:$state.current.name, params:$state.params};
+        $rootScope.addFavoriteAfterLogin = true;
         $state.go('account.login');
       }
     }//// fun. favorite click

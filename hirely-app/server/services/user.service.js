@@ -4,6 +4,7 @@ var userModel = require('../models/user.model');
 var onetScoresService = require('../services/onetScores.service');
 var idMapModel = require('../models/useridmap.model');
 var matchingService = require('../services/matching.service');
+var traitifyService = require('../services/traitify.service');
 var bcrypt = require('bcrypt');
 
 
@@ -42,10 +43,10 @@ var userService = {
      * [getAll function will get all users.  Not to be used in production]
      * @return {[type]}        [promise]
      */
-    getAll : function(reqQuery){
+    getAll: function (reqQuery) {
         // Determine what fields to return based on reqQuery.
         var returnFields = '-' + privateFields.join(' -')
-        if(undefined !== reqQuery.complete) {
+        if (undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }
         return userModel.find({}, returnFields).exec();
@@ -57,11 +58,11 @@ var userService = {
      * @param  {[type]} reqQuery [req.query from service. if reqQuery.complete: return complete object]
      * @return {[type]}        [promise]
      */
-    getById: function(id, reqQuery){
+    getById: function (id, reqQuery) {
         // Determine what fields to return based on reqQuery.
 
         var returnFields = '';
-        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
+        if (undefined !== reqQuery && undefined !== reqQuery.complete) {
             /**
              * Complete set is requested let's send the whole user object
              */
@@ -69,20 +70,20 @@ var userService = {
 
             returnFields = '-nothing';
         }
-        else{
+        else {
 
             /**
              * No complete set is requested
              * Checek of any property name is sent in query throuhg the below loop
              */
-            for(var field in reqQuery){
+            for (var field in reqQuery) {
                 returnFields += '' + field + ' ';
             }
 
             /**
              * if no properties requested send the basic info
              */
-            if(returnFields === ''){
+            if (returnFields === '') {
                 returnFields = '-' + privateFields.join(' -')
             }
         }
@@ -95,7 +96,7 @@ var userService = {
      * @param  {[type]} userObj [JS object with required field in user Model]
      * @return {[type]}         [promise with user basic info]
      */
-    createNewUser : function(userObj){
+    createNewUser: function (userObj) {
         var salt = bcrypt.genSaltSync(10);
         userObj.password = bcrypt.hashSync(userObj.password, salt);
         var newUser = new userModel(userObj);
@@ -105,21 +106,21 @@ var userService = {
          */
         return newUser.save();
     },
-    
-    passwordLogin: function(email, password) {
-        return userModel.findOne({email: email}).then(function(user) {
+
+    passwordLogin: function (email, password) {
+        return userModel.findOne({email: email}).then(function (user) {
             if (!user) {
-                console.log("passwordLogin: user not found for "+email);
+                console.log("passwordLogin: user not found for " + email);
                 return null;
             }
             if (!user.password) {
                 console.log("passwordLogin: user does not have a password");
                 return null;
             }
-            if(bcrypt.compareSync(password, user.password)) {
+            if (bcrypt.compareSync(password, user.password)) {
                 return user;
             } else {
-                console.log("passwordLogin: bad password for "+email);
+                console.log("passwordLogin: bad password for " + email);
                 return null;
             }
         });
@@ -130,30 +131,30 @@ var userService = {
      * @param  {[string]} extId [esternal id ]
      * @return {[promis]}       [description]
      */
-    getUserByExternalId: function(extId, reqQuery){
+    getUserByExternalId: function (extId, reqQuery) {
 
         // Determine what fields to return based on reqQuery.
         var returnFields = '-' + privateFields.join(' -')
-        if(undefined !== reqQuery.complete) {
+        if (undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }
 
-        return idMapModel.findOne({externalId:extId}).exec()
-        .then(
-            /**
-             * map is found for this external id
-             * find the user and return it in promise
-             */
-            function(map){
-                return userModel.findById(map.localId, returnFields).exec();
-            },//// fun. resolve
-            function(error){
+        return idMapModel.findOne({externalId: extId}).exec()
+            .then(
                 /**
-                 * No map is found for this external id
+                 * map is found for this external id
+                 * find the user and return it in promise
                  */
-                console.log(error);
-            }//// fun. reject
-        )//// then
+                function (map) {
+                    return userModel.findById(map.localId, returnFields).exec();
+                },//// fun. resolve
+                function (error) {
+                    /**
+                     * No map is found for this external id
+                     */
+                    console.log(error);
+                }//// fun. reject
+            )//// then
 
     }, //// fun. getUserByExternalId
 
@@ -166,7 +167,7 @@ var userService = {
      * @param  {object} userData [object that hold properites that need to be updated]
      * @return {promise}          [promise]
      */
-    saveUser: function(userId, userData){
+    saveUser: function (userId, userData) {
         var deferred = q.defer();
 
         var user = new userModel(userData);
@@ -183,250 +184,289 @@ var userService = {
          * is the user exists in DB
          */
         userModel.findById(userId)
-        .then(
-            function(foundedUser){
-                /**
-                 * User exists in DB, do the update
-                 */
-                console.log(userData);
-                if(foundedUser){
-                    console.log("Found user");
-
+            .then(
+                function (foundedUser) {
                     /**
-                     * Loop through sent properties and set them
+                     * User exists in DB, do the update
                      */
-                    for(var prop in userData){
-                        console.log(prop);
-                        foundedUser[prop] = userData[prop];
+                    console.log(userData);
+                    if (foundedUser) {
+                        console.log("Found user");
 
-                        // Calc educationMax if education changed
-                        // Calc if currently in school also
-                        try {
-                            if (prop == "education") {
-                                foundedUser['educationStatus'] = "completed";
+                        /**
+                         * Loop through sent properties and set them
+                         */
+                        for (var prop in userData) {
+                            console.log(prop);
+                            foundedUser[prop] = userData[prop];
+                        }//// for
 
-                                if (userData['education'].length > 0) {
-                                    var educationSortedByRank = userData['education'];
-                                    educationSortedByRank.sort(function (a, b) {
-                                        return educationProgramTypes.indexOf(a.programType) - educationProgramTypes.indexOf(b.programType)
-                                    });
-                                    foundedUser['educationMax'] = educationSortedByRank.pop();
+                        foundedUser.lastModifiedOn = new Date();
 
-                                    for (let program of userData['education']) {
-                                        if (program.isCompleted == false) {
-                                            foundedUser['educationStatus'] = "attending";
-                                        }
-                                    }
-                                } else {
-                                    // set to blank so that filters work
-                                    foundedUser['educationMax'] = {}
+                        if (userData.hasOwnProperty("workExperience")) {
+                            console.log("Experience was updated, so updating user metrics");
+                            foundedUser.queuedForMetricUpdate = true;
+                        }
+
+                        console.log("Saving user");
+                        foundedUser.save()
+                            .then(
+                                function (user) {
+                                    console.log("User save success");
+                                    deferred.resolve(user);
+                                },//// save() resolve
+                                function (err) {
+                                    /**
+                                     * Error in updating user
+                                     */
+                                    console.log(err);
+                                    console.log('Error: user couldn\'t be updated');
+                                    deferred.reject(err);
                                 }
+                            ); /// .save().then
 
-                            }
-                        } catch (error) {
-                            console.log("Error calcing educationMax: "+error);
-                            foundedUser['educationMax'] = {programType: null}
-                        }
+                    }//// if user._id
 
-                    }//// for
-
-                    foundedUser.lastModifiedOn = new Date();
-                    console.log("Saving user");
-                    foundedUser.save()
-                    .then(
-                        function(user){
-                            console.log("User save success");
-                            deferred.resolve(user);
-                            console.dir(userData);
-                            // if (userData.hasOwnProperty("workExperience")) {
-                            //     console.log("Experience was updated, so updating user metrics");
-                            //     userService.updateUserMetrics(user);
-                            // }
-                        },//// save() resolve
-                        function(err){
-                            /**
-                             * Error in updating user
-                             */
-                            console.log(err);
-                            console.log('Error: user couldn\'t be updated');
-                            deferred.reject(err);
-                        }
-                    ); /// .save().then
-
-                }//// if user._id
-
-            },//// fun. reslove
-            function(err){
-                /**
-                 * User doesn't exists
-                 */
-                deferred.reject("User trying to update doesn't exists");
-            }
-        );//// then
+                },//// fun. reslove
+                function (err) {
+                    /**
+                     * User doesn't exists
+                     */
+                    deferred.reject("User trying to update doesn't exists");
+                }
+            );//// then
 
         return deferred.promise;
     },  //// fun. saveUser
 
-    monthCountToExperienceLevel: function(monthCount) {
-        if      (monthCount > 120) { return 120; }
-        else if (monthCount > 96) { return 96; }
-        else if (monthCount > 72) { return 72; }
-        else if (monthCount > 48) { return 48; }
-        else if (monthCount > 24) { return 24; }
-        else if (monthCount > 12) { return 12; }
-        else if (monthCount > 6) { return 6; }
-        else if (monthCount > 3) { return 3; }
-        else if (monthCount > 1) { return 1; }
-        else { return 0; }
+    monthCountToExperienceLevel: function (monthCount) {
+        if (monthCount > 120) {
+            return 120;
+        }
+        else if (monthCount > 96) {
+            return 96;
+        }
+        else if (monthCount > 72) {
+            return 72;
+        }
+        else if (monthCount > 48) {
+            return 48;
+        }
+        else if (monthCount > 24) {
+            return 24;
+        }
+        else if (monthCount > 12) {
+            return 12;
+        }
+        else if (monthCount > 6) {
+            return 6;
+        }
+        else if (monthCount > 3) {
+            return 3;
+        }
+        else if (monthCount > 1) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     },
 
-    updateUserMetricsById: function(userId) {
-        console.log("257");
+    addEduMetrics: function (user) {
+        // Calc educationMax if education changed
+        // Calc if currently in school also
+        try {
+            user['educationStatus'] = "completed";
+
+            if (user['education'].length > 0) {
+                var educationSortedByRank = user['education'];
+                educationSortedByRank.sort(function (a, b) {
+                    return educationProgramTypes.indexOf(a.programType) - educationProgramTypes.indexOf(b.programType)
+                });
+                user['educationMax'] = educationSortedByRank.pop();
+
+                for (let program of user['education']) {
+                    if (program.isCompleted == false) {
+                        user['educationStatus'] = "attending";
+                    }
+                }
+            } else {
+                // set to blank so that filters work
+                user['educationMax'] = {}
+            }
+        } catch (error) {
+            console.log("Error calcing educationMax: " + error);
+            user['educationMax'] = {programType: null}
+        }
+        return user;
+    },
+
+
+    addExpScores: function (user, roles) {
+
+        try {
+            // Calc roles
+            var roles = {};
+            var totalWorkMonths = 0;
+            for (let workExperience of user.workExperience) {
+                var occId = workExperience.occId;
+                // console.log("us260");
+                var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
+                totalWorkMonths += monthCount;
+
+                // If role doesn't already exist, create it
+                // console.log("us261.1");
+                if (!(occId in roles)) {
+                    roles[occId] = {"monthCount": 0, "expLvl": 0};
+                }
+
+                // console.log("us261.2");
+                roles[occId].monthCount += monthCount;
+                roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount)
+            }
+
+            // console.log("us262");
+            return onetScoresService.findByIds(Object.keys(roles))
+                .then(function (occScoresArray) {
+                    // Extend roles with onet metrics
+
+                    try {
+                        // console.log("us262.5");
+                        for (let occScores of occScoresArray) {
+                            console.log("expLvl: " + roles[occScores._id].expLvl);
+                            console.log("occId: " + occScores._id);
+                            //console.dir(occScores.scores);
+
+                            //console.dir("")
+                            var scores = occScores.scores;
+                            try {
+                                scores = scores.toObject()
+                            } catch (err) {
+                                console.log("Warning:  occScores.scores.toObject failed.  This is known to happen and usually indicates it's already an object")
+                            }
+                            var occScoresForExp = scores[roles[occScores._id].expLvl];
+                            try {
+                                occScoresForExp = occScoresForExp.toObject();
+                            } catch (err) {
+                                console.log("Warning:  occScoresForExp.toObject failed.  This is known to happen and usually indicates it's already an object")
+                            }
+                            for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
+                                roles[occScores._id][cat] = occScoresForExp[cat];
+                                try {
+                                    roles[occScores._id][cat] = roles[occScores._id][cat].toObject();
+                                } catch (err) {
+                                    console.log("Warning:  roles[occScores._id][cat].toObject failed.  This is known to happen and usually indicates it's already an object")
+                                }
+                            }
+                        }
+                    } catch(err) {
+                        var err = "ERROR US:addExpScores("+user._id+"): "+err;
+                        console.log(err);
+                        var deferred = q.defer(err);
+                        deferred.resolve(user);
+                        return deferred.promise;
+                    }
+
+
+                    return roles;
+                }).then(function (roles) {
+                    // Use roles to calc KSAW scores and add to user
+
+                    try {
+                        var totalWorkMonths = 0;
+                        for (var occId in roles) {
+                            totalWorkMonths += roles[occId].monthCount;
+                        }
+
+                        // Add tenureAvg to user
+                        user.tenureAvg = 0;
+                        if (totalWorkMonths !== 0) {
+                            user.tenureAvg = Math.ceil(totalWorkMonths / user.workExperience.length);
+                        }
+
+                        // Add master KSAs
+                        // console.log("us263");
+                        var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
+                        for (var occId in roles) {
+                            // console.log("us264");
+                            // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
+                            var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
+                            for (var category in roles[occId]) {
+                                // console.log("us265");
+                                for (var key in roles[occId][category]) {
+                                    // console.log("us266");
+                                    var weighted = Number(weight * roles[occId][category][key]).toFixed(4);
+                                    if (key in scores[category]) {
+                                        // console.log("us267");
+                                        scores[category][key] += weighted;
+                                    } else {
+                                        // console.log("us268");
+                                        scores[category][key] = weighted;
+                                    }
+                                }
+                            }
+                        }  // end roles.forEach
+                        // console.log("us269");
+                        user.scores = scores;
+
+                        return user;
+                    } catch(err) {
+                        var err = "ERROR US:addExpScores("+user._id+"): "+err;
+                        console.log(err);
+                        var deferred = q.defer(err);
+                        deferred.resolve(user);
+                        return deferred.promise;
+                    }
+                });
+
+        } catch(err) {
+            var err = "ERROR US:addExpScores("+user._id+"): "+err;
+            console.log(err);
+            var deferred = q.defer(err);
+            deferred.resolve(user);
+            return deferred.promise;
+        }
+    },
+
+    updateUserMetricsById: function (userId) {
+        // console.log("us257");
         var self = this;
-        return userModel.findById(userId).then(function(user) {
+        return userModel.findById(userId).then(function (user) {
             return self.updateUserMetrics(user);
         });
     },
 
-    updateUserMetrics: function(user) {
-        console.log("258");
+    updateUserMetrics: function (user) {
+        // console.log("us258");
 
+        var self = this;
 
-        // Education
-        user.educationMaxLvl = 0;
+        // Set queuedForMetricUpdate = false to avoid race conditions (it's not perfect though)
+        user.queuedForMetricUpdate = false;
+        // Go ahead and add edu metrics since this is synchronous
+        user = self.addEduMetrics(user);
+        console.log("u259");
 
-        user.education.forEach(function (program) {
-            // TODO: Make sure that program type numbers match up to onet, and that 2 = some college;
-            if (program.programType > 1 && program.isCompleted == 0) {
-                program.programType = 2;
-            }
-            if (program.programType > user.educationMaxLvl) {  // 0 = non edu, 1 = High School, 2 = Bachelors, 3 = Masters, 4 = PhD;
-                user.educationMaxLvl = program.programType;
-            }
-        });
-
-
-
-        // Clear the old Ksa
-        console.log("259");
-        for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
-            user.scores[cat] = {};
-        }
-
-        // Concat roles
-        var roles = {};
-        var totalWorkMonths = 0;
-        for (let workExperience of user.workExperience) {
-            var occId = workExperience.occId;
-            console.log("260");
-            var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
-            totalWorkMonths += monthCount;
-
-            // If role doesn't already exist, create it
-            console.log("261.1");
-            if (!(occId in roles)) {
-                roles[occId] = {"monthCount": 0, "expLvl": 0};
-            }
-
-            console.log("261.2");
-            roles[occId].monthCount += monthCount;
-            roles[occId].expLvl = userService.monthCountToExperienceLevel(roles[occId].monthCount)
-        }
-
-
-        // Retrieve the role occupations from OnetScore
-        console.log("262");
-        var promises = [];
-        for (var key in roles) {
-            promises.push(onetScoresService.findById(key));
-        }
-
-        // Wait until retrieves are done
-        return q.all(promises).then(function (occScoresArray) {
-            console.log("262.5");
-
-            // Extend roles with onet metrics
-            for (let occScores of occScoresArray) {
-                console.log("expLvl: "+ roles[occScores._id].expLvl);
-                console.log("occId: "+ occScores._id);
-                //console.dir(occScores.scores);
-
-                //console.dir("")
-                var scores = occScores.scores;
-                try {
-                    scores = scores.toObject()
-                } catch (err) {
-                    console.log("Warning:  occScores.scores.toObject failed.  This is known to happen and usually indicates it's already an object")
-                }
-                var occScoresForExp = scores[roles[occScores._id].expLvl];
-                try {
-                    occScoresForExp = occScoresForExp.toObject();
-                } catch (err) {
-                    console.log("Warning:  occScoresForExp.toObject failed.  This is known to happen and usually indicates it's already an object")
-                }
-                for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
-                    roles[occScores._id][cat] = occScoresForExp[cat];
-                    try {
-                        roles[occScores._id][cat] = roles[occScores._id][cat].toObject();
-                    } catch (err) {
-                        console.log("Warning:  roles[occScores._id][cat].toObject failed.  This is known to happen and usually indicates it's already an object")
-                    }
-                }
-            }
-
-
-            // Calc master KSAs
-            console.log("263");
-            var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
-            for (var occId in roles) {
-                console.log("264");
-                // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
-                var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
-
-                for (var category in roles[occId]) {
-                    console.log("265");
-                    for (var key in roles[occId][category]) {
-                        console.log("266");
-                        var weighted = Number(weight * roles[occId][category][key]).toFixed(4);
-                        if (key in scores[category]) {
-                            console.log("267");
-                            scores[category][key] += weighted;
-                        } else {
-                            console.log("268");
-                            scores[category][key] = weighted;
-                        }
-                    }
-                }
-            }  // end roles.forEach
-
-            // Update user
-            console.log("269");
-            user.scores = scores;
-            user.tenureAvg = 0;
-            if (totalWorkMonths !== 0) {
-                user.tenureAvg = Math.ceil(totalWorkMonths / user.workExperience.length);
-            }
-            console.log("270");
-            return user.save().then(
-                function (user) {
-                    if (user.personalityExams.length > 0) {
-                        return matchingService.generateCareerMatchScoresForUser(user);
-                    } else {
-                        return user;
-                    }
-                },
-                function (error) {
-                    console.log(error);
-                }
-            );
-
-
+        // var deferred = q.defer(); deferred.resolve(user); deferred.promise
+        user.save()
+        .then(function (user) {
+            console.log("u260");
+            return traitifyService.addTraitifyCareerMatchScoresToUser(user);
+        }).then(function (user) {
+            console.log("u261");
+            return self.addExpScores(user);
+        }).then(function (user) {
+            console.log("u262");
+            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
+            user.queuedForMetricUpdate = false;
+            return user.save();
+        }).then(function (user) {
+            console.log("u263");
+            return matchingService.generateCareerMatchScoresForUser(user);
+        }).then(function (boolResult) {
+            console.log("u264");
+            return true;
         })
-        //    .catch(function (error) {
-        //    console.dir(error);
-        //    raise(error);
-        //    // Do whatever happens if one or more errored
-        //});  // end q.all()
 
     }  // end updateUserMetricsById
 

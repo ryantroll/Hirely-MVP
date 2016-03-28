@@ -59,6 +59,7 @@ $day-button-size: 60px;
 		width:100%;
 		z-index: 1000;
 
+
 		.left{
 			height: $footer-height;
 		}/// .left
@@ -122,6 +123,11 @@ $day-button-size: 60px;
 			}
 		}
 	}//// footer
+
+	footer.fixedBottom {
+		position: fixed;
+		bottom: 0;
+	}
 }//// .profile
 .form-loader{
 	width:40px;
@@ -214,6 +220,7 @@ $day-button-size: 60px;
 		padding-top:3em;
 		position:relative;
 
+
         p{
             font-size:0.85em;
             margin-bottom: .5em;
@@ -288,6 +295,24 @@ $day-button-size: 60px;
 		padding:0.3em 0;
 		width:100%;
 		// background-color:#ccc;
+	}
+
+	button.isSeasonalBtn,
+	button.seasonBtn {
+		width: 48%;
+		background-color:$c-hirely-text-gray;
+		color:#fff;
+	}
+	button.isSeasonalBtn.active,
+	button.seasonBtn.active {
+		background-color:$light-grass-green;
+	}
+	button.seasonBtn {
+		margin-bottom: 8px;
+	}
+	button#Spring,
+	button#Fall {
+		float: right;
 	}
 
     textarea{

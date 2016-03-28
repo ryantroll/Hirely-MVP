@@ -35,6 +35,7 @@
     $scope.stepFiveLoaded = false;
 
     $scope.startOptions = AvailabilityService.startOptions;
+    $scope.seasonOptions = AvailabilityService.seasonOptions;
 
     $scope.days = AvailabilityService.days;
 
@@ -144,6 +145,7 @@
 
       } //// fun. initializeScope
 
+      $scope.isSeasonal = $scope.availability.season != null;
 
       /**
        * [hourClick trigger on td click event to set/unset hour availablity in time table]

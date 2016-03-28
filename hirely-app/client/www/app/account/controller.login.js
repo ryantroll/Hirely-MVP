@@ -53,16 +53,6 @@
         };
 
 
-
-
-        $scope.showRegister = function(){
-            /**
-             * app/application/controller.job-application.js will listen to ShowRegister
-             */
-            $rootScope.$emit('ShowRegister');
-        };
-
-
         $scope.showForgotPassword = function(){
             alert("Please email us at support@hirely.io to reset your password.");
             return;

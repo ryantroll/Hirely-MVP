@@ -115,6 +115,7 @@ var userSchema = new Schema({
   profileImageURL       :     {type:String},
   eligibleToWorkInUS    :     {type:Boolean},
   tenureAvg             :     {type:Number},
+  queuedForMetricUpdate :     {type:Boolean, default:false},
 
 
   /**
