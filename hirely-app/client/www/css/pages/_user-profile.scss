@@ -11,6 +11,7 @@ $day-button-size: 60px;
 		.steps{
 			min-height: $header-height;
 			@include drop-shadow;
+			width: 100%;
 
 			> ul{
 				list-style:none;

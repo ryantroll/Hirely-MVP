@@ -13,10 +13,10 @@
       return Math.round(value);
     }
   })
-  .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', '$q', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'AuthService', 'UserService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+  .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'AuthService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-  function JobApplicationController($scope, $rootScope, $stateParams, $state, $q, uiGmapGoogleMapApi, uiGmapIsReady, authService, userService, JobApplicationService, BusinessService) {
+  function JobApplicationController($scope, $rootScope, $stateParams, $state, $timeout, authService, JobApplicationService, BusinessService) {
 
     $scope.isAuth = null;
     /**
@@ -202,10 +202,7 @@
         }
     }
 
-    semiFixedFooter();
-    $(window).resize(function(){
-        semiFixedFooter();
-    });
+    $timeout(semiFixedFooter, 100);
 
   }
 })();
