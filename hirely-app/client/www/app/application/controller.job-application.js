@@ -202,7 +202,7 @@
         }
     }
 
-    $timeout(semiFixedFooter, 100);
+      setInterval(semiFixedFooter, 100);
 
   }
 })();
