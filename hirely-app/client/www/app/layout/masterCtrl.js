@@ -4,13 +4,14 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl ]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$state', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl ]);
 
-    function MasterCtrl($scope, $window, authService, userService, geocodeService) {
+    function MasterCtrl($scope, $state, $window, authService, userService, geocodeService) {
 
         $scope.isUserLoggedIn = authService.isUserLoggedIn();
         $scope.location = {};
         $scope.currentPlace = null;
+        $scope.$state = $state;
         
         /**
          * check on loged in user

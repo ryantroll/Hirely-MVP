@@ -6,7 +6,7 @@
                 <img src="img/hirely_logo_small.png" alt="Hirely"/>
             </a><!--//logo-->
 
-            <div class="user pull-right">
+            <div class="user pull-right" ng-show="!($state.is('app.account.login') || $state.is('app.account.register'))">
 
                 <div class="buttons" ng-show="!isUserLoggedIn">
                     <!--<button class="btn red" ui-sref="app.account.register">Register</button>-->
