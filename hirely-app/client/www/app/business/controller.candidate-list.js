@@ -275,7 +275,7 @@
     function applySort(){
 
       $scope.filtered.sort(function(a, b){
-        if($scope.sortBy === 'date'){
+        if($scope.sortBy === 'rank'){
           var aScore = Number($scope.scores[a.userId].scores[$scope.position.expLvl].overall);
           var bScore = Number($scope.scores[b.userId].scores[$scope.position.expLvl].overall);
           return bScore - aScore;
