@@ -1,4 +1,4 @@
-/* ======= Animations ======= */
+/* ======= Homepage Animations ======= */
 $(document).ready(function() {
 
     //Only animate elements when using non-mobile devices    
