@@ -12,7 +12,7 @@ header.hi-header{
     border-bottom:1px solid rgba(0,0,0,0.25);
 
     a {
-        color: white;
+        color: $c-hirely-mid-gray;
     }
     a:hover {
         color: $c-hirely-red;
@@ -127,7 +127,14 @@ header.hi-header{
 
 header.hi-header.logged-in-header {
     background-color: $c-hirely-mid-gray;
-    color:$c-white;
+    color: $c-white;
+
+    a {
+        color: $c-white;
+    }
+    a:hover {
+        color: $c-hirely-red;
+    }
 }
 
 header > .row {
