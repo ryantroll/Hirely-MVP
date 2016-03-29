@@ -47,7 +47,7 @@
                             </label>
                             <input type="text" id="positionTitle" name="positionTitle" class="text-field"
                                    ng-model="occupation.reportedOccTitle"
-                                   ng-change="searchOccupationsWithDebounce()"
+                                   ng-change="handleReportedOccTitleChange()"
                                    required
                             />
                             <input type="text" id="occId" name="occId" class="text-field"
@@ -78,10 +78,17 @@
                             </label>
                             <div class="row occupationChoices" id="occupationChoicesSelect">
                                 <div class="col-sm-12">
-                                    <div class="occupationChoice" ng-repeat="occupationChoice in occupationChoices">
-                                        <!--<div class="text-center">-->
+                                    <div ng-show="occupationState=='blankReportedOccTitle'">Start typing in the position title and we'll try to find the closest occupations here</div>
+                                    <div ng-show="occupationState=='lowReportedOccTitle'">Please further refine your title</div>
+                                    <div ng-show="occupationState=='notFound'">Sorry, we couldn't find any occupations based on your position title.  Please try other common variations</div>
+                                    <div ng-show="occupationState=='working'">
+                                        <div class="text-center">Loading...</div>
+                                        <div class="loadingBar">
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                    <div ng-show="occupationState=='choicesAvailable'" class="occupationChoice" ng-repeat="occupationChoice in occupationChoices">
                                         <button class="text-center fullwidth" ng-click="chooseOccupation(occupationChoice, $event)">{{occupationChoice.occTitle}}</button>
-                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>

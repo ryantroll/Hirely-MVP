@@ -202,7 +202,13 @@
         }
     }
 
-      setInterval(semiFixedFooter, 100);
+    setInterval(semiFixedFooter, 100);
+      
+    var loadingBarLocation = 0;
+    setInterval(function() {
+      loadingBarLocation = (loadingBarLocation + 1) % 5;
+      $(".loadingBar div").css("margin-left", loadingBarLocation*20+"%");
+    }, 300);
 
   }
 })();

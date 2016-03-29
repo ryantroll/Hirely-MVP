@@ -45,7 +45,7 @@ var onetOccSearchService = {
     },
 
     keywordSearch: function (query, full) {
-        return this.onetCall("online/search?keyword="+query.replace(' ', '%20')).then(function (matchesRaw) {
+        return this.onetCall("online/search?keyword="+encodeURIComponent(query)).then(function (matchesRaw) {
             var matches = [];
             for (let matchRaw of matchesRaw.occupations.occupation) {
                 var match = {

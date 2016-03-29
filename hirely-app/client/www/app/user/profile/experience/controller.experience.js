@@ -350,38 +350,43 @@
      * @return {array}       [array of matched occupations]
      */
     $scope.occupationChoices = [];
-    $scope.occupationChoicesDisabled = true;
-    $scope.occupationSaveDisabled = true;
+    $scope.occupationState = "blankReportedOccTitle";
     $scope.searchOccupations = function(){
-      if( $scope.occupation.reportedOccTitle != undefined &&
-          $scope.occupation.reportedOccTitle.trim().length > 2){
         return OccupationService.searchOccupations($scope.occupation.reportedOccTitle).then(function(matches){
-          $scope.occupationChoices = matches.slice(0,5);
+          if (matches.length == 0) {
+            $scope.occupationState = "notFound";
+            console.log("Empty choices");
+          } else {
+            $scope.occupationState = "choicesAvailable";
+            $scope.occupationChoices = matches.slice(0, 5);
+            console.log("Showing choices");
+          }
         });
-      }//// if query
-      else{
-        return [];
-      }
     }; //// fun. searchOccupations
 
     $scope.chooseOccupation = function(occupationChoice, $event) {
       $scope.occupation.occTitle = occupationChoice.occTitle;
       $scope.occupation.occId = occupationChoice.occId;
       $scope.occupationChoices = [occupationChoice];
-      $scope.occupationSaveDisabled = false;
+      $scope.occupationState = "chosen";
+      console.log("Chosen");
       $event.preventDefault();
     };
 
-    $scope.clearOccupationChoices = function() {
-      $scope.occupation.occTitle = "";
-      $scope.occupation.occId = "";
-      $scope.occupationChoices = [];
-      $scope.occupationSaveDisabled = true;
-    };
-
-    $scope.searchOccupationsWithDebounce = function() {
-      $scope.clearOccupationChoices();
-      $scope.customDebounce($scope.searchOccupations, 1500);
+    $scope.handleReportedOccTitleChange = function() {
+      $scope.occupationState = "working";
+      if($scope.occupation.reportedOccTitle == undefined || $scope.occupation.reportedOccTitle.trim().length == 0) {
+        $timeout(function() {$scope.occupationState = "blankReportedOccTitle";}, 800);
+        console.log("No rep title");
+      } else if($scope.occupation.reportedOccTitle.trim().length < 4) {
+        $timeout(function() {$scope.occupationState = "lowReportedOccTitle";}, 800);
+        console.log("Low rep title");
+      } else {
+        $scope.occupation.occTitle = "";
+        $scope.occupation.occId = "";
+        $scope.occupationChoices = [];
+        $scope.customDebounce($scope.searchOccupations, 1500);
+      }
     };
 
       /**
