@@ -12,7 +12,7 @@
                 <!--<button ng-show="!isUserLoggedIn" class="btn red" ui-sref="app.account.register">Register</button>-->
                 <a ng-show="!isUserLoggedIn" ui-sref="app.account.login">Login</a>
                 <a ng-show="isUserLoggedIn" ui-sref="app.user.profile">Edit Profile</a>
-                <a ng-show="isUserLoggedIn"ng-click="logout()">Logout</a>
+                <a ng-show="isUserLoggedIn" href="javascript:void(0)" ng-click="logout()">Logout</a>
 
             </div>
         </header>
