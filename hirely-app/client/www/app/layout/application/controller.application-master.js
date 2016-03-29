@@ -5,24 +5,24 @@
     'use strict';
 
     angular.module('hirelyApp.layout')
-    .directive("applicationFooter", function() {
-        return {
-            restrict: 'A',
-            templateUrl: 'app/layout/application/application-footer.tpl.html',
-            scope: true,
-            transclude : false
-        };
-    })
-    .directive("applicationHeader", function() {
-        return {
-            restrict: 'A',
-            templateUrl: 'app/layout/application/application-header.tpl.html',
-            controller: 'ApplicationHeaderController',
-            scope: true,
-            transclude : false
-        };
-    })
-    .controller('ApplicationMasterController', ['$stateParams', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController ])
+        .directive("applicationFooter", function () {
+            return {
+                restrict: 'A',
+                templateUrl: 'app/layout/application/application-footer.tpl.html',
+                scope: true,
+                transclude: false
+            };
+        })
+        .directive("applicationHeader", function () {
+            return {
+                restrict: 'A',
+                templateUrl: 'app/layout/application/application-header.tpl.html',
+                controller: 'ApplicationHeaderController',
+                scope: true,
+                transclude: false
+            };
+        })
+        .controller('ApplicationMasterController', ['$stateParams', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController])
 
     function ApplicationMasterController($stateParams, $scope, $rootScope, authService, UserService) {
 
@@ -34,9 +34,13 @@
          * isUserLoggedIn method will do the needfull and set all the required variabls
          */
         var auth = authService.isUserLoggedIn();
-        authService.syncCurrentUserFromDb();
+        if (auth) {
+            authService.syncCurrentUserFromDb();
+        } else {
+            $scope.go("app.account.register");
+        }
 
-        $scope.layoutModel = {business:null, noHeader:null};
+        $scope.layoutModel = {business: null, noHeader: null};
 
     };
 })();

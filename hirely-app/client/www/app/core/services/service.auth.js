@@ -13,7 +13,7 @@
         var currentUser;
         var currentUserID;
 
-        var service =  {
+        var service = {
             passwordLogin: passwordLogin,
             registerNewUser: registerNewUser,
             logout: logout,
@@ -34,25 +34,30 @@
 
         function getCurrentUser() {
             if (service.currentUser) {
+                console.log("getCurrentUser: found user in cache");
                 return service.currentUser;
             }
 
             //// Get currentUser cookie
             var user = $cookies.get("currentUser");
             if (user) {
+                console.log("getCurrentUser: found user in cookie");
                 user = JSON.parse(user);
                 service.currentUser = user;
                 service.currentUserID = user._id;
                 return user;
             }
 
+            console.log("getCurrentUser: did not find any user");
             return null;
         }
 
         function syncCurrentUserFromDb() {
+            console.log("syncCurrentUserFromDb");
             if (service.isUserLoggedIn()) {
-                console.log("User synced from db");
+                console.log("syncCurrentUserFromDb: Syncing user from db: " + service.currentUser.email);
                 return userService.getUserById(service.currentUserID, true).then(function (userNew) {
+                    console.log("syncCurrentUserFromDb: User synced from db: " + userNew.email);
                     setCurrentUser(userNew);
                     return userNew;
                 });
@@ -66,7 +71,7 @@
         }
 
         function passwordLogin(email, password) {
-            return userService.passwordLogin(email, password).then(function(user) {
+            return userService.passwordLogin(email, password).then(function (user) {
                 if (user) {
                     setCurrentUser(user);
                     return user;
@@ -75,7 +80,7 @@
         }
 
         function registerNewUser(userData) {
-            return userService.createNewUser(userData).then(function(user) {
+            return userService.createNewUser(userData).then(function (user) {
                 if (user) {
                     setCurrentUser(user);
                     return user;
@@ -84,7 +89,7 @@
         }
 
 
-        function logout(){
+        function logout() {
             removeCurrentUser();
         }
 
@@ -96,30 +101,30 @@
             $cookies.put("currentUser", JSON.stringify(userStripped));
         }
 
-        function setCurrentUser(user){
+        function setCurrentUser(user) {
 
-          //// set the rootScope currentUser
-          service.currentUser = user;
-          service.currentUserID = user._id;
+            //// set the rootScope currentUser
+            service.currentUser = user;
+            service.currentUserID = user._id;
 
-          //// if any of children scopes need to now whos logged in
-          //// let them know
-          $rootScope.$emit('UserLoggedIn', user);
-          $rootScope.$broadcast('UserLoggedIn', user);
+            //// if any of children scopes need to now whos logged in
+            //// let them know
+            $rootScope.$emit('UserLoggedIn', user);
+            $rootScope.$broadcast('UserLoggedIn', user);
 
-          service.updateCurrentUserCookie();
+            service.updateCurrentUserCookie();
         }
 
-        function removeCurrentUser(){
-          service.currentUser = undefined;
-          service.currentUserID = undefined;
+        function removeCurrentUser() {
+            service.currentUser = undefined;
+            service.currentUserID = undefined;
 
-          //// Set currentUser cookie
-          $cookies.remove("currentUser");
+            //// Set currentUser cookie
+            $cookies.remove("currentUser");
 
-          /// let all scopes the user is logged out
-          $rootScope.$emit('UserLoggedOut');
-          $rootScope.$broadcast('UserLoggedOut');
+            /// let all scopes the user is logged out
+            $rootScope.$emit('UserLoggedOut');
+            $rootScope.$broadcast('UserLoggedOut');
         }
 
         /**
@@ -128,18 +133,18 @@
          * @param  {object} user [User object se user Model]
          * @return {nothing}      [no return value]
          */
-        function updateCurrentUser(user){
+        function updateCurrentUser(user) {
             service.currentUser = user;
             service.updateCurrentUserCookie();
             $rootScope.$emit('UserDataChange', service.currentUser);
             $rootScope.$broadcast('UserDataChange', service.currentUser);
         }
-        
+
         function isUserLoggedIn() {
             return service.getCurrentUser() != null;
         }//// fun. isUserLoggedIn
 
-        function onAuth(callback){
+        function onAuth(callback) {
             callback(service.currentUser);
         }//// fun. onAuth
 
@@ -148,7 +153,7 @@
             service.updateCurrentUserCookie();
         }
 
-        function resetPassword(email){
+        function resetPassword(email) {
             var deferred = $q.defer();
 
             // firebaseRef.$resetPassword({'email':email})

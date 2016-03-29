@@ -5,7 +5,7 @@
 <div class="form-container user-profile-exp" ng-show="stepTwoLoaded">
     <div class="row">
         <div class="cards-wrapper">
-            <div class="card" ng-repeat="xpItem in xpItems">
+            <div class="card" ng-repeat="xpItem in workExperience">
                 <h3>{{xpItem.reportedOccTitle}}</h3>
                 <p>{{xpItem.formattedAddress}} - {{xpItem.city}}, {{xpItem.state}} </p>
                 <p ng-class="{'-xxxx-bg-danger':xpItem.conflict}">{{xpItem.dateStartMonth}}/{{xpItem.dateStartYear}} - <span ng-show="!xpItem.currentlyHere">{{xpItem.dateEndMonth}}/{{xpItem.dateEndYear}}</span><span ng-show="xpItem.currentlyHere">Current</span></p>

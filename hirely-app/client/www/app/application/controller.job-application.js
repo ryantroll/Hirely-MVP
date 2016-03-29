@@ -123,7 +123,13 @@
             $state.go('app.account.register');
         }
 
+        $scope.userIsSynced = false;
+        authService.syncCurrentUserFromDb().then(function() {
+            $scope.userIsSynced = true;
+        });
+        
         setSteps();
+        
 
 
       /**

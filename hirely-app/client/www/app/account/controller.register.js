@@ -48,7 +48,7 @@
                 delete $rootScope.nextState;
             }
             else{
-                $state.go('user.profile')
+                $state.go('app.user.profile')
             }
         }
 

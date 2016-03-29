@@ -167,7 +167,8 @@
       getTotalHours:getTotalHours,
       getDayHours:getDayHours,
       updateRanges:updateRanges,
-      getWeeklyAggregatedArray:getWeeklyAggregatedArray
+      getWeeklyAggregatedArray:getWeeklyAggregatedArray,
+      toFrontEndModel: toFrontEndModel
     };
 
     /**
@@ -177,21 +178,18 @@
      * @return {[promise]}              [description]
      */
     function save(availability, userId){
-      var deferred = $q.defer();
       var data = toDBDataModel(availability);
 
-      HirelyApiService.users(userId).patch({availability:data})
+      return HirelyApiService.users(userId).patch({availability:data})
       .then(
         function(user){
-          // console.log('Avilability saved')
-          // console.log(user)
+          return user;
         },
         function(err){
           console.log('error saving availablity');
           console.log(err);
         }
-      )
-      return deferred.promise;
+      );
     }//// fun. save
 
     /**

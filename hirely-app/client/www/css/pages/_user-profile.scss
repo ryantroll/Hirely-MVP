@@ -531,6 +531,7 @@ $day-button-size: 60px;
   #occupationChoicesSelect {
 	  background: lightgray;
 	  padding: 10px 0;
+	  min-height: 74px;
       margin: 0;
   }
 
@@ -582,9 +583,9 @@ $day-button-size: 60px;
     opacity:0.7;
 }
 
-
 .user-profile-exp{
 	min-height:400px;
+
 }//// .user-profile-exp
 
 .cards-wrapper{

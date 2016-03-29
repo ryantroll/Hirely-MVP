@@ -72,7 +72,7 @@
             }
             else{
                 console.log("2");
-                $state.go('user.profile')
+                $state.go('app.user.profile')
             }
         };
 

@@ -42,13 +42,13 @@ var myApp = angular.module('hirelyApp',
         controller: 'HomeCtrl'
       })
 
-      .state('user', {
+      .state('app.user', {
         url:'/user',
         templateUrl: 'app/user/user.html',
         controller: 'UserController',
         authRequired: true
       })
-      .state('user.profile', {
+      .state('app.user.profile', {
         url:'/profile',
         templateUrl: 'app/user/profile/user-profile.html',
         controller: 'UserProfileController',

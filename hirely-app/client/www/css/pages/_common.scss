@@ -123,6 +123,10 @@ header.hi-header.logged-in-header {
     color:$c-white;
 }
 
+header > .row {
+    margin: 0;
+}
+
 .form-content{
     width:100%;
     margin:0 auto;

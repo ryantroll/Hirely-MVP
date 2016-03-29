@@ -4,7 +4,7 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$state', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl ]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$state', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl]);
 
     function MasterCtrl($scope, $state, $window, authService, userService, geocodeService) {
 
@@ -12,30 +12,36 @@
         $scope.location = {};
         $scope.currentPlace = null;
         $scope.$state = $state;
-        
+
+        $scope.userIsSynced = false;
+        if ($scope.isUserLoggedIn) {
+            authService.syncCurrentUserFromDb().then(function() {
+                $scope.userIsSynced = true;
+            });
+        }
+
         /**
          * check on loged in user
          * isUserLoggedIn method will do the needfull and set all the required variabls
          */
-        
-        
-        $window.navigator.geolocation.getCurrentPosition(function(position){
+
+
+        $window.navigator.geolocation.getCurrentPosition(function (position) {
 
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
 
-            $scope.$apply(function() {
+            $scope.$apply(function () {
                     $scope.location.latitude = lat;
                     $scope.location.longitude = long;
-                    if(lat && long)
-                    {
+                    if (lat && long) {
                         geocodeService.getPlacebyLatLong(lat, long)
-                            .then(function(place) {
-                                if(place){
+                            .then(function (place) {
+                                if (place) {
                                     $scope.currentPlace = place;
-                                    $scope.$broadcast('currentPlaceChanged', { message: place });
+                                    $scope.$broadcast('currentPlaceChanged', {message: place});
                                 }
-                            }, function(err) {
+                            }, function (err) {
                                 deferred.reject(err);
                             });
                     }
@@ -53,7 +59,7 @@
             $scope.isUserLoggedIn = false;
         });
 
-        $scope.logout = function(){
+        $scope.logout = function () {
             authService.logout();
         };
     };
