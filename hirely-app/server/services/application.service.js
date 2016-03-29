@@ -124,6 +124,7 @@ var applicationService = {
                             users: users,
                             careerMatchScoress: careerMatchScoress
                         };
+
                         return returnObj;
                     });
 

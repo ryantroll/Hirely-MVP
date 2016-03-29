@@ -146,7 +146,7 @@
     .then(
       function(data){
 
-        // console.log(data)
+        console.log(data)
         $scope.applications = data.applications
         $scope.applicants = data.users;
         $scope.scores = data.careerMatchScoress;
@@ -399,10 +399,10 @@
       detailsModal.result
       .then(
         function(d){
-          console.log(d);
+
         },
         function(err){
-          console.log(err)
+
         }
       )
     }

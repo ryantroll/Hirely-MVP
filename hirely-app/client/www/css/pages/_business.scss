@@ -573,8 +573,12 @@ $candidat-menu-height:40px;
 }//// .business
 
 .candidate-details{
-    padding:2em 1em;
+    padding: 0;
+    padding-top:2em;
     position:relative;
+    @media screen and (min-width:$screen-sm-min){
+        padding-top:0;
+    }
     a.close{
         display:block;
         width:30px;
@@ -587,7 +591,12 @@ $candidat-menu-height:40px;
         font-size:0.85em;
     }
     header{
-        padding-bottom:2em;
+        padding: 0 1em;
+        // background-color:$c-hirely-blue;
+        display: none;
+        @media screen and (min-width:$screen-sm-min){
+            display: block;
+        }
         .menu{
             ul{
                 list-style: none;
@@ -596,7 +605,12 @@ $candidat-menu-height:40px;
             li{
                 float:left;
                 margin-right:1em;
-
+                height: 60px;
+                line-height: 60px;
+                display: none;
+                @media screen and (min-width:$screen-sm-min){
+                    display: block;
+                }
                 a{
                     color:$c-hirely-mid-gray;
                 }
@@ -604,11 +618,72 @@ $candidat-menu-height:40px;
             li:last-child{
                 margin-right: 0;
             }
+            li.active{
+                display:block;
+            }
 
         }
     }//// head
+    header.active{
+        background-color:$c-hirely-mid-gray;
+        .menu{
+            li{
+                a{
+                    color:$c-white;
+                }
+            }
+            li.active{
+                font-weight: 700;
+                border-bottom:4px solid $c-white;
+            }
+            li.all{
+                a{
+                    color:$c-hirely-red;
+                }
+                font-weight: 700;
+            }
+
+        }//// .menu
+
+    }//// header.active
+
+    .mobile-menu{
+        display: block;
+         @media screen and (min-width:$screen-sm-min){
+            display: none;
+        }
+
+        ul{
+            list-style: none;
+            padding-left:0;
+            margin:0 auto;
+            display: table;
+            width:auto;
+        }
+        li{
+            float:left;
+            margin-right:1em;
+            height: 60px;
+            line-height: 60px;
+            display:none;
+
+        }
+        li.active{
+            display: block;
+        }
+        li.arrow{
+            display:block;
+        }
+        li.arrow.right{
+            float:right;
+        }
+        li:last-child{
+            margin-right: 0;
+        }
+    }
 
     article{
+        padding:1em 1em;
         .box{
             border:none;
             padding:0;
@@ -659,6 +734,7 @@ $candidat-menu-height:40px;
                     margin: 0 auto;
                     margin-bottom: 1em;
 
+
                     @media screen and (min-width:$screen-sm-min){
                         margin: 0 0;
                         margin-bottom: 1em;
@@ -687,9 +763,15 @@ $candidat-menu-height:40px;
                     .legend{
                         font-size:0.8em;
                         font-weight: 600;
-                        float:left;
+                        float:none;
+                        text-align: center;
+                        display: block;
                         margin-left:0.5em;
                         line-height: 15px;
+                        @media screen and (min-width:$screen-sm-min){
+                            float:left;
+                            text-align: left;
+                        }
                     }
                 } //// .fit-scale
 
@@ -716,7 +798,41 @@ $candidat-menu-height:40px;
                         }
                     }
                 }//// .traits
+
+                .status{
+                    display: block;
+                    font-size:0.8em;
+                    font-weight: 700;
+                    text-align: center;
+                    @media screen and (min-width:$screen-sm-min){
+                        display: none;
+                    }
+
+                    .open{
+                        color:$c-hirely-blue;
+                    }
+                    .declined{
+                        color:$c-hirely-red;
+                    }
+                    .contacted, .hired{
+                        color:$c-hirely-green;
+                    }
+                }
             }//// .details
+
+            .details.center{
+                h4{
+                    text-align: center;
+                }
+                .fit-scale{
+                    margin: 0 auto;
+                    text-align: center;
+                    .legend{
+                        float:none;
+                        display: block;
+                    }
+                }
+            }
 
             .title{
                 padding:1em;
@@ -885,14 +1001,19 @@ $candidat-menu-height:40px;
                         text-align: center;
                         font-size:4em;
                         line-height: 74px;
+                        display: none;
                         @media screen and (min-width:$screen-sm-min){
                             font-size: 8em;
                             width:20%;
+                            display: block;
                         }
                     }
                     .exp{
-                        width:80%;
+                        width:100%;
                         float:left;
+                        @media screen and (min-width:$screen-sm-min){
+                            width:80%;
+                        }
                     }
                 }
                 li:last-child{

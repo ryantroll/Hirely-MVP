@@ -158,6 +158,13 @@
        */
       $scope.showTimeTable('mon', 0);
 
-      console.log($scope.applicants[$scope.detailsUserId].education)
+      /**
+       * Add details top menu interactivity
+       */
+      $scope.showSection = function(section){
+        $scope.activeSection = section;
+      }//// fun.showSection
+
+
   }//// controller
 })();
