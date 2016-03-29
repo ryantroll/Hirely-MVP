@@ -11,15 +11,24 @@ header.hi-header{
     @include drop-shadow;
     border-bottom:1px solid rgba(0,0,0,0.25);
 
+    a {
+        color: white;
+    }
+    a:hover {
+        color: $c-hirely-red;
+    }
+
     .logo{
-        padding-top:1em;
-        padding-left:1em;
-        /**
-         * below is to fix conflict with .logo class in different css file
-         */
-        @media screen and (max-width:$screen-sm-min){
-            padding-left:1em!important;
-        }
+        font-weight: bold;
+        font-size: 33px;
+        margin-left: 20px;
+    }
+
+    .nav-links a{
+
+        font-size: 25px;
+        margin: 0 40px 0 0;
+        line-height: 55px;
     }
 
     .user{
@@ -112,9 +121,7 @@ header.hi-header{
             border-bottom: 10px solid $c-hirely-gray;
         }
 
-        .buttons{
-            padding-top:10px;
-        }
+
     }//// .user
 }//// header
 
