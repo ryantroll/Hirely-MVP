@@ -351,42 +351,50 @@
      */
     $scope.occupationChoices = [];
     $scope.occupationState = "blankReportedOccTitle";
-    $scope.searchOccupations = function(){
-        return OccupationService.searchOccupations($scope.occupation.reportedOccTitle).then(function(matches){
+    $scope.handleReportedOccTitleChangeImmediate = function() {
+      console.log("Occ working...");
+      $scope.occupation.occTitle = "";
+      $scope.occupation.occId = "";
+      $scope.occupationChoices = [];
+      $scope.occupationState = 'working';
+    };
+
+    $scope.handleReportedOccTitleChangeDebounced= function() {
+      console.log("In debounce");
+      if ($scope.occupation.reportedOccTitle == undefined || $scope.occupation.reportedOccTitle.trim().length == 0) {
+        // Query is empty
+        $scope.occupationState = "blankReportedOccTitle";
+        console.log("No rep title");
+        $scope.$apply();
+      } else if ($scope.occupation.reportedOccTitle.trim().length < 4) {
+        // Query is not long enough
+        $scope.occupationState = "lowReportedOccTitle";
+        console.log("Low rep title");
+        $scope.$apply();
+      } else {
+        // Search for query
+        return OccupationService.searchOccupations($scope.occupation.reportedOccTitle).then(function (matches) {
           if (matches.length == 0) {
             $scope.occupationState = "notFound";
-            console.log("Empty choices");
           } else {
             $scope.occupationState = "choicesAvailable";
             $scope.occupationChoices = matches.slice(0, 5);
             console.log("Showing choices");
           }
+          // $scope.$apply(); // This doesn't need to be done because me thinks ajax?
         });
-    }; //// fun. searchOccupations
+      }
+    };
+    $scope.$watch('occupation.reportedOccTitle', $scope.handleReportedOccTitleChangeImmediate);
+    $scope.$watch('occupation.reportedOccTitle', _.debounce($scope.handleReportedOccTitleChangeDebounced, 1000));
 
     $scope.chooseOccupation = function(occupationChoice, $event) {
       $scope.occupation.occTitle = occupationChoice.occTitle;
       $scope.occupation.occId = occupationChoice.occId;
-      $scope.occupationChoices = [occupationChoice];
+      $scope.occupationChoice = occupationChoice;
       $scope.occupationState = "chosen";
       console.log("Chosen");
       $event.preventDefault();
-    };
-
-    $scope.handleReportedOccTitleChange = function() {
-      $scope.occupationState = "working";
-      if($scope.occupation.reportedOccTitle == undefined || $scope.occupation.reportedOccTitle.trim().length == 0) {
-        $timeout(function() {$scope.occupationState = "blankReportedOccTitle";}, 800);
-        console.log("No rep title");
-      } else if($scope.occupation.reportedOccTitle.trim().length < 4) {
-        $timeout(function() {$scope.occupationState = "lowReportedOccTitle";}, 800);
-        console.log("Low rep title");
-      } else {
-        $scope.occupation.occTitle = "";
-        $scope.occupation.occId = "";
-        $scope.occupationChoices = [];
-        $scope.customDebounce($scope.searchOccupations, 1500);
-      }
     };
 
       /**
