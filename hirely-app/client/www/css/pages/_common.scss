@@ -1,4 +1,10 @@
 $application-header-height: 60px;
+
+.dark-gray {
+    background-color: $c-hirely-mid-gray;
+    color:$c-white;
+}
+
 header.hi-header{
     height: $application-header-height;
     background-color:$c-hirely-gray;
