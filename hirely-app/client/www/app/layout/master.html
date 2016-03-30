@@ -1,19 +1,22 @@
 <div class="master-wrapper" ng-controller="MasterCtrl">
     <nav id="mobile-nav" ng-class="userType">
         <header class="hi-header" ng-class="{'logged-in-header':isUserLoggedIn}">
-            <!--<a class="logo pull-left" ui-sref="app.home">-->
-            <a class="logo" href="http://hirely.us">
-                <!--<img src="img/hirely_logo_small.png" alt="Hirely"/>-->
-                hirely
-            </a><!--//logo-->
+            <div class="row">
+                <!--<a class="logo pull-left" ui-sref="app.home">-->
+                <a class="logo" href="http://hirely.us">
+                    <!--<img src="img/hirely_logo_small.png" alt="Hirely"/>-->
+                    hirely
+                </a><!--//logo-->
 
-            <div class="pull-right nav-links" ng-show="!($state.is('app.account.login') || $state.is('app.account.register'))">
+                <div class="pull-right nav-links" ng-show="!($state.is('app.account.login') || $state.is('app.account.register'))">
 
-                <!--<button ng-show="!isUserLoggedIn" class="btn red" ui-sref="app.account.register">Register</button>-->
-                <a ng-show="!isUserLoggedIn" ui-sref="app.account.login">Login</a>
-                <a ng-show="isUserLoggedIn" ui-sref="app.user.profile">Edit Profile</a>
-                <a ng-show="isUserLoggedIn" href="javascript:void(0)" ng-click="logout()">Logout</a>
+                    <!--<button ng-show="!isUserLoggedIn" class="btn red" ui-sref="app.account.register">Register</button>-->
+                    <!--<a ng-show="!isUserLoggedIn" ui-sref="app.account.login">Login</a>-->
+                    <!--<a ng-show="isUserLoggedIn" ui-sref="app.user.profile">Edit Profile</a>-->
+                    <!--<a ng-show="isUserLoggedIn" href="javascript:void(0)" ng-click="logout()">Logout</a>-->
+                    <a ui-sref="app.home">My Dashboard</a>
 
+                </div>
             </div>
         </header>
 

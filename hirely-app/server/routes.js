@@ -1,3 +1,6 @@
+var requireDir = require('require-dir');
+var _ = require('lodash');
+
 /**
  * Created by labrina.loving on 9/18/2015.
  */
@@ -22,14 +25,7 @@ module.exports = function(app) {
     var favoriteApiRoutes = require('./routes/favorite.api.routes');
     var onetWebApiRoutes = require('./routes/onetWeb.api.routes');
 
-    // Make sure get requests to db are never cached in IE
-    app.get('/*',function(req,res,next){
-        res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-        res.header("Pragma", "no-cache");
-        res.header("Expires",0);
-        next(); // http://expressjs.com/guide.html#passing-route control
-    });
-
+    app.all('/api/v1/*', _.values(requireDir('./middlewares')));
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
     app.get('/api/search/cities/:addressQuery', getAddressFomQuery);

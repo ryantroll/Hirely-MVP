@@ -1,5 +1,7 @@
 var config = {};
 
+config.jwtSecret = "iwXye8tYZoGKPdGBckmm3QuX";
+
 config.googleMapsAPIKey = 'AIzaSyDXt_V8OyuoNph540_ZBTUSjx66QKLUuJc';
 
 config.traitify = {

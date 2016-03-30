@@ -5,6 +5,7 @@ var onetScoresService = require('../services/onetScores.service');
 var idMapModel = require('../models/useridmap.model');
 var matchingService = require('../services/matching.service');
 var traitifyService = require('../services/traitify.service');
+var config = require('../config');
 var bcrypt = require('bcrypt');
 
 
@@ -129,8 +130,12 @@ var userService = {
                 return null;
             }
 
+            // Check the password
             if (bcrypt.compareSync(password, user.password)) {
-                return user;
+                // Create a token
+                var jwt = require('jsonwebtoken');
+                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: '1h'});
+                return {token: token, user: user};
             } else {
                 console.log("US:passwordLogin: bad password for " + email);
                 return null;

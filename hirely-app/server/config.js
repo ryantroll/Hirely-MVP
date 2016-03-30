@@ -1,5 +1,7 @@
 var config = {};
 
+config.jwtSecret = "iwXye8tYZoGKPdGBckmm3QuX";
+
 config.googleMapsAPIKey = 'AIzaSyDXt_V8OyuoNph540_ZBTUSjx66QKLUuJc';
 
 config.traitify = {
@@ -11,8 +13,8 @@ config.traitify = {
 
 //config.mongoUri = 'mongodb://ip-172-31-25-53.ec2.internal:27000/hirely';
 //config.mongoUri = 'mongodb://db:27017/hirely';
-config.mongoUri = 'mongodb://localhost:27017/hirely';
-// config.mongoUri = 'mongodb://ec2-54-173-108-137.compute-1.amazonaws.com:27000/hirely';
+// config.mongoUri = 'mongodb://localhost:27017/hirely';
+config.mongoUri = 'mongodb://ec2-54-173-108-137.compute-1.amazonaws.com:27000/hirely';
 
 /**
  * [urlSeparator this will be used in slug generating as word separator]
