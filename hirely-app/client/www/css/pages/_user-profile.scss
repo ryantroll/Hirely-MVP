@@ -874,9 +874,9 @@ $day-button-size: 60px;
 		padding: 2em 0;
 	}
 	.hours{
-		width:50%;
+		width:100%;
 		margin:0 auto;
-		min-width: 300px;
+		max-width: 300px;
 		@media screen and (min-width:$screen-sm-min){
 			width:95%;
 			min-width:auto;
@@ -923,7 +923,7 @@ $day-button-size: 60px;
 	.btn-hour.active{
 		background-color:$light-grass-green;
 	}
-}
+}//// .timetable
 
 /**
  * Adding 5 col layout to bootstrap

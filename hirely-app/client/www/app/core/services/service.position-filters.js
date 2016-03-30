@@ -604,7 +604,7 @@
             }
         ]
       },
-      collage: {
+      college: {
         name: "Collage",
         dateCreated: new Date(),
         type: "computation",

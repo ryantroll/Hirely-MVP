@@ -126,7 +126,7 @@
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'noEducaiton')">No Education</a></li>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'highSchool')">High School</a></li>
-                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'collage')">College</a></li>
+                                <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'college')">College</a></li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -138,7 +138,7 @@
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3><i class="icon icon-users_group_icon"></i> Candidates <span ng-show="filtered.length > 0">({{filtered.length}})</span></h3>
-                            <div class="drop-down">
+                            <div class="drop-down visible-sm-block visible-md-block visible-lg-block">
                                 <a href="javascript:void(0);" ng-click="toggleSortMenu($event)">
                                     <span class="value">{{sortByLabel}}</span>
                                     <i class="icon glyphicon glyphicon-menu-down"></i>
@@ -204,7 +204,7 @@
                                         <p class="traits" ng-show="applicants[app.userId].personalityExams.length > 0">
                                             <strong>Top Traits</strong> <span ng-repeat="trait in applicants[app.userId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
                                         </p>
-                                        <div class="more-link"><a href="javascript:void(0);">View Details</a></div>
+                                        <div class="more-link"><a href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)">View Details</a></div>
                                     </div>
                                 </div>
                             </div>

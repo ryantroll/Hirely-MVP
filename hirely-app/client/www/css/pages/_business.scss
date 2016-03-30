@@ -561,4 +561,563 @@ $candidat-menu-height:40px;
             }//// .menu
         }//// .candidate
     }//// .candidates-list
+
+
+
+
 }//// .business
+
+.candidate-details{
+    padding: 0;
+    padding-top:2em;
+    position:relative;
+    @media screen and (min-width:$screen-sm-min){
+        padding-top:0;
+    }
+    a.close{
+        display:block;
+        width:30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        position:absolute;
+        top:5px;
+        right:5px;
+        font-size:0.85em;
+    }
+    header{
+        padding: 0 1em;
+        // background-color:$c-hirely-blue;
+        display: none;
+        @media screen and (min-width:$screen-sm-min){
+            display: block;
+        }
+        .menu{
+            ul{
+                list-style: none;
+                padding-left:0;
+            }
+            li{
+                float:left;
+                margin-right:1em;
+                height: 60px;
+                line-height: 60px;
+                display: none;
+                @media screen and (min-width:$screen-sm-min){
+                    display: block;
+                }
+                a{
+                    color:$c-hirely-mid-gray;
+                }
+            }
+            li:last-child{
+                margin-right: 0;
+            }
+            li.active{
+                display:block;
+            }
+
+        }
+    }//// head
+    header.active{
+        background-color:$c-hirely-mid-gray;
+        .menu{
+            li{
+                a{
+                    color:$c-white;
+                }
+            }
+            li.active{
+                font-weight: 700;
+                border-bottom:4px solid $c-white;
+            }
+            li.all{
+                a{
+                    color:$c-hirely-red;
+                }
+                font-weight: 700;
+            }
+
+        }//// .menu
+
+    }//// header.active
+
+    .mobile-menu{
+        display: block;
+         @media screen and (min-width:$screen-sm-min){
+            display: none;
+        }
+
+        ul{
+            list-style: none;
+            padding-left:0;
+            margin:0 auto;
+            display: table;
+            width:auto;
+        }
+        li{
+            float:left;
+            margin-right:1em;
+            height: 60px;
+            line-height: 60px;
+            display:none;
+
+        }
+        li.active{
+            display: block;
+        }
+        li.arrow{
+            display:block;
+        }
+        li.arrow.right{
+            float:right;
+        }
+        li:last-child{
+            margin-right: 0;
+        }
+    }
+
+    article{
+        padding:1em 1em;
+        .box{
+            border:none;
+            padding:0;
+            margin:0;
+            background-color:$c-white;
+            margin-bottom:1em;
+            width:100%;
+            @include border-radius(4px);
+            overflow: hidden;
+            // padding:1em;
+
+            .image{
+                padding: 1em 0 1em 1em;
+                .image-wrapper{
+                    width:80px;
+                    height: 80px;
+                    @include border-radius(50%);
+                    overflow: hidden;
+                    margin: 0 auto;
+                    > img{
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }//// .image-wrapper
+                .date{
+                    font-size:0.8em;
+                    text-align: center;
+                }
+            }//// .image
+
+            .details{
+                padding:1em 1em 1em 1em;
+                h4{
+                    font-size:1.5em;
+                    font-weight: 600;
+                    text-align:center;
+                    @media screen and (min-width:$screen-sm-min){
+                        text-align: inherit;
+                    }
+                }
+
+                .fit-scale{
+                    display:table;
+                    width:auto;
+                    height: 15px;
+                    margin: 0 auto;
+                    margin-bottom: 1em;
+
+
+                    @media screen and (min-width:$screen-sm-min){
+                        margin: 0 0;
+                        margin-bottom: 1em;
+                    }
+
+                    i{
+                        display: block;
+                        width:15px;
+                        height: 15px;
+                        float:left;
+                        margin-right:1px;
+                        background-color:$c-hirely-light-gray;
+                    }
+                    i.great{
+                        background-color:$c-hirely-green;
+                    }
+                    i.good{
+                        background-color:$c-hirely-green;
+                    }
+                    i.poor{
+                        background-color:$c-hirely-red;
+                    }
+                    i.ok{
+                        background-color:$c-hirely-yellow;
+                    }
+                    .legend{
+                        font-size:0.8em;
+                        font-weight: 600;
+                        float:none;
+                        text-align: center;
+                        display: block;
+                        margin-left:0.5em;
+                        line-height: 15px;
+                        @media screen and (min-width:$screen-sm-min){
+                            float:left;
+                            text-align: left;
+                        }
+                    }
+                } //// .fit-scale
+
+                .answers{
+                    .answer{
+                        b{
+                            font-weight: normal;
+                            text-transform:uppercase;
+                        }
+                    }
+                }//// .answers
+
+                .traits{
+                    font-weight: 600;
+                    font-size:0.8em;
+                    strong{
+                        display: block;
+                        clear: both;
+                        font-weight: normal;
+
+                        @media screen and (min-width:$screen-sm-min){
+                            display: inline-block;
+                            width:100px;
+                        }
+                    }
+                }//// .traits
+
+                .status{
+                    display: block;
+                    font-size:0.8em;
+                    font-weight: 700;
+                    text-align: center;
+                    @media screen and (min-width:$screen-sm-min){
+                        display: none;
+                    }
+
+                    .open{
+                        color:$c-hirely-blue;
+                    }
+                    .declined{
+                        color:$c-hirely-red;
+                    }
+                    .contacted, .hired{
+                        color:$c-hirely-green;
+                    }
+                }
+            }//// .details
+
+            .details.center{
+                h4{
+                    text-align: center;
+                }
+                .fit-scale{
+                    margin: 0 auto;
+                    text-align: center;
+                    .legend{
+                        float:none;
+                        display: block;
+                    }
+                }
+            }
+
+            .title{
+                padding:1em;
+                h5{
+                    font-weight: 600;
+                    font-size:1.2em;
+                    text-transform: uppercase;
+                    margin-top:0;
+                    margin-bottom: 0;
+                }
+                .info{
+                        display: block;
+                        width:22px;
+                        height: 22px;
+                        float:right;
+                        @include border-radius(11px);
+                        background-color:$c-hirely-red;
+                        color:$c-white;
+                        text-align: center;
+                        font-weight: 700;
+                        font-size:0.8em;
+                        line-height: 22px;
+                    }
+            }//// .title
+            .title.blue{
+                background-color:$c-hirely-blue;
+                color:$c-white;
+                h5{
+                    font-weight:normal;
+                    font-size:1em;
+                }
+            }
+
+            .prescreen{
+                padding: 0 1em 1em 1em;
+                ul{
+                    list-style: none;
+                }
+                li{
+                    margin-bottom: 2em;
+                    b{
+                        display: block;
+                        margin-bottom:1em;
+                    }
+                }
+                li:last-child{
+                    margin-bottom: none;
+                }
+            }//// .prescreen
+
+            .personality{
+                padding: 0 1em 1em 1em;
+                .head{
+                    text-align: center;
+                    font-size: 1.4em;
+                    padding-bottom:1em;
+
+                    .Visionary{
+                        color:#953ecf;
+                    }
+                    .Mentor{
+                        color:#e62f34;
+                    }
+                    .Analyzer{
+                        color:#369ee2;
+                    }
+                    .Action-Taker{
+                        color:#e05d26
+                    }
+                    .Iventory{
+                        color:#59DDB0;
+                    }
+                    .Naturalist{
+                        color:#4eb73d;
+                    }
+                    .Planner{
+                        color:#f3c927;
+                    }
+
+
+                }//// .head
+                .traits{
+                    .col{
+                        display: block;
+                        width:50%;
+                        float:left;
+                        text-align: center;
+                        div{
+                            display:block;
+                            margin-bottom: 1em;
+                        }
+                        strong{
+                            display:block;
+                            margin-bottom: 1em;
+                        }
+                    }
+                    .col:first-child{
+                        border-right:1px solid $c-hirely-mid-gray;
+                    }
+                }
+            }//// .personality
+
+            .timetable{
+                padding: 0 1em 1em 1em;
+                .days-list{
+
+                    li{
+                        position:relative;
+                        width:50px;
+                        height: 50px;
+                        line-height: 50px;
+                        margin-bottom:20px;
+                        a{
+
+                            height: 50px;
+                        }
+
+                    }
+                    li.active:after{
+                        position:absolute;
+                        bottom:-10px;
+                        left:50%;
+                        margin-left:-10px;
+                        display: block;
+                        content:" ";
+                        width: 0;
+                        height: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-bottom: 10px solid $c-hirely-mid-gray;
+                    }
+                }
+            }//// .timetable
+
+            .experience{
+                padding: 0 1em 1em 1em;
+                ul{
+                    width:100%;
+                    list-style: none;
+                    padding-left: 0;
+                }
+                li{
+                    display:block;
+                    width:100%;
+                    border-bottom:1px solid $c-hirely-light-gray;
+                    padding-bottom:1em;
+                    margin-bottom: 1em;
+
+                    h6{
+                        font-weight: bold;
+                        font-size:1.3em;
+                        margin-top:0;
+                        margin-bottom:5px;
+
+                        span{
+                            font-weight: normal;
+                        }
+                    }
+                    .address{
+                        margin-bottom: 1em;
+                    }
+                    .icon{
+                        min-height: 74px;
+                        width:10%;
+                        float:left;
+                        text-align: center;
+                        font-size:4em;
+                        line-height: 74px;
+                        display: none;
+                        @media screen and (min-width:$screen-sm-min){
+                            font-size: 8em;
+                            width:20%;
+                            display: block;
+                        }
+                    }
+                    .exp{
+                        width:100%;
+                        float:left;
+                        @media screen and (min-width:$screen-sm-min){
+                            width:80%;
+                        }
+                    }
+                }
+                li:last-child{
+                    border-bottom:none;
+                    margin-bottom: 0;
+                }
+            }//// .experience
+
+            .actions{
+                padding:1em;
+                min-height: 67px;
+
+                .menu{
+                    width:auto;
+                    display: none;
+                    height: $candidat-menu-height;
+                    position:absolute;
+                    left:50%;
+                    margin-left:-80px;
+
+                    @media screen and (min-width:$screen-sm-min){
+                        display: table;
+                    }
+
+                    .inner{
+                        height: $candidat-menu-height;
+                        @include border-radius();
+                        overflow: hidden;
+                    }
+
+                    .action{
+                        height: $candidat-menu-height;
+                        width:80px;
+                        background-color:$c-hirely-green;
+                        color:$c-white;
+                        text-align: center;
+                        line-height: $candidat-menu-height;
+                        float:left;
+                    }
+                    a{
+                        float:left;
+                        display: block;
+                        width:$candidat-menu-height;
+                        height: $candidat-menu-height;
+                        line-height: $candidat-menu-height;
+                        text-align: center;
+                        color:$c-white;
+
+                    }
+                    .drop{
+                        background-color:$c-hirely-light-gray;
+                        font-size:1.3em;
+                    }
+                    .execlude{
+                        background-color:$c-hirely-red;
+                        font-size:1.6em;
+                    }
+                    ul{
+                        display: block;
+                        padding-left:0;
+                        list-style: none;
+                        width:120px;
+                        position:absolute;
+                        top:$candidat-menu-height;
+                        left:0;
+                        z-index: 101;
+                        @include drop-shadow();
+
+                        li{
+                            display: block;
+                            width:100%;
+                            height: $candidat-menu-height;
+
+                            a{
+                                display: block;
+                                width:100%;
+                                height: $candidat-menu-height;
+                                line-height: $candidat-menu-height;
+                                padding: 0 10px;
+                                background-color:$c-hirely-light-gray;
+                                color:$c-hirely-mid-gray;
+                                border-bottom:1px solid $c-white;
+                            }
+                            a:hover{
+                                background-color: $c-white;
+                                color:$c-hirely-red;
+                            }
+                        }
+                        li:last-child{
+                            a{
+                                border-bottom:none;
+                            }
+                        }
+                        li.active{
+                            a{
+                                background-color:$c-hirely-red;
+                                color:$c-white;
+                            }
+                        }
+                    }//// ul
+                }//// .menu
+            }//// .actions
+        }//// .box
+
+        .arrows{
+            button{
+                width:46%;
+            }
+        }//// .arrows
+    }//// article
+}//// candidate-details
+

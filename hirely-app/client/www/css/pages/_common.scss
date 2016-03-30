@@ -199,6 +199,10 @@ header > .row {
     background-color:$c-hirely-navy;
     color:$c-white;
 }
+.btn.mid-gray{
+    background-color:$c-hirely-mid-gray;
+    color:$c-white;
+}
 .text-red{
     color:$c-hirely-red;
 }
@@ -207,4 +211,13 @@ header > .row {
 }
 .text-purple{
     color:$c-hirely-purple;
+}
+
+.modal-dialog.modal-full{
+    width:95%;
+}
+.gray{
+    .modal-content{
+        background-color:$c-hirely-gray;
+    }
 }
