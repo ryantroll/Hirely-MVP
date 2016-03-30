@@ -116,6 +116,7 @@ var applicationService = {
                 }
 
                 return userModel.find({_id: {$in: userIds}, queuedForMetricUpdate: false}).then(function (users) {
+
                     return careerMatchScoresModel.find({userId: {$in: userIds}, occId: position.occId}).then(function (careerMatchScoress) {
                         console.log("CMS: ");
                         console.dir(careerMatchScoress.length);

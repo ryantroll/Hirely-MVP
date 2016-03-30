@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', CandidateDetailsController]);
+  angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'UserService', 'JobApplicationService', CandidateDetailsController]);
 
 
-  function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService) {
+  function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, UserService, JobApplicationService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     $scope.days = AvailabilityService.days;
@@ -145,8 +145,7 @@
 
       $scope.preApplication = function(){
         var newIndex = $scope.detailsIndex -1;
-
-        if(newIndex > 0){
+        if(newIndex >= 0){
           $scope.detailsIndex = newIndex;
           $scope.detailsApp = $scope.applications[newIndex];
           $scope.detailsUserId = $scope.detailsApp.userId;
@@ -164,6 +163,11 @@
       $scope.showSection = function(section){
         $scope.activeSection = section;
       }//// fun.showSection
+
+      $scope.formatPhoneNumber = function(phone){
+        var p = phone.replace('+1', '');
+        return UserService.formatPhone(p);
+      }
 
 
   }//// controller

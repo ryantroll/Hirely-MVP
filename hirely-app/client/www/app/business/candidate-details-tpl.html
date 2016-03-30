@@ -1,6 +1,7 @@
 <div class="candidate-details clearfix">
-    <a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a>
+
     <header ng-class="{active:activeSection}">
+        <a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a>
         <div class="menu clearfix">
             <ul>
                 <li ng-class="{active:activeSection === 'pre-screen'}"><a href="javascript:void(0);" ng-click="showSection('pre-screen')">Pre-Screen</a></li>
@@ -14,7 +15,7 @@
     </header>
     <article>
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-sm-8">
                 <div id="left-column">
 
                     <div class="box" ng-show="!activeSection">
@@ -205,7 +206,7 @@
             </div><!--col-->
 
 
-            <div class="col-sm-3 visible-sm-block visible-md-block visible-lg-block">
+            <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
 
                 <div class="box" ng-show="activeSection">
                     <div class="row">
@@ -243,6 +244,12 @@
                     <div class="title blue">
                         <h5>Candidate Status: {{statusLabels[detailsApp.status]}}</h5>
                     </div>
+                    <div class="contacts">
+                        <ul>
+                            <li><a href="tel:{{applicants[detailsUserId].mobile}}"><i class="icon green glyphicon glyphicon-earphone"></i>{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></li>
+                            <li><a href="mailto:{{applicants[detailsUserId].email}}"><i class="icon blue glyphicon glyphicon-envelope"></i>{{applicants[detailsUserId].email}}</a></li>
+                        </ul>
+                    </div>
                     <div class="actions clearfix">
                         <div class="menu">
                             <div class="inner">
@@ -263,8 +270,8 @@
                 </div><!--box-->
 
                 <div class="arrows clearfix">
-                    <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-disabled="detailsIndex === 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
-                    <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-disabled="detailsIndex <= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
+                    <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-disabled="detailsIndex == 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
+                    <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-disabled="detailsIndex >= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
                 </dvi><!--arrows-->
             </div><!--col-->
 

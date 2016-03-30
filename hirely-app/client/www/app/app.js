@@ -21,11 +21,11 @@ var myApp = angular.module('hirelyApp',
     'hirelyApp.core',
     'hirelyApp.account',
     'ngSanitize',
-    'multiStepForm', 
+    'multiStepForm',
     'ngCookies'
 
   ])
-    
+
   .config(function ($stateProvider, $urlRouterProvider) {
 
     $stateProvider
@@ -52,6 +52,12 @@ var myApp = angular.module('hirelyApp',
         url:'/profile',
         templateUrl: 'app/user/profile/user-profile.html',
         controller: 'UserProfileController',
+        authRequired: true
+      })
+      .state('app.user.dashboard', {
+        url:'/dashboard',
+        templateUrl: 'app/user/user-dashboard.html',
+        controller: 'UserDashboardController',
         authRequired: true
       })
       .state('application', {
