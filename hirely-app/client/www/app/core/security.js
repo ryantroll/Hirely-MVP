@@ -15,9 +15,9 @@
      * that we can no longer view.
      */
          .run(['$rootScope', '$state', 'AuthService', 'UserService', 'loginRedirectPath',
-            function ($rootScope, $state, AuthService, UserService, loginRedirectPath) {
+            function ($rootScope, $state, authService, userService, loginRedirectPath) {
                 // watch for login status changes and redirect if appropriate
-                AuthService.onAuth(check);
+                authService.onAuth(check);
 
                 // some of our routes may reject resolve promises with the special {authRequired: true} error
                 // this redirects to the login page whenever that is encountered
@@ -28,11 +28,11 @@
                 });
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-                    AuthService.onAuth(check);
-                    // AuthService.isUserLoggedIn();
+                    authService.onAuth(check);
+                    // authService.isUserLoggedIn();
                     
-                    if (toState.authRequired && !AuthService.isUserLoggedIn()){
-                        // User isn’t authenticated
+                    if (toState.authRequired && !authService.isUserLoggedIn()){
+                        // User isnï¿½t authenticated
                         $state.transitionTo(loginRedirectPath);
                         event.preventDefault();
                     }

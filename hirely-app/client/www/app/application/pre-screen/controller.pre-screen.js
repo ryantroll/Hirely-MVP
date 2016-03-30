@@ -13,17 +13,7 @@
 	.controller('PreScreenController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', 'JobApplicationService', PreScreenController]);
 
 
-	function PreScreenController($scope, $stateParams, multiStepFormInstance, UserService, AuthService, $timeout, JobApplicationService) {
-
-		/**
-		 * $scope.business, postion is inhereated from controller.job-application.js
-		 */
-
-
-		/**
-		 * bring the vaiant object to me from parent scope contoller.job-application.js
-		 */
-		var position = angular.copy($scope.position);
+	function PreScreenController($scope, $stateParams, multiStepFormInstance, userService, authService, $timeout, JobApplicationService) {
 
 		$scope.dayDiff = function (d1, d2) {
 			var months;
@@ -39,67 +29,83 @@
 			return Math.round((d2.getHours() - d1.getHours()) / 24)
 		};
 
-		$scope.daysUntilReapply = function() {
-			if ($scope.jobApplication.application) {
-				var dayDiff = $scope.dayDiff($scope.jobApplication.application.createdAt)
-				var daysUntilReapply = 30 - dayDiff;
-				if (daysUntilReapply < 0) {
-					daysUntilReapply = 0;
-				}
-				return daysUntilReapply;
-			} else {
-				return 0;
-			}
-		}();
+		$scope.initPrescreen = function() {
 
-		$scope.isApplyEligible = function() {
-			return $scope.daysUntilReapply == 0;
-		}();
-
-		$scope.$parent.blockFinished = !$scope.isApplyEligible;
-
-		if(angular.isDefined($scope.jobApplication.application) && null !== $scope.jobApplication.application){
-
-			$scope.model = {
-				prescreenAnswers: angular.copy($scope.jobApplication.application.prescreenAnswers)
-			}
-
-
-		}//// if application in granddaddy
-		else{
 			/**
-			 * initialize the data model to be saved in DB
-			 * @type {Object}
+			 * bring the vaiant object to me from parent scope contoller.job-application.js
 			 */
-			$scope.model = {
-				prescreenAnswers: angular.copy(position.prescreenQuestions)
-			};
+			var position = angular.copy($scope.position);
 
 
-		}/// if applicaiton in granddaddy else
+			$scope.daysUntilReapply = function () {
+				if ($scope.jobApplication.application) {
+					var dayDiff = $scope.dayDiff($scope.jobApplication.application.createdAt)
+					var daysUntilReapply = 30 - dayDiff;
+					if (daysUntilReapply < 0) {
+						daysUntilReapply = 0;
+					}
+					return daysUntilReapply;
+				} else {
+					return 0;
+				}
+			}();
 
-		/**
-		 * Remove the _id property from answers array, if kept and sent with post request will create problem
-		 */
-		for(var x=0; x<$scope.model.prescreenAnswers.length; x++){
-			delete $scope.model.prescreenAnswers[x]._id;
+			$scope.isApplyEligible = function () {
+				return $scope.daysUntilReapply == 0;
+			}();
+
+			$scope.$parent.blockFinished = !$scope.isApplyEligible;
+
+			if (angular.isDefined($scope.jobApplication.application) && null !== $scope.jobApplication.application) {
+
+				$scope.model = {
+					prescreenAnswers: angular.copy($scope.jobApplication.application.prescreenAnswers)
+				}
+
+
+			}//// if application in granddaddy
+			else {
+				/**
+				 * initialize the data model to be saved in DB
+				 * @type {Object}
+				 */
+				$scope.model = {
+					prescreenAnswers: angular.copy(position.prescreenQuestions)
+				};
+
+
+			}/// if applicaiton in granddaddy else
+
+			/**
+			 * Remove the _id property from answers array, if kept and sent with post request will create problem
+			 */
+			for (var x = 0; x < $scope.model.prescreenAnswers.length; x++) {
+				delete $scope.model.prescreenAnswers[x]._id;
+			}
+
+			$timeout(function () {
+				window.scrollTo(0, 0);
+			});
+
+			/**
+			 * Waite for 1 sec to check the stepOnLoaded
+			 * waiting time is added to prevent the undefined value for this var that happen occasionally
+			 */
+			$timeout(function () {
+				if (!$scope.stepFourLoaded) {
+					// $scope.user = angular.copy(authService.currentUser);
+					$scope.stepFourLoaded = true;
+				}
+
+			}, 1000);/// $timeout
 		}
 
-		$timeout(function() {
-			window.scrollTo(0 ,0);
-		});
-
-		/**
-		 * Waite for 1 sec to check the stepOnLoaded
-		 * waiting time is added to prevent the undefined value for this var that happen occasionally
-		 */
-		$timeout(function(){
-			if(!$scope.stepFourLoaded){
-				// $scope.user = angular.copy(AuthService.currentUser);
-				$scope.stepFourLoaded = true;
+		$scope.$watch('$parent.userIsSynced', function(newValue, oldValue) {
+			if (newValue == true) {
+				console.log("pre.$parent.userIsSynced = true;");
+				$scope.initPrescreen();
 			}
-
-		}, 1000);/// $timeout
+		});
 
 		//// wait for destroy event to update data
 		$scope.$on('$destroy', function(event){
@@ -111,17 +117,17 @@
 			/**
 			 * Make sure user is logged in before you do update
 			 */
-			if(AuthService.isUserLoggedIn()){
+			if(authService.isUserLoggedIn()) {
 				/**
 				 * User is authenticated create application data
 				 */
 
-				var application = new JobApplication(
-					AuthService.currentUserID,
-					position._id,
-					 1, //// set status to 1
-					 angular.copy($scope.model.prescreenAnswers)
-				);
+				var application = {
+					userId: authService.currentUserID,
+					positionId: position._id,
+					status: 1, //// set status to 1
+					prescreenAnswers: angular.copy($scope.model.prescreenAnswers)
+				};
 
 				JobApplicationService.save(application)
 				.then(

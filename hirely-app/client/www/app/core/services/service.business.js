@@ -1,26 +1,11 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.manager')
+    angular.module('hirelyApp.account')
         .service('BusinessService', ['$q','HirelyApiService', BusinessService]);
 
      function BusinessService( $q, HirelyApiService) {
 
-        // var deferred = $q.defer();
-        //
-        this.testObj = function testObj(){
-
-          var obj = {
-            name : 'zouhir',
-            testObje: {
-              anotherName: [{name: 'zouuhir'}, {name2: 'zouhir2'}],
-              ObjectNested: {
-                againName: 'Zouhir'
-              }
-            }
-          };
-          // businessRef.push(obj);
-        };
 
         this.getWorkTypeTitle = function(type){
           var types = [
@@ -179,15 +164,15 @@
                      return left.length
                  case "sum":
                      var sum = 0;
-                     for (var e of left) {
-                         sum += e;
-                     }
+                     left.forEach(function(element) {
+                         sum += element;
+                     });
                      return sum;
                  case "avg":
                      var sum = 0;
-                     for (var e of left) {
-                         sum += e;
-                     }
+                     left.forEach(function(element) {
+                         sum += element;
+                     });
                      return sum / left.length;
                  case "slice":
                      var arr = left;
@@ -202,15 +187,15 @@
                  // A special slice for availability arrays, which slices based on value instead of index
                  case "sliceAvail":
                      var avail = [];
-                     for (var hour of avail) {
+                     left.forEach(function(hour) {
                          if (right.start != null && hour < right.start) {
-                             continue;
+                             return;
                          }
                          if (right.stop != null && hour >= right.stop) {
-                             continue;
+                             return;
                          }
                          avail.push(hour);
-                     }
+                     });
                      return avail;
              }
          };
@@ -229,9 +214,9 @@
                      // const = attribute of a variable, resolve attribute
                      var parts = filter.value.split('.');
                      var result = context[parts.shift()];
-                     for (var part of parts) {
+                     parts.forEach(function(part) {
                          result = result[part];
-                     }
+                     });
                      return result;
                  case 'computation':
                      // Note:  An operand can be nested filter.
@@ -240,10 +225,11 @@
                          // Is an array operation, like sum or avg
                          return this.filterBasicCalculator(filter.operator, result, filter.options);
                      } else {
-                         for (var operand of filter.operands.slice(1)) {
-                             var intermediateResult = this.filterCompoundCalculator(operand, context);
-                             result = this.filterBasicCalculator(filter.operator, result, intermediateResult);
-                         }
+                         var self = this;
+                         filter.operands.slice(1).forEach(function(operand) {
+                             var intermediateResult = self.filterCompoundCalculator(operand, context);
+                             result = self.filterBasicCalculator(filter.operator, result, intermediateResult);
+                         });
                      }
              }
              console.log("CPBSQFE9");

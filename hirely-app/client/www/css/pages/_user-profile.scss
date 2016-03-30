@@ -11,6 +11,7 @@ $day-button-size: 60px;
 		.steps{
 			min-height: $header-height;
 			@include drop-shadow;
+			width: 100%;
 
 			> ul{
 				list-style:none;
@@ -531,13 +532,27 @@ $day-button-size: 60px;
 	  background: lightgray;
 	  padding: 10px 0;
 	  min-height: 74px;
+      margin: 0;
   }
 
-  #occupationChoicesSelect button {
+  #occupationChoicesSelect button.fullwidth {
 	  background: white;
 	  padding: 10px 0;
 	  margin: 4px 0;
 	  border-radius: 5px;
+  }
+
+  #occupationChoicesSelect button.fullwidth.active {
+      background: $light-grass-green;
+  }
+
+  .occ-more-button {
+	  background: white;
+	  width: 100%;
+	  padding: 0;
+	  font-size: 18px;
+	  color: gray;
+	  line-height: 15px;
   }
 }//// .hirely-form
 
@@ -568,9 +583,9 @@ $day-button-size: 60px;
     opacity:0.7;
 }
 
-
 .user-profile-exp{
 	min-height:400px;
+
 }//// .user-profile-exp
 
 .cards-wrapper{

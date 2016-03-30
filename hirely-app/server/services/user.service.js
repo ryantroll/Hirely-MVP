@@ -98,7 +98,13 @@ var userService = {
      */
     createNewUser: function (userObj) {
         var salt = bcrypt.genSaltSync(10);
-        userObj.password = bcrypt.hashSync(userObj.password, salt);
+
+        try {
+            userObj.email = userObj.email.toLowerCase();
+            userObj.password = bcrypt.hashSync(userObj.password, salt);
+        } catch(err) {
+            console.log("US:createNewUser: password or email is malformed for " + userObj.email)
+        }
         var newUser = new userModel(userObj);
 
         /**
@@ -108,19 +114,25 @@ var userService = {
     },
 
     passwordLogin: function (email, password) {
+        try {
+            email = email.toLowerCase();
+        } catch(err) {
+            console.log("US:passwordLogin: email is malformed: " + email)
+        }
         return userModel.findOne({email: email}).then(function (user) {
             if (!user) {
-                console.log("passwordLogin: user not found for " + email);
+                console.log("US:passwordLogin: user not found for " + email);
                 return null;
             }
             if (!user.password) {
-                console.log("passwordLogin: user does not have a password");
+                console.log("US:passwordLogin: user does not have a password");
                 return null;
             }
+
             if (bcrypt.compareSync(password, user.password)) {
                 return user;
             } else {
-                console.log("passwordLogin: bad password for " + email);
+                console.log("US:passwordLogin: bad password for " + email);
                 return null;
             }
         });

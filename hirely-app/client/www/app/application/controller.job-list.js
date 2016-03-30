@@ -10,7 +10,7 @@
   angular.module('hirelyApp').controller('JobListController', ['$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', JobListController]);
 
 
-  function JobListController($scope, $stateParams, $state, AuthService, UserService, JobApplicationService, HirelyApiService) {
+  function JobListController($scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
 
     delete $scope.layoutModel.noHeader;
     delete $scope.layoutModel.business;

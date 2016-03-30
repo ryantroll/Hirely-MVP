@@ -3,11 +3,10 @@
         <div class="job-title" ng-show="layoutModel.noHeader">
             <h4>Applying for {{layoutModel.position}} position at {{layoutModel.business}} - {{layoutModel.location}}</h4>
         </div>
-        <div ng-show="!layoutModel.noHeader" application-header></div>
 
         <div ui-view><!--main content--> </div>
 
-        <div ng-show="!layoutModel.noHeader" application-footer></div>
+        
     </div>
 
 </div>

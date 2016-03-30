@@ -6,7 +6,7 @@
 
   angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'AuthService', 'UserService', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobPositionController]);
 
-  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, AuthService, UserService, BusinessService, AvailabilityService, FavoritesService, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, authService, userService, BusinessService, AvailabilityService, FavoritesService, uiGmapGoogleMapApi, uiGmapIsReady) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -17,7 +17,7 @@
 
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-        $scope.isAuth = AuthService.isUserLoggedIn();
+        $scope.isAuth = authService.isUserLoggedIn();
 
         if ($scope.isAuth && $rootScope.addFavoriteAfterLogin == true) {
           $scope.favoriteClick();
@@ -171,7 +171,7 @@
         /**
          * find if user favorite this job
          */
-        FavoritesService.getFavorite({type:'position', userId:AuthService.currentUserID, positionId: $scope.position._id})
+        FavoritesService.getFavorite({type:'position', userId:authService.currentUserID, positionId: $scope.position._id})
         .then(
           function(found){
             if(Array.isArray(found) && found.length > 0){
@@ -210,7 +210,7 @@
     }
 
     $scope.otherPositionClick = function(slug){
-      $state.go('job.position', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:slug});
+      $state.go('app.job.position', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:slug});
     }
 
     /**
@@ -248,9 +248,9 @@
     }//// fun. getIcon
 
     $scope.favoriteClick = function(){
-      if($scope.isAuth && AuthService.currentUserID){
+      if($scope.isAuth && authService.currentUserID){
         var favObj = {
-          userId: AuthService.currentUserID,
+          userId: authService.currentUserID,
           positionId: $scope.position._id,
           locationId: $scope.location._id,
           businessId: $scope.business._id,
@@ -280,7 +280,7 @@
          */
         $rootScope.nextState = {state:$state.current.name, params:$state.params};
         $rootScope.addFavoriteAfterLogin = true;
-        $state.go('account.login');
+        $state.go('app.account.login');
       }
     }//// fun. favorite click
 

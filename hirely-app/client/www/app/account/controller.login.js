@@ -7,9 +7,9 @@
     angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', LoginController ]);
 
 
-    function LoginController($scope, $rootScope, $state, $stateParams, AuthService, userService) {
-        var authService = AuthService;
-        var vm = this;
+    function LoginController($scope, $rootScope, $state, $stateParams, authService, userService) {
+
+
         $scope.error = '';
         $scope.user = {email: '', password:''};
         $scope.loginError = false;
@@ -25,7 +25,7 @@
             authService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(
                     function(user){
-                        console.dir(user);
+                        // console.dir(user);
                         if (!user) {
                             $scope.loginError = true;
                             $scope.ajaxBusy = false;
@@ -72,7 +72,7 @@
             }
             else{
                 console.log("2");
-                $state.go('user.profile')
+                $state.go('app.user.profile')
             }
         };
 

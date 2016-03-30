@@ -306,13 +306,16 @@ function setFavoritesEndpoint(){
       function(payload){
         var res = payload.data;
         if(res.statusCode = 200){
+            console.dir(res.results);
           deferred.resolve(res.results);
         }
         else{
+            console.log("getUsers: error: "+res.message);
           deferred.reject(res.message);
         }
       },
       function(error){
+          console.log("Error getting user with url " + baseURL + endpointUrl +".  Error: "+error)
         deferred.reject(error);
       }
     )
@@ -331,6 +334,7 @@ function setFavoritesEndpoint(){
           deferred.resolve(res.results);
         }
         else{
+            console.log("saveUser: error: status code != 200.  It equals "+res.statusCode);
           deferred.reject(res.message);
         }
       },

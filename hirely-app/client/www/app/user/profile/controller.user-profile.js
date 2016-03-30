@@ -12,7 +12,7 @@
 
 
 
-  function UserProfileController($scope, $stateParams, $state, AuthService, UserService, JobApplicationService, HirelyApiService) {
+  function UserProfileController($scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
 
     $scope.availability = {};
 
@@ -22,6 +22,14 @@
      */
     (function init() {
 
+
+      if (!authService.isUserLoggedIn()) {
+        $scope.go("app.account.login");
+      }
+      $scope.userIsSynced = false;
+      authService.syncCurrentUserFromDb().then(function() {
+        $scope.userIsSynced = true;
+      });
 
       /**
        * Set the form steps
@@ -72,5 +80,25 @@
     $scope.finish = function(){
       $state.go('app.home')
     }
+
+    function semiFixedFooter() {
+      var windowHeight = getBody().clientHeight;
+      var docHeight = $("body > .ng-scope").height();
+
+      if (windowHeight > docHeight) {
+        $(".multi-step-container footer").addClass("fixedBottom");
+      } else {
+        $(".multi-step-container footer").removeClass("fixedBottom");
+      }
+    }
+
+    setInterval(semiFixedFooter, 100);
+
+    var loadingBarLocation = 0;
+    setInterval(function() {
+      loadingBarLocation = (loadingBarLocation + 1) % 5;
+      $(".loadingBar div").css("margin-left", loadingBarLocation*20+"%");
+    }, 300);
+    
   }
 })();

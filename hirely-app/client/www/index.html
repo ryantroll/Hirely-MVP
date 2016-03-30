@@ -51,9 +51,6 @@
 
 <body data-ng-app="hirelyApp">
 <div ui-view></div>
-<a href="javascript:pageDown()" id="more-arrow">
-    <div></div>
-</a>
 <!-- build:js js/lib.js -->
 <!-- bower:js -->
 <script src="../../lib/jquery/dist/jquery.js"></script>
@@ -100,66 +97,43 @@
 <!-- Custom Libs -->
 <script src="https://cdn.traitify.com/js/widgets/v1.js"></script>
 <script src="https://cdn.traitify.com/js/widgets/careers.js"></script>
+<script src="https://cdn.jsdelivr.net/lodash/4.6.1/lodash.min.js"></script>
 <script src="../../customLibs/firebaseIds.js"></script>
 <script src="../../customLibs/mapsStyle.js"></script>
 <script src="../../customLibs/hirelySelect.js"></script>
 <script src="../../customLibs/fixed-tables.js"></script>
 
-<!-- Data Models -->
-<script src="app/core/services/models/model.js"></script>
-<script src="app/core/services/models/user.js"></script>
-<script src="app/core/services/models/business.js"></script>
-<script src="app/core/services/models/user.js"></script>
-<script src="app/core/services/models/application.js"></script>
 
 <!-- build:js js/app.js-->
 <!-- inject:js -->
-<script src="js/animations.js"></script>
-<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="js/main.js"></script>
+<script src="js/homepage-animations.js"></script>
 <script src="js/doc-size-lib.js"></script>
-<script src="js/underscore-min.js"></script>
 <script src="app/account/account.module.js"></script>
-<script src="app/candidate/candidate.module.js"></script>
 <script src="app/core/core.module.js"></script>
 <script src="app/home/home.module.js"></script>
-<script src="app/jobdetails/jobDetails.module.js"></script>
 <script src="app/job/job.module.js"></script>
 <script src="app/layout/layout.module.js"></script>
-<script src="app/manager/manager.module.js"></script>
 <script src="app/shared/shared.module.js"></script>
 <script src="app/app.js"></script>
 <script src="app/account/controller.login.js"></script>
 <script src="app/account/controller.password.js"></script>
 <script src="app/account/controller.register.js"></script>
 
-<script src="app/candidate/candidateCtrl.js"></script>
-<script src="app/candidate/candidateDashboardCtrl.js"></script>
 <script src="app/core/config.js"></script>
 <script src="app/core/constants.js"></script>
 <script src="app/core/security.js"></script>
 <script src="app/core/states.js"></script>
 <script src="app/home/homeCtrl.js"></script>
-<script src="app/jobdetails/jobDetailCtrl.js"></script>
 <script src="app/job/jobSearchCtrl.js"></script>
-<script src="app/layout/footerCtrl.js"></script>
-<script src="app/layout/footer_directive.js"></script>
-<script src="app/layout/headerCtrl.js"></script>
-<script src="app/layout/header_directive.js"></script>
 <script src="app/layout/masterCtrl.js"></script>
 
 <script src="app/layout/application/controller.application-master.js"></script>
-<script src="app/layout/application/controller.application-header.js"></script>
-<script src="app/layout/application/controller.application-footer.js"></script>
 
 <script src="app/layout/job/controller.job-master.js"></script>
 <script src="app/layout/account/controller.account-master.js"></script>
 
 <script src="app/layout/business/controller.business-master.js"></script>
-<script src="app/layout/business/controller.business-header.js"></script>
 
-<script src="app/manager/autoFillableField.js"></script>
-<script src="app/manager/hmregisterCtrl.js"></script>
 <script src="app/shared/flexslider_directive.js"></script>
 <script src="app/shared/googlePlacesAutocomplete_directive.js"></script>
 
@@ -181,19 +155,11 @@
 <script src="app/user/profile/personality/controller.personality.js"></script>
 <script src="app/user/profile/availability/controller.availability.js"></script>
 
-<!-- <script src="app/candidate/profile/candidateProfileAvailabilityCtrl.js"></script>
-<script src="app/candidate/profile/candidateProfileBasicsCtrl.js"></script>
-<script src="app/candidate/profile/candidateProfileCtrl.js"></script>
-<script src="app/candidate/profile/candidateProfileExperienceCtrl.js"></script>
-<script src="app/candidate/profile/candidateProfilePersonalityCtrl.js"></script> -->
 <script src="app/core/directives/ngCloak-directive.js"></script>
-<script src="app/core/filters/jobSearchFilter.js"></script>
 <script src="app/core/services/service.application.js"></script>
 <script src="app/core/services/service.auth.js"></script>
 <script src="app/core/services/service.availability.js"></script>
 <script src="app/core/services/service.business.js"></script>
-<script src="app/core/services/service.candidate.js"></script>
-<script src="app/core/services/service.filePicker.js"></script>
 <script src="app/core/services/service.geocode.js"></script>
 <script src="app/core/services/service.hirelyapi.js"></script>
 <script src="app/core/services/service.job.js"></script>
@@ -204,20 +170,10 @@
 <script src="app/core/services/service.user.js"></script>
 <script src="app/core/services/service.file-upload.js"></script>
 <script src="app/core/services/service.position-filters.js"></script>
-<script src="app/manager/company/autoFillableField.js"></script>
-<script src="app/manager/company/hmCompanyCtrl.js"></script>
-<script src="app/core/services/models/address.js"></script>
-<script src="app/core/services/models/application.js"></script>
-<script src="app/core/services/models/business.js"></script>
-<script src="app/core/services/models/contact.js"></script>
-<script src="app/core/services/models/model.js"></script>
-<script src="app/core/services/models/user.js"></script>
 <!-- endinject -->
 <!-- inject:templates:js -->
 <!-- endinject -->
 <!-- endbuild -->
-
-<script type="text/javascript" src="//api.filepicker.io/v2/filepicker.js"></script>
 
 </body>
 </html>

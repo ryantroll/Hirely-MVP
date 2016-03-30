@@ -1,3 +1,5 @@
+<h1 class="text-center">Create an account, it's easy!</h1>
+
 <div class="user-profile-basic hirely-form" ng-class="{waiting:ajaxBusy}">
     <div class="in-form-loader">
         <div class="form-loader">
@@ -11,7 +13,7 @@
             <div class="row" id="already-have-account-link-mobile">
                 <div class="col-sm-12">
                     <div class="copy-section text-center">
-                        <p>Already have an Account? <a href="javascript:void(0);" ui-sref="account.login">Log in</a></p>
+                        <p>Already have an Account? <a href="javascript:void(0);" ui-sref="app.account.login">Log in</a></p>
                     </div>
                 </div>
             </div>
@@ -52,7 +54,7 @@
                             ng-model="user.email"
                             ng-pattern='/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
                             ng-change="resetEmailValidity()"
-                            required
+                            required autocapitalize="none"
                         />
                     </div>
                 </div>
@@ -73,6 +75,7 @@
                             ng-model="user.password"
                             required
                             validate-password
+                            autocapitalize="none"
                         />
                     </div>
                 </div>
@@ -84,7 +87,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="copy-section text-center">
-                        <p>Already have an Account? <a href="javascript:void(0);" ui-sref="account.login">Log in</a></p>
+                        <p>Already have an Account? <a href="javascript:void(0);" ui-sref="app.account.login">Log in</a></p>
                     </div>
                 </div>
             </div>

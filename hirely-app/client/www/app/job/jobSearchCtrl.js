@@ -9,11 +9,11 @@
 
 
 
-  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, OccupationService,UserService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
+  function JobSearchCtrl($scope, $http, $state, $stateParams, PositionService, GeocodeService, OccupationService,userService, CandidateService, Notification, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
       var positionService = PositionService;
       var occupationService = OccupationService;
       var geocodeService = GeocodeService;
-      var userService = UserService;
+      
       var candidateService = CandidateService;
 
       $scope.positions = [];

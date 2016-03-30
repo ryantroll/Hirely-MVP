@@ -1,19 +1,34 @@
 $application-header-height: 60px;
+
+.dark-gray {
+    background-color: $c-hirely-mid-gray;
+    color:$c-white;
+}
+
 header.hi-header{
     height: $application-header-height;
     background-color:$c-hirely-gray;
     @include drop-shadow;
     border-bottom:1px solid rgba(0,0,0,0.25);
 
+    a {
+        color: $c-hirely-mid-gray;
+    }
+    a:hover {
+        color: $c-hirely-red;
+    }
+
     .logo{
-        padding-top:1em;
-        padding-left:1em;
-        /**
-         * below is to fix conflict with .logo class in different css file
-         */
-        @media screen and (max-width:$screen-sm-min){
-            padding-left:1em!important;
-        }
+        font-weight: bold;
+        font-size: 33px;
+        margin-left: 20px;
+    }
+
+    .nav-links a{
+
+        font-size: 24px;
+        margin: 0 40px 0 0;
+        line-height: 60px;
     }
 
     .user{
@@ -106,11 +121,26 @@ header.hi-header{
             border-bottom: 10px solid $c-hirely-gray;
         }
 
-        .buttons{
-            padding-top:10px;
-        }
+
     }//// .user
 }//// header
+
+header.hi-header.logged-in-header {
+    background-color: $c-hirely-mid-gray;
+    color: $c-white;
+
+    a {
+        color: $c-white;
+    }
+    a:hover {
+        color: $c-hirely-red;
+    }
+}
+
+header > .row {
+    margin: 0;
+}
+
 .form-content{
     width:100%;
     margin:0 auto;

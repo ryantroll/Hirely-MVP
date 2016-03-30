@@ -174,7 +174,7 @@
        */
       if(false === $scope.isAuth){
         $rootScope.nextState = {state:$state.current.name, params:$state.params};
-        $state.go('account.login');
+        $state.go('app.account.login');
         return;
       }
 
@@ -368,11 +368,11 @@
     }
 
     $scope.changePosition = function(posSlug){
-      $state.go('business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
+      $state.go('app.business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
     }
 
     $scope.goToPosition = function(){
-      $state.go('job.position', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:$scope.position.slug})
+      $state.go('app.job.position', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:$scope.position.slug})
     }
 
     $scope.copyPositionURL = function(){
