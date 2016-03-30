@@ -22,6 +22,7 @@
             getCurrentUser: getCurrentUser,
             syncCurrentUserFromDb: syncCurrentUserFromDb,
             setCurrentUser: setCurrentUser,
+            setTokenCookie: setTokenCookie,
             updateCurrentUserCookie: updateCurrentUserCookie,
             updateCurrentUser: updateCurrentUser,
             isUserLoggedIn: isUserLoggedIn,
@@ -40,11 +41,14 @@
 
             //// Get currentUser cookie
             var user = $cookies.get("currentUser");
+            var token = $cookies.get("token");
+            if (token) {
+                setTokenCookie(token);
+            }
             if (user) {
                 console.log("getCurrentUser: found user in cookie");
                 user = JSON.parse(user);
-                service.currentUser = user;
-                service.currentUserID = user._id;
+                setCurrentUser(user);
                 return user;
             }
 
@@ -71,10 +75,11 @@
         }
 
         function passwordLogin(email, password) {
-            return userService.passwordLogin(email, password).then(function (user) {
-                if (user) {
-                    setCurrentUser(user);
-                    return user;
+            return userService.passwordLogin(email, password).then(function (result) {
+                if (result) {
+                    setCurrentUser(result.user);
+                    setTokenCookie(result.token);
+                    return result.user;
                 }
             });
         }
@@ -115,16 +120,24 @@
             service.updateCurrentUserCookie();
         }
 
+        function setTokenCookie(token) {
+            service.token = token;
+            $cookies.put("token", token);
+            $rootScope.token = token;
+        }
+
         function removeCurrentUser() {
             service.currentUser = undefined;
             service.currentUserID = undefined;
 
             //// Set currentUser cookie
             $cookies.remove("currentUser");
+            $cookies.remove("token");
 
             /// let all scopes the user is logged out
             $rootScope.$emit('UserLoggedOut');
             $rootScope.$broadcast('UserLoggedOut');
+            $rootScope.token = null;
         }
 
         /**
