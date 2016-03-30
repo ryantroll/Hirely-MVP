@@ -2,23 +2,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('HirelyApiService', ['$http', '$q', '$rootScope', HirelyApiService]);
+        .service('HirelyApiService', ['$http', '$injector', '$q', '$rootScope', HirelyApiService]);
 
-    function HirelyApiService($http, $q, $rootScope) {
-
-        var httpConfig = {headers: {}};
-        if ($rootScope.token) {
-            httpConfig.headers.Authorization = $rootScope.token;
-            console.log("All set");
-        }
-
-        $rootScope.$on('UserLoggedIn', function (event, args) {
-            console.log("Caught login");
-            httpConfig.headers.Authorization = $rootScope.token;
-        });
-        $rootScope.$on('UserLoggedOut', function (event, args) {
-            delete httpConfig.headers.Authorization;
-        });
+    function HirelyApiService($http, $injector, $q, $rootScope) {
 
 
         /**
@@ -106,6 +92,34 @@
             post: updateFavorites,
             get: getFavorites
         };
+
+        function httpWrapper(method, url, data) {
+            var deferred = $q.defer();
+            var params = {
+                method: method,
+                url: url,
+                headers: {
+                    Authorization: $rootScope.token
+                },
+                data: data
+            };
+            $http(params).then(
+                function (resSuccess) {
+                    deferred.resolve(resSuccess.data.results);
+                },
+                function (resError) {
+                    if (resError.status == 401) {
+                        // Load the authservice on demand to avoid circular dep
+                        var authService = $injector.get('AuthService');
+                        authService.logout();
+                    }
+
+                    console.log("Error getting user with url " + baseURL + endpointUrl + ".  Error: " + resError.data.message);
+                    deferred.reject(resError.data.message);
+                }
+            );
+            return deferred.promise;
+        }
 
         /**
          * [setUsersEndpoint this will set the endpint for users api and return child users object for function call chain]
@@ -228,33 +242,7 @@
          * @return {[promis]}      [description]
          */
         function createNewUser(userData) {
-            var deferred = $q.defer();
-
-            $http.post(baseURL + endpointUrl, userData, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(error.message);
-                    }
-                }, //// fun. resolve
-                function (error) {
-                    var res = error.data;
-                    /**
-                     * Check if dublicated email is the issue and set a readable message
-                     */
-                    if (res.statusCode === 11000) {
-                        deferred.reject('Email is already registered');
-                    }
-                    else {
-                        deferred.reject(res.message);
-                    }
-                }//// fun. reject
-            )
-
-            return deferred.promise;
+            return httpWrapper('POST', baseURL + endpointUrl, userData);
         }/// fun. createNewUser
 
 
@@ -264,25 +252,7 @@
          * @return {[promis]}      [description]
          */
         function createNewBusiness(bData) {
-            var deferred = $q.defer();
-
-            $http.post(baseURL + endpointUrl, bData, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(error.message);
-                    }
-                }, //// fun. resolve
-                function (error) {
-                    var res = error.data;
-                    deferred.reject(res.message);
-                }//// fun. reject
-            )
-
-            return deferred.promise;
+            return httpWrapper('POST', baseURL + endpointUrl, bData);
         }/// fun. createNewBusiness
 
 
@@ -292,246 +262,48 @@
          * @return {[promis]}      [description]
          */
         function createNewApplication(applicationData) {
-            var deferred = $q.defer();
-
-            $http.post(baseURL + endpointUrl, applicaitonData, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(error.message);
-                    }
-                }, //// fun. resolve
-                function (error) {
-                    var res = error.data;
-                    deferred.reject(res.message);
-                }//// fun. reject
-            )
-
-            return deferred.promise;
+            return httpWrapper('POST', baseURL + endpointUrl, applicationData);
         }/// fun. createNewApplication
 
         function getUsers() {
-            var deferred = $q.defer();
-
-            $http.get(baseURL + endpointUrl, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        console.log("getUsers: error: " + res.message);
-                        deferred.reject(res.message);
-                    }
-                },
-                function (error) {
-                    console.log("Error getting user with url " + baseURL + endpointUrl + ".  Error: " + error)
-                    deferred.reject(error);
-                }
-            )
-
-            return deferred.promise;
+            return httpWrapper('GET', baseURL + endpointUrl);
         }//// fun. getUsers
 
         function saveUser(userData) {
-            var deferred = $q.defer();
-
-            $http.patch(baseURL + endpointUrl, userData, httpConfig)
-                .then(
-                    function (payload) {
-                        var res = payload.data;
-                        if (res.statusCode = 200) {
-                            deferred.resolve(res.results);
-                        }
-                        else {
-                            console.log("saveUser: error: status code != 200.  It equals " + res.statusCode);
-                            deferred.reject(res.message);
-                        }
-                    },
-                    function (error) {
-                        deferred.reject(error);
-                    }
-                );/// patch.then
-
-            return deferred.promise;
+            return httpWrapper('PATCH', baseURL + endpointUrl, userData);
         }//// fun. saveUser
 
-        function saveBusiness(userData) {
-            var deferred = $q.defer();
-
-            $http.patch(baseURL + endpointUrl, userData, httpConfig)
-                .then(
-                    function (payload) {
-                        var res = payload.data;
-                        if (res.statusCode = 200) {
-                            deferred.resolve(res.results);
-                        }
-                        else {
-                            deferred.reject(res.message);
-                        }
-                    },
-                    function (error) {
-                        deferred.reject(error);
-                    }
-                );/// patch.then
-
-            return deferred.promise;
+        function saveBusiness(data) {
+            return httpWrapper('PATCH', baseURL + endpointUrl, data);
         }//// fun. saveBusiness
 
 
-        function saveApplication(userData) {
-            var deferred = $q.defer();
-
-            $http.patch(baseURL + endpointUrl, userData, httpConfig)
-                .then(
-                    function (payload) {
-                        var res = payload.data;
-                        if (res.statusCode = 200) {
-                            deferred.resolve(res.results);
-                        }
-                        else {
-                            deferred.reject(res.message);
-                        }
-                    },
-                    function (error) {
-                        deferred.reject(error);
-                    }
-                );/// patch.then
-
-            return deferred.promise;
+        function saveApplication(data) {
+            return httpWrapper('PATCH', baseURL + endpointUrl, data);
         }//// fun. saveApplication
 
         function getBusinesses() {
-            var deferred = $q.defer();
-
-            $http.get(baseURL + endpointUrl, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(res.message);
-                    }
-                },
-                function (error) {
-                    deferred.reject(error);
-                }
-            )
-
-            return deferred.promise;
+            return httpWrapper('GET', baseURL + endpointUrl);
         }//// fun. getBusinesses
 
         function getApplications() {
-            var deferred = $q.defer();
-
-            $http.get(baseURL + endpointUrl, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(res.message);
-                    }
-                },
-                function (error) {
-                    deferred.reject(error);
-                }
-            )
-
-            return deferred.promise;
+            return httpWrapper('GET', baseURL + endpointUrl);
         }//// fun. getApplications
 
         function getTraifityAssessment() {
-            var deferred = $q.defer();
-
-            $http.get(baseURL + endpointUrl, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(res.message);
-                    }
-                },
-                function (error) {
-                    deferred.reject(error);
-                }
-            )
-
-            return deferred.promise;
+            return httpWrapper('GET', baseURL + endpointUrl);
         }//// fun. getTraifity
 
         function createTraitifyAssessment(data) {
-            var deferred = $q.defer();
-
-            $http.post(baseURL + endpointUrl, data, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(error.message);
-                    }
-                }, //// fun. resolve
-                function (error) {
-                    var res = error.data;
-                    deferred.reject(res.message);
-                }//// fun. reject
-            )
-
-            return deferred.promise;
+            return httpWrapper('POST', baseURL + endpointUrl, data);
         }//// fun. createTraitifyAssessment
 
         function updateFavorites(data) {
-            var deferred = $q.defer();
-
-            $http.post(baseURL + endpointUrl, data, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(error.message);
-                    }
-                }, //// fun. resolve
-                function (error) {
-                    var res = error.data;
-                    deferred.reject(res.message);
-                }//// fun. reject
-            )
-
-            return deferred.promise;
+            return httpWrapper('POST', baseURL + endpointUrl, data);
         }/// fun. updateFavorite
 
         function getFavorites() {
-            var deferred = $q.defer();
-
-            $http.get(baseURL + endpointUrl, httpConfig).then(
-                function (payload) {
-                    var res = payload.data;
-
-                    if (res.statusCode = 200) {
-                        deferred.resolve(res.results);
-                    }
-                    else {
-                        deferred.reject(res.message);
-                    }
-                },
-                function (error) {
-                    deferred.reject(error);
-                }
-            )
-
-            return deferred.promise;
+            return httpWrapper('GET', baseURL + endpointUrl);
         }
 
         return service;
