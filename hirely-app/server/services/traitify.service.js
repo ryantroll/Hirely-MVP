@@ -187,9 +187,18 @@ function extractBlendMeta(blend) {
 
     // ret.metaName = blend.name;
     ret._id = blend.name;
-    ret.metaType = 'personality_blend'
+    ret.metaType = 'personality_blend';
     ret.meta.details = blend.details;
-    ret.meta.description = blend.description
+    ret.meta.description = blend.description;
+
+    ret.meta.environments = [];
+    console.log("Count: " + blend.environments.length);
+    blend.environments.forEach(function(environment) {
+        console.log(environment.name);
+        ret.meta.environments.push(environment.name);
+    });
+
+
     return ret;
 }//// fun. extractBlendMeta
 
@@ -235,12 +244,16 @@ var traitifySevice = {
             return deferred.promise;
         }
 
-        console.log("Getting " + onetIds.length + " career matches for " + assessmentId + ". Depth = " + this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] + "/" + this.getAssessmentCareerMatchScoresByIdDepthMax);
+        console.log("Getting " + onetIds.length + " career matches for " + assessmentId + ". " +
+            "Depth = " + this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
+            "/" + this.getAssessmentCareerMatchScoresByIdDepthMax);
 
         traitify.getCareerMatches(assessmentId, onetIds, function (matchesRaw) {
             try {
 
-                console.log("Got " + matchesRaw.length + " career matches for " + assessmentId + ". Depth = " + self.getAssessmentCareerMatchScoresByIdDepth[assessmentId] + "/" + self.getAssessmentCareerMatchScoresByIdDepthMax);
+                console.log("Got " + matchesRaw.length + " career matches for " + assessmentId + ". " +
+                    "Depth = " + self.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
+                    "/" + self.getAssessmentCareerMatchScoresByIdDepthMax);
 
                 var matches = {};
                 var matchOnetIds = [];
@@ -250,12 +263,14 @@ var traitifySevice = {
                 }
                 var missingOnetIds = _.xor(onetIds, matchOnetIds);
                 if (missingOnetIds.length > 0) {
-                    self.getAssessmentCareerMatchScoresByIdWithParams(assessmentId, missingOnetIds).then(function (matches2) {
-                        for (var onetId in matches2) {
-                            matches[onetId] = matches2[onetId];
-                        }
-                        deferred.resolve(matches);
-                    });
+                    self.getAssessmentCareerMatchScoresByIdWithParams(assessmentId, missingOnetIds)
+                        .then(
+                            function (matches2) {
+                                for (var onetId in matches2) {
+                                    matches[onetId] = matches2[onetId];
+                                }
+                                deferred.resolve(matches);
+                            });
                 } else {
                     deferred.resolve(matches);
                 }
@@ -293,7 +308,7 @@ var traitifySevice = {
         // console.log("ts293");
         try {
             user.personalityExams[0].extId;
-        } catch(err) {
+        } catch (err) {
             var err = "SKIP TS:addTraitifyCareerMatchScoresToUser: missing personalityExam";
             console.log(err);
             var deferred = q.defer(err);

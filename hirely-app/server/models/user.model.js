@@ -201,3 +201,26 @@ var userSchema = new Schema({
 var UserModel = mongoose.model('User', userSchema, "users");
 
 module.exports = UserModel;
+
+// console.log("Running...");
+// UserModel.find({}).then(function(users) {
+//     console.log("Found users");
+//     users.forEach(function(user) {
+//         console.log("user: "+user.email);
+//         if (user.personalityExams && user.personalityExams.length) {
+//             user.personalityExams[0].personalityBlend = {
+//                 "name": "Mentor/Inventor",
+//                 "personalityTypes": [
+//                     {
+//                         "_id": "Mentor"
+//                     },
+//                     {
+//                         "_id": "Inventor"
+//                     }
+//                 ]
+//             };
+//             user.save();
+//         }
+//     });
+//     console.log("Done.");
+// });
