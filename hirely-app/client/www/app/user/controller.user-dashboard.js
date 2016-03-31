@@ -7,13 +7,14 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('UserDashboardController', ['$scope', '$stateParams', '$state' , UserDashboardController]);
+  angular.module('hirelyApp').controller('UserDashboardController', ['$scope', '$stateParams', '$state', 'AuthService', UserDashboardController]);
 
 
-  function UserDashboardController($scope, $stateParams, $state) {
+  function UserDashboardController($scope, $stateParams, $state, AuthService) {
     /**
      * Nothing so far
      */
-     console.log('UserDashboardController')
+     $scope.isAuth = AuthService.isUserLoggedIn();
+     console.log(AuthService.currentUser)
   }
 })();

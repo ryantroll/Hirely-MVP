@@ -1,1 +1,243 @@
-<h1>Dashboard</h1>
+<!-- <div class="form-loader" ng-show="!dataLoaded">
+    <p>Loading</p>
+    <div class="loader"></div>
+</div>
+
+<div class="content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Data Not Found!</h4>
+        </div>
+    </div>
+</div> -->
+
+<div class="dashboard">
+    <div class="max-width">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>My Dashboard</h1>
+                <div class="intro">
+                    <p>
+                        Hi Ryan (not Ryan? <a href="javascript:void(0)">Log Out</a>) From your dashboard you can edit your profile, view your applications, manage your positions, and <a href="javascript:void(0)">change your password</a>
+                    </p>
+                </div>
+            </div><!--col-->
+        </div><!--row-->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="title">
+                        <h3>My Positions</h3>
+                    </div>
+                    <div class="list">
+                        <table>
+                            <thead class="clearfix">
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Status</th>
+                                    <th>Openings</th>
+                                    <th>Wage</th>
+                                    <th>Candidates</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Status</th>
+                                    <td>Active</td>
+                                    <th>Openings</th>
+                                    <td>10</td>
+                                    <th>Wage</th>
+                                    <td>$12 Per Hour</td>
+                                    <th>Candidates</th>
+                                    <td><button class="btn red">MANAGE</button></td>
+                                    <th>Details</th>
+                                    <td><button class="btn">VIEW</button></td>
+                                </tr>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Status</th>
+                                    <td>Active</td>
+                                    <th>Openings</th>
+                                    <td>10</td>
+                                    <th>Wage</th>
+                                    <td>$12 Per Hour</td>
+                                    <th>Candidates</th>
+                                    <td><button class="btn red">MANAGE</button></td>
+                                    <th>Details</th>
+                                    <td><button class="btn">VIEW</button></td>
+                                </tr>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Status</th>
+                                    <td>Active</td>
+                                    <th>Openings</th>
+                                    <td>10</td>
+                                    <th>Wage</th>
+                                    <td>$12 Per Hour</td>
+                                    <th>Candidates</th>
+                                    <td><button class="btn red">MANAGE</button></td>
+                                    <th>Details</th>
+                                    <td><button class="btn">VIEW</button></td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div><!--list-->
+                </div><!--box-->
+            </div><!--col-->
+        </div><!--row-->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="title">
+                        <h3>Favorite Positions</h3>
+                    </div>
+                    <div class="list">
+                        <table>
+                            <thead class="clearfix">
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Business</th>
+                                    <th>Location</th>
+                                    <th>Openings</th>
+                                    <th>Action</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Business</th>
+                                    <td>Shake Shack - Dupont Circle</td>
+                                    <th>Location</th>
+                                    <td>Washington, DC</td>
+                                    <th>Opening</th>
+                                    <td>4</td>
+                                    <th>Action</th>
+                                    <td><button class="btn red">Apply</button></td>
+                                    <th>&nbsp;</th>
+                                    <td><button class="btn">Remove</button></td>
+                                </tr>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Business</th>
+                                    <td>Shake Shack - Dupont Circle</td>
+                                    <th>Location</th>
+                                    <td>Washington, DC</td>
+                                    <th>Opening</th>
+                                    <td>4</td>
+                                    <th>Action</th>
+                                    <td><button class="btn red">Apply</button></td>
+                                    <th>&nbsp;</th>
+                                    <td><button class="btn">Remove</button></td>
+                                </tr>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Business</th>
+                                    <td>Shake Shack - Dupont Circle</td>
+                                    <th>Location</th>
+                                    <td>Washington, DC</td>
+                                    <th>Opening</th>
+                                    <td>4</td>
+                                    <th>Action</th>
+                                    <td><button class="btn red">Apply</button></td>
+                                    <th>&nbsp;</th>
+                                    <td><button class="btn">Remove</button></td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div><!--list-->
+                </div><!--box-->
+            </div><!--col-->
+        </div><!--row-->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="title">
+                        <h3>Application History</h3>
+                    </div>
+                    <div class="list">
+                        <table>
+                            <thead class="clearfix">
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Business</th>
+                                    <th>Location</th>
+                                    <th>Apply Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Business</th>
+                                    <td>Shake Shack - Dupont Circle</td>
+                                    <th>Location</th>
+                                    <td>Washington, DC</td>
+                                    <th>Apply Date</th>
+                                    <td>3/1/2016</td>
+                                    <th>Status</th>
+                                    <td>Applied</td>
+                                </tr>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Business</th>
+                                    <td>Shake Shack - Dupont Circle</td>
+                                    <th>Location</th>
+                                    <td>Washington, DC</td>
+                                    <th>Apply Date</th>
+                                    <td>3/1/2016</td>
+                                    <th>Status</th>
+                                    <td>Applied</td>
+                                </tr>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>Team Member</td>
+                                    <th>Business</th>
+                                    <td>Shake Shack - Dupont Circle</td>
+                                    <th>Location</th>
+                                    <td>Washington, DC</td>
+                                    <th>Apply Date</th>
+                                    <td>3/1/2016</td>
+                                    <th>Status</th>
+                                    <td>Applied</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div><!--list-->
+                </div><!--box-->
+            </div><!--col-->
+        </div><!--row-->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>My Profile <a href="javascript:void(0)"><i class="glyphicon glyphicon-edit"></i></a></h1>
+                <div class="profile">
+                    <p>
+                        Ryan Troll<br>
+                        ryan.troll@gmail.com<br>
+                        (444) 555-6666
+                    </p>
+                </div><!--profile-->
+            </div><!--col-->
+        </div><!--row-->
+
+    </div><!--dashboard-->
+</div><!--dashboard-->
