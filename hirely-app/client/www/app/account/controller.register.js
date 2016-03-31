@@ -11,9 +11,12 @@
       require:'ngModel',
       link:function(scope, ele, attrs, ctrl){
         ctrl.$parsers.unshift(function(value){
-          var pat = /^.{6,12}$/;
+          // Contains at least 8 chars, 1 lowercase, 1 uppercase, and 1 number.
+          // All other chars are banned
+          var minSatRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[0-9a-zA-Z]{8,}$/;
 
-          ctrl.$setValidity('invalidPassword', pat.test(value));
+          // ctrl.$setValidity('invalidPassword', minSatRegex.test(value) && freeFromBannedRegex.test(value));
+          ctrl.$setValidity('invalidPassword', minSatRegex.test(value));
           return value;
         });/// unshift
       }//// fun. link
