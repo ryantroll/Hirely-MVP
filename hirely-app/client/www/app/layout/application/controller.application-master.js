@@ -22,9 +22,9 @@
                 transclude: false
             };
         })
-        .controller('ApplicationMasterController', ['$stateParams', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController])
+        .controller('ApplicationMasterController', ['$stateParams', '$state', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController])
 
-    function ApplicationMasterController($stateParams, $scope, $rootScope, authService, UserService) {
+    function ApplicationMasterController($stateParams, $state, $scope, $rootScope, authService, UserService) {
 
         // $scope.AuthService = AuthService;
 
