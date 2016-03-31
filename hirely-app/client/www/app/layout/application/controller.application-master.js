@@ -37,7 +37,7 @@
         if (auth) {
             authService.syncCurrentUserFromDb();
         } else {
-            $scope.go("app.account.register");
+            $state.go("app.account.register");
         }
 
         $scope.layoutModel = {business: null, noHeader: null};
