@@ -9,6 +9,16 @@ var permissionService = {
             }
         });
         return grant;
+    },
+
+    isBusinessUser: function(permissions) {
+        var isBusinessUser = false;
+        permissions.forEach(function(permission) {
+            if (['business', 'location', 'position'].indexOf(permission.destType) !== -1) {
+                isBusinessUser = true;
+            }
+        });
+        return isBusinessUser;
     }
 }/// users object
 

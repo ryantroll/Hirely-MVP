@@ -76,19 +76,20 @@
 
         function passwordLogin(email, password) {
             return userService.passwordLogin(email, password).then(function (result) {
-                if (result) {
-                    setCurrentUser(result.user);
-                    setTokenCookie(result.token);
-                    return result.user;
+                if (userAndToken) {
+                    setCurrentUser(userAndToken.user);
+                    setTokenCookie(userAndToken.token);
+                    return userAndToken.user;
                 }
             });
         }
 
         function registerNewUser(userData) {
-            return userService.createNewUser(userData).then(function (user) {
-                if (user) {
-                    setCurrentUser(user);
-                    return user;
+            return userService.createNewUser(userData).then(function (userAndToken) {
+                if (userAndToken) {
+                    setCurrentUser(userAndToken.user);
+                    setTokenCookie(userAndToken.token);
+                    return userAndToken.user;
                 }
             });
         }

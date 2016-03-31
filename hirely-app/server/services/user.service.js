@@ -97,13 +97,13 @@ var userService = {
         }
         var newUser = new userModel(userObj);
 
-        /**
-         * make sure basic info of user returned by the promise.
-         */
-        return newUser.save();
+        return newUser.save().then(function(user) {
+            var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: '1h'});
+            return {token: token, user: user};
+        });
     },
 
-    passwordLogin: function (email, password, skipPasswordCheck) {
+    passwordLogin: function (email, password, skipPasswordCheck, isBusinessUser) {
         try {
             email = email.toLowerCase();
         } catch(err) {
@@ -128,7 +128,10 @@ var userService = {
             // Check the password
             if (bcrypt.compareSync(password, user.password)) {
                 // Create a token
-                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: '1h'});
+                // If user is a business user, make cookie last longer
+                var expiresIn = '1h';
+                if (isBusinessUser) expiresIn = '1 month';
+                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
                 return {token: token, user: user};
             } else {
                 console.log("US:passwordLogin: bad password for " + email);

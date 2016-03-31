@@ -1,3 +1,4 @@
+var permissionService = require('../services/permissions.service');
 var userService = require('../services/user.service');
 var apiUtil = require('../utils/api-response');
 
@@ -37,11 +38,12 @@ var userRoutes = {
 
         userService.createNewUser(user)
             .then(
-                function(user){
-                    console.log(user);
-                    res.status(200).json(apiUtil.generateResponse(200, "User created successfully", user));
+                function(userAndToken){
+                    // console.log(userAndToken);
+                    res.status(200).json(apiUtil.generateResponse(200, "User created successfully", userAndToken));
                 },
                 function(error){
+                    console.log("Create User Error: "+error);
                     res.status(200).json(apiUtil.generateResponse(200, "Email already registered", null));
                 }
             )
@@ -50,7 +52,8 @@ var userRoutes = {
 
     passwordLogin : function(req, res) {
         var skipPasswordCheck = req.isSuperUser;
-        userService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck)
+        var isBusinessUser = req.isSuperUser || permissionService.isBusinessUser(req.permissions);
+        userService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck, isBusinessUser)
             .then(
                 function(user) {
                     res.status(200).json(apiUtil.generateResponse(200, "Password login results", user));
