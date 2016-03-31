@@ -125,34 +125,37 @@
       function(business){
 
         $scope.business = business;
-        $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
 
-        $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
+        try {
+          $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
 
-        /**
-         * Check if user is logged in and move to next promise
-         */
-        $scope.isAuth = AuthService.isUserLoggedIn();
+          $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-        return JobApplicationService.getByPositionId($scope.position._id);
+          /**
+           * Check if user is logged in and move to next promise
+           */
+          $scope.isAuth = AuthService.isUserLoggedIn();
+
+          return JobApplicationService.getByPositionId($scope.position._id);
+        } catch (err) {
+          $scope.dataError = err;
+        }
       },
       function(err){
-
-        $scope.dataError = true;
-        $scope.isAuth = false;
-
+        $scope.dataError = err;
       }
     )
     .then(
       function(data){
 
-        console.log(data)
-        $scope.applications = data.applications
+        console.log(data);
+        $scope.applications = data.applications;
         $scope.applicants = data.users;
         $scope.scores = data.careerMatchScoress;
       },
       function(err){
         console.log(err)
+        $scope.dataError = err;
       }
     )
     .finally(
@@ -163,11 +166,6 @@
     );
 
     function initialize(){
-
-      /**
-       * Check for data error first of all
-       */
-      $scope.dataError = !$scope.business || !$scope.location || !$scope.position;
 
       /**
        * Save the current state to bring user back after login
