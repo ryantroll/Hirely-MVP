@@ -21,7 +21,7 @@
      * @type {Object}
      */
     var service = {
-      save:save,
+      create:create,
       isApplicationExists: isApplicationExists,
       getByPositionId: getByPositionId,
       getStatistics: getStatistics,
@@ -38,37 +38,9 @@
      * @param {[type]} userId [User id to associate this job application with]
      * @param {[type]} jobID  [ID of the Job applicant is applying to]
      */
-    function save(jobApp){
-      var deferred = $q.defer();
-      var data = {};
-
-      /**
-       * check if job app exists and set right create on date
-       */
-      return isApplicationExists(jobApp.userId, jobApp.positionId)
-        .then(
-            function(foundedApp){
-                /**
-                 * application exist do patch
-                 */
-                delete foundedApp.prescreenAnswers;
-
-                angular.extend(foundedApp, jobApp);
-
-                return HirelyApiService.applications(foundedApp._id).patch(jobApp);
-            },
-            function(){
-                /**
-                 * application doesn't exists do post
-                 */
-
-                return HirelyApiService.applications().post(jobApp);
-            }
-        )/// then
-
-
-      return deferred.promise;
-    }//// fun. save
+    function create(jobApp){
+      return HirelyApiService.applications().post(jobApp);
+    }//// fun. create
 
     /**
      * [isApplicationExists used to check and retrive job applicaiton object]

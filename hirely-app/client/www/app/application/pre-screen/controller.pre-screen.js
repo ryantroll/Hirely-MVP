@@ -129,7 +129,7 @@
 					prescreenAnswers: angular.copy($scope.model.prescreenAnswers)
 				};
 
-				JobApplicationService.save(application)
+				JobApplicationService.create(application)
 				.then(
 					function(savedApp){
 						/**

@@ -1,38 +1,33 @@
 var applicationService = require('../services/application.service');
 var apiUtil = require('../utils/api-response');
+var permissionService = require('../services/permissions.service');
+var applicationModel = require('../models/application.model');
 
 var applicationRoutes = {
-
-    getAll : function(req, res){
-        /**
-         * Get all applicaitons
-         */
-        applicationService.getAll(req.query)
-        .then(
-            function(users){
-                res.status(200).json(apiUtil.generateResponse(200, "Applications retrieved successfully", users));
-            },
-            function(error){
-                //// application couldn't be found 404
-                res.status(500).json(apiUtil.generateResponse(404, "Applications couldn't be located", null));
-            }
-        );
-    },
-
     getById: function(req, res){
         applicationService.getById(req.params.id, req.query)
             .then(
                 function(app){
-                    res.status(200).json(apiUtil.generateResponse(200, "Application retrieved successfully", app));
+                    // Only allow if user owns the application
+                    if (req.isSuperUser || req.userId == app.userId) {
+                        res.status(200).json(apiUtil.generateResponse(200, "Application retrieved successfully", app));
+                    } else {
+                        res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+                    }
                 },
                 function(error){
                     //// application couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(404, "Application couldn't be located", null));
+                    res.status(404).json(apiUtil.generateResponse(404, "Application couldn't be located", null));
                 }
             );
     },
 
     getByUserId: function(req, res){
+        // only allow if user is requesting his own applications
+        if (!(req.isSuperUser || req.userId == req.params.userId)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
         applicationService.getByUserId(req.params.userId, req.query)
             .then(
                 function(app){
@@ -40,12 +35,17 @@ var applicationRoutes = {
                 },
                 function(error){
                     //// application couldn't be found 404
-                    res.status(500).json(apiUtil.generateResponse(404, "No application found for this user", null));
+                    res.status(404).json(apiUtil.generateResponse(404, "No application found for this user", null));
                 }
             );
     },
 
     getByPositionId: function(req, res){
+        // only allow if user has read permission on business
+        if (!permissionService.checkPermission(req.permissions, "positions", req.params.id)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
         applicationService.getByPositionId(req.params.id, req.query)
             .then(
                 function(app){
@@ -59,6 +59,9 @@ var applicationRoutes = {
     },
 
     createNewApplication: function(req, res){
+        if (!req.userId) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+        }
         var application = req.body;
 
         applicationService.createNewApplication(application)
@@ -67,23 +70,30 @@ var applicationRoutes = {
                     res.status(200).json(apiUtil.generateResponse(200, "Application created successfully", app));
                 },
                 function(error){
-                    res.status(500).json(apiUtil.generateResponse(500, error, null));
+                    res.status(404).json(apiUtil.generateResponse(404, error, null));
                 }
             )/// .then
     },
 
     saveApplication: function(req, res){
-        var application = req.body;
 
-        applicationService.saveApplication(req.params.appId, application)
-        .then(
-            function(app){
-                res.status(200).json(apiUtil.generateResponse(200, "Application created successfully", app));
-            },
-            function(error){
-                res.status(500).json(apiUtil.generateResponse(500, error, null));
+        applicationModel.findById(req.params.appId).then(function(app) {
+            if (!permissionService.checkPermission(req.permissions, "positions", app.positionId)) {
+                res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+                return;
             }
-        )/// .then
+
+            applicationService.saveApplication(req.params.appId, req.body)
+                .then(
+                    function (app) {
+                        res.status(200).json(apiUtil.generateResponse(200, "Application created successfully", app));
+                    },
+                    function (error) {
+                        res.status(404).json(apiUtil.generateResponse(404, error, null));
+                    }
+                ); /// .then
+        });
+
     }
 
 

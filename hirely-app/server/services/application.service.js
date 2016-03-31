@@ -59,23 +59,6 @@ function validateIds(userId, positionId){
 
 
 var applicationService = {
-    /**
-     * [getAll function will get all applications.  Not to be used in production]
-     * @return {[type]}        [promise]
-     */
-    getAll : function(reqQuery){
-        var filters = {}
-        if(undefined !== reqQuery.userId) {
-            filters['userId'] = reqQuery.userId;
-        }
-        if(undefined !== reqQuery.positionId) {
-            filters['positionId'] = reqQuery.positionId;
-        }
-        if(undefined !== reqQuery.status) {
-            filters['status'] = reqQuery.status;
-        }
-        return applicationModel.find(filters).exec();
-    },
 
     /**
      * [getById function will get a application by id]
@@ -117,8 +100,6 @@ var applicationService = {
 
                 return userModel.find({_id: {$in: userIds}, queuedForMetricUpdate: false}).then(function (users) {
                     return careerMatchScoresModel.find({userId: {$in: userIds}, occId: position.occId}).then(function (careerMatchScoress) {
-                        console.log("CMS: ");
-                        console.dir(careerMatchScoress.length);
                         var returnObj = {
                             applications: applications,
                             users: users,

@@ -7,6 +7,7 @@ var matchingService = require('../services/matching.service');
 var traitifyService = require('../services/traitify.service');
 var config = require('../config');
 var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
 
 /**
@@ -40,18 +41,6 @@ var educationProgramTypes = ['High School', 'Certificate', 'Associate\'s Degree'
 
 
 var userService = {
-    /**
-     * [getAll function will get all users.  Not to be used in production]
-     * @return {[type]}        [promise]
-     */
-    getAll: function (reqQuery) {
-        // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -')
-        if (undefined !== reqQuery.complete) {
-            returnFields = '-nothing'
-        }
-        return userModel.find({}, returnFields).exec();
-    },
 
     /**
      * [get function will get a user by id or slug]
@@ -114,7 +103,7 @@ var userService = {
         return newUser.save();
     },
 
-    passwordLogin: function (email, password) {
+    passwordLogin: function (email, password, skipPasswordCheck) {
         try {
             email = email.toLowerCase();
         } catch(err) {
@@ -125,6 +114,12 @@ var userService = {
                 console.log("US:passwordLogin: user not found for " + email);
                 return null;
             }
+
+            if (skipPasswordCheck) {
+                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: '1h'});
+                return {token: token, user: user};
+            }
+
             if (!user.password) {
                 console.log("US:passwordLogin: user does not have a password");
                 return null;
@@ -133,7 +128,6 @@ var userService = {
             // Check the password
             if (bcrypt.compareSync(password, user.password)) {
                 // Create a token
-                var jwt = require('jsonwebtoken');
                 var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: '1h'});
                 return {token: token, user: user};
             } else {

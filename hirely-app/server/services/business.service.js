@@ -13,18 +13,6 @@ var privateFields = [
 ];
 
 var businessService = {
-    /**
-     * [getAll function will get all businesss.  Not to be used in production]
-     * @return {[type]}        [promise]
-     */
-    getAll : function(reqQuery){
-        // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -');
-        if(undefined !== reqQuery.complete) {
-            returnFields = '-nothing'
-        }
-        return businessModel.find({}, returnFields).exec();
-    },
 
     /**
      * [get function will get a business by id or slug]
@@ -60,23 +48,6 @@ var businessService = {
         //return businessModel.find({})
         //.where({positions:{$elemMatch:{_id:positionId}}})
         //.exec();
-    },
-
-    /**
-     * [createNewBusiness will create new business object in database]
-     * @param  {[type]} businessObj [JS object with required field in business Model]
-     * @return {[type]}         [promise with business basic info]
-     */
-    createNewBusiness : function(businessObj){
-        var newBusiness = new businessModel(businessObj);
-
-        return newBusiness.save()
-        .then(
-            function(business){
-                return businessModel.findById(business._id).exec();
-            }//// then fun.
-
-        );/// then
     },
 
     /**

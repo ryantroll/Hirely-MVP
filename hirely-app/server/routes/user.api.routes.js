@@ -3,23 +3,13 @@ var apiUtil = require('../utils/api-response');
 
 var userRoutes = {
 
-    getAll : function(req, res){
-        /**
-         * Get all users
-         */
-        userService.getAll(req.query)
-        .then(
-            function(users){
-                res.status(200).json(apiUtil.generateResponse(200, "Users retrieved successfully", users));
-            },
-            function(error){
-                //// user couldn't be found 404
-                res.status(500).json(apiUtil.generateResponse(404, "Users couldn't be located", null));
-            }
-        );
-    },
-
     getById: function(req, res){
+
+        if (!(req.isSuperUser || req.userId == req.params.id)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
+
         /**
          * Send public info if all is not requested
          */
@@ -59,7 +49,8 @@ var userRoutes = {
     },
 
     passwordLogin : function(req, res) {
-        userService.passwordLogin(req.body.email, req.body.password)
+        var skipPasswordCheck = req.isSuperUser;
+        userService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck)
             .then(
                 function(user) {
                     res.status(200).json(apiUtil.generateResponse(200, "Password login results", user));
@@ -72,21 +63,13 @@ var userRoutes = {
         //res.json(apiUtil.generateResponse(200, "New user created successfully", result));
     },
 
-    getUserByExternalId: function(req, res) {
-        userService.getUserByExternalId(req.params.extId, req.query)
-        .then(
-            function(user){
-                res.status(200).json(apiUtil.generateResponse(200, "User retrieved successfully", user));
-            },
-            function(error){
-                //// user couldn't be found 404
-                // console.log(error);
-                res.status(500).json(apiUtil.generateResponse(500, "User couldn't be located with suplied external id", null));
-            }
-        );
-    },//// fun. getUserByExternalId
-
     saveUser: function(req, res){
+
+        if (!(req.isSuperUser || req.userId == req.params.id)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
+
         userService.saveUser(req.params.id, req.body)
         .then(
             function(user){

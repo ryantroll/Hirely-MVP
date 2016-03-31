@@ -51,36 +51,22 @@ module.exports = function(app) {
     /**
      * Adding routes for local mongoDB users
      */
-    app.get('/api/v1/users', userApiRoutes.getAll);
     app.get('/api/v1/users/:id', userApiRoutes.getById);
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
     app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
-    app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
     app.post('/api/v1/users/:id/updateUserMetricsById', userApiRoutes.updateUserMetricsById);
     app.post('/api/v1/users/passwordLogin', userApiRoutes.passwordLogin);
 
-    /**
-     * Adding routes for local mongoDB businesses
-     */
-    app.get('/api/v1/businesses', businessApiRoutes.getAll);
     app.get('/api/v1/businesses/positionIcon', businessApiRoutes.getPositionDisplayData);
     app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);
     app.get('/api/v1/businessByPositionId/:pid', businessApiRoutes.getByPositionId);
-    app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
     app.get('/api/v1/positions/:pid/isUserFiltered/:uid', businessApiRoutes.isUserFilteredForPosition);
 
-    /**
-     * Adding routs for local monogoDB applicaion
-     */
-    app.get('/api/v1/applications', applicationApiRoutes.getAll);
     app.get('/api/v1/applications/:id', applicationApiRoutes.getById);
     app.get('/api/v1/applications/byPositionId/:id', applicationApiRoutes.getByPositionId);
     app.post('/api/v1/applications/', applicationApiRoutes.createNewApplication);
     app.patch('/api/v1/applications/:appId', applicationApiRoutes.saveApplication);
 
-    /**
-     * Adding routs for favorite
-     */
     app.get('/api/v1/favorites', favoriteApiRoutes.getFavorites);
     app.post('/api/v1/favorites', favoriteApiRoutes.updateFavorite);
 
