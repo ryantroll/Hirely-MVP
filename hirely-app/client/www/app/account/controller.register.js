@@ -19,20 +19,26 @@
       }//// fun. link
     }/// return object
   })/// validate date;
-    .controller('RegisterController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
+    .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
 
-    function RegisterController($scope, $rootScope, $state, $stateParams, authService, UserService) {
+    function RegisterController($location, $scope, $rootScope, $state, $stateParams, authService, UserService) {
 
-        
 
-        
+
+
         $scope.error = '';
-        $scope.user = {email: '', password: '', firstName: '', lastName: ''}
+        $scope.user = {email: '', password: '', firstName: '', lastName: ''};
+
+        if ($location.search().inv) {
+            $scope.user.invitation = $location.search().inv;
+            $scope.businessName = $location.search().b;
+        }
+
 
 
         $scope.resetEmailValidity = function(){
           $scope.registerForm.email.$setValidity('emailExists', true);
-        }
+        };
 
         $scope.handleRgisterForm = function(){
             if(!$scope.registerForm.$valid){
@@ -40,7 +46,7 @@
             }
             $scope.ajaxBusy = true;
             registerPasswordUser($scope.user);
-        }
+        };
 
         $scope.cancelRegistration = function() {
             if(angular.isDefined($rootScope.nextState)){

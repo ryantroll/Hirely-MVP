@@ -50,9 +50,28 @@ var userRoutes = {
 
     },
 
+    createSimpleBusinessInvitationTokenFromId : function(req, res) {
+        if (!permissionService.checkPermission(req.permissions, "businesses", req.params.id)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
+
+        userService.createSimpleBusinessInvitationTokenFromId(req.params.id)
+            .then(
+                function(user) {
+                    res.status(200).json(apiUtil.generateResponse(200, "Invitation Results", user));
+                },
+                function(error) {
+                    res.status(error.code).json(apiUtil.generateResponse(error.code, error.message, null));
+                }
+            )
+    },
+
     passwordLogin : function(req, res) {
+
         var skipPasswordCheck = req.isSuperUser;
         var isBusinessUser = req.isSuperUser || permissionService.isBusinessUser(req.permissions);
+
         userService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck, isBusinessUser)
             .then(
                 function(user) {
