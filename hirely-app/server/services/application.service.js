@@ -100,9 +100,17 @@ var applicationService = {
 
                 return userModel.find({_id: {$in: userIds}, queuedForMetricUpdate: false}).then(function (users) {
                     return careerMatchScoresModel.find({userId: {$in: userIds}, occId: position.occId}).then(function (careerMatchScoress) {
+
+                        var slimUsers = [];
+                        users.forEach(function(user) {
+                            var slimUser = user.toObject();
+                            delete slimUser.personalityExams[0].careerMatchScores;
+                            delete slimUser.scores;
+                            slimUsers.push(slimUser);
+                        });
                         var returnObj = {
                             applications: applications,
-                            users: users,
+                            users: slimUsers,
                             careerMatchScoress: careerMatchScoress
                         };
 
