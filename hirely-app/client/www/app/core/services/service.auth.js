@@ -75,7 +75,7 @@
         }
 
         function passwordLogin(email, password) {
-            return userService.passwordLogin(email, password).then(function (result) {
+            return userService.passwordLogin(email, password).then(function (userAndToken) {
                 if (userAndToken) {
                     setCurrentUser(userAndToken.user);
                     setTokenCookie(userAndToken.token);
