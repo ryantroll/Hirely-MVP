@@ -24,7 +24,7 @@
 
 
       if (!authService.isUserLoggedIn()) {
-        $scope.go("app.account.login");
+        $state.go("app.account.login");
       }
       $scope.userIsSynced = false;
       authService.syncCurrentUserFromDb().then(function() {

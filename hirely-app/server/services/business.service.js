@@ -14,6 +14,16 @@ var privateFields = [
 
 var businessService = {
 
+    getById: function(id, reqQuery){
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+        if(undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+
+        return businessModel.findById(id, returnFields).exec();
+    },
+
     /**
      * [get function will get a business by id or slug]
      * @param  {[type]} idOrSlug [business id/slug should match business object id/slug in DB]
@@ -28,6 +38,18 @@ var businessService = {
         }
 
         return businessModel.findOne({ slug: slug }, returnFields).exec();
+    },
+
+    getByLocationId: function(locationId, reqQuery){
+
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+
+        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+
+        return businessModel.findOne({ $where: "obj.locations['"+locationId+"']" }, returnFields).exec();
     },
 
     /**
@@ -45,9 +67,6 @@ var businessService = {
         }
 
         return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }, returnFields).exec();
-        //return businessModel.find({})
-        //.where({positions:{$elemMatch:{_id:positionId}}})
-        //.exec();
     },
 
     /**

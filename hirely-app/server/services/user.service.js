@@ -8,6 +8,8 @@ var traitifyService = require('../services/traitify.service');
 var config = require('../config');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+var permissionModel = require('../models/permission.model');
+var businessModel = require('../models/business.model');
 
 
 /**
@@ -87,20 +89,70 @@ var userService = {
      * @return {[type]}         [promise with user basic info]
      */
     createNewUser: function (userObj) {
-        var salt = bcrypt.genSaltSync(10);
 
-        try {
-            userObj.email = userObj.email.toLowerCase();
-            userObj.password = bcrypt.hashSync(userObj.password, salt);
-        } catch(err) {
-            console.log("US:createNewUser: password or email is malformed for " + userObj.email)
+        if (userObj.password.length < 8) {
+            var err = "Password length is too short";
+            console.log(err);
+            throw err;
         }
-        var newUser = new userModel(userObj);
 
-        return newUser.save().then(function(user) {
-            var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: '1h'});
-            return {token: token, user: user};
+        userObj.email = userObj.email.toLowerCase();
+        var salt = bcrypt.genSaltSync(10);
+        userObj.password = bcrypt.hashSync(userObj.password, salt);
+
+        // Resolve perms if permToken present
+        var perms = [];
+        if (userObj.invitation) {
+            try {
+                var payload = jwt.verify(userObj.invitation, config.jwtSecret);
+                if (!payload.permObjs) throw "Invitation is malformed";
+
+                payload.permObjs.forEach(function(permDest) {
+                    var perm = {
+                        srcType: "users",
+                        destType: permDest.destType,
+                        destId: permDest.destId,
+                        c: permDest.c, r: permDest.r, u: permDest.u, d: permDest.d
+                    };
+                    perms.push(perm);
+                });
+
+            } catch (err) {
+                console.dir("Invite error: " + err);
+                deferred.reject(err);
+                return;
+            }
+        }
+        return userModel.create(userObj).then(function(user) {
+            var token = jwt.sign({userId: user._id}, config.jwtSecret, {expiresIn: '1h'});
+            var userAndToken = {token: token, user: user};
+
+            if (perms.length) {
+                for (let perm of perms) {
+                    perm.srcId = user._id;
+                }
+                return permissionModel.create(perms).then(function (perms) {
+                    return userAndToken;
+                });
+            } else {
+                return userAndToken;
+            }
         });
+
+    },
+
+    createInvitationToken: function (permObjs, expiresIn) {
+        // console.log("createInvitationToken");
+        var token = jwt.sign({permObjs: permObjs}, config.jwtSecret, {expiresIn: expiresIn});
+        return token;
+    },
+    createSimpleBusinessInvitationToken: function(businessId) {
+        var permObj = {
+            destType: 'businesses',
+            destId: businessId,
+            c: true, r: true, u: true, d: true
+        };
+        return this.createInvitationToken([permObj], '7d');
     },
 
     passwordLogin: function (email, password, skipPasswordCheck, isBusinessUser) {

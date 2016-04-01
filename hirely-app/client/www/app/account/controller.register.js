@@ -11,28 +11,37 @@
       require:'ngModel',
       link:function(scope, ele, attrs, ctrl){
         ctrl.$parsers.unshift(function(value){
-          var pat = /^.{6,12}$/;
+          // Contains at least 8 chars, 1 lowercase, 1 uppercase, and 1 number.
+          // All other chars are banned
+          var minSatRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[0-9a-zA-Z]{8,}$/;
 
-          ctrl.$setValidity('invalidPassword', pat.test(value));
+          // ctrl.$setValidity('invalidPassword', minSatRegex.test(value) && freeFromBannedRegex.test(value));
+          ctrl.$setValidity('invalidPassword', minSatRegex.test(value));
           return value;
         });/// unshift
       }//// fun. link
     }/// return object
   })/// validate date;
-    .controller('RegisterController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
+    .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
 
-    function RegisterController($scope, $rootScope, $state, $stateParams, authService, UserService) {
+    function RegisterController($location, $scope, $rootScope, $state, $stateParams, authService, UserService) {
 
-        
 
-        
+
+
         $scope.error = '';
-        $scope.user = {email: '', password: '', firstName: '', lastName: ''}
+        $scope.user = {email: '', password: '', firstName: '', lastName: ''};
+
+        if ($location.search().inv) {
+            $scope.user.invitation = $location.search().inv;
+            $scope.businessName = $location.search().b;
+        }
+
 
 
         $scope.resetEmailValidity = function(){
           $scope.registerForm.email.$setValidity('emailExists', true);
-        }
+        };
 
         $scope.handleRgisterForm = function(){
             if(!$scope.registerForm.$valid){
@@ -40,7 +49,7 @@
             }
             $scope.ajaxBusy = true;
             registerPasswordUser($scope.user);
-        }
+        };
 
         $scope.cancelRegistration = function() {
             if(angular.isDefined($rootScope.nextState)){

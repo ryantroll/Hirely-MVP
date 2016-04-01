@@ -31,7 +31,8 @@
     "bcrypt": "*",
     "mongodb": "*",
     "jsonwebtoken": "*",
-    "require-dir": "*"
+    "require-dir": "*",
+    "compression": "*"
   },
   "devDependencies": {
     "bower": "^1.3.3",

@@ -37,21 +37,23 @@ var businessRoutes = {
     },
 
     isUserFilteredForPosition: function(req, res){
-        if (!permissionService.checkPermission(req.permissions, "positions", req.params.pid)) {
-            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
-            return;
-        }
+        permissionService.checkPermission(req.permissions, "positions", req.params.pid).then(function(grant) {
+            if (!grant) {
+                res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+                return;
+            }
 
-        businessService.isUserIdFilteredForPositionId(req.params.uid, req.params.pid, req.query)
-            .then(
-                function(bool){
-                    res.status(200).json(apiUtil.generateResponse(200, bool));
-                },
-                function(error){
-                    //// business couldn't be found 404
-                    res.status(404).json(apiUtil.generateResponse(404, "Position or user not found or error. "+error, null));
-                }
-            );
+            businessService.isUserIdFilteredForPositionId(req.params.uid, req.params.pid, req.query)
+                .then(
+                    function (bool) {
+                        res.status(200).json(apiUtil.generateResponse(200, bool));
+                    },
+                    function (error) {
+                        //// business couldn't be found 404
+                        res.status(404).json(apiUtil.generateResponse(404, "Position or user not found or error. " + error, null));
+                    }
+                );
+        });
     },
 
 
