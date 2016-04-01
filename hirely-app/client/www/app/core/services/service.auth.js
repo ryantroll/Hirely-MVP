@@ -75,8 +75,9 @@
         }
 
         function passwordLogin(email, password) {
-            return userService.passwordLogin(email, password).then(function (result) {
-                if (userAndToken) {
+            return userService.passwordLogin(email, password).then(function (userAndToken) {
+
+                if (!angular.isUndefined(userAndToken) ){
                     setCurrentUser(userAndToken.user);
                     setTokenCookie(userAndToken.token);
                     return userAndToken.user;

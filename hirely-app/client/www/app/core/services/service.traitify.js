@@ -39,10 +39,15 @@
       return HirelyApiService.traitify({userId:userId}).get();
     }
 
+    function getMeta(metaId){
+      return HirelyApiService.traitify('meta', {metaId:metaId}).get();
+    }
+
     return {
       getAssessmentId: getAssessmentId,
       saveAssessment:saveAssessment,
       getTest: getTest,
+      getMeta: getMeta,
       getUserAssessment: getUserAssessment
     }
 

@@ -186,7 +186,8 @@ function extractBlendMeta(blend) {
     // console.log(blend);
 
     // ret.metaName = blend.name;
-    ret._id = blend.name;
+    ret._id = blend.name;//.replace('/', '');
+    ret.metaId = ret._id;
     ret.metaType = 'personality_blend';
     ret.meta.details = blend.details;
     ret.meta.description = blend.description;
@@ -387,6 +388,7 @@ var traitifySevice = {
         traitifyModel.findOne({_id: blend._id}).exec()
             .then(
                 function (founded) {
+
                     if (null !== founded) {
                         founded.meta = blend.meta;
                         founded.save(function (err, saved) {
@@ -395,8 +397,9 @@ var traitifySevice = {
                     }//// if null !== founded
                     else {
                         var newBlend = new traitifyModel(blend);
-
+                        console.log('%%%%%%%%%%%%%%%', blend)
                         newBlend.save(function (err, saved) {
+                            console.log('>>>>>>>>>>>>>>>>>>>>>>>', err)
                             if (err) deferred.reject(err);
                         })
                     }//// if null !== else
@@ -484,7 +487,13 @@ var traitifySevice = {
         }//// if isArray
 
         return deferred.promise;
+    },
+
+    getMeta: function(metaId){
+        return traitifyModel.findOne({_id:metaId}).exec();
     }
+
+
 
 }//// traitifyService
 

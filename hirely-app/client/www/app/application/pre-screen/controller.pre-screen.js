@@ -34,6 +34,7 @@
 			/**
 			 * bring the vaiant object to me from parent scope contoller.job-application.js
 			 */
+
 			var position = angular.copy($scope.position);
 
 
@@ -124,7 +125,7 @@
 
 				var application = {
 					userId: authService.currentUserID,
-					positionId: position._id,
+					positionId: $scope.position._id,
 					status: 1, //// set status to 1
 					prescreenAnswers: angular.copy($scope.model.prescreenAnswers)
 				};

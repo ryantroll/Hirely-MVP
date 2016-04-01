@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', CandidateDetailsController]);
+  angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
 
 
-  function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService) {
+  function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     $scope.days = AvailabilityService.days;
@@ -35,9 +35,24 @@
     .then(
       function(iconData){
         $scope.iconData = iconData;
+
+        /**
+         * Get traitify meta data for user personality blend
+         * @type {[type]}
+         */
+        var blend = $scope.applicants[$scope.detailsUserId].personalityExams[0].personalityBlend.name;
+        return TraitifyService.getMeta(blend);
       },
       function(error){
         console.log(error)
+      }
+    )
+    .then(
+      function(meta){
+        $scope.personalityBlendMeta = meta;
+      },
+      function(err){
+        console.log(err)
       }
     );
 

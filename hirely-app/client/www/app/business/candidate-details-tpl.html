@@ -93,7 +93,7 @@
                         </div>
                         <div class="personality clearfix">
                             <div class="head">{{applicants[detailsUserId].firstName}} is a <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div>
-                            <div class="traits">
+                            <div class="traits clearfix">
                                 <div class="col">
                                     <strong>Strongest Traits</strong>
                                     <div ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}</div>
@@ -102,6 +102,12 @@
                                     <strong>Weakest Traits</strong>
                                     <div ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5 : 51">{{trait._id}}</div>
                                 </div>
+                            </div>
+                            <div class="environment">
+                                <div class="head">{{applicants[detailsUserId].firstName}}'s ideal work environments</div>
+                                <ul>
+                                    <li ng-repeat="env in personalityBlendMeta.meta.environments">{{env}}</li>
+                                </ul>
                             </div>
                         </div>
 

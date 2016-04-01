@@ -98,7 +98,7 @@ var applicationService = {
                     userIds.push(application.userId);
                 }
 
-                return userModel.find({_id: {$in: userIds}, queuedForMetricUpdate: false}).then(function (users) {
+                return userModel.find({_id: {$in: userIds}, queuedForMetricUpdate:false}).then(function (users) {
                     return careerMatchScoresModel.find({userId: {$in: userIds}, occId: position.occId}).then(function (careerMatchScoress) {
                         var returnObj = {
                             applications: applications,
