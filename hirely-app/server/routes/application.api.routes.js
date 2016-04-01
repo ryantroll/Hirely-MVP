@@ -41,21 +41,25 @@ var applicationRoutes = {
     },
 
     getByPositionId: function(req, res){
-        // only allow if user has read permission on business
-        if (!permissionService.checkPermission(req.permissions, "positions", req.params.id)) {
-            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
-            return;
-        }
-        applicationService.getByPositionId(req.params.id, req.query)
-            .then(
-                function(app){
-                    res.status(200).json(apiUtil.generateResponse(200, "Application retrieved successfully", app));
-                },
-                function(error){
-                    //// application couldn't be found 404
-                    res.status(404).json(apiUtil.generateResponse(404, "No application found for this position or error. "+error, null));
-                }
-            );
+        permissionService.checkPermission(req.permissions, "positions", req.params.id).then(function(grant) {
+
+
+            // only allow if user has read permission on business
+            if (!grant) {
+                res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+                return;
+            }
+            applicationService.getByPositionId(req.params.id, req.query)
+                .then(
+                    function (app) {
+                        res.status(200).json(apiUtil.generateResponse(200, "Application retrieved successfully", app));
+                    },
+                    function (error) {
+                        //// application couldn't be found 404
+                        res.status(404).json(apiUtil.generateResponse(404, "No application found for this position or error. " + error, null));
+                    }
+                );
+        });
     },
 
     createNewApplication: function(req, res){
@@ -76,22 +80,23 @@ var applicationRoutes = {
     },
 
     saveApplication: function(req, res){
-
         applicationModel.findById(req.params.appId).then(function(app) {
-            if (!permissionService.checkPermission(req.permissions, "positions", app.positionId)) {
-                res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
-                return;
-            }
+            permissionService.checkPermission(req.permissions, "positions", app.positionId).then(function(grant) {
+                if (!grant) {
+                    res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+                    return;
+                }
 
-            applicationService.saveApplication(req.params.appId, req.body)
-                .then(
-                    function (app) {
-                        res.status(200).json(apiUtil.generateResponse(200, "Application created successfully", app));
-                    },
-                    function (error) {
-                        res.status(404).json(apiUtil.generateResponse(404, error, null));
-                    }
-                ); /// .then
+                applicationService.saveApplication(req.params.appId, req.body)
+                    .then(
+                        function (app) {
+                            res.status(200).json(apiUtil.generateResponse(200, "Application created successfully", app));
+                        },
+                        function (error) {
+                            res.status(404).json(apiUtil.generateResponse(404, error, null));
+                        }
+                    ); /// .then
+            })
         });
 
     }
