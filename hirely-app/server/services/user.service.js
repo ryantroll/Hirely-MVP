@@ -146,39 +146,13 @@ var userService = {
         var token = jwt.sign({permObjs: permObjs}, config.jwtSecret, {expiresIn: expiresIn});
         return token;
     },
-    createSimpleBusinessInvitationTokenFromId: function(businessId) {
-        // console.log("createSimpleBusinessInvitationTokenFromId");
-        var self = this;
-        return businessModel.findById(businessId).then(function (business) {
-            return self.createSimpleBusinessInvitationToken(business);
-        });
-    },
-    createSimpleBusinessInvitationToken: function(business) {
-        // console.log("createSimpleBusinessInvitationToken");
-
-        var permObjs = [];
-        permObjs.push({
+    createSimpleBusinessInvitationToken: function(businessId) {
+        var permObj = {
             destType: 'businesses',
-            destId: business._id,
+            destId: businessId,
             c: true, r: true, u: true, d: true
-        });
-
-        for (var locationId in business.locations.toObject()) {
-            permObjs.push({
-                destType: 'locations',
-                destId: locationId,
-                c: true, r: true, u: true, d: true
-            });
-        }
-        for (var positionId in business.positions.toObject()) {
-            permObjs.push({
-                destType: 'positions',
-                destId: positionId,
-                c: true, r: true, u: true, d: true
-            });
-        }
-
-        return this.createInvitationToken(permObjs, '7d');
+        };
+        return this.createInvitationToken([permObj], '7d');
     },
 
     passwordLogin: function (email, password, skipPasswordCheck, isBusinessUser) {

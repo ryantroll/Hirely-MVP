@@ -56,7 +56,7 @@ module.exports = function(app) {
     app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
     app.post('/api/v1/users/:id/updateUserMetricsById', userApiRoutes.updateUserMetricsById);
     app.post('/api/v1/users/passwordLogin', userApiRoutes.passwordLogin);
-    app.get('/api/v1/users/createSimpleBusinessInvitationTokenFromId/:id', userApiRoutes.createSimpleBusinessInvitationTokenFromId);
+    app.get('/api/v1/users/createSimpleBusinessInvitationToken/:id', userApiRoutes.createSimpleBusinessInvitationToken);
 
     app.get('/api/v1/businesses/positionIcon', businessApiRoutes.getPositionDisplayData);
     app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);
