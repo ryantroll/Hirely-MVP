@@ -58,11 +58,6 @@ var myApp = angular.module('hirelyApp',
         abstract: true,
         templateUrl: 'app/layout/application/application-master.tpl.html'
       })
-      .state('application.joblist', {
-        url: '/jobs/:businessSlug',
-        templateUrl: 'app/application/job-list.tpl.html',
-        controller: 'JobListController',
-      })
       .state('application.apply', {
         url: '/:businessSlug/:locationSlug/:positionSlug/apply',
         templateUrl: 'app/application/job-application.tpl.html',
