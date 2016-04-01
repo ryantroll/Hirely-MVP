@@ -26,6 +26,20 @@
 
         var results = {};
 
+        // TraitifyService.getTest()
+        // .then(
+        //     function(test){
+        //         console.log(test);
+        //         results.slides = test.slides;
+        //         results.types = test.personalityTypes;
+        //         results.blend = test.personalityBlend;
+        //         results.traits = test.personalityTraits;
+        //         assessmentId = test.extId;
+        //         saved = false;
+        //         saveAssessment();
+        //     }
+        // )
+
         /**
          * Enable next button but default
          * it will be disabled only when user is taking the test
@@ -46,6 +60,7 @@
         function saveAssessment() {
             if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
                 saved = true;
+
                 TraitifyService.saveAssessment(results, authService.currentUserID, assessmentId).then(function (personalityExam) {
                     authService.updateCurrentUserPropInCache('personalityExams', [personalityExam])
                 });
