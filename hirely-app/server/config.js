@@ -41,4 +41,6 @@ config.primeOnetScoresCache = false;
 
 config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
 
+config.appMode = 'express';
+
 module.exports = config;

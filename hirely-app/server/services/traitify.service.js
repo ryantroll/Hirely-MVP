@@ -244,16 +244,16 @@ var traitifySevice = {
             return deferred.promise;
         }
 
-        console.log("Getting " + onetIds.length + " career matches for " + assessmentId + ". " +
-            "Depth = " + this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
-            "/" + this.getAssessmentCareerMatchScoresByIdDepthMax);
+        // console.log("Getting " + onetIds.length + " career matches for " + assessmentId + ". " +
+        //     "Depth = " + this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
+        //     "/" + this.getAssessmentCareerMatchScoresByIdDepthMax);
 
         traitify.getCareerMatches(assessmentId, onetIds, function (matchesRaw) {
             try {
 
-                console.log("Got " + matchesRaw.length + " career matches for " + assessmentId + ". " +
-                    "Depth = " + self.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
-                    "/" + self.getAssessmentCareerMatchScoresByIdDepthMax);
+                // console.log("Got " + matchesRaw.length + " career matches for " + assessmentId + ". " +
+                //     "Depth = " + self.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
+                //     "/" + self.getAssessmentCareerMatchScoresByIdDepthMax);
 
                 var matches = {};
                 var matchOnetIds = [];
@@ -290,7 +290,9 @@ var traitifySevice = {
         var self = this;
         return this.getAssessmentCareerMatchScoresByIdWithParams(assessmentId, onetIdsAll).then(function (matches) {
             delete self.getAssessmentCareerMatchScoresByIdDepth[assessmentId];
-            return matches;
+            var deferred = q.defer();
+            deferred.resolve(matches);
+            return deferred.promise;
         });
 
     },
@@ -311,8 +313,8 @@ var traitifySevice = {
         } catch (err) {
             var err = "SKIP TS:addTraitifyCareerMatchScoresToUser: missing personalityExam";
             console.log(err);
-            var deferred = q.defer(err);
-            deferred.resolve(user);
+            var deferred = q.defer();
+            deferred.reject(err);
             return deferred.promise;
         }
 
@@ -324,7 +326,9 @@ var traitifySevice = {
 
                 if (Object.keys(careerMatchScores).length == 0) {
                     console.log("Warning:  Skipping update user with career match scores because traitify call failed.");
-                    return user;
+                    var deferred = q.defer();
+                    deferred.resolve(user);
+                    return deferred.promise;
                 }
 
                 // Note:  Mongo will group occIds by parts, separated by '.', so

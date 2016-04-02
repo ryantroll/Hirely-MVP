@@ -399,8 +399,8 @@ var userService = {
                     try {
                         // console.log("us262.5");
                         for (let occScores of occScoresArray) {
-                            console.log("expLvl: " + roles[occScores._id].expLvl);
-                            console.log("occId: " + occScores._id);
+                            // console.log("expLvl: " + roles[occScores._id].expLvl);
+                            // console.log("occId: " + occScores._id);
                             //console.dir(occScores.scores);
 
                             //console.dir("")
@@ -428,8 +428,8 @@ var userService = {
                     } catch(err) {
                         var err = "ERROR US:addExpScores("+user._id+"): "+err;
                         console.log(err);
-                        var deferred = q.defer(err);
-                        deferred.resolve(user);
+                        var deferred = q.defer();
+                        deferred.reject(err);
                         return deferred.promise;
                     }
 
@@ -479,8 +479,8 @@ var userService = {
                     } catch(err) {
                         var err = "ERROR US:addExpScores("+user._id+"): "+err;
                         console.log(err);
-                        var deferred = q.defer(err);
-                        deferred.resolve(user);
+                        var deferred = q.defer();
+                        deferred.reject(err);
                         return deferred.promise;
                     }
                 });
@@ -488,8 +488,8 @@ var userService = {
         } catch(err) {
             var err = "ERROR US:addExpScores("+user._id+"): "+err;
             console.log(err);
-            var deferred = q.defer(err);
-            deferred.resolve(user);
+            var deferred = q.defer();
+            deferred.reject(err);
             return deferred.promise;
         }
     },
@@ -511,30 +511,65 @@ var userService = {
         user.queuedForMetricUpdate = false;
         // Go ahead and add edu metrics since this is synchronous
         user = self.addEduMetrics(user);
-        console.log("u259");
+        // console.log("u259");
 
         // var deferred = q.defer(); deferred.resolve(user); deferred.promise
-        user.save()
+        return user.save()
         .then(function (user) {
-            console.log("u260");
+            // console.log("u260");
             return traitifyService.addTraitifyCareerMatchScoresToUser(user);
         }).then(function (user) {
-            console.log("u261");
+            // console.log("u261");
             return self.addExpScores(user);
         }).then(function (user) {
-            console.log("u262");
+            // console.log("u262");
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
             user.queuedForMetricUpdate = false;
             return user.save();
         }).then(function (user) {
-            console.log("u263");
+            // console.log("u263");
             return matchingService.generateCareerMatchScoresForUser(user);
-        }).then(function (boolResult) {
-            console.log("u264");
-            return true;
         })
 
-    }  // end updateUserMetricsById
+    },  // end updateUserMetricsById
+
+    updateQueuedUserMetricsLock: false,
+    updateQueuedUserMetrics: function () {
+        if (this.updateQueuedUserMetricsLock) {
+            // console.log("Waiting to finish");
+            return;
+        }
+
+        this.updateQueuedUserMetricsLock = true;
+
+        // console.log("Checking for queued users");
+        var self = this;
+
+        userModel.find({queuedForMetricUpdate:true}).then(function (users) {
+        // return userModel.find({firstName: 'Ryan'}).then(function (users) {
+            var promises = [];
+            try {
+                for (let user of users) {
+                    console.log("Updating: " + user.email);
+                    promises.push(userService.updateUserMetrics(user));
+                    if (promises.length > 3) {
+                        break;
+                    }
+                }
+                if (!users.length) {
+                    // console.log("None found");
+                }
+            } catch (err) {
+                console.log("updateQueuedUserMetrics:err: " + err);
+            }
+
+            return q.all(promises).then(function (results) {
+                // console.log("Lock lifted");
+                self.updateQueuedUserMetricsLock = false;
+            });
+
+        });
+    }
 
 }; /// users object
 

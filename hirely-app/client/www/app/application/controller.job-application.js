@@ -5,216 +5,220 @@
  * Develoopers - Hirely 2015
  */
 (function () {
-  'use strict';
+    'use strict';
 
-  angular.module('hirelyApp')
-  .filter('numberRound', function(){
-    return function(value){
-      return Math.round(value);
-    }
-  })
-  .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'AuthService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
-
-
-  function JobApplicationController($scope, $rootScope, $stateParams, $state, $timeout, authService, JobApplicationService, BusinessService) {
-
-    $scope.isAuth = null;
-    /**
-     * [availability this scope is the parent of availability step scope and this variaable is needed there]
-     * @type {Object}
-     */
-    $scope.availability = {};
-
-    $scope.destroyDirection = 0;
-    $scope.blockFinished = false;
-
-    /**
-     * [jobApplication a parent object to hold variables to be set by child scope
-     * if child scope set direct variable of scope the will be overwriten]
-     * @type {Object}
-     */
-    $scope.jobApplication = {
-      application: null, //// applicatin object after it get saved in db
-      isNewUser: false //// this variable will be set in register form controller or login form congroller to identify new user from old logged in user
-    };
+    angular.module('hirelyApp')
+        .filter('numberRound', function () {
+            return function (value) {
+                return Math.round(value);
+            }
+        })
+        .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'AuthService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-    BusinessService.getBySlug($stateParams.businessSlug)
-    .then(
-      function(business){
+    function JobApplicationController($scope, $rootScope, $stateParams, $state, $timeout, authService, JobApplicationService, BusinessService) {
 
-        $scope.business = business;
-        $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
+        /**
+         * [availability this scope is the parent of availability step scope and this variaable is needed there]
+         * @type {Object}
+         */
+        $scope.availability = {};
 
-        $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business)
-
-        initialize();
-      },
-      function(err){
-        console.log(err)
-      }
-    );
-
-    /**
-     * [getApplicationData this function created to separate the promise chain,
-     * if user not logged in there is not need to load application data and user profile fileds
-     * this function will be called again inside UserLoggedIn event below to continue data loading]
-     * @return {promise} [description]
-     */
-    function getApplicationData(){
-        if (!authService.isUserLoggedIn()) {
-            return q.reject();
-        }
-        $scope.userData = authService.currentUser;
-
-      return JobApplicationService.isApplicationExists(authService.currentUser._id, $scope.position._id)
-      .then(
-        function(app){
-          if(app){
-            $scope.jobApplication.application = app;
-          }
-        }
-      )
-
-    }//// fun. getApplicationData
-
-    function setSteps(){
-
-      $scope.steps = [
-
-        {
-          templateUrl: '/app/user/profile/basic/basic.tpl.html',
-          controller: 'ProfileBasicController',
-          hasForm: false
-        },
-        {
-          templateUrl: '/app/user/profile/experience/experience.tpl.html',
-          controller: 'ProfileExperienceController',
-          hasForm: false
-        },
-        {
-          templateUrl: '/app/user/profile/education/education.tpl.html',
-          controller: 'ProfileEducationController',
-          hasForm: false
-        },
-        {
-          templateUrl: '/app/user/profile/personality/personality.tpl.html',
-          controller: 'ProfilePersonalityController'
-        },
-        {
-          templateUrl: '/app/user/profile/availability/availability.tpl.html',
-          controller: 'ProfileAvailabilityController',
-          hasForm: true
-        },
-        {
-          templateUrl: '/app/application/pre-screen/pre-screen.tpl.html',
-          controller: 'PreScreenController',
-          hasForm: true
-        }
-      ];
-    }//// fun. setStpes
-
-    function initialize(){
+        $scope.destroyDirection = 0;
+        $scope.blockFinished = false;
 
         $scope.isAuth = authService.isUserLoggedIn();
+        $scope.userIsSynced = false;
 
-        if (!$scope.isAuth) {
-            $rootScope.nextState = {state:'application.apply', params:{businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug}};
+        if ($scope.isAuth) {
+            authService.syncCurrentUserFromDb().then(function () {
+                $scope.userIsSynced = true;
+            });
+        } else {
+            $rootScope.nextState = {state: $state.current.name, params: $state.params};
             $state.go('app.account.register');
         }
 
-        $scope.userIsSynced = false;
-        authService.syncCurrentUserFromDb().then(function() {
-            $scope.userIsSynced = true;
+        $scope.$on('UserLoggedOut', function(event, args) {
+            $rootScope.nextState = {state: $state.current.name, params: $state.params};
+            $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
         });
-        
-        setSteps();
-        
 
 
-      /**
-       * initiate layout template variables
-       */
-      $scope.dataError = !$scope.business || !$scope.location || !$scope.position;
-      $scope.dataLoaded = true;
-      $scope.registerFrom = true;
-      $scope.loginForm = false;
-      $scope.passwordForm = false;
 
-      if(!$scope.dataError){
         /**
-         * Set required variable in parent $scope app/layout/application-master.js
-         * @type {[type]}
+         * [jobApplication a parent object to hold variables to be set by child scope
+         * if child scope set direct variable of scope the will be overwriten]
+         * @type {Object}
          */
-        $scope.layoutModel.business = $scope.business.name;
-        $scope.layoutModel.position = $scope.position.title;
-        $scope.layoutModel.location = $scope.location.name;
+        $scope.jobApplication = {
+            application: null, //// applicatin object after it get saved in db
+            isNewUser: false //// this variable will be set in register form controller or login form congroller to identify new user from old logged in user
+        };
 
-        $scope.layoutModel.noHeader = true;
-      }//// if!dataError
 
-    }//// fun. initialize
+        BusinessService.getBySlug($stateParams.businessSlug)
+            .then(
+                function (business) {
 
-   /**
-     * [setInitialStep used inside the template in multiStepForm directive
-     * to set the initiale step based on user profile]
-     */
-    $scope.setInitialStep = function(){
-      // var initialStep = 1;
-      if(
-        !(angular.isDefined(authService.currentUser.mobile) && authService.currentUser.mobile &&
-        angular.isDefined(authService.currentUser.dateOfBirth) && authService.currentUser.dateOfBirth &&
-        angular.isDefined(authService.currentUser.postalCode) && authService.currentUser.postalCode)
-      ){
-        return 1;
-      }
+                    $scope.business = business;
+                    $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
 
-      if( !(angular.isDefined($scope.userData) && Array.isArray($scope.userData.workExperience) && $scope.userData.workExperience.length > 0) ){
-        return 2;
-      }
+                    $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business)
 
-      if( !(angular.isDefined($scope.userData) && Array.isArray($scope.userData.education) && $scope.userData.education.length > 0) ){
-        return 3;
-      }
+                    initialize();
+                },
+                function (err) {
+                    console.log(err)
+                }
+            );
 
-      if( !(angular.isDefined($scope.userData) && Array.isArray($scope.userData.personalityExams) && $scope.userData.personalityExams.length > 0) ){
-        return 4;
-      }
+        /**
+         * [getApplicationData this function created to separate the promise chain,
+         * if user not logged in there is not need to load application data and user profile fileds
+         * this function will be called again inside UserLoggedIn event below to continue data loading]
+         * @return {promise} [description]
+         */
+        function getApplicationData() {
+            if (!authService.isUserLoggedIn()) {
+                return q.reject();
+            }
+            $scope.userData = authService.currentUser;
 
-      if( !(angular.isDefined($scope.userData.availability.hoursPerWeekMin) && $scope.userData.availability.hoursPerWeekMin > 0) ){
-        return 5;
-      }
+            return JobApplicationService.isApplicationExists(authService.currentUser._id, $scope.position._id)
+                .then(
+                    function (app) {
+                        if (app) {
+                            $scope.jobApplication.application = app;
+                        }
+                    }
+                )
 
-      return 6;
-    }
+        }//// fun. getApplicationData
 
-    /**
-     * [finish trigger when user get to the last step pre-screen and click finish button, will reidrect the user to thank you page]
-     * @return {[type]} [description]
-     */
-    $scope.finish = function(){
-      delete $scope.layoutModel.noHeader;
-      $state.go('application.done', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
-    };
+        function setSteps() {
 
-    function semiFixedFooter() {
-        var windowHeight = getBody().clientHeight;
-        var docHeight = $("body > .ng-scope").height();
+            $scope.steps = [
 
-        if (windowHeight > docHeight) {
-            $(".multi-step-container footer").addClass("fixedBottom");
-        } else {
-            $(".multi-step-container footer").removeClass("fixedBottom");
+                {
+                    templateUrl: '/app/user/profile/basic/basic.tpl.html',
+                    controller: 'ProfileBasicController',
+                    hasForm: false
+                },
+                {
+                    templateUrl: '/app/user/profile/experience/experience.tpl.html',
+                    controller: 'ProfileExperienceController',
+                    hasForm: false
+                },
+                {
+                    templateUrl: '/app/user/profile/education/education.tpl.html',
+                    controller: 'ProfileEducationController',
+                    hasForm: false
+                },
+                {
+                    templateUrl: '/app/user/profile/personality/personality.tpl.html',
+                    controller: 'ProfilePersonalityController'
+                },
+                {
+                    templateUrl: '/app/user/profile/availability/availability.tpl.html',
+                    controller: 'ProfileAvailabilityController',
+                    hasForm: true
+                },
+                {
+                    templateUrl: '/app/application/pre-screen/pre-screen.tpl.html',
+                    controller: 'PreScreenController',
+                    hasForm: true
+                }
+            ];
+        }//// fun. setStpes
+
+        function initialize() {
+
+            setSteps();
+
+            /**
+             * initiate layout template variables
+             */
+            $scope.dataError = !$scope.business || !$scope.location || !$scope.position;
+            $scope.dataLoaded = true;
+            $scope.registerFrom = true;
+            $scope.loginForm = false;
+            $scope.passwordForm = false;
+
+            if (!$scope.dataError) {
+                /**
+                 * Set required variable in parent $scope app/layout/application-master.js
+                 * @type {[type]}
+                 */
+                $scope.layoutModel.business = $scope.business.name;
+                $scope.layoutModel.position = $scope.position.title;
+                $scope.layoutModel.location = $scope.location.name;
+
+                $scope.layoutModel.noHeader = true;
+            }//// if!dataError
+
+        }//// fun. initialize
+
+        /**
+         * [setInitialStep used inside the template in multiStepForm directive
+         * to set the initiale step based on user profile]
+         */
+        $scope.setInitialStep = function () {
+            // var initialStep = 1;
+            if (
+                !(angular.isDefined(authService.currentUser.mobile) && authService.currentUser.mobile &&
+                angular.isDefined(authService.currentUser.dateOfBirth) && authService.currentUser.dateOfBirth &&
+                angular.isDefined(authService.currentUser.postalCode) && authService.currentUser.postalCode)
+            ) {
+                return 1;
+            }
+
+            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.workExperience) && $scope.userData.workExperience.length > 0)) {
+                return 2;
+            }
+
+            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.education) && $scope.userData.education.length > 0)) {
+                return 3;
+            }
+
+            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.personalityExams) && $scope.userData.personalityExams.length > 0)) {
+                return 4;
+            }
+
+            if (!(angular.isDefined($scope.userData.availability.hoursPerWeekMin) && $scope.userData.availability.hoursPerWeekMin > 0)) {
+                return 5;
+            }
+
+            return 6;
         }
+
+        /**
+         * [finish trigger when user get to the last step pre-screen and click finish button, will reidrect the user to thank you page]
+         * @return {[type]} [description]
+         */
+        $scope.finish = function () {
+            delete $scope.layoutModel.noHeader;
+            $state.go('application.done', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
+        };
+
+        function semiFixedFooter() {
+            var windowHeight = getBody().clientHeight;
+            var docHeight = $("body > .ng-scope").height();
+
+            if (windowHeight > docHeight) {
+                $(".multi-step-container footer").addClass("fixedBottom");
+            } else {
+                $(".multi-step-container footer").removeClass("fixedBottom");
+            }
+        }
+
+        setInterval(semiFixedFooter, 100);
+
+        var loadingBarLocation = 0;
+        setInterval(function () {
+            loadingBarLocation = (loadingBarLocation + 1) % 5;
+            $(".loadingBar div").css("margin-left", loadingBarLocation * 20 + "%");
+        }, 300);
+
     }
-
-    setInterval(semiFixedFooter, 100);
-      
-    var loadingBarLocation = 0;
-    setInterval(function() {
-      loadingBarLocation = (loadingBarLocation + 1) % 5;
-      $(".loadingBar div").css("margin-left", loadingBarLocation*20+"%");
-    }, 300);
-
-  }
 })();

@@ -53,20 +53,36 @@ switch (environment){
 
         break;
 }
-app.listen(port, function() {
-    console.log('Express server listening on port ' + port);
-    console.log('env = ' + app.get('env') +
-        '\n__dirname = ' + __dirname  +
-        '\nprocess.cwd = ' + process.cwd());
-});
 
-if (config.primeOnetScoresCache) {
-    onetScoresService.getAll().then(
-        function(onetScoresCache) {
+function startListening() {
+    app.listen(port, function () {
+        console.log('Express server listening on port ' + port);
+        console.log('env = ' + app.get('env') +
+            '\n__dirname = ' + __dirname +
+            '\nprocess.cwd = ' + process.cwd());
+    });
+}
+
+
+if (config.appMode == 'crunchMuncher') {
+    console.log("Running in crunchMuncher mode...");
+    var userService = require('./server/services/user.service');
+
+    console.log("Priming onetScoresCache...");
+    onetScoresService.getAll().then(function() {
+        console.log("onetScoresCache is primed");
+        setInterval(userService.updateQueuedUserMetrics, 10000)
+    });
+
+} else {
+    // Standard Express mode
+    if (config.primeOnetScoresCache) {
+        console.log("Priming onetScoresCache...");
+        onetScoresService.getAll().then(function () {
             console.log("onetScoresCache is primed");
-        },
-        function(err) {
-            console.log("onetScoresCache error: " +err);
-        }
-    );
+            startListening();
+        });
+    } else {
+        startListening();
+    }
 }

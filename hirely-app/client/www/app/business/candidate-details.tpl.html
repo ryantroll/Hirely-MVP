@@ -22,37 +22,37 @@
                             <div class="col-sm-3">
                                 <div class="image">
                                     <div class="image-wrapper">
-                                        <img src="{{applicants[detailsUserId].profileImageURL || defaultImage}}" />
+                                        <img src="{{applicant.profileImageURL || defaultImage}}" />
                                     </div>
-                                    <div class="date">Applied: {{detailsApp.createdAt | date:'MM/dd/yyyy'}}</div>
+                                    <div class="date">Applied: {{application.createdAt | date:'MM/dd/yyyy'}}</div>
                                 </div>
                             </div>
                             <div class="col-sm-9">
                                 <div class="details">
-                                    <h4>{{applicants[detailsUserId].firstName}} {{applicants[detailsUserId].lastName}}</h4>
+                                    <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
                                     <div class="fit-scale">
-                                        <i ng-class="getFitClass(0, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(1, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(2, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(3, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(4, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(5, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(6, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(7, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(8, detailsApp.score)"></i>
-                                        <i ng-class="getFitClass(9, detailsApp.score)"></i>
-                                        <span class="legend">{{getFitClass(-1, detailsApp.score) | uppercase}} Fit</span>
+                                        <i ng-class="getFitClass2(0, application.score)"></i>
+                                        <i ng-class="getFitClass2(1, application.score)"></i>
+                                        <i ng-class="getFitClass2(2, application.score)"></i>
+                                        <i ng-class="getFitClass2(3, application.score)"></i>
+                                        <i ng-class="getFitClass2(4, application.score)"></i>
+                                        <i ng-class="getFitClass2(5, application.score)"></i>
+                                        <i ng-class="getFitClass2(6, application.score)"></i>
+                                        <i ng-class="getFitClass2(7, application.score)"></i>
+                                        <i ng-class="getFitClass2(8, application.score)"></i>
+                                        <i ng-class="getFitClass2(9, application.score)"></i>
+                                        <span class="legend">{{getFitClass(-1, application.score) | uppercase}} Fit</span>
                                     </div>
                                     <div class="answers visible-sm-block visible-md-block visible-lg-block">
-                                        <div class="answer" ng-repeat="answer in detailsApp.prescreenAnswers | limitTo : 1">
+                                        <div class="answer" ng-repeat="answer in application.prescreenAnswers | limitTo : 1">
                                             <p>{{answer.answer}}</p>
                                         </div>
                                     </div>
-                                    <p class="traits visible-sm-block visible-md-block visible-lg-block" ng-show="applicants[detailsUserId].personalityExams.length > 0">
-                                        <strong>Top Traits</strong> <span ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
+                                    <p class="traits visible-sm-block visible-md-block visible-lg-block" ng-show="applicant.personalityExams.length > 0">
+                                        <strong>Top Traits</strong> <span ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
                                     </p>
                                     <p class="status">
-                                        {{position.title}} - <span class="{{statusLabels[detailsApp.status] | lowercase}}">{{statusLabels[detailsApp.status]}}</span>
+                                        {{position.title}} - <span class="{{statusLabels[applicant.status] | lowercase}}">{{statusLabels[applicant.status]}}</span>
                                     </p>
                                 </div><!--details-->
                             </div><!--col-->
@@ -77,7 +77,7 @@
                         </div>
                         <div class="prescreen">
                             <ul>
-                                <li ng-repeat="answer in detailsApp.prescreenAnswers">
+                                <li ng-repeat="answer in application.prescreenAnswers">
                                     <b>{{answer.question}}</b>
                                     <p>
                                         {{answer.answer}}
@@ -92,15 +92,15 @@
                             <h5>Personality <a href="javascript:void(0)" class="info">?</a></h5>
                         </div>
                         <div class="personality clearfix">
-                            <div class="head">{{applicants[detailsUserId].firstName}} is a <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicants[detailsUserId].personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div>
+                            <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div>
                             <div class="traits">
                                 <div class="col">
                                     <strong>Strongest Traits</strong>
-                                    <div ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}</div>
+                                    <div ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}</div>
                                 </div>
                                 <div class="col">
                                     <strong>Weakest Traits</strong>
-                                    <div ng-repeat="trait in applicants[detailsUserId].personalityExams[0].personalityTraits | limitTo : 5 : 51">{{trait._id}}</div>
+                                    <div ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5 : 51">{{trait._id}}</div>
                                 </div>
                             </div>
                         </div>
@@ -112,8 +112,8 @@
                             <h5>Availability</h5>
                         </div>
                         <div class="details">
-                            <p>I'm available to start <span ng-show="getAvailabilityByDays() != 'Immediately'">in</span> <b>{{getAvailabilityByDays()}}</b> upon hire</p>
-                            <p>I'm looking for <b>{{applicants[detailsUserId].availability.hoursPerWeekMin}}</b> to <b>{{applicants[detailsUserId].availability.hoursPerWeekMax}}</b> hours per week</p>
+                            <p>I'm available to start <span ng-show="daysUntilAvailable != 'Immediately'">in</span> <b>{{daysUntilAvailable}}</b> upon hire</p>
+                            <p>I'm looking for <b>{{applicant.availability.hoursPerWeekMin}}</b> to <b>{{applicant.availability.hoursPerWeekMax}}</b> hours per week</p>
                             <p>My current availability for shifts is as follows</p>
                         </div>
 
@@ -163,10 +163,10 @@
                         </div>
                         <div class="experience">
                             <ul>
-                                <li class="clearfix" ng-repeat="work in applicants[detailsUserId].workExperience">
+                                <li class="clearfix" ng-repeat="work in applicant.workExperience">
                                     <div class="icon icon-{{getPositionIcon(work.occId, 'cssClass')}}" style="color:{{getPositionIcon(work.occId, 'iconColor')}}"></div>
                                     <div class="exp">
-                                        <h6>{{work.occTitle}} <span>{{getDateDif($index)}}</span></h6>
+                                        <h6>{{work.occTitle}} <span>{{work.monthCount}}</span></h6>
                                         <div class="address"><p>{{work.formattedAddress}} - {{work.city}}, {{work.state}}</p></div>
                                         <div class="date">
                                             <p>{{work.dateStart | date : 'MMM yyyy'}} to <span ng-if="!work.dateEnd">Present</span><span ng-if="work.dateEnd">{{work.dateEnd | date : 'MMM yyyy'}}</span></p>
@@ -183,7 +183,7 @@
                         </div>
                         <div class="experience">
                             <ul>
-                                <li class="clearfix" ng-repeat="edu in applicants[detailsUserId].education">
+                                <li class="clearfix" ng-repeat="edu in applicant.education">
 
                                     <div class="exp">
                                         <h6>{{edu.institutionName}}</h6>
@@ -212,26 +212,26 @@
                         <div class="col-sm-12">
                             <div class="image">
                                 <div class="image-wrapper">
-                                    <img src="{{applicants[detailsUserId].profileImageURL || defaultImage}}" />
+                                    <img src="{{applicant.profileImageURL || defaultImage}}" />
                                 </div>
-                                <div class="date">Applied: {{detailsApp.createdAt | date:'MM/dd/yyyy'}}</div>
+                                <div class="date">Applied: {{application.createdAt | date:'MM/dd/yyyy'}}</div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="details center">
-                                <h4>{{applicants[detailsUserId].firstName}} {{applicants[detailsUserId].lastName}}</h4>
+                                <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
                                 <div class="fit-scale">
-                                    <i ng-class="getFitClass(0, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(1, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(2, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(3, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(4, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(5, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(6, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(7, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(8, detailsApp.score)"></i>
-                                    <i ng-class="getFitClass(9, detailsApp.score)"></i>
-                                    <span class="legend">{{getFitClass(-1, detailsApp.score) | uppercase}} Fit</span>
+                                    <i ng-class="getFitClass(0, application.score)"></i>
+                                    <i ng-class="getFitClass(1, application.score)"></i>
+                                    <i ng-class="getFitClass(2, application.score)"></i>
+                                    <i ng-class="getFitClass(3, application.score)"></i>
+                                    <i ng-class="getFitClass(4, application.score)"></i>
+                                    <i ng-class="getFitClass(5, application.score)"></i>
+                                    <i ng-class="getFitClass(6, application.score)"></i>
+                                    <i ng-class="getFitClass(7, application.score)"></i>
+                                    <i ng-class="getFitClass(8, application.score)"></i>
+                                    <i ng-class="getFitClass(9, application.score)"></i>
+                                    <span class="legend">{{getFitClass(-1, application.score) | uppercase}} Fit</span>
                                 </div>
 
                             </div><!--details-->
@@ -241,30 +241,30 @@
 
                 <div class="box">
                     <div class="title blue">
-                        <h5>Candidate Status: {{statusLabels[detailsApp.status]}}</h5>
+                        <h5>Applicant Status: {{statusLabels[application.status]}}</h5>
                     </div>
                     <div class="actions clearfix">
                         <div class="menu">
                             <div class="inner">
-                                <a href="javascript:void(0);" class="action" ng-if="detailsApp.status === 1" ng-click="updateAppStatus($event, detailsApp._id, 2)">Contact</a>
-                                <a href="javascript:void(0);" class="action" ng-if="detailsApp.status === 2" ng-click="updateAppStatus($event, detailsApp._id, 3)">Hire</a>
-                                <a href="javascript:void(0);" class="action" ng-if="detailsApp.status === 3 || detailsApp.status === 0" ng-click="updateAppStatus($event, detailsApp._id, 1)">Applied</a>
+                                <a href="javascript:void(0);" class="action" ng-if="application.status === 1" ng-click="updateAppStatus($event, application._id, 2)">Contact</a>
+                                <a href="javascript:void(0);" class="action" ng-if="application.status === 2" ng-click="updateAppStatus($event, application._id, 3)">Hire</a>
+                                <a href="javascript:void(0);" class="action" ng-if="application.status === 3 || application.status === 0" ng-click="updateAppStatus($event, application._id, 1)">Applied</a>
                                 <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, 'detailsAction')"><i class="glyphicon glyphicon-menu-down"></i></a>
-                                <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, detailsApp._id, 0)"><i class="icon-thumb_down_icon"></i></a>
+                                <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, application._id, 0)"><i class="icon-thumb_down_icon"></i></a>
                             </div>
                             <ul class="hidden" id="menu_detailsAction">
-                                <li ng-if="app.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, detailsApp._id, 1)">APPLIED</a></li>
-                                <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, detailsApp._id, 2)">CONTACT</a></li>
-                                <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, detailsApp._id, 3)">HIRE</a></li>
-                                <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, detailsApp._id, 0)">DECLINE</a></li>
+                                <li ng-if="app.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, application._id, 1)">APPLIED</a></li>
+                                <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, application._id, 2)">CONTACT</a></li>
+                                <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, application._id, 3)">HIRE</a></li>
+                                <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, application._id, 0)">DECLINE</a></li>
                             </ul>
                         </div><!--menu-->
                     </div><!--actions-->
                 </div><!--box-->
 
                 <div class="arrows clearfix">
-                    <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-disabled="detailsIndex === 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
-                    <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-disabled="detailsIndex <= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
+                    <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-show="isModal" ng-disabled="detailsIndex === 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
+                    <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-show="isModal" ng-disabled="detailsIndex >= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
                 </dvi><!--arrows-->
             </div><!--col-->
 

@@ -10,16 +10,25 @@
   angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
 
 
-  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, AuthService, UserService, PositionFiltersService) {
+  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, authService, userService, PositionFiltersService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
-
-    /**
-     * Code for layout interactivity *****************************************************
-     */
 
     $scope.showPositionMenu = false;
     $scope.showSortMenu = false;
     $scope.sortByLabel = 'Sort By';
+
+    // Save the current state to bring user back after login
+    if(false === authService.isUserLoggedIn()){
+      $rootScope.nextState = {state:$state.current.name, params:$state.params};
+      $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
+      return;
+    }
+
+    $scope.$on('UserLoggedOut', function(event, args) {
+      $rootScope.nextState = {state:$state.current.name, params:$state.params};
+      $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
+      return;
+    });
 
     $scope.togglePositionMenu = function(event){
 
@@ -125,21 +134,10 @@
       function(business){
 
         $scope.business = business;
+        $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
+        $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-        try {
-          $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
-
-          $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
-
-          /**
-           * Check if user is logged in and move to next promise
-           */
-          $scope.isAuth = AuthService.isUserLoggedIn();
-
-          return JobApplicationService.getByPositionId($scope.position._id);
-        } catch (err) {
-          $scope.dataError = err;
-        }
+        return JobApplicationService.getByPositionId($scope.position._id);
       },
       function(err){
         $scope.dataError = err;
@@ -154,7 +152,7 @@
         $scope.scores = data.careerMatchScoress;
       },
       function(err){
-        console.log(err)
+        console.log(err);
         $scope.dataError = err;
       }
     )
@@ -166,16 +164,6 @@
     );
 
     function initialize(){
-
-      /**
-       * Save the current state to bring user back after login
-       */
-      if(false === $scope.isAuth){
-        $rootScope.nextState = {state:$state.current.name, params:$state.params};
-        $state.go('app.account.login');
-        return;
-      }
-
 
       /**
        * don't continue if there is a data error
@@ -388,8 +376,8 @@
 
       var detailsModal  = $uibModal.open({
         size:'full',
-        controller: 'CandidateDetailsController',
-        templateUrl: 'app/business/candidate-details-tpl.html',
+        controller: 'CandidateDetailsModalController',
+        templateUrl: 'app/business/candidate-details.tpl.html',
         windowClass: 'gray',
         scope:$scope
       })

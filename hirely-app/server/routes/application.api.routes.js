@@ -42,13 +42,12 @@ var applicationRoutes = {
 
     getByPositionId: function(req, res){
         permissionService.checkPermission(req.permissions, "positions", req.params.id).then(function(grant) {
-
-
             // only allow if user has read permission on business
             if (!grant) {
                 res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
                 return;
             }
+            
             applicationService.getByPositionId(req.params.id, req.query)
                 .then(
                     function (app) {

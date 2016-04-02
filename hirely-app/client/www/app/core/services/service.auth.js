@@ -56,20 +56,40 @@
             return null;
         }
 
+        var lastsync = null;
         function syncCurrentUserFromDb() {
-            console.log("syncCurrentUserFromDb");
+            // console.log("syncCurrentUserFromDb");
+
+            var now = new Date();
+            if (this.lastsync != null && now.getTime() < this.lastsync.getTime() + 1000 ) {
+                console.log("syncCurrentUserFromDb: skipping because synced soon ago");
+                return;
+            }
+
+            this.lastsync = now;
+
             if (service.isUserLoggedIn()) {
-                console.log("syncCurrentUserFromDb: Syncing user from db: " + service.currentUser.email);
-                return userService.getUserById(service.currentUserID, true).then(function (userNew) {
-                    console.log("syncCurrentUserFromDb: User synced from db: " + userNew.email);
-                    setCurrentUser(userNew);
-                    return userNew;
-                });
+                // console.log("syncCurrentUserFromDb: Syncing user from db: " + service.currentUser.email);
+                return userService.getUserById(service.currentUserID, true).then(
+                    function (userNew) {
+                        if (userNew && userNew.email) {
+                            console.log("syncCurrentUserFromDb: User synced from db: " + userNew.email);
+                            setCurrentUser(userNew);
+                            return userNew;
+                        } else {
+                            console.error("syncCurrentUserFromDb: error: " + err);
+                            service.logout();
+                        }
+                    }, function(err) {
+                        console.error("syncCurrentUserFromDb2: error: " + err);
+                        service.logout();
+                    }
+                );
             } else {
                 var deferred = $q.defer();
                 var err = "warning:  syncCurrentUserFromDb failed because no user is logged in";
                 deferred.reject(err);
-                console.log(err);
+                console.warn(err);
                 return deferred.promise;
             }
         }

@@ -115,7 +115,7 @@ var userSchema = new Schema({
   profileImageURL       :     {type:String},
   eligibleToWorkInUS    :     {type:Boolean},
   tenureAvg             :     {type:Number},
-  queuedForMetricUpdate :     {type:Boolean, default:false},
+  queuedForMetricUpdate :     {type:Boolean, default:false, index:true},
 
 
   /**
@@ -207,20 +207,7 @@ module.exports = UserModel;
 //     console.log("Found users");
 //     users.forEach(function(user) {
 //         console.log("user: "+user.email);
-//         if (user.personalityExams && user.personalityExams.length) {
-//             user.personalityExams[0].personalityBlend = {
-//                 "name": "Mentor/Inventor",
-//                 "personalityTypes": [
-//                     {
-//                         "_id": "Mentor"
-//                     },
-//                     {
-//                         "_id": "Inventor"
-//                     }
-//                 ]
-//             };
-//             user.save();
-//         }
+//
 //     });
 //     console.log("Done.");
 // });

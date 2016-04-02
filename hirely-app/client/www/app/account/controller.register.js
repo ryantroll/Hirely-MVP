@@ -12,11 +12,10 @@
       link:function(scope, ele, attrs, ctrl){
         ctrl.$parsers.unshift(function(value){
           // Contains at least 8 chars, 1 lowercase, 1 uppercase, and 1 number.
-          // All other chars are banned
           var minSatRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[0-9a-zA-Z]{8,}$/;
 
           // ctrl.$setValidity('invalidPassword', minSatRegex.test(value) && freeFromBannedRegex.test(value));
-          ctrl.$setValidity('invalidPassword', minSatRegex.test(value));
+            ctrl.$setValidity('invalidPassword', minSatRegex.test(value));
           return value;
         });/// unshift
       }//// fun. link
@@ -25,9 +24,6 @@
     .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
 
     function RegisterController($location, $scope, $rootScope, $state, $stateParams, authService, UserService) {
-
-
-
 
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: ''};

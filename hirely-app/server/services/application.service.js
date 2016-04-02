@@ -67,7 +67,26 @@ var applicationService = {
      * @return {[type]}        [promise]
      */
     getById: function(id, reqQuery){
-        return applicationModel.findById(id).exec();
+        var self = this;
+
+        return applicationModel.findById(id).then(function(application) {
+            if (application) {
+                return userModel.findById(application.userId).then(function(user) {
+                    return careerMatchScoresModel.findOne({userId:application.userId}).then(function(cms) {
+                        var slimUser = self.convertUserToSlimObject(user);
+                        var ret = {
+                            application: application,
+                            applicant: slimUser,
+                            careerMatchScore: cms
+                        };
+                        return ret;
+                    });
+                });
+            } else {
+                throw "Application not found";
+            }
+
+        });
     },
 
     /**
@@ -80,6 +99,15 @@ var applicationService = {
         return applicationModel.find({userId:userId}).exec();
     },
 
+    convertUserToSlimObject: function(user) {
+        var slimUser = user.toObject();
+        if (slimUser.personalityExams && slimUser.personalityExams.length && slimUser.personalityExams[0].careerMatchScores)
+            delete slimUser.personalityExams[0].careerMatchScores;
+        if (slimUser.scores)
+            delete slimUser.scores;
+        return slimUser;
+    },
+
     /**
      * [getByPositionId will get applications and related users list that match a position id]
      * @param  {string} positionId [id of position]
@@ -87,34 +115,48 @@ var applicationService = {
      * @return {promise}           [description]
      */
     getByPositionId: function(positionId, reqQuery){
+        var self = this;
+
+        // console.log("as:getByPositionId:0");
         return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
+            // console.log("as:getByPositionId:1");
             var businessObj = business.toObject();
             var position = businessObj.positions[positionId];
 
+            // console.log("as:getByPositionId:2");
             return applicationModel.find({'positionId': positionId}).then(function (applications) {
-
+                // console.log("as:getByPositionId:3");
                 var userIds = [];
                 for (let application of applications) {
                     userIds.push(application.userId);
                 }
 
+                // console.log("as:getByPositionId:4");
                 return userModel.find({_id: {$in: userIds}, queuedForMetricUpdate: false}).then(function (users) {
+                    // console.log("as:getByPositionId:5");
                     return careerMatchScoresModel.find({userId: {$in: userIds}, occId: position.occId}).then(function (careerMatchScoress) {
+                        // console.log("as:getByPositionId:6");
 
-                        var slimUsers = [];
-                        users.forEach(function(user) {
-                            var slimUser = user.toObject();
-                            delete slimUser.personalityExams[0].careerMatchScores;
-                            delete slimUser.scores;
-                            slimUsers.push(slimUser);
-                        });
-                        var returnObj = {
-                            applications: applications,
-                            users: slimUsers,
-                            careerMatchScoress: careerMatchScoress
-                        };
+                        try {
+                            var slimUsers = [];
+                            users.forEach(function (user) {
+                                var slimUser = self.convertUserToSlimObject(user);
+                                slimUsers.push(slimUser);
+                            });
 
-                        return returnObj;
+                            var returnObj = {
+                                applications: applications,
+                                users: slimUsers,
+                                careerMatchScoress: careerMatchScoress
+                            };
+                            // console.log("as:getByPositionId:6");
+
+                            return returnObj;
+                        } catch (err) {
+                            err = "as:getByPositionId:err:" + err
+                            console.log(err);
+                            throw err;
+                        }
                     });
 
                 });

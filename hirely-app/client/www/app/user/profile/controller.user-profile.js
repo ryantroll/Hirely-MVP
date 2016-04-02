@@ -22,13 +22,20 @@
      */
     (function init() {
 
-
-      if (!authService.isUserLoggedIn()) {
+      $scope.userIsSynced = false;
+      if (authService.isUserLoggedIn()) {
+        authService.syncCurrentUserFromDb().then(function () {
+          $scope.userIsSynced = true;
+        });
+      } else {
+        $rootScope.nextState = {state: $state.current.name, params: $state.params};
         $state.go("app.account.login");
       }
-      $scope.userIsSynced = false;
-      authService.syncCurrentUserFromDb().then(function() {
-        $scope.userIsSynced = true;
+
+
+      $scope.$on('UserLoggedOut', function(event, args) {
+        $rootScope.nextState = {state: $state.current.name, params: $state.params};
+        $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
       });
 
       /**

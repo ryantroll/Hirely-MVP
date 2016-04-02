@@ -20,6 +20,13 @@
             });
         }
 
+        $scope.$on('UserLoggedOut', function(event, args) {
+            $scope.isUserLoggedIn = false;
+        });
+        $scope.$on('UserLoggedin', function(event, args) {
+            $scope.isUserLoggedIn = true;
+        });
+
         /**
          * check on loged in user
          * isUserLoggedIn method will do the needfull and set all the required variabls
