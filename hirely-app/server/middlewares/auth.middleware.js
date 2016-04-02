@@ -12,7 +12,8 @@ module.exports = function(req, res, next) {
 
     if(req.method == 'OPTIONS') next();
 
-    if (req.headers.authorization) {
+    console.log("Auth: "+req.headers.authorization);
+    if (req.headers.authorization && req.headers.authorization != null && req.headers.authorization != 'null') {
         jwt.verify(req.headers.authorization, config.jwtSecret, function(err, payload) {
             // console.log("Payload: "+payload);
             if (err) {

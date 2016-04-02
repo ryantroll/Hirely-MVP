@@ -168,7 +168,7 @@ var userService = {
             }
 
             if (skipPasswordCheck) {
-                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: '1h'});
+                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: config.tokenLifeDefault});
                 return {token: token, user: user};
             }
 
@@ -181,8 +181,8 @@ var userService = {
             if (bcrypt.compareSync(password, user.password)) {
                 // Create a token
                 // If user is a business user, make cookie last longer
-                var expiresIn = '1h';
-                if (isBusinessUser) expiresIn = '1 month';
+                var expiresIn = config.tokenLifeDefault;
+                if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
                 var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
                 return {token: token, user: user};
             } else {

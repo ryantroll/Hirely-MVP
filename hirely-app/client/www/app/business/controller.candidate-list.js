@@ -144,12 +144,14 @@
       }
     )
     .then(
-      function(data){
-
-        console.log(data);
-        $scope.applications = data.applications;
-        $scope.applicants = data.users;
-        $scope.scores = data.careerMatchScoress;
+      function(appData){
+        if (appData) {
+          $scope.applications = appData.applications;
+          $scope.applicants = appData.users;
+          $scope.scores = appData.careerMatchScoress;
+        } else {
+          $scope.dataError = "No applications found.";
+        }
       },
       function(err){
         console.log(err);

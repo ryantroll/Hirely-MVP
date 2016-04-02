@@ -156,9 +156,12 @@
             $cookies.remove("token");
 
             /// let all scopes the user is logged out
+            $rootScope.token = null;
+            service.token = null;
+            console.log("Token has been removed");
             $rootScope.$emit('UserLoggedOut');
             $rootScope.$broadcast('UserLoggedOut');
-            $rootScope.token = null;
+
         }
 
         /**

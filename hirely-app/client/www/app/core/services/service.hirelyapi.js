@@ -98,11 +98,12 @@
             var params = {
                 method: method,
                 url: url,
-                headers: {
-                    Authorization: $rootScope.token
-                },
+                headers: {},
                 data: data
             };
+            if ($rootScope.token) {
+                params.headers['Authorization'] = $rootScope.token;
+            }
             $http(params).then(
                 function (resSuccess) {
                     deferred.resolve(resSuccess.data.results);
