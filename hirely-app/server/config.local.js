@@ -42,4 +42,7 @@ config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
 
 config.appMode = 'express';
 
+config.tokenLifeDefault = '1h';
+config.tokenLifeBusiness = '48h';
+
 module.exports = config;
