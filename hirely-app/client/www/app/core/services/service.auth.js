@@ -72,7 +72,7 @@
                 // console.log("syncCurrentUserFromDb: Syncing user from db: " + service.currentUser.email);
                 return userService.getUserById(service.currentUserID, true).then(
                     function (userNew) {
-                        if (userNew && userNew.email) {
+                        if (angular.isDefined(userNew) && userNew.email) {
                             console.log("syncCurrentUserFromDb: User synced from db: " + userNew.email);
                             setCurrentUser(userNew);
                             return userNew;

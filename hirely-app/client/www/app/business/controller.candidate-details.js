@@ -7,11 +7,11 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', CandidateDetailsController]);
-    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', CandidateDetailsModalController]);
+    angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
+    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsModalController]);
 
 
-    function CandidateDetailsControllerCore($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService) {
+    function CandidateDetailsControllerCore($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
         $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
         $scope.days = AvailabilityService.days;
         $scope.hours = AvailabilityService.hours;
@@ -63,9 +63,24 @@
                         $scope.iconData = iconData;
                     },
                     function (error) {
-                        console.log(error)
+                        console.log("BS.getPositionDisplayData.error: "+error)
                     }
                 );
+
+            /**
+             * Get traitify meta data for user personality blend
+             * @type {[type]}
+             */
+            var blend = $scope.applicant.personalityExams[0].personalityBlend.name;
+            return TraitifyService.getMeta(blend).then(
+                function(meta){
+                    $scope.personalityBlendMeta = meta;
+                },
+                function(err){
+                    console.log("BS.getMeta.error: "+err)
+                }
+            )
+
         }
 
         // Added '2' to not be confused with controller.candidate-list.getFitClass
@@ -182,8 +197,8 @@
 
     }//// controller
 
-    function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService) {
-        CandidateDetailsControllerCore($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService);
+    function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
+        CandidateDetailsControllerCore($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
 
         $scope.isModal = false;
 
@@ -192,7 +207,6 @@
             JobApplicationService.getById($stateParams.applicationId).then(function (applicationData) {
                 $scope.application = applicationData.application;
                 $scope.applicant = applicationData.applicant;
-                console.dir(applicationData);
                 // $scope.careerMatchScores = applicationData.careerMatchScores;
                 $scope.initializeCandidateDetails();
             });
@@ -201,8 +215,8 @@
 
     }
 
-    function CandidateDetailsModalController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService) {
-        CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService)
+    function CandidateDetailsModalController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
+        CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
 
         $scope.isModal = true;
 

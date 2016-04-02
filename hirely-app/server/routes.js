@@ -46,6 +46,7 @@ module.exports = function(app) {
     app.post('/api/v1/traitify/', traitifyApiRoutes.createNewAssessment);
     app.get('/api/v1/traitify/test', traitifyApiRoutes.getTest);
     app.get('/api/v1/traitify/getAssessmentCareerMatchScoresById/:id', traitifyApiRoutes.getAssessmentCareerMatchScoresById);
+    app.get('/api/v1/traitify/meta', traitifyApiRoutes.getMeta);
     app.post('/api/v1/traitify/updateAssessmentCareerMatchScoresByUserId/:id', traitifyApiRoutes.updateAssessmentCareerMatchScoresByUserId);
 
     /**

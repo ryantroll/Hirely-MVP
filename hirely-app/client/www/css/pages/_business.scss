@@ -928,6 +928,19 @@ $candidat-menu-height:40px;
                         border-right:1px solid $c-hirely-mid-gray;
                     }
                 }
+                .environment{
+                    padding-top:1em;
+                    p{
+                        text-align:center;
+                    }
+                    ul{
+                        margin: 0 auto;
+                        width:100%;
+                        @media screen and (min-width:$screen-sm-min){
+                            width:70%;
+                        }
+                    }
+                }
             }//// .personality
 
             .timetable{
@@ -998,7 +1011,7 @@ $candidat-menu-height:40px;
                         line-height: 74px;
                         display: none;
                         @media screen and (min-width:$screen-sm-min){
-                            font-size: 8em;
+                            font-size: 5em;
                             width:20%;
                             display: block;
                         }

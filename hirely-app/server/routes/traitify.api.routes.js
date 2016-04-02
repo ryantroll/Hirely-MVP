@@ -68,6 +68,19 @@ var traitifyRoutes = {
                     res.status(500).json(apiUtil.generateResponse(500, "Matches couldn't be located: "+error, null));
                 }
             );
+    },
+
+    getMeta: function(req, res){
+        traitifyService.getMeta(req.query.metaId)
+            .then(
+                function(meta){
+                    res.status(200).json(apiUtil.generateResponse(200, "Meta retrieved successfully", meta));
+                },
+                function(error){
+                    //// user couldn't be found 404
+                    res.status(500).json(apiUtil.generateResponse(500, "Meta couldn't be located: "+error, null));
+                }
+            );
     }
 
 }/// users object

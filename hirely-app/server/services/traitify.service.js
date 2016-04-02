@@ -187,6 +187,7 @@ function extractBlendMeta(blend) {
 
     // ret.metaName = blend.name;
     ret._id = blend.name;
+    ret.metaId = ret._id;//.replace('/', '');
     ret.metaType = 'personality_blend';
     ret.meta.details = blend.details;
     ret.meta.description = blend.description;
@@ -488,6 +489,10 @@ var traitifySevice = {
         }//// if isArray
 
         return deferred.promise;
+    },
+
+    getMeta: function(metaId){
+        return traitifyModel.findOne({_id:metaId}).exec();
     }
 
 }//// traitifyService
