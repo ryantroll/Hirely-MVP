@@ -4,6 +4,12 @@ var apiUtil = require('../utils/api-response');
 var favoriteRoutes = {
 
     updateFavorite: function (req, res){
+
+        if (!(req.isSuperUser || req.userId == req.body.userId)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
+
         favoritesServices.updateFavorite(req.body)
         .then(
             function(saved){
@@ -16,6 +22,12 @@ var favoriteRoutes = {
     },//// fun. getAssmentId
 
     getFavorites: function(req, res){
+
+        if (!(req.isSuperUser || req.userId == req.query.userId)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
+
         favoritesServices.getFavorites(req.query)
         .then(
             function(favs){

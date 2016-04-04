@@ -5,7 +5,11 @@ var onetScoresService = require('../services/onetScores.service');
 var idMapModel = require('../models/useridmap.model');
 var matchingService = require('../services/matching.service');
 var traitifyService = require('../services/traitify.service');
+var config = require('../config');
 var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
+var permissionModel = require('../models/permission.model');
+var businessModel = require('../models/business.model');
 
 
 /**
@@ -39,18 +43,6 @@ var educationProgramTypes = ['High School', 'Certificate', 'Associate\'s Degree'
 
 
 var userService = {
-    /**
-     * [getAll function will get all users.  Not to be used in production]
-     * @return {[type]}        [promise]
-     */
-    getAll: function (reqQuery) {
-        // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -')
-        if (undefined !== reqQuery.complete) {
-            returnFields = '-nothing'
-        }
-        return userModel.find({}, returnFields).exec();
-    },
 
     /**
      * [get function will get a user by id or slug]
@@ -97,23 +89,73 @@ var userService = {
      * @return {[type]}         [promise with user basic info]
      */
     createNewUser: function (userObj) {
-        var salt = bcrypt.genSaltSync(10);
 
-        try {
-            userObj.email = userObj.email.toLowerCase();
-            userObj.password = bcrypt.hashSync(userObj.password, salt);
-        } catch(err) {
-            console.log("US:createNewUser: password or email is malformed for " + userObj.email)
+        if (userObj.password.length < 8) {
+            var err = "Password length is too short";
+            console.log(err);
+            throw err;
         }
-        var newUser = new userModel(userObj);
 
-        /**
-         * make sure basic info of user returned by the promise.
-         */
-        return newUser.save();
+        userObj.email = userObj.email.toLowerCase();
+        var salt = bcrypt.genSaltSync(10);
+        userObj.password = bcrypt.hashSync(userObj.password, salt);
+
+        // Resolve perms if permToken present
+        var perms = [];
+        if (userObj.invitation) {
+            try {
+                var payload = jwt.verify(userObj.invitation, config.jwtSecret);
+                if (!payload.permObjs) throw "Invitation is malformed";
+
+                payload.permObjs.forEach(function(permDest) {
+                    var perm = {
+                        srcType: "users",
+                        destType: permDest.destType,
+                        destId: permDest.destId,
+                        c: permDest.c, r: permDest.r, u: permDest.u, d: permDest.d
+                    };
+                    perms.push(perm);
+                });
+
+            } catch (err) {
+                console.dir("Invite error: " + err);
+                deferred.reject(err);
+                return;
+            }
+        }
+        return userModel.create(userObj).then(function(user) {
+            var token = jwt.sign({userId: user._id}, config.jwtSecret, {expiresIn: '1h'});
+            var userAndToken = {token: token, user: user};
+
+            if (perms.length) {
+                for (let perm of perms) {
+                    perm.srcId = user._id;
+                }
+                return permissionModel.create(perms).then(function (perms) {
+                    return userAndToken;
+                });
+            } else {
+                return userAndToken;
+            }
+        });
+
     },
 
-    passwordLogin: function (email, password) {
+    createInvitationToken: function (permObjs, expiresIn) {
+        // console.log("createInvitationToken");
+        var token = jwt.sign({permObjs: permObjs}, config.jwtSecret, {expiresIn: expiresIn});
+        return token;
+    },
+    createSimpleBusinessInvitationToken: function(businessId) {
+        var permObj = {
+            destType: 'businesses',
+            destId: businessId,
+            c: true, r: true, u: true, d: true
+        };
+        return this.createInvitationToken([permObj], '7d');
+    },
+
+    passwordLogin: function (email, password, skipPasswordCheck, isBusinessUser) {
         try {
             email = email.toLowerCase();
         } catch(err) {
@@ -124,52 +166,31 @@ var userService = {
                 console.log("US:passwordLogin: user not found for " + email);
                 return null;
             }
+
+            if (skipPasswordCheck) {
+                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: config.tokenLifeDefault});
+                return {token: token, user: user};
+            }
+
             if (!user.password) {
                 console.log("US:passwordLogin: user does not have a password");
                 return null;
             }
 
+            // Check the password
             if (bcrypt.compareSync(password, user.password)) {
-                return user;
+                // Create a token
+                // If user is a business user, make cookie last longer
+                var expiresIn = config.tokenLifeDefault;
+                if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
+                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
+                return {token: token, user: user};
             } else {
                 console.log("US:passwordLogin: bad password for " + email);
                 return null;
             }
         });
     },
-
-    /**
-     * [getUserByExternalId will take an external ID e.g. firebaseid and return the user basic info only]
-     * @param  {[string]} extId [esternal id ]
-     * @return {[promis]}       [description]
-     */
-    getUserByExternalId: function (extId, reqQuery) {
-
-        // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -')
-        if (undefined !== reqQuery.complete) {
-            returnFields = '-nothing'
-        }
-
-        return idMapModel.findOne({externalId: extId}).exec()
-            .then(
-                /**
-                 * map is found for this external id
-                 * find the user and return it in promise
-                 */
-                function (map) {
-                    return userModel.findById(map.localId, returnFields).exec();
-                },//// fun. resolve
-                function (error) {
-                    /**
-                     * No map is found for this external id
-                     */
-                    console.log(error);
-                }//// fun. reject
-            )//// then
-
-    }, //// fun. getUserByExternalId
-
 
     /**
      * [saveUser will update user in database after checking the existance of user by his id
@@ -317,9 +338,11 @@ var userService = {
     addExpScores: function (user, roles) {
 
         try {
-            // Calc roles
+            // Calc roles and tenure avg
             var roles = {};
             var totalWorkMonths = 0;
+            var nonSeasonalTotalWorkMonths = 0;
+            var nonSeasonalJobCount = 0;
             for (let workExperience of user.workExperience) {
                 var occId = workExperience.occId;
                 // console.log("us260");
@@ -335,6 +358,17 @@ var userService = {
                 // console.log("us261.2");
                 roles[occId].monthCount += monthCount;
                 roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount)
+
+                if (!workExperience.isSeasonal) {
+                    nonSeasonalTotalWorkMonths += monthCount;
+                    nonSeasonalJobCount += 1;
+                }
+            }
+
+            // Add tenureAvg to user
+            user.tenureAvg = 0;
+            if (nonSeasonalTotalWorkMonths !== 0) {
+                user.tenureAvg = Math.ceil(nonSeasonalTotalWorkMonths / nonSeasonalJobCount);
             }
 
             // console.log("us262");
@@ -345,8 +379,8 @@ var userService = {
                     try {
                         // console.log("us262.5");
                         for (let occScores of occScoresArray) {
-                            console.log("expLvl: " + roles[occScores._id].expLvl);
-                            console.log("occId: " + occScores._id);
+                            // console.log("expLvl: " + roles[occScores._id].expLvl);
+                            // console.log("occId: " + occScores._id);
                             //console.dir(occScores.scores);
 
                             //console.dir("")
@@ -374,8 +408,8 @@ var userService = {
                     } catch(err) {
                         var err = "ERROR US:addExpScores("+user._id+"): "+err;
                         console.log(err);
-                        var deferred = q.defer(err);
-                        deferred.resolve(user);
+                        var deferred = q.defer();
+                        deferred.reject(err);
                         return deferred.promise;
                     }
 
@@ -388,12 +422,6 @@ var userService = {
                         var totalWorkMonths = 0;
                         for (var occId in roles) {
                             totalWorkMonths += roles[occId].monthCount;
-                        }
-
-                        // Add tenureAvg to user
-                        user.tenureAvg = 0;
-                        if (totalWorkMonths !== 0) {
-                            user.tenureAvg = Math.ceil(totalWorkMonths / user.workExperience.length);
                         }
 
                         // Add master KSAs
@@ -425,8 +453,8 @@ var userService = {
                     } catch(err) {
                         var err = "ERROR US:addExpScores("+user._id+"): "+err;
                         console.log(err);
-                        var deferred = q.defer(err);
-                        deferred.resolve(user);
+                        var deferred = q.defer();
+                        deferred.reject(err);
                         return deferred.promise;
                     }
                 });
@@ -434,8 +462,8 @@ var userService = {
         } catch(err) {
             var err = "ERROR US:addExpScores("+user._id+"): "+err;
             console.log(err);
-            var deferred = q.defer(err);
-            deferred.resolve(user);
+            var deferred = q.defer();
+            deferred.reject(err);
             return deferred.promise;
         }
     },
@@ -457,30 +485,65 @@ var userService = {
         user.queuedForMetricUpdate = false;
         // Go ahead and add edu metrics since this is synchronous
         user = self.addEduMetrics(user);
-        console.log("u259");
+        // console.log("u259");
 
         // var deferred = q.defer(); deferred.resolve(user); deferred.promise
-        user.save()
+        return user.save()
         .then(function (user) {
-            console.log("u260");
+            // console.log("u260");
             return traitifyService.addTraitifyCareerMatchScoresToUser(user);
         }).then(function (user) {
-            console.log("u261");
+            // console.log("u261");
             return self.addExpScores(user);
         }).then(function (user) {
-            console.log("u262");
+            // console.log("u262");
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
             user.queuedForMetricUpdate = false;
             return user.save();
         }).then(function (user) {
-            console.log("u263");
+            // console.log("u263");
             return matchingService.generateCareerMatchScoresForUser(user);
-        }).then(function (boolResult) {
-            console.log("u264");
-            return true;
         })
 
-    }  // end updateUserMetricsById
+    },  // end updateUserMetricsById
+
+    updateQueuedUserMetricsLock: false,
+    updateQueuedUserMetrics: function () {
+        if (this.updateQueuedUserMetricsLock) {
+            // console.log("Waiting to finish");
+            return;
+        }
+
+        this.updateQueuedUserMetricsLock = true;
+
+        // console.log("Checking for queued users");
+        var self = this;
+
+        userModel.find({queuedForMetricUpdate:true}).then(function (users) {
+        // return userModel.find({firstName: 'Ryan'}).then(function (users) {
+            var promises = [];
+            try {
+                for (let user of users) {
+                    console.log("Updating: " + user.email);
+                    promises.push(userService.updateUserMetrics(user));
+                    if (promises.length > 3) {
+                        break;
+                    }
+                }
+                if (!users.length) {
+                    // console.log("None found");
+                }
+            } catch (err) {
+                console.log("updateQueuedUserMetrics:err: " + err);
+            }
+
+            return q.all(promises).then(function (results) {
+                // console.log("Lock lifted");
+                self.updateQueuedUserMetricsLock = false;
+            });
+
+        });
+    }
 
 }; /// users object
 

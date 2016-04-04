@@ -1,5 +1,7 @@
 var config = {};
 
+config.jwtSecret = "iwXye8tYZoGKPdGBckmm3QuX";
+
 config.googleMapsAPIKey = 'AIzaSyDXt_V8OyuoNph540_ZBTUSjx66QKLUuJc';
 
 config.traitify = {
@@ -37,5 +39,10 @@ config.saveTraitifyFamousPeople = false;
 config.primeOnetScoresCache = true;
 
 config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
+
+config.appMode = 'express';
+
+config.tokenLifeDefault = '1h';
+config.tokenLifeBusiness = '48h';
 
 module.exports = config;

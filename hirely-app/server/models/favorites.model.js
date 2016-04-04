@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var favoriteSchecma = new Schema({
-  userId      :       {type:Schema.Types.ObjectId, ref:'users', required:true, index:true},
+var favoriteSchema = new Schema({
+  userId      :       {type:String, ref:'users', required:true, index:true},
   type        :       {
                         type:String,
                         required:true,
@@ -13,9 +13,9 @@ var favoriteSchecma = new Schema({
                           message:'{VALUE} is not valid favorite type'
                         }
                       },
-  businessId  :       {type:Schema.Types.ObjectId, ref:'businesses', required:true, index:true},
+  businessId  :       {type:String, ref:'businesses', required:true, index:true},
   locationId  :       {
-                        type:Schema.Types.ObjectId,
+                        type:String,
                         index:true,
                         // validate:{
                         //   validator: function(v){
@@ -27,11 +27,11 @@ var favoriteSchecma = new Schema({
                         //   message: 'Location ID is required for favorite type location and position'
                         // }
                       },
-  positionId  :       {type:Schema.Types.ObjectId, index:true},
+  positionId  :       {type:String, index:true},
   createdAt   :       {type:Date, required:true, default:Date.now()}
 });//// applicationSchema
 
-favoriteSchecma.pre('save', function(next){
+favoriteSchema.pre('save', function(next){
   if(this.type === 'location' && !this.locationId){
     return next(new Error("locationId is required for type location"))
   }
@@ -46,6 +46,6 @@ favoriteSchecma.pre('save', function(next){
   next();
 })
 
-var FavoritesModel = mongoose.model('FavoritesModel', favoriteSchecma, "favorites");
+var FavoritesModel = mongoose.model('FavoritesModel', favoriteSchema, "favorites");
 
 module.exports = FavoritesModel;

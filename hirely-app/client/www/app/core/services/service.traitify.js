@@ -35,6 +35,10 @@
       return HirelyApiService.traitify('test').get();
     }
 
+    function getMeta(metaId){
+      return HirelyApiService.traitify('meta', {metaId:metaId}).get();
+    }
+
     function getUserAssessment(userId){
       return HirelyApiService.traitify({userId:userId}).get();
     }
@@ -43,6 +47,7 @@
       getAssessmentId: getAssessmentId,
       saveAssessment:saveAssessment,
       getTest: getTest,
+      getMeta: getMeta,
       getUserAssessment: getUserAssessment
     }
 

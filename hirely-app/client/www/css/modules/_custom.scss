@@ -4,11 +4,6 @@
   margin-top: 5px;
 }
 
-.logo{
-  padding-left: 20px;
-  padding-top: 6px;
-  display: inline-block;
-}
 .grid{
   height: 50px;
 }
@@ -1182,6 +1177,10 @@ rzslider{
   .logo{
     float: none !important;
     padding-left: 0px !important;
+  }
+  .nav-links a{
+    margin-right: 14px !important;
+    font-size: 17px !important;
   }
   .lines-button{
     display:inline-block;

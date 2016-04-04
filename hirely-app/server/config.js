@@ -1,5 +1,7 @@
 var config = {};
 
+config.jwtSecret = "iwXye8tYZoGKPdGBckmm3QuX";
+
 config.googleMapsAPIKey = 'AIzaSyDXt_V8OyuoNph540_ZBTUSjx66QKLUuJc';
 
 config.traitify = {
@@ -24,12 +26,12 @@ config.urlSeparator = '-';
  * [extractTraitifyMeta congiration option if set to false will stop the code from proccessing the meta of traitify with each assessment save]
  * @type {Boolean}
  */
-config.extractTraitifyMeta = false;
+config.extractTraitifyMeta = true;
 /**
  * [saveTraitifyFamousPeople if set to true will add the famous people to traitify meta processing]
  * @type {Boolean}
  */
-config.saveTraitifyFamousPeople = false;
+config.saveTraitifyFamousPeople = true;
 
 /**
  * [primeOnetScoresCache if set to true will prime the onetScoresCache in onetScoresService]
@@ -38,5 +40,10 @@ config.saveTraitifyFamousPeople = false;
 config.primeOnetScoresCache = false;
 
 config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
+
+config.appMode = 'express';
+
+config.tokenLifeDefault = '1h';
+config.tokenLifeBusiness = '48h';
 
 module.exports = config;

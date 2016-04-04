@@ -85,11 +85,9 @@
           HirelyApiService.businesses('getPositionsByManagerId', managerId).get()
           .then(
             function(positions){
-                console.log(positions)
-                deferred.reslove(positions);
+                deferred.resolve(positions);
             },
             function(err){
-                console.log(err)
               deferred.reject(err)
             }
           );

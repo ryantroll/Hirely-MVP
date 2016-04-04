@@ -19,6 +19,9 @@
 
     var positionIds  = [];
 
+    $scope.myLocations = [];
+    $scope.myPositions = [];
+
     FavoritesService.getFavorite({userId:AuthService.currentUserID, type:'position'})
     .then(
         function(favs){
@@ -60,7 +63,25 @@
     )
     .then(
         function(positions){
-            console.log(positions)
+
+            /**
+             * Build my Locations
+             */
+            $scope.myLocationsObj = {};
+
+            for(var pos in positions){
+                if( !(positions[pos].locationId in $scope.myLocationsObj) ){
+                    $scope.myLocationsObj[positions[pos].locationId] = [];
+                    $scope.myLocationsObj[positions[pos].locationId].push(angular.copy(positions[pos]))
+                    $scope.myLocations.push(angular.copy(positions[pos].location));
+                }
+                else{
+                    $scope.myLocationsObj[positions[pos].locationId].push(angular.copy(positions[pos]))
+                    $scope.myLocations.push(angular.copy(positions[pos].location));
+                }
+            }
+            console.log($scope.myLocationsObj);
+            $scope.myPositions = positions;
         },
         function(err){
             console.log(err);

@@ -1,4 +1,5 @@
-<h1 class="text-center">Create an account, it's easy!</h1>
+<h1 ng-show="!user.invitation" class="text-center">Create an account, it's easy!</h1>
+<h1 ng-show="user.invitation" class="text-center">Welcome to {{businessName}}!</h1>
 
 <div class="user-profile-basic hirely-form" ng-class="{waiting:ajaxBusy}">
     <div class="in-form-loader">
@@ -71,7 +72,7 @@
                             <span class="fa fa-check feedback-valid"></span>
                             <span class="fa fa-close feedback-error"></span>
                         </label>
-                        <input type="password" class="text-field" name="upassword" id="password"
+                        <input type="password" class="text-field" name="password" id="password"
                             ng-model="user.password"
                             required
                             validate-password
@@ -80,7 +81,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 no-col-padding">
-                    <div class="bg-danger error-label" ng-show="registerForm.password.$error.invalidPassword">Password should be between 6 and 12 characters</div>
+                    <div class="bg-danger error-label" ng-show="registerForm.password.$error.invalidPassword">Minimum 1 lowercase, 1 upper, 1 number, 8 characters, no symbols. </div>
                 </div>
             </div>
 

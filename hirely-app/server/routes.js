@@ -1,3 +1,6 @@
+var requireDir = require('require-dir');
+var _ = require('lodash');
+
 /**
  * Created by labrina.loving on 9/18/2015.
  */
@@ -22,14 +25,7 @@ module.exports = function(app) {
     var favoriteApiRoutes = require('./routes/favorite.api.routes');
     var onetWebApiRoutes = require('./routes/onetWeb.api.routes');
 
-    // Make sure get requests to db are never cached in IE
-    app.get('/*',function(req,res,next){
-        res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-        res.header("Pragma", "no-cache");
-        res.header("Expires",0);
-        next(); // http://expressjs.com/guide.html#passing-route control
-    });
-
+    app.all('/api/v1/*', _.values(requireDir('./middlewares')));
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
     app.get('/api/search/cities/:addressQuery', getAddressFomQuery);
@@ -50,44 +46,32 @@ module.exports = function(app) {
     app.post('/api/v1/traitify/', traitifyApiRoutes.createNewAssessment);
     app.get('/api/v1/traitify/test', traitifyApiRoutes.getTest);
     app.get('/api/v1/traitify/getAssessmentCareerMatchScoresById/:id', traitifyApiRoutes.getAssessmentCareerMatchScoresById);
+    app.get('/api/v1/traitify/meta', traitifyApiRoutes.getMeta);
     app.post('/api/v1/traitify/updateAssessmentCareerMatchScoresByUserId/:id', traitifyApiRoutes.updateAssessmentCareerMatchScoresByUserId);
 
     /**
      * Adding routes for local mongoDB users
      */
-    app.get('/api/v1/users', userApiRoutes.getAll);
     app.get('/api/v1/users/:id', userApiRoutes.getById);
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
     app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
-    app.get('/api/v1/users/:extId/external', userApiRoutes.getUserByExternalId);
     app.post('/api/v1/users/:id/updateUserMetricsById', userApiRoutes.updateUserMetricsById);
     app.post('/api/v1/users/passwordLogin', userApiRoutes.passwordLogin);
+    app.get('/api/v1/users/createSimpleBusinessInvitationToken/:id', userApiRoutes.createSimpleBusinessInvitationToken);
 
-    /**
-     * Adding routes for local mongoDB businesses
-     */
-    app.get('/api/v1/businesses', businessApiRoutes.getAll);
     app.get('/api/v1/businesses/positionIcon', businessApiRoutes.getPositionDisplayData);
     app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);
     app.get('/api/v1/businesses/getPositionById/:pid', businessApiRoutes.getPositionById);
     app.get('/api/v1/businesses/getPositionsByManagerId/:managerId', businessApiRoutes.getPositionsByManagerId);
     app.get('/api/v1/businessByPositionId/:pid', businessApiRoutes.getByPositionId);
-    app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
     app.get('/api/v1/positions/:pid/isUserFiltered/:uid', businessApiRoutes.isUserFilteredForPosition);
 
-    /**
-     * Adding routs for local monogoDB applicaion
-     */
-    app.get('/api/v1/applications', applicationApiRoutes.getAll);
     app.get('/api/v1/applications/:id', applicationApiRoutes.getById);
     app.get('/api/v1/applications/byPositionId/:id', applicationApiRoutes.getByPositionId);
     app.get('/api/v1/applications/byUserId/:userId', applicationApiRoutes.getByUserId);
     app.post('/api/v1/applications/', applicationApiRoutes.createNewApplication);
     app.patch('/api/v1/applications/:appId', applicationApiRoutes.saveApplication);
 
-    /**
-     * Adding routs for favorite
-     */
     app.get('/api/v1/favorites', favoriteApiRoutes.getFavorites);
     app.post('/api/v1/favorites', favoriteApiRoutes.updateFavorite);
 

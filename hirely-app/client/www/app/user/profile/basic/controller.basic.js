@@ -191,6 +191,10 @@
                 $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
             }
 
+            if (!$scope.user.languagesSpoken || !$scope.user.languagesSpoken.length) {
+                $scope.user.languagesSpoken = ["English"];
+            }
+
             $scope.stepOneLoaded = true;
         };
 
@@ -215,13 +219,24 @@
              * Save only basic information
              */
 
+            // Get lanuages from dom as an array
+            // Do it this way because direct mapping using ng-model causes focus issues
+            var languagesSpoken = [];
+            $(".language").map(function() {
+                var language = $(this).val().trim();
+                if (language.length != 0) {
+                    languagesSpoken.push(language);
+                }
+            });
+
 
             var toSave = {
                 _id: $scope.user._id,
                 profileImageURL: $scope.user.profileImageURL,
                 mobile: $scope.user.mobile,
                 dateOfBirth: $scope.user.dateOfBirth,
-                postalCode: $scope.user.postalCode
+                postalCode: $scope.user.postalCode,
+                languagesSpoken: languagesSpoken
             };
             userService.saveUser(toSave)
                 .then(

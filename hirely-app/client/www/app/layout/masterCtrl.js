@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$state', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$rootScope', '$state', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl]);
 
-    function MasterCtrl($scope, $state, $window, authService, userService, geocodeService) {
+    function MasterCtrl($scope, $rootScope, $state, $window, authService, userService, geocodeService) {
 
         $scope.isUserLoggedIn = authService.isUserLoggedIn();
         $scope.location = {};
@@ -19,6 +19,16 @@
                 $scope.userIsSynced = true;
             });
         }
+
+        $scope.$on('UserLoggedOut', function(event, args) {
+            $scope.isUserLoggedIn = false;
+            $rootScope.nextState = {state:$state.current.name, params:$state.params};
+            $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
+            return;
+        });
+        $scope.$on('UserLoggedin', function(event, args) {
+            $scope.isUserLoggedIn = true;
+        });
 
         /**
          * check on loged in user

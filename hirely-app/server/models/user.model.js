@@ -55,10 +55,11 @@ var experienceSchema = new Schema({
                                       required:false,
                                       validate:[endDateValidator, 'End date must be greater than start date']
                                     },
-  reportedOccTitle         :         {type:String, required:true},
-  occTitle       :         {type:String, required:true},
-  occId        :         {type:String, required:false},
-  accomplishments         :         {type:String, required:false}
+  reportedOccTitle        :         {type:String, required:true},
+  occTitle                :         {type:String, required:true},
+  occId                   :         {type:String, required:false},
+  accomplishments         :         {type:String, required:false},
+  isSeasonal              :         {type:Boolean, default:false}
 });
 
 var educationSchema = new Schema({
@@ -115,7 +116,7 @@ var userSchema = new Schema({
   profileImageURL       :     {type:String},
   eligibleToWorkInUS    :     {type:Boolean},
   tenureAvg             :     {type:Number},
-  queuedForMetricUpdate :     {type:Boolean, default:false},
+  queuedForMetricUpdate :     {type:Boolean, default:false, index:true},
 
 
   /**
@@ -193,7 +194,8 @@ var userSchema = new Schema({
         WorkActivities      :       {type:freeSchema, required:false}
     },
 
-    isVetted            : {type:String, default:false}
+    isVetted            : {type:String, default:false},
+    languagesSpoken     : [String]
 
 });
 
@@ -201,3 +203,13 @@ var userSchema = new Schema({
 var UserModel = mongoose.model('User', userSchema, "users");
 
 module.exports = UserModel;
+
+// console.log("Running...");
+// UserModel.find({}).then(function(users) {
+//     console.log("Found users");
+//     users.forEach(function(user) {
+//         console.log("user: "+user.email);
+//
+//     });
+//     console.log("Done.");
+// });

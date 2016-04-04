@@ -13,6 +13,7 @@ header.hi-header{
 
     a {
         color: $c-hirely-mid-gray;
+        line-height: 60px;
     }
     a:hover {
         color: $c-hirely-red;
@@ -22,13 +23,12 @@ header.hi-header{
         font-weight: bold;
         font-size: 33px;
         margin-left: 20px;
+        padding-left: 20px;
     }
 
     .nav-links a{
-
         font-size: 24px;
         margin: 0 40px 0 0;
-        line-height: 60px;
     }
 
     .user{
@@ -139,6 +139,10 @@ header.hi-header.logged-in-header {
 
 header > .row {
     margin: 0;
+}
+
+.hirely-content{
+    clear:both;
 }
 
 .form-content{

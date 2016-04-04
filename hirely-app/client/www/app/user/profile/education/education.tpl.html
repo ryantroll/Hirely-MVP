@@ -5,7 +5,7 @@
 <div class="form-container user-profile-exp" ng-show="stepTwoLoaded">
     <div class="row">
         <div class="cards-wrapper">
-            <div class="card" ng-repeat="eduItem in eduItems">
+            <div class="card" ng-repeat="eduItem in education">
                 <h3>{{eduItem.institutionName}}</h3>
                 <p>{{eduItem.degree}} / {{eduItem.programType}} </p>
                 <p><span ng-show="eduItem.isCompleted">{{eduItem.dateEndMonth}}/{{eduItem.dateEndYear}}</span><span ng-show="!eduItem.isCompleted">Currently Enrolled</span></p>
@@ -46,7 +46,7 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <select class="" id="programType" name="programType"
-                                ng-model="education.programType"
+                                ng-model="educationInstance.programType"
                                 required>
                                 <option></option>
                                 <option ng-repeat="type in programTypes" value="{{type}}">{{type}}</option>
@@ -67,7 +67,7 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <input type="text" class="text-field" id="institution" name="institution"
-                                ng-model="education.institutionName"
+                                ng-model="educationInstance.institutionName"
                                 required
                             />
                         </div>
@@ -83,7 +83,7 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <input type="text" class="text-feild" id="educationCity" name="educationCity"
-                                ng-model="education.city"
+                                ng-model="educationInstance.city"
                                 required
                             />
                         </div>
@@ -96,7 +96,7 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <select  class="form-control" id="educationState" name="educationState"
-                                ng-model="education.state"
+                                ng-model="educationInstance.state"
                                 required
                             >
                                 <option></option>
@@ -118,7 +118,7 @@
                             <span class="info-label" ng-click="tipVisibility=!tipVisibility" uib-tooltip="Please provide the name or title of your degree or certificate. Example: GED or Bartending.">?</span>
                             <div ng-show="tipVisibility">Please provide the name or title of your degree or certificate. Example: GED or Bartending.</div>
                             <input type="text" class="text-feild" id="degree" name="degree"
-                                ng-model="education.degree"
+                                ng-model="educationInstance.degree"
                                 required
                             />
                         </div>
@@ -172,7 +172,7 @@
                         <div class="field-wrapper checkbox">
                             <label class="custom-option toggle" data-off="NO" data-on="YES">
                                 <input type="checkbox" id="eduEnrolled" name="eduEnrolled"
-                                    ng-model="education.currentlyEnrolled"
+                                    ng-model="educationInstance.currentlyEnrolled"
                                 />
                                 <span class="button-checkbox"></span>
                             </label>
@@ -181,7 +181,7 @@
                     </div>
                 </div>
 
-                <div class="row" ng-show="!education.currentlyEnrolled">
+                <div class="row" ng-show="!educationInstance.currentlyEnrolled">
                     <div class="col-sm-6">
                         <div class="field-wrapper"  ng-class="{'error': !stepTwoE.eduDateEndM.$valid && stepTwoE.eduDateEndM.$dirty, 'valid' : stepTwoE.eduDateEndM.$valid}">
                             <label for="eduDateEndM">
@@ -190,8 +190,8 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <select class="form-control" id="eduDateEndM" name="eduDateEndM"
-                                ng-model="education.dateEndMonth"
-                                ng-required="!education.currentlyEnrolled"
+                                ng-model="educationInstance.dateEndMonth"
+                                ng-required="!educationInstance.currentlyEnrolled"
                                 validate-month
                             >
                                 <!-- <option></option> -->
@@ -209,8 +209,8 @@
                             </label>
                             <input type="tel" class="text-feild" id="eduDateEndY" name="eduDateEndY"
                                 maxlength="4"
-                                ng-model="education.dateEndYear"
-                                ng-required="!education.currentlyEnrolled"
+                                ng-model="educationInstance.dateEndYear"
+                                ng-required="!educationInstance.currentlyEnrolled"
                                 validate-year
                             />
                         </div>

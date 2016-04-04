@@ -3,6 +3,7 @@ var businessModel = require('../models/business.model');
 var userModel = require('../models/user.model');
 var onetIconsModel = require('../models/onetIcons.model');
 var applicationModel = require('../models/application.model');
+var permissionsModel = require('../models/permission.model');
 var careerMatchScoresModel = require('../models/careerMatchScores.model');
 var q = require('q');
 /**
@@ -14,17 +15,15 @@ var privateFields = [
 ];
 
 var businessService = {
-    /**
-     * [getAll function will get all businesss.  Not to be used in production]
-     * @return {[type]}        [promise]
-     */
-    getAll : function(reqQuery){
+
+    getById: function(id, reqQuery){
         // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -');
+        var returnFields = '-' + privateFields.join(' -')
         if(undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }
-        return businessModel.find({}, returnFields).exec();
+
+        return businessModel.findById(id, returnFields).exec();
     },
 
     /**
@@ -41,6 +40,18 @@ var businessService = {
         }
 
         return businessModel.findOne({ slug: slug }, returnFields).exec();
+    },
+
+    getByLocationId: function(locationId, reqQuery){
+
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+
+        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+
+        return businessModel.findOne({ $where: "obj.locations['"+locationId+"']" }, returnFields).exec();
     },
 
     /**
@@ -60,9 +71,6 @@ var businessService = {
         var ids = positionId.split('|');
 
         return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }, returnFields).exec();
-        //return businessModel.find({})
-        //.where({positions:{$elemMatch:{_id:positionId}}})
-        //.exec();
     },
 
     getPositionById: function(positionId, reqQuery){
@@ -129,9 +137,33 @@ var businessService = {
         if(undefined !== reqQuery && undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }
+        permissionsModel.find({srcId:managerId, srcType:'users', destType:'positions', c:true, u:true, d:true})
+        .then(
+            function(found){
+                if(found.length < 1){
+                    deferred.reject(found);
+                    return
+                }
 
-        console.log('>>>>>>', managerId);
+                var ids = [];
+                for(var i=0; i<found.length; i++){
+                    ids.push(found[i].destId);
+                }
 
+                return businessService.getPositionById(ids.join('|'))
+            },
+            function(err){
+                console.log(err)
+            }
+        )
+        .then(
+            function(positions){
+                deferred.resolve(positions);
+            },
+            function(err){
+                deferred.rejet(err);
+            }
+        )
         return deferred.promise;
     },
 

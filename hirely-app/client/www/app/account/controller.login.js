@@ -14,6 +14,8 @@
         $scope.user = {email: '', password:''};
         $scope.loginError = false;
 
+        $scope.message = $stateParams.message;
+
         /**
          * Let the parent scope know it is NOT a new user
          */

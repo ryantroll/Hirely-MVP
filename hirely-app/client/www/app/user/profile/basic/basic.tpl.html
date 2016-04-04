@@ -119,6 +119,26 @@
 				</div>
 			</div>
 
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="field-wrapper" ng-class="{'error': !stepOne.languagesSpoken.$valid && stepOne.languagesSpoken.$dirty, 'valid' : stepOne.languagesSpoken.$valid}">
+						<label>
+							Languages Spoken
+							<span class="fa fa-check feedback-valid"></span>
+							<span class="fa fa-close feedback-error"></span>
+						</label>
+						<div class="clearfix languagesSpokenDiv" ng-repeat="lang in user.languagesSpoken" id="languagesSpokenDiv" name="languagesSpokenDiv">
+							<input type="text" class="text-field pull-left language" name="language"
+							       ng-value="lang"
+							       required minlength="3"
+							/>
+							<button class="pull-right languageSubtract" ng-click="user.languagesSpoken.splice($index,1)"><i class="fa fa-minus"></i></button>
+						</div>
+						<button class="btn languageAdd" ng-click="user.languagesSpoken.push('')"><i class="fa fa-plus"></i></button>
+					</div>
+				</div>
+			</div>
+
 
 
 		</fieldset>

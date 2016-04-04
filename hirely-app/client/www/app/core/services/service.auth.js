@@ -22,6 +22,7 @@
             getCurrentUser: getCurrentUser,
             syncCurrentUserFromDb: syncCurrentUserFromDb,
             setCurrentUser: setCurrentUser,
+            setTokenCookie: setTokenCookie,
             updateCurrentUserCookie: updateCurrentUserCookie,
             updateCurrentUser: updateCurrentUser,
             isUserLoggedIn: isUserLoggedIn,
@@ -40,11 +41,14 @@
 
             //// Get currentUser cookie
             var user = $cookies.get("currentUser");
+            var token = $cookies.get("token");
+            if (token) {
+                setTokenCookie(token);
+            }
             if (user) {
                 console.log("getCurrentUser: found user in cookie");
                 user = JSON.parse(user);
-                service.currentUser = user;
-                service.currentUserID = user._id;
+                setCurrentUser(user);
                 return user;
             }
 
@@ -52,38 +56,62 @@
             return null;
         }
 
+        var lastsync = null;
         function syncCurrentUserFromDb() {
-            console.log("syncCurrentUserFromDb");
+            // console.log("syncCurrentUserFromDb");
+
+            var now = new Date();
+            if (this.lastsync != null && now.getTime() < this.lastsync.getTime() + 1000 ) {
+                console.log("syncCurrentUserFromDb: skipping because synced soon ago");
+                var deferred = $q.defer();
+                deferred.resolve(service.currentUser);
+                return deferred.promise;
+            }
+
+            this.lastsync = now;
+
             if (service.isUserLoggedIn()) {
-                console.log("syncCurrentUserFromDb: Syncing user from db: " + service.currentUser.email);
-                return userService.getUserById(service.currentUserID, true).then(function (userNew) {
-                    console.log("syncCurrentUserFromDb: User synced from db: " + userNew.email);
-                    setCurrentUser(userNew);
-                    return userNew;
-                });
+                // console.log("syncCurrentUserFromDb: Syncing user from db: " + service.currentUser.email);
+                return userService.getUserById(service.currentUserID, true).then(
+                    function (userNew) {
+                        if (angular.isDefined(userNew) && userNew.email) {
+                            console.log("syncCurrentUserFromDb: User synced from db: " + userNew.email);
+                            setCurrentUser(userNew);
+                            return userNew;
+                        } else {
+                            console.error("syncCurrentUserFromDb: error: " + err);
+                            service.logout();
+                        }
+                    }, function(err) {
+                        console.error("syncCurrentUserFromDb2: error: " + err);
+                        service.logout();
+                    }
+                );
             } else {
                 var deferred = $q.defer();
                 var err = "warning:  syncCurrentUserFromDb failed because no user is logged in";
                 deferred.reject(err);
-                console.log(err);
+                console.warn(err);
                 return deferred.promise;
             }
         }
 
         function passwordLogin(email, password) {
-            return userService.passwordLogin(email, password).then(function (user) {
-                if (user) {
-                    setCurrentUser(user);
-                    return user;
+            return userService.passwordLogin(email, password).then(function (userAndToken) {
+                if (userAndToken) {
+                    setCurrentUser(userAndToken.user);
+                    setTokenCookie(userAndToken.token);
+                    return userAndToken.user;
                 }
             });
         }
 
         function registerNewUser(userData) {
-            return userService.createNewUser(userData).then(function (user) {
-                if (user) {
-                    setCurrentUser(user);
-                    return user;
+            return userService.createNewUser(userData).then(function (userAndToken) {
+                if (userAndToken) {
+                    setCurrentUser(userAndToken.user);
+                    setTokenCookie(userAndToken.token);
+                    return userAndToken.user;
                 }
             });
         }
@@ -115,16 +143,27 @@
             service.updateCurrentUserCookie();
         }
 
+        function setTokenCookie(token) {
+            service.token = token;
+            $cookies.put("token", token);
+            $rootScope.token = token;
+        }
+
         function removeCurrentUser() {
             service.currentUser = undefined;
             service.currentUserID = undefined;
 
             //// Set currentUser cookie
             $cookies.remove("currentUser");
+            $cookies.remove("token");
 
             /// let all scopes the user is logged out
+            $rootScope.token = null;
+            service.token = null;
+            console.log("Token has been removed");
             $rootScope.$emit('UserLoggedOut');
             $rootScope.$broadcast('UserLoggedOut');
+
         }
 
         /**

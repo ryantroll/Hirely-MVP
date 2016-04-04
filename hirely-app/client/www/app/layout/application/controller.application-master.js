@@ -22,9 +22,9 @@
                 transclude: false
             };
         })
-        .controller('ApplicationMasterController', ['$stateParams', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController])
+        .controller('ApplicationMasterController', ['$stateParams', '$state', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController])
 
-    function ApplicationMasterController($stateParams, $scope, $rootScope, authService, UserService) {
+    function ApplicationMasterController($stateParams, $state, $scope, $rootScope, authService, UserService) {
 
         // $scope.AuthService = AuthService;
 
@@ -37,7 +37,7 @@
         if (auth) {
             authService.syncCurrentUserFromDb();
         } else {
-            $scope.go("app.account.register");
+            $state.go("app.account.register");
         }
 
         $scope.layoutModel = {business: null, noHeader: null};

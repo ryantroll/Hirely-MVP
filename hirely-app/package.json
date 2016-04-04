@@ -29,7 +29,10 @@
     "lodash": "*",
     "xml2json": "*",
     "bcrypt": "*",
-    "mongodb": "*"
+    "mongodb": "*",
+    "jsonwebtoken": "*",
+    "require-dir": "*",
+    "compression": "*"
   },
   "devDependencies": {
     "bower": "^1.3.3",

@@ -39,14 +39,13 @@ var MatchService = {
         } catch(err) {
             var err = "SKIP MS:generateCareerMatchScoresForUser: missing personalityExam";
             console.log(err);
-            var deferred = q.defer();
             deferred.reject(err);
             return deferred.promise;
         }
 
         return onetScoresService.getAll().then(function(onetScoresAll) {
             // console.log("ms40");
-            var deferred = q.defer();
+
             try {
                 var careerMatchScoresArray = [];
                 var userScores = user.scores.toObject();
@@ -139,7 +138,7 @@ var MatchService = {
 
                 // Do a direct db connection for speed
                 console.log("Connecting to mongo");
-                // TODO:  Figure out how to turn this into a promise.  For some reason I can't access the deferred var inside
+                var deferred = q.defer();
                 MongoClient.connect(config.mongoUri, function (err, db) {
                     try {
                         assert.equal(null, err);
@@ -158,9 +157,11 @@ var MatchService = {
                                     err = "Error in MS("+user._id+").insertMany: "+err;
                                     console.log(err);
                                     db.close();
+                                    deferred.reject(err);
                                     return;
                                 }
                                 console.log("Created career match scores for user " + user._id);
+                                deferred.resolve(true);
                                 db.close();
                             });
                         });
@@ -168,6 +169,7 @@ var MatchService = {
                     } catch(err) {
                         err = "Error in MS("+user._id+"): "+err;
                         console.log(err);
+                        deferred.reject(err);
                     }
 
                 });

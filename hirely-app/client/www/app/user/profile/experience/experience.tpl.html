@@ -89,7 +89,7 @@
                                         <button class="fullwidth" ng-click="chooseOccupation(occChoice, $event)" ng-class="{active: occupationChoice.occTitle==occChoice.occTitle}">{{occChoice.occTitle}}</button>
                                     </div>
                                     <div ng-show="occupationState=='chosen'">
-                                        <button class="fullwidth">{{occupationChoice.occTitle}}</button>
+                                        <button class="fullwidth active">{{occupationChoice.occTitle}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -207,6 +207,20 @@
                         <div class="bg-danger error-label" ng-show="stepTwo.workDateStartY.$error.startDateConflict">Start date conflicting with one of previous entered experience dates</div>
                     </div>
 
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper checkbox">
+                            <label class="custom-option toggle" data-off="NO" data-on="YES">
+                                <input type="checkbox" id="isSeasonal" name="isSeasonal"
+                                       ng-model="occupation.isSeasonal"
+                                />
+                                <span class="button-checkbox"></span>
+                            </label>
+                            <label for="isSeasonal">This position was seasonal</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">

@@ -7,12 +7,12 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('UserProfileController', ['$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', UserProfileController])
+  angular.module('hirelyApp').controller('UserProfileController', ['$rootScope', '$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', UserProfileController])
 
 
 
 
-  function UserProfileController($scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
+  function UserProfileController($rootScope, $scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
 
     $scope.availability = {};
 
@@ -22,13 +22,20 @@
      */
     (function init() {
 
-
-      if (!authService.isUserLoggedIn()) {
-        $scope.go("app.account.login");
-      }
       $scope.userIsSynced = false;
-      authService.syncCurrentUserFromDb().then(function() {
-        $scope.userIsSynced = true;
+      if (authService.isUserLoggedIn()) {
+        authService.syncCurrentUserFromDb().then(function () {
+          $scope.userIsSynced = true;
+        });
+      } else {
+        $rootScope.nextState = {state: $state.current.name, params: $state.params};
+        $state.go("app.account.login");
+      }
+
+
+      $scope.$on('UserLoggedOut', function(event, args) {
+        $rootScope.nextState = {state: $state.current.name, params: $state.params};
+        $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
       });
 
       /**

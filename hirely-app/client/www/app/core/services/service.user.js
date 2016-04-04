@@ -60,8 +60,8 @@
     this.passwordLogin = function(email, password) {
       return HirelyApiService.users("passwordLogin").post({email: email, password: password})
           .then(
-              function(user) {
-                return user;
+              function(userAndToken) {
+                return userAndToken;
               },
               function(err) {
                 console.log("Error logging in: "+err)

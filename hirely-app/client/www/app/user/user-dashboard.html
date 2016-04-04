@@ -20,7 +20,7 @@
                 <h1>My Dashboard</h1>
                 <div class="intro">
                     <p>
-                        Hi Ryan (not Ryan? <a href="javascript:void(0)">Log Out</a>) From your dashboard you can edit your profile, view your applications, manage your positions, and <a href="javascript:void(0)">change your password</a>
+                        Hi {{user.firstName}}, from your dashboard you can edit your profile, view your applications, manage your positions.
                     </p>
                 </div>
             </div><!--col-->
@@ -32,7 +32,8 @@
                     <div class="title">
                         <h3>My Positions</h3>
                     </div>
-                    <div class="list">
+                    <div class="list" ng-repeat="loc in myLocations">
+                        <h4>Location: {{loc.name}} - {{loc.city}}, {{loc.state}}</h4>
                         <table>
                             <thead class="clearfix">
                                 <tr>
@@ -45,47 +46,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr ng-repeat="pos in myLocationsObj[loc._id]">
                                     <th>Position</th>
-                                    <td>Team Member</td>
+                                    <td>{{pos.title}}</td>
                                     <th>Status</th>
                                     <td>Active</td>
                                     <th>Openings</th>
-                                    <td>10</td>
+                                    <td>{{pos.openingsCount}}</td>
                                     <th>Wage</th>
-                                    <td>$12 Per Hour</td>
+                                    <td>${{pos.compensation.wageAmount}}/{{pos.compensation.wageType}}</td>
                                     <th>Candidates</th>
-                                    <td><button class="btn red">MANAGE</button></td>
+                                    <td><button class="btn red" ui-sref="app.business.candidateList({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">MANAGE</button></td>
                                     <th>Details</th>
-                                    <td><button class="btn">VIEW</button></td>
-                                </tr>
-                                <tr>
-                                    <th>Position</th>
-                                    <td>Team Member</td>
-                                    <th>Status</th>
-                                    <td>Active</td>
-                                    <th>Openings</th>
-                                    <td>10</td>
-                                    <th>Wage</th>
-                                    <td>$12 Per Hour</td>
-                                    <th>Candidates</th>
-                                    <td><button class="btn red">MANAGE</button></td>
-                                    <th>Details</th>
-                                    <td><button class="btn">VIEW</button></td>
-                                </tr>
-                                <tr>
-                                    <th>Position</th>
-                                    <td>Team Member</td>
-                                    <th>Status</th>
-                                    <td>Active</td>
-                                    <th>Openings</th>
-                                    <td>10</td>
-                                    <th>Wage</th>
-                                    <td>$12 Per Hour</td>
-                                    <th>Candidates</th>
-                                    <td><button class="btn red">MANAGE</button></td>
-                                    <th>Details</th>
-                                    <td><button class="btn">VIEW</button></td>
+                                    <td><button class="btn" ui-sref="app.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">VIEW</button></td>
                                 </tr>
                             </tbody>
 
