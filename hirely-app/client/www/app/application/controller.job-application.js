@@ -13,10 +13,10 @@
                 return Math.round(value);
             }
         })
-        .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'AuthService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+        .controller('JobApplicationController', ['$q', '$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'AuthService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-    function JobApplicationController($scope, $rootScope, $stateParams, $state, $timeout, authService, JobApplicationService, BusinessService) {
+    function JobApplicationController($q, $scope, $rootScope, $stateParams, $state, $timeout, authService, JobApplicationService, BusinessService) {
 
         /**
          * [availability this scope is the parent of availability step scope and this variaable is needed there]
@@ -31,8 +31,10 @@
         $scope.userIsSynced = false;
 
         if ($scope.isAuth) {
-            authService.syncCurrentUserFromDb().then(function () {
-                $scope.userIsSynced = true;
+            authService.syncCurrentUserFromDb().then(function (user) {
+                if (user) {
+                    $scope.userIsSynced = true;
+                };
             });
         } else {
             $rootScope.nextState = {state: $state.current.name, params: $state.params};
@@ -81,7 +83,7 @@
          */
         function getApplicationData() {
             if (!authService.isUserLoggedIn()) {
-                return q.reject();
+                return $q.reject();
             }
             $scope.userData = authService.currentUser;
 

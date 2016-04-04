@@ -63,7 +63,9 @@
             var now = new Date();
             if (this.lastsync != null && now.getTime() < this.lastsync.getTime() + 1000 ) {
                 console.log("syncCurrentUserFromDb: skipping because synced soon ago");
-                return;
+                var deferred = $q.defer();
+                deferred.resolve(service.currentUser);
+                return deferred.promise;
             }
 
             this.lastsync = now;
