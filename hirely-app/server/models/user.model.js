@@ -55,10 +55,11 @@ var experienceSchema = new Schema({
                                       required:false,
                                       validate:[endDateValidator, 'End date must be greater than start date']
                                     },
-  reportedOccTitle         :         {type:String, required:true},
-  occTitle       :         {type:String, required:true},
-  occId        :         {type:String, required:false},
-  accomplishments         :         {type:String, required:false}
+  reportedOccTitle        :         {type:String, required:true},
+  occTitle                :         {type:String, required:true},
+  occId                   :         {type:String, required:false},
+  accomplishments         :         {type:String, required:false},
+  isSeasonal              :         {type:Boolean, default:false}
 });
 
 var educationSchema = new Schema({

@@ -193,39 +193,6 @@ var userService = {
     },
 
     /**
-     * [getUserByExternalId will take an external ID e.g. firebaseid and return the user basic info only]
-     * @param  {[string]} extId [esternal id ]
-     * @return {[promis]}       [description]
-     */
-    getUserByExternalId: function (extId, reqQuery) {
-
-        // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -')
-        if (undefined !== reqQuery.complete) {
-            returnFields = '-nothing'
-        }
-
-        return idMapModel.findOne({externalId: extId}).exec()
-            .then(
-                /**
-                 * map is found for this external id
-                 * find the user and return it in promise
-                 */
-                function (map) {
-                    return userModel.findById(map.localId, returnFields).exec();
-                },//// fun. resolve
-                function (error) {
-                    /**
-                     * No map is found for this external id
-                     */
-                    console.log(error);
-                }//// fun. reject
-            )//// then
-
-    }, //// fun. getUserByExternalId
-
-
-    /**
      * [saveUser will update user in database after checking the existance of user by his id
      * this function create and manage its own promise
      * this function does NOT make use of model.update() method because it doesn't trigger schema validation]
@@ -371,9 +338,11 @@ var userService = {
     addExpScores: function (user, roles) {
 
         try {
-            // Calc roles
+            // Calc roles and tenure avg
             var roles = {};
             var totalWorkMonths = 0;
+            var nonSeasonalTotalWorkMonths = 0;
+            var nonSeasonalJobCount = 0;
             for (let workExperience of user.workExperience) {
                 var occId = workExperience.occId;
                 // console.log("us260");
@@ -389,6 +358,17 @@ var userService = {
                 // console.log("us261.2");
                 roles[occId].monthCount += monthCount;
                 roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount)
+
+                if (!workExperience.isSeasonal) {
+                    nonSeasonalTotalWorkMonths += monthCount;
+                    nonSeasonalJobCount += 1;
+                }
+            }
+
+            // Add tenureAvg to user
+            user.tenureAvg = 0;
+            if (nonSeasonalTotalWorkMonths !== 0) {
+                user.tenureAvg = Math.ceil(nonSeasonalTotalWorkMonths / nonSeasonalJobCount);
             }
 
             // console.log("us262");
@@ -442,12 +422,6 @@ var userService = {
                         var totalWorkMonths = 0;
                         for (var occId in roles) {
                             totalWorkMonths += roles[occId].monthCount;
-                        }
-
-                        // Add tenureAvg to user
-                        user.tenureAvg = 0;
-                        if (totalWorkMonths !== 0) {
-                            user.tenureAvg = Math.ceil(totalWorkMonths / user.workExperience.length);
                         }
 
                         // Add master KSAs
