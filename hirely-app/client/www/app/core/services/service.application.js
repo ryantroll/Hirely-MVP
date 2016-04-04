@@ -24,6 +24,7 @@
       save:save,
       isApplicationExists: isApplicationExists,
       getByPositionId: getByPositionId,
+      getByUserId: getByUserId,
       getStatistics: getStatistics,
       viewStatusLabels: viewStatusLabels,
       statusLabels: statusLabels,
@@ -116,6 +117,20 @@
                 else{
                     deferred.reject('No application found');
                 }
+            },
+            function(err){
+                deferred.reject(err);
+            }
+        )//// .get().then()
+        return deferred.promise;
+    }//// getPositionById
+
+    function getByUserId(userId){
+        var deferred = $q.defer();
+        HirelyApiService.applications('byUserId', userId).get()
+        .then(
+            function(found){
+              deferred.resolve(found);
             },
             function(err){
                 deferred.reject(err);

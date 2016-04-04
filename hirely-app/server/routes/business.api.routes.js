@@ -51,6 +51,35 @@ var businessRoutes = {
             );
     },
 
+    getPositionById: function(req, res){
+        /**
+         * Send public info if all is not requested
+         */
+        businessService.getPositionById(req.params.pid, req.query)
+            .then(
+                function(position){
+                    res.status(200).json(apiUtil.generateResponse(200, "Position retrieved successfully", position));
+                },
+                function(error){
+                    //// business couldn't be found 404
+                    res.status(404).json(apiUtil.generateResponse(404, "Position couldn't be located", null));
+                }
+            );
+    },
+
+    getPositionsByManagerId: function(req, res){
+        businessService.getPositionsByManagerId(req.params.managerId, req.query)
+            .then(
+                function(position){
+                    res.status(200).json(apiUtil.generateResponse(200, "Position retrieved successfully", position));
+                },
+                function(error){
+                    //// business couldn't be found 404
+                    res.status(404).json(apiUtil.generateResponse(404, "Position couldn't be located", null));
+                }
+            );
+    },
+
     isUserFilteredForPosition: function(req, res){
         businessService.isUserIdFilteredForPositionId(req.params.uid, req.params.pid, req.query)
             .then(

@@ -69,6 +69,8 @@ module.exports = function(app) {
     app.get('/api/v1/businesses', businessApiRoutes.getAll);
     app.get('/api/v1/businesses/positionIcon', businessApiRoutes.getPositionDisplayData);
     app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);
+    app.get('/api/v1/businesses/getPositionById/:pid', businessApiRoutes.getPositionById);
+    app.get('/api/v1/businesses/getPositionsByManagerId/:managerId', businessApiRoutes.getPositionsByManagerId);
     app.get('/api/v1/businessByPositionId/:pid', businessApiRoutes.getByPositionId);
     app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
     app.get('/api/v1/positions/:pid/isUserFiltered/:uid', businessApiRoutes.isUserFilteredForPosition);
@@ -79,6 +81,7 @@ module.exports = function(app) {
     app.get('/api/v1/applications', applicationApiRoutes.getAll);
     app.get('/api/v1/applications/:id', applicationApiRoutes.getById);
     app.get('/api/v1/applications/byPositionId/:id', applicationApiRoutes.getByPositionId);
+    app.get('/api/v1/applications/byUserId/:userId', applicationApiRoutes.getByUserId);
     app.post('/api/v1/applications/', applicationApiRoutes.createNewApplication);
     app.patch('/api/v1/applications/:appId', applicationApiRoutes.saveApplication);
 

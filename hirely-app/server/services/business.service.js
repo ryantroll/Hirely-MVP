@@ -4,6 +4,7 @@ var userModel = require('../models/user.model');
 var onetIconsModel = require('../models/onetIcons.model');
 var applicationModel = require('../models/application.model');
 var careerMatchScoresModel = require('../models/careerMatchScores.model');
+var q = require('q');
 /**
  * [privateFields array to define the names of extended fields in user objects]
  * @type {Array}
@@ -56,10 +57,82 @@ var businessService = {
             returnFields = '-nothing'
         }
 
+        var ids = positionId.split('|');
+
         return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }, returnFields).exec();
         //return businessModel.find({})
         //.where({positions:{$elemMatch:{_id:positionId}}})
         //.exec();
+    },
+
+    getPositionById: function(positionId, reqQuery){
+        var deferred = q.defer();
+
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+
+        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+
+        var ids = positionId.split('|');
+        var query = {$or: []};
+        for(var x=0; x<ids.length; x++){
+            var or = {};
+            or['positions.'+ids[0]] = { $exists:true, $nin:[null] };
+            query.$or.push(or);
+        }
+        businessModel.find(query, returnFields)
+        .then(
+            function(found){
+                if(Array.isArray(found)){
+                    var ret = {};
+
+                    for(var i=0; i<found.length; i++){
+                        var b = found[i];
+                        var positions =b.positions.toObject();
+                        for(var pos in positions){
+                            if(ids.indexOf(pos) > -1){
+                                var myPos = positions[pos];
+
+                                /**
+                                 * add required location and business field to position
+                                 */
+                                var location = b.locations.toObject()[myPos.locationId]
+
+                                delete location.positionSlugs;
+                                myPos.location = location;
+                                myPos.business = {name:b.name, slug:b.slug, _id:b._id, description:b.description};
+
+                                ret[pos] = myPos
+                            }
+                        }//// for pos in b
+
+                        deferred.resolve(ret)
+                    }////for i
+                }//// if isArray
+            },//// then success
+            function(err){
+                deferred.reject(err);
+            }
+        )
+
+        return deferred.promise;
+    },
+
+    getPositionsByManagerId: function(managerId, reqQuery){
+        var deferred = q.defer();
+
+        // Determine what fields to return based on reqQuery.
+        var returnFields = '-' + privateFields.join(' -')
+
+        if(undefined !== reqQuery && undefined !== reqQuery.complete) {
+            returnFields = '-nothing'
+        }
+
+        console.log('>>>>>>', managerId);
+
+        return deferred.promise;
     },
 
     /**
@@ -125,7 +198,7 @@ var businessService = {
                 return left != right;
             case "indexOf":
                 return left.indexOf(right);
-            
+
             // Special within for availability
             // Checks to see if left is completely within right
             // TODO: not even using this right now, consider removing
@@ -136,7 +209,7 @@ var businessService = {
                     }
                 });
                 return 1;
-            
+
             // Normal array ops
             case "len":
                 return left.length
@@ -212,7 +285,7 @@ var businessService = {
         console.log("CPBSQFE9");
         return result;
     },
-    
+
     isUserIdFilteredForPositionId: function(userId, positionId, reqQuery) {
         return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
             var businessObj = business.toObject();
@@ -227,7 +300,7 @@ var businessService = {
         });
 
     },  // end isUserIdFilteredForPositionId
-    
+
     isUserFilteredForPosition: function(user, business, positionId, application, careerMatchScores, disqualifyThreshold) {
         disqualifyThreshold = disqualifyThreshold || 0;  // 0 is least important
 

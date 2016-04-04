@@ -1,4 +1,4 @@
-<!-- <div class="form-loader" ng-show="!dataLoaded">
+<div class="form-loader" ng-show="!dataLoaded">
     <p>Loading</p>
     <div class="loader"></div>
 </div>
@@ -10,9 +10,9 @@
             <h4>Data Not Found!</h4>
         </div>
     </div>
-</div> -->
+</div>
 
-<div class="dashboard">
+<div class="dashboard" ng-show="dataLoaded && !dataError">
     <div class="max-width">
 
         <div class="row">
@@ -102,7 +102,7 @@
                         <h3>Favorite Positions</h3>
                     </div>
                     <div class="list">
-                        <table>
+                        <table ng-if="myFavorites.length > 0">
                             <thead class="clearfix">
                                 <tr>
                                     <th>Position</th>
@@ -114,51 +114,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr ng-repeat="fav in myFavorites">
                                     <th>Position</th>
-                                    <td>Team Member</td>
+                                    <td>{{positions[fav.positionId].title}}</td>
                                     <th>Business</th>
-                                    <td>Shake Shack - Dupont Circle</td>
+                                    <td>{{positions[fav.positionId].business.name}} - {{positions[fav.positionId].location.name}}</td>
                                     <th>Location</th>
-                                    <td>Washington, DC</td>
+                                    <td>{{positions[fav.positionId].location.city}}, {{positions[fav.positionId].location.state}}</td>
                                     <th>Opening</th>
-                                    <td>4</td>
+                                    <td>{{positions[fav.positionId].openingsCount}}</td>
                                     <th>Action</th>
-                                    <td><button class="btn red">Apply</button></td>
+                                    <td><button class="btn red" ui-sref="application.apply({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">Apply</button></td>
                                     <th>&nbsp;</th>
-                                    <td><button class="btn">Remove</button></td>
-                                </tr>
-                                <tr>
-                                    <th>Position</th>
-                                    <td>Team Member</td>
-                                    <th>Business</th>
-                                    <td>Shake Shack - Dupont Circle</td>
-                                    <th>Location</th>
-                                    <td>Washington, DC</td>
-                                    <th>Opening</th>
-                                    <td>4</td>
-                                    <th>Action</th>
-                                    <td><button class="btn red">Apply</button></td>
-                                    <th>&nbsp;</th>
-                                    <td><button class="btn">Remove</button></td>
-                                </tr>
-                                <tr>
-                                    <th>Position</th>
-                                    <td>Team Member</td>
-                                    <th>Business</th>
-                                    <td>Shake Shack - Dupont Circle</td>
-                                    <th>Location</th>
-                                    <td>Washington, DC</td>
-                                    <th>Opening</th>
-                                    <td>4</td>
-                                    <th>Action</th>
-                                    <td><button class="btn red">Apply</button></td>
-                                    <th>&nbsp;</th>
-                                    <td><button class="btn">Remove</button></td>
+                                    <td><button class="btn" ng-click="favoriteUpdate($index, fav.positionId, positions[fav.positionId].locationId, positions[fav.positionId].business._id)">Remove</button></td>
                                 </tr>
                             </tbody>
-
                         </table>
+
+                        <div ng-if="myFavorites.length < 1">
+                            <td colspan="6">No favorite positions found.</td>
+                        </div>
                     </div><!--list-->
                 </div><!--box-->
             </div><!--col-->
@@ -171,7 +146,8 @@
                         <h3>Application History</h3>
                     </div>
                     <div class="list">
-                        <table>
+
+                        <table ng-if="myApplications.length > 0">
                             <thead class="clearfix">
                                 <tr>
                                     <th>Position</th>
@@ -182,45 +158,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr ng-repeat="app in myApplications">
                                     <th>Position</th>
-                                    <td>Team Member</td>
+                                    <td>{{positions[app.positionId].title}}</td>
                                     <th>Business</th>
-                                    <td>Shake Shack - Dupont Circle</td>
+                                    <td>{{positions[app.positionId].business.name}} - {{positions[app.positionId].location.name}}</td>
                                     <th>Location</th>
-                                    <td>Washington, DC</td>
+                                    <td>{{positions[app.positionId].location.city}}, {{positions[app.positionId].location.state}}</td>
                                     <th>Apply Date</th>
-                                    <td>3/1/2016</td>
+                                    <td>{{app.createdAt | date : 'MM/dd/yyyy'}}</td>
                                     <th>Status</th>
-                                    <td>Applied</td>
-                                </tr>
-                                <tr>
-                                    <th>Position</th>
-                                    <td>Team Member</td>
-                                    <th>Business</th>
-                                    <td>Shake Shack - Dupont Circle</td>
-                                    <th>Location</th>
-                                    <td>Washington, DC</td>
-                                    <th>Apply Date</th>
-                                    <td>3/1/2016</td>
-                                    <th>Status</th>
-                                    <td>Applied</td>
-                                </tr>
-                                <tr>
-                                    <th>Position</th>
-                                    <td>Team Member</td>
-                                    <th>Business</th>
-                                    <td>Shake Shack - Dupont Circle</td>
-                                    <th>Location</th>
-                                    <td>Washington, DC</td>
-                                    <th>Apply Date</th>
-                                    <td>3/1/2016</td>
-                                    <th>Status</th>
-                                    <td>Applied</td>
+                                    <td>{{getApplicationStatus(app.status)}}</td>
                                 </tr>
                             </tbody>
 
                         </table>
+
+                        <div ng-if="myApplications.length < 1">
+                            <td colspan="6">You haven't applied to any position yet.</td>
+                        </div>
+
                     </div><!--list-->
                 </div><!--box-->
             </div><!--col-->
@@ -228,12 +185,12 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <h1>My Profile <a href="javascript:void(0)"><i class="glyphicon glyphicon-edit"></i></a></h1>
+                <h1>My Profile <a href="javascript:void(0)" ui-sref="app.user.profile"><i class="glyphicon glyphicon-edit"></i></a></h1>
                 <div class="profile">
                     <p>
-                        Ryan Troll<br>
-                        ryan.troll@gmail.com<br>
-                        (444) 555-6666
+                        {{user.firstName}} {{user.lastName}}<br>
+                        {{user.email}}<br>
+                        {{getFormatedPhone(user.mobile)}}
                     </p>
                 </div><!--profile-->
             </div><!--col-->

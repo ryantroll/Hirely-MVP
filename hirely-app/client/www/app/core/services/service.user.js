@@ -56,7 +56,7 @@
           );
       return deferred.promise;
     };//// fun. saveUser
-    
+
     this.passwordLogin = function(email, password) {
       return HirelyApiService.users("passwordLogin").post({email: email, password: password})
           .then(
@@ -126,7 +126,7 @@
     }//// fun. updateUserMetricsById
 
     this.clearPhoneFormat = function(val){
-      return val.split(/[\(|\)| |\-|\+|\.]/).join('');
+      return val.split(/[\(|\)| |\-|\+|\.|\+1\.]/).join('');
     }
 
     this.formatPhone = function(val){
