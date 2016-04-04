@@ -191,9 +191,16 @@
                 $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
             }
 
-            if (!$scope.user.languagesSpoken || !$scope.user.languagesSpoken.length) {
-                $scope.user.languagesSpoken = ["English"];
+            var languagesListRaw = $scope.user.languagesSpoken;
+            if (!languagesListRaw || !languagesListRaw.length) {
+                languagesListRaw = ["English"];
             }
+            // Convert list of strings to list of objects, otherwise angular gets cranky with ngRepeat and inputs
+            $scope.languagesListObjs = [];
+            languagesListRaw.forEach(function(lang) {
+                $scope.languagesListObjs.push({language:lang});
+            });
+
 
             $scope.stepOneLoaded = true;
         };
@@ -205,6 +212,12 @@
             }
         });
 
+        $scope.addAndFocusLanguage = function() {
+            $scope.languagesListObjs.push({language:''});
+            $timeout(function() {
+                $('.language:last').focus()
+            });
+        };
 
         //// wait for destroy event to update data
         $scope.$on('$destroy', function (event) {
@@ -221,11 +234,11 @@
 
             // Get lanuages from dom as an array
             // Do it this way because direct mapping using ng-model causes focus issues
-            var languagesSpoken = [];
-            $(".language").map(function() {
-                var language = $(this).val().trim();
+            var languagesSpokenRaw = [];
+            $scope.languagesListObjs.forEach(function(language) {
+                language = language.language.trim();
                 if (language.length != 0) {
-                    languagesSpoken.push(language);
+                    languagesSpokenRaw.push(language);
                 }
             });
 
@@ -236,7 +249,7 @@
                 mobile: $scope.user.mobile,
                 dateOfBirth: $scope.user.dateOfBirth,
                 postalCode: $scope.user.postalCode,
-                languagesSpoken: languagesSpoken
+                languagesSpoken: languagesSpokenRaw
             };
             userService.saveUser(toSave)
                 .then(

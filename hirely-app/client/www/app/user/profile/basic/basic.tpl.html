@@ -127,14 +127,11 @@
 							<span class="fa fa-check feedback-valid"></span>
 							<span class="fa fa-close feedback-error"></span>
 						</label>
-						<div class="clearfix languagesSpokenDiv" ng-repeat="lang in user.languagesSpoken" id="languagesSpokenDiv" name="languagesSpokenDiv">
-							<input type="text" class="text-field pull-left language" name="language"
-							       ng-value="lang"
-							       required minlength="3"
-							/>
-							<button class="pull-right languageSubtract" ng-click="user.languagesSpoken.splice($index,1)"><i class="fa fa-minus"></i></button>
+						<div class="clearfix languagesSpokenDiv" ng-repeat="langObj in languagesListObjs" id="languagesSpokenDiv" name="languagesSpokenDiv">
+							<input type="text" class="text-field pull-left language" name="language" ng-model="langObj.language" required minlength="3" />
+							<button class="pull-right languageSubtract" ng-click="languagesListObjs.splice($index,1)"><i class="fa fa-minus"></i></button>
 						</div>
-						<button class="btn languageAdd" ng-click="user.languagesSpoken.push('')"><i class="fa fa-plus"></i></button>
+						<button class="btn languageAdd" ng-click="addAndFocusLanguage()"><i class="fa fa-plus"></i></button>
 					</div>
 				</div>
 			</div>
