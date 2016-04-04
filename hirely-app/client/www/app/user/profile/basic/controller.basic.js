@@ -223,8 +223,8 @@
             // Do it this way because direct mapping using ng-model causes focus issues
             var languagesSpoken = [];
             $(".language").map(function() {
-                var language = $(this).val();
-                if (language.trim().length != 0) {
+                var language = $(this).val().trim();
+                if (language.length != 0) {
                     languagesSpoken.push(language);
                 }
             });
