@@ -7,12 +7,12 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('UserProfileController', ['$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', UserProfileController])
+  angular.module('hirelyApp').controller('UserProfileController', ['$rootScope', '$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', UserProfileController])
 
 
 
 
-  function UserProfileController($scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
+  function UserProfileController($rootScope, $scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
 
     $scope.availability = {};
 

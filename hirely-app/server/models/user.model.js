@@ -194,7 +194,8 @@ var userSchema = new Schema({
         WorkActivities      :       {type:freeSchema, required:false}
     },
 
-    isVetted            : {type:String, default:false}
+    isVetted            : {type:String, default:false},
+    languagesSpoken     : [String]
 
 });
 

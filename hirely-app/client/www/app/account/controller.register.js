@@ -7,6 +7,7 @@
     angular.module('hirelyApp.account')
     .directive('validatePassword', function(){
     return {
+        // TODO:  Consider if we can use ng-pattern like we do for basic info postal code
       restrict:'A',
       require:'ngModel',
       link:function(scope, ele, attrs, ctrl){
