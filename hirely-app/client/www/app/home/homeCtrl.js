@@ -1,12 +1,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', '$stateParams', 'GeocodeService', '$window','$timeout', 'BusinessService' ,'JobService','UserService',HomeCtrl ]);
+    angular.module('hirelyApp.home').controller('HomeCtrl', ['$scope', '$state', HomeCtrl ]);
 
-    function HomeCtrl ($scope, $state, $stateParams, GeocodeService, $window, $timeout, BusinessService , JobService, UserService) {
+    function HomeCtrl ($scope, $state) {
 
-
-        var geocodeService = GeocodeService;
 
         $scope.flexSliderOptions = {
             animation: "fade",

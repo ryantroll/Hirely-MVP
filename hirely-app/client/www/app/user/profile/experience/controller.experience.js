@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$rootScope', '$scope', '$filter', '$timeout', 'GeocodeService', 'OccupationService', 'AuthService', 'UserService', 'StatesNames', ProfileExperienceController]);
+    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$rootScope', '$scope', '$filter', '$timeout', 'OccupationService', 'UserService', 'StatesNames', ProfileExperienceController]);
 
     hirelyApp.directive('validateMonth', function () {
             return {
@@ -43,9 +43,7 @@
 
         }); /// validate year
 
-    function ProfileExperienceController($rootScope, $scope, $filter, $timeout, GeocodeService, OccupationService, authService, userService, StatesNames) {
-
-        var geocodeService = GeocodeService;
+    function ProfileExperienceController($rootScope, $scope, $filter, $timeout, OccupationService, userService, StatesNames) {
 
         $scope.requireWorkOccupationValidation = false;
 

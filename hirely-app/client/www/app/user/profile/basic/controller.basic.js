@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('ProfileBasicController', ['$scope', '$rootScope', '$stateParams', 'multiStepFormInstance', 'GeocodeService', 'UserService', 'AuthService', '$timeout', 'FileUpload', 'DEFAULT_PROFILE_IMAGE', ProfileBasicController])
+    angular.module('hirelyApp').controller('ProfileBasicController', ['$scope', '$rootScope', 'multiStepFormInstance', 'UserService', '$timeout', 'FileUpload', 'DEFAULT_PROFILE_IMAGE', ProfileBasicController])
         .directive('validateDate', function () {
             return {
                 restrict: 'A',
@@ -106,9 +106,7 @@
         });
 
 
-    function ProfileBasicController($scope, $rootScope, $stateParams, multiStepFormInstance, GeocodeService, userService, authService, $timeout, FileUpload, DEFAULT_PROFILE_IMAGE) {
-
-        var geocodeService = GeocodeService;
+    function ProfileBasicController($scope, $rootScope, multiStepFormInstance, userService, $timeout, FileUpload, DEFAULT_PROFILE_IMAGE) {
 
         $scope.validStep = false;
 

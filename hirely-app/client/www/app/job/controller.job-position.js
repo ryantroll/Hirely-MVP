@@ -141,25 +141,6 @@
        */
       if($rootScope.currentUserId){
         /**
-         * get the distance between user and location
-         */
-        // uiGmapGoogleMapApi.then(function(maps){
-        //   var directionsService = new maps.DirectionsService();
-        //   var request = {
-        //     origin: new maps.LatLng(
-        //       from.lat(),
-        //       from.lng()
-        //     ),
-        //     destination: new maps.LatLng(
-        //       to.lat(),
-        //       to.lng()
-        //     ),
-        //     travelMode: maps.TravelMode['DRIVING'],
-        //     optimizeWaypoints: true
-        //   };
-        // });//// uiGmapGoogleMapApi.them
-
-        /**
          * find if user favorite this job
          */
         FavoritesService.getFavorite({type:'position', userId:$rootScope.currentUserId, positionId: $scope.position._id})

@@ -2,12 +2,10 @@
 
 var myApp = angular.module('hirelyApp',
     [
-        'uiGmapgoogle-maps',
         'ui.router',
         'ui.bootstrap',
         'ui.bootstrap.typeahead',
         'ui.grid',
-        'uiGmapgoogle-maps',
         'firebase',
         'ngMask',
         'ng-currency',
