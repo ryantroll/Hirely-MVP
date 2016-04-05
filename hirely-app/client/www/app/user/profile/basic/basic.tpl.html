@@ -129,7 +129,7 @@
 						</label>
 						<div class="clearfix languagesSpokenDiv" ng-repeat="langObj in languagesListObjs" id="languagesSpokenDiv" name="languagesSpokenDiv">
 							<input type="text" class="text-field pull-left language" name="language" ng-model="langObj.language" required minlength="3" />
-							<button class="pull-right languageSubtract" ng-click="languagesListObjs.splice($index,1)"><i class="fa fa-minus"></i></button>
+							<button class="pull-right languageSubtract" ng-click="rmAndFocusLanguage($index)"><i class="fa fa-minus"></i></button>
 						</div>
 						<button class="btn languageAdd" ng-click="addAndFocusLanguage()"><i class="fa fa-plus"></i></button>
 					</div>

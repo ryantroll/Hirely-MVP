@@ -219,6 +219,14 @@
             });
         };
 
+        $scope.rmAndFocusLanguage = function(index) {
+            if ($scope.languagesListObjs.length == 1) {
+                alert("You must list at least one language.");
+                return;
+            }
+            $scope.languagesListObjs.splice(index,1);
+        };
+
         //// wait for destroy event to update data
         $scope.$on('$destroy', function (event) {
             if ($scope._dateOfBirth) {
