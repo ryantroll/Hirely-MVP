@@ -284,7 +284,17 @@
             angular.element('.image-loader').text(percent);
         });
 
+        // Manual debounce, because IE11 bounces
+        $scope.lastUploadPhotoCall = null;
         $scope.uploadPhoto = function () {
+            var now = Date.now();
+            if ($scope.lastUploadPhotoCall && now < $scope.lastUploadPhotoCall + 1000) {
+                console.log("skipped");
+                return;
+            }
+            console.log("unskip");
+            $scope.lastUploadPhotoCall = now;
+
             angular.element('.image-loader').show();
 
             if (angular.isUndefined($scope.file)) {
