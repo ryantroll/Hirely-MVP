@@ -56,7 +56,6 @@ var businessRoutes = {
         businessService.getPositionsByManagerId(req.params.managerId, req.query)
             .then(
                 function(position){
-                    console.log('>>>>>>>>>>>>>>')
                     res.status(200).json(apiUtil.generateResponse(200, "Position retrieved successfully", position));
                 },
                 function(error){
