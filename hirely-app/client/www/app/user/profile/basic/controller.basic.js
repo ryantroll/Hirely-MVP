@@ -284,55 +284,53 @@
             angular.element('.image-loader').text(percent);
         });
 
-        // Manual debounce, because IE11 bounces
-        $scope.lastUploadPhotoCall = null;
         $scope.uploadPhoto = function () {
-            var now = Date.now();
-            if ($scope.lastUploadPhotoCall && now < $scope.lastUploadPhotoCall + 1000) {
-                console.log("skipped");
-                return;
+
+            // IE11 bounces on this for some reason, and this errors out
+            try {
+
+                if (!$scope.file || angular.isUndefined($scope.file)) {
+                    console.log("skipped $scope.uploadPhoto due to debounce");
+                    return null;
+                }
+
+                var fileName = $scope.file.name.split('.');
+                var ext = fileName.pop();
+                fileName = fileName.join('.');
+                fileName += '-pofile-' + authService.currentUserID + '.' + ext;
+
+                angular.element('.image-loader').show();
+
+                FileUpload.putFile($scope.file, fileName, 'profile-photos')
+                    .then(
+                        function (fileUrl) {
+                            $scope.user.profileImageURL = fileUrl;
+                            var userToSave = angular.copy(authService.getCurrentUser());
+                            userToSave.profileImageURL = fileUrl;
+                            return userService.saveUser(userToSave)
+                        },
+                        function (err) {
+                            console.log(err);
+                            return null;
+                        }
+                    )///
+                    .then(
+                        function (savedUser) {
+                            console.log("Added image to user");
+                            authService.setCurrentUser(savedUser);
+                            $scope.initBasic();
+
+                            delete $scope.file;
+                            angular.element('#photoFile').val(null);
+                            angular.element('.image-loader').hide();
+                        },
+                        function (err) {
+                            console.log(err)
+                        }
+                    )
+            } catch (IEerror) {
+                console.log("Caught error. Prob IE bounce: " + IEerror);
             }
-            console.log("unskip");
-            $scope.lastUploadPhotoCall = now;
-
-            angular.element('.image-loader').show();
-
-            if (angular.isUndefined($scope.file)) {
-                return null;
-            }
-
-            var fileName = $scope.file.name.split('.');
-            var ext = fileName.pop();
-            fileName = fileName.join('.');
-            fileName += '-pofile-' + authService.currentUserID + '.' + ext;
-
-            FileUpload.putFile($scope.file, fileName, 'profile-photos')
-                .then(
-                    function (fileUrl) {
-                        $scope.user.profileImageURL = fileUrl;
-                        var userToSave = angular.copy(authService.getCurrentUser());
-                        userToSave.profileImageURL = fileUrl;
-                        return userService.saveUser(userToSave)
-                    },
-                    function (err) {
-                        console.log(err);
-                        return null;
-                    }
-                )///
-                .then(
-                    function (savedUser) {
-                        console.log("Added image to user");
-                        authService.setCurrentUser(savedUser);
-                        $scope.initBasic();
-
-                        delete $scope.file;
-                        angular.element('#photoFile').val(null);
-                        angular.element('.image-loader').hide();
-                    },
-                    function (err) {
-                        console.log(err)
-                    }
-                )
         }//// fun. uploadPhoto
 
         $scope.removeImage = function () {
