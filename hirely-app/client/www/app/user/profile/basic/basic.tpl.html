@@ -17,9 +17,10 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="text-center image-links">
-						<a href="javascript:void(0);" ng-click="selectFile()" ng-show="user.profileImageURL==DEFAULT_PROFILE_IMAGE">Add</a>
-						<a href="javascript:void(0);" ng-click="selectFile()" ng-show="user.profileImageURL!=DEFAULT_PROFILE_IMAGE">Edit</a>
-						| <a href="javascript:void(0);" ng-click="removeImage()">Remove</a>
+						<a ng-show="user.profileImageURL==DEFAULT_PROFILE_IMAGE" href="javascript:void(0);" ng-click="selectFile()">Add</a>
+						<a ng-show="user.profileImageURL!=DEFAULT_PROFILE_IMAGE" href="javascript:void(0);" ng-click="selectFile()">Edit</a>
+						<span ng-show="user.profileImageURL!=DEFAULT_PROFILE_IMAGE">| </span>
+						<a ng-show="user.profileImageURL!=DEFAULT_PROFILE_IMAGE" href="javascript:void(0);" ng-click="removeImage()">Remove</a>
 						<input id="photoFile" name="file" type="file" class="profile-image" file />
 					</div>
 				</div>

@@ -98,7 +98,7 @@
                         var file = files[0];
                         scope.file = file;
                         scope.$parent.file = file;
-                        scope.$apply();
+                        // scope.$apply();
                         scope.$parent.uploadPhoto();
                     });
                 }
