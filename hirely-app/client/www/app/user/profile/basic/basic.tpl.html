@@ -8,14 +8,19 @@
 				<div class="col-sm-12">
 					<div class="text-center user-image">
 						<span class="image-loader"></span>
-						<img src="{{user.profileImageURL}}"/>
+						<a href="javascript:void(0)" ng-click="selectFile()">
+							<img src="{{user.profileImageURL}}" />
+						</a>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="text-center image-links">
-						<a href="javascript:void(0);" ng-click="selectFile()">Edit</a> | <a href="javascript:void(0);" ng-click="removeImage()">Remove</a>
+						<a ng-show="user.profileImageURL==DEFAULT_PROFILE_IMAGE" href="javascript:void(0);" ng-click="selectFile()">Add</a>
+						<a ng-show="user.profileImageURL!=DEFAULT_PROFILE_IMAGE" href="javascript:void(0);" ng-click="selectFile()">Edit</a>
+						<span ng-show="user.profileImageURL!=DEFAULT_PROFILE_IMAGE">| </span>
+						<a ng-show="user.profileImageURL!=DEFAULT_PROFILE_IMAGE" href="javascript:void(0);" ng-click="removeImage()">Remove</a>
 						<input id="photoFile" name="file" type="file" class="profile-image" file />
 					</div>
 				</div>
@@ -127,14 +132,11 @@
 							<span class="fa fa-check feedback-valid"></span>
 							<span class="fa fa-close feedback-error"></span>
 						</label>
-						<div class="clearfix languagesSpokenDiv" ng-repeat="lang in user.languagesSpoken" id="languagesSpokenDiv" name="languagesSpokenDiv">
-							<input type="text" class="text-field pull-left language" name="language"
-							       ng-value="lang"
-							       required minlength="3"
-							/>
-							<button class="pull-right languageSubtract" ng-click="user.languagesSpoken.splice($index,1)"><i class="fa fa-minus"></i></button>
+						<div class="clearfix languagesSpokenDiv" ng-repeat="langObj in languagesListObjs" id="languagesSpokenDiv" name="languagesSpokenDiv">
+							<input type="text" class="text-field pull-left language" name="language" ng-model="langObj.language" required minlength="3" />
+							<button class="pull-right languageSubtract" ng-click="rmAndFocusLanguage($index)"><i class="fa fa-minus"></i></button>
 						</div>
-						<button class="btn languageAdd" ng-click="user.languagesSpoken.push('')"><i class="fa fa-plus"></i></button>
+						<button class="btn languageAdd" ng-click="addAndFocusLanguage()"><i class="fa fa-plus"></i></button>
 					</div>
 				</div>
 			</div>

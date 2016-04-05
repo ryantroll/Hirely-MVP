@@ -98,7 +98,7 @@
                         var file = files[0];
                         scope.file = file;
                         scope.$parent.file = file;
-                        scope.$apply();
+                        // scope.$apply();
                         scope.$parent.uploadPhoto();
                     });
                 }
@@ -111,6 +111,8 @@
         var geocodeService = GeocodeService;
 
         $scope.validStep = false;
+
+        $scope.DEFAULT_PROFILE_IMAGE = DEFAULT_PROFILE_IMAGE;
 
         $timeout(function () {
             window.scrollTo(0, 0);
@@ -191,9 +193,16 @@
                 $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
             }
 
-            if (!$scope.user.languagesSpoken || !$scope.user.languagesSpoken.length) {
-                $scope.user.languagesSpoken = ["English"];
+            var languagesListRaw = $scope.user.languagesSpoken;
+            if (!languagesListRaw || !languagesListRaw.length) {
+                languagesListRaw = ["English"];
             }
+            // Convert list of strings to list of objects, otherwise angular gets cranky with ngRepeat and inputs
+            $scope.languagesListObjs = [];
+            languagesListRaw.forEach(function(lang) {
+                $scope.languagesListObjs.push({language:lang});
+            });
+
 
             $scope.stepOneLoaded = true;
         };
@@ -205,6 +214,20 @@
             }
         });
 
+        $scope.addAndFocusLanguage = function() {
+            $scope.languagesListObjs.push({language:''});
+            $timeout(function() {
+                $('.language:last').focus()
+            });
+        };
+
+        $scope.rmAndFocusLanguage = function(index) {
+            if ($scope.languagesListObjs.length == 1) {
+                alert("You must list at least one language.");
+                return;
+            }
+            $scope.languagesListObjs.splice(index,1);
+        };
 
         //// wait for destroy event to update data
         $scope.$on('$destroy', function (event) {
@@ -221,11 +244,11 @@
 
             // Get lanuages from dom as an array
             // Do it this way because direct mapping using ng-model causes focus issues
-            var languagesSpoken = [];
-            $(".language").map(function() {
-                var language = $(this).val().trim();
+            var languagesSpokenRaw = [];
+            $scope.languagesListObjs.forEach(function(language) {
+                language = language.language.trim();
                 if (language.length != 0) {
-                    languagesSpoken.push(language);
+                    languagesSpokenRaw.push(language);
                 }
             });
 
@@ -236,7 +259,7 @@
                 mobile: $scope.user.mobile,
                 dateOfBirth: $scope.user.dateOfBirth,
                 postalCode: $scope.user.postalCode,
-                languagesSpoken: languagesSpoken
+                languagesSpoken: languagesSpokenRaw
             };
             userService.saveUser(toSave)
                 .then(
@@ -262,44 +285,52 @@
         });
 
         $scope.uploadPhoto = function () {
-            angular.element('.image-loader').show();
 
-            if (angular.isUndefined($scope.file)) {
-                return null;
+            // IE11 bounces on this for some reason, and this errors out
+            try {
+
+                if (!$scope.file || angular.isUndefined($scope.file)) {
+                    console.log("skipped $scope.uploadPhoto due to debounce");
+                    return null;
+                }
+
+                var fileName = $scope.file.name.split('.');
+                var ext = fileName.pop();
+                fileName = fileName.join('.');
+                fileName += '-pofile-' + authService.currentUserID + '.' + ext;
+
+                angular.element('.image-loader').show();
+
+                FileUpload.putFile($scope.file, fileName, 'profile-photos')
+                    .then(
+                        function (fileUrl) {
+                            $scope.user.profileImageURL = fileUrl;
+                            var userToSave = angular.copy(authService.getCurrentUser());
+                            userToSave.profileImageURL = fileUrl;
+                            return userService.saveUser(userToSave)
+                        },
+                        function (err) {
+                            console.log(err);
+                            return null;
+                        }
+                    )///
+                    .then(
+                        function (savedUser) {
+                            console.log("Added image to user");
+                            authService.setCurrentUser(savedUser);
+                            $scope.initBasic();
+
+                            delete $scope.file;
+                            angular.element('#photoFile').val(null);
+                            angular.element('.image-loader').hide();
+                        },
+                        function (err) {
+                            console.log(err)
+                        }
+                    )
+            } catch (IEerror) {
+                console.log("Caught error. Prob IE bounce: " + IEerror);
             }
-
-            var fileName = $scope.file.name.split('.');
-            var ext = fileName.pop();
-            fileName = fileName.join('.');
-            fileName += '-pofile-' + authService.currentUserID + '.' + ext;
-
-            FileUpload.putFile($scope.file, fileName, 'profile-photos')
-                .then(
-                    function (fileUrl) {
-                        $scope.user.profileImageURL = fileUrl;
-                        var userToSave = angular.copy(authService.getCurrentUser());
-                        userToSave.profileImageURL = fileUrl;
-                        return userService.saveUser(userToSave)
-                    },
-                    function (err) {
-                        console.log(err);
-                        return null;
-                    }
-                )///
-                .then(
-                    function (savedUser) {
-                        console.log("Added image to user");
-                        authService.setCurrentUser(savedUser);
-                        $scope.initBasic();
-
-                        delete $scope.file;
-                        angular.element('#photoFile').val(null);
-                        angular.element('.image-loader').hide();
-                    },
-                    function (err) {
-                        console.log(err)
-                    }
-                )
         }//// fun. uploadPhoto
 
         $scope.removeImage = function () {

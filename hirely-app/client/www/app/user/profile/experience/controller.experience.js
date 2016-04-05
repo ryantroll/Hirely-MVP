@@ -98,6 +98,8 @@
 
                 if (item.currentlyHere != true) {
                     item.dateEnd = new Date(item.dateEnd);
+                    item.dateEndYear = item.dateEnd.getFullYear();
+                    item.dateEndMonth = String(item.dateEnd.getMonth() + 1);
                 }
 
             });

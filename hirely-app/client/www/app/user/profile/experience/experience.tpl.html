@@ -213,20 +213,6 @@
                     <div class="col-sm-12">
                         <div class="field-wrapper checkbox">
                             <label class="custom-option toggle" data-off="NO" data-on="YES">
-                                <input type="checkbox" id="isSeasonal" name="isSeasonal"
-                                       ng-model="occupation.isSeasonal"
-                                />
-                                <span class="button-checkbox"></span>
-                            </label>
-                            <label for="isSeasonal">This position was seasonal</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="field-wrapper checkbox">
-                            <label class="custom-option toggle" data-off="NO" data-on="YES">
                                 <input type="checkbox" id="workHere" name="workHere"
                                     ng-model="occupation.currentlyHere"
                                 />
@@ -275,6 +261,20 @@
                     <div class="col-sm-12 no-col-padding">
                         <div class="error-label bg-danger" ng-show="stepTwo.workDateEndY.$error.endDateConflict">End date conflicting with one of previous entered experience dates</div>
                         <div class="error-label bg-danger" ng-show="stepTwo.workDateEndY.$error.invalidEndDate">End date should be greater than start date</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper checkbox">
+                            <label class="custom-option toggle" data-off="NO" data-on="YES">
+                                <input type="checkbox" id="isSeasonal" name="isSeasonal"
+                                       ng-model="occupation.isSeasonal"
+                                />
+                                <span class="button-checkbox"></span>
+                            </label>
+                            <label for="isSeasonal">This position was seasonal</label>
+                        </div>
                     </div>
                 </div>
 
