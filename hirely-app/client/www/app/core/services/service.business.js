@@ -53,13 +53,13 @@
          * @param  {id or array of ids} ids [it can be one id or an array of ids to by queried ]
          * @return {promise}     [promise on success the promise will return a object of objects ]
          */
-        this.getPositionById = function(ids){
+        this.getPositionsByIds = function(ids){
           var deferred = $q.defer();
           if(!Array.isArray(ids)){
             ids = [ids];
           }
 
-          HirelyApiService.businesses('getPositionById', ids.join('|')).get()
+          HirelyApiService.businesses('getPositionsByIds', ids.join('|')).get()
           .then(
             function(positions){
                 if(positions){

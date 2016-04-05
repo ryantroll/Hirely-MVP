@@ -45,6 +45,10 @@
         table{
             width:100%;
         }
+        caption{
+            font-size:1.1em;
+            font-weight: 700;
+        }
         thead{
             display: none;
             @media screen and (min-width:$screen-sm-min){

@@ -36,11 +36,11 @@ var businessRoutes = {
             );
     },
 
-    getPositionById: function(req, res){
+    getPositionsByIds: function(req, res){
         /**
          * Send public info if all is not requested
          */
-        businessService.getPositionById(req.params.pid, req.query)
+        businessService.getPositionsByIds(req.params.pid.split('|'), req.query)
             .then(
                 function(position){
                     res.status(200).json(apiUtil.generateResponse(200, "Position retrieved successfully", position));

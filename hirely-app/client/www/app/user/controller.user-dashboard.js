@@ -44,7 +44,7 @@
                     positionIds.push(apps[x].positionId)
                 }
             }
-            return BusinessService.getPositionById(positionIds);
+            return BusinessService.getPositionsByIds(positionIds);
         },
         function(err){
             console.log(err);

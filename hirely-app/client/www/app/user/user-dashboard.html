@@ -32,36 +32,37 @@
                     <div class="title">
                         <h3>My Positions</h3>
                     </div>
-                    <div class="list" ng-repeat="loc in myLocations">
-                        <h4>Location: {{loc.name}} - {{loc.city}}, {{loc.state}}</h4>
-                        <table>
+                    <div class="list">
+                        <!-- <h4>Location: {{loc.name}} - {{loc.city}}, {{loc.state}}</h4> -->
+
+                        <table ng-repeat="loc in myLocations">
+                            <caption>Location: {{loc.name}} - {{loc.city}}, {{loc.state}}</caption>
                             <thead class="clearfix">
                                 <tr>
-                                    <th>Position</th>
-                                    <th>Status</th>
-                                    <th>Openings</th>
-                                    <th>Wage</th>
-                                    <th>Candidates</th>
-                                    <th>Details</th>
+                                    <th width="25%">Position</th>
+                                    <!-- <th>Status</th> -->
+                                    <th width="15%">Openings</th>
+                                    <th width="20%">Wage</th>
+                                    <th width="20%">Candidates</th>
+                                    <th width="20%">Details</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="pos in myLocationsObj[loc._id]">
                                     <th>Position</th>
                                     <td>{{pos.title}}</td>
-                                    <th>Status</th>
-                                    <td>Active</td>
+                                    <!-- <th>Status</th>
+                                    <td>Active</td> -->
                                     <th>Openings</th>
                                     <td>{{pos.openingsCount}}</td>
                                     <th>Wage</th>
-                                    <td>${{pos.compensation.wageAmount}}/{{pos.compensation.wageType}}</td>
+                                    <td>${{pos.compensation.wageAmount}}/{{pos.compensation.wageType | uppercase}}</td>
                                     <th>Candidates</th>
                                     <td><button class="btn red" ui-sref="app.business.candidateList({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">MANAGE</button></td>
                                     <th>Details</th>
                                     <td><button class="btn" ui-sref="app.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">VIEW</button></td>
                                 </tr>
                             </tbody>
-
                         </table>
                     </div><!--list-->
                 </div><!--box-->

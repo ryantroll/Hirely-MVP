@@ -73,7 +73,12 @@ var businessService = {
         return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }, returnFields).exec();
     },
 
-    getPositionById: function(positionId, reqQuery){
+    /**
+     * [getPositionByIds will retrieve POSITION objects from business collection location and business basic fields will be added as properties for each position]
+     * @param  {[type]} positionIds [Array of positions IDs if one position needed send array with one item]
+     * @return {promise}             [return a promise with retrieved positions array on resolve]
+     */
+    getPositionsByIds: function(positionIds, reqQuery){
         var deferred = q.defer();
 
         // Determine what fields to return based on reqQuery.
@@ -83,7 +88,8 @@ var businessService = {
             returnFields = '-nothing'
         }
 
-        var ids = positionId.split('|');
+        var ids = positionIds;
+
         var query = {$or: []};
         for(var x=0; x<ids.length; x++){
             var or = {};
@@ -128,6 +134,12 @@ var businessService = {
         return deferred.promise;
     },
 
+    /**
+     * [getPositionsByManagerId query the position based on permission where user has Create, Update, and Delete authorization
+     * this function depend on getPositionByIds]
+     * @param  {[type]} managerId [user id of designated position manager]
+     * @return {[type]}           [description]
+     */
     getPositionsByManagerId: function(managerId, reqQuery){
         var deferred = q.defer();
 
@@ -137,23 +149,74 @@ var businessService = {
         if(undefined !== reqQuery && undefined !== reqQuery.complete) {
             returnFields = '-nothing'
         }
-        permissionsModel.find({srcId:managerId, srcType:'users', destType:'positions', c:true, u:true, d:true})
+
+        var ids = [];
+        var query = {$or: []};
+        var queryNext = {$or: []};
+
+        /**
+         * these two arrays will keep track of business ids and locations ids where manager
+         * has a permission on them for next query
+         * @type {Array}
+         */
+        var businessesIds = [];
+        var locationsIds = [];
+
+        query.$or.push({srcId:managerId, srcType:'users', destType:'businesses', c:true, u:true, d:true});
+        query.$or.push({srcId:managerId, srcType:'users', destType:'locations', c:true, u:true, d:true});
+        query.$or.push({srcId:managerId, srcType:'users', destType:'positions', c:true, u:true, d:true});
+
+        permissionsModel.find(query)
         .then(
             function(found){
-                if(found.length < 1){
-                    deferred.reject(found);
-                    return
-                }
 
-                var ids = [];
+                /**
+                 * add the position id to the list or position
+                 * or if business or location add new criteria for next query
+                 */
                 for(var i=0; i<found.length; i++){
-                    ids.push(found[i].destId);
+                    switch(found[i].destType){
+                        case 'positions':
+                            ids.push(found[i].destId);
+                            break;
+                        case 'businesses':
+                            queryNext.$or.push({_id:found[i].destId});
+                            businessesIds.push(found[i].destId);
+                            break;
+                        case 'locations':
+                            var q = {};
+                            q['locations.'+found[i].destId] = {$exists: true};
+                            locationsIds.push(found[i].destId);
+                            queryNext.$or.push(q);
+                            break;
+                    }
                 }
 
-                return businessService.getPositionById(ids.join('|'))
+                return businessModel.find(queryNext)
             },
             function(err){
                 console.log(err)
+            }
+        )
+        .then(
+            function(businesses){
+                for(var i=0; i<businesses.length; i++){
+                    //// if manager has permission on business then add all of its positions
+                    var addAllLocations = businessesIds.indexOf(businesses[i]) >= 0;
+
+                    var positions = businesses[i].positions.toObject();
+                    for(var pos in positions){
+
+                        if(true === addAllLocations || locationsIds.indexOf(positions[pos].locationId) >= 0 ){
+                            if(ids.indexOf(pos) < 0) ids.push(pos);
+                        }
+
+                    }//// for pos in positions
+                }//// for
+                return businessService.getPositionsByIds(ids)
+            },
+            function(err){
+                console.log(err);
             }
         )
         .then(

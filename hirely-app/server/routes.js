@@ -61,7 +61,7 @@ module.exports = function(app) {
 
     app.get('/api/v1/businesses/positionIcon', businessApiRoutes.getPositionDisplayData);
     app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);
-    app.get('/api/v1/businesses/getPositionById/:pid', businessApiRoutes.getPositionById);
+    app.get('/api/v1/businesses/getPositionsByIds/:pid', businessApiRoutes.getPositionsByIds);
     app.get('/api/v1/businesses/getPositionsByManagerId/:managerId', businessApiRoutes.getPositionsByManagerId);
     app.get('/api/v1/businessByPositionId/:pid', businessApiRoutes.getByPositionId);
     app.get('/api/v1/positions/:pid/isUserFiltered/:uid', businessApiRoutes.isUserFilteredForPosition);
