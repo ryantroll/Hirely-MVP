@@ -112,6 +112,8 @@
 
         $scope.validStep = false;
 
+        $scope.DEFAULT_PROFILE_IMAGE = DEFAULT_PROFILE_IMAGE;
+
         $timeout(function () {
             window.scrollTo(0, 0);
         });

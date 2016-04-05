@@ -170,7 +170,7 @@ $day-button-size: 60px;
         @include border-radius(50%);
         // border:5px solid #fff;
 
-		> img{
+		> a > img{
 			display: block;
             width: 100%;
             height: 100%;
