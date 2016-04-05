@@ -1,5 +1,35 @@
 $application-header-height: 60px;
 
+#tokenExpiringModal {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: table;
+}
+
+#tokenExpiringModal > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#tokenExpiringModal > div > div {
+    text-align: center;
+    line-height: 30px;
+    background-color: white;
+    border-radius: 5px;
+    margin: auto;
+    max-width: 300px;
+    padding: 10px;
+}
+
+#tokenExpiringModal button {
+    height: 100px;
+    width: 90%;
+}
+
 .dark-gray {
     background-color: $c-hirely-mid-gray;
     color:$c-white;

@@ -22,25 +22,9 @@
                 transclude: false
             };
         })
-        .controller('ApplicationMasterController', ['$stateParams', '$state', '$scope', '$rootScope', 'AuthService', 'UserService', ApplicationMasterController])
+        .controller('ApplicationMasterController', ['$scope', ApplicationMasterController])
 
-    function ApplicationMasterController($stateParams, $state, $scope, $rootScope, authService, UserService) {
-
-        // $scope.AuthService = AuthService;
-
-        // console.log($scope.Auth.currentUser)
-        /**
-         * check on loged in user
-         * isUserLoggedIn method will do the needfull and set all the required variabls
-         */
-        var auth = authService.isUserLoggedIn();
-        if (auth) {
-            authService.syncCurrentUserFromDb();
-        } else {
-            $state.go("app.account.register");
-        }
-
+    function ApplicationMasterController($scope) {
         $scope.layoutModel = {business: null, noHeader: null};
-
     };
 })();

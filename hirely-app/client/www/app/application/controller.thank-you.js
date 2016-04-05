@@ -7,23 +7,14 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('ThankYouApplicationController', ['$scope', '$stateParams', '$state', 'AuthService', 'UserService', 'JobApplicationService', 'HirelyApiService', ThankYouApplicationController]);
+  angular.module('hirelyApp').controller('ThankYouApplicationController', ['$rootScope', '$scope', ThankYouApplicationController]);
 
 
-  function ThankYouApplicationController($scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
-
-    // delete $scope.layoutModel.noHeader;
-    // delete $scope.layoutModel.business;
-    // delete $scope.layoutModel.location;
-    // delete $scope.layoutModel.position;
-
-    if (authService.isUserLoggedIn()) {
-      initialize();
-    }
-
+  function ThankYouApplicationController($rootScope, $scope) {
     function initialize(){
-      $scope.name = authService.currentUser.firstName;
+      $scope.name = $rootScope.currentUser.firstName;
     }
+    initialize();
 
   }
 })();

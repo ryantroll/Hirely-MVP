@@ -36,16 +36,7 @@
                         $scope.loginError = false;
                         $scope.ajaxBusy = false;
 
-                        /**
-                         * Check if nextState is set in rootScope and redirect user to it
-                         */
-                        if(angular.isDefined($rootScope.nextState)){
-                            $state.go($rootScope.nextState.state, $rootScope.nextState.params);
-                            delete $rootScope.nextState;
-                        }
-                        else{
-                            $state.go('app.home')
-                        }
+                        $scope.goToNextState();
                     },
                     function(err) {
                         $scope.loginError = true;
@@ -53,6 +44,20 @@
                     }
                 );
         };
+
+        $scope.goToNextState = function() {
+            if($rootScope.nextState.length) {
+                var nextState = $rootScope.nextState.pop();
+                if (nextState.state) {
+                    $state.go(nextState.state, nextState.params);
+                } else {
+                    $scope.goToNextState()
+                }
+            }
+            else{
+                $state.go('master.default.home')
+            }
+        }
 
 
         $scope.showForgotPassword = function(){
@@ -65,16 +70,15 @@
             $rootScope.$emit('ShowForgotPassword');
         };
 
-        $scope.cancelRegistration = function() {
+        $scope.cancelLogin = function() {
             console.log("IN cancel");
-            if(angular.isDefined($rootScope.nextState)){
-                console.log("1");
-                $state.go($rootScope.nextState.state, $rootScope.nextState.params);
-                delete $rootScope.nextState;
+            if($rootScope.nextState.length) {
+                var nextState = $rootScope.nextState.pop();
+                $state.go(nextState.state, nextState.params);
             }
             else{
                 console.log("2");
-                $state.go('app.user.profile')
+                $state.go('master.default.home')
             }
         };
 

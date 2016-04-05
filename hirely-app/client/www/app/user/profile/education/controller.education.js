@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$scope', '$stateParams', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', 'JobApplicationService', ProfileEducationController]);
+    var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$rootScope', '$scope', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', 'JobApplicationService', ProfileEducationController]);
 
     hirelyApp.directive('validateMonth', function () {
             return {
@@ -43,7 +43,7 @@
 
         })/// validate year
 
-    function ProfileEducationController($scope, $stateParams, $filter, $timeout, authService, userService, StatesNames, JobApplicationService) {
+    function ProfileEducationController($rootScope, $scope, $filter, $timeout, authService, userService, StatesNames, JobApplicationService) {
 
 
         /**
@@ -55,8 +55,9 @@
 
         $scope.programTypes = JobApplicationService.educationPrograms;
 
-
         $scope.states = StatesNames;
+
+        $scope.educationChanged = false;
 
         $scope.months = [
             {order: 1, name: 'Jan'},
@@ -79,10 +80,10 @@
              * [eduItems will hold the education data]
              * @type {Array}
              */
-            if (!authService.currentUser.education) {
-                authService.currentUser.education = [];
+            if (!$rootScope.currentUser.education) {
+                $rootScope.currentUser.education = [];
             }
-            $scope.education = authService.currentUser.education;
+            $scope.education = $rootScope.currentUser.education;
             $scope.education = orderBy($scope.education, 'dateEnd', true);
 
 
@@ -109,13 +110,9 @@
             });//// for each
 
             $scope.stepTwoLoaded = true;
+            $(window).scrollTop(0);
         };
-        $scope.$watch('$parent.userIsSynced', function(newValue, oldValue) {
-            if (newValue == true) {
-                console.log("edu.$parent.userIsSynced = true;")
-                $scope.initEducation();
-            }
-        });
+        $timeout($scope.initEducation);
 
 
         /**
@@ -124,6 +121,8 @@
          */
         $scope.addEducation = function () {
             if (!$scope.stepTwoE.$valid) return null;
+
+            $scope.educationChanged = true;
 
             if (angular.isDefined($scope.editIndex)) {
 
@@ -191,6 +190,7 @@
          */
         $scope.removeEducation = function (index) {
             $scope.education.splice(index, 1);
+            $scope.educationChanged = true;
         }
 
         $scope.editEducation = function (index) {
@@ -232,26 +232,19 @@
          * Save the entries to database on scope destroy]
          */
         $scope.$on('$destroy', function () {
-            /**
-             * Make sure user is authenticated
-             */
-            if (authService.isUserLoggedIn()) {
+            if ($scope.educationChanged || true) {
                 var toSave = {education: angular.copy($scope.education)};
-                userService.saveUser(toSave, authService.currentUserID)
+                userService.saveUser(toSave, $rootScope.currentUserId)
                     .then(
                         function (user) {
-                            authService.setCurrentUser(user);
-                            $scope.initEducation();
+                            angular.extend($rootScope.currentUser, {education: user.education});
                         },
                         function (err) {
                             alert("Error!\nYour data was not saved, please try again.")
                             console.log(err);
                         }
                     )
-            }//// if isAuth
-            else {
-
-            }//// if isAuth else
+            }
         });/// $on.$destroy
 
     }

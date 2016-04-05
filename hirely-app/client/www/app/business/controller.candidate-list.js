@@ -7,28 +7,15 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
+  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
 
 
-  function CandidateListController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, authService, userService, PositionFiltersService) {
+  function CandidateListController($scope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, authService, userService, PositionFiltersService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     $scope.showPositionMenu = false;
     $scope.showSortMenu = false;
     $scope.sortByLabel = 'Sort By';
-
-    // Save the current state to bring user back after login
-    if(false === authService.isUserLoggedIn()){
-      $rootScope.nextState = {state:$state.current.name, params:$state.params};
-      $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
-      return;
-    }
-
-    $scope.$on('UserLoggedOut', function(event, args) {
-      $rootScope.nextState = {state:$state.current.name, params:$state.params};
-      $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
-      return;
-    });
 
     $scope.togglePositionMenu = function(event){
 
@@ -356,11 +343,11 @@
     }
 
     $scope.changePosition = function(posSlug){
-      $state.go('app.business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
+      $state.go('master.default.business.candidateList', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:posSlug})
     }
 
     $scope.goToPosition = function(){
-      $state.go('app.job.position', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:$scope.position.slug})
+      $state.go('master.default.job.position', {businessSlug:$scope.business.slug, locationSlug: $scope.location.slug, positionSlug:$scope.position.slug})
     }
 
     $scope.copyPositionURL = function(){

@@ -892,7 +892,7 @@ select {
         padding: 0 15px;
         margin-left: -4px;
         vertical-align: top !important;
-        @include border-radiuses(4px, 4px, 0, 0)
+        @include border-radiuses(4px, 4px, 0, 0);
         overflow: hidden;
       }
       .btn-search-inner

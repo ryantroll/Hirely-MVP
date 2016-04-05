@@ -230,12 +230,11 @@
       };
 
       $scope.searchJobs = function(){
-          $state.go('app.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
+          $state.go('master.default.job', {placeId: $scope.details.place_id, wage: $scope.filter.minWage, occupationId: $scope.filter.occupationId, distance: $scope.filter.distance })
       };
 
       $scope.addToFavorites = function(positionId){
-         var user = userService.getCurrentUser();
-         candidateService.savePositiontoFavorites(user.userId, positionId);
+         candidateService.savePositiontoFavorites(userService.currentUserId, positionId);
           Notification.success('Job Added to Favorites');
       };
 

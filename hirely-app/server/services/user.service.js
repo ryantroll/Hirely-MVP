@@ -89,6 +89,7 @@ var userService = {
      * @return {[type]}         [promise with user basic info]
      */
     createNewUser: function (userObj) {
+        var self = this;
 
         if (userObj.password.length < 8) {
             var err = "Password length is too short";
@@ -124,8 +125,7 @@ var userService = {
             }
         }
         return userModel.create(userObj).then(function(user) {
-            var token = jwt.sign({userId: user._id}, config.jwtSecret, {expiresIn: '1h'});
-            var userAndToken = {token: token, user: user};
+            var userAndToken = self.getUserAndTokenObj(user, config.tokenLifeDefault);
 
             if (perms.length) {
                 for (let perm of perms) {
@@ -156,40 +156,48 @@ var userService = {
     },
 
     passwordLogin: function (email, password, skipPasswordCheck, isBusinessUser) {
+        var self = this;
+
         try {
             email = email.toLowerCase();
         } catch(err) {
             console.log("US:passwordLogin: email is malformed: " + email)
         }
         return userModel.findOne({email: email}).then(function (user) {
-            if (!user) {
-                console.log("US:passwordLogin: user not found for " + email);
-                return null;
-            }
+            try {
+                if (!user) {
+                    console.log("US:passwordLogin: user not found for " + email);
+                    return null;
+                }
 
-            if (skipPasswordCheck) {
-                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: config.tokenLifeDefault});
-                return {token: token, user: user};
-            }
+                if (skipPasswordCheck) {
+                    return self.getUserAndTokenObj(user, config.tokenLifeDefault);
+                }
 
-            if (!user.password) {
-                console.log("US:passwordLogin: user does not have a password");
-                return null;
-            }
+                if (!user.password) {
+                    console.log("US:passwordLogin: user does not have a password");
+                    return null;
+                }
 
-            // Check the password
-            if (bcrypt.compareSync(password, user.password)) {
-                // Create a token
-                // If user is a business user, make cookie last longer
-                var expiresIn = config.tokenLifeDefault;
-                if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
-                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
-                return {token: token, user: user};
-            } else {
-                console.log("US:passwordLogin: bad password for " + email);
-                return null;
+                // Check the password
+                if (bcrypt.compareSync(password, user.password)) {
+                    var expiresIn = config.tokenLifeDefault;
+                    if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
+                    return self.getUserAndTokenObj(user, expiresIn);
+                } else {
+                    console.log("US:passwordLogin: bad password for " + email);
+                    return null;
+                }
+            } catch(err) {
+                console.log("US:passwordLogin:error: " + err);
             }
         });
+    },
+    
+    getUserAndTokenObj: function(user, expiresIn) {
+        var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
+        var exp = jwt.verify(token, config.jwtSecret).exp;
+        return {token: {jwt: token, exp:exp}, user: user};
     },
 
     /**

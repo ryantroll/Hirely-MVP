@@ -17,21 +17,6 @@
         $scope.hours = AvailabilityService.hours;
         $scope.statusLabels = JobApplicationService.statusLabels;
 
-        // Save the current state to bring user back after login
-        if(false === authService.isUserLoggedIn()){
-            $rootScope.nextState = {state:$state.current.name, params:$state.params};
-            $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
-            return;
-        }
-
-        $scope.$on('UserLoggedOut', function(event, args) {
-            // If not modal, handle logout
-            if (!$stateParams.applicationId) {
-                $rootScope.nextState = {state: $state.current.name, params: $state.params};
-                $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
-            }
-        });
-
         $scope.daysUntilAvailable = 0;
         $scope.initializeCandidateDetails = function() {
             $scope.applicant.workExperience.forEach(function(work) {

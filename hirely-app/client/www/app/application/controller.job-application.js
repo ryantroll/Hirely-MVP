@@ -13,10 +13,10 @@
                 return Math.round(value);
             }
         })
-        .controller('JobApplicationController', ['$q', '$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'AuthService', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+        .controller('JobApplicationController', ['$q', '$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-    function JobApplicationController($q, $scope, $rootScope, $stateParams, $state, $timeout, authService, JobApplicationService, BusinessService) {
+    function JobApplicationController($q, $scope, $rootScope, $stateParams, $state, $timeout, JobApplicationService, BusinessService) {
 
         /**
          * [availability this scope is the parent of availability step scope and this variaable is needed there]
@@ -26,27 +26,7 @@
 
         $scope.destroyDirection = 0;
         $scope.blockFinished = false;
-
-        $scope.isAuth = authService.isUserLoggedIn();
-        $scope.userIsSynced = false;
-
-        if ($scope.isAuth) {
-            authService.syncCurrentUserFromDb().then(function (user) {
-                if (user) {
-                    $scope.userIsSynced = true;
-                };
-            });
-        } else {
-            $rootScope.nextState = {state: $state.current.name, params: $state.params};
-            $state.go('app.account.register');
-        }
-
-        $scope.$on('UserLoggedOut', function(event, args) {
-            $rootScope.nextState = {state: $state.current.name, params: $state.params};
-            $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
-        });
-
-
+        
 
         /**
          * [jobApplication a parent object to hold variables to be set by child scope
@@ -82,12 +62,7 @@
          * @return {promise} [description]
          */
         function getApplicationData() {
-            if (!authService.isUserLoggedIn()) {
-                return $q.reject();
-            }
-            $scope.userData = authService.currentUser;
-
-            return JobApplicationService.isApplicationExists(authService.currentUser._id, $scope.position._id)
+            return JobApplicationService.getById($scope.position._id)
                 .then(
                     function (app) {
                         if (app) {
@@ -168,9 +143,9 @@
         $scope.setInitialStep = function () {
             // var initialStep = 1;
             if (
-                !(angular.isDefined(authService.currentUser.mobile) && authService.currentUser.mobile &&
-                angular.isDefined(authService.currentUser.dateOfBirth) && authService.currentUser.dateOfBirth &&
-                angular.isDefined(authService.currentUser.postalCode) && authService.currentUser.postalCode)
+                !(angular.isDefined($rootScope.currentUser.mobile) && $rootScope.currentUser.mobile &&
+                angular.isDefined($rootScope.currentUser.dateOfBirth) && $rootScope.currentUser.dateOfBirth &&
+                angular.isDefined($rootScope.currentUser.postalCode) && $rootScope.currentUser.postalCode)
             ) {
                 return 1;
             }
@@ -200,7 +175,7 @@
          */
         $scope.finish = function () {
             delete $scope.layoutModel.noHeader;
-            $state.go('application.done', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
+            $state.go('master.application.done', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
         };
 
         function semiFixedFooter() {

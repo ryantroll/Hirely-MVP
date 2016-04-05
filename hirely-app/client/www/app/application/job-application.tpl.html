@@ -2,23 +2,6 @@
     <p>Loading</p>
     <div class="loader"></div>
 </div>
-<div class="hirely-content" ng-show="dataLoaded && !dataError && !isAuth">
-    <div class="row">
-        <div class="col-sm-12 text-center" ng-show="!appWorkflow">
-            <h4>
-                <span ng-show="registerFrom">Create a Hirely account</span>
-                <span ng-show="loginForm">Login to Hirely</span>
-                to apply for "{{position.title}}" at {{business.name}}</h4>
-        </div>
-    </div>
-    <div class="form-content">
-        <div class="inner">
-            <div ng-if="!isAuth && !dataError && registerFrom" register-form></div>
-            <div ng-if="!isAuth && !dataError && loginForm" login-form></div>
-            <div ng-if="!isAuth && !dataError && passwordForm" reset-password-form></div>
-        </div>
-    </div>
-</div>
 
 <div class="hi-content" ng-show="dataLoaded && dataError">
     <div class="row">
@@ -29,7 +12,7 @@
     </div>
 </div>
 
-<section class="profile" ng-if="dataLoaded && isAuth">
+<section class="profile" ng-if="dataLoaded && !dataError">
     <multi-step-container steps="steps" class="simple-prev-next" initial-step="setInitialStep()">
     <header>
         <div class="steps">

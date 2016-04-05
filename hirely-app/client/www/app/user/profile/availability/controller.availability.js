@@ -17,9 +17,9 @@
      * Controller Definition ********************************************************
      * ******************************************************************************
      */
-    step5App.controller('ProfileAvailabilityController', ['$scope', '$stateParams', '$filter', '$timeout', 'multiStepFormInstance', 'GeocodeService', '$q', 'AvailabilityService', 'AuthService', ProfileAvailabilityController])
+    step5App.controller('ProfileAvailabilityController', ['$rootScope', '$scope', 'AvailabilityService', 'AuthService', ProfileAvailabilityController])
 
-    function ProfileAvailabilityController($scope, $stateParams, $filter, $timeout, multiStepFormInstance, GeocodeService, $q, availabilityService, authService) {
+    function ProfileAvailabilityController($rootScope, $scope, availabilityService, authService) {
 
         /**
          * [availability this object will hold the data that need bot saved in database
@@ -62,7 +62,7 @@
              * @type {Array}
              */
 
-            $scope.availability = availabilityService.toFrontEndModel(authService.currentUser.availability);
+            $scope.availability = availabilityService.toFrontEndModel($rootScope.currentUser.availability);
 
             $scope.totalHours = 0;
             for (var d = 0; d < 7; d++) {
@@ -78,13 +78,7 @@
             $scope.stepFiveLoaded = true;
 
         }; //// fun. initAvail
-
-        $scope.$watch('$parent.userIsSynced', function(newValue, oldValue) {
-            if (newValue == true) {
-                console.log("avail.$parent.userIsSynced = true;")
-                $scope.initAvail();
-            }
-        });
+        $timeout($scope.initAvail);
 
 
         /**
@@ -206,12 +200,11 @@
         $scope.$on('$destroy', function () {
             console.log("Caught avail destroy");
 
-            availabilityService.save(angular.copy($scope.availability), authService.currentUserID)
+            availabilityService.save(angular.copy($scope.availability), $rootScope.currentUserId)
                 .then(
-                    function (savedUser) {
+                    function (user) {
                         console.log("Avail is saved");
-                        authService.setCurrentUser(savedUser);
-                        $scope.initAvail();
+                        angular.extend($rootScope.currentUser, {availability: user.availability});
                     },//// .save resolve
                     function (error) {
                         /**

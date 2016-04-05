@@ -83,29 +83,11 @@
 				delete $scope.model.prescreenAnswers[x]._id;
 			}
 
-			$timeout(function () {
-				window.scrollTo(0, 0);
-			});
+			$(window).scrollTop(0);
+			$scope.stepFourLoaded = true;
+		};
 
-			/**
-			 * Waite for 1 sec to check the stepOnLoaded
-			 * waiting time is added to prevent the undefined value for this var that happen occasionally
-			 */
-			$timeout(function () {
-				if (!$scope.stepFourLoaded) {
-					// $scope.user = angular.copy(authService.currentUser);
-					$scope.stepFourLoaded = true;
-				}
-
-			}, 1000);/// $timeout
-		}
-
-		$scope.$watch('$parent.userIsSynced', function(newValue, oldValue) {
-			if (newValue == true) {
-				console.log("pre.$parent.userIsSynced = true;");
-				$scope.initPrescreen();
-			}
-		});
+		$timeout($scope.initPrescreen);
 
 		//// wait for destroy event to update data
 		$scope.$on('$destroy', function(event){
@@ -114,46 +96,28 @@
 				return;
 			}
 
-			/**
-			 * Make sure user is logged in before you do update
-			 */
-			if(authService.isUserLoggedIn()) {
-				/**
-				 * User is authenticated create application data
-				 */
+			var application = {
+				userId: $rootScope.currentUserId,
+				positionId: position._id,
+				status: 1, //// set status to 1
+				prescreenAnswers: angular.copy($scope.model.prescreenAnswers)
+			};
 
-				var application = {
-					userId: authService.currentUserID,
-					positionId: position._id,
-					status: 1, //// set status to 1
-					prescreenAnswers: angular.copy($scope.model.prescreenAnswers)
-				};
+			JobApplicationService.create(application)
+			.then(
+				function(savedApp){
+					/**
+					 * application saved
+					 * Update the parent scope
+					 * $scope.jobApplication.application  defined in parent controller.job-application.js
+					 */
+					$scope.jobApplication.application = savedApp;
 
-				JobApplicationService.create(application)
-				.then(
-					function(savedApp){
-						/**
-						 * application saved
-						 * Update the parent scope
-						 * $scope.jobApplication.application  defined in parent controller.job-application.js
-						 */
-						$scope.jobApplication.application = savedApp;
-
-					},//// save resolve
-					function(err){
-						alert(err);
-					}//// save reject
-				);//// save().then()
-
-				// return deferred.promise;
-			}//// if isUserLoggedIn
-			else{
-				/**
-				 * Error in isUserLoggedIn
-				 */
-				alert(result);
-			}//// if true else
-
+				},//// save resolve
+				function(err){
+					alert(err);
+				}//// save reject
+			);//// save().then()
 		});
 
 	}

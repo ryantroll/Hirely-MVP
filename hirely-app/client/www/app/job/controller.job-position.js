@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'AuthService', 'UserService', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', JobPositionController]);
+  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'BusinessService', 'AvailabilityService', 'FavoritesService', JobPositionController]);
 
-  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, authService, userService, BusinessService, AvailabilityService, FavoritesService, uiGmapGoogleMapApi, uiGmapIsReady) {
+  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, BusinessService, AvailabilityService, FavoritesService) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -17,9 +17,7 @@
 
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-        $scope.isAuth = authService.isUserLoggedIn();
-
-        if ($scope.isAuth && $rootScope.addFavoriteAfterLogin == true) {
+        if ($rootScope.currentUserId && $rootScope.addFavoriteAfterLogin == true) {
           $scope.favoriteClick();
         }
 
@@ -62,13 +60,6 @@
       }
 
     }//// fun. posWindowScroll
-
-    /**
-     * Watch for user log out event
-     */
-    $scope.$on('UserLoggedOut', function(){
-      delete $scope.thisPositionFav;
-    })
 
     function initialize(){
 
@@ -148,7 +139,7 @@
       /**
        * if user logged in get the distance
        */
-      if($scope.isAuth){
+      if($rootScope.currentUserId){
         /**
          * get the distance between user and location
          */
@@ -171,7 +162,7 @@
         /**
          * find if user favorite this job
          */
-        FavoritesService.getFavorite({type:'position', userId:authService.currentUserID, positionId: $scope.position._id})
+        FavoritesService.getFavorite({type:'position', userId:$rootScope.currentUserId, positionId: $scope.position._id})
         .then(
           function(found){
             if(Array.isArray(found) && found.length > 0){
@@ -206,11 +197,11 @@
     }//// fun. numOfBenefits
 
     $scope.applyClick = function(){
-      $state.go('application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
+      $state.go('master.application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
     }
 
     $scope.otherPositionClick = function(slug){
-      $state.go('app.job.position', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:slug});
+      $state.go('master.default.job.position', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:slug});
     }
 
     /**
@@ -248,9 +239,9 @@
     }//// fun. getIcon
 
     $scope.favoriteClick = function(){
-      if($scope.isAuth && authService.currentUserID){
+      if($rootScope.currentUserId){
         var favObj = {
-          userId: authService.currentUserID,
+          userId: $rootScope.currentUserId,
           positionId: $scope.position._id,
           locationId: $scope.location._id,
           businessId: $scope.business._id,
@@ -278,9 +269,9 @@
          * user is not logged in redirect to login page after saving the current state in rootScope
          * LoginController will detect this rootScope object and redirect back after login
          */
-        $rootScope.nextState = {state:$state.current.name, params:$state.params};
+        $rootScope.nextState.push({state:$state.current.name, params:$state.params});
         $rootScope.addFavoriteAfterLogin = true;
-        $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
+        $state.go('master.default.account.loginWithMessage', {message: "Sorry, your session has expired."});
       }
     }//// fun. favorite click
 

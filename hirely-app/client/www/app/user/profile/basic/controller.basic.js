@@ -177,7 +177,7 @@
         
 
         $scope.initBasic = function () {
-            $scope.user = angular.copy(authService.currentUser);
+            $scope.user = angular.copy($rootScope.currentUser);
 
             /**
              * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
@@ -203,16 +203,10 @@
                 $scope.languagesListObjs.push({language:lang});
             });
 
-
+            $(window).scrollTop(0);
             $scope.stepOneLoaded = true;
         };
-
-        $scope.$watch('$parent.userIsSynced', function(newValue, oldValue) {
-            if (newValue == true) {
-                console.log("b.$parent.userIsSynced = true;")
-                $scope.initBasic();
-            }
-        });
+        $timeout($scope.initBasic);
 
         $scope.addAndFocusLanguage = function() {
             $scope.languagesListObjs.push({language:''});
@@ -261,18 +255,7 @@
                 postalCode: $scope.user.postalCode,
                 languagesSpoken: languagesSpokenRaw
             };
-            userService.saveUser(toSave)
-                .then(
-                    function (savedUser) {
-                        console.log("User basic info saved");
-                        authService.setCurrentUser(savedUser);
-                        $scope.initBasic();
-                    },//// fun. resolve
-                    function (err) {
-                        alert('Error!\nSomething wrong happened while saving data.');
-                    }//// fun. reject
-                );//// saveUser then
-
+            userService.saveUser(toSave);
         });
 
         $scope.selectFile = function () {
@@ -297,7 +280,7 @@
                 var fileName = $scope.file.name.split('.');
                 var ext = fileName.pop();
                 fileName = fileName.join('.');
-                fileName += '-pofile-' + authService.currentUserID + '.' + ext;
+                fileName += '-pofile-' + $rootScope.currentUserId + '.' + ext;
 
                 angular.element('.image-loader').show();
 
@@ -305,27 +288,25 @@
                     .then(
                         function (fileUrl) {
                             $scope.user.profileImageURL = fileUrl;
-                            var userToSave = angular.copy(authService.getCurrentUser());
-                            userToSave.profileImageURL = fileUrl;
-                            return userService.saveUser(userToSave)
+                            $rootScope.currentUser.profileImageURL = fileUrl;
+                            var userData = {profileImageURL: fileUrl};
+                            return userService.saveUser(userData, $rootScope.currentUserId);
                         },
                         function (err) {
-                            console.log(err);
+                            console.log("Error uploading: "+err);
+                            alert("Error uploading image");
                             return null;
                         }
                     )///
                     .then(
                         function (savedUser) {
-                            console.log("Added image to user");
-                            authService.setCurrentUser(savedUser);
-                            $scope.initBasic();
-
                             delete $scope.file;
                             angular.element('#photoFile').val(null);
                             angular.element('.image-loader').hide();
                         },
                         function (err) {
-                            console.log(err)
+                            console.log("Error saving image url to db: "+err);
+                            alert("Error saving image to db");
                         }
                     )
             } catch (IEerror) {
@@ -334,20 +315,24 @@
         }//// fun. uploadPhoto
 
         $scope.removeImage = function () {
-            var userToSave = angular.copy(authService.currentUser);
-            userToSave.profileImageURL = null;
             $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
-            userService.saveUser(userToSave)
+            $rootScope.currentUser.profileImageURL = null;
+            var userData = {profileImageURL: null};
+            return userService.saveUser(userData, $rootScope.currentUserId)
                 .then(
                     function (savedUser) {
-                        console.log("Removed image from user");
-                        authService.setCurrentUser(savedUser);
-                        $scope.initBasic();
+                        delete $scope.file;
+                        angular.element('#photoFile').val(null);
+                        angular.element('.image-loader').hide();
                     },
                     function (err) {
-                        console.log(err)
+                        console.log("Error removing image from db: "+err);
+                        alert("Error saving image to db");
                     }
-                );/// .then
+                )
+
+
+
         }//// fun. removeImage
 
 

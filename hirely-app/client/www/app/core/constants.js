@@ -11,7 +11,7 @@
         .constant('version', '0.6')
 
         // where to redirect users if they need to authenticate (see module.routeSecurity)
-        .constant('loginRedirectPath', 'app.home')
+        .constant('loginRedirectPath', 'master.default.account.loginWithMessage')
 
         // your Firebase URL goes here
         .constant('FIREBASE_URL', 'https://hirely-dev.firebaseio.com')

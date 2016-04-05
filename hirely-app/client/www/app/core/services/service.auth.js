@@ -5,112 +5,68 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .factory('AuthService', ['$q', '$rootScope', '$cookies', 'UserService', AuthService]);
+        .factory('AuthService', ['$q', '$rootScope', '$cookies', 'UserService', 'HirelyApiService', AuthService]);
 
-    function AuthService($q, $rootScope, $cookies, userService) {
-        var self = this;
-        var authData = '';
-        var currentUser;
-        var currentUserID;
+    function AuthService($q, $rootScope, $cookies, userService, hirelyApiService) {
 
         var service = {
+            refreshSession: refreshSession,
             passwordLogin: passwordLogin,
             registerNewUser: registerNewUser,
-            logout: logout,
-            currentUser: currentUser,
-            currentUserID: currentUserID,
-            getCurrentUser: getCurrentUser,
-            syncCurrentUserFromDb: syncCurrentUserFromDb,
-            setCurrentUser: setCurrentUser,
-            setTokenCookie: setTokenCookie,
-            updateCurrentUserCookie: updateCurrentUserCookie,
-            updateCurrentUser: updateCurrentUser,
-            isUserLoggedIn: isUserLoggedIn,
-            onAuth: onAuth,
-            updateCurrentUserPropInCache: updateCurrentUserPropInCache,
-            resetPassword: resetPassword
+            logout: logout
         };
         return service;
 
-
-        function getCurrentUser() {
-            if (service.currentUser) {
-                console.log("getCurrentUser: found user in cache");
-                return service.currentUser;
-            }
-
-            //// Get currentUser cookie
-            var user = $cookies.get("currentUser");
+        function refreshSession() {
             var token = $cookies.get("token");
-            if (token) {
-                setTokenCookie(token);
-            }
-            if (user) {
-                console.log("getCurrentUser: found user in cookie");
-                user = JSON.parse(user);
-                setCurrentUser(user);
-                return user;
-            }
+            if (token && token != '') {
+                token = JSON.parse(token);
+                $rootScope.token = token;
 
-            console.log("getCurrentUser: did not find any user");
-            return null;
-        }
+                return hirelyApiService.auth().get().then(function (userAndToken) {
+                    if (userAndToken) {
+                        $cookies.put("token", JSON.stringify(userAndToken.token));
+                        $rootScope.token = userAndToken.token;
+                        $rootScope.currentUser = userAndToken.user;
+                        $rootScope.currentUserId = userAndToken.user._id;
 
-        var lastsync = null;
-        function syncCurrentUserFromDb() {
-            // console.log("syncCurrentUserFromDb");
-
-            var now = new Date();
-            if (this.lastsync != null && now.getTime() < this.lastsync.getTime() + 1000 ) {
-                console.log("syncCurrentUserFromDb: skipping because synced soon ago");
-                var deferred = $q.defer();
-                deferred.resolve(service.currentUser);
-                return deferred.promise;
-            }
-
-            this.lastsync = now;
-
-            if (service.isUserLoggedIn()) {
-                // console.log("syncCurrentUserFromDb: Syncing user from db: " + service.currentUser.email);
-                return userService.getUserById(service.currentUserID, true).then(
-                    function (userNew) {
-                        if (angular.isDefined(userNew) && userNew.email) {
-                            console.log("syncCurrentUserFromDb: User synced from db: " + userNew.email);
-                            setCurrentUser(userNew);
-                            return userNew;
-                        } else {
-                            console.error("syncCurrentUserFromDb: error: " + err);
-                            service.logout();
-                        }
-                    }, function(err) {
-                        console.error("syncCurrentUserFromDb2: error: " + err);
-                        service.logout();
+                        $rootScope.$emit('UserLoggedIn', userAndToken.user);
+                        $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
+                        console.log("Session has been refreshed");
+                        return true;
                     }
-                );
-            } else {
-                var deferred = $q.defer();
-                var err = "warning:  syncCurrentUserFromDb failed because no user is logged in";
-                deferred.reject(err);
-                console.warn(err);
-                return deferred.promise;
-            }
+                    return null;
+                });
+            };
+            return $q.resolve(null);
         }
 
         function passwordLogin(email, password) {
-            return userService.passwordLogin(email, password).then(function (userAndToken) {
+            return hirelyApiService.auth().post({email: email, password: password}).then(function(userAndToken) {
                 if (userAndToken) {
-                    setCurrentUser(userAndToken.user);
-                    setTokenCookie(userAndToken.token);
+                    $cookies.put("token", JSON.stringify(userAndToken.token));
+                    $rootScope.token = userAndToken.token;
+                    $rootScope.currentUser = userAndToken.user;
+                    $rootScope.currentUserId = userAndToken.user._id;
+
+                    $rootScope.$emit('UserLoggedIn', userAndToken.user);
+                    $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
                     return userAndToken.user;
                 }
+                return null;
             });
         }
 
         function registerNewUser(userData) {
             return userService.createNewUser(userData).then(function (userAndToken) {
                 if (userAndToken) {
-                    setCurrentUser(userAndToken.user);
-                    setTokenCookie(userAndToken.token);
+                    $cookies.put("token", JSON.stringify(userAndToken.token));
+                    $rootScope.token = userAndToken.token;
+                    $rootScope.currentUser = userAndToken.user;
+                    $rootScope.currentUserId = userAndToken.user._id;
+
+                    $rootScope.$emit('UserLoggedIn', userAndToken.user);
+                    $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
                     return userAndToken.user;
                 }
             });
@@ -118,94 +74,14 @@
 
 
         function logout() {
-            removeCurrentUser();
-        }
-
-        function updateCurrentUserCookie() {
-            //// Set currentUser cookie
-            var userStripped = angular.copy(service.currentUser);
-            delete userStripped.personalityExams;
-            delete userStripped.scores;
-            $cookies.put("currentUser", JSON.stringify(userStripped));
-        }
-
-        function setCurrentUser(user) {
-
-            //// set the rootScope currentUser
-            service.currentUser = user;
-            service.currentUserID = user._id;
-
-            //// if any of children scopes need to now whos logged in
-            //// let them know
-            $rootScope.$emit('UserLoggedIn', user);
-            $rootScope.$broadcast('UserLoggedIn', user);
-
-            service.updateCurrentUserCookie();
-        }
-
-        function setTokenCookie(token) {
-            service.token = token;
-            $cookies.put("token", token);
-            $rootScope.token = token;
-        }
-
-        function removeCurrentUser() {
-            service.currentUser = undefined;
-            service.currentUserID = undefined;
-
-            //// Set currentUser cookie
-            $cookies.remove("currentUser");
+            console.log("Logging out");
+            $rootScope.currentUser = null;
+            $rootScope.currentUserId = null;
             $cookies.remove("token");
-
-            /// let all scopes the user is logged out
             $rootScope.token = null;
-            service.token = null;
-            console.log("Token has been removed");
             $rootScope.$emit('UserLoggedOut');
             $rootScope.$broadcast('UserLoggedOut');
-
+            $rootScope.$apply();
         }
-
-        /**
-         * [updateCurrentUser will update the currentUser object without triggering login events UserDataChange event is emited instead
-         * Mainly this function will be user in uder profile update to make sure data in front ent is matching db]
-         * @param  {object} user [User object se user Model]
-         * @return {nothing}      [no return value]
-         */
-        function updateCurrentUser(user) {
-            service.currentUser = user;
-            service.updateCurrentUserCookie();
-            $rootScope.$emit('UserDataChange', service.currentUser);
-            $rootScope.$broadcast('UserDataChange', service.currentUser);
-        }
-
-        function isUserLoggedIn() {
-            return service.getCurrentUser() != null;
-        }//// fun. isUserLoggedIn
-
-        function onAuth(callback) {
-            callback(service.currentUser);
-        }//// fun. onAuth
-
-        function updateCurrentUserPropInCache(propname, prop) {
-            service.currentUser[propname] = prop;
-            service.updateCurrentUserCookie();
-        }
-
-        function resetPassword(email) {
-            var deferred = $q.defer();
-
-            // firebaseRef.$resetPassword({'email':email})
-            //     .then(function(){
-            //         deferred.resolve();
-            //     })
-            //     .catch(function(error){
-            //         deferred.reject(error);
-            //     });
-
-
-            return deferred.promise;
-        }//// fun. resetPasswrod
-
     }
 })();

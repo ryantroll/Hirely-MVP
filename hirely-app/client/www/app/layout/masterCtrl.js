@@ -4,73 +4,43 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$rootScope', '$state', '$window', 'AuthService', 'UserService', 'GeocodeService', MasterCtrl]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$rootScope', '$state', '$interval', 'AuthService', MasterCtrl]);
 
-    function MasterCtrl($scope, $rootScope, $state, $window, authService, userService, geocodeService) {
+    function MasterCtrl($scope, $rootScope, $state, $interval, authService) {
 
-        $scope.isUserLoggedIn = authService.isUserLoggedIn();
         $scope.location = {};
         $scope.currentPlace = null;
         $scope.$state = $state;
 
-        $scope.userIsSynced = false;
-        if ($scope.isUserLoggedIn) {
-            authService.syncCurrentUserFromDb().then(function() {
-                $scope.userIsSynced = true;
-            });
-        }
 
-        $scope.$on('UserLoggedOut', function(event, args) {
-            $scope.isUserLoggedIn = false;
-            $rootScope.nextState = {state:$state.current.name, params:$state.params};
-            $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
-            return;
-        });
-        $scope.$on('UserLoggedin', function(event, args) {
-            $scope.isUserLoggedIn = true;
-        });
+        // Session auto-logout controls
+        $scope.refreshSession = authService.refreshSession;
+        $scope.tokenRemainingTime = 0;
+        $scope.showRefreshModal = false;
+        $scope.updateTokenRemainingTime = function() {
+            if ($rootScope.currentUserId) {
+                $scope.tokenRemainingTime = Number($rootScope.token.exp) - Math.ceil(Date.now()/1000) - 5;
 
-        /**
-         * check on loged in user
-         * isUserLoggedIn method will do the needfull and set all the required variabls
-         */
-
-
-        $window.navigator.geolocation.getCurrentPosition(function (position) {
-
-            var lat = position.coords.latitude;
-            var long = position.coords.longitude;
-
-            $scope.$apply(function () {
-                    $scope.location.latitude = lat;
-                    $scope.location.longitude = long;
-                    if (lat && long) {
-                        geocodeService.getPlacebyLatLong(lat, long)
-                            .then(function (place) {
-                                if (place) {
-                                    $scope.currentPlace = place;
-                                    $scope.$broadcast('currentPlaceChanged', {message: place});
-                                }
-                            }, function (err) {
-                                deferred.reject(err);
-                            });
-                    }
-
+                if ($scope.tokenRemainingTime > 60 && $scope.showRefreshModal==true) {
+                    $scope.showRefreshModal = false;
+                    $scope.$apply();
                 }
-            )
-        });
 
+                if ($scope.tokenRemainingTime < 60) {
+                    $scope.showRefreshModal = true;
+                    $scope.$apply();
+                }
 
-        //listen for changes to current user
-        $scope.$on('UserLoggedIn', function (event, args) {
-            $scope.isUserLoggedIn = true;
-        });
-        $scope.$on('UserLoggedOut', function (event, args) {
-            $scope.isUserLoggedIn = false;
-        });
-
-        $scope.logout = function () {
-            authService.logout();
+                if ($scope.tokenRemainingTime < 0) {
+                    $scope.showRefreshModal = false;
+                    $scope.$apply();
+                    $rootScope.$emit('TokenExpired');
+                    $scope.tokenRemainingTime = 0;
+                }
+            }
         };
+        setInterval($scope.updateTokenRemainingTime,1000);
+
+
     };
 })();

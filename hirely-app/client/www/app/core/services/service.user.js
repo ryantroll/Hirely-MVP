@@ -2,12 +2,9 @@
   'use strict';
 
   angular.module('hirelyApp.core')
-    .service('UserService', ['$rootScope', '$q', 'HirelyApiService', UserService]);
+    .service('UserService', ['$q', 'HirelyApiService', UserService]);
 
-  function UserService($rootScope, $q, HirelyApiService) {
-    var self = this;
-
-
+  function UserService($q, HirelyApiService) {
 
     /**
      * [createRegisteredNewUser will create user model data based on data sent from registration form
@@ -56,18 +53,6 @@
           );
       return deferred.promise;
     };//// fun. saveUser
-    
-    this.passwordLogin = function(email, password) {
-      return HirelyApiService.users("passwordLogin").post({email: email, password: password})
-          .then(
-              function(userAndToken) {
-                return userAndToken;
-              },
-              function(err) {
-                console.log("Error logging in: "+err)
-              }
-          );
-    };
 
 
     /**
@@ -76,21 +61,21 @@
      * @return {promise}    [description]
      */
     this.getUserById = function getUserById(id, complete) {
-      var deferred = $q.defer();
-      var user = {};
-
-      /**
-       * find out if exteral id
-       * firebase user ids contains -
-       * e.g. firebase 93306b91-d5ba-4e06-838c-0ab85fd58783
-       * e.g. mongoDB 568fde202127fa312543f50f
-       */
       if(complete){
         return HirelyApiService.users(id, ['complete']).get();
       }
       else{
         return HirelyApiService.users(id).get();
       }
+    };
+
+    /**
+     * [getUserById will get a user object from DB by suppling user id for local DB or user id for exteranl DB like firebase id]
+     * @param  {string} id [id of user this id can b]
+     * @return {promise}    [description]
+     */
+    this.getToken = function getToken() {
+      return HirelyApiService.users('getToken').get();
     };
 
     /**

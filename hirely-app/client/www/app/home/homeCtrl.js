@@ -52,7 +52,7 @@
         $scope.getResults = function() {
             if(!!$scope.selectedLocation){
                 geocodeService.setPlace($scope.selectedLocation);
-                $state.go('app.job', {placeId: $scope.selectedLocation.placeId});
+                $state.go('master.default.job', {placeId: $scope.selectedLocation.placeId});
             }
             else {
                 console.log('no!');
