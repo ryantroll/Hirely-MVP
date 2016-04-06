@@ -55,7 +55,7 @@
                 }
             }
             else{
-                $state.go('master.default.home')
+                $state.go('master.default.dashboard')
             }
         }
 
@@ -78,7 +78,7 @@
             }
             else{
                 console.log("2");
-                $state.go('master.default.home')
+                $state.go('master.default.dashboard')
             }
         };
 

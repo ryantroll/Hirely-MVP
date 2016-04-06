@@ -81,7 +81,7 @@
                               delete $rootScope.nextState;
                           }
                           else{
-                              $state.go('master.default.home')
+                              $state.go('master.default.dashboard')
                           }
                       } else {
                           $scope.registerForm.email.$setValidity('emailExists', false);

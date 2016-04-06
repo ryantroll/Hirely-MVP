@@ -59,7 +59,7 @@
 
     $scope.finish = function(){
       console.log("UP:Going home");
-      $state.go('master.default.home')
+      $state.go('master.default.dashboard')
     }
 
     function semiFixedFooter() {

@@ -67,17 +67,12 @@
             $scope.myLocationsObj = {};
 
             for(var pos in positions){
-                if( !(positions[pos].locationId in $scope.myLocationsObj) ){
-                    $scope.myLocationsObj[positions[pos].locationId] = [];
-                    $scope.myLocationsObj[positions[pos].locationId].push(angular.copy(positions[pos]))
-                    $scope.myLocations.push(angular.copy(positions[pos].location));
+                if( !(positions[pos].location_id in $scope.myLocationsObj) ){
+                    $scope.myLocationsObj[positions[pos].location_id] = [];
                 }
-                else{
-                    $scope.myLocationsObj[positions[pos].locationId].push(angular.copy(positions[pos]))
-                    $scope.myLocations.push(angular.copy(positions[pos].location));
-                }
+                $scope.myLocationsObj[positions[pos].location_id].push(angular.copy(positions[pos]))
+                $scope.myLocations.push(angular.copy(positions[pos].location));
             }
-            console.log($scope.myLocationsObj);
             $scope.myPositions = positions;
         },
         function(err){
