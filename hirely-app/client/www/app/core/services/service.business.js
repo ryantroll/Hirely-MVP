@@ -47,6 +47,54 @@
           return deferred.promise;
         }; //// fun. getBySlug
 
+        /**
+         * [getPositionById will return an OBJECT (not array) list of POISITIONS object NOT business by sending one position id or any array of ids
+         * business and location will come as child property of each position object]
+         * @param  {id or array of ids} ids [it can be one id or an array of ids to by queried ]
+         * @return {promise}     [promise on success the promise will return a object of objects ]
+         */
+        this.getPositionsByIds = function(ids){
+          var deferred = $q.defer();
+          if(!Array.isArray(ids)){
+            ids = [ids];
+          }
+
+          HirelyApiService.businesses('getPositionsByIds', ids.join('|')).get()
+          .then(
+            function(positions){
+                if(positions){
+                  deferred.resolve(positions);
+                }
+                else{
+                  deferred.reject('Positions not found')
+                }
+
+
+            },
+            function(err){
+              deferred.reject(err)
+            }
+          );
+
+          return deferred.promise;
+        }; //// fun. getPositionById
+
+        this.getPositionsByManagerId = function(managerId){
+            var deferred = $q.defer();
+
+          HirelyApiService.businesses('getPositionsByManagerId', managerId).get()
+          .then(
+            function(positions){
+                deferred.resolve(positions);
+            },
+            function(err){
+              deferred.reject(err)
+            }
+          );
+
+          return deferred.promise;
+        }//// fun. getPositionByManagerId
+
         this.locationBySlug = function(slug, business){
 
           if(angular.isUndefined(business.locationSlugs[slug])){
@@ -76,6 +124,7 @@
             return null;
           }
         }; //// fun. positionBySlug
+
 
         this.getPositionsByLocation = function(business, locationId, excludeId){
             var ret = [];

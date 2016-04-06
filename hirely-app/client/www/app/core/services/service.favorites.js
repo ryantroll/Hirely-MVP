@@ -16,7 +16,6 @@
     }
 
     function getFavorite(query){
-
       return HirelyApiService.favorites(query).get();
     }
 

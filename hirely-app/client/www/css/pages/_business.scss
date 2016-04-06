@@ -581,9 +581,11 @@ $candidat-menu-height:40px;
         line-height: 30px;
         text-align: center;
         position:absolute;
-        top:5px;
-        right:5px;
-        font-size:0.85em;
+        top:15px;
+        right:15px;
+        font-size:1.2em;
+        opacity:1;///// conflict fix
+        color:$c-hirely-mid-gray;
     }
     header{
         padding: 0 1em;
@@ -639,6 +641,10 @@ $candidat-menu-height:40px;
             }
 
         }//// .menu
+
+        a.close{
+            color:$c-hirely-gray;
+        }
 
     }//// header.active
 
@@ -803,7 +809,7 @@ $candidat-menu-height:40px;
                         display: none;
                     }
 
-                    .open{
+                    .applied{
                         color:$c-hirely-blue;
                     }
                     .declined{
@@ -823,8 +829,8 @@ $candidat-menu-height:40px;
                     margin: 0 auto;
                     text-align: center;
                     .legend{
-                        float:none;
-                        display: block;
+                        // float:none;
+                        // display: block;
                     }
                 }
             }
@@ -1124,6 +1130,51 @@ $candidat-menu-height:40px;
                     }//// ul
                 }//// .menu
             }//// .actions
+
+            .contacts{
+                padding:1em;
+                ul{
+                    list-style: none;
+                    padding-left: 0;
+                    margin-bottom: 0;
+                    width:100%;
+
+                }
+                li{
+                    display: block;
+                    width:100%;
+                    margin-bottom: 0.5em;
+                    line-height: 30px;
+                    font-size: 1.2em;
+                    font-weight: 700;
+
+                    .icon{
+                        display: inline-block;
+                        width:30px;
+                        height: 30px;
+                        margin-right: 0.5em;
+                        line-height: 30px;
+                        text-align: center;
+                        background-color:$c-hirely-gray;
+                        color:$c-white;
+                        font-weight: 400;
+                        @include border-radius(15px);
+                    }
+                    .icon.blue{
+                        background-color:$c-hirely-blue;
+                    }
+                    .icon.green{
+                        background-color:$c-hirely-green;
+                    }
+                }
+                li:last-child{
+                    margin-bottom: 0;
+                }
+                a{
+                    color:$c-hirely-mid-gray;
+
+                }
+            }
         }//// .box
 
         .arrows{

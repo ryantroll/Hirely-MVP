@@ -5,6 +5,7 @@
  *
  */
 (function () {
+
     'use strict';
 
     angular.module('hirelyApp.core')
@@ -24,6 +25,7 @@
             create: create,
             isApplicationExists: isApplicationExists,
             getByPositionId: getByPositionId,
+            getByUserId: getByUserId,
             getById: getById,
             getStatistics: getStatistics,
             viewStatusLabels: viewStatusLabels,
@@ -112,6 +114,20 @@
             return deferred.promise;
         }//// getPositionById
 
+        function getByUserId(userId) {
+            var deferred = $q.defer();
+            HirelyApiService.applications('byUserId', userId).get()
+                .then(
+                    function (found) {
+                        deferred.resolve(found);
+                    },
+                    function (err) {
+                        deferred.reject(err);
+                    }
+                )//// .get().then()
+            return deferred.promise;
+        }//// getPositionById
+
         function getStatistics(list) {
             var ret = {};
             ret.total = list.length;
@@ -147,6 +163,7 @@
                     ret[app[x]._id] = app[x];
                 }
             }
+
             return ret;
         }//// fun. applicantsArrayToObject
 

@@ -133,7 +133,9 @@ var applicationService = {
 
                 // console.log("as:getByPositionId:4");
                 return userModel.find({_id: {$in: userIds}, queuedForMetricUpdate: false}).then(function (users) {
+
                     // console.log("as:getByPositionId:5");
+
                     return careerMatchScoresModel.find({userId: {$in: userIds}, occId: position.occId}).then(function (careerMatchScoress) {
                         // console.log("as:getByPositionId:6");
 

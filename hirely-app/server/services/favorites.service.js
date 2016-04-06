@@ -1,4 +1,5 @@
 var favoritesModel = require('../models/favorites.model');
+var businessModel = require('../models/business.model');
 var q = require('q');
 
 var favoritesService = {
@@ -57,6 +58,8 @@ var favoritesService = {
     },
 
     getFavorites: function(query){
+        var deferred = q.defer();
+
         var where = {};
         where.type = query.type ? query.type : 'position';
 
@@ -72,7 +75,18 @@ var favoritesService = {
         if(query.locationId){
             where.locationId = query.locationId;
         }
-        return favoritesModel.find(where).exec();
+
+        favoritesModel.find(where)
+        .then(
+            function(found){
+                deferred.resolve(found);
+            },
+            function(err){
+                deferred.reject(err);
+            }
+        )
+
+        return deferred.promise;
     }
 
 

@@ -1,0 +1,120 @@
+.dashboard{
+    padding-top:2em;
+    background-color: $c-hirely-gray;
+    min-height: 600px;
+    h1{
+        font-size:1.5em;
+
+        a{
+            color:inherit;
+            font-size:0.9em;
+            margin-left:5px;
+        }
+    }
+    .intro{
+        padding: 1em 0;
+    }
+
+    .box{
+        display: block;
+        width:100%;
+        border:0;
+        padding:0;
+        margin:0;
+        background-color:$c-white;
+        margin-bottom:2em;
+        @include border-radius();
+
+        .title{
+            padding: 1em;
+            h3{
+                font-size:1.2em;
+                margin-top:0;
+                margin-bottom: 0;
+            }
+        }//// .title
+
+
+    }///// .box
+    .list{
+        padding:0 1.6em 1em 1.6em;
+
+        h4{
+            font-size:1.1em;
+        }
+        table{
+            width:100%;
+        }
+        caption{
+            font-size:1.1em;
+            font-weight: 700;
+        }
+        thead{
+            display: none;
+            @media screen and (min-width:$screen-sm-min){
+                display: table-header-group;
+            }
+            th{
+                padding-bottom:1em;
+            }
+            tr{
+                border-bottom:none;
+            }
+        }
+        tbody{
+            tr{
+                border-bottom:1px solid $c-hirely-light-gray;
+                display: block;
+                width:100%;
+                margin-bottom:0.5em;
+
+                @media screen and (min-width:$screen-sm-min){
+                    display: table-row;
+                    width:auto;
+                    margin-bottom:0;
+                }
+            }
+            //// adding clearfix to tr on mobile onlye
+            tr:before, tr:after{
+                content: " ";
+                display: table;
+                @media screen and (min-width:$screen-sm-min){
+                    display: none;
+                }
+            }
+            tr:after{
+                clear: both;
+            }
+
+            tr:last-child{
+                border-bottom:0;
+            }
+            td{
+                padding: 0 0 0.5em 0;
+                display: block;
+                width:60%;
+                float:left;
+                height: auto;
+                @media screen and (min-width:$screen-sm-min){
+                    display: table-cell;
+                    width:auto;
+                    float:none;
+                    padding: 0.5em 0 0.5em 0;
+                    height: 52px;
+                }
+            }
+            th{
+                padding: 0 0 0.5em 0;
+                display: block;
+                width:40%;
+                float:left;
+                @media screen and (min-width:$screen-sm-min){
+                    display: none;
+                }
+            }
+        }//// tbody
+
+
+
+    }
+}//// .dashboard
