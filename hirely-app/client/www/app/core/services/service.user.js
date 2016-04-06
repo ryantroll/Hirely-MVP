@@ -111,7 +111,9 @@
     }//// fun. updateUserMetricsById
 
     this.clearPhoneFormat = function(val){
-      return val.split(/[\(|\)| |\-|\+|\.|\+1\.]/).join('');
+      if (val) {
+        return val.split(/[\(|\)| |\-|\+|\.|\+1\.]/).join('');
+      } else return '';
     }
 
     this.formatPhone = function(val){

@@ -37,12 +37,17 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/layout/default.html',
                 controller: 'DefaultCtrl'
             })
-            .state('master.default.home', {
-                url: '/',
-                // parent: 'app',
-                templateUrl: 'app/home/home.html',
+            // .state('master.default.home', {
+            //     url: '/',
+            //     templateUrl: 'app/home/home.html',
+            //     controller: 'HomeCtrl'
+            // })
 
-                controller: 'HomeCtrl'
+            .state('master.default.dashboard', {
+                url: '/',
+                templateUrl: 'app/user/user-dashboard.html',
+                controller: 'UserDashboardController',
+                authRequired: true
             })
 
             .state('master.default.user', {
@@ -128,5 +133,5 @@ var myApp = angular.module('hirelyApp',
 
 
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/');
+        // $urlRouterProvider.otherwise('/');
     });

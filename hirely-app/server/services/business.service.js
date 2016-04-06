@@ -81,6 +81,13 @@ var businessService = {
     getPositionsByIds: function(positionIds, reqQuery){
         var deferred = q.defer();
 
+        if (!positionIds.length) {
+            deferred.resolve([]);
+            return deferred.promise;
+        }
+
+        console.log("BS:getPositionsByIds:1: " + positionIds);
+
         // Determine what fields to return based on reqQuery.
         var returnFields = '-' + privateFields.join(' -')
 
@@ -96,35 +103,53 @@ var businessService = {
             or['positions.'+ids[0]] = { $exists:true, $nin:[null] };
             query.$or.push(or);
         }
+
+        console.log("BS:getPositionsByIds:10");
         businessModel.find(query, returnFields)
         .then(
             function(found){
-                if(Array.isArray(found)){
-                    var ret = {};
+                console.log("BS:getPositionsByIds:11");
+                try {
+                    if (Array.isArray(found)) {
+                        console.log("BS:getPositionsByIds:12");
+                        var ret = {};
 
-                    for(var i=0; i<found.length; i++){
-                        var b = found[i];
-                        var positions =b.positions.toObject();
-                        for(var pos in positions){
-                            if(ids.indexOf(pos) > -1){
-                                var myPos = positions[pos];
+                        for (var i = 0; i < found.length; i++) {
+                            console.log("BS:getPositionsByIds:13");
+                            var b = found[i];
+                            var positions = b.positions.toObject();
+                            for (var pos in positions) {
+                                console.log("BS:getPositionsByIds:14");
+                                if (ids.indexOf(pos) > -1) {
+                                    console.log("BS:getPositionsByIds:15");
+                                    var myPos = positions[pos];
 
-                                /**
-                                 * add required location and business field to position
-                                 */
-                                var location = b.locations.toObject()[myPos.locationId]
+                                    /**
+                                     * add required location and business field to position
+                                     */
+                                    var location = b.locations.toObject()[myPos.locationId];
 
-                                delete location.positionSlugs;
-                                myPos.location = location;
-                                myPos.business = {name:b.name, slug:b.slug, _id:b._id, description:b.description};
+                                    // The following is commented out because it's throwing an error and doesn't seem necessary
+                                    // delete location.positionSlugs;
 
-                                ret[pos] = myPos
-                            }
-                        }//// for pos in b
+                                    myPos.location = location;
+                                    myPos.business = {name: b.name, slug: b.slug, _id: b._id, description: b.description};
 
-                        deferred.resolve(ret)
-                    }////for i
-                }//// if isArray
+                                    ret[pos] = myPos
+                                    console.log("BS:getPositionsByIds:16");
+                                }
+                            }//// for pos in b
+
+                            console.log("BS:getPositionsByIds:17");
+                            deferred.resolve(ret);
+                            console.log("BS:getPositionsByIds:complete");
+                        }////for i
+                    }//// if isArray
+                } catch(err) {
+                    error = "BS:getPositionsByIds:error: "+err;
+                    console.log(err);
+                    deferred.reject(err);
+                }
             },//// then success
             function(err){
                 deferred.reject(err);
@@ -142,9 +167,10 @@ var businessService = {
      */
     getPositionsByManagerId: function(managerId, reqQuery){
         var deferred = q.defer();
+        console.log("BS:getPositionsByManagerId:1:managerid: "+managerId);
 
         // Determine what fields to return based on reqQuery.
-        var returnFields = '-' + privateFields.join(' -')
+        var returnFields = '-' + privateFields.join(' -');
 
         if(undefined !== reqQuery && undefined !== reqQuery.complete) {
             returnFields = '-nothing'
@@ -166,24 +192,30 @@ var businessService = {
         query.$or.push({srcId:managerId, srcType:'users', destType:'locations', c:true, u:true, d:true});
         query.$or.push({srcId:managerId, srcType:'users', destType:'positions', c:true, u:true, d:true});
 
+        console.log("BS:getPositionsByManagerId:2");
         permissionsModel.find(query)
         .then(
             function(found){
+                console.log("BS:getPositionsByManagerId:3");
 
                 /**
                  * add the position id to the list or position
                  * or if business or location add new criteria for next query
                  */
                 for(var i=0; i<found.length; i++){
+                    console.log("BS:getPositionsByManagerId:4");
                     switch(found[i].destType){
                         case 'positions':
+                            console.log("BS:getPositionsByManagerId:5: "+found[i].destId);
                             ids.push(found[i].destId);
                             break;
                         case 'businesses':
+                            console.log("BS:getPositionsByManagerId:6: "+found[i].destId);
                             queryNext.$or.push({_id:found[i].destId});
                             businessesIds.push(found[i].destId);
                             break;
                         case 'locations':
+                            console.log("BS:getPositionsByManagerId:6.5: "+found[i].destId);
                             var q = {};
                             q['locations.'+found[i].destId] = {$exists: true};
                             locationsIds.push(found[i].destId);
@@ -192,7 +224,11 @@ var businessService = {
                     }
                 }
 
-                return businessModel.find(queryNext)
+                console.log("BS:getPositionsByManagerId:7");
+                return businessModel.find(queryNext);
+                // Both of these work too
+                // return businessModel.find({$or: queryNext.$or});
+                // return businessModel.find().or(queryNext.$or);
             },
             function(err){
                 console.log(err)
@@ -200,33 +236,47 @@ var businessService = {
         )
         .then(
             function(businesses){
-                for(var i=0; i<businesses.length; i++){
-                    //// if manager has permission on business then add all of its positions
-                    var addAllLocations = businessesIds.indexOf(businesses[i]) >= 0;
+                console.log("BS:getPositionsByManagerId:8:businessIds: "+businessesIds);
 
+                for(var i=0; i<businesses.length; i++){
+                    console.log("BS:getPositionsByManagerId:9:businessId: "+businesses[i]._id);
+                    //// if manager has permission on business then add all of its positions
+                    var addAllLocations = businessesIds.indexOf(String(businesses[i]._id)) >= 0;
+
+                    console.log("BS:getPositionsByManagerId:10:addAllLocations " + addAllLocations);
                     var positions = businesses[i].positions.toObject();
+                    console.log("BS:getPositionsByManagerId:11");
                     for(var pos in positions){
+                        console.log("BS:getPositionsByManagerId:12");
 
                         if(true === addAllLocations || locationsIds.indexOf(positions[pos].locationId) >= 0 ){
+                            console.log("BS:getPositionsByManagerId:13");
                             if(ids.indexOf(pos) < 0) ids.push(pos);
                         }
 
                     }//// for pos in positions
                 }//// for
-                return businessService.getPositionsByIds(ids)
+                console.log("BS:getPositionsByManagerId:20");
+                return businessService.getPositionsByIds(ids);
             },
             function(err){
+                err = "BS:getPositionsByManagerId:21:error" + err;
                 console.log(err);
+                deferred.reject(err);
             }
         )
         .then(
             function(positions){
+                console.log("BS:getPositionsByManagerId:30");
                 deferred.resolve(positions);
             },
             function(err){
-                deferred.rejet(err);
+                err = "BS:getPositionsByManagerId:40:error" + err;
+                console.log(err);
+                deferred.reject(err);
             }
-        )
+        );
+        console.log("BS:getPositionsByManagerId:50");
         return deferred.promise;
     },
 

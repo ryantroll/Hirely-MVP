@@ -22,14 +22,16 @@
                 }
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-                    if (toState.authRequired && !$rootScope.currentUserId){
-                        $rootScope.nextState.push({state:toState, params:toParams})
-                        $state.go(loginRedirectPath, {message: "You must login to view this page."});
-                        event.preventDefault();
-                    }
-                    
                     // If user is logged in, refresh token. If fails, redirect to login
-                    authService.refreshSession();
+                    authService.refreshSession().then(function() {
+                        if (toState.authRequired && !$rootScope.currentUserId){
+                            $rootScope.nextState.push({state:toState, params:toParams})
+                            $state.go(loginRedirectPath, {message: "You must login to view this page."});
+                            event.preventDefault();
+                        }
+                    });
+
+
 
                 });
 
