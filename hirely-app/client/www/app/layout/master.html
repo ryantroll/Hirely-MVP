@@ -1,33 +1,14 @@
 <div class="master-wrapper" ng-controller="MasterCtrl">
-    <nav id="mobile-nav" ng-class="userType">
-        <header class="hi-header" ng-class="{'logged-in-header':isUserLoggedIn}">
-            <div class="row">
-                <!--<a class="logo pull-left" ui-sref="app.home">-->
-                <a class="logo" href="http://hirely.us">
-                    <!--<img src="img/hirely_logo_small.png" alt="Hirely"/>-->
-                    hirely
-                </a><!--//logo-->
-
-                <div class="pull-right nav-links" ng-show="!($state.is('app.account.login') || $state.is('app.account.register'))">
-
-                    <!--<button ng-show="!isUserLoggedIn" class="btn red" ui-sref="app.account.register">Register</button>-->
-                    <!--<a ng-show="!isUserLoggedIn" ui-sref="app.account.login">Login</a>-->
-                    <!--<a ng-show="isUserLoggedIn" ui-sref="app.user.profile">Edit Profile</a>-->
-                    <!--<a ng-show="isUserLoggedIn" href="javascript:void(0)" ng-click="logout()">Logout</a>-->
-                    <a ui-sref="app.user.dashboard">My Dashboard</a>
-
-                </div>
-            </div>
-        </header>
-
-    </nav>
     <div class="wrapper" id="hirely-content">
-        <div header></div>
-        <div ui-view>
+        <div ui-view></div>
 
-            <!--main content-->
-
+        <div id="tokenExpiringModal" ng-show="showRefreshModal">
+            <div><div>
+                <div>Ya still there?</div>
+                <button class="btn btn-lg red" ng-click="refreshSession()">CLICK HERE</button>
+                <div>to stay logged in.</div>
+                <div>Countdown: {{tokenRemainingTime}}</div>
+            </div></div>
         </div>
     </div>
-    <div footer></div>
 </div>
