@@ -365,7 +365,7 @@ var userService = {
 
                 // console.log("us261.2");
                 roles[occId].monthCount += monthCount;
-                roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount)
+                roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount);
 
                 if (!workExperience.isSeasonal) {
                     nonSeasonalTotalWorkMonths += monthCount;
@@ -414,7 +414,7 @@ var userService = {
                             }
                         }
                     } catch(err) {
-                        var err = "ERROR US:addExpScores("+user._id+"): "+err;
+                        var err = "ERROR US:addExpScores:1("+user._id+"): "+err;
                         console.log(err);
                         var deferred = q.defer();
                         deferred.reject(err);
@@ -438,19 +438,16 @@ var userService = {
                         for (var occId in roles) {
                             // console.log("us264");
                             // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
-                            var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
+                            var weight = roles[occId].monthCount / totalWorkMonths;
                             for (var category in roles[occId]) {
                                 // console.log("us265");
                                 for (var key in roles[occId][category]) {
                                     // console.log("us266");
-                                    var weighted = Number(Number(weight * roles[occId][category][key]).toFixed(4));
-                                    if (key in scores[category]) {
-                                        // console.log("us267");
-                                        scores[category][key] += weighted;
-                                    } else {
-                                        // console.log("us268");
-                                        scores[category][key] = weighted;
+                                    var weighted = weight * roles[occId][category][key];
+                                    if (!(key in scores[category])) {
+                                        scores[category][key] = 0;
                                     }
+                                    scores[category][key] = Math.round(scores[category][key]+weighted * 100) / 100;
                                 }
                             }
                         }  // end roles.forEach
@@ -459,7 +456,7 @@ var userService = {
 
                         return user;
                     } catch(err) {
-                        var err = "ERROR US:addExpScores("+user._id+"): "+err;
+                        var err = "ERROR US:addExpScores:2("+user._id+"): "+err;
                         console.log(err);
                         var deferred = q.defer();
                         deferred.reject(err);
@@ -468,7 +465,7 @@ var userService = {
                 });
 
         } catch(err) {
-            var err = "ERROR US:addExpScores("+user._id+"): "+err;
+            var err = "ERROR US:addExpScores:3("+user._id+"): "+err;
             console.log(err);
             var deferred = q.defer();
             deferred.reject(err);
@@ -498,38 +495,44 @@ var userService = {
         // var deferred = q.defer(); deferred.resolve(user); deferred.promise
         return user.save()
         .then(function (user) {
-            // console.log("u260");
+            // console.log("u260: " + user._id);
             return traitifyService.addTraitifyCareerMatchScoresToUser(user);
+            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
         }).then(function (user) {
-            // console.log("u261");
+            // console.log("u261: " + user._id);
             return self.addExpScores(user);
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
         }).then(function (user) {
-            // console.log("u262");
+            // console.log("u262: " + user._id);
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
             user.queuedForMetricUpdate = false;
             return user.save();
         }).then(function (user) {
-            // console.log("u263");
+            // console.log("u263: " + user._id);
             return matchingService.generateCareerMatchScoresForUser(user);
         })
 
     },  // end updateUserMetricsById
 
     updateQueuedUserMetricsLock: false,
+    updateQueuedUserMetricsLastRan: 0,
     updateQueuedUserMetrics: function () {
         if (this.updateQueuedUserMetricsLock) {
-            // console.log("Waiting to finish");
+            console.log("Waiting to finish");
             return;
         }
 
         this.updateQueuedUserMetricsLock = true;
+        this.updateQueuedUserMetricsLastRan = Date.now();
+        console.log("Lock is set.");
 
         // console.log("Checking for queued users");
         var self = this;
 
-        userModel.find({queuedForMetricUpdate:true}).then(function (users) {
+        userModel.find({}).then(function (users) {
         // return userModel.find({firstName: 'Tyler'}).then(function (users) {
+            var updateCount = users.length>3 ? 3 : users.length;
+            console.log("Updating "+updateCount+"/"+users.length);
             var promises = [];
             try {
                 for (let user of users) {
@@ -546,12 +549,16 @@ var userService = {
                 console.log("updateQueuedUserMetrics:err: " + err);
             }
 
-            return q.all(promises).then(function (results) {
-                // console.log("Lock lifted");
+            return q.all(promises);
+        }).then(
+            function (results) {
+                console.log("Lock lifted");
                 self.updateQueuedUserMetricsLock = false;
-            });
-
-        });
+            }, function (errs) {
+                console.log("Lock lifted with errors: " + errs);
+                self.updateQueuedUserMetricsLock = false;
+            }
+        );
     }
 
 }; /// users object
