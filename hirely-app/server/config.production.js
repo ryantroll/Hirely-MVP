@@ -40,8 +40,8 @@ config.primeOnetScoresCache = true;
 
 config.onetSecretKey = "YXBwX2hpcmVseV91c19jb21wYXM6NTQ1OGdhdg==";
 
-config.appMode = 'express';
-// config.appMode = 'crunchMuncher';
+// config.appMode = 'express';
+config.appMode = 'crunchMuncher';
 
 config.tokenLifeDefault = '30m';
 config.tokenLifeBusiness = '48h';

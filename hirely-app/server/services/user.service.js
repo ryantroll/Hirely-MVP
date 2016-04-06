@@ -529,7 +529,7 @@ var userService = {
         // console.log("Checking for queued users");
         var self = this;
 
-        userModel.find({}).then(function (users) {
+        userModel.find({queuedForMetricUpdate:true}).then(function (users) {
         // return userModel.find({firstName: 'Tyler'}).then(function (users) {
             var updateCount = users.length>3 ? 3 : users.length;
             console.log("Updating "+updateCount+"/"+users.length);
@@ -552,7 +552,7 @@ var userService = {
             return q.all(promises);
         }).then(
             function (results) {
-                console.log("Lock lifted");
+                console.log("Lock lifted with result:");
                 self.updateQueuedUserMetricsLock = false;
             }, function (errs) {
                 console.log("Lock lifted with errors: " + errs);
