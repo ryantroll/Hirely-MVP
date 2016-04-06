@@ -44,7 +44,7 @@
                             delete $rootScope.nextState;
                         }
                         else{
-                            $state.go('app.user.dashboard');
+                            $state.go('app.home')
                         }
                     },
                     function(err) {
