@@ -1,0 +1,25 @@
+<nav id="mobile-nav" ng-class="userType">
+    <header class="hi-header" ng-class="{'logged-in-header':rootScope.currentUserId}">
+        <div class="row">
+            <!--<a class="logo pull-left" ui-sref="master.default.home">-->
+            <a class="logo" href="http://hirely.us">
+                <!--<img src="img/hirely_logo_small.png" alt="Hirely"/>-->
+                hirely
+            </a><!--//logo-->
+
+            <div class="pull-right nav-links" ng-show="!($state.is('master.default.account.login') || $state.is('master.default.account.register'))">
+
+                <!--<button ng-show="!isUserLoggedIn" class="btn red" ui-sref="master.default.account.register">Register</button>-->
+                <!--<a ng-show="!isUserLoggedIn" ui-sref="master.default.account.login">Login</a>-->
+                <!--<a ng-show="isUserLoggedIn" ui-sref="master.default.user.profile">Edit Profile</a>-->
+                <!--<a ng-show="isUserLoggedIn" href="javascript:void(0)" ng-click="logout()">Logout</a>-->
+                <a ui-sref="master.default.home">My Dashboard</a>
+
+            </div>
+        </div>
+    </header>
+
+</nav>
+<div class="wrapper">
+    <div ui-view></div>
+</div>

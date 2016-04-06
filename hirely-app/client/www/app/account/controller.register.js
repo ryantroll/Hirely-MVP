@@ -49,12 +49,12 @@
         };
 
         $scope.cancelRegistration = function() {
-            if(angular.isDefined($rootScope.nextState)){
-                $state.go($rootScope.nextState.state, $rootScope.nextState.params);
-                delete $rootScope.nextState;
+            if($rootScope.nextState.length) {
+                var nextState = $rootScope.nextState.pop();
+                $state.go(nextState.state, nextState.params);
             }
             else{
-                $state.go('app.user.profile')
+                $state.go('master.default.user.profile')
             }
         }
 
@@ -75,12 +75,13 @@
                           /**
                            * Check if nextState is set in rootScope and redirect user to it
                            */
-                          if(angular.isDefined($rootScope.nextState)){
-                              $state.go($rootScope.nextState.state, $rootScope.nextState.params);
+                          if($rootScope.nextState.length) {
+                              var nextState = $rootScope.nextState.pop();
+                              $state.go(nextState.state, nextState.params);
                               delete $rootScope.nextState;
                           }
                           else{
-                              $state.go('app.home')
+                              $state.go('master.default.home')
                           }
                       } else {
                           $scope.registerForm.email.$setValidity('emailExists', false);

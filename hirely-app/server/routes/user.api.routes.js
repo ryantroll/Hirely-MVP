@@ -1,6 +1,7 @@
 var permissionService = require('../services/permissions.service');
 var userService = require('../services/user.service');
 var apiUtil = require('../utils/api-response');
+var config = require('../config');
 
 var userRoutes = {
 
@@ -24,6 +25,20 @@ var userRoutes = {
                     res.status(500).json(apiUtil.generateResponse(404, "User couldn't be located", null));
                 }
             );
+    },
+
+    getToken: function(req, res){
+        if (!req.userId) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
+        var isBusinessUser = permissionService.isBusinessUser(req.permissions);
+        var expiresIn = config.tokenLifeDefault;
+        if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
+
+        var userAndToken = userService.getUserAndTokenObj(req.user, expiresIn);
+
+        res.status(200).json(apiUtil.generateResponse(200, "Token retrieved successfully", userAndToken));
     },
 
     createNewUser : function(req, res){
@@ -65,7 +80,7 @@ var userRoutes = {
     passwordLogin : function(req, res) {
 
         var skipPasswordCheck = req.isSuperUser;
-        var isBusinessUser = req.isSuperUser || permissionService.isBusinessUser(req.permissions);
+        var isBusinessUser = permissionService.isBusinessUser(req.permissions);
 
         userService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck, isBusinessUser)
             .then(

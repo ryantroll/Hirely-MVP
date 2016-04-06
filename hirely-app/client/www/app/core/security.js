@@ -16,35 +16,31 @@
      */
          .run(['$rootScope', '$state', 'AuthService', 'UserService', 'loginRedirectPath',
             function ($rootScope, $state, authService, userService, loginRedirectPath) {
-                // watch for login status changes and redirect if appropriate
-                authService.onAuth(check);
 
-                // some of our routes may reject resolve promises with the special {authRequired: true} error
-                // this redirects to the login page whenever that is encountered
-                $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
-                    if (error === "AUTH_REQUIRED") {
-                        $state.go(loginRedirectPath);
-                    }
-                });
+                if (angular.isUndefined($rootScope.nextState)) {
+                    $rootScope.nextState = [];
+                }
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-                    authService.onAuth(check);
-                    // authService.isUserLoggedIn();
-                    
-                    if (toState.authRequired && !authService.isUserLoggedIn()){
-                        // User isn�t authenticated
-                        $state.transitionTo(loginRedirectPath);
+                    if (toState.authRequired && !$rootScope.currentUserId){
+                        $rootScope.nextState.push({state:toState, params:toParams})
+                        $state.go(loginRedirectPath, {message: "You must login to view this page."});
                         event.preventDefault();
                     }
+                    
+                    // If user is logged in, refresh token. If fails, redirect to login
+                    authService.refreshSession();
+
                 });
 
-
-
-                function check(user) {
-                    if (!user && $state.current.authRequired) {
-                         $state.go(loginRedirectPath);
+                $rootScope.$on('TokenExpired', function(event, args) {
+                    authService.logout();
+                    if ($state.current.authRequired) {
+                        console.log("Caught private page with token expired");
+                        $rootScope.nextState.push({state:$state.current.name, params:$state.params})
+                        $state.go(loginRedirectPath, {message: "Sorry, your session has expired."});
                     }
-                }
+                });
 
             }
         ]);

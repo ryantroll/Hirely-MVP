@@ -20,7 +20,7 @@
                 <h1>My Dashboard</h1>
                 <div class="intro">
                     <p>
-                        Hi {{user.firstName}}, from your dashboard you can edit your profile, view your applications, manage your positions.
+                        Hi {{rootScope.currentUser.firstName}}, from your dashboard you can edit your profile, view your applications, manage your positions.
                     </p>
                 </div>
             </div><!--col-->
@@ -58,9 +58,9 @@
                                     <th>Wage</th>
                                     <td>${{pos.compensation.wageAmount}}/{{pos.compensation.wageType | uppercase}}</td>
                                     <th>Candidates</th>
-                                    <td><button class="btn red" ui-sref="app.business.candidateList({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">MANAGE</button></td>
+                                    <td><button class="btn red" ui-sref="master.default.business.candidateList({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">MANAGE</button></td>
                                     <th>Details</th>
-                                    <td><button class="btn" ui-sref="app.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">VIEW</button></td>
+                                    <td><button class="btn" ui-sref="master.default.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">VIEW</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -98,7 +98,7 @@
                                     <th>Opening</th>
                                     <td>{{positions[fav.positionId].openingsCount}}</td>
                                     <th>Action</th>
-                                    <td><button class="btn red" ui-sref="application.apply({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">Apply</button></td>
+                                    <td><button class="btn red" ui-sref="master.application.apply({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">Apply</button></td>
                                     <th>&nbsp;</th>
                                     <td><button class="btn" ng-click="favoriteUpdate($index, fav.positionId, positions[fav.positionId].locationId, positions[fav.positionId].business._id)">Remove</button></td>
                                 </tr>
@@ -159,12 +159,12 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <h1>My Profile <a href="javascript:void(0)" ui-sref="app.user.profile"><i class="glyphicon glyphicon-edit"></i></a></h1>
+                <h1>My Profile <a href="javascript:void(0)" ui-sref="master.default.user.profile"><i class="glyphicon glyphicon-edit"></i></a></h1>
                 <div class="profile">
                     <p>
-                        {{user.firstName}} {{user.lastName}}<br>
-                        {{user.email}}<br>
-                        {{getFormatedPhone(user.mobile)}}
+                        {{rootScope.currentUser.firstName}} {{rootScope.currentUser.lastName}}<br>
+                        {{rootScope.currentUser.email}}<br>
+                        {{getFormatedPhone(rootScope.currentUser.mobile)}}
                     </p>
                 </div><!--profile-->
             </div><!--col-->

@@ -22,22 +22,6 @@
      */
     (function init() {
 
-      $scope.userIsSynced = false;
-      if (authService.isUserLoggedIn()) {
-        authService.syncCurrentUserFromDb().then(function () {
-          $scope.userIsSynced = true;
-        });
-      } else {
-        $rootScope.nextState = {state: $state.current.name, params: $state.params};
-        $state.go("app.account.login");
-      }
-
-
-      $scope.$on('UserLoggedOut', function(event, args) {
-        $rootScope.nextState = {state: $state.current.name, params: $state.params};
-        $state.go('app.account.loginWithMessage', {message: "Sorry, your session has expired."});
-      });
-
       /**
        * Set the form steps
        */
@@ -71,21 +55,11 @@
 
       ];
 
-
-      /**
-       * Monitor is user is logged out and reload the current state
-       */
-      $scope.$on('UserLoggedOut', function(){
-        if($scope.application){
-           delete $scope.application;
-           $state.reload();
-        }
-      });/// $on UserLoggedOut
-
     })();//// fun. init()
 
     $scope.finish = function(){
-      $state.go('app.home')
+      console.log("UP:Going home");
+      $state.go('master.default.home')
     }
 
     function semiFixedFooter() {

@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$scope', '$stateParams', '$filter', '$timeout', 'GeocodeService', 'OccupationService', 'AuthService', 'UserService', 'StatesNames', ProfileExperienceController]);
+    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$rootScope', '$scope', '$filter', '$timeout', 'OccupationService', 'UserService', 'StatesNames', ProfileExperienceController]);
 
     hirelyApp.directive('validateMonth', function () {
             return {
@@ -43,9 +43,7 @@
 
         }); /// validate year
 
-    function ProfileExperienceController($scope, $stateParams, $filter, $timeout, GeocodeService, OccupationService, authService, userService, StatesNames) {
-
-        var geocodeService = GeocodeService;
+    function ProfileExperienceController($rootScope, $scope, $filter, $timeout, OccupationService, userService, StatesNames) {
 
         $scope.requireWorkOccupationValidation = false;
 
@@ -78,16 +76,12 @@
         ];
 
 
-        $timeout(function () {
-            window.scrollTo(0, 0);
-        });
-
         $scope.initExperience = function () {
-            if (!authService.currentUser.workExperience) {
+            if (!$rootScope.currentUser.workExperience) {
                 console.log("Initializing new work experience");
-                authService.currentUser.workExperience = [];
+                $rootScope.currentUser.workExperience = [];
             }
-            $scope.workExperience = angular.copy(authService.currentUser.workExperience);
+            $scope.workExperience = angular.copy($rootScope.currentUser.workExperience);
             angular.forEach($scope.workExperience, function (item) {
                 /**
                  * do some dates clenaing and fixing
@@ -103,14 +97,10 @@
                 }
 
             });
+            $(window).scrollTop(0);
             $scope.stepTwoLoaded = true;
         };
-        $scope.$watch('$parent.userIsSynced', function(newValue, oldValue) {
-            if (newValue == true) {
-                console.log("exp.$parent.userIsSynced = true;")
-                $scope.initExperience();
-            }
-        });
+        $timeout($scope.initExperience);
 
         /**
          * [customDebounce is used to debounce inputs, thereby waiting to call a callback until the activity stops X ms.
@@ -332,12 +322,11 @@
                 var toSave = {
                     workExperience: angular.copy($scope.workExperience)
                 };
-                userService.saveUser(toSave, authService.currentUserID)
+                userService.saveUser(toSave, $rootScope.currentUserId)
                     .then(
                         function (user) {
                             console.log("User experience updated");
-                            authService.setCurrentUser(user);
-                            $scope.initExperience();
+                            angular.extend($rootScope.currentUser, {workExperience: user.workExperience});
                             return user;
                         },
                         function (err) {

@@ -23,9 +23,9 @@ var MongoClient = require('mongodb').MongoClient
 var MatchService = {
     // I have this list, when you are ready;
     expLvls: [0, 1, 3, 6, 12, 24, 48, 72, 96, 120], // tiers of experience where level = num of months
-    defaultExpWeight: .3,
+    defaultExpWeight: .5,
     //defaultEduWeight: .1,
-    defaultPsyWeight: .7,
+    defaultPsyWeight: .5,
     minimumSuggestionThreshold: 60,
 
     // This should be an api endpoint;
@@ -63,37 +63,36 @@ var MatchService = {
                         var ss_occ_all = [];
 
                         // Calc std deviation of ksaw
-                        if (expLvl != 0) {
-                            for (var category in userScores) {
-                                try {
-                                    userScores[category] = userScores[category].toObject();
-                                } catch (err) {
-                                    //console.log("User score didn't have toObject");
-                                }
-                                //console.log("44");
-                                for (var key in userScores[category]) {
-                                    var oScore = onetScoresInstance.scores[expLvl][category][key];
-                                    ss_user_all.push(Math.pow(userScores[category][key] - oScore, 2));
-                                    ss_occ_all.push(Math.pow(onetScoresInstance.scores[expLvl][category][key], 2));
-                                }
+                        for (var category in userScores) {
+                            if (category == "_id") continue;
+                            try {
+                                userScores[category] = userScores[category].toObject();
+                            } catch (err) {
+                                // console.log("User score didn't have toObject");
+                            }
+                            // console.log("ms44");
+                            for (var key in userScores[category]) {
+                                var oScore = onetScoresInstance.scores[expLvl][category][key];
+                                ss_user_all.push(Math.pow(userScores[category][key] - oScore, 2));
+                                ss_occ_all.push(Math.pow(onetScoresInstance.scores[expLvl][category][key], 2));
                             }
                         }
 
                         // Calc Overall Experience score based on std deviations
-                        //console.log("47");
+                        // console.log("ms47");
                         if (ss_user_all.length === 0) {
+                            console.log("MS:ERROR:ss_user_all.length === 0");
+                            expScore = 0;
+                        } else if (ss_occ_all.length === 0) {
+                            console.log("MS:ERROR:ss_occ_all.length === 0");
                             expScore = 0;
                         } else {
-                            var ss_user_all_sum = Number(ss_user_all.reduce(function (a, b) {
-                                return a + b;
-                            })).toFixed(4);
-                            var ss_occ_all_sum = Number(ss_occ_all.reduce(function (a, b) {
-                                return a + b;
-                            })).toFixed(4);
-                            var expScore = 1 - Number(Math.sqrt(ss_user_all_sum / ss_occ_all_sum)).toFixed(4);
+                            var ss_user_all_sum = Math.round(ss_user_all.reduce(function (a, b) { return a + b; }) * 100) / 100;
+                            var ss_occ_all_sum = Math.round(ss_occ_all.reduce(function (a, b) { return a + b; }) * 100) / 100;
+                            var expScore = 1 - Math.round(Math.sqrt(ss_user_all_sum / ss_occ_all_sum) * 100) / 100;
                             expScore = Math.max(expScore, 0) * 100;
                         }
-                        scores[expLvl].exp = Number(expScore).toFixed(2);
+                        scores[expLvl].exp = String(Math.round(expScore * 100) / 100);
 
                         // Education calcs
                         // console.log("ms48");
@@ -109,14 +108,14 @@ var MatchService = {
                             console.log("Career Score missing from traitify:  " + onetScoresInstance._id);
                             psyScore = 0;
                         }
-                        scores[expLvl].psy = Number(psyScore).toFixed(2);
+                        scores[expLvl].psy = String(Math.round(psyScore * 100) / 100);
 
                         // Grand overallScore calcs;
                         // console.log("ms50");
                         var overallScore = expScore * MatchService.defaultExpWeight;
                         //overallScore += eduScore * MatchService.defaultEduWeight;
                         overallScore += psyScore * MatchService.defaultPsyWeight;
-                        scores[expLvl].overall = Number(overallScore).toFixed(2);
+                        scores[expLvl].overall = String(Math.round(overallScore * 100) / 100);
 
                         // console.log("ms51");
                         if (overallScore > maxOverallScore) {
@@ -127,9 +126,10 @@ var MatchService = {
 
                     // console.log("ms52");
                     var careerMatchScoresDoc = {
+                        createdAt: new Date(),
                         userId: String(user._id),
                         occId: String(onetScoresInstance._id),
-                        maxOverallScore: Number(maxOverallScore).toFixed(2),
+                        maxOverallScore: String(Math.round(maxOverallScore * 100) / 100),
                         scores: scores
                     };
                     careerMatchScoresArray.push(careerMatchScoresDoc);
@@ -144,7 +144,7 @@ var MatchService = {
                         assert.equal(null, err);
                         var collection = db.collection('careerMatchScores');
                         console.log("MS: Deleting career match scores for user " + user._id);
-                        collection.deleteMany({userId: user._id}, function (err, res) {
+                        collection.deleteMany({'userId': String(user._id)}, function (err, res) {
                             if (err != null) {
                                 err = "Error in MS("+user._id+").deleteMany: "+err;
                                 console.log(err);
@@ -167,17 +167,17 @@ var MatchService = {
                         });
 
                     } catch(err) {
-                        err = "Error in MS("+user._id+"): "+err;
+                        err = "Error in MS1("+user._id+"): "+err;
                         console.log(err);
-                        deferred.reject(err);
+                        deferred.resolve(err);
                     }
 
                 });
             
             } catch(err) {
-                err = "Error in MS("+user._id+"): "+err;
+                err = "Error in MS2(uid="+user._id+"): "+err;
                 console.log(err);
-                deferred.reject(err);
+                deferred.resolve(err);
             }
 
             return deferred.promise;

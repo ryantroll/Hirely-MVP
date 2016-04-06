@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('HirelyApiService', ['$http', '$injector', '$q', '$rootScope', HirelyApiService]);
+        .service('HirelyApiService', ['$http', '$q', '$rootScope', HirelyApiService]);
 
-    function HirelyApiService($http, $injector, $q, $rootScope) {
+    function HirelyApiService($http, $q, $rootScope) {
 
 
         /**
@@ -34,6 +34,7 @@
         var service = {
             version: version,
             users: setUsersEndpoint,
+            auth: setAuthEndpoint,
             businesses: setBusinessesEndpoint,
             applications: setApplicationsEndpoint,
             traitify: setTraitifyEndpoint,
@@ -49,6 +50,11 @@
             post: createNewUser,
             get: getUsers,
             patch: saveUser
+        };
+
+        var auth = {
+            post: passwordLogin,
+            get: getToken
         };
 
         /**
@@ -93,7 +99,7 @@
             get: getFavorites
         };
 
-        function httpWrapper(method, url, data) {
+        function httpWrapper(method, url, data, withoutAuth) {
             var deferred = $q.defer();
             var params = {
                 method: method,
@@ -101,8 +107,8 @@
                 headers: {},
                 data: data
             };
-            if ($rootScope.token) {
-                params.headers['Authorization'] = $rootScope.token;
+            if ($rootScope.token && !withoutAuth) {
+                params.headers['Authorization'] = $rootScope.token.jwt;
             }
             $http(params).then(
                 function (resSuccess) {
@@ -110,9 +116,7 @@
                 },
                 function (resError) {
                     if (resError.status == 401) {
-                        // Load the authservice on demand to avoid circular dep
-                        var authService = $injector.get('AuthService');
-                        authService.logout();
+                        $rootScope.$emit('TokenExpired');
                     }
 
                     console.log("Error getting user with url " + baseURL + endpointUrl + ".  Error: " + resError.data.message);
@@ -138,6 +142,12 @@
             setEndpoint('users', arguments);
 
             return users;
+        }/// fun. setUserEndpoint
+
+        function setAuthEndpoint() {
+            setEndpoint('auth', arguments);
+
+            return auth;
         }/// fun. setUserEndpoint
 
         function setBusinessesEndpoint() {
@@ -266,9 +276,17 @@
             return httpWrapper('POST', baseURL + endpointUrl, applicationData);
         }/// fun. createNewApplication
 
+        function passwordLogin(emailAndPassword) {
+            return httpWrapper('POST', baseURL + endpointUrl, emailAndPassword, true);
+        }/// fun. passwordLogin
+
         function getUsers() {
             return httpWrapper('GET', baseURL + endpointUrl);
         }//// fun. getUsers
+
+        function getToken() {
+            return httpWrapper('GET', baseURL + endpointUrl);
+        }//// fun. getToken
 
         function saveUser(userData) {
             return httpWrapper('PATCH', baseURL + endpointUrl, userData);

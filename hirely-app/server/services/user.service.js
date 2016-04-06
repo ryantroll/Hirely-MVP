@@ -89,6 +89,7 @@ var userService = {
      * @return {[type]}         [promise with user basic info]
      */
     createNewUser: function (userObj) {
+        var self = this;
 
         if (userObj.password.length < 8) {
             var err = "Password length is too short";
@@ -124,8 +125,7 @@ var userService = {
             }
         }
         return userModel.create(userObj).then(function(user) {
-            var token = jwt.sign({userId: user._id}, config.jwtSecret, {expiresIn: '1h'});
-            var userAndToken = {token: token, user: user};
+            var userAndToken = self.getUserAndTokenObj(user, config.tokenLifeDefault);
 
             if (perms.length) {
                 for (let perm of perms) {
@@ -156,40 +156,48 @@ var userService = {
     },
 
     passwordLogin: function (email, password, skipPasswordCheck, isBusinessUser) {
+        var self = this;
+
         try {
             email = email.toLowerCase();
         } catch(err) {
             console.log("US:passwordLogin: email is malformed: " + email)
         }
         return userModel.findOne({email: email}).then(function (user) {
-            if (!user) {
-                console.log("US:passwordLogin: user not found for " + email);
-                return null;
-            }
+            try {
+                if (!user) {
+                    console.log("US:passwordLogin: user not found for " + email);
+                    return null;
+                }
 
-            if (skipPasswordCheck) {
-                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: config.tokenLifeDefault});
-                return {token: token, user: user};
-            }
+                if (skipPasswordCheck) {
+                    return self.getUserAndTokenObj(user, config.tokenLifeDefault);
+                }
 
-            if (!user.password) {
-                console.log("US:passwordLogin: user does not have a password");
-                return null;
-            }
+                if (!user.password) {
+                    console.log("US:passwordLogin: user does not have a password");
+                    return null;
+                }
 
-            // Check the password
-            if (bcrypt.compareSync(password, user.password)) {
-                // Create a token
-                // If user is a business user, make cookie last longer
-                var expiresIn = config.tokenLifeDefault;
-                if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
-                var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
-                return {token: token, user: user};
-            } else {
-                console.log("US:passwordLogin: bad password for " + email);
-                return null;
+                // Check the password
+                if (bcrypt.compareSync(password, user.password)) {
+                    var expiresIn = config.tokenLifeDefault;
+                    if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
+                    return self.getUserAndTokenObj(user, expiresIn);
+                } else {
+                    console.log("US:passwordLogin: bad password for " + email);
+                    return null;
+                }
+            } catch(err) {
+                console.log("US:passwordLogin:error: " + err);
             }
         });
+    },
+    
+    getUserAndTokenObj: function(user, expiresIn) {
+        var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
+        var exp = jwt.verify(token, config.jwtSecret).exp;
+        return {token: {jwt: token, exp:exp}, user: user};
     },
 
     /**
@@ -357,7 +365,7 @@ var userService = {
 
                 // console.log("us261.2");
                 roles[occId].monthCount += monthCount;
-                roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount)
+                roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount);
 
                 if (!workExperience.isSeasonal) {
                     nonSeasonalTotalWorkMonths += monthCount;
@@ -406,7 +414,7 @@ var userService = {
                             }
                         }
                     } catch(err) {
-                        var err = "ERROR US:addExpScores("+user._id+"): "+err;
+                        var err = "ERROR US:addExpScores:1("+user._id+"): "+err;
                         console.log(err);
                         var deferred = q.defer();
                         deferred.reject(err);
@@ -430,19 +438,16 @@ var userService = {
                         for (var occId in roles) {
                             // console.log("us264");
                             // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
-                            var weight = (roles[occId].monthCount / totalWorkMonths).toFixed(4);
+                            var weight = roles[occId].monthCount / totalWorkMonths;
                             for (var category in roles[occId]) {
                                 // console.log("us265");
                                 for (var key in roles[occId][category]) {
                                     // console.log("us266");
-                                    var weighted = Number(weight * roles[occId][category][key]).toFixed(4);
-                                    if (key in scores[category]) {
-                                        // console.log("us267");
-                                        scores[category][key] += weighted;
-                                    } else {
-                                        // console.log("us268");
-                                        scores[category][key] = weighted;
+                                    var weighted = weight * roles[occId][category][key];
+                                    if (!(key in scores[category])) {
+                                        scores[category][key] = 0;
                                     }
+                                    scores[category][key] = Math.round(scores[category][key]+weighted * 100) / 100;
                                 }
                             }
                         }  // end roles.forEach
@@ -451,7 +456,7 @@ var userService = {
 
                         return user;
                     } catch(err) {
-                        var err = "ERROR US:addExpScores("+user._id+"): "+err;
+                        var err = "ERROR US:addExpScores:2("+user._id+"): "+err;
                         console.log(err);
                         var deferred = q.defer();
                         deferred.reject(err);
@@ -460,7 +465,7 @@ var userService = {
                 });
 
         } catch(err) {
-            var err = "ERROR US:addExpScores("+user._id+"): "+err;
+            var err = "ERROR US:addExpScores:3("+user._id+"): "+err;
             console.log(err);
             var deferred = q.defer();
             deferred.reject(err);
@@ -490,37 +495,44 @@ var userService = {
         // var deferred = q.defer(); deferred.resolve(user); deferred.promise
         return user.save()
         .then(function (user) {
-            // console.log("u260");
+            // console.log("u260: " + user._id);
             return traitifyService.addTraitifyCareerMatchScoresToUser(user);
+            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
         }).then(function (user) {
-            // console.log("u261");
+            // console.log("u261: " + user._id);
             return self.addExpScores(user);
+            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
         }).then(function (user) {
-            // console.log("u262");
+            // console.log("u262: " + user._id);
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
             user.queuedForMetricUpdate = false;
             return user.save();
         }).then(function (user) {
-            // console.log("u263");
+            // console.log("u263: " + user._id);
             return matchingService.generateCareerMatchScoresForUser(user);
         })
 
     },  // end updateUserMetricsById
 
     updateQueuedUserMetricsLock: false,
+    updateQueuedUserMetricsLastRan: 0,
     updateQueuedUserMetrics: function () {
         if (this.updateQueuedUserMetricsLock) {
-            // console.log("Waiting to finish");
+            console.log("Waiting to finish");
             return;
         }
 
         this.updateQueuedUserMetricsLock = true;
+        this.updateQueuedUserMetricsLastRan = Date.now();
+        console.log("Lock is set.");
 
         // console.log("Checking for queued users");
         var self = this;
 
         userModel.find({queuedForMetricUpdate:true}).then(function (users) {
-        // return userModel.find({firstName: 'Ryan'}).then(function (users) {
+        // return userModel.find({firstName: 'Tyler'}).then(function (users) {
+            var updateCount = users.length>3 ? 3 : users.length;
+            console.log("Updating "+updateCount+"/"+users.length);
             var promises = [];
             try {
                 for (let user of users) {
@@ -537,12 +549,16 @@ var userService = {
                 console.log("updateQueuedUserMetrics:err: " + err);
             }
 
-            return q.all(promises).then(function (results) {
-                // console.log("Lock lifted");
+            return q.all(promises);
+        }).then(
+            function (results) {
+                console.log("Lock lifted");
                 self.updateQueuedUserMetricsLock = false;
-            });
-
-        });
+            }, function (errs) {
+                console.log("Lock lifted with errors: " + errs);
+                self.updateQueuedUserMetricsLock = false;
+            }
+        );
     }
 
 }; /// users object

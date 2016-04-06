@@ -2,12 +2,10 @@
 
 var myApp = angular.module('hirelyApp',
     [
-        'uiGmapgoogle-maps',
         'ui.router',
         'ui.bootstrap',
         'ui.bootstrap.typeahead',
         'ui.grid',
-        'uiGmapgoogle-maps',
         'firebase',
         'ngMask',
         'ng-currency',
@@ -30,99 +28,102 @@ var myApp = angular.module('hirelyApp',
 
         $stateProvider
 
-            .state('app', {
+            .state('master', {
                 abstract: true,
                 templateUrl: 'app/layout/master.html'
             })
-            .state('app.home', {
+            .state('master.default', {
+                abstract: true,
+                templateUrl: 'app/layout/default.html',
+                controller: 'DefaultCtrl'
+            })
+            .state('master.default.home', {
                 url: '/',
-                parent: 'app',
+                // parent: 'app',
                 templateUrl: 'app/home/home.html',
 
                 controller: 'HomeCtrl'
             })
-            
-            .state('app.user', {
+
+            .state('master.default.user', {
                 url: '/user',
                 templateUrl: 'app/user/user.html',
                 controller: 'UserController',
                 authRequired: true
             })
-            .state('app.user.profile', {
+            .state('master.default.user.profile', {
                 url: '/profile',
                 templateUrl: 'app/user/profile/user-profile.html',
                 controller: 'UserProfileController',
                 authRequired: true
             })
-            .state('master.default.user.dashboard', {
-                url: '/dashboard',
-                templateUrl: 'app/user/user-dashboard.html',
-                controller: 'UserDashboardController',
-                authRequired: true
-            })
-            .state('application', {
+            .state('master.application', {
                 abstract: true,
                 templateUrl: 'app/layout/application/application-master.tpl.html'
             })
-            .state('application.apply', {
+            .state('master.application.apply', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/apply',
                 templateUrl: 'app/application/job-application.tpl.html',
-                controller: 'JobApplicationController'
+                controller: 'JobApplicationController',
+                authRequired: true
             })
 
-            .state('application.done', {
+            .state('master.application.done', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/done',
                 templateUrl: 'app/application/thank-you.tpl.html',
-                controller: 'ThankYouApplicationController'
+                controller: 'ThankYouApplicationController',
+                authRequired: true
             })
             //
-            // .state('application.printout', {
+            // .state('master.application.printout', {
             //     url: '/:applicationId',
             //     templateUrl: 'app/business/candidate-details.tpl.html',
             //     controller: 'CandidateListController'
             // })
 
-            .state('app.account', {
+            .state('master.default.account', {
                 abstract: true,
                 templateUrl: 'app/layout/account/account-master.tpl.html',
             })
-            .state('app.account.login', {
+            .state('master.default.account.login', {
                 url: '/login',
                 templateUrl: 'app/account/login.tpl.html',
                 controller: 'LoginController'
             })
-            .state('app.account.loginWithMessage', {
+            .state('master.default.account.loginWithMessage', {
                 url: '/login/:message',
                 templateUrl: 'app/account/login.tpl.html',
                 controller: 'LoginController'
             })
-            .state('app.account.register', {
+            .state('master.default.account.register', {
                 url: '/register',
                 templateUrl: 'app/account/register.tpl.html',
                 controller: 'RegisterController'
             })
-            .state('app.job', {
+            .state('master.default.job', {
                 abstract: true,
                 templateUrl: 'app/layout/job/job-master.tpl.html',
             })
-            .state('app.job.position', {
+            .state('master.default.job.position', {
                 url: '/:businessSlug/:locationSlug/:positionSlug',
                 templateUrl: 'app/job/job-position.tpl.html',
                 controller: 'JobPositionController'
             })
-            .state('app.business', {
+            .state('master.default.business', {
                 abstract: true,
                 templateUrl: 'app/layout/business/business-master.tpl.html',
             })
-            .state('app.business.candidateList', {
+            .state('master.default.business.candidateList', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/applicants',
                 templateUrl: 'app/business/candidate-list.tpl.html',
-                controller: 'CandidateListController'
+                controller: 'CandidateListController',
+                authRequired: true
             })
-            .state('app.business.candidateDetails', {
+            .state('master.default.business.candidateDetails', {
                 url: '/applications/:applicationId',
                 templateUrl: 'app/business/candidate-details.tpl.html',
-                controller: 'CandidateDetailsController'
+                controller: 'CandidateDetailsController',
+                authRequired: true
             })
 
 

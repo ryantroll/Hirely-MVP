@@ -7,32 +7,29 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('UserDashboardController', ['$scope', '$stateParams', '$state', 'AuthService', 'FavoritesService', 'JobApplicationService', 'BusinessService', 'UserService', UserDashboardController]);
+  angular.module('hirelyApp').controller('UserDashboardController', ['$rootScope', '$scope', 'FavoritesService', 'JobApplicationService', 'BusinessService', 'UserService', UserDashboardController]);
 
 
-  function UserDashboardController($scope, $stateParams, $state, AuthService, FavoritesService, JobApplicationService, BusinessService, UserService) {
-
-
-    $scope.isAuth = AuthService.isUserLoggedIn();
-
-    $scope.user = AuthService.currentUser;
+  function UserDashboardController($rootScope, $scope, FavoritesService, JobApplicationService, BusinessService, UserService) {
 
     var positionIds  = [];
+
+    $scope.rootScope = $rootScope;
 
     $scope.myLocations = [];
     $scope.myPositions = [];
 
-    FavoritesService.getFavorite({userId:AuthService.currentUserID, type:'position'})
+    FavoritesService.getFavorite({userId:$rootScope.currentUserId, type:'position'})
     .then(
         function(favs){
             $scope.myFavorites = favs;
             for(var x=0; x< favs.length; x++){
                 positionIds.push(favs[x].positionId)
             }
-            return JobApplicationService.getByUserId(AuthService.currentUserID)
+            return JobApplicationService.getByUserId($rootScope.currentUserId)
         },
         function(err){
-            console.log(err)
+            console.log(err);
             $scope.dataError = true;
         }
     )
@@ -54,7 +51,7 @@
     .then(
         function(positions){
             $scope.positions = positions;
-            return BusinessService.getPositionsByManagerId(AuthService.currentUserID);
+            return BusinessService.getPositionsByManagerId($rootScope.currentUserId);
         },
         function(err){
             console.log(err);
@@ -95,9 +92,9 @@
     )
 
     $scope.favoriteUpdate = function(index, posId, locationId, businessId){
-        if($scope.isAuth && AuthService.currentUserID){
+        if($rootScope.currentUserId){
             var favObj = {
-              userId: AuthService.currentUserID,
+              userId: $rootScope.currentUserId,
               positionId: posId,
               locationId: locationId,
               businessId: businessId,

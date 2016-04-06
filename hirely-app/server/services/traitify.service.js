@@ -32,7 +32,7 @@ function extractPersonalitySummary(full) {
     for (var x = 0; x < full.personalityTypes.length; x++) {
         var type = full.personalityTypes[x];
         var typeSummary = {};
-        typeSummary.score = type.score;
+        typeSummary.score = Number(type.score).toFixed(2);
         typeSummary._id = type.personality_type.name;
         summary.personalityTypes.push(typeSummary);
     }
@@ -260,7 +260,7 @@ var traitifySevice = {
                 var matchOnetIds = [];
                 for (let match of matchesRaw) {
                     matchOnetIds.push(match.career.id);
-                    matches[match.career.id] = match.score.toFixed(4);
+                    matches[match.career.id] = Math.round(match.score * 100) / 100;
                 }
                 var missingOnetIds = _.xor(onetIds, matchOnetIds);
                 if (missingOnetIds.length > 0) {
@@ -316,6 +316,13 @@ var traitifySevice = {
             console.log(err);
             var deferred = q.defer();
             deferred.reject(err);
+            return deferred.promise;
+        }
+
+        if (onetIdsAll.length == Object.keys(user.personalityExams[0].careerMatchScores.toObject()).length) {
+            console.log("Skipping getAssessmentCareerMatchScoresById because already gotten");
+            var deferred = q.defer();
+            deferred.resolve(user);
             return deferred.promise;
         }
 

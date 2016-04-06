@@ -9,10 +9,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$stateParams', '$timeout', 'TraitifyService', 'AuthService', 'UserService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
+    angular.module('hirelyApp').controller('ProfilePersonalityController', ['$rootScope', '$scope', '$timeout', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
 
 
-    function ProfilePersonalityController($scope, $stateParams, $timeout, TraitifyService, authService, userService, TRAITIFY_PUBLIC_KEY) {
+    function ProfilePersonalityController($rootScope, $scope, $timeout, TraitifyService, TRAITIFY_PUBLIC_KEY) {
 
         $scope.stepThreeLoaded = false;
 
@@ -46,8 +46,8 @@
         function saveAssessment() {
             if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
                 saved = true;
-                TraitifyService.saveAssessment(results, authService.currentUserID, assessmentId).then(function (personalityExam) {
-                    authService.updateCurrentUserPropInCache('personalityExams', [personalityExam])
+                TraitifyService.saveAssessment(results, $rootScope.currentUserId, assessmentId).then(function (personalityExam) {
+                    $rootScope.currentUser.personalityExams = [personalityExam];
                 });
             }
         }//// fun. saveAssessment
@@ -57,10 +57,9 @@
          * Start by checking if user taken the personality assessment before
          */
         $scope.initPersonality = function () {
-            var user = authService.getCurrentUser();
-            if (user.personalityExams && user.personalityExams.length) {
+            if ($rootScope.currentUser.personalityExams && $rootScope.currentUser.personalityExams.length) {
                 $scope.stepThreeLoaded = true;
-                var assessmentId = user.personalityExams[0].extId;
+                var assessmentId = $rootScope.currentUser.personalityExams[0].extId;
                 $scope.assessmentId = assessmentId;
                 /**
                  * Load the result
@@ -89,7 +88,11 @@
                     $scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
                     $scope.$apply();
                 });
+
+                $(window).scrollTop(0);
+
             } else {
+                $(window).scrollTop(0);
                 $scope.stepThreeLoaded = true;
             }
         };
