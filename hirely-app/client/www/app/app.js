@@ -1,7 +1,6 @@
 'use strict';
 
 var myApp = angular.module('hirelyApp',
-
     [
         'uiGmapgoogle-maps',
         'ui.router',
@@ -39,8 +38,10 @@ var myApp = angular.module('hirelyApp',
                 url: '/',
                 parent: 'app',
                 templateUrl: 'app/home/home.html',
+
                 controller: 'HomeCtrl'
             })
+            
             .state('app.user', {
                 url: '/user',
                 templateUrl: 'app/user/user.html',
@@ -53,7 +54,7 @@ var myApp = angular.module('hirelyApp',
                 controller: 'UserProfileController',
                 authRequired: true
             })
-            .state('app.user.dashboard', {
+            .state('master.default.user.dashboard', {
                 url: '/dashboard',
                 templateUrl: 'app/user/user-dashboard.html',
                 controller: 'UserDashboardController',
