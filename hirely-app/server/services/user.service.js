@@ -552,7 +552,7 @@ var userService = {
             return q.all(promises);
         }).then(
             function (results) {
-                console.log("Lock lifted with result:");
+                console.log("Lock lifted");
                 self.updateQueuedUserMetricsLock = false;
             }, function (errs) {
                 console.log("Lock lifted with errors: " + errs);
