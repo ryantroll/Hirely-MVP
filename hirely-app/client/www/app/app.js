@@ -116,12 +116,14 @@ var myApp = angular.module('hirelyApp',
             .state('master.default.business.candidateList', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/applicants',
                 templateUrl: 'app/business/candidate-list.tpl.html',
-                controller: 'CandidateListController'
+                controller: 'CandidateListController',
+                authRequired: true
             })
             .state('master.default.business.candidateDetails', {
                 url: '/applications/:applicationId',
                 templateUrl: 'app/business/candidate-details.tpl.html',
-                controller: 'CandidateDetailsController'
+                controller: 'CandidateDetailsController',
+                authRequired: true
             })
 
 
