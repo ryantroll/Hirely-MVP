@@ -71,7 +71,8 @@ if (config.appMode == 'crunchMuncher') {
     console.log("Priming onetScoresCache...");
     onetScoresService.getAll().then(function() {
         console.log("onetScoresCache is primed");
-        setInterval(userService.updateQueuedUserMetrics, 10000)
+        setInterval(userService.updateQueuedUserMetrics, 10000);
+        // userService.updateQueuedUserMetrics();
     });
 
 } else {

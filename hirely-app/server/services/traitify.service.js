@@ -319,6 +319,13 @@ var traitifySevice = {
             return deferred.promise;
         }
 
+        if (onetIdsAll.length == Object.keys(user.personalityExams[0].careerMatchScores.toObject()).length) {
+            console.log("Skipping getAssessmentCareerMatchScoresById because already gotten");
+            var deferred = q.defer();
+            deferred.resolve(user);
+            return deferred.promise;
+        }
+
         // console.log("ts295");
         return traitifySevice.getAssessmentCareerMatchScoresById(user.personalityExams[0].extId)
             .then(function (careerMatchScores) {

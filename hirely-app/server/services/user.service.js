@@ -443,7 +443,7 @@ var userService = {
                                 // console.log("us265");
                                 for (var key in roles[occId][category]) {
                                     // console.log("us266");
-                                    var weighted = Number(weight * roles[occId][category][key]).toFixed(4);
+                                    var weighted = Number(Number(weight * roles[occId][category][key]).toFixed(4));
                                     if (key in scores[category]) {
                                         // console.log("us267");
                                         scores[category][key] += weighted;
@@ -503,6 +503,7 @@ var userService = {
         }).then(function (user) {
             // console.log("u261");
             return self.addExpScores(user);
+            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
         }).then(function (user) {
             // console.log("u262");
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
@@ -528,7 +529,7 @@ var userService = {
         var self = this;
 
         userModel.find({queuedForMetricUpdate:true}).then(function (users) {
-        // return userModel.find({firstName: 'Ryan'}).then(function (users) {
+        // return userModel.find({firstName: 'Tyler'}).then(function (users) {
             var promises = [];
             try {
                 for (let user of users) {

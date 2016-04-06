@@ -63,25 +63,27 @@ var MatchService = {
                         var ss_occ_all = [];
 
                         // Calc std deviation of ksaw
-                        if (expLvl != 0) {
-                            for (var category in userScores) {
-                                try {
-                                    userScores[category] = userScores[category].toObject();
-                                } catch (err) {
-                                    //console.log("User score didn't have toObject");
-                                }
-                                //console.log("44");
-                                for (var key in userScores[category]) {
-                                    var oScore = onetScoresInstance.scores[expLvl][category][key];
-                                    ss_user_all.push(Math.pow(userScores[category][key] - oScore, 2));
-                                    ss_occ_all.push(Math.pow(onetScoresInstance.scores[expLvl][category][key], 2));
-                                }
+                        for (var category in userScores) {
+                            try {
+                                userScores[category] = userScores[category].toObject();
+                            } catch (err) {
+                                //console.log("User score didn't have toObject");
+                            }
+                            // console.log("ms44");
+                            for (var key in userScores[category]) {
+                                var oScore = onetScoresInstance.scores[expLvl][category][key];
+                                ss_user_all.push(Math.pow(userScores[category][key] - oScore, 2));
+                                ss_occ_all.push(Math.pow(onetScoresInstance.scores[expLvl][category][key], 2));
                             }
                         }
 
                         // Calc Overall Experience score based on std deviations
-                        //console.log("47");
+                        // console.log("ms47");
                         if (ss_user_all.length === 0) {
+                            console.log("MS:ERROR:ss_user_all.length === 0");
+                            expScore = 0;
+                        } else if (ss_occ_all.length === 0) {
+                            console.log("MS:ERROR:ss_occ_all.length === 0");
                             expScore = 0;
                         } else {
                             var ss_user_all_sum = Number(ss_user_all.reduce(function (a, b) {
@@ -144,7 +146,7 @@ var MatchService = {
                         assert.equal(null, err);
                         var collection = db.collection('careerMatchScores');
                         console.log("MS: Deleting career match scores for user " + user._id);
-                        collection.deleteMany({userId: user._id}, function (err, res) {
+                        collection.deleteMany({'userId': String(user._id)}, function (err, res) {
                             if (err != null) {
                                 err = "Error in MS("+user._id+").deleteMany: "+err;
                                 console.log(err);
@@ -167,7 +169,7 @@ var MatchService = {
                         });
 
                     } catch(err) {
-                        err = "Error in MS("+user._id+"): "+err;
+                        err = "Error in MS1("+user._id+"): "+err;
                         console.log(err);
                         deferred.reject(err);
                     }
@@ -175,7 +177,7 @@ var MatchService = {
                 });
             
             } catch(err) {
-                err = "Error in MS("+user._id+"): "+err;
+                err = "Error in MS2("+user._id+"): "+err;
                 console.log(err);
                 deferred.reject(err);
             }
