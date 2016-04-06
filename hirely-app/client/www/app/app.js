@@ -64,13 +64,15 @@ var myApp = angular.module('hirelyApp',
             .state('master.application.apply', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/apply',
                 templateUrl: 'app/application/job-application.tpl.html',
-                controller: 'JobApplicationController'
+                controller: 'JobApplicationController',
+                authRequired: true
             })
 
             .state('master.application.done', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/done',
                 templateUrl: 'app/application/thank-you.tpl.html',
-                controller: 'ThankYouApplicationController'
+                controller: 'ThankYouApplicationController',
+                authRequired: true
             })
             //
             // .state('master.application.printout', {
