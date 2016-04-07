@@ -71,7 +71,7 @@ var traitifyRoutes = {
     },
 
     getMeta: function(req, res){
-        traitifyService.getMeta(req.query.metaId)
+        traitifyService.getMeta(req.query.metaId.split('|'))
             .then(
                 function(meta){
                     res.status(200).json(apiUtil.generateResponse(200, "Meta retrieved successfully", meta));

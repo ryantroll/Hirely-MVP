@@ -96,11 +96,18 @@ $candidat-menu-height:40px;
                 border: 1px solid $c-hirely-mid-gray;
                 line-height: 30px;
                 padding:2px 5px;
-                @include border-radius(4px);
+                @include border-radius(2px);
                 width:50%;
+                float:left;
+                margin-right:1em;
             }
-            button{
+            .btn{
                 border:none;
+                margin-top:-1px;
+                @include border-radius(2px);
+                float:left;
+                padding-top:9px;
+                padding-bottom:9px;
             }
         }
 
@@ -127,15 +134,18 @@ $candidat-menu-height:40px;
                 display: block;
                 float:left;
                 width:auto;
-                padding-right:5px;
-
+                padding-right:2px;
+                @media screen and (min-width:$screen-sm-min){
+                    padding-right:5px;
+                }
                 .btn{
-                    width:73px;
+                    width:65px;
                     height: 50px;
                     text-align: center;
                     padding-left:0;
                     padding-right:0;
-                    font-size:0.9em;
+                    font-size:0.8em;
+                    @include border-radius(2px);
                     @media screen and (min-width:$screen-sm-min){
                         width:140px;
                         font-size:1em;
@@ -166,14 +176,14 @@ $candidat-menu-height:40px;
         background-color:$c-white;
         margin-bottom:1em;
         width:100%;
-        @include border-radius(4px);
+        @include border-radius(2px);
         overflow: hidden;
 
         .header{
             background-color:$c-hirely-light-gray;
             @include box-shadow(0);
             @include drop-shadow(0, 0, 0, 0);
-            padding:1em 1em 0.7em 1em;
+            padding:1.3em 1em 1.1em 1em;
             overflow: visible;
             // height: 300px;
 
@@ -207,9 +217,9 @@ $candidat-menu-height:40px;
                 float:right;
                 position:absolute; //// absolute is to fix the overflow hidden set on .box
                 height: 30px;
-                @include border-radius();
+                @include border-radius(2px);
                 overflow: visible;
-                top:9px;
+                top:15px;
                 right:26px;
 
                 a{
@@ -281,7 +291,7 @@ $candidat-menu-height:40px;
 
         }//// .inner
         .inner.padding{
-            padding:1em;
+            padding:1.3em;
         }
 
         .inner.list{
@@ -333,9 +343,9 @@ $candidat-menu-height:40px;
         margin-top: 1em;
 
         .candidate{
-            padding:1em;
+            padding:1.3em;
             background-color:$c-white;
-            @include border-radius();
+            @include border-radius(2px);
             position:relative;
             margin-bottom: 1em;
 
@@ -460,8 +470,12 @@ $candidat-menu-height:40px;
 
                 .more-link{
                     text-align:center;
+
                     @media screen and (min-width:$screen-sm-min){
                         text-align: left;
+                    }
+                    .btn{
+                        @include border-radius(2px);
                     }
                 }
 
@@ -484,7 +498,7 @@ $candidat-menu-height:40px;
 
                 .inner{
                     height: $candidat-menu-height;
-                    @include border-radius();
+                    @include border-radius(2px);
                     overflow: hidden;
                 }
 
@@ -496,6 +510,12 @@ $candidat-menu-height:40px;
                     text-align: center;
                     line-height: $candidat-menu-height;
                     float:left;
+                }
+                .action.disabled{
+                    cursor:not-allowed;
+                }
+                .action[disabled="disabled"]{
+                    cursor:not-allowed;
                 }
                 a{
                     float:left;
@@ -588,7 +608,7 @@ $candidat-menu-height:40px;
         color:$c-hirely-mid-gray;
     }
     header{
-        padding: 0 1em;
+        padding: 0 1.3em;
         // background-color:$c-hirely-blue;
         display: none;
         @media screen and (min-width:$screen-sm-min){
@@ -601,7 +621,7 @@ $candidat-menu-height:40px;
             }
             li{
                 float:left;
-                margin-right:1em;
+                margin-right:3em;
                 height: 60px;
                 line-height: 60px;
                 display: none;
@@ -692,12 +712,12 @@ $candidat-menu-height:40px;
             background-color:$c-white;
             margin-bottom:1em;
             width:100%;
-            @include border-radius(4px);
+            @include border-radius(2px);
             overflow: hidden;
             // padding:1em;
 
             .image{
-                padding: 1em 0 1em 1em;
+                padding: 1.3em 0 1.3em 1em;
                 .image-wrapper{
                     width:80px;
                     height: 80px;
@@ -718,7 +738,7 @@ $candidat-menu-height:40px;
             }//// .image
 
             .details{
-                padding:1em 1em 1em 1em;
+                padding:1.3em 1em 1.3em 1em;
                 h4{
                     font-size:1.5em;
                     font-weight: 600;
@@ -836,7 +856,7 @@ $candidat-menu-height:40px;
             }
 
             .title{
-                padding:1em;
+                padding:1.3em 1em;
                 h5{
                     font-weight: 600;
                     font-size:1.2em;
@@ -862,7 +882,7 @@ $candidat-menu-height:40px;
                 background-color:$c-hirely-blue;
                 color:$c-white;
                 h5{
-                    font-weight:normal;
+                    font-weight:700;
                     font-size:1em;
                 }
             }
@@ -1037,8 +1057,8 @@ $candidat-menu-height:40px;
             }//// .experience
 
             .actions{
-                padding:1em;
-                min-height: 67px;
+                padding:1.3em 1em;
+                min-height: 76px;
 
                 .menu{
                     width:auto;
@@ -1054,7 +1074,7 @@ $candidat-menu-height:40px;
 
                     .inner{
                         height: $candidat-menu-height;
-                        @include border-radius();
+                        @include border-radius(2px);
                         overflow: hidden;
                     }
 
@@ -1067,6 +1087,12 @@ $candidat-menu-height:40px;
                         line-height: $candidat-menu-height;
                         float:left;
                     }
+                    .action.disabled{
+                        cursor:not-allowed;
+                    }
+                    .action[disabled="disabled"]{
+                        cursor:not-allowed;
+                    }
                     a{
                         float:left;
                         display: block;
@@ -1077,6 +1103,7 @@ $candidat-menu-height:40px;
                         color:$c-white;
 
                     }
+
                     .drop{
                         background-color:$c-hirely-light-gray;
                         font-size:1.3em;
@@ -1180,6 +1207,9 @@ $candidat-menu-height:40px;
         .arrows{
             button{
                 width:46%;
+                padding-top:15px;
+                padding-bottom:15px;
+                @include border-radius(2px);
             }
         }//// .arrows
     }//// article

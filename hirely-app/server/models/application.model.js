@@ -7,11 +7,11 @@ var applicationSchema = new Schema({
   positionId   :       {type:String, required:true, index:true},
   createdAt   :       {type:Date, required:true, default:Date.now},
   status      :       {
-                        type:Number, //// 0 Declined, 1 open or new, 2 contacted, 3 hired.
+                        type:Number, //// 0 Dismiss, 1 open or new, 2 contacted, 3 hired, 4 shortlisted.
                         required:true,
                         validate:{
                           validator: function(v){
-                            return /^(3|2|1|0)$/.test(v.toString());
+                            return /^(4|3|2|1|0)$/.test(v.toString());
                           },
                           message:'{VALUE} is not valid value for application status'
                         }

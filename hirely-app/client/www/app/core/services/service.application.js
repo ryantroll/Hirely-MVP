@@ -13,8 +13,8 @@
 
     function JobApplicationService($q, HirelyApiService) {
 
-        var viewStatusLabels = ['New', 'Viewed'];
-        var statusLabels = ['Declined', 'Open', 'Contacted', 'Hired'];
+        var viewStatusLabels = ['New', 'Viewed', 'Aging'];
+        var statusLabels = ['Dismiss', 'Applied', 'Contacted', 'Hired', 'Shortlisted'];
         var educationPrograms = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
         /**
@@ -23,6 +23,7 @@
          */
         var service = {
             create: create,
+            update: update,
             isApplicationExists: isApplicationExists,
             getByPositionId: getByPositionId,
             getByUserId: getByUserId,
@@ -43,6 +44,10 @@
         function create(jobApp) {
             return HirelyApiService.applications().post(jobApp);
         }//// fun. create
+
+        function update(appId, app){
+            return HirelyApiService.applications(appId).patch(app);
+        }
 
         /**
          * [isApplicationExists used to check and retrive job applicaiton object]
@@ -135,6 +140,7 @@
             ret.contacted = 0;
             ret.hired = 0;
             ret.declined = 0;
+            ret.shortlisted = 0;
 
             for (var x = 0; x < ret.total; x++) {
 
@@ -150,6 +156,9 @@
                         break;
                     case 3:
                         ++ret.hired;
+                        break;
+                    case 4:
+                        ++ret.shortlisted;
                         break;
                 }
             }/// for

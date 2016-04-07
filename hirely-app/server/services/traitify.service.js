@@ -498,8 +498,8 @@ var traitifySevice = {
         return deferred.promise;
     },
 
-    getMeta: function(metaId){
-        return traitifyModel.findOne({_id:metaId}).exec();
+    getMeta: function(metaIds){
+        return traitifyModel.find({_id:{$in:metaIds}}).exec();
     }
 
 }//// traitifyService

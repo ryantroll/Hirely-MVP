@@ -47,7 +47,7 @@ var applicationRoutes = {
                 res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
                 return;
             }
-            
+
             applicationService.getByPositionId(req.params.id, req.query)
                 .then(
                     function (app) {
@@ -79,6 +79,7 @@ var applicationRoutes = {
     },
 
     saveApplication: function(req, res){
+
         applicationModel.findById(req.params.appId).then(function(app) {
             permissionService.checkPermission(req.permissions, "positions", app.positionId).then(function(grant) {
                 if (!grant) {
