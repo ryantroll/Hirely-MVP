@@ -78,7 +78,7 @@ var businessService = {
      * @param  {[type]} positionIds [Array of positions IDs if one position needed send array with one item]
      * @return {promise}             [return a promise with retrieved positions array on resolve]
      */
-    getPositionsByIds: function(positionIds, reqQuery){
+    getPositionsByIds: function(positionIds, reqQuery, isSuperUser){
         var deferred = q.defer();
 
         if (!positionIds.length) {
@@ -97,11 +97,15 @@ var businessService = {
 
         var ids = positionIds;
 
-        var query = {$or: []};
-        for(var x=0; x<ids.length; x++){
-            var or = {};
-            or['positions.'+ids[0]] = { $exists:true, $nin:[null] };
-            query.$or.push(or);
+        if (isSuperUser && false) {
+            query = {};
+        } else {
+            var query = {$or: []};
+            for (var x = 0; x < ids.length; x++) {
+                var or = {};
+                or['positions.' + ids[0]] = {$exists: true, $nin: [null]};
+                query.$or.push(or);
+            }
         }
 
         // console.log("BS:getPositionsByIds:10");
@@ -170,8 +174,23 @@ var businessService = {
      * @param  {[type]} managerId [user id of designated position manager]
      * @return {[type]}           [description]
      */
-    getPositionsByManagerId: function(managerId, reqQuery){
+    getPositionsByManagerId: function(managerId, reqQuery, isSuperUser){
+
+        if (isSuperUser) {
+            return businessModel.find({}).then(function(businesses) {
+                var positionIds = [];
+                for (var b in businesses) {
+                    for (var p in businesses[b].toObject().positions) {
+                        positionIds.push(p);
+                    }
+                }
+                return businessService.getPositionsByIds(positionIds);
+            });
+        }
+
         var deferred = q.defer();
+
+
         // console.log("BS:getPositionsByManagerId:1:managerid: "+managerId);
 
         // Determine what fields to return based on reqQuery.

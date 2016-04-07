@@ -53,7 +53,7 @@ var businessRoutes = {
     },
 
     getPositionsByManagerId: function(req, res){
-        businessService.getPositionsByManagerId(req.params.managerId, req.query)
+        businessService.getPositionsByManagerId(req.params.managerId, req.query, req.isSuperUser)
             .then(
                 function(position){
                     res.status(200).json(apiUtil.generateResponse(200, "Position retrieved successfully", position));
