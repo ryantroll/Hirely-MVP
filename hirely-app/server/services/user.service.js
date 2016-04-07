@@ -93,7 +93,7 @@ var userService = {
 
         if (userObj.password.length < 8) {
             var err = "Password length is too short";
-            console.log(err);
+            // console.log(err);
             throw err;
         }
 
@@ -119,7 +119,8 @@ var userService = {
                 });
 
             } catch (err) {
-                console.dir("Invite error: " + err);
+                err = "US:createNewUser:error: "+err;
+                console.error(err);
                 deferred.reject(err);
                 return;
             }
@@ -142,7 +143,7 @@ var userService = {
     },
 
     createInvitationToken: function (permObjs, expiresIn) {
-        // console.log("createInvitationToken");
+        // console.log("US:createInvitationToken:info:1");
         var token = jwt.sign({permObjs: permObjs}, config.jwtSecret, {expiresIn: expiresIn});
         return token;
     },
@@ -161,12 +162,12 @@ var userService = {
         try {
             email = email.toLowerCase();
         } catch(err) {
-            console.log("US:passwordLogin: email is malformed: " + email)
+            // console.log("US:passwordLogin: email is malformed: " + email)
         }
         return userModel.findOne({email: email}).then(function (user) {
             try {
                 if (!user) {
-                    console.log("US:passwordLogin: user not found for " + email);
+                    // console.log("US:passwordLogin: user not found for " + email);
                     return null;
                 }
 
@@ -175,7 +176,7 @@ var userService = {
                 }
 
                 if (!user.password) {
-                    console.log("US:passwordLogin: user does not have a password");
+                    // console.log("US:passwordLogin: user does not have a password");
                     return null;
                 }
 
@@ -185,11 +186,11 @@ var userService = {
                     if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
                     return self.getUserAndTokenObj(user, expiresIn);
                 } else {
-                    console.log("US:passwordLogin: bad password for " + email);
+                    // console.log("US:passwordLogin: bad password for " + email);
                     return null;
                 }
             } catch(err) {
-                console.log("US:passwordLogin:error: " + err);
+                console.error("US:passwordLogin:error: " + err);
             }
         });
     },
@@ -217,7 +218,7 @@ var userService = {
          * Make sure the posted properties are valid properties
          */
         // userModel.schema.eachPath(function(path){
-        //     console.log(path);
+        //     // console.log(path);
         // });
         //
 
@@ -230,38 +231,35 @@ var userService = {
                     /**
                      * User exists in DB, do the update
                      */
-                    console.log(userData);
+                    // console.log(userData);
                     if (foundedUser) {
-                        console.log("Found user");
+                        // console.log("US:saveUser:info: Found user");
 
                         /**
                          * Loop through sent properties and set them
                          */
                         for (var prop in userData) {
-                            console.log(prop);
+                            // console.log(prop);
                             foundedUser[prop] = userData[prop];
                         }//// for
 
                         foundedUser.lastModifiedOn = new Date();
 
                         if (userData.hasOwnProperty("workExperience")) {
-                            console.log("Experience was updated, so updating user metrics");
+                            // console.log("US:saveUser:info: Experience was updated, so updating user metrics");
                             foundedUser.queuedForMetricUpdate = true;
                         }
 
-                        console.log("Saving user");
+                        // console.log("Saving user");
                         foundedUser.save()
                             .then(
                                 function (user) {
-                                    console.log("User save success");
+                                    // console.log("US:saveUser:info: User save success");
                                     deferred.resolve(user);
                                 },//// save() resolve
                                 function (err) {
-                                    /**
-                                     * Error in updating user
-                                     */
-                                    console.log(err);
-                                    console.log('Error: user couldn\'t be updated');
+                                    err = "US:saveUser:error: "+err;
+                                    console.error(err);
                                     deferred.reject(err);
                                 }
                             ); /// .save().then
@@ -270,10 +268,9 @@ var userService = {
 
                 },//// fun. reslove
                 function (err) {
-                    /**
-                     * User doesn't exists
-                     */
-                    deferred.reject("User trying to update doesn't exists");
+                    err = "US:saveUser:error: "+err;
+                    console.error(err);
+                    deferred.reject(err);
                 }
             );//// then
 
@@ -314,31 +311,43 @@ var userService = {
     },
 
     addEduMetrics: function (user) {
+        // console.log("US:addEduMetrics:info:0");
         // Calc educationMax if education changed
         // Calc if currently in school also
         try {
-            user['educationStatus'] = "completed";
+            user.educationStatus = "completed";
+            // console.log("US:addEduMetrics:info:1");
 
-            if (user['education'].length > 0) {
-                var educationSortedByRank = user['education'];
+            if (user.education.length > 0) {
+                // console.log("US:addEduMetrics:info:1.1");
+                var educationSortedByRank = user.education;
+                // console.log("US:addEduMetrics:info:1.2");
                 educationSortedByRank.sort(function (a, b) {
+                    // console.log("US:addEduMetrics:info:1.3");
                     return educationProgramTypes.indexOf(a.programType) - educationProgramTypes.indexOf(b.programType)
                 });
-                user['educationMax'] = educationSortedByRank.pop();
+                // console.log("US:addEduMetrics:info:2");
+                user.educationMax = educationSortedByRank.pop();
 
+                // console.log("US:addEduMetrics:info:3");
                 for (let program of user['education']) {
+                    // console.log("US:addEduMetrics:info:4");
                     if (program.isCompleted == false) {
-                        user['educationStatus'] = "attending";
+                        // console.log("US:addEduMetrics:info:5");
+                        user.educationStatus = "attending";
                     }
                 }
             } else {
+                // console.log("US:addEduMetrics:info:6");
                 // set to blank so that filters work
-                user['educationMax'] = {}
+                user.educationMax = {};
+                // console.log("US:addEduMetrics:info:6.1");
             }
         } catch (error) {
-            console.log("Error calcing educationMax: " + error);
-            user['educationMax'] = {programType: null}
+            console.error("US:addEduMetrics:error:1: " + error);
+            user.educationMax = {programType: null}
         }
+        // console.log("US:addEduMetrics:info:10");
         return user;
     },
 
@@ -353,17 +362,17 @@ var userService = {
             var nonSeasonalJobCount = 0;
             for (let workExperience of user.workExperience) {
                 var occId = workExperience.occId;
-                // console.log("us260");
+                // console.log("US:addExpScores:info:260");
                 var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
                 totalWorkMonths += monthCount;
 
                 // If role doesn't already exist, create it
-                // console.log("us261.1");
+                // console.log("US:addExpScores:info:261.1");
                 if (!(occId in roles)) {
                     roles[occId] = {"monthCount": 0, "expLvl": 0};
                 }
 
-                // console.log("us261.2");
+                // console.log("US:addExpScores:info:261.2");
                 roles[occId].monthCount += monthCount;
                 roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount);
 
@@ -379,43 +388,44 @@ var userService = {
                 user.tenureAvg = Math.ceil(nonSeasonalTotalWorkMonths / nonSeasonalJobCount);
             }
 
-            // console.log("us262");
+            // console.log("US:addExpScores:info:262");
             return onetScoresService.findByIds(Object.keys(roles))
                 .then(function (occScoresArray) {
                     // Extend roles with onet metrics
 
                     try {
-                        // console.log("us262.5");
+                        // console.log("US:addExpScores:info:262.5");
                         for (let occScores of occScoresArray) {
-                            // console.log("expLvl: " + roles[occScores._id].expLvl);
-                            // console.log("occId: " + occScores._id);
-                            //console.dir(occScores.scores);
+                            // console.log("US:addExpScores:info:262.6");
 
-                            //console.dir("")
                             var scores = occScores.scores;
                             try {
-                                scores = scores.toObject()
+                                scores = scores.toObject();
                             } catch (err) {
-                                console.log("Warning:  occScores.scores.toObject failed.  This is known to happen and usually indicates it's already an object")
+                                console.warn("US:addExpScores:warn:0:  occScores.scores.toObject failed.  This is known to happen and usually indicates it's already an object")
                             }
+
+                            // console.log("US:addExpScores:info:262.7");
                             var occScoresForExp = scores[roles[occScores._id].expLvl];
                             try {
                                 occScoresForExp = occScoresForExp.toObject();
                             } catch (err) {
-                                console.log("Warning:  occScoresForExp.toObject failed.  This is known to happen and usually indicates it's already an object")
+                                console.warn("US:addExpScores:warn:1:  occScoresForExp.toObject failed.  This is known to happen and usually indicates it's already an object")
                             }
+                            
+                            // console.log("US:addExpScores:info:262.8");
                             for (let cat of ['Knowledge', 'Skills', 'Abilities', 'WorkActivities']) {
                                 roles[occScores._id][cat] = occScoresForExp[cat];
                                 try {
                                     roles[occScores._id][cat] = roles[occScores._id][cat].toObject();
                                 } catch (err) {
-                                    console.log("Warning:  roles[occScores._id][cat].toObject failed.  This is known to happen and usually indicates it's already an object")
+                                    console.warn("US:addExpScores:warn:2:  roles[occScores._id][cat].toObject failed.  This is known to happen and usually indicates it's already an object")
                                 }
                             }
                         }
                     } catch(err) {
-                        var err = "ERROR US:addExpScores:1("+user._id+"): "+err;
-                        console.log(err);
+                        var err = "US:addExpScores:error:1("+user._id+"): "+err;
+                        console.error(err);
                         var deferred = q.defer();
                         deferred.reject(err);
                         return deferred.promise;
@@ -433,16 +443,16 @@ var userService = {
                         }
 
                         // Add master KSAs
-                        // console.log("us263");
+                        // console.log("US:addExpScores:info:263");
                         var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
                         for (var occId in roles) {
-                            // console.log("us264");
+                            // console.log("US:addExpScores:info:264");
                             // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
                             var weight = roles[occId].monthCount / totalWorkMonths;
                             for (var category in roles[occId]) {
-                                // console.log("us265");
+                                // console.log("US:addExpScores:info:265");
                                 for (var key in roles[occId][category]) {
-                                    // console.log("us266");
+                                    // console.log("US:addExpScores:info:266");
                                     var weighted = weight * roles[occId][category][key];
                                     if (!(key in scores[category])) {
                                         scores[category][key] = 0;
@@ -451,13 +461,13 @@ var userService = {
                                 }
                             }
                         }  // end roles.forEach
-                        // console.log("us269");
+                        // console.log("US:addExpScores:info:269");
                         user.scores = scores;
 
                         return user;
                     } catch(err) {
-                        var err = "ERROR US:addExpScores:2("+user._id+"): "+err;
-                        console.log(err);
+                        var err = "US:addExpScores:error:2("+user._id+"): "+err;
+                        console.error(err);
                         var deferred = q.defer();
                         deferred.reject(err);
                         return deferred.promise;
@@ -465,8 +475,8 @@ var userService = {
                 });
 
         } catch(err) {
-            var err = "ERROR US:addExpScores:3("+user._id+"): "+err;
-            console.log(err);
+            var err = "US:addExpScores:error:3("+user._id+"): "+err;
+            console.error(err);
             var deferred = q.defer();
             deferred.reject(err);
             return deferred.promise;
@@ -474,7 +484,7 @@ var userService = {
     },
 
     updateUserMetricsById: function (userId) {
-        // console.log("us257");
+        // console.log("US:updateUserMetricsById:info:257");
         var self = this;
         return userModel.findById(userId).then(function (user) {
             return self.updateUserMetrics(user);
@@ -482,7 +492,7 @@ var userService = {
     },
 
     updateUserMetrics: function (user) {
-        // console.log("us258");
+        // console.log("US:updateUserMetrics:info:258");
 
         var self = this;
 
@@ -490,25 +500,25 @@ var userService = {
         user.queuedForMetricUpdate = false;
         // Go ahead and add edu metrics since this is synchronous
         user = self.addEduMetrics(user);
-        // console.log("u259");
+        // console.log("US:updateUserMetrics:info:259");
 
         // var deferred = q.defer(); deferred.resolve(user); deferred.promise
         return user.save()
         .then(function (user) {
-            // console.log("u260: " + user._id);
+            // console.log("US:updateUserMetrics:info:260: " + user._id);
             return traitifyService.addTraitifyCareerMatchScoresToUser(user);
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
         }).then(function (user) {
-            // console.log("u261: " + user._id);
+            // console.log("US:updateUserMetrics:info:261: " + user._id);
             return self.addExpScores(user);
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
         }).then(function (user) {
-            // console.log("u262: " + user._id);
+            // console.log("US:updateUserMetrics:info:262: " + user._id);
             // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
             user.queuedForMetricUpdate = false;
             return user.save();
         }).then(function (user) {
-            // console.log("u263: " + user._id);
+            // console.log("US:updateUserMetrics:info:263: " + user._id);
             return matchingService.generateCareerMatchScoresForUser(user);
         })
 
@@ -518,44 +528,43 @@ var userService = {
     updateQueuedUserMetricsLastRan: 0,
     updateQueuedUserMetrics: function () {
         if (this.updateQueuedUserMetricsLock) {
-            console.log("Waiting to finish");
+            console.warn("US:updateQueuedUserMetrics:info: Waiting to finish");
             return;
         }
 
         this.updateQueuedUserMetricsLock = true;
         this.updateQueuedUserMetricsLastRan = Date.now();
-        console.log("Lock is set.");
+        console.warn("US:updateQueuedUserMetrics:info: Start your crunching at " + (new Date()));
 
-        // console.log("Checking for queued users");
         var self = this;
 
         userModel.find({queuedForMetricUpdate:true}).then(function (users) {
-        // return userModel.find({firstName: 'Tyler'}).then(function (users) {
+        // return userModel.find({email: "personality@test.com"}).then(function (users) {
             var updateCount = users.length>3 ? 3 : users.length;
-            console.log("Updating "+updateCount+"/"+users.length);
+            console.warn("US:updateQueuedUserMetrics:info: Updating "+updateCount+"/"+users.length);
             var promises = [];
             try {
                 for (let user of users) {
-                    console.log("Updating: " + user.email);
+                    console.warn("US:updateQueuedUserMetrics:info: Updating: " + user.email);
                     promises.push(userService.updateUserMetrics(user));
                     if (promises.length > 3) {
                         break;
                     }
                 }
                 if (!users.length) {
-                    // console.log("None found");
+                    console.warn("US:updateQueuedUserMetrics:info: None found");
                 }
             } catch (err) {
-                console.log("updateQueuedUserMetrics:err: " + err);
+                console.error("US:updateUserMetrics:updateQueuedUserMetrics:error: " + err);
             }
 
             return q.all(promises);
         }).then(
             function (results) {
-                console.log("Lock lifted");
+                console.warn("US:updateQueuedUserMetrics:info: Lock lifted");
                 self.updateQueuedUserMetricsLock = false;
             }, function (errs) {
-                console.log("Lock lifted with errors: " + errs);
+                console.error("US:updateQueuedUserMetrics:error: Lock lifted with errors: " + errs);
                 self.updateQueuedUserMetricsLock = false;
             }
         );

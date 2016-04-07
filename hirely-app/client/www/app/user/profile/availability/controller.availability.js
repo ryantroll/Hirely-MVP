@@ -17,9 +17,9 @@
      * Controller Definition ********************************************************
      * ******************************************************************************
      */
-    step5App.controller('ProfileAvailabilityController', ['$rootScope', '$scope', 'AvailabilityService', 'AuthService', ProfileAvailabilityController])
+    step5App.controller('ProfileAvailabilityController', ['$rootScope', '$scope', '$timeout', 'AvailabilityService', ProfileAvailabilityController])
 
-    function ProfileAvailabilityController($rootScope, $scope, availabilityService, authService) {
+    function ProfileAvailabilityController($rootScope, $scope, $timeout, availabilityService) {
 
         /**
          * [availability this object will hold the data that need bot saved in database

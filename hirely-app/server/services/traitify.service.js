@@ -193,7 +193,7 @@ function extractBlendMeta(blend) {
     ret.meta.description = blend.description;
 
     ret.meta.environments = [];
-    console.log("Count: " + blend.environments.length);
+    // console.log("Count: " + blend.environments.length);
     blend.environments.forEach(function(environment) {
         console.log(environment.name);
         ret.meta.environments.push(environment.name);
@@ -240,19 +240,19 @@ var traitifySevice = {
 
         this.getAssessmentCareerMatchScoresByIdDepth[assessmentId]++;
         if (this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] > this.getAssessmentCareerMatchScoresByIdDepthMax) {
-            console.log("Error: getAssessmentCareerMatchScoresByIdDepthMax hit");
+            // console.log("Error: getAssessmentCareerMatchScoresByIdDepthMax hit");
             deferred.resolve({});
             return deferred.promise;
         }
 
-        // console.log("Getting " + onetIds.length + " career matches for " + assessmentId + ". " +
+        // // console.log("Getting " + onetIds.length + " career matches for " + assessmentId + ". " +
         //     "Depth = " + this.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
         //     "/" + this.getAssessmentCareerMatchScoresByIdDepthMax);
 
         traitify.getCareerMatches(assessmentId, onetIds, function (matchesRaw) {
             try {
 
-                // console.log("Got " + matchesRaw.length + " career matches for " + assessmentId + ". " +
+                // // console.log("Got " + matchesRaw.length + " career matches for " + assessmentId + ". " +
                 //     "Depth = " + self.getAssessmentCareerMatchScoresByIdDepth[assessmentId] +
                 //     "/" + self.getAssessmentCareerMatchScoresByIdDepthMax);
 
@@ -277,7 +277,7 @@ var traitifySevice = {
                 }
 
             } catch (error) {
-                console.log("Error:  getCareerMatches failed:  " + error);
+                // console.log("Error:  getCareerMatches failed:  " + error);
                 deferred.resolve({});
             }
         });
@@ -308,32 +308,37 @@ var traitifySevice = {
 
 
     addTraitifyCareerMatchScoresToUser: function (user) {
-        // console.log("ts293");
+        // console.log("TS:addTraitifyCareerMatchScoresToUser:info:293");
         try {
             user.personalityExams[0].extId;
         } catch (err) {
-            var err = "SKIP TS:addTraitifyCareerMatchScoresToUser: missing personalityExam";
+            var err = "TS:addTraitifyCareerMatchScoresToUser:skip: missing personalityExam";
             console.log(err);
             var deferred = q.defer();
             deferred.reject(err);
             return deferred.promise;
         }
 
-        if (onetIdsAll.length == Object.keys(user.personalityExams[0].careerMatchScores.toObject()).length) {
-            console.log("Skipping getAssessmentCareerMatchScoresById because already gotten");
-            var deferred = q.defer();
-            deferred.resolve(user);
-            return deferred.promise;
+        // console.log("TS:addTraitifyCareerMatchScoresToUser:info:294");
+        try {
+            if (onetIdsAll.length == Object.keys(user.personalityExams[0].careerMatchScores.toObject()).length) {
+                // console.log("TS:addTraitifyCareerMatchScoresToUser:skip: getAssessmentCareerMatchScoresById because already gotten");
+                var deferred = q.defer();
+                deferred.resolve(user);
+                return deferred.promise;
+            }
+        } catch (err) {
+            // console.log("TS:addTraitifyCareerMatchScoresToUser:info:294.1: User is fresh");
         }
 
-        // console.log("ts295");
+        // console.log("TS:addTraitifyCareerMatchScoresToUser:info:295");
         return traitifySevice.getAssessmentCareerMatchScoresById(user.personalityExams[0].extId)
             .then(function (careerMatchScores) {
-                // console.log("ts296");
-                console.log("TS: Career Match Count actual/expected: " + Object.keys(careerMatchScores).length + "/" + onetIdsAll.length);
+                // console.log("TS:addTraitifyCareerMatchScoresToUser:info:296");
+                // console.log("TS:addTraitifyCareerMatchScoresToUser:info: Career Match Count actual/expected: " + Object.keys(careerMatchScores).length + "/" + onetIdsAll.length);
 
                 if (Object.keys(careerMatchScores).length == 0) {
-                    console.log("Warning:  Skipping update user with career match scores because traitify call failed.");
+                    console.warn("TS:addTraitifyCareerMatchScoresToUser:warning:  Skipping update user with career match scores because traitify call failed.");
                     var deferred = q.defer();
                     deferred.resolve(user);
                     return deferred.promise;
@@ -345,7 +350,7 @@ var traitifySevice = {
                 for (var occId in careerMatchScores) {
                     careerMatchScores2[occId.replace('.', ',')] = careerMatchScores[occId];
                 }
-                // console.log("ts297");
+                // console.log("TS:addTraitifyCareerMatchScoresToUser:info:297");
                 user.personalityExams[0].careerMatchScores = careerMatchScores2;
                 return user.save()
             });
@@ -362,7 +367,7 @@ var traitifySevice = {
         var summary = extractPersonalitySummary(data);
         summary.extId = examId;
 
-        console.log("TS: Updating Personality Summary");
+        // console.log("TS:createNewAssessment:info: Updating Personality Summary");
         userModel.findById(userId).exec().then(
             function (user) {
                 user.personalityExams = [summary];
@@ -373,13 +378,15 @@ var traitifySevice = {
                         // return self.updateAssessmentCareerMatchScoresByUserId(user._id);
                     },
                     function (err) {
-                        console.log("TS: User save failed" + err);
+                        err = "TS:createNewAssessment:error:1: "+err;
+                        console.error(err);
                         deferred.reject(err);
                     }
                 );
             },
             function (err) {
-                console.log("TS: User find failed" + err);
+                err = "TS:createNewAssessment:error:2: "+err;
+                console.error(err);
                 deferred.reject(err);
             }
         );
@@ -402,19 +409,29 @@ var traitifySevice = {
                     if (null !== founded) {
                         founded.meta = blend.meta;
                         founded.save(function (err, saved) {
-                            if (err) deferred.reject(err);
+                            if (err) {
+                                err = "TS:createNewAssessment:error:3: "+err;
+                                console.error(err);
+                                deferred.reject(err);
+                            }
                         })
                     }//// if null !== founded
                     else {
                         var newBlend = new traitifyModel(blend);
 
                         newBlend.save(function (err, saved) {
-                            if (err) deferred.reject(err);
+                            if (err) {
+                                err = "TS:createNewAssessment:error:4: "+err;
+                                console.error(err);
+                                deferred.reject(err);
+                            }
                         })
                     }//// if null !== else
                 },//// fun. resolve
                 function (err) {
-                    console.log(err);
+                    err = "TS:createNewAssessment:error:5: "+err;
+                    console.error(err);
+                    deferred.reject(err);
                 }
             );/// then
 
@@ -434,7 +451,11 @@ var traitifySevice = {
                             founded.meta = type.meta;
                             founded.metaName = type.metaName;
                             founded.save(function (err, saved) {
-                                if (err) deferred.reject(err);
+                                if (err) {
+                                    err = "TS:createNewAssessment:error:6: "+err;
+                                    console.error(err);
+                                    deferred.reject(err);
+                                }
                             });
                         }
                         else {
@@ -443,7 +464,11 @@ var traitifySevice = {
                              */
                             var newType = new traitifyModel(type);
                             newType.save(function (err, saved) {
-                                if (err) deferred.reject(err);
+                                if (err) {
+                                    err = "TS:createNewAssessment:error:7: "+err;
+                                    console.error(err);
+                                    deferred.reject(err);
+                                }
                             });
                         }
                     });//// q.nivoke.then()
@@ -473,7 +498,11 @@ var traitifySevice = {
                             founded.meta = trait.meta;
                             founded.metaName = trait.metaName;
                             founded.save(function (err, saved) {
-                                if (err) deferred.reject(err);
+                                if (err) {
+                                    err = "TS:createNewAssessment:error:8: "+err;
+                                    console.error(err);
+                                    deferred.reject(err);
+                                }
                             });
                         }
                         else {
@@ -483,7 +512,11 @@ var traitifySevice = {
                             var newTrait = new traitifyModel(trait);
 
                             newTrait.save(function (err, saved) {
-                                if (err) deferred.reject(err);
+                                if (err) {
+                                    err = "TS:createNewAssessment:error:9: "+err;
+                                    console.error(err);
+                                    deferred.reject(err);
+                                }
                             });
                         }
                     });//// q.nivoke.then()
@@ -491,7 +524,7 @@ var traitifySevice = {
 
             q.all(promises)
                 .then(function () {
-                    console.log('all traits meta are saved');
+                    console.log('TS:createNewAssessment:info: all traits meta are saved');
                 });
         }//// if isArray
 
