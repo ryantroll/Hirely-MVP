@@ -13,10 +13,10 @@
                 return Math.round(value);
             }
         })
-        .controller('JobApplicationController', ['$q', '$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+        .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-    function JobApplicationController($q, $scope, $rootScope, $stateParams, $state, $timeout, JobApplicationService, BusinessService) {
+    function JobApplicationController($scope, $rootScope, $stateParams, $state, JobApplicationService, BusinessService) {
 
         /**
          * [availability this scope is the parent of availability step scope and this variaable is needed there]
@@ -46,7 +46,7 @@
                     $scope.business = business;
                     $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
 
-                    $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business)
+                    $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
                     initialize();
                 },
@@ -150,24 +150,24 @@
                 return 1;
             }
 
-            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.workExperience) && $scope.userData.workExperience.length > 0)) {
+            if (!(Array.isArray($rootScope.currentUser.workExperience) && $rootScope.currentUser.workExperience.length > 0)) {
                 return 2;
             }
 
-            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.education) && $scope.userData.education.length > 0)) {
+            if (!(Array.isArray($rootScope.currentUser.education) && $rootScope.currentUser.education.length > 0)) {
                 return 3;
             }
 
-            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.personalityExams) && $scope.userData.personalityExams.length > 0)) {
+            if (!(Array.isArray($rootScope.currentUser.personalityExams) && $rootScope.currentUser.personalityExams.length > 0)) {
                 return 4;
             }
 
-            if (!(angular.isDefined($scope.userData.availability.hoursPerWeekMin) && $scope.userData.availability.hoursPerWeekMin > 0)) {
+            if (!(angular.isDefined($rootScope.currentUser.availability.hoursPerWeekMin) && $rootScope.currentUser.availability.hoursPerWeekMin > 0)) {
                 return 5;
             }
 
             return 6;
-        }
+        };
 
         /**
          * [finish trigger when user get to the last step pre-screen and click finish button, will reidrect the user to thank you page]
@@ -175,7 +175,7 @@
          */
         $scope.finish = function () {
             delete $scope.layoutModel.noHeader;
-            $state.go('master.application.done', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
+            $state.go('master.default.confirm', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
         };
 
         function semiFixedFooter() {

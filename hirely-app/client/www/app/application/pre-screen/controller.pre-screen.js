@@ -10,10 +10,10 @@
 	'use strict';
 
 	angular.module('hirelyApp')
-	.controller('PreScreenController', ['$scope', '$stateParams', 'multiStepFormInstance', 'UserService', 'AuthService', '$timeout', 'JobApplicationService', PreScreenController]);
+	.controller('PreScreenController', ['$rootScope', '$scope', '$timeout', 'JobApplicationService', PreScreenController]);
 
 
-	function PreScreenController($scope, $stateParams, multiStepFormInstance, userService, authService, $timeout, JobApplicationService) {
+	function PreScreenController($rootScope, $scope, $timeout, JobApplicationService) {
 
 		$scope.dayDiff = function (d1, d2) {
 			var months;
@@ -30,12 +30,6 @@
 		};
 
 		$scope.initPrescreen = function() {
-
-			/**
-			 * bring the vaiant object to me from parent scope contoller.job-application.js
-			 */
-			var position = angular.copy($scope.position);
-
 
 			$scope.daysUntilReapply = function () {
 				if ($scope.jobApplication.application) {
@@ -70,7 +64,7 @@
 				 * @type {Object}
 				 */
 				$scope.model = {
-					prescreenAnswers: angular.copy(position.prescreenQuestions)
+					prescreenAnswers: $scope.position.prescreenQuestions
 				};
 
 
@@ -98,7 +92,7 @@
 
 			var application = {
 				userId: $rootScope.currentUserId,
-				positionId: position._id,
+				positionId: $scope.position._id,
 				status: 1, //// set status to 1
 				prescreenAnswers: angular.copy($scope.model.prescreenAnswers)
 			};
