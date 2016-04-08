@@ -33,10 +33,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-3">
-                    <div class="left">
-                        <button ng-hide="$isFirst()" ng-click="destroyDirection=0; $previousStep()" class="btn back">
-                            <span ng-hide="!jobApplication.isNewUser && $getActiveIndex(step) == 6">Back</span>
-                            <span ng-show="!jobApplication.isNewUser && $getActiveIndex(step) == 6">Edit Profile</span>
+                    <div class="left" ng-hide="$isFirst()">
+                        <button ng-show="$getActiveIndex(step)!=6"
+                                ng-click="destroyDirection=0;
+                                $previousStep()" class="btn back">
+                            <span>Back</span>
+                        </button>
+                        <button ng-show="$getActiveIndex(step)==6"
+                                ng-click="destroyDirection=0; $setActiveIndex(1)"
+                                class="btn back">
+                            <span>Edit Profile</span>
                         </button>
                     </div>
                 </div><!--col-sm-3-->
