@@ -30,14 +30,14 @@
                         return JobApplicationService.getByUserId($rootScope.currentUserId)
                     },
                     function (err) {
-                        console.log(err);
+                        console.log("UD1:"+err);
                         $scope.dataError = true;
                     }
                 )
                 .then(
                     function (apps) {
                         $scope.myApplications = apps;
-                        if (apps) {
+                        if (apps.length) {
                             for (var x = 0; x < apps.length; x++) {
                                 if (positionIds.indexOf(apps[x].positionId) < 0) {
                                     positionIds.push(apps[x].positionId)
@@ -48,7 +48,7 @@
                         return [];
                     },
                     function (err) {
-                        console.log(err);
+                        console.log("UD2:"+err);
                         $scope.dataError = true;
                     }
                 )
@@ -58,7 +58,7 @@
                         return BusinessService.getPositionsByManagerId($rootScope.currentUserId);
                     },
                     function (err) {
-                        console.log(err);
+                        console.log("UD3:"+err);
                         $scope.dataError = true;
                     }
                 )
@@ -82,7 +82,7 @@
                         $scope.myPositions = positions;
                     },
                     function (err) {
-                        console.log(err);
+                        console.log("UD4:"+err);
                         $scope.dataError = true;
                     }
                 )
