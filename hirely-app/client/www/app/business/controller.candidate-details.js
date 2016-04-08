@@ -8,7 +8,7 @@
     'use strict';
 
     angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
-    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsModalController]);
+    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsModalController]);
 
 
     function CandidateDetailsControllerCore($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
@@ -57,9 +57,28 @@
              * @type {[type]}
              */
             var blend = $scope.applicant.personalityExams[0].personalityBlend.name;
-            return TraitifyService.getMeta(blend).then(
-                function(meta){
-                    $scope.personalityBlendMeta = meta;
+            var metaArray = [blend];
+            for(var x=0; x<5; x++){
+                metaArray.push($scope.applicant.personalityExams[0].personalityTraits[x]._id);
+            }
+
+            return TraitifyService.getMeta(metaArray.join('|')).then(
+                function(metas){
+                    console.log(metas)
+                    for(var x=0; x<metas.length; x++){
+                        if(metas[x]._id === blend){
+                            $scope.personalityBlendMeta = metas[x];
+                            continue;
+                        }
+                        for(var xx=1; xx<6; xx++){
+                            if(metas[x]._id === metaArray[xx]){
+                                $scope.applicant.personalityExams[0].personalityTraits[xx-1].meta = metas[x].meta;
+                                continue;
+                            }
+                        }//// for
+                        console.log($scope.applicant.personalityExams[0].personalityTraits);
+                    }//// for
+
                 },
                 function(err){
                     console.log("BS.getMeta.error: "+err)
@@ -180,6 +199,8 @@
 
 
 
+
+
     }//// controller
 
     function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
@@ -200,7 +221,7 @@
 
     }
 
-    function CandidateDetailsModalController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
+    function CandidateDetailsModalController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
         CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
 
         $scope.isModal = true;
@@ -239,6 +260,9 @@
             initializeApplication();
         });
 
+        $scope.formatPhoneNumber = function(phone){
+           return UserService.formatPhone(phone)
+        }
     }
 
 })();

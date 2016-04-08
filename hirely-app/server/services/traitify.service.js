@@ -134,7 +134,7 @@ function extractTraitMeta(trait) {
     ret.metaType = 'personality_trait';
     ret.meta.definition = trait.personality_trait.definition;
     ret.meta.personalityType = trait.personality_trait.personality_type.name;
-
+    ret.metaId = ret._id;
     return ret;
 }//// fun. extractTraitMeta
 
@@ -487,6 +487,7 @@ var traitifySevice = {
          */
 
         if (Array.isArray(data.personalityTraits) && data.personalityTraits.length > 0) {
+
             var promises = data.personalityTraits.map(function (rawTrait) {
                 var trait = extractTraitMeta(rawTrait);
                 return q.ninvoke(traitifyModel, 'findOne', {_id: trait._id})
@@ -531,8 +532,8 @@ var traitifySevice = {
         return deferred.promise;
     },
 
-    getMeta: function(metaId){
-        return traitifyModel.findOne({_id:metaId}).exec();
+    getMeta: function(metaIds){
+        return traitifyModel.find({_id:{$in:metaIds}}).exec();
     }
 
 }//// traitifyService

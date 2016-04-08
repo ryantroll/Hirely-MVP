@@ -237,6 +237,10 @@ header > .row {
     background-color:$c-hirely-mid-gray;
     color:$c-white;
 }
+.btn.disabled{
+    cursor:not-allowed;
+}
+
 .text-red{
     color:$c-hirely-red;
 }
@@ -249,6 +253,9 @@ header > .row {
 
 .modal-dialog.modal-full{
     width:95%;
+    @media screen and (min-width:$screen-sm-min){
+        width:90%;
+    }
 }
 .gray{
     .modal-content{

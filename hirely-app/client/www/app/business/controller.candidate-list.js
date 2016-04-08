@@ -123,7 +123,6 @@
         $scope.business = business;
         $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
-
         return JobApplicationService.getByPositionId($scope.position._id);
       },
       function(err){
@@ -224,14 +223,34 @@
 
     $scope.getViewStatus = function(id, index){
 
-      var app = $scope.applications[index];
+      var app = angular.copy($scope.applications[index]);
       var now = Date.now();
       var appDate = new Date(app.createdAt);
 
-      if(appDate.getTime() <= now - (86400 * 1000 * 6) ){
+      if(angular.isDefined(app.viewStatus)){
+        return JobApplicationService.viewStatusLabels[app.viewStatus];
+      }
+      else if(appDate.getTime() <= now - (86400 * 1000 * 6) ){
+        /**
+         * update view status to aging
+         */
+        app.viewStatus = 2;
+        JobApplicationService.save(app).
+        then(
+          function(app){
+            $scope.applications[index] = app;
+          },
+          function(err){
+            console.log(err);
+          }
+        )
         return 'Aging';
       }
-      return angular.isDefined(app.viewStatus) ? JobApplicationService.viewStatusLabels[app.viewStatus] : 'New';
+
+      return 'New';
+
+
+
     }
 
     function findAppById(appId){
@@ -268,6 +287,9 @@
       var app = findAppById(appId);
       if(app){
         app.status = status;
+        if(angular.isDefined($scope.detailsApp)){
+          $scope.detailsApp.status = status;
+        }
         JobApplicationService.save(app)
         .then(
           function(saved){
@@ -371,6 +393,36 @@
         scope:$scope
       })
 
+      /**
+       * Resolved when modal successfully open
+       */
+      detailsModal.opened
+      .then(
+        function(result){
+          if(true === result){
+            /**
+             * Update the viewStats of the application to viewed
+             */
+            var appToSave = angular.copy(app);
+            appToSave.viewStatus = 1;
+            JobApplicationService.save(appToSave).
+            then(
+              function(app){
+                  $scope.applications[index] = app;
+              },
+              function(err){
+                console.log(err);
+              }
+            )
+          }//// if
+        },
+        function(err){
+          console.log(err)
+        }
+      )
+      /**
+       * Resolved when modal closed
+       */
       detailsModal.result
       .then(
         function(d){

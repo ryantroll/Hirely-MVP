@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-10">
                 <div class="title">
-                    <h2><a href="javascript:void(0);" ng-click="togglePositionMenu($event)">Barista - Shaw <i class="icon glyphicon glyphicon-menu-down" ng-show="positionsList.length > 0"></i></a></h2>
+                    <h2><a href="javascript:void(0);" ng-click="togglePositionMenu($event)">{{position.title}} - {{location.neighborhood}} <i class="icon glyphicon glyphicon-menu-down" ng-show="positionsList.length > 0"></i></a></h2>
                     <ul class="menu" ng-show="showPositionMenu">
                         <li class="active" ng-repeat="pos in positionsList">
                             <a href="javascript:void(0);" ng-click="changePosition(pos.slug)">
@@ -31,12 +31,12 @@
                 <div class="buttons visible-sm-block visible-md-block visible-lg-block">
                     <input type="text" name="positionURL" id="positionURL" value="http://app.hirely.us/#/{{business.slug}}/{{location.slug}}/{{position.slug}}" />
                     <button class="btn blue" ng-click="copyPositionURL()">Copy</button>
-                    <button class="btn red">Promote</button>
+                    <!-- <button class="btn red">Promote</button> -->
                 </div>
             </div><!--col-->
             <div class="col-sm-2 visible-sm-block visible-md-block visible-lg-block">
                 <div class="buttons">
-                    <button class="btn gray" ng-click="goToPosition()">View Details</button>
+                    <a class="btn gray" target="_blank" ui-sref="master.default.job.position({businessSlug: business.slug, locationSlug:location.slug, positionSlug:position.slug })">View Details</a>
                 </div>
             </div>
         </div><!--row-->
@@ -63,9 +63,10 @@
                 <div class="col-sm-12">
                     <ul>
                         <li><button class="btn" ng-class="{red:isFilterActive('applied'), white:!isFilterActive('applied')}" ng-click="setFilter('applied')" ng-disabled="statistics.applied == 0">Applied <span  ng-show="statistics.applied > 0">({{statistics.applied}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('shortlisted'), white:!isFilterActive('shortlisted')}" ng-click="setFilter('shortlisted')" ng-disabled="statistics.shortlisted == 0">Shortlisted <span  ng-show="statistics.shortlisted > 0">({{statistics.shortlisted}})</span></button></li>
                         <li><button class="btn" ng-class="{red:isFilterActive('contacted'), white:!isFilterActive('contacted')}" ng-click="setFilter('contacted')" ng-disabled="statistics.contacted == 0">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
                         <li><button class="btn" ng-class="{red:isFilterActive('hired'), white:!isFilterActive('hired')}" ng-click="setFilter('hired')" ng-disabled="statistics.hired == 0">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
-                        <li><button class="btn" ng-class="{red:isFilterActive('declined'), white:!isFilterActive('declined')}" ng-click="setFilter('declined')" ng-disabled="statistics.declined == 0">Declined <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('declined'), white:!isFilterActive('declined')}" ng-click="setFilter('declined')" ng-disabled="statistics.declined == 0">Dismiss <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
                     </ul>
                 </div><!--col-->
             </div><!--row-->
@@ -156,17 +157,19 @@
                         <div class="candidate" ng-repeat="app in filtered">
                             <div class="menu">
                                 <div class="inner">
-                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 1" ng-click="updateAppStatus($event, app._id, 2)">Contact</a>
-                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 2" ng-click="updateAppStatus($event, app._id, 3)">Hire</a>
-                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 3 || app.status === 0" ng-click="updateAppStatus($event, app._id, 1)">Applied</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 1 || app.status === 0" ng-click="updateAppStatus($event, app._id, 4)">Shortlist</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 4" ng-click="updateAppStatus($event, app._id, 2)">Contact</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 2 || app.status === 3" ng-disabled="app.status === 3" ng-click="updateAppStatus($event, app._id, 3)">Hire</a>
+                                    <!-- <a href="javascript:void(0);" class="action" ng-if="app.status === 0" ng-click="updateAppStatus($event, app._id, 1)">Applied</a> -->
                                     <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, app._id)"><i class="glyphicon glyphicon-menu-down"></i></a>
                                     <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, app._id, 0)"><i class="icon-thumb_down_icon"></i></a>
                                 </div>
                                 <ul class="hidden" id="menu_{{app._id}}">
                                     <li ng-if="app.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, app._id, 1)">APPLIED</a></li>
+                                    <li ng-if="app.status !== 4"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 4)">SHORTLIST</a></li>
                                     <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 2)">CONTACT</a></li>
                                     <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, app._id, 3)">HIRE</a></li>
-                                    <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, app._id, 0)">DECLINE</a></li>
+                                    <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, app._id, 0)">DISMISS</a></li>
                                 </ul>
                             </div>
                             <div class="row">
@@ -196,15 +199,18 @@
                                             <i ng-class="getFitClass(9, app.score)"></i>
                                             <span class="legend">{{getFitClass(-1, app.score) | uppercase}} Fit</span>
                                         </div>
-                                        <div class="answers">
+                                        <!-- <div class="answers">
                                             <div class="answer" ng-repeat="answer in app.prescreenAnswers | limitTo : 1">
                                                 <p>{{answer.answer}}</p>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <p class="traits" ng-show="applicants[app.userId].personalityExams.length > 0">
                                             <strong>Top Traits</strong> <span ng-repeat="trait in applicants[app.userId].personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
                                         </p>
-                                        <div class="more-link"><a href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)">View Details</a></div>
+                                        <div class="more-link">
+                                            <a href="javascript:void(0);" class="hidden-xs" ng-click="showDetails($index, app.userId, app)">View Details</a>
+                                            <a href="javascript:void(0);" class="btn red visible-xs-inline-block" ng-click="showDetails($index, app.userId, app)">View Details</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
