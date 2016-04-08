@@ -97,6 +97,8 @@ var businessService = {
 
         var ids = positionIds;
 
+         var ret = {};
+
         if (isSuperUser && false) {
             query = {};
         } else {
@@ -108,7 +110,8 @@ var businessService = {
             }
         }
 
-        // console.log("BS:getPositionsByIds:10");
+
+
         businessModel.find(query, returnFields)
         .then(
             function(found){
@@ -116,8 +119,6 @@ var businessService = {
                 try {
                     if (Array.isArray(found)) {
                         // console.log("BS:getPositionsByIds:12");
-                        var ret = {};
-
                         for (var i = 0; i < found.length; i++) {
                             // console.log("BS:getPositionsByIds:13");
                             var b = found[i];
@@ -131,9 +132,9 @@ var businessService = {
                                     /**
                                      * add required location and business field to position
                                      */
-                                    var location = b.locations.toObject()[myPos.location_id];
+                                    var location = b.locations.toObject()[myPos.locationId];
                                     if (!location) {
-                                        var err = "BS:getPositionsByIds:15.1:error: location missing with id = " + myPos.location_id + "; Available: ["+Object.keys(b.locations.toObject()).join(',')+"]";
+                                        var err = "BS:getPositionsByIds:15.1:error: location missing with id = " + myPos.locationId + "; Available: ["+Object.keys(b.locations.toObject()).join(',')+"]";
                                         console.log(err);
                                         continue;
                                     }
@@ -144,13 +145,23 @@ var businessService = {
                                     myPos.location = location;
                                     myPos.business = {name: b.name, slug: b.slug, _id: b._id, description: b.description};
 
+                                    /**
+                                     * initiate the applicationCount to 0 in preparation for next promise
+                                     * @type {Number}
+                                     */
+                                    myPos.applicationCount = 0;
+
                                     ret[pos] = myPos
                                     // console.log("BS:getPositionsByIds:16");
                                 }
                             }//// for pos in b
 
                             // console.log("BS:getPositionsByIds:17");
-                            deferred.resolve(ret);
+                            /**
+                             * Get the application count where status is not dismiss
+                             * @type {Object}
+                             */
+                            return applicationModel.aggregate([{$match:{positionId:{$in:ids}, status:{$nin:[0]}}}, {$group:{_id:'$positionId', applicationCount:{"$sum":1}}}]).exec()
                             // console.log("BS:getPositionsByIds:complete");
                         }////for i
                     }//// if isArray
@@ -164,7 +175,28 @@ var businessService = {
                 deferred.reject(err);
             }
         )
+        .then(
+            function(appCount){
+                ///
+                if(Array.isArray(appCount) && appCount.length > 0){
+                    for(var x=0; x<appCount.length; x++){
+                        /**
+                         * Update the applicationCount in return object
+                         */
+                        if(ret[appCount[x]._id]){
+                            ret[appCount[x]._id].applicationCount = appCount[x].applicationCount;
+                        }
+                    }
+                }
 
+                deferred.resolve(ret);
+
+            },
+            function(err){
+                console.log('IB:Getting.application.count>>', err);
+                deferred.resolve(ret);
+            }
+        )
         return deferred.promise;
     },
 
@@ -215,7 +247,7 @@ var businessService = {
         query.$or.push({srcId:managerId, srcType:'users', destType:'businesses', c:true, u:true, d:true});
         query.$or.push({srcId:managerId, srcType:'users', destType:'locations', c:true, u:true, d:true});
         query.$or.push({srcId:managerId, srcType:'users', destType:'positions', c:true, u:true, d:true});
-
+        console.log('>>>>>>', query);
         // console.log("BS:getPositionsByManagerId:2");
         permissionsModel.find(query)
         .then(

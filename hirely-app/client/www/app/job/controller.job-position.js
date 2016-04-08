@@ -105,7 +105,7 @@
         strOccIds.push($scope.business.positions[pos].occId);
         //// add position in same location only
         if(
-          $scope.business.positions[pos].location_id === $scope.location._id
+          $scope.business.positions[pos].locationId === $scope.location._id
           && $scope.business.positions[pos]._id !== $scope.position._id
         ){
           $scope.otherPositions.push($scope.business.positions[pos]);
