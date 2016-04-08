@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', LoginController ]);
+    angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'AuthService', LoginController ]);
 
 
-    function LoginController($scope, $rootScope, $state, $stateParams, authService, userService) {
+    function LoginController($scope, $rootScope, $state, $stateParams, $timeout, authService) {
 
 
         $scope.error = '';
@@ -15,6 +15,10 @@
         $scope.loginError = false;
 
         $scope.message = $stateParams.message;
+
+        $timeout(function() {
+            $(window).scrollTop(0);
+        });
 
         /**
          * Let the parent scope know it is NOT a new user

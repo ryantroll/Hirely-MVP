@@ -22,9 +22,9 @@
       }//// fun. link
     }/// return object
   })/// validate date;
-    .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', RegisterController ]);
+    .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$timeout', 'AuthService', RegisterController ]);
 
-    function RegisterController($location, $scope, $rootScope, $state, $stateParams, authService, UserService) {
+    function RegisterController($location, $scope, $rootScope, $state, $timeout, authService) {
 
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: ''};
@@ -34,7 +34,9 @@
             $scope.businessName = $location.search().b;
         }
 
-
+        $timeout(function() {
+            $(window).scrollTop(0);
+        });
 
         $scope.resetEmailValidity = function(){
           $scope.registerForm.email.$setValidity('emailExists', true);

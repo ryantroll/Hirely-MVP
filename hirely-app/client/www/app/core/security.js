@@ -26,7 +26,12 @@
                     authService.refreshSession().then(function() {
                         if (toState.authRequired && !$rootScope.currentUserId){
                             $rootScope.nextState.push({state:toState, params:toParams})
-                            $state.go(loginRedirectPath, {message: "You must login to view this page."});
+
+                            if (toState.name == 'master.application.apply') {
+                                $state.go('master.default.account.register');
+                            } else {
+                                $state.go(loginRedirectPath, {message: "You must login to view this page."});
+                            }
                             event.preventDefault();
                         }
                     });
