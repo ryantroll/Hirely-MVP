@@ -39,8 +39,10 @@
                     authService.logout();
                     if ($state.current.authRequired) {
                         console.log("Caught private page with token expired");
-                        $rootScope.nextState.push({state:$state.current.name, params:$state.params})
+                        $rootScope.nextState.push({state:$state.current.name, params:$state.params});
                         $state.go(loginRedirectPath, {message: "Sorry, your session has expired."});
+                    } else {
+                        $rootScope.$apply();
                     }
                 });
 

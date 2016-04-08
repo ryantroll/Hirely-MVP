@@ -81,7 +81,6 @@
             $rootScope.token = null;
             $rootScope.$emit('UserLoggedOut');
             $rootScope.$broadcast('UserLoggedOut');
-            $rootScope.$apply();
         }
     }
 })();

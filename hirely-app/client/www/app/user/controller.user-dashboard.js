@@ -7,10 +7,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('UserDashboardController', ['$rootScope', '$scope', '$timeout', 'FavoritesService', 'JobApplicationService', 'BusinessService', 'UserService', UserDashboardController]);
+    angular.module('hirelyApp').controller('UserDashboardController', ['$rootScope', '$scope', '$state', '$timeout', 'loginRedirectPath', 'FavoritesService', 'JobApplicationService', 'BusinessService', 'UserService', 'AuthService', UserDashboardController]);
 
 
-    function UserDashboardController($rootScope, $scope, $timeout, FavoritesService, JobApplicationService, BusinessService, UserService) {
+    function UserDashboardController($rootScope, $scope, $state, $timeout, loginRedirectPath, FavoritesService, JobApplicationService, BusinessService, UserService, AuthService) {
 
         var positionIds = [];
 
@@ -18,6 +18,15 @@
 
         $scope.myLocations = [];
         $scope.myPositions = [];
+
+        $scope.logout = function() {
+            AuthService.logout();
+            if ($state.current.authRequired) {
+                console.log("Caught private page with token expired");
+                $rootScope.nextState.push({state:$state.current.name, params:$state.params});
+                $state.go(loginRedirectPath, {message: "You must login to view this page."});
+            }
+        };
 
         $scope.initDash = function () {
             FavoritesService.getFavorite({userId: $rootScope.currentUserId, type: 'position'})
@@ -30,7 +39,7 @@
                         return JobApplicationService.getByUserId($rootScope.currentUserId)
                     },
                     function (err) {
-                        console.log("UD1:"+err);
+                        console.error("UD1:"+err);
                         $scope.dataError = true;
                     }
                 )
@@ -48,7 +57,7 @@
                         return [];
                     },
                     function (err) {
-                        console.log("UD2:"+err);
+                        console.error("UD2:"+err);
                         $scope.dataError = true;
                     }
                 )
@@ -58,7 +67,7 @@
                         return BusinessService.getPositionsByManagerId($rootScope.currentUserId);
                     },
                     function (err) {
-                        console.log("UD3:"+err);
+                        console.error("UD3:"+err);
                         $scope.dataError = true;
                     }
                 )
@@ -82,7 +91,7 @@
                         $scope.myPositions = positions;
                     },
                     function (err) {
-                        console.log("UD4:"+err);
+                        console.error("UD4:"+err);
                         $scope.dataError = true;
                     }
                 )
