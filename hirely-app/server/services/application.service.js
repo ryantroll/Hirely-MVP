@@ -96,7 +96,11 @@ var applicationService = {
      * @return {promise}          [description]
      */
     getByUserId: function(userId, reqQuery){
-        return applicationModel.find({userId:userId}).exec();
+        var filters = {userId:userId};
+        if(undefined !== reqQuery.positionId) {
+            filters['positionId'] = reqQuery.positionId;
+        }
+        return applicationModel.find(filters).exec();
     },
 
     convertUserToSlimObject: function(user) {
@@ -124,6 +128,7 @@ var applicationService = {
             var position = businessObj.positions[positionId];
 
             // console.log("as:getByPositionId:2");
+
             return applicationModel.find({'positionId': positionId}).then(function (applications) {
                 // console.log("as:getByPositionId:3");
                 var userIds = [];
@@ -155,7 +160,7 @@ var applicationService = {
 
                             return returnObj;
                         } catch (err) {
-                            err = "as:getByPositionId:err:" + err
+                            err = "as:getByPositionId:err:" + err;
                             console.log(err);
                             throw err;
                         }

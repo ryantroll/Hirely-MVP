@@ -7,112 +7,71 @@
  *
  */
 (function () {
-	'use strict';
+    'use strict';
 
-	angular.module('hirelyApp')
-	.controller('PreScreenController', ['$rootScope', '$scope', '$timeout', 'JobApplicationService', PreScreenController]);
-
-
-	function PreScreenController($rootScope, $scope, $timeout, JobApplicationService) {
-
-		$scope.dayDiff = function (d1, d2) {
-			var months;
-			if (isNaN(d2) || !d2) {
-				d2 = new Date();
-			}
-			if (angular.isString(d1)) {
-				d1 = new Date(d1);
-			}
-			if (angular.isString(d2)) {
-				d2 = new Date(d2);
-			}
-			return Math.round((d2.getHours() - d1.getHours()) / 24)
-		};
-
-		$scope.initPrescreen = function() {
-
-			$scope.daysUntilReapply = function () {
-				if ($scope.jobApplication.application) {
-					var dayDiff = $scope.dayDiff($scope.jobApplication.application.createdAt)
-					var daysUntilReapply = 30 - dayDiff;
-					if (daysUntilReapply < 0) {
-						daysUntilReapply = 0;
-					}
-					return daysUntilReapply;
-				} else {
-					return 0;
-				}
-			}();
-
-			$scope.isApplyEligible = function () {
-				return $scope.daysUntilReapply == 0;
-			}();
-
-			$scope.$parent.blockFinished = !$scope.isApplyEligible;
-
-			if (angular.isDefined($scope.jobApplication.application) && null !== $scope.jobApplication.application) {
-
-				$scope.model = {
-					prescreenAnswers: angular.copy($scope.jobApplication.application.prescreenAnswers)
-				}
+    angular.module('hirelyApp')
+        .controller('PreScreenController', ['$rootScope', '$scope', '$timeout', 'JobApplicationService', PreScreenController]);
 
 
-			}//// if application in granddaddy
-			else {
-				/**
-				 * initialize the data model to be saved in DB
-				 * @type {Object}
-				 */
-				$scope.model = {
-					prescreenAnswers: $scope.position.prescreenQuestions
-				};
+    function PreScreenController($rootScope, $scope, $timeout, JobApplicationService) {
 
+        $scope.daysUntilReapply = 0;
 
-			}/// if applicaiton in granddaddy else
+        $scope.dayDiff = function (d1, d2) {
+            var months;
+            if (isNaN(d2) || !d2) {
+                d2 = new Date();
+            }
+            if (angular.isString(d1)) {
+                d1 = new Date(d1);
+            }
+            if (angular.isString(d2)) {
+                d2 = new Date(d2);
+            }
+            return Math.round((d2.getHours() - d1.getHours()) / 24)
+        };
 
-			/**
-			 * Remove the _id property from answers array, if kept and sent with post request will create problem
-			 */
-			for (var x = 0; x < $scope.model.prescreenAnswers.length; x++) {
-				delete $scope.model.prescreenAnswers[x]._id;
-			}
+        $scope.initPrescreen = function () {
+            $scope.daysUntilReapply = $scope.getDaysUntilReapply($scope.application);
+            $scope.isApplyEligible = $scope.daysUntilReapply == 0;
+            $scope.$parent.blockFinished = !$scope.isApplyEligible;
 
-			$(window).scrollTop(0);
-			$scope.stepFourLoaded = true;
-		};
+            $(window).scrollTop(0);
+            $scope.stepFourLoaded = true;
+        };
+        $timeout($scope.initPrescreen);
 
-		$timeout($scope.initPrescreen);
+        $scope.getDaysUntilReapply = function (application) {
+            if (application.status == 0) {
+                return 0;
+            }
+            var dayDiff = $scope.dayDiff(application.createdAt);
+            var daysUntilReapply = 30 - dayDiff;
+            if (daysUntilReapply < 0) {
+                daysUntilReapply = 0;
+            }
+            return daysUntilReapply;
+        };
 
-		//// wait for destroy event to update data
-		$scope.$on('$destroy', function(event){
-			// Submit if submitting
-			if (!$scope.$parent.destroyDirection) {
-				return;
-			}
+        //// wait for destroy event to update data
+        $scope.$on('$destroy', function (event) {
 
-			var application = {
-				userId: $rootScope.currentUserId,
-				positionId: $scope.position._id,
-				status: 1, //// set status to 1
-				prescreenAnswers: angular.copy($scope.model.prescreenAnswers)
-			};
+            // If "Finish" was clicked, update the status of the application
+            if ($scope.$parent.destroyDirection) {
+                console.log("'Finish' was clicked, update the status of the application");
+                $scope.application.status = 1;
+            }
 
-			JobApplicationService.create(application)
-			.then(
-				function(savedApp){
-					/**
-					 * application saved
-					 * Update the parent scope
-					 * $scope.jobApplication.application  defined in parent controller.job-application.js
-					 */
-					$scope.jobApplication.application = savedApp;
+            JobApplicationService.save($scope.application)
+                .then(
+                    function () {
+                        console.log("Application created");
+                    },//// save resolve
+                    function (err) {
+                        alert(err);
+                    }//// save reject
+                );//// save().then()
+        });
 
-				},//// save resolve
-				function(err){
-					alert(err);
-				}//// save reject
-			);//// save().then()
-		});
-
-	}
+    }
 })();

@@ -23,6 +23,7 @@
          */
         var service = {
             create: create,
+            save: save,
             isApplicationExists: isApplicationExists,
             getByPositionId: getByPositionId,
             getByUserId: getByUserId,
@@ -44,6 +45,11 @@
             return HirelyApiService.applications().post(jobApp);
         }//// fun. create
 
+        function save(jobApp) {
+            console.dir(jobApp);
+            return HirelyApiService.applications(jobApp._id).patch(jobApp);
+        }//// fun. save
+
         /**
          * [isApplicationExists used to check and retrive job applicaiton object]
          * @param  {[string]}  userID [id of user]
@@ -53,7 +59,7 @@
         function isApplicationExists(userId, positionId) {
             var deferred = $q.defer();
 
-            HirelyApiService.applications({userId: userId, positionId: positionId}).get()
+            HirelyApiService.applications('byUserId', userId, {positionId: positionId}).get()
                 .then(
                     function (foundedApp) {
                         if (angular.isArray(foundedApp) && foundedApp.length > 0) {

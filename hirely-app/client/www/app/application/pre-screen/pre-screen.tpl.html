@@ -5,16 +5,16 @@
     <form class="form-horizontal" name="stepFour" novalidate form-step-validity>
         <fieldset>
             <div class="row" ng-show="!isApplyEligible">
-                <div class="col-sm-12">
-                        <div class="error-label bg-warning">You Already Applied for this job! You may re-apply in {{daysUntilReapply}} days.</div>
+                <div class="col-sm-12 error-label bg-warning" style="margin:0">
+                        <p>You Already Applied for this job! You may re-apply in {{daysUntilReapply}} days.  You're former pre-screen answers are below for reference.</p>
                 </div>
             </div>
-            <div class="row" ng-show="jobApplication.application && isApplyEligible">
-                <div class="col-sm-12">
-                    <div class="error-label bg-warning">You've applied for this job but it's been long enough that we recommend you re-apply.  Your former answers have been pre-filled.</div>
+            <div class="row" ng-show="isApplyEligible">
+                <div class="col-sm-12 text-center error-label bg-warning" style="margin:0">
+                    <p>You've applied for this job but it's been long enough that we recommend you re-apply.  Your former answers have been pre-filled.</p>
                 </div>
             </div>
-            <div class="row" ng-repeat="q in model.prescreenAnswers" ng-show="isApplyEligible">
+            <div class="row" ng-repeat="q in application.prescreenAnswers">
                 <div class="col-sm-12">
                     <div class="field-wrapper" ng-class="{'error': questionForm.question.$error.required && questionForm.question.$dirty, 'valid' : questionForm.question.$valid}">
                         <ng-form name="questionForm">
@@ -23,7 +23,7 @@
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
-                            <textarea class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" required></textarea>
+                            <textarea ng-disabled="!isApplyEligible" class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" required></textarea>
                         </ng-form>
                     </div>
                 </div>

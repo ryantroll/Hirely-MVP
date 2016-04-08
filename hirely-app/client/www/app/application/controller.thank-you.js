@@ -17,10 +17,8 @@
     businessService.getBySlug($stateParams.businessSlug)
         .then(
             function (business) {
-
               $scope.business = business;
               $scope.location = businessService.locationBySlug($stateParams.locationSlug, business);
-
               $scope.position = businessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
             },
             function (err) {

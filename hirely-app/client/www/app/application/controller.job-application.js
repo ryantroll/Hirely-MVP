@@ -26,52 +26,42 @@
 
         $scope.destroyDirection = 0;
         $scope.blockFinished = false;
-        
-
-        /**
-         * [jobApplication a parent object to hold variables to be set by child scope
-         * if child scope set direct variable of scope the will be overwriten]
-         * @type {Object}
-         */
-        $scope.jobApplication = {
-            application: null, //// applicatin object after it get saved in db
-            isNewUser: false //// this variable will be set in register form controller or login form congroller to identify new user from old logged in user
-        };
 
 
         BusinessService.getBySlug($stateParams.businessSlug)
             .then(
                 function (business) {
-
                     $scope.business = business;
                     $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
-
                     $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-                    initialize();
+                    JobApplicationService.isApplicationExists($rootScope.currentUserId, $scope.position._id).then(function(application) {
+                        $scope.application = application;
+                        if (!application) {
+                            $scope.application = application = {
+                                userId: $rootScope.currentUserId,
+                                positionId: $scope.position._id,
+                                prescreenAnswers: $scope.position.prescreenQuestions,
+                                status: 0
+                            };
+                            return JobApplicationService.create(application)
+                                .then(
+                                    function(application){
+                                        console.log("Application created");
+                                    },//// save resolve
+                                    function(err){
+                                        alert(err);
+                                    }//// save reject
+                                );//// save().then()
+                        }
+                    }).then(function() {
+                        initialize();
+                    });
                 },
                 function (err) {
                     console.log(err)
                 }
             );
-
-        /**
-         * [getApplicationData this function created to separate the promise chain,
-         * if user not logged in there is not need to load application data and user profile fileds
-         * this function will be called again inside UserLoggedIn event below to continue data loading]
-         * @return {promise} [description]
-         */
-        function getApplicationData() {
-            return JobApplicationService.getById($scope.position._id)
-                .then(
-                    function (app) {
-                        if (app) {
-                            $scope.jobApplication.application = app;
-                        }
-                    }
-                )
-
-        }//// fun. getApplicationData
 
         function setSteps() {
 
@@ -132,6 +122,8 @@
                 $scope.layoutModel.location = $scope.location.name;
 
                 $scope.layoutModel.noHeader = true;
+
+                
             }//// if!dataError
 
         }//// fun. initialize
