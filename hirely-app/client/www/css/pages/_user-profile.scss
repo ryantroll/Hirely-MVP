@@ -105,7 +105,8 @@ $day-button-size: 60px;
 		}
 
 		.progress-bar{
-			width:100px;
+			margin-left:5%;
+			width:90%;
 			height: 8px;
 			background-color:$c-hirely-text-gray;
 			@include border-radius(4px);
@@ -963,6 +964,13 @@ $day-button-size: 60px;
     width: 20%;
     float: left;
 }
+
+@media (max-width: 600px) {
+	.profile footer .center {
+		display:none;
+	}
+}
+
 @media (min-width: 768px) {
 	.col-sm-15 {
 		width: 20%;
