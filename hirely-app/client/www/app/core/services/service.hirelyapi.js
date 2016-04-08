@@ -99,7 +99,7 @@
             get: getFavorites
         };
 
-        function httpWrapper(method, url, data, withoutAuth) {
+        function httpWrapper(method, url, data) {
             var deferred = $q.defer();
             var params = {
                 method: method,
@@ -107,7 +107,7 @@
                 headers: {},
                 data: data
             };
-            if ($rootScope.token && !withoutAuth) {
+            if ($rootScope.token) {
                 params.headers['Authorization'] = $rootScope.token.jwt;
             }
             $http(params).then(
@@ -294,7 +294,7 @@
         }/// fun. createNewApplication
 
         function passwordLogin(emailAndPassword) {
-            return httpWrapper('POST', baseURL + endpointUrl, emailAndPassword, true);
+            return httpWrapper('POST', baseURL + endpointUrl, emailAndPassword);
         }/// fun. passwordLogin
 
         function getUsers() {

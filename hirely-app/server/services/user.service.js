@@ -170,7 +170,7 @@ var userService = {
                     // console.log("US:passwordLogin: user not found for " + email);
                     return null;
                 }
-
+                
                 if (skipPasswordCheck) {
                     return self.getUserAndTokenObj(user, config.tokenLifeDefault);
                 }

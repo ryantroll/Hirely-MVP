@@ -222,37 +222,43 @@ var businessService = {
             function(found){
                 // console.log("BS:getPositionsByManagerId:3");
 
-                /**
-                 * add the position id to the list or position
-                 * or if business or location add new criteria for next query
-                 */
-                for(var i=0; i<found.length; i++){
-                    // console.log("BS:getPositionsByManagerId:4");
-                    switch(found[i].destType){
-                        case 'positions':
-                            // console.log("BS:getPositionsByManagerId:5: "+found[i].destId);
-                            ids.push(found[i].destId);
-                            break;
-                        case 'businesses':
-                            // console.log("BS:getPositionsByManagerId:6: "+found[i].destId);
-                            queryNext.$or.push({_id:found[i].destId});
-                            businessesIds.push(found[i].destId);
-                            break;
-                        case 'locations':
-                            // console.log("BS:getPositionsByManagerId:6.5: "+found[i].destId);
-                            var q = {};
-                            q['locations.'+found[i].destId] = {$exists: true};
-                            locationsIds.push(found[i].destId);
-                            queryNext.$or.push(q);
-                            break;
-                    }
-                }
+                if (found.length) {
+                    console.log("BS:getPositionsByManagerId:3.1");
 
-                // console.log("BS:getPositionsByManagerId:7");
-                return businessModel.find(queryNext);
-                // Both of these work too
-                // return businessModel.find({$or: queryNext.$or});
-                // return businessModel.find().or(queryNext.$or);
+                    /**
+                     * add the position id to the list or position
+                     * or if business or location add new criteria for next query
+                     */
+                    for (var i = 0; i < found.length; i++) {
+                        // console.log("BS:getPositionsByManagerId:4");
+                        switch (found[i].destType) {
+                            case 'positions':
+                                // console.log("BS:getPositionsByManagerId:5: "+found[i].destId);
+                                ids.push(found[i].destId);
+                                break;
+                            case 'businesses':
+                                // console.log("BS:getPositionsByManagerId:6: "+found[i].destId);
+                                queryNext.$or.push({_id: found[i].destId});
+                                businessesIds.push(found[i].destId);
+                                break;
+                            case 'locations':
+                                // console.log("BS:getPositionsByManagerId:6.5: "+found[i].destId);
+                                var q = {};
+                                q['locations.' + found[i].destId] = {$exists: true};
+                                locationsIds.push(found[i].destId);
+                                queryNext.$or.push(q);
+                                break;
+                        }
+                    }
+
+                    // console.log("BS:getPositionsByManagerId:7");
+                    return businessModel.find(queryNext);
+                    // Both of these work too
+                    // return businessModel.find({$or: queryNext.$or});
+                    // return businessModel.find().or(queryNext.$or);
+                } else {
+                    return [];
+                }
             },
             function(err){
                 console.log(err)
@@ -262,26 +268,31 @@ var businessService = {
             function(businesses){
                 // console.log("BS:getPositionsByManagerId:8:businessIds: "+businessesIds);
 
-                for(var i=0; i<businesses.length; i++){
-                    // console.log("BS:getPositionsByManagerId:9:businessId: "+businesses[i]._id);
-                    //// if manager has permission on business then add all of its positions
-                    var addAllLocations = businessesIds.indexOf(String(businesses[i]._id)) >= 0;
+                if (businesses.length) {
 
-                    // console.log("BS:getPositionsByManagerId:10:addAllLocations " + addAllLocations);
-                    var positions = businesses[i].positions.toObject();
-                    // console.log("BS:getPositionsByManagerId:11");
-                    for(var pos in positions){
-                        // console.log("BS:getPositionsByManagerId:12");
+                    for (var i = 0; i < businesses.length; i++) {
+                        // console.log("BS:getPositionsByManagerId:9:businessId: "+businesses[i]._id);
+                        //// if manager has permission on business then add all of its positions
+                        var addAllLocations = businessesIds.indexOf(String(businesses[i]._id)) >= 0;
 
-                        if(true === addAllLocations || locationsIds.indexOf(positions[pos].locationId) >= 0 ){
-                            // console.log("BS:getPositionsByManagerId:13");
-                            if(ids.indexOf(pos) < 0) ids.push(pos);
-                        }
+                        // console.log("BS:getPositionsByManagerId:10:addAllLocations " + addAllLocations);
+                        var positions = businesses[i].positions.toObject();
+                        // console.log("BS:getPositionsByManagerId:11");
+                        for (var pos in positions) {
+                            // console.log("BS:getPositionsByManagerId:12");
 
-                    }//// for pos in positions
-                }//// for
-                // console.log("BS:getPositionsByManagerId:20");
-                return businessService.getPositionsByIds(ids);
+                            if (true === addAllLocations || locationsIds.indexOf(positions[pos].locationId) >= 0) {
+                                // console.log("BS:getPositionsByManagerId:13");
+                                if (ids.indexOf(pos) < 0) ids.push(pos);
+                            }
+
+                        }//// for pos in positions
+                    }//// for
+                    // console.log("BS:getPositionsByManagerId:20");
+                    return businessService.getPositionsByIds(ids);
+                } else {
+                    return [];
+                }
             },
             function(err){
                 err = "BS:getPositionsByManagerId:21:error" + err;

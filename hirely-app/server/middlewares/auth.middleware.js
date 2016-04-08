@@ -13,13 +13,19 @@ module.exports = function(req, res, next) {
     if(req.method == 'OPTIONS') next();
 
     console.log("Auth: "+req.headers.authorization);
+    console.log("URL: "+ req.url);
+    console.log("METHOD: "+ req.method);
     if (req.headers.authorization && req.headers.authorization != null && req.headers.authorization != 'null') {
         jwt.verify(req.headers.authorization, config.jwtSecret, function(err, payload) {
             // console.log("Payload: "+payload);
             if (err) {
-                console.log("Auth token declined");
-                res.status(401).json(apiUtil.generateResponse(401, "Auth token declined", null));
-                return;
+                if (req.url=='/api/v1/auth' && req.method=='POST') {
+                    console.log("Skipping auth reject because is login");
+                } else {
+                    console.log("Auth token declined");
+                    res.status(401).json(apiUtil.generateResponse(401, "Auth token declined", null));
+                    return;
+                }
             } else {
                 // do something with the string, which will look like "Bearer ____"
                 userModel.findById(payload.userId).then(function (user) {

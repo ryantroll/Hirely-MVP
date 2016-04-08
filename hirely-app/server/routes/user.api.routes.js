@@ -80,6 +80,7 @@ var userRoutes = {
     passwordLogin : function(req, res) {
 
         var skipPasswordCheck = req.isSuperUser;
+        console.log("req.isSuperUser:"+req.isSuperUser);
         var isBusinessUser = permissionService.isBusinessUser(req.permissions);
 
         userService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck, isBusinessUser)
