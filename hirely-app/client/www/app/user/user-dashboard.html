@@ -26,7 +26,7 @@
             </div><!--col-->
         </div><!--row-->
 
-        <div class="row" ng-show="myLocations.length">
+        <div class="row" ng-show="true">
             <div class="col-sm-12">
                 <div class="box">
                     <div class="title">
@@ -35,32 +35,31 @@
                     <div class="list">
                         <!-- <h4>Location: {{loc.name}} - {{loc.city}}, {{loc.state}}</h4> -->
 
-                        <table ng-repeat="loc in myLocations">
-                            <caption>Location: {{loc.name}} - {{loc.city}}, {{loc.state}}</caption>
+                        <table>
                             <thead class="clearfix">
                                 <tr>
                                     <th width="25%">Position</th>
-                                    <!-- <th>Status</th> -->
-                                    <th width="15%">Openings</th>
-                                    <th width="20%">Wage</th>
-                                    <th width="20%">Candidates</th>
-                                    <th width="20%">Details</th>
+                                    <th width="22%">Business</th>
+                                    <th width="22%">Location</th>
+                                    <th width="10%">Openings</th>
+                                    <th width="10%">Candidates</th>
+                                    <th width="10%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="pos in myLocationsObj[loc._id]">
+                                <tr ng-repeat="pos in myPositions">
                                     <th>Position</th>
-                                    <td>{{pos.title}}</td>
-                                    <!-- <th>Status</th>
-                                    <td>Active</td> -->
+                                    <td><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">{{pos.title}}</a></td>
+                                    <th>Business</th>
+                                    <td>{{pos.business.name}}</td>
+                                    <th>Location</th>
+                                    <td>{{pos.location.neighborhood}} - {{pos.location.city}}, {{pos.location.state}}</td>
                                     <th>Openings</th>
                                     <td>{{pos.openingsCount}}</td>
-                                    <th>Wage</th>
-                                    <td>${{pos.compensation.wageAmount}}/{{pos.compensation.wageType | uppercase}}</td>
-                                    <th>Candidates</th>
-                                    <td><button class="btn red" ui-sref="master.default.business.candidateList({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">MANAGE</button></td>
-                                    <th>Details</th>
-                                    <td><button class="btn" ui-sref="master.default.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">VIEW</button></td>
+                                    <th>Candidates</ht>
+                                    <td>{{pos.applicationCount}}</td>
+                                    <th>Action</th>
+                                    <td><button class="btn red" ui-sref="master.default.business.candidateList({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">Manage</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -79,28 +78,28 @@
                         <table ng-if="myFavorites.length > 0">
                             <thead class="clearfix">
                                 <tr>
-                                    <th>Position</th>
-                                    <th>Business</th>
-                                    <th>Location</th>
-                                    <th>Openings</th>
-                                    <th>Action</th>
-                                    <th>&nbsp;</th>
+                                    <th width="25%">Position</th>
+                                    <th width="22%">Business</th>
+                                    <th width="22%">Location</th>
+                                    <th width="15%">Wage</th>
+                                    <th width="10%">Action</th>
+                                    <th width="5%">&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="fav in myFavorites">
                                     <th>Position</th>
-                                    <td>{{positions[fav.positionId].title}}</td>
+                                    <td><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">{{positions[fav.positionId].title}}</a></td>
                                     <th>Business</th>
-                                    <td>{{positions[fav.positionId].business.name}} - {{positions[fav.positionId].location.name}}</td>
+                                    <td>{{positions[fav.positionId].business.name}}</td>
                                     <th>Location</th>
-                                    <td>{{positions[fav.positionId].location.city}}, {{positions[fav.positionId].location.state}}</td>
-                                    <th>Opening</th>
-                                    <td>{{positions[fav.positionId].openingsCount}}</td>
+                                    <td>{{positions[fav.positionId].location.neighborhood}} - {{positions[fav.positionId].location.city}}, {{positions[fav.positionId].location.state}}</td>
+                                    <th>Wage</th>
+                                    <td>${{positions[fav.positionId].compensation.wageAmount}} - {{positions[fav.positionId].compensation.wageType | uppercase}}</td>
                                     <th>Action</th>
                                     <td><button class="btn red" ui-sref="master.application.apply({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">Apply</button></td>
                                     <th>&nbsp;</th>
-                                    <td><button class="btn" ng-click="favoriteUpdate($index, fav.positionId, positions[fav.positionId].locationId, positions[fav.positionId].business._id)">Remove</button></td>
+                                    <td><button class="btn white" ng-click="favoriteUpdate($index, fav.positionId, positions[fav.positionId].locationId, positions[fav.positionId].business._id)"><i class="glyphicon glyphicon-remove"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -124,21 +123,21 @@
                         <table ng-if="myApplications.length > 0">
                             <thead class="clearfix">
                                 <tr>
-                                    <th>Position</th>
-                                    <th>Business</th>
-                                    <th>Location</th>
-                                    <th>Apply Date</th>
-                                    <th>Status</th>
+                                    <th width="25%">Position</th>
+                                    <th width="22%">Business</th>
+                                    <th width="22%">Location</th>
+                                    <th width="20%">Apply Date</th>
+                                    <th width="20%">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="app in myApplications">
                                     <th>Position</th>
-                                    <td>{{positions[app.positionId].title}}</td>
+                                    <td><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">{{positions[app.positionId].title}}</a></td>
                                     <th>Business</th>
-                                    <td>{{positions[app.positionId].business.name}} - {{positions[app.positionId].location.name}}</td>
+                                    <td>{{positions[app.positionId].business.name}}</td>
                                     <th>Location</th>
-                                    <td>{{positions[app.positionId].location.city}}, {{positions[app.positionId].location.state}}</td>
+                                    <td>{{positions[app.positionId].location.neighborhood}} - {{positions[app.positionId].location.city}}, {{positions[app.positionId].location.state}}</td>
                                     <th>Apply Date</th>
                                     <td>{{app.createdAt | date : 'MM/dd/yyyy'}}</td>
                                     <th>Status</th>

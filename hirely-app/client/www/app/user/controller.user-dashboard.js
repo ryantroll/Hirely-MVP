@@ -73,21 +73,6 @@
                 )
                 .then(
                     function (positions) {
-
-                        /**
-                         * Build my Locations
-                         */
-                        $scope.myLocationsObj = {};
-
-                        if (positions) {
-                            for (var pos in positions) {
-                                if (!(positions[pos].location_id in $scope.myLocationsObj)) {
-                                    $scope.myLocationsObj[positions[pos].location_id] = [];
-                                }
-                                $scope.myLocationsObj[positions[pos].location_id].push(angular.copy(positions[pos]))
-                                $scope.myLocations.push(angular.copy(positions[pos].location));
-                            }
-                        }
                         $scope.myPositions = positions;
                     },
                     function (err) {
