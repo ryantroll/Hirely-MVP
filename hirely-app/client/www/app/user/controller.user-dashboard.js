@@ -52,9 +52,8 @@
                                     positionIds.push(apps[x].positionId)
                                 }
                             }
-                            return BusinessService.getPositionsByIds(positionIds);
                         }
-                        return [];
+                        return BusinessService.getPositionsByIds(positionIds);
                     },
                     function (err) {
                         console.error("UD2:"+err);
