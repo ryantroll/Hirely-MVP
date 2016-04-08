@@ -17,8 +17,9 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <h1>My Dashboard</h1>
-                <div class="intro">
+                <h1 class="pull-left">My Dashboard</h1>
+                <div class="pull-left" style="margin-top:20px; padding-left:10px">(<a href="javascript:void(0)" ng-click="logout()">Logout</a>)</div>
+                <div class="intro" style="clear:both;">
                     <p>
                         Hi {{rootScope.currentUser.firstName}}, from your dashboard you can edit your profile, view your applications, manage your positions.
                     </p>
@@ -167,7 +168,6 @@
                         {{getFormatedPhone(rootScope.currentUser.mobile)}}
                     </p>
                 </div><!--profile-->
-                <a href="javascript:void(0)" ng-click="logout()">Logout</a>
             </div><!--col-->
         </div><!--row-->
 
