@@ -14,7 +14,7 @@
     function JobApplicationService($q, HirelyApiService) {
 
         var viewStatusLabels = ['New', 'Viewed', 'Aging'];
-        var statusLabels = ['Dismiss', 'Applied', 'Contacted', 'Hired', 'Shortlisted'];
+        var statusLabels = ['Started', 'Applied', 'Shortlisted', 'Contacted', 'Hired', 'Dismissed', 'Expired'];
         var educationPrograms = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
         /**
@@ -132,11 +132,13 @@
         function getStatistics(list) {
             var ret = {};
             ret.total = list.length;
+            ret.started = 0;
             ret.applied = 0;
+            ret.shortlisted = 0;
             ret.contacted = 0;
             ret.hired = 0;
-            ret.declined = 0;
-            ret.shortlisted = 0;
+            ret.dismissed = 0;
+            ret.expired = 0;
 
             for (var x = 0; x < ret.total; x++) {
 
@@ -145,16 +147,22 @@
                         ++ret.applied;
                         break;
                     case 0:
-                        ++ret.declined;
+                        ++ret.started;
                         break;
                     case 2:
-                        ++ret.contacted;
+                        ++ret.shortlisted;
                         break;
                     case 3:
-                        ++ret.hired;
+                        ++ret.contacted;
                         break;
                     case 4:
-                        ++ret.shortlisted;
+                        ++ret.hired;
+                        break;
+                    case 5:
+                        ++ret.dismissed;
+                        break;
+                    case 6:
+                        ++ret.expired;
                         break;
                 }
             }/// for

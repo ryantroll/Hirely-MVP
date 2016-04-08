@@ -66,7 +66,7 @@
                         <li><button class="btn" ng-class="{red:isFilterActive('shortlisted'), white:!isFilterActive('shortlisted')}" ng-click="setFilter('shortlisted')" ng-disabled="statistics.shortlisted == 0">Shortlisted <span  ng-show="statistics.shortlisted > 0">({{statistics.shortlisted}})</span></button></li>
                         <li><button class="btn" ng-class="{red:isFilterActive('contacted'), white:!isFilterActive('contacted')}" ng-click="setFilter('contacted')" ng-disabled="statistics.contacted == 0">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
                         <li><button class="btn" ng-class="{red:isFilterActive('hired'), white:!isFilterActive('hired')}" ng-click="setFilter('hired')" ng-disabled="statistics.hired == 0">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
-                        <li><button class="btn" ng-class="{red:isFilterActive('declined'), white:!isFilterActive('declined')}" ng-click="setFilter('declined')" ng-disabled="statistics.declined == 0">Dismiss <span ng-show="statistics.declined > 0">({{statistics.declined}})</span></button></li>
+                        <li><button class="btn" ng-class="{red:isFilterActive('dismissed'), white:!isFilterActive('dismissed')}" ng-click="setFilter('dismissed')" ng-disabled="statistics.dismissed == 0">Dismiss <span ng-show="statistics.dismissed > 0">({{statistics.dismissed}})</span></button></li>
                     </ul>
                 </div><!--col-->
             </div><!--row-->
@@ -157,19 +157,18 @@
                         <div class="candidate" ng-repeat="app in filtered">
                             <div class="menu">
                                 <div class="inner">
-                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 1 || app.status === 0" ng-click="updateAppStatus($event, app._id, 4)">Shortlist</a>
-                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 4" ng-click="updateAppStatus($event, app._id, 2)">Contact</a>
-                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 2 || app.status === 3" ng-disabled="app.status === 3" ng-click="updateAppStatus($event, app._id, 3)">Hire</a>
-                                    <!-- <a href="javascript:void(0);" class="action" ng-if="app.status === 0" ng-click="updateAppStatus($event, app._id, 1)">Applied</a> -->
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 1 || app.status === 5" ng-click="updateAppStatus($event, app._id, 2)">Shortlist</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 2" ng-click="updateAppStatus($event, app._id, 3)">Contact</a>
+                                    <a href="javascript:void(0);" class="action" ng-if="app.status === 3 || app.status === 4" ng-disabled="app.status === 4" ng-click="updateAppStatus($event, app._id, 4)">Hire</a>
                                     <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, app._id)"><i class="glyphicon glyphicon-menu-down"></i></a>
-                                    <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 0" ng-click="updateAppStatus($event, app._id, 0)"><i class="icon-thumb_down_icon"></i></a>
+                                    <a class="execlude" href="javascript:void(0);" ng-if="app.status !== 5" ng-click="updateAppStatus($event, app._id, 5)"><i class="icon-thumb_down_icon"></i></a>
                                 </div>
                                 <ul class="hidden" id="menu_{{app._id}}">
                                     <li ng-if="app.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, app._id, 1)">APPLIED</a></li>
-                                    <li ng-if="app.status !== 4"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 4)">SHORTLIST</a></li>
-                                    <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 2)">CONTACT</a></li>
-                                    <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, app._id, 3)">HIRE</a></li>
-                                    <li ng-if="app.status !== 0"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, app._id, 0)">DISMISS</a></li>
+                                    <li ng-if="app.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 2)">SHORTLIST</a></li>
+                                    <li ng-if="app.status !== 3"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, app._id, 3)">CONTACT</a></li>
+                                    <li ng-if="app.status !== 4"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, app._id, 4)">HIRE</a></li>
+                                    <li ng-if="app.status !== 5"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, app._id, 5)">DISMISS</a></li>
                                 </ul>
                             </div>
                             <div class="row">

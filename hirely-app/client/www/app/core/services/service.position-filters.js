@@ -39,7 +39,7 @@
             },
             {
                 type: "number",
-                value: 2
+                value: 3
             }
         ]
       },
@@ -56,12 +56,12 @@
             },
             {
                 type: "number",
-                value: 3
+                value: 4
             }
         ]
       },
-      declined: {
-        name: "Declined",
+      dismissed: {
+        name: "Dismissed",
         // dateCreated: new Date(),
         type: "computation",
         importance: 1,
@@ -73,7 +73,7 @@
             },
             {
                 type: "number",
-                value: 0
+                value: 5
             }
         ]
       },
@@ -90,7 +90,7 @@
             },
             {
                 type: "number",
-                value: 4
+                value: 2
             }
         ]
       },
