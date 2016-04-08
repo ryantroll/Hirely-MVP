@@ -142,7 +142,10 @@
                                     <th>Apply Date</th>
                                     <td>{{app.createdAt | date : 'MM/dd/yyyy'}}</td>
                                     <th>Status</th>
-                                    <td>{{getApplicationStatus(app.status)}}</td>
+                                    <td>
+                                        <span ng-if="app.status != 0">{{getApplicationStatus(app.status)}}</span>
+                                        <button class="btn red" ng-if="app.status == 0" ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Finish</button>
+                                    </td>
                                 </tr>
                             </tbody>
 
