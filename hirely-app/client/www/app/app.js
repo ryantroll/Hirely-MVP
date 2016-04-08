@@ -105,6 +105,11 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/account/register.tpl.html',
                 controller: 'RegisterController'
             })
+            .state('master.default.account.registerWithMessage', {
+                url: '/register/:message',
+                templateUrl: 'app/account/register.tpl.html',
+                controller: 'RegisterController'
+            })
             .state('master.default.job', {
                 abstract: true,
                 templateUrl: 'app/layout/job/job-master.tpl.html',

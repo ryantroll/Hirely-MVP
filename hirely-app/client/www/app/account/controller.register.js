@@ -22,9 +22,9 @@
       }//// fun. link
     }/// return object
   })/// validate date;
-    .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$timeout', 'AuthService', RegisterController ]);
+    .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'AuthService', RegisterController ]);
 
-    function RegisterController($location, $scope, $rootScope, $state, $timeout, authService) {
+    function RegisterController($location, $scope, $rootScope, $state, $stateParams, $timeout, authService) {
 
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: ''};
@@ -33,6 +33,8 @@
             $scope.user.invitation = $location.search().inv;
             $scope.businessName = $location.search().b;
         }
+
+        $scope.message = $stateParams.message;
 
         $timeout(function() {
             $(window).scrollTop(0);
