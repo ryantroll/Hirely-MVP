@@ -79,13 +79,17 @@ var applicationRoutes = {
     },
 
     saveApplication: function(req, res){
-
         applicationModel.findById(req.params.appId).then(function(app) {
+
+            // console.log("AR:info:1");
             permissionService.checkPermission(req.permissions, "positions", app.positionId).then(function(grant) {
-                if (!grant) {
+                // console.log("AR:info:1.1");
+                if (!(req.userId==app.userId || grant)) {
+                    // console.log("AR:info:2");
                     res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
                     return;
                 }
+                // console.log("AR:info:3");
 
                 applicationService.saveApplication(req.params.appId, req.body)
                     .then(

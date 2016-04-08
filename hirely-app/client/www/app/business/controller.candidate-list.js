@@ -235,7 +235,7 @@
          * update view status to aging
          */
         app.viewStatus = 2;
-        JobApplicationService.update(app._id, app).
+        JobApplicationService.save(app).
         then(
           function(app){
             $scope.applications[index] = app;
@@ -290,7 +290,7 @@
         if(angular.isDefined($scope.detailsApp)){
           $scope.detailsApp.status = status;
         }
-        JobApplicationService.update(app._id, app)
+        JobApplicationService.save(app)
         .then(
           function(saved){
             // $scope.updateStats();
@@ -405,7 +405,7 @@
              */
             var appToSave = angular.copy(app);
             appToSave.viewStatus = 1;
-            JobApplicationService.update(app._id, appToSave).
+            JobApplicationService.save(appToSave).
             then(
               function(app){
                   $scope.applications[index] = app;

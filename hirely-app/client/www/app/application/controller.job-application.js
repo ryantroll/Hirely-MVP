@@ -13,10 +13,10 @@
                 return Math.round(value);
             }
         })
-        .controller('JobApplicationController', ['$q', '$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+        .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', 'JobApplicationService', 'BusinessService', JobApplicationController]);
 
 
-    function JobApplicationController($q, $scope, $rootScope, $stateParams, $state, $timeout, JobApplicationService, BusinessService) {
+    function JobApplicationController($scope, $rootScope, $stateParams, $state, JobApplicationService, BusinessService) {
 
         /**
          * [availability this scope is the parent of availability step scope and this variaable is needed there]
@@ -26,52 +26,42 @@
 
         $scope.destroyDirection = 0;
         $scope.blockFinished = false;
-        
-
-        /**
-         * [jobApplication a parent object to hold variables to be set by child scope
-         * if child scope set direct variable of scope the will be overwriten]
-         * @type {Object}
-         */
-        $scope.jobApplication = {
-            application: null, //// applicatin object after it get saved in db
-            isNewUser: false //// this variable will be set in register form controller or login form congroller to identify new user from old logged in user
-        };
 
 
         BusinessService.getBySlug($stateParams.businessSlug)
             .then(
                 function (business) {
-
                     $scope.business = business;
                     $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
+                    $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-                    $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business)
-
-                    initialize();
+                    JobApplicationService.isApplicationExists($rootScope.currentUserId, $scope.position._id).then(function(application) {
+                        $scope.application = application;
+                        if (!application) {
+                            $scope.application = application = {
+                                userId: $rootScope.currentUserId,
+                                positionId: $scope.position._id,
+                                prescreenAnswers: $scope.position.prescreenQuestions,
+                                status: 0
+                            };
+                            return JobApplicationService.create(application)
+                                .then(
+                                    function(application){
+                                        console.log("Application created");
+                                    },//// save resolve
+                                    function(err){
+                                        alert(err);
+                                    }//// save reject
+                                );//// save().then()
+                        }
+                    }).then(function() {
+                        initialize();
+                    });
                 },
                 function (err) {
                     console.log(err)
                 }
             );
-
-        /**
-         * [getApplicationData this function created to separate the promise chain,
-         * if user not logged in there is not need to load application data and user profile fileds
-         * this function will be called again inside UserLoggedIn event below to continue data loading]
-         * @return {promise} [description]
-         */
-        function getApplicationData() {
-            return JobApplicationService.getById($scope.position._id)
-                .then(
-                    function (app) {
-                        if (app) {
-                            $scope.jobApplication.application = app;
-                        }
-                    }
-                )
-
-        }//// fun. getApplicationData
 
         function setSteps() {
 
@@ -132,6 +122,8 @@
                 $scope.layoutModel.location = $scope.location.name;
 
                 $scope.layoutModel.noHeader = true;
+
+                
             }//// if!dataError
 
         }//// fun. initialize
@@ -150,24 +142,24 @@
                 return 1;
             }
 
-            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.workExperience) && $scope.userData.workExperience.length > 0)) {
+            if (!(Array.isArray($rootScope.currentUser.workExperience) && $rootScope.currentUser.workExperience.length > 0)) {
                 return 2;
             }
 
-            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.education) && $scope.userData.education.length > 0)) {
+            if (!(Array.isArray($rootScope.currentUser.education) && $rootScope.currentUser.education.length > 0)) {
                 return 3;
             }
 
-            if (!(angular.isDefined($scope.userData) && Array.isArray($scope.userData.personalityExams) && $scope.userData.personalityExams.length > 0)) {
+            if (!(Array.isArray($rootScope.currentUser.personalityExams) && $rootScope.currentUser.personalityExams.length > 0)) {
                 return 4;
             }
 
-            if (!(angular.isDefined($scope.userData.availability.hoursPerWeekMin) && $scope.userData.availability.hoursPerWeekMin > 0)) {
+            if (!(angular.isDefined($rootScope.currentUser.availability.hoursPerWeekMin) && $rootScope.currentUser.availability.hoursPerWeekMin > 0)) {
                 return 5;
             }
 
             return 6;
-        }
+        };
 
         /**
          * [finish trigger when user get to the last step pre-screen and click finish button, will reidrect the user to thank you page]
@@ -175,7 +167,7 @@
          */
         $scope.finish = function () {
             delete $scope.layoutModel.noHeader;
-            $state.go('master.application.done', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
+            $state.go('master.default.confirm', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
         };
 
         function semiFixedFooter() {

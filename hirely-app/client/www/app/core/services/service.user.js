@@ -112,7 +112,7 @@
 
     this.clearPhoneFormat = function(val){
       if (val) {
-        return val.split(/[\(|\)| |\-|\+|\.|\+1\.]/).join('');
+        return val.split(/[\(|\)| |\-|\+|\.]/).join('');
       } else return '';
     }
 

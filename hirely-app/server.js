@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var errorHandler = require('./server/utils/errorHandler')();
 var logger = require('morgan');
-var tinylr  = require('tiny-lr');
 
 var config = require('./server/config');
 
@@ -12,7 +11,6 @@ var onetScoresService = require('./server/services/onetScores.service');
 
 /** MongoDB **/
 var mongoose = require('mongoose');
-var connectMongo = require('connect-mongo');
 mongoose.connect(config.mongoUri);
 
 var port =  process.env.LR_PORT || process.env.PORT || 3000;
@@ -21,7 +19,16 @@ var routes;
 var environment = process.env.NODE_ENV;
 
 var compression = require('compression');
-app.use(compression());
+app.use(compression({filter: function(req, res) {
+    // iPhone: Mozilla/5.0 (iPhone; CPU iPhone OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E233 Safari/601.1
+    // Chrome: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36
+    // console.dir('Ua: ' +req.headers['user-agent']);
+    if (req.headers['user-agent'].indexOf('iPhone')!=-1 || req.headers['user-agent'].indexOf('iPad')!=-1) {
+        console.log("IPHONE DETECTED.  Disabling compression");
+        return false;
+    }
+    return compression.filter(req, res);
+}}));
 
 app.use(bodyParser.urlencoded({extended: true, limit:'50mb'}));
 app.use(bodyParser.json({limit:'50mb'}));

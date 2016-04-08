@@ -1,18 +1,25 @@
-<div class="content">
-    <div class="inner text-center">
-        <h3>Huzzuh!</h3>
-        <p>&nbsp;</p>
-        <p>
-            Way to crush that application, {{name}}! We’re now hard at work determing if you are a good fit for the {{layoutModel.position}} position. A hiring manager from {{ayoutModel.position}} will be in touch.
-        </p>
-        <p>&nbsp;</p>
-        <!--<p>-->
-            <!--Did you like this application experience? Please take-->
-            <!--<br>-->
-            <!--1 minute to provide us with your feedback.-->
-        <!--</p>-->
-        <!--<p>-->
-            <!--<a class="btn red">take survey</a>-->
-        <!--</p>-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 center-block" style="float:none">
+            <div class="content thank-you">
+                <div class="inner text-center">
+                    <h3>Huzzuh!</h3>
+                    <p>&nbsp;</p>
+                    <p>
+                        Way to crush that application, {{rootScope.currentUser.firstName}}! We’re now hard at work determining if you are a good fit for the {{position.title}} position. We'll keep you posted.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>To see the status of this and other applications, check our your <a ui-sref="master.default.dashboard">dashboard</a>.</p>
+                    <!--<p>-->
+                        <!--Did you like this application experience? Please take-->
+                        <!--<br>-->
+                        <!--1 minute to provide us with your feedback.-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<a class="btn red">take survey</a>-->
+                    <!--</p>-->
+                </div>
+            </div>
+        </div>
     </div>
 </div>

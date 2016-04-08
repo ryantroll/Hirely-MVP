@@ -73,7 +73,7 @@ var myApp = angular.module('hirelyApp',
                 authRequired: true
             })
 
-            .state('master.application.done', {
+            .state('master.default.confirm', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/done',
                 templateUrl: 'app/application/thank-you.tpl.html',
                 controller: 'ThankYouApplicationController',
@@ -133,5 +133,5 @@ var myApp = angular.module('hirelyApp',
 
 
         // if none of the above states are matched, use this as the fallback
-        // $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/');
     });

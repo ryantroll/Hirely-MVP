@@ -99,7 +99,7 @@
             get: getFavorites
         };
 
-        function httpWrapper(method, url, data, withoutAuth) {
+        function httpWrapper(method, url, data) {
             var deferred = $q.defer();
             var params = {
                 method: method,
@@ -107,7 +107,7 @@
                 headers: {},
                 data: data
             };
-            if ($rootScope.token && !withoutAuth) {
+            if ($rootScope.token) {
                 params.headers['Authorization'] = $rootScope.token.jwt;
             }
             $http(params).then(
@@ -244,6 +244,23 @@
                     endpointUrl += (endpointUrl.indexOf('?') < 0 ? "?" : "&") + processObject(args[1]);
                 }
             }//// if 2 == argsNum
+
+            if (3 <= numArgs) {
+                /**
+                 * if third argument is string add to end of URL only if second string is not array or object
+                 * e.g. /api/v1/some-id/external
+                 */
+                if ("string" === typeof args[2] && '' !== args[2] && 'string' === typeof args[1] && '' !== args[1]) {
+                    endpointUrl += '/' + encodeURIComponent(args[2]);
+                }
+                else if (angular.isArray(args[2])) {
+                    endpointUrl += (endpointUrl.indexOf('?') < 0 ? "?" : "&") + processArray(args[2]);
+                }
+                else if (angular.isObject(args[2])) {
+                    endpointUrl += (endpointUrl.indexOf('?') < 0 ? "?" : "&") + processObject(args[2]);
+                }
+            }//// if 3 == argsNum
+
         }//// fun. setEndpoint
 
 
@@ -277,7 +294,7 @@
         }/// fun. createNewApplication
 
         function passwordLogin(emailAndPassword) {
-            return httpWrapper('POST', baseURL + endpointUrl, emailAndPassword, true);
+            return httpWrapper('POST', baseURL + endpointUrl, emailAndPassword);
         }/// fun. passwordLogin
 
         function getUsers() {
