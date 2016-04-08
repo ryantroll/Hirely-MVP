@@ -466,6 +466,7 @@ $candidat-menu-height:40px;
                             width:100px;
                         }
                     }
+
                 }//// .traits
 
                 .more-link{
@@ -817,6 +818,9 @@ $candidat-menu-height:40px;
                             display: inline-block;
                             width:100px;
                         }
+                    }
+                    span{
+                        cursor: help;
                     }
                 }//// .traits
 

@@ -43,6 +43,23 @@
             window.scrollTo(0, 0);
         });
 
+        /**
+         * Below code is used for testing traitfiy meta data saving
+         */
+        // TraitifyService.getTest()
+        // .then(
+        //     function(test){
+        //         console.log(test);
+        //         assessmentId = test.extId;
+        //         results.slides = test.slides;
+        //         results.blend = test.personalityBlend;
+        //         results.traits = test.personalityTraits;
+        //         results.types = test.personalityTypes;
+
+        //         saveAssessment();
+        //     }
+        // )
+
         function saveAssessment() {
             if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
                 saved = true;

@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
                                     <p class="traits visible-sm-block visible-md-block visible-lg-block" ng-show="applicant.personalityExams.length > 0">
-                                        <strong>Top Traits</strong> <span uib-tooltip="{{trait._id}}" ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
+                                        <strong>Top Traits</strong> <span uib-tooltip="{{trait.meta.definition}}" ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
                                     </p>
                                     <p class="status">
                                         {{position.title}} - <span class="{{statusLabels[applicant.status] | lowercase}}">{{statusLabels[applicant.status]}}</span>

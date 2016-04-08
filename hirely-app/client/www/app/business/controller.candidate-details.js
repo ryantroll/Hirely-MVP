@@ -72,9 +72,11 @@
                         }
                         for(var xx=1; xx<6; xx++){
                             if(metas[x]._id === metaArray[xx]){
-
+                                $scope.applicant.personalityExams[0].personalityTraits[xx-1].meta = metas[x].meta;
+                                continue;
                             }
                         }//// for
+                        console.log($scope.applicant.personalityExams[0].personalityTraits);
                     }//// for
 
                 },
