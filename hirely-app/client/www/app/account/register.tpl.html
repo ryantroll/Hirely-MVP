@@ -95,8 +95,8 @@
                         />
                         <label for="legalAgree" style="padding-left:10px">
                             I agree to Hirely's
-                            <a href="javascript:void(0)" ng-click="showTerms=true">Terms of Service</a>
-                            &amp; <a href="javascript:void(0)" ng-click="showPrivacy=true">Privacy Policy</a>.
+                            <a target="_blank"  href="http://hirely.us/terms-conditions/">Terms of Service</a>
+                            &amp; <a target="_blank" href="http://hirely.us/privacy-policy">Privacy Policy</a>.
                         </label>
                     </div>
                 </div>
@@ -128,29 +128,4 @@
 
         </fieldset>
     </ng-form>
-</div>
-
-<div id="termsModal" class="genericModal" ng-show="showTerms">
-    <div><div> <!-- For the modal -->
-        <ul>
-            <li>A legal resident of the United States or one of its territories</li>
-            <li>Legally be allowed to work or conduct business in the United States</li>
-            <li>At least 16 years old</li>
-        </ul>
-        <div class="text-center">
-            <button ng-click="showTerms=false" class="btn-sm gray">Close</button>
-        </div>
-    </div></div>
-</div>
-
-<div id="privacyModal" class="genericModal" ng-show="showPrivacy">
-    <div><div> <!-- For the modal -->
-        <ul>
-            <li>You agree to allow businesses to contact you</li>
-            <li>Your data will be used anonymously for reporting metrics</li>
-        </ul>
-        <div class="text-center">
-            <button ng-click="showPrivacy=false" class="btn-sm gray">Close</button>
-        </div>
-    </div></div>
 </div>
