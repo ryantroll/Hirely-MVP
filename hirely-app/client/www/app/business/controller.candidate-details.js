@@ -1,4 +1,4 @@
-/**
+    /**
  *
  * Applicant List Main Controller
  *
@@ -64,7 +64,6 @@
 
             return TraitifyService.getMeta(metaArray.join('|')).then(
                 function(metas){
-                    console.log(metas)
                     for(var x=0; x<metas.length; x++){
                         if(metas[x]._id === blend){
                             $scope.personalityBlendMeta = metas[x];
@@ -76,7 +75,7 @@
                                 continue;
                             }
                         }//// for
-                        console.log($scope.applicant.personalityExams[0].personalityTraits);
+
                     }//// for
 
                 },
