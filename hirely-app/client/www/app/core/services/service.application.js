@@ -58,24 +58,18 @@
          * @return {promise}        [usually promise will returned]
          */
         function isApplicationExists(userId, positionId) {
-            var deferred = $q.defer();
 
-            HirelyApiService.applications('byUserId', userId, {positionId: positionId}).get()
+            return HirelyApiService.applications('byUserId', userId, {positionId: positionId}).get()
                 .then(
                     function (foundedApp) {
-                        if (angular.isArray(foundedApp) && foundedApp.length > 0) {
-                            deferred.resolve(foundedApp[0]);
+                        if (foundedApp.length > 0) {
+                            return foundedApp[0];
                         }
                         else {
-                            deferred.reject();
+                            return null;
                         }
-                    },
-                    function (err) {
-                        deferred.reject(err);
                     }
                 )//// .get().then()
-
-            return deferred.promise;
         }
 
         function getById(applicationId) {

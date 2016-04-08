@@ -34,11 +34,13 @@
                     $scope.business = business;
                     $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
                     $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
+                    console.log("JA:info: Business loaded successfully");
 
                     JobApplicationService.isApplicationExists($rootScope.currentUserId, $scope.position._id).then(function(application) {
                         $scope.application = application;
                         if (!application) {
-                            $scope.application = application = {
+                            console.log("JA:info: No prior application found");
+                            application = {
                                 userId: $rootScope.currentUserId,
                                 positionId: $scope.position._id,
                                 prescreenAnswers: $scope.position.prescreenQuestions,
@@ -47,12 +49,15 @@
                             return JobApplicationService.create(application)
                                 .then(
                                     function(application){
-                                        console.log("Application created");
+                                        console.log("JA:info: Application created");
+                                        $scope.application = application;
                                     },//// save resolve
                                     function(err){
                                         alert(err);
                                     }//// save reject
                                 );//// save().then()
+                        } else {
+                            console.log("JA:info: Prior application found");
                         }
                     }).then(function() {
                         initialize();
