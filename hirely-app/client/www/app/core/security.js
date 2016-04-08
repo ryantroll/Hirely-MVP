@@ -14,8 +14,8 @@
      * for changes in auth status which might require us to navigate away from a path
      * that we can no longer view.
      */
-         .run(['$rootScope', '$state', 'AuthService', 'UserService', 'loginRedirectPath',
-            function ($rootScope, $state, authService, userService, loginRedirectPath) {
+         .run(['$rootScope', '$state', 'AuthService', 'UserService', 'BusinessService', 'loginRedirectPath',
+            function ($rootScope, $state, authService, userService, businessService, loginRedirectPath) {
 
                 if (angular.isUndefined($rootScope.nextState)) {
                     $rootScope.nextState = [];
@@ -26,7 +26,16 @@
                     authService.refreshSession().then(function() {
                         if (toState.authRequired && !$rootScope.currentUserId){
                             $rootScope.nextState.push({state:toState, params:toParams})
-                            $state.go(loginRedirectPath, {message: "You must login to view this page."});
+
+                            if (toState.name == 'master.application.apply') {
+                                console.log("Caught apply without login");
+                                getPositionTitleFromParams(toParams).then(function(positionTitle) {
+                                    console.log("PosTitle = "+positionTitle);
+                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
+                                });
+                            } else {
+                                $state.go(loginRedirectPath, {message: "You must login to view this page."});
+                            }
                             event.preventDefault();
                         }
                     });
@@ -38,7 +47,6 @@
                 $rootScope.$on('TokenExpired', function(event, args) {
                     authService.logout();
                     if ($state.current.authRequired) {
-                        console.log("Caught private page with token expired");
                         $rootScope.nextState.push({state:$state.current.name, params:$state.params});
                         $state.go(loginRedirectPath, {message: "Sorry, your session has expired."});
                     } else {
@@ -46,6 +54,14 @@
                     }
                 });
 
+                function getPositionTitleFromParams(params) {
+                    return businessService.getBySlug(params.businessSlug)
+                        .then(function (business) {
+                            return businessService.positionBySlug(params.positionSlug, params.locationSlug, business).title;
+                        }
+                    );
+
+                }
             }
         ]);
 

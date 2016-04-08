@@ -253,7 +253,9 @@
                 postalCode: $scope.user.postalCode,
                 languagesSpoken: languagesSpokenRaw
             };
-            userService.saveUser(toSave);
+            userService.saveUser(toSave).then(function(user) {
+                angular.extend($rootScope.currentUser, user);
+            });
         });
 
         $scope.selectFile = function () {

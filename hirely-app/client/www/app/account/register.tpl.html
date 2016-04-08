@@ -1,5 +1,6 @@
-<h1 ng-show="!user.invitation" class="text-center">Create an account, it's easy!</h1>
+<h1 ng-show="!user.invitation && !message" class="text-center">Create an account, it's easy!</h1>
 <h1 ng-show="user.invitation" class="text-center">Welcome to {{businessName}}!</h1>
+<h1 ng-show="message" class="text-center">{{message}}</h1>
 
 <div class="user-profile-basic hirely-form" ng-class="{waiting:ajaxBusy}">
     <div class="in-form-loader">
@@ -87,28 +88,15 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="copy-section text-center">
-                        <p>Already have an Account? <a href="javascript:void(0);" ui-sref="master.default.account.login">Log in</a></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="copy-section">
-                        <div class="text-center">
-                            <p>
-                                By signing up, you agree to HIRELY’s<br>
-                                <a href="javascript:void(0)">Terms of Service</a> &amp; <a href="javascript:void(0)">Privacy Policy</a>.
-                            </p>
-                        </div>
-                        <div class="narrow">
-                            <ul>
-                                <li>A legal resident of the United States or one of its territories</li>
-                                <li>Legally be allowed to work or conduct business in the United States</li>
-                                <li>At least 16 years old</li>
-                            </ul>
-                        </div>
+                    <div class="field-wrapper">
+                        <input type="checkbox" id="legalAgree" name="legalagree"
+                               required
+                        />
+                        <label for="legalAgree" style="padding-left:10px">
+                            I agree to Hirely's
+                            <a target="_blank"  href="http://hirely.us/terms-conditions/">Terms of Service</a>
+                            &amp; <a target="_blank" href="http://hirely.us/privacy-policy">Privacy Policy</a>.
+                        </label>
                     </div>
                 </div>
             </div>
@@ -117,6 +105,14 @@
                 <div class="col-sm-12">
                     <div class="field-wrapper text-center">
                         <button class="btn btn-lg red" ng-disabled="!registerForm.$valid" ng-click="handleRgisterForm()">Create Account</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="copy-section text-center">
+                        <p>Already have an Account? <a href="javascript:void(0);" ui-sref="master.default.account.login">Log in</a></p>
                     </div>
                 </div>
             </div>

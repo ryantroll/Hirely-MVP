@@ -29,6 +29,7 @@
                 if ($scope.tokenRemainingTime < 60) {
                     $scope.showRefreshModal = true;
                     $scope.$apply();
+                    $(window).scrollTop(0);
                 }
 
                 if ($scope.tokenRemainingTime < 0) {

@@ -79,6 +79,11 @@ var applicationRoutes = {
     },
 
     saveApplication: function(req, res){
+        if (req.user.sandboxMode) {
+            res.status(200).json(apiUtil.generateResponse(200, "Skipping because sandbox mode", null));
+            return;
+        }
+
         applicationModel.findById(req.params.appId).then(function(app) {
 
             // console.log("AR:info:1");
