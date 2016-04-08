@@ -1246,6 +1246,7 @@ var userSchema = new Schema({
     eligibleToWorkInUS: {type: Boolean},
     tenureAvg: {type: Number},
     queuedForMetricUpdate: {type: Boolean, default: false, index: true},
+    sandboxMode: {type: Boolean, default:false},
 
 
     /**
