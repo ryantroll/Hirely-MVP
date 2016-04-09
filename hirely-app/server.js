@@ -35,6 +35,7 @@ app.use(bodyParser.json({limit:'50mb'}));
 app.use(logger('dev'));
 app.use(cors());                // enable ALL CORS requests
 app.use(errorHandler.init);
+app.use(require('./server/middlewares/force-https.middleware'));
 
 
 routes = require('./server/routes')(app);

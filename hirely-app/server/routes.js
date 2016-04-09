@@ -25,7 +25,10 @@ module.exports = function(app) {
     var favoriteApiRoutes = require('./routes/favorite.api.routes');
     var onetWebApiRoutes = require('./routes/onetWeb.api.routes');
 
-    app.all('/api/v1/*', _.values(requireDir('./middlewares')));
+    // app.all('/api/v1/*', _.values(requireDir('./middlewares')));
+    app.all('/api/v1/*', require('./middlewares/auth.middleware'));
+    app.all('/api/v1/*', require('./middlewares/ie-no-cache.middleware.js'));
+
 
     app.get('/api/googleplace:placeId', getGooglePlacebyId);
     app.get('/api/search/cities/:addressQuery', getAddressFomQuery);
