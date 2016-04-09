@@ -14,34 +14,39 @@
      * for changes in auth status which might require us to navigate away from a path
      * that we can no longer view.
      */
-         .run(['$rootScope', '$state', 'AuthService', 'UserService', 'BusinessService', 'loginRedirectPath',
-            function ($rootScope, $state, authService, userService, businessService, loginRedirectPath) {
+         .run(['$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', 'BusinessService', 'loginRedirectPath',
+            function ($rootScope, $state, $stateParams, authService, userService, businessService, loginRedirectPath) {
 
                 if (angular.isUndefined($rootScope.nextState)) {
                     $rootScope.nextState = [];
                 }
 
+                function handleAuthRequiredRedirect(toState, toParams, event) {
+                    if (toState.authRequired && !$rootScope.currentUserId){
+                        $rootScope.nextState.push({state:toState, params:toParams})
+
+                        if (toState.name == 'master.application.apply') {
+                            console.log("Caught apply without login");
+                            getPositionTitleFromParams(toParams).then(function(positionTitle) {
+                                console.log("PosTitle = "+positionTitle);
+                                $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
+                            });
+                        } else {
+                            $state.go(loginRedirectPath, {message: "You must login to view this page."});
+                        }
+                        if (event) {
+                            event.preventDefault();
+                        }
+                    }
+                }
+                // Run on initialization, just in case it doesn't get caught by $stateChangeStart, which I suspect it does sometimes
+                handleAuthRequiredRedirect($state, $stateParams, event);
+
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
                     // If user is logged in, refresh token. If fails, redirect to login
                     authService.refreshSession().then(function() {
-                        if (toState.authRequired && !$rootScope.currentUserId){
-                            $rootScope.nextState.push({state:toState, params:toParams})
-
-                            if (toState.name == 'master.application.apply') {
-                                console.log("Caught apply without login");
-                                getPositionTitleFromParams(toParams).then(function(positionTitle) {
-                                    console.log("PosTitle = "+positionTitle);
-                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
-                                });
-                            } else {
-                                $state.go(loginRedirectPath, {message: "You must login to view this page."});
-                            }
-                            event.preventDefault();
-                        }
+                        handleAuthRequiredRedirect(toState, toParams, event)
                     });
-
-
-
                 });
 
                 $rootScope.$on('TokenExpired', function(event, args) {
