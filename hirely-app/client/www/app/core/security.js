@@ -22,8 +22,9 @@
                 }
 
                 function handleAuthRequiredRedirect(toState, toParams, event) {
+                    console.log("S:handleAuthRequiredRedirect:info: "+$rootScope.currentUserId+":"+toState.name+":"+toState.authRequired);
                     if (toState.authRequired && !$rootScope.currentUserId){
-                        $rootScope.nextState.push({state:toState, params:toParams})
+                        $rootScope.nextState.push({state:toState.name, params:toParams});
 
                         if (toState.name == 'master.application.apply') {
                             console.log("Caught apply without login");
