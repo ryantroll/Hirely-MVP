@@ -195,11 +195,11 @@
         var userObj = $scope.applicants[list[x].userId];
 
         if (!scoreObj) {
-          console.log("Error: user "+list[x].userId+" was not found in $scope.scores.  AppId: " + list[x]._id);
+          console.log("CandidateList:applyFilters:error:0: user "+list[x].userId+" was not found in $scope.scores.  AppId: " + list[x]._id);
           continue;
         }
         if (!userObj) {
-          console.log("Error: user "+list[x].userId+" was not found in $scope.applicants.  AppId: " + list[x]._id);
+          console.log("CandidateList:applyFilters:error:1: user "+list[x].userId+" was not found in $scope.applicants.  AppId: " + list[x]._id);
           continue;
         }
 
