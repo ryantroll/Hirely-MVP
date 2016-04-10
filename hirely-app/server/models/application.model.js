@@ -6,6 +6,7 @@ var applicationSchema = new Schema({
   userId      :       {type:String, ref:'users', required:true, index:true},
   positionId   :       {type:String, required:true, index:true},
   createdAt   :       {type:Date, required:true, default:Date.now},
+  isVetted    :       {type:Boolean, default:false},
   status      :       {
                         type:Number, //// 0 Started, 1 Applied, 2 Shortlisted, 3 Contacted, 4 Hired, 5 Dismissed, 6 Expired.
                         required:true,
