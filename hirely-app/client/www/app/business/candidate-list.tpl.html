@@ -175,7 +175,7 @@
                                 <div class="col-sm-3">
                                     <div class="image">
                                         <div class="image-wrapper">
-                                            <img ng-if="applicants[app.userId].profileImageURL || defaultImage" src="{{applicants[app.userId].profileImageURL || defaultImage}}" />
+                                            <img ng-if="applicants[app.userId].profileImageURL || defaultImage" ng-src="{{applicants[app.userId].profileImageURL || defaultImage}}" />
                                         </div>
                                         <div class="tag">{{getViewStatus(app._id, $index)}}</div>
                                         <div class="date">Applied: {{app.createdAt | date:'MM/dd/yyyy'}}</div>

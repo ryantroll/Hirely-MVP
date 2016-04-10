@@ -129,7 +129,7 @@ var applicationService = {
 
             // console.log("as:getByPositionId:2");
 
-            return applicationModel.find({'positionId': positionId}).then(function (applications) {
+            return applicationModel.find({positionId: positionId, status: {$gt: -1} }).then(function (applications) {
                 // console.log("as:getByPositionId:3");
                 var userIds = [];
                 for (let application of applications) {
