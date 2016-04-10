@@ -37,32 +37,36 @@
                     $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
                     console.log("JA:info: Business loaded successfully");
 
-                    JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function(application) {
-                        $scope.application = application;
-                        if (!application) {
-                            console.log("JA:info: No prior application found");
-                            application = {
-                                userId: AuthService.currentUserId,
-                                positionId: $scope.position._id,
-                                prescreenAnswers: $scope.position.prescreenQuestions,
-                                status: 0
-                            };
-                            return JobApplicationService.create(application)
-                                .then(
-                                    function(application){
-                                        console.log("JA:info: Application created");
-                                        $scope.application = application;
-                                    },//// save resolve
-                                    function(err){
-                                        alert(err);
-                                    }//// save reject
-                                );//// save().then()
-                        } else {
-                            console.log("JA:info: Prior application found");
-                        }
-                    }).then(function() {
+                    if (AuthService.token.twt) {
+                        JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function (application) {
+                            $scope.application = application;
+                            if (!application) {
+                                console.log("JA:info: No prior application found");
+                                application = {
+                                    userId: AuthService.currentUserId,
+                                    positionId: $scope.position._id,
+                                    prescreenAnswers: $scope.position.prescreenQuestions,
+                                    status: 0
+                                };
+                                return JobApplicationService.create(application)
+                                    .then(
+                                        function (application) {
+                                            console.log("JA:info: Application created");
+                                            $scope.application = application;
+                                        },//// save resolve
+                                        function (err) {
+                                            alert(err);
+                                        }//// save reject
+                                    );//// save().then()
+                            } else {
+                                console.log("JA:info: Prior application found");
+                            }
+                        }).then(function () {
+                            initialize();
+                        });
+                    } else {
                         initialize();
-                    });
+                    }
                 },
                 function (err) {
                     console.log(err)
