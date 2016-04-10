@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('ProfileBasicController', ['$scope', '$rootScope', 'multiStepFormInstance', 'UserService', '$timeout', 'FileUpload', 'DEFAULT_PROFILE_IMAGE', ProfileBasicController])
+    angular.module('hirelyApp').controller('ProfileBasicController', ['$rootScope', '$scope', '$timeout', 'multiStepFormInstance', 'AuthService', 'UserService', 'FileUpload', 'DEFAULT_PROFILE_IMAGE', ProfileBasicController])
         .directive('validateDate', function () {
             return {
                 restrict: 'A',
@@ -106,7 +106,7 @@
         });
 
 
-    function ProfileBasicController($scope, $rootScope, multiStepFormInstance, userService, $timeout, FileUpload, DEFAULT_PROFILE_IMAGE) {
+    function ProfileBasicController($rootScope, $scope, $timeout, multiStepFormInstance, AuthService, UserService, FileUpload, DEFAULT_PROFILE_IMAGE) {
 
         $scope.validStep = false;
 
@@ -128,7 +128,7 @@
 
             if (newVal === false || angular.isUndefined(newVal)) return;
 
-            $scope._mobile = userService.formatPhone(newVal);
+            $scope._mobile = UserService.formatPhone(newVal);
 
             // Android doesn't move the cursor to the end of the input when we change it, so re-focus
             $("#dob").focus();
@@ -175,16 +175,16 @@
         
 
         $scope.initBasic = function () {
-            $scope.user = angular.copy($rootScope.currentUser);
+            $scope.user = angular.copy(AuthService.currentUser);
 
             /**
              * Set scope _dateOfBirth and _mobile these 2 properites need to be fomrated before display
              */
             if ($scope.user.mobile) {
-                $scope._mobile = userService.formatPhone($scope.user.mobile.split('+1.').join(''));
+                $scope._mobile = UserService.formatPhone($scope.user.mobile.split('+1.').join(''));
             }
             if ($scope.user.dateOfBirth) {
-                $scope._dateOfBirth = userService.formatDate($scope.user.dateOfBirth);
+                $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
             }
 
             if (!$scope.user.profileImageURL) {
@@ -227,7 +227,7 @@
                 $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
             }
             if ($scope._mobile) {
-                $scope.user.mobile = '+1.' + userService.clearPhoneFormat($scope._mobile);
+                $scope.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
             }
 
             /**
@@ -253,8 +253,8 @@
                 postalCode: $scope.user.postalCode,
                 languagesSpoken: languagesSpokenRaw
             };
-            userService.saveUser(toSave).then(function(user) {
-                angular.extend($rootScope.currentUser, user);
+            UserService.saveUser(toSave).then(function(user) {
+                angular.extend(AuthService.currentUser, user);
             });
         });
 
@@ -280,7 +280,7 @@
                 var fileName = $scope.file.name.split('.');
                 var ext = fileName.pop();
                 fileName = fileName.join('.');
-                fileName += '-pofile-' + $rootScope.currentUserId + '.' + ext;
+                fileName += '-pofile-' + AuthService.currentUserId + '.' + ext;
 
                 angular.element('.image-loader').show();
 
@@ -288,9 +288,9 @@
                     .then(
                         function (fileUrl) {
                             $scope.user.profileImageURL = fileUrl;
-                            $rootScope.currentUser.profileImageURL = fileUrl;
+                            AuthService.currentUser.profileImageURL = fileUrl;
                             var userData = {profileImageURL: fileUrl};
-                            return userService.saveUser(userData, $rootScope.currentUserId);
+                            return UserService.saveUser(userData, AuthService.currentUserId);
                         },
                         function (err) {
                             console.log("Error uploading: "+err);
@@ -316,9 +316,9 @@
 
         $scope.removeImage = function () {
             $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
-            $rootScope.currentUser.profileImageURL = null;
+            AuthService.currentUser.profileImageURL = null;
             var userData = {profileImageURL: null};
-            return userService.saveUser(userData, $rootScope.currentUserId)
+            return UserService.saveUser(userData, AuthService.currentUserId)
                 .then(
                     function (savedUser) {
                         delete $scope.file;

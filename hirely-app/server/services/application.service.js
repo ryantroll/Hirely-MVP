@@ -1,10 +1,10 @@
 'use strict'
 var applicationModel = require('../models/application.model');
-var userService = require('./user.service');
+var UserService = require('./user.service');
 var userModel = require('../models/user.model');
 var businessModel = require('../models/business.model');
 var careerMatchScoresModel = require('../models/careerMatchScores.model');
-var businessService = require('./business.service');
+var BusinessService = require('./business.service');
 var q = require('q');
 
 function validateIds(userId, positionId){
@@ -12,7 +12,7 @@ function validateIds(userId, positionId){
     /**
      * First Check if user is a valid user
      */
-    userService.getById(userId)
+    UserService.getById(userId)
     .then(
         function(user){
             if(null !== user){
@@ -20,7 +20,7 @@ function validateIds(userId, positionId){
                  * User existes check if position is there with it's business object
                  */
 
-                businessService.getByPositionId(positionId)
+                BusinessService.getByPositionId(positionId)
                 .then(
                     function(business){
                         /**

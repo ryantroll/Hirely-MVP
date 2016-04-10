@@ -1,10 +1,5 @@
-/**
- * Created by labrina.loving on 8/9/2015.
- */
 (function (angular) {
     "use strict";
-
-      var securedRoutes = [];
 
     angular.module('hirelyApp.core')
 
@@ -14,56 +9,59 @@
      * for changes in auth status which might require us to navigate away from a path
      * that we can no longer view.
      */
-         .run(['$rootScope', '$state', '$stateParams', 'AuthService', 'UserService', 'BusinessService', 'loginRedirectPath',
-            function ($rootScope, $state, $stateParams, authService, userService, businessService, loginRedirectPath) {
+         .run(['$rootScope', '$state', '$stateParams', 'BusinessService', 'AuthService', 'loginRedirectPath',
+            function ($rootScope, $state, $stateParams, BusinessService, AuthService, loginRedirectPath) {
 
-                if (angular.isUndefined($rootScope.nextState)) {
-                    $rootScope.nextState = [];
-                }
+                var AuthInitted = false;
 
-                function handleAuthRequiredRedirect(toState, toParams, event) {
-                    console.log("S:handleAuthRequiredRedirect:info: "+$rootScope.currentUserId+":"+toState.name+":"+toState.authRequired);
-                    if (toState.authRequired && !$rootScope.currentUserId){
+                function handleAuthRequiredRedirect(toState, toParams, event, msg) {
+                    if (!AuthInitted) {
+                        console.log("S:handleAuthRequiredRedirect:info:0: Skipping because auth not init yet");
+                        return;
+                    }
+                    console.log("S:handleAuthRequiredRedirect:info:0: "+AuthService.currentUserId+":"+toState.name+":"+toState.authRequired);
+                    if (toState.authRequired && !AuthService.token.remainingTime){
                         $rootScope.nextState.push({state:toState.name, params:toParams});
 
                         if (toState.name == 'master.application.apply') {
-                            console.log("Caught apply without login");
+                            console.log("S:handleAuthRequiredRedirect:info:1: Caught apply without login");
                             getPositionTitleFromParams(toParams).then(function(positionTitle) {
                                 console.log("PosTitle = "+positionTitle);
                                 $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
                             });
                         } else {
-                            $state.go(loginRedirectPath, {message: "You must login to view this page."});
+                            console.log("S:handleAuthRequiredRedirect:info:2: Redirecting to login");
+                            if (!msg) {
+                                msg = "You must login to view this page."
+                            }
+                            $state.go(loginRedirectPath, {message: msg});
                         }
                         if (event) {
                             event.preventDefault();
                         }
                     }
                 }
-                // Run on initialization, just in case it doesn't get caught by $stateChangeStart, which I suspect it does sometimes
-                handleAuthRequiredRedirect($state, $stateParams, event);
+
+                $rootScope.$on('AuthInitted', function(event, args) {
+                    AuthInitted = true;
+                    console.log("S:AuthInitted:info:0: Caught Auth Init");
+                    handleAuthRequiredRedirect($state.current.name, $state.params, event);
+                });
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-                    // If user is logged in, refresh token. If fails, redirect to login
-                    authService.refreshSession().then(function() {
-                        handleAuthRequiredRedirect(toState, toParams, event)
-                    });
+                    console.log("S:$stateChangeStart:info:0: Caught state change: "+fromState.name+" to "+toState.name);
+                    handleAuthRequiredRedirect(toState, toParams, event);
                 });
 
-                $rootScope.$on('TokenExpired', function(event, args) {
-                    authService.logout();
-                    if ($state.current.authRequired) {
-                        $rootScope.nextState.push({state:$state.current.name, params:$state.params});
-                        $state.go(loginRedirectPath, {message: "Sorry, your session has expired."});
-                    } else {
-                        $rootScope.$apply();
-                    }
+                $rootScope.$on('UserLoggedOut', function(event, args) {
+                    console.log("S:TokenExpired:info:0: Caught user logged out");
+                    handleAuthRequiredRedirect($state.current.name, $state.params, event);
                 });
-
+                
                 function getPositionTitleFromParams(params) {
-                    return businessService.getBySlug(params.businessSlug)
+                    return BusinessService.getBySlug(params.businessSlug)
                         .then(function (business) {
-                            return businessService.positionBySlug(params.positionSlug, params.locationSlug, business).title;
+                            return BusinessService.positionBySlug(params.positionSlug, params.locationSlug, business).title;
                         }
                     );
 

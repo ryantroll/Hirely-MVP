@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('hirelyApp.core')
-        .service('HirelyApiService', ['$http', '$q', '$rootScope', HirelyApiService]);
+        .service('HirelyApiService', ['$http', '$q', '$rootScope', '$injector', HirelyApiService]);
 
-    function HirelyApiService($http, $q, $rootScope) {
+    function HirelyApiService($http, $q, $rootScope, $injector) {
 
 
         /**
@@ -107,8 +107,9 @@
                 headers: {},
                 data: data
             };
-            if ($rootScope.token) {
-                params.headers['Authorization'] = $rootScope.token.jwt;
+            var jwt = $injector.get('AuthService').token.jwt;
+            if (jwt) {
+                params.headers['Authorization'] = jwt;
             }
             $http(params).then(
                 function (resSuccess) {
@@ -116,7 +117,7 @@
                 },
                 function (resError) {
                     if (resError.status == 401) {
-                        $rootScope.$emit('TokenExpired');
+                        $rootScope.$emit('TokenExpiredError');
                     }
 
                     console.log("Error getting user with url " + baseURL + endpointUrl + ".  Error: " + resError.data.message);

@@ -4,9 +4,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('DefaultCtrl', ['$scope', '$rootScope', '$state', DefaultCtrl]);
+    angular.module('hirelyApp.layout').controller('DefaultCtrl', ['$scope', '$state', 'AuthService', DefaultCtrl]);
 
-    function DefaultCtrl($scope, $rootScope, $state) {
-        $scope.rootScope = $rootScope;
+    function DefaultCtrl($scope, $state, AuthService) {
+        $scope.AuthService = AuthService;
+        $scope.$state = $state;
     };
 })();

@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'AuthService', 'UserService', 'PositionFiltersService', CandidateListController]);
+  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'PositionFiltersService', CandidateListController]);
 
 
-  function CandidateListController($scope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, authService, userService, PositionFiltersService) {
+  function CandidateListController($scope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, PositionFiltersService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     $scope.showPositionMenu = false;

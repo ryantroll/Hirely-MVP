@@ -1,7 +1,7 @@
 'use strict'
 var q = require('q');
 var onetScoresService = require('../services/onetScores.service');
-var userService = require('../services/user.service');
+var UserService = require('../services/user.service');
 var Business = require('../models/business.model');
 var User = require('../models/user.model');
 var CareerMatchScores = require('../models/careerMatchScores.model');

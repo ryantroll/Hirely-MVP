@@ -1,4 +1,4 @@
-var businessService = require('../services/business.service');
+var BusinessService = require('../services/business.service');
 var apiUtil = require('../utils/api-response');
 var permissionService = require('../services/permissions.service');
 
@@ -8,7 +8,7 @@ var businessRoutes = {
         /**
          * Send public info if all is not requested
          */
-        businessService.getBySlug(req.params.slug, req.query)
+        BusinessService.getBySlug(req.params.slug, req.query)
         .then(
             function(business){
                 res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
@@ -24,7 +24,7 @@ var businessRoutes = {
         /**
          * Send public info if all is not requested
          */
-        businessService.getByPositionId(req.params.pid, req.query)
+        BusinessService.getByPositionId(req.params.pid, req.query)
             .then(
                 function(business){
                     res.status(200).json(apiUtil.generateResponse(200, "Business retrieved successfully", business));
@@ -40,7 +40,7 @@ var businessRoutes = {
         /**
          * Send public info if all is not requested
          */
-        businessService.getPositionsByIds(req.params.pid.split('|'), req.query)
+        BusinessService.getPositionsByIds(req.params.pid.split('|'), req.query)
             .then(
                 function(position){
                     res.status(200).json(apiUtil.generateResponse(200, "Position retrieved successfully", position));
@@ -53,7 +53,7 @@ var businessRoutes = {
     },
 
     getPositionsByManagerId: function(req, res){
-        businessService.getPositionsByManagerId(req.params.managerId, req.query, req.isSuperUser)
+        BusinessService.getPositionsByManagerId(req.params.managerId, req.query, req.isSuperUser)
             .then(
                 function(position){
                     res.status(200).json(apiUtil.generateResponse(200, "Position retrieved successfully", position));
@@ -72,7 +72,7 @@ var businessRoutes = {
                 return;
             }
 
-            businessService.isUserIdFilteredForPositionId(req.params.uid, req.params.pid, req.query)
+            BusinessService.isUserIdFilteredForPositionId(req.params.uid, req.params.pid, req.query)
                 .then(
                     function (bool) {
                         res.status(200).json(apiUtil.generateResponse(200, bool));
@@ -88,7 +88,7 @@ var businessRoutes = {
 
     getPositionDisplayData : function(req, res){
 
-        businessService.getPositionDisplayData(req.query.occId)
+        BusinessService.getPositionDisplayData(req.query.occId)
         .then(
             function(data){
                 res.status(200).json(apiUtil.generateResponse(200, "Icon found", data));

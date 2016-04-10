@@ -7,11 +7,11 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('CandidateDetailsController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
-    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AuthService', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsModalController]);
+    angular.module('hirelyApp').controller('CandidateDetailsController', ['$stateParams', '$scope', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
+    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$scope', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsModalController]);
 
 
-    function CandidateDetailsControllerCore($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
+    function CandidateDetailsControllerCore($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
         $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
         $scope.days = AvailabilityService.days;
         $scope.hours = AvailabilityService.hours;
@@ -202,8 +202,8 @@
 
     }//// controller
 
-    function CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
-        CandidateDetailsControllerCore($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
+    function CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
+        CandidateDetailsControllerCore($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
 
         $scope.isModal = false;
 
@@ -220,8 +220,8 @@
 
     }
 
-    function CandidateDetailsModalController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, $uibModalInstance, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
-        CandidateDetailsController($scope, $rootScope, $stateParams, $state, $timeout, $interpolate, DEFAULT_PROFILE_IMAGE, authService, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
+    function CandidateDetailsModalController($scope, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
+        CandidateDetailsController($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
 
         $scope.isModal = true;
 

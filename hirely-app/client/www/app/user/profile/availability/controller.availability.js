@@ -17,9 +17,9 @@
      * Controller Definition ********************************************************
      * ******************************************************************************
      */
-    step5App.controller('ProfileAvailabilityController', ['$rootScope', '$scope', '$timeout', 'AvailabilityService', ProfileAvailabilityController])
+    step5App.controller('ProfileAvailabilityController', ['$scope', '$timeout', 'AuthService', 'AvailabilityService', ProfileAvailabilityController])
 
-    function ProfileAvailabilityController($rootScope, $scope, $timeout, availabilityService) {
+    function ProfileAvailabilityController($scope, $timeout, AuthService, availabilityService) {
 
         /**
          * [availability this object will hold the data that need bot saved in database
@@ -62,7 +62,7 @@
              * @type {Array}
              */
 
-            $scope.availability = availabilityService.toFrontEndModel($rootScope.currentUser.availability);
+            $scope.availability = availabilityService.toFrontEndModel(AuthService.currentUser.availability);
 
             $scope.totalHours = 0;
             for (var d = 0; d < 7; d++) {
@@ -200,11 +200,11 @@
         $scope.$on('$destroy', function () {
             console.log("Caught avail destroy");
 
-            availabilityService.save(angular.copy($scope.availability), $rootScope.currentUserId)
+            availabilityService.save(angular.copy($scope.availability), AuthService.currentUserId)
                 .then(
                     function (user) {
                         console.log("Avail is saved");
-                        angular.extend($rootScope.currentUser, {availability: user.availability});
+                        angular.extend(AuthService.currentUser, {availability: user.availability});
                     },//// .save resolve
                     function (error) {
                         /**

@@ -1,5 +1,5 @@
 var permissionService = require('../services/permissions.service');
-var userService = require('../services/user.service');
+var UserService = require('../services/user.service');
 var apiUtil = require('../utils/api-response');
 var config = require('../config');
 
@@ -15,7 +15,7 @@ var userRoutes = {
         /**
          * Send public info if all is not requested
          */
-        userService.getById(req.params.id, req.query)
+        UserService.getById(req.params.id, req.query)
             .then(
                 function(user){
                     res.status(200).json(apiUtil.generateResponse(200, "User retrieved successfully", user));
@@ -36,7 +36,7 @@ var userRoutes = {
         var expiresIn = config.tokenLifeDefault;
         if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
 
-        var userAndToken = userService.getUserAndTokenObj(req.user, expiresIn);
+        var userAndToken = UserService.getUserAndTokenObj(req.user, expiresIn);
 
         res.status(200).json(apiUtil.generateResponse(200, "Token retrieved successfully", userAndToken));
     },
@@ -51,7 +51,7 @@ var userRoutes = {
         }
 
 
-        userService.createNewUser(user)
+        UserService.createNewUser(user)
             .then(
                 function(userAndToken){
                     // console.log(userAndToken);
@@ -72,7 +72,7 @@ var userRoutes = {
                 return;
             }
 
-            var token = userService.createSimpleBusinessInvitationToken(req.params.id);
+            var token = UserService.createSimpleBusinessInvitationToken(req.params.id);
             res.status(200).json(apiUtil.generateResponse(200, "Invitation Results", token));
         });
     },
@@ -83,7 +83,7 @@ var userRoutes = {
         console.log("req.isSuperUser:"+req.isSuperUser);
         var isBusinessUser = permissionService.isBusinessUser(req.permissions);
 
-        userService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck, isBusinessUser)
+        UserService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck, isBusinessUser)
             .then(
                 function(user) {
                     res.status(200).json(apiUtil.generateResponse(200, "Password login results", user));
@@ -103,7 +103,7 @@ var userRoutes = {
             return;
         }
 
-        userService.saveUser(req.params.id, req.body)
+        UserService.saveUser(req.params.id, req.body)
         .then(
             function(user){
                 res.status(200).json(apiUtil.generateResponse(200, "User updated successfully", user));
@@ -117,7 +117,7 @@ var userRoutes = {
 
 
     updateUserMetricsById: function(req, res){
-        userService.updateUserMetricsById(req.params.id).then(
+        UserService.updateUserMetricsById(req.params.id).then(
             function(user) {
                 res.status(200).json(apiUtil.generateResponse(200, "User updated successfully", user));
             },

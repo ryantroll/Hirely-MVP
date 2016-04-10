@@ -12,7 +12,7 @@
 
 
 
-  function UserProfileController($rootScope, $scope, $stateParams, $state, authService, userService, JobApplicationService, HirelyApiService) {
+  function UserProfileController($rootScope, $scope, $stateParams, $state, AuthService, UserService, JobApplicationService, HirelyApiService) {
 
     $scope.availability = {};
 

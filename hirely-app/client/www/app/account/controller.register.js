@@ -24,7 +24,7 @@
   })/// validate date;
     .controller('RegisterController', ['$location', '$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'AuthService', RegisterController ]);
 
-    function RegisterController($location, $scope, $rootScope, $state, $stateParams, $timeout, authService) {
+    function RegisterController($location, $scope, $rootScope, $state, $stateParams, $timeout, AuthService) {
 
         $scope.error = '';
         $scope.user = {email: '', password: '', firstName: '', lastName: ''};
@@ -71,7 +71,7 @@
 
 
             //register new user
-            authService.registerNewUser(registeredUser)
+            AuthService.registerNewUser(registeredUser)
                 .then(
                     function(user) {
                       if (user) {

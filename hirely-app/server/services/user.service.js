@@ -42,7 +42,7 @@ function monthDiff(d1, d2) {
 var educationProgramTypes = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
 
-var userService = {
+var UserService = {
 
     /**
      * [get function will get a user by id or slug]
@@ -546,7 +546,7 @@ var userService = {
             try {
                 for (let user of users) {
                     console.warn("US:updateQueuedUserMetrics:info: Updating: " + user.email);
-                    promises.push(userService.updateUserMetrics(user));
+                    promises.push(UserService.updateUserMetrics(user));
                     if (promises.length > 3) {
                         break;
                     }
@@ -572,4 +572,4 @@ var userService = {
 
 }; /// users object
 
-module.exports = userService;
+module.exports = UserService;

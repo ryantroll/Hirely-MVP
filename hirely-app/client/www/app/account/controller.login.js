@@ -7,7 +7,7 @@
     angular.module('hirelyApp.account').controller('LoginController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'AuthService', LoginController ]);
 
 
-    function LoginController($scope, $rootScope, $state, $stateParams, $timeout, authService) {
+    function LoginController($scope, $rootScope, $state, $stateParams, $timeout, AuthService) {
 
 
         $scope.error = '';
@@ -27,8 +27,8 @@
 
         $scope.passwordLogin = function() {
             $scope.ajaxBusy = true;
-            console.log("logging in...");
-            authService.passwordLogin($scope.user.email, $scope.user.password)
+            console.log("Login:passwordLogin:info:logging in...");
+            AuthService.passwordLogin($scope.user.email, $scope.user.password)
                 .then(
                     function(user){
                         // console.dir(user);

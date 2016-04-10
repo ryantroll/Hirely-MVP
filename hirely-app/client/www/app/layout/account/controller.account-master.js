@@ -4,10 +4,9 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.layout').controller('AccountMasterController', ['$scope', '$state', '$stateParams',AccountMasterController]);
+  angular.module('hirelyApp.layout').controller('AccountMasterController', [AccountMasterController]);
 
-  function AccountMasterController($scope, $http, $state, $stateParams) {
-    console.log('account master')
+  function AccountMasterController() {
   }//// fun. JobController
 
  })();

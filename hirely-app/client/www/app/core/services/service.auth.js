@@ -7,48 +7,64 @@
     angular.module('hirelyApp.core')
         .factory('AuthService', ['$q', '$rootScope', '$cookies', 'UserService', 'HirelyApiService', AuthService]);
 
-    function AuthService($q, $rootScope, $cookies, userService, hirelyApiService) {
-
+    function AuthService($q, $rootScope, $cookies, UserService, HirelyApiService) {
         var service = {
+            token: {jwt:null, exp:0, remainingTime:0},
+            currentUser: null,
+            currentUserId: null,
+            setToken: setToken,
             refreshSession: refreshSession,
             passwordLogin: passwordLogin,
             registerNewUser: registerNewUser,
-            logout: logout
+            logout: logout,
+            updateTokenRemainingTime: updateTokenRemainingTime
         };
+
         return service;
 
+        function setToken(tokenAndExp) {
+            $cookies.put("token", JSON.stringify(tokenAndExp));
+            service.token = {jwt:tokenAndExp.jwt, exp:tokenAndExp.exp, remainingTime:9999};
+            service.updateTokenRemainingTime();
+        }
+
         function refreshSession() {
-            var token = $cookies.get("token");
-            if (token && token != '') {
-                token = JSON.parse(token);
-                $rootScope.token = token;
-
-                return hirelyApiService.auth().get().then(function (userAndToken) {
+            if (!service.token.jwt) {
+                var tokenCookie = $cookies.get("token");
+                if (tokenCookie && tokenCookie != '') {
+                    service.setToken(JSON.parse(tokenCookie));
+                }
+            }
+            if (service.token.jwt) {
+                return HirelyApiService.auth().get().then(function (userAndToken) {
                     if (userAndToken) {
-                        $cookies.put("token", JSON.stringify(userAndToken.token));
-                        $rootScope.token = userAndToken.token;
-                        $rootScope.currentUser = userAndToken.user;
-                        $rootScope.currentUserId = userAndToken.user._id;
-
-                        $rootScope.$emit('UserLoggedIn', userAndToken.user);
-                        $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
-                        console.log("Session has been refreshed");
+                        service.setToken(userAndToken.token);
+                        service.currentUser = userAndToken.user;
+                        service.currentUserId = userAndToken.user._id;
+                        console.log("AS:SessionRefresh:info: Token Refreshed");
+                        $rootScope.$emit('SessionRefreshed');
+                        $rootScope.$broadcast('SessionRefreshed');
                         return true;
                     }
+                    console.error("AS:SessionRefresh:error: Token refresh failed");
+                    $rootScope.$emit('SessionRefreshed');
+                    $rootScope.$broadcast('SessionRefreshed');
                     return null;
                 });
-            };
-            return $q.resolve(null);
+            } else {
+                console.log("AS:SessionRefresh:info: No token to refresh");
+                $rootScope.$emit('SessionRefreshed');
+                $rootScope.$broadcast('SessionRefreshed');
+                return $q.resolve(null);
+            }
         }
 
         function passwordLogin(email, password) {
-            return hirelyApiService.auth().post({email: email, password: password}).then(function(userAndToken) {
+            return HirelyApiService.auth().post({email: email, password: password}).then(function(userAndToken) {
                 if (userAndToken) {
-                    $cookies.put("token", JSON.stringify(userAndToken.token));
-                    $rootScope.token = userAndToken.token;
-                    $rootScope.currentUser = userAndToken.user;
-                    $rootScope.currentUserId = userAndToken.user._id;
-
+                    service.setToken(userAndToken.token);
+                    service.currentUser = userAndToken.user;
+                    service.currentUserId = userAndToken.user._id;
                     $rootScope.$emit('UserLoggedIn', userAndToken.user);
                     $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
                     return userAndToken.user;
@@ -58,15 +74,15 @@
         }
 
         function registerNewUser(userData) {
-            return userService.createNewUser(userData).then(function (userAndToken) {
+            return UserService.createNewUser(userData).then(function (userAndToken) {
                 if (userAndToken) {
-                    $cookies.put("token", JSON.stringify(userAndToken.token));
-                    $rootScope.token = userAndToken.token;
-                    $rootScope.currentUser = userAndToken.user;
-                    $rootScope.currentUserId = userAndToken.user._id;
-
+                    service.setToken(userAndToken.token);
+                    service.currentUser = userAndToken.user;
+                    service.currentUserId = userAndToken.user._id;
                     $rootScope.$emit('UserLoggedIn', userAndToken.user);
                     $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
+                    $rootScope.$emit('UserRegistered', userAndToken.user);
+                    $rootScope.$broadcast('UserRegistered', userAndToken.user);
                     return userAndToken.user;
                 }
             });
@@ -75,12 +91,20 @@
 
         function logout() {
             console.log("Logging out");
-            $rootScope.currentUser = null;
-            $rootScope.currentUserId = null;
+            service.currentUser = null;
+            service.currentUserId = null;
+            service.setToken({jwt:null, exp:0});
             $cookies.remove("token");
-            $rootScope.token = null;
             $rootScope.$emit('UserLoggedOut');
             $rootScope.$broadcast('UserLoggedOut');
         }
+
+        function updateTokenRemainingTime() {
+            service.token.remainingTime = Number(service.token.exp) - Math.ceil(Date.now()/1000) - 5;
+            if(service.token.remainingTime<=0 && service.token.jwt) {
+                service.logout();
+            }
+        }
     }
+
 })();

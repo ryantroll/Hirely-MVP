@@ -74,13 +74,13 @@ function startListening() {
 
 if (config.appMode == 'crunchMuncher') {
     console.log("Running in crunchMuncher mode...");
-    var userService = require('./server/services/user.service');
+    var UserService = require('./server/services/user.service');
 
     console.log("Priming onetScoresCache...");
     onetScoresService.getAll().then(function() {
         console.log("onetScoresCache is primed");
-        // userService.updateQueuedUserMetrics();
-        setInterval(userService.updateQueuedUserMetrics, 10000);
+        // UserService.updateQueuedUserMetrics();
+        setInterval(UserService.updateQueuedUserMetrics, 10000);
         startListening();
     });
 

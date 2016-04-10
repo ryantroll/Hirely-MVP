@@ -14,7 +14,7 @@ var privateFields = [
 
 ];
 
-var businessService = {
+var BusinessService = {
 
     getById: function(id, reqQuery){
         // Determine what fields to return based on reqQuery.
@@ -216,7 +216,7 @@ var businessService = {
                         positionIds.push(p);
                     }
                 }
-                return businessService.getPositionsByIds(positionIds);
+                return BusinessService.getPositionsByIds(positionIds);
             });
         }
 
@@ -321,7 +321,7 @@ var businessService = {
                         }//// for pos in positions
                     }//// for
                     // console.log("BS:getPositionsByManagerId:20");
-                    return businessService.getPositionsByIds(ids);
+                    return BusinessService.getPositionsByIds(ids);
                 } else {
                     return [];
                 }
@@ -505,7 +505,7 @@ var businessService = {
             return userModel.findById(userId).then(function(user) {
                 return applicationModel.findOne({userId: user._id, positionId: positionId}).then(function(application) {
                     return careerMatchScoresModel.findOne({userId: user._id, occId: position.occId}).then(function(careerMatchScores) {
-                        return businessService.isUserFilteredForPosition(user, businessObj, positionId, application, careerMatchScores);
+                        return BusinessService.isUserFilteredForPosition(user, businessObj, positionId, application, careerMatchScores);
                     });
                 })
             });
@@ -566,4 +566,4 @@ var businessService = {
 }/// businesss object
 
 
-module.exports = businessService;
+module.exports = BusinessService;

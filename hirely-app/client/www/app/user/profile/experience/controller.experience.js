@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$rootScope', '$scope', '$filter', '$timeout', 'OccupationService', 'UserService', 'StatesNames', ProfileExperienceController]);
+    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$scope', '$filter', '$timeout', 'AuthService', 'OccupationService', 'UserService', 'StatesNames', ProfileExperienceController]);
 
     hirelyApp.directive('validateMonth', function () {
             return {
@@ -43,7 +43,7 @@
 
         }); /// validate year
 
-    function ProfileExperienceController($rootScope, $scope, $filter, $timeout, OccupationService, userService, StatesNames) {
+    function ProfileExperienceController($scope, $filter, $timeout, AuthService, OccupationService, UserService, StatesNames) {
 
         $scope.requireWorkOccupationValidation = false;
 
@@ -77,11 +77,11 @@
 
 
         $scope.initExperience = function () {
-            if (!$rootScope.currentUser.workExperience) {
+            if (!AuthService.currentUser.workExperience) {
                 console.log("Initializing new work experience");
-                $rootScope.currentUser.workExperience = [];
+                AuthService.currentUser.workExperience = [];
             }
-            $scope.workExperience = angular.copy($rootScope.currentUser.workExperience);
+            $scope.workExperience = angular.copy(AuthService.currentUser.workExperience);
             angular.forEach($scope.workExperience, function (item) {
                 /**
                  * do some dates clenaing and fixing
@@ -322,11 +322,11 @@
                 var toSave = {
                     workExperience: angular.copy($scope.workExperience)
                 };
-                userService.saveUser(toSave, $rootScope.currentUserId)
+                UserService.saveUser(toSave, AuthService.currentUserId)
                     .then(
                         function (user) {
                             console.log("User experience updated");
-                            angular.extend($rootScope.currentUser, {workExperience: user.workExperience});
+                            angular.extend(AuthService.currentUser, {workExperience: user.workExperience});
                             return user;
                         },
                         function (err) {

@@ -14,7 +14,7 @@
 
         var positionIds = [];
 
-        $scope.rootScope = $rootScope;
+        $scope.AuthService = AuthService;
 
         $scope.myLocations = [];
         $scope.myPositions = [];
@@ -29,14 +29,14 @@
         };
 
         $scope.initDash = function () {
-            FavoritesService.getFavorite({userId: $rootScope.currentUserId, type: 'position'})
+            FavoritesService.getFavorite({userId: AuthService.currentUserId, type: 'position'})
                 .then(
                     function (favs) {
                         $scope.myFavorites = favs;
                         for (var x = 0; x < favs.length; x++) {
                             positionIds.push(favs[x].positionId)
                         }
-                        return JobApplicationService.getByUserId($rootScope.currentUserId)
+                        return JobApplicationService.getByUserId(AuthService.currentUserId)
                     },
                     function (err) {
                         console.error("UD1:"+err);
@@ -63,7 +63,7 @@
                 .then(
                     function (positions) {
                         $scope.positions = positions;
-                        return BusinessService.getPositionsByManagerId($rootScope.currentUserId);
+                        return BusinessService.getPositionsByManagerId(AuthService.currentUserId);
                     },
                     function (err) {
                         console.error("UD3:"+err);
@@ -88,9 +88,9 @@
         $timeout($scope.initDash);
 
         $scope.favoriteUpdate = function (index, posId, locationId, businessId) {
-            if ($rootScope.currentUserId) {
+            if (AuthService.currentUserId) {
                 var favObj = {
-                    userId: $rootScope.currentUserId,
+                    userId: AuthService.currentUserId,
                     positionId: posId,
                     locationId: locationId,
                     businessId: businessId,

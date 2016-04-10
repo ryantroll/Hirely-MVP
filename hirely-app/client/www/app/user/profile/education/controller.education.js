@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$rootScope', '$scope', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', 'JobApplicationService', ProfileEducationController]);
+    var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$scope', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', 'JobApplicationService', ProfileEducationController]);
 
     hirelyApp.directive('validateMonth', function () {
             return {
@@ -43,7 +43,7 @@
 
         })/// validate year
 
-    function ProfileEducationController($rootScope, $scope, $filter, $timeout, authService, userService, StatesNames, JobApplicationService) {
+    function ProfileEducationController($scope, $filter, $timeout, AuthService, UserService, StatesNames, JobApplicationService) {
 
 
         /**
@@ -80,10 +80,10 @@
              * [eduItems will hold the education data]
              * @type {Array}
              */
-            if (!$rootScope.currentUser.education) {
-                $rootScope.currentUser.education = [];
+            if (!AuthService.currentUser.education) {
+                AuthService.currentUser.education = [];
             }
-            $scope.education = $rootScope.currentUser.education;
+            $scope.education = AuthService.currentUser.education;
             $scope.education = orderBy($scope.education, 'dateEnd', true);
 
 
@@ -234,10 +234,10 @@
         $scope.$on('$destroy', function () {
             if ($scope.educationChanged || true) {
                 var toSave = {education: angular.copy($scope.education)};
-                userService.saveUser(toSave, $rootScope.currentUserId)
+                UserService.saveUser(toSave, AuthService.currentUserId)
                     .then(
                         function (user) {
-                            angular.extend($rootScope.currentUser, {education: user.education});
+                            angular.extend(AuthService.currentUser, {education: user.education});
                         },
                         function (err) {
                             alert("Error!\nYour data was not saved, please try again.")

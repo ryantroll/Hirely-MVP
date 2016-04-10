@@ -1,6 +1,6 @@
 'use strict';
 var q = require('q');
-var businessService = require('./business.service');
+var BusinessService = require('./business.service');
 
 var permissionService = {
     checkPermission: function(permissions, destType, destId) {
@@ -19,7 +19,7 @@ var permissionService = {
             // console.log("PS:checkPermission:info:2");
             if (permission.destType == 'businesses') {
                 // console.log("PS:checkPermission:info:3");
-                promises.push(businessService.getById(permission.destId, {complete:true}).then(function(business) {
+                promises.push(BusinessService.getById(permission.destId, {complete:true}).then(function(business) {
                     if (business) {
                         if (destType == "locations" && Object.keys(business.locations).indexOf(destId) != 1) {
                             grant = true;
@@ -34,7 +34,7 @@ var permissionService = {
             // If user has a location permission, check if the requested target is a child of location
             // console.log("PS:checkPermission:info:4");
             if (permission.destType == 'locations') {
-                promises.push(businessService.getByLocationId(permission.destId, {complete:true}).then(function(business) {
+                promises.push(BusinessService.getByLocationId(permission.destId, {complete:true}).then(function(business) {
                     if (business) {
                         if (destType == "positions" && Object.keys(business.positions).indexOf(destId) != 1) {
                             grant = true;

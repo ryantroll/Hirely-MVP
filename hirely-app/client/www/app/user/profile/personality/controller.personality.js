@@ -9,10 +9,10 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('ProfilePersonalityController', ['$rootScope', '$scope', '$timeout', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
+    angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$timeout', 'AuthService', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
 
 
-    function ProfilePersonalityController($rootScope, $scope, $timeout, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+    function ProfilePersonalityController($scope, $timeout, AuthService, TraitifyService, TRAITIFY_PUBLIC_KEY) {
 
         $scope.stepThreeLoaded = false;
 
@@ -63,8 +63,8 @@
         function saveAssessment() {
             if (results.slides && results.types && results.blend && results.traits && assessmentId && !saved) {
                 saved = true;
-                TraitifyService.saveAssessment(results, $rootScope.currentUserId, assessmentId).then(function (personalityExam) {
-                    $rootScope.currentUser.personalityExams = [personalityExam];
+                TraitifyService.saveAssessment(results, AuthService.currentUserId, assessmentId).then(function (personalityExam) {
+                    AuthService.currentUser.personalityExams = [personalityExam];
                 });
             }
         }//// fun. saveAssessment
@@ -74,9 +74,9 @@
          * Start by checking if user taken the personality assessment before
          */
         $scope.initPersonality = function () {
-            if ($rootScope.currentUser.personalityExams && $rootScope.currentUser.personalityExams.length) {
+            if (AuthService.currentUser.personalityExams && AuthService.currentUser.personalityExams.length) {
                 $scope.stepThreeLoaded = true;
-                var assessmentId = $rootScope.currentUser.personalityExams[0].extId;
+                var assessmentId = AuthService.currentUser.personalityExams[0].extId;
                 $scope.assessmentId = assessmentId;
                 /**
                  * Load the result

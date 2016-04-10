@@ -13,10 +13,10 @@
                 return Math.round(value);
             }
         })
-        .controller('JobApplicationController', ['$scope', '$rootScope', '$stateParams', '$state', 'JobApplicationService', 'BusinessService', JobApplicationController]);
+        .controller('JobApplicationController', ['$scope', '$stateParams', '$state', 'JobApplicationService', 'BusinessService', 'AuthService', JobApplicationController]);
 
 
-    function JobApplicationController($scope, $rootScope, $stateParams, $state, JobApplicationService, BusinessService) {
+    function JobApplicationController($scope, $stateParams, $state, JobApplicationService, BusinessService, AuthService) {
 
         /**
          * [availability this scope is the parent of availability step scope and this variaable is needed there]
@@ -36,12 +36,12 @@
                     $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
                     console.log("JA:info: Business loaded successfully");
 
-                    JobApplicationService.isApplicationExists($rootScope.currentUserId, $scope.position._id).then(function(application) {
+                    JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function(application) {
                         $scope.application = application;
                         if (!application) {
                             console.log("JA:info: No prior application found");
                             application = {
-                                userId: $rootScope.currentUserId,
+                                userId: AuthService.currentUserId,
                                 positionId: $scope.position._id,
                                 prescreenAnswers: $scope.position.prescreenQuestions,
                                 status: 0
@@ -140,26 +140,26 @@
         $scope.setInitialStep = function () {
             // var initialStep = 1;
             if (
-                !(angular.isDefined($rootScope.currentUser.mobile) && $rootScope.currentUser.mobile &&
-                angular.isDefined($rootScope.currentUser.dateOfBirth) && $rootScope.currentUser.dateOfBirth &&
-                angular.isDefined($rootScope.currentUser.postalCode) && $rootScope.currentUser.postalCode)
+                !(angular.isDefined(AuthService.currentUser.mobile) && AuthService.currentUser.mobile &&
+                angular.isDefined(AuthService.currentUser.dateOfBirth) && AuthService.currentUser.dateOfBirth &&
+                angular.isDefined(AuthService.currentUser.postalCode) && AuthService.currentUser.postalCode)
             ) {
                 return 1;
             }
 
-            if (!(Array.isArray($rootScope.currentUser.workExperience) && $rootScope.currentUser.workExperience.length > 0)) {
+            if (!(Array.isArray(AuthService.currentUser.workExperience) && AuthService.currentUser.workExperience.length > 0)) {
                 return 2;
             }
 
-            if (!(Array.isArray($rootScope.currentUser.education) && $rootScope.currentUser.education.length > 0)) {
+            if (!(Array.isArray(AuthService.currentUser.education) && AuthService.currentUser.education.length > 0)) {
                 return 3;
             }
 
-            if (!(Array.isArray($rootScope.currentUser.personalityExams) && $rootScope.currentUser.personalityExams.length > 0)) {
+            if (!(Array.isArray(AuthService.currentUser.personalityExams) && AuthService.currentUser.personalityExams.length > 0)) {
                 return 4;
             }
 
-            if (!(angular.isDefined($rootScope.currentUser.availability.hoursPerWeekMin) && $rootScope.currentUser.availability.hoursPerWeekMin > 0)) {
+            if (!(angular.isDefined(AuthService.currentUser.availability.hoursPerWeekMin) && AuthService.currentUser.availability.hoursPerWeekMin > 0)) {
                 return 5;
             }
 

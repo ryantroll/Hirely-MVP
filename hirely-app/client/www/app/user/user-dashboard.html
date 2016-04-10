@@ -21,7 +21,7 @@
                 <div class="pull-left" style="margin-top:20px; padding-left:10px">(<a href="javascript:void(0)" ng-click="logout()">Logout</a>)</div>
                 <div class="intro" style="clear:both;">
                     <p>
-                        Hi {{rootScope.currentUser.firstName}}, from your dashboard you can edit your profile, view your applications, manage your positions.
+                        Hi {{AuthService.currentUser.firstName}}, from your dashboard you can edit your profile, view your applications, manage your positions.
                     </p>
                 </div>
             </div><!--col-->
@@ -165,9 +165,9 @@
                 <h1>My Profile <a href="javascript:void(0)" ui-sref="master.default.user.profile"><i class="glyphicon glyphicon-edit"></i></a></h1>
                 <div class="profile">
                     <p>
-                        {{rootScope.currentUser.firstName}} {{rootScope.currentUser.lastName}}<br>
-                        {{rootScope.currentUser.email}}<br>
-                        {{getFormatedPhone(rootScope.currentUser.mobile)}}
+                        {{AuthService.currentUser.firstName}} {{AuthService.currentUser.lastName}}<br>
+                        {{AuthService.currentUser.email}}<br>
+                        {{getFormatedPhone(AuthService.currentUser.mobile)}}
                     </p>
                 </div><!--profile-->
             </div><!--col-->
