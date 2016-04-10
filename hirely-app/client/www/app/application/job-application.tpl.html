@@ -56,7 +56,7 @@
                 </div><!--col-sm-6-->
                 <div class="col-xs-3">
                     <div class="right">
-                        <button class="btn next" ng-hide="$isLast()" ng-click="destroyDirection=1; $nextStep()" ng-disabled="$isLast() || ($getActiveStep().hasForm && !$getActiveStep().valid)">Next</button>
+                        <button class="btn next" ng-hide="$isLast()" ng-click="destroyDirection=1; $nextStep()" ng-disabled="isNextManuallyDisabled() || $isLast() || ($getActiveStep().hasForm && !$getActiveStep().valid)">Next</button>
                         <button class="btn next" ng-hide="!$isLast() || blockFinished" ng-click="destroyDirection=1; finish()">Submit</button>
                     </div>
                 </div><!--col-sm-3-->

@@ -26,6 +26,7 @@
 
         $scope.destroyDirection = 0;
         $scope.blockFinished = false;
+        $scope.enableNextButton = true;
 
 
         BusinessService.getBySlug($stateParams.businessSlug)
@@ -68,6 +69,10 @@
                 }
             );
 
+        $scope.isNextManuallyDisabled = function() {
+            return $scope.enableNextButton;
+        }
+
         function setSteps() {
 
             $scope.steps = [
@@ -89,7 +94,8 @@
                 },
                 {
                     templateUrl: '/app/user/profile/personality/personality.tpl.html',
-                    controller: 'ProfilePersonalityController'
+                    controller: 'ProfilePersonalityController',
+                    hasForm: true
                 },
                 {
                     templateUrl: '/app/user/profile/availability/availability.tpl.html',

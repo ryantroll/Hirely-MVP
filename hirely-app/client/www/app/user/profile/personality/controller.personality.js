@@ -30,7 +30,7 @@
          * Enable next button but default
          * it will be disabled only when user is taking the test
          */
-        $scope.enableNextButton = true;
+        $scope.enableNextButton = false;
 
 
         Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
@@ -117,12 +117,6 @@
 
 
         $scope.showAssessment = function () {
-
-            /**
-             * Disable next button
-             */
-            delete $scope.enableNextButton;
-
             $("header").hide();
             $("footer").hide();
             $(window).scrollTop(0);
@@ -184,6 +178,10 @@
                     }//// fun.
                 )//// then()
         }/// fun. showAssessment
+
+        $scope.$on('$destroy', function (event) {
+            $scope.enableNextButton = true;
+        })
 
     }
 })();
