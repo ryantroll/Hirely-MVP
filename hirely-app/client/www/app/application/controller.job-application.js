@@ -73,9 +73,10 @@
                 }
             );
 
-        $scope.isNextManuallyDisabled = function() {
-            return $scope.enableNextButton;
-        }
+        $scope.$on('setEnableNextButton', function(event, args) {
+            console.log("Caught enb: ");
+            $scope.enableNextButton = args.newValue;
+        });
 
         function setSteps() {
 

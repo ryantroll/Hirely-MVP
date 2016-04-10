@@ -26,12 +26,6 @@
 
         var results = {};
 
-        /**
-         * Enable next button but default
-         * it will be disabled only when user is taking the test
-         */
-        $scope.enableNextButton = false;
-
 
         Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
         Traitify.setHost("api.traitify.com");
@@ -40,6 +34,7 @@
         $scope.assessment = {};
 
         $timeout(function () {
+            $scope.$emit('setEnableNextButton', {newValue:false});
             window.scrollTo(0, 0);
         });
 
@@ -154,7 +149,7 @@
                                 /**
                                  * Enable next button after result is displayed
                                  */
-                                $scope.enableNextButton = true;
+                                $scope.$emit('setEnableNextButton', {newValue:true});
 
                                 Traitify.getPersonalityTypes(assessmentId).then(function (data) {
                                     results.types = data.personality_types;
@@ -180,7 +175,7 @@
         }/// fun. showAssessment
 
         $scope.$on('$destroy', function (event) {
-            $scope.enableNextButton = true;
+            $scope.$emit('setEnableNextButton', {newValue:true});
         })
 
     }
