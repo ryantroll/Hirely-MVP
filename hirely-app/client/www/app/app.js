@@ -120,7 +120,7 @@ var myApp = angular.module('hirelyApp',
                 controller: 'JobPositionController'
             })
             .state('interview', {
-                url: '/:businessSlug/:locationSlug/:positionSlug/interviews/:interviewQuestionsIndex',
+                url: '/:businessSlug/:locationSlug/:positionSlug/interviewQs/:interviewQuestionsIndex',
                 templateUrl: 'app/job/interview.tpl.html',
                 controller: 'InterviewController'
             })
