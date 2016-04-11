@@ -322,7 +322,7 @@ var traitifySevice = {
         // console.log("TS:addTraitifyCareerMatchScoresToUser:info:294");
         try {
             if (onetIdsAll.length == Object.keys(user.personalityExams[0].careerMatchScores.toObject()).length) {
-                // console.log("TS:addTraitifyCareerMatchScoresToUser:skip: getAssessmentCareerMatchScoresById because already gotten");
+                console.warn("TS:addTraitifyCareerMatchScoresToUser:skip: getAssessmentCareerMatchScoresById because already gotten");
                 var deferred = q.defer();
                 deferred.resolve(user);
                 return deferred.promise;
@@ -335,7 +335,7 @@ var traitifySevice = {
         return traitifySevice.getAssessmentCareerMatchScoresById(user.personalityExams[0].extId)
             .then(function (careerMatchScores) {
                 // console.log("TS:addTraitifyCareerMatchScoresToUser:info:296");
-                // console.log("TS:addTraitifyCareerMatchScoresToUser:info: Career Match Count actual/expected: " + Object.keys(careerMatchScores).length + "/" + onetIdsAll.length);
+                console.warn("TS:addTraitifyCareerMatchScoresToUser:info: Career Match Count actual/expected: " + Object.keys(careerMatchScores).length + "/" + onetIdsAll.length);
 
                 if (Object.keys(careerMatchScores).length == 0) {
                     console.warn("TS:addTraitifyCareerMatchScoresToUser:warning:  Skipping update user with career match scores because traitify call failed.");
