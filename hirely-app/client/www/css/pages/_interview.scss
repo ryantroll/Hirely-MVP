@@ -1,0 +1,98 @@
+.interview {
+  width: 1202px;
+  margin-top: 30px;
+
+  .interview-header {
+    height: 92px;
+
+    .title {
+      width: 100%;
+      text-align: center;
+      margin: 6px 0;
+    }
+    .header-left {
+      position:absolute;
+      top:30px;
+      left:10px;
+    }
+    .header-right {
+      position:absolute;
+      top:30px;
+      left:894px;
+    }
+
+    pre {
+      padding:0;
+      margin:0;
+      background:none;
+      border:none;
+    }
+
+  }
+
+  .interview-question-set {
+    border: 1px solid black;
+  }
+
+  .qRow {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    page-break-inside: avoid;
+    clear: both;
+  }
+  .qCatRow .qRow:nth-child(even) {
+    background: lightgray;
+  }
+  .qCat {
+    width: 100%;
+    background: black;
+    color:white;
+    text-align: center;
+  }
+  .qCol {
+    float:left;
+    padding: 0 10px;
+  }
+  .qCatRow .qCol {
+    min-height: 140px;
+  }
+  .qCol.q{
+    width: 360px;
+  }
+  .qCol.situation{
+    width: 265px;
+    border-left: 1px solid black;
+  }
+  .qCol.action{
+    width: 265px;
+    border-left: 1px solid black;
+  }
+  .qCol.result{
+    width: 265px;
+    border-left: 1px solid black;
+  }
+  .qCol.rate{
+    width: 44px;
+    border-left: 1px solid black;
+  }
+  .qHeader {
+    text-align: center;
+    font-weight: bold;
+  }
+  .qIndex {
+    padding-top: 6px;
+    width: 30px;
+    text-align: center;
+    float:left;
+  }
+  .qQuestion {
+    width: 320px;
+    border-left: 1px solid black;
+    float:left;
+    padding: 6px;
+
+    .qHint {
+      font-style: italic;
+    }
+  }
+}

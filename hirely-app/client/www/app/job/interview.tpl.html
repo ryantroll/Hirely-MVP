@@ -1,0 +1,77 @@
+<style>
+    @page
+    {
+        size: landscape;   /* auto is the initial value */
+        margin: 6mm 10mm;  /* this affects the margin in the printer settings */
+    }
+</style>
+
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loading</p>
+    <div class="loader"></div>
+</div>
+
+<div class="interview" ng-show="dataLoaded && !dataError">
+
+    <div class="interview-header">
+        <h3 class="title">{{position.title}} Interview Guide</h3>
+
+        <div class="header-left">
+            <div class="doi">Date of Interview: {{today}}</div>
+            <div class="location">Location: {{location.name}}</div>
+            <div class="interviewers">Interviewers: {{AuthService.currentUser.firstName}} {{AuthService.currentUser.lastName}}
+            </div>
+        </div>
+
+        <div class="header-right">
+
+            <div class="applicant">Candidate Name:______________________________</div>
+            <div class="contact">Email Address & Cell #:________________________</div>
+            <div class="under21"><pre>Under 21:  YES   NO   (Age if YES:____)</pre></div>
+            <div class="avail"><pre>Avail: OPEN  Weekdays  Weekends  AM  PM</pre></div>
+        </div>
+    </div>
+
+
+    <div class="interview-question-set interview-question-set-sar qTable" ng-show="interviewQuestionSet.type=='sar'">
+        <div class="qRow">
+            <div class="qCol q qHeader">Characteristics</div>
+            <div class="qCol situation qHeader">Situation</div>
+            <div class="qCol action qHeader">Action</div>
+            <div class="qCol result qHeader">Result</div>
+            <div class="qCol rate qHeader" style="padding:0;">Rate</div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class='qCatRow' ng-repeat="qCat in interviewQuestionSet.qs">
+            <div class="qRow">
+                <div class="qCat">Category: {{qCat.category}}</div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="qRow" ng-repeat="q in qCat.qs">
+                <div class="qCol q" style="padding:0">
+                    <div class="qIndex">{{$index}}</div>
+                    <div class="qQuestion">
+                        <div class="question">{{q.q}}</div>
+                        <div class="qHint">{{q.hint}}</div>
+                    </div>
+                </div>
+                <div class="qCol situation"><div></div></div>
+                <div class="qCol action"></div>
+                <div class="qCol result"></div>
+                <div class="qCol rate text-center">P<br>N<br>M</div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+</div><!--interview-->
+
+<div class="content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Interview failed to load.</h4>
+        </div>
+    </div>
+</div>

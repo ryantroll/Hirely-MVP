@@ -252,7 +252,7 @@
          */
         $rootScope.nextState.push({state:$state.current.name, params:$state.params});
         $rootScope.addFavoriteAfterLogin = true;
-        $state.go('master.default.account.loginWithMessage', {message: "Sorry, your session has expired."});
+        $state.go('master.default.account.loginWithMessage', {message: "Please login to favorite a business."});
       }
     }//// fun. favorite click
 
