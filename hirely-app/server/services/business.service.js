@@ -81,7 +81,7 @@ var BusinessService = {
     getPositionsByIds: function(positionIds, reqQuery, isSuperUser){
         var deferred = q.defer();
 
-        if (!positionIds.length) {
+        if (!(positionIds && positionIds.length)) {
             deferred.resolve([]);
             return deferred.promise;
         }
