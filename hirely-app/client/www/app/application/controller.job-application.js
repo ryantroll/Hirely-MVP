@@ -37,7 +37,7 @@
                     $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
                     console.log("JA:info: Business loaded successfully");
 
-                    if (AuthService.token.twt) {
+                    if (AuthService.token.jwt) {
                         JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function (application) {
                             $scope.application = application;
                             if (!application) {

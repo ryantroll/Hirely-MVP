@@ -34,7 +34,6 @@
         $scope.assessment = {};
 
         $timeout(function () {
-            $scope.$emit('setEnableNextButton', {newValue:false});
             window.scrollTo(0, 0);
         });
 
@@ -73,6 +72,7 @@
                 $scope.stepThreeLoaded = true;
                 var assessmentId = AuthService.currentUser.personalityExams[0].extId;
                 $scope.assessmentId = assessmentId;
+                $scope.$emit('setEnableNextButton', {newValue:true});
                 /**
                  * Load the result
                  * @type {[type]}
@@ -105,6 +105,7 @@
 
             } else {
                 $(window).scrollTop(0);
+                $scope.$emit('setEnableNextButton', {newValue:false});
                 $scope.stepThreeLoaded = true;
             }
         };
@@ -146,10 +147,6 @@
                             traitify.results.onInitialize(function () {
                                 $scope.traitifyResultLoaded = true;
                                 $scope.personalityExam = false;
-                                /**
-                                 * Enable next button after result is displayed
-                                 */
-                                $scope.$emit('setEnableNextButton', {newValue:true});
 
                                 Traitify.getPersonalityTypes(assessmentId).then(function (data) {
                                     results.types = data.personality_types;
@@ -167,6 +164,7 @@
                                 $scope.resultsLoaded = true;
                                 $("header").show();
                                 $("footer").show();
+                                $scope.$emit('setEnableNextButton', {newValue:true});
                                 $scope.$apply();
                             });
                         }/// if new-assessment
