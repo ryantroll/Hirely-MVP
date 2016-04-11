@@ -105,28 +105,27 @@ var BusinessService = {
             var query = {$or: []};
             for (var x = 0; x < ids.length; x++) {
                 var or = {};
-                or['positions.' + ids[0]] = {$exists: true, $nin: [null]};
+                or['positions.' + ids[x]] = {$exists: true, $nin: [null]};
                 query.$or.push(or);
             }
         }
-
-
-
+        
         businessModel.find(query, returnFields)
         .then(
             function(found){
                 // console.log("BS:getPositionsByIds:11");
                 try {
                     if (Array.isArray(found)) {
-                        // console.log("BS:getPositionsByIds:12");
+                        // console.log("BS:getPositionsByIds:12: "+found.length);
                         for (var i = 0; i < found.length; i++) {
                             // console.log("BS:getPositionsByIds:13");
                             var b = found[i];
+                            // console.log("BS:getPositionsByIds:13.1: "+b._id);
                             var positions = b.positions.toObject();
                             for (var pos in positions) {
-                                // console.log("BS:getPositionsByIds:14");
+                                // console.log("BS:getPositionsByIds:14: "+pos);
                                 if (ids.indexOf(pos) > -1) {
-                                    // console.log("BS:getPositionsByIds:15");
+                                    // console.log("BS:getPositionsByIds:15: "+pos);
                                     var myPos = positions[pos];
 
                                     /**
@@ -157,13 +156,13 @@ var BusinessService = {
                             }//// for pos in b
 
                             // console.log("BS:getPositionsByIds:17");
-                            /**
-                             * Get the application count where status is not dismiss
-                             * @type {Object}
-                             */
-                            return applicationModel.aggregate([{$match:{positionId:{$in:ids}, status:{$nin:[0]}}}, {$group:{_id:'$positionId', applicationCount:{"$sum":1}}}]).exec()
-                            // console.log("BS:getPositionsByIds:complete");
                         }////for i
+                        /**
+                         * Get the application count where status is not dismiss
+                         * @type {Object}
+                         */
+                        return applicationModel.aggregate([{$match:{positionId:{$in:ids}, status:{$nin:[0]}}}, {$group:{_id:'$positionId', applicationCount:{"$sum":1}}}]).exec()
+                        // console.log("BS:getPositionsByIds:complete");
                     }//// if isArray
                 } catch(err) {
                     error = "BS:getPositionsByIds:error: "+err;
