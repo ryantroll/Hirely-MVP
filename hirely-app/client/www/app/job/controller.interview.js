@@ -6,6 +6,15 @@
     function InterviewController($scope, $rootScope, $state, $stateParams, $timeout, BusinessService, AvailabilityService, FavoritesService, AuthService) {
 
         $scope.AuthService = AuthService;
+
+        var nowDate = new Date();
+        var monthNames = [
+            "January", "February", "March",
+            "April", "May", "June", "July",
+            "August", "September", "October",
+            "November", "December"
+        ];
+        $scope.today = monthNames[nowDate.getMonth()]+' '+nowDate.getDate()+', '+nowDate.getFullYear();
         
         BusinessService.getBySlug($stateParams.businessSlug)
             .then(

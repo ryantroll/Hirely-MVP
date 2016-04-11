@@ -122,7 +122,8 @@ var myApp = angular.module('hirelyApp',
             .state('interview', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/interviewQs/:interviewQuestionsIndex',
                 templateUrl: 'app/job/interview.tpl.html',
-                controller: 'InterviewController'
+                controller: 'InterviewController',
+                authRequired: true
             })
             .state('master.default.business', {
                 abstract: true,
@@ -143,5 +144,5 @@ var myApp = angular.module('hirelyApp',
 
 
         // if none of the above states are matched, use this as the fallback
-        // $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/');
     });
