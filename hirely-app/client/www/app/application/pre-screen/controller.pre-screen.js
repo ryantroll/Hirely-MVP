@@ -57,7 +57,7 @@
         $scope.$on('$destroy', function (event) {
 
             // If "Finish" was clicked, update the status of the application
-            if ($scope.$parent.destroyDirection) {
+            if ($scope.destroyDirection) {
                 console.log("'Sumbit' was clicked, update the status of the application");
                 $scope.application.status = 1;
             }
