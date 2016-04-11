@@ -101,6 +101,11 @@
 
         function updateTokenRemainingTime() {
             service.token.remainingTime = Number(service.token.exp) - Math.ceil(Date.now()/1000) - 5;
+            if (service.token.remainingTime < 0) {
+                service.token.remainingTime = 0;
+            }
+            $rootScope.$emit('RemainingTimeUpdate', {tokenRemainingTime: service.token.remainingTime});
+            $rootScope.$broadcast('RemainingTimeUpdate', {tokenRemainingTime: service.token.remainingTime});
             if(service.token.remainingTime<=0 && service.token.jwt) {
                 service.logout();
             }

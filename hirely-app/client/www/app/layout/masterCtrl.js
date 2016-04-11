@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$state', 'AuthService', MasterCtrl]);
+    angular.module('hirelyApp.layout').controller('MasterCtrl', ['$scope', '$state', '$interval', 'AuthService', MasterCtrl]);
 
-    function MasterCtrl($scope, $state, AuthService) {
+    function MasterCtrl($scope, $state, $interval, AuthService) {
 
         $scope.location = {};
         $scope.currentPlace = null;
@@ -16,5 +16,10 @@
         // Session auto-logout controls
         $scope.refreshSession = AuthService.refreshSession;
         $scope.tokenRemainingTime = AuthService.token.remainingTime;
+
+        $interval(function() {
+            $scope.tokenRemainingTime = AuthService.token.remainingTime;
+        }, 1000)
+        
     };
 })();

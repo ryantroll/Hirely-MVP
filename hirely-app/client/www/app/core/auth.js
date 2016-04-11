@@ -2,12 +2,12 @@
     "use strict";
 
     angular.module('hirelyApp.core')
-         .run(['$rootScope', 'AuthService',
-            function ($rootScope, AuthService) {
+         .run(['$rootScope', '$interval', 'AuthService',
+            function ($rootScope, $interval, AuthService) {
 
                 console.log("AS:info: Initting Auth");
                 AuthService.refreshSession().then(function() {
-                    setInterval(AuthService.updateTokenRemainingTime,1000);
+                    $interval(AuthService.updateTokenRemainingTime, 1000);
                     $rootScope.$emit('AuthInitted');
                     $rootScope.$broadcast('AuthInitted');
                 });
