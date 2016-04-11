@@ -207,6 +207,7 @@
             $scope.editIndex = index;
             $scope.addWorkXpForm = true;
             fixFormDiv('#expFormDiv');
+            $scope.queueChoiceAutoSelect = true;
         };
 
         /**
@@ -243,37 +244,49 @@
         $scope.occupationChoices = [];
         $scope.occupationState = "blankReportedOccTitle";
         $scope.handleReportedOccTitleChangeImmediate = function () {
-            console.log("Occ working...");
-            $scope.occupation.occTitle = "";
-            $scope.occupation.occId = "";
-            $scope.occupationChoices = [];
-            $scope.occupationState = 'working';
+            if ($scope.addWorkXpForm) {
+                console.log("Occ working...");
+                $scope.occupation.occTitle = "";
+                $scope.occupation.occId = "";
+                $scope.occupationChoices = [];
+                $scope.occupationState = 'working';
+            }
         };
 
         $scope.handleReportedOccTitleChangeDebounced = function () {
-            console.log("In debounce");
-            if ($scope.occupation.reportedOccTitle == undefined || $scope.occupation.reportedOccTitle.trim().length == 0) {
-                // Query is empty
-                $scope.occupationState = "blankReportedOccTitle";
-                console.log("No rep title");
-                $scope.$apply();
-            } else if ($scope.occupation.reportedOccTitle.trim().length < 4) {
-                // Query is not long enough
-                $scope.occupationState = "lowReportedOccTitle";
-                console.log("Low rep title");
-                $scope.$apply();
-            } else {
-                // Search for query
-                return OccupationService.searchOccupations($scope.occupation.reportedOccTitle).then(function (matches) {
-                    if (matches.length == 0) {
-                        $scope.occupationState = "notFound";
-                    } else {
-                        $scope.occupationState = "choicesAvailable";
-                        $scope.occupationChoices = matches.slice(0, 5);
-                        console.log("Showing choices");
-                    }
-                    // $scope.$apply(); // This doesn't need to be done because me thinks ajax?
-                });
+            if ($scope.addWorkXpForm) {
+                console.log("In debounce");
+                if ($scope.occupation.reportedOccTitle == undefined || $scope.occupation.reportedOccTitle.trim().length == 0) {
+                    // Query is empty
+                    $scope.occupationState = "blankReportedOccTitle";
+                    console.log("No rep title");
+                    $scope.$apply();
+                } else if ($scope.occupation.reportedOccTitle.trim().length < 4) {
+                    // Query is not long enough
+                    $scope.occupationState = "lowReportedOccTitle";
+                    console.log("Low rep title");
+                    $scope.$apply();
+                } else {
+                    // Search for query
+                    return OccupationService.searchOccupations($scope.occupation.reportedOccTitle).then(function (matches) {
+                        if (matches.length == 0) {
+                            $scope.occupationState = "notFound";
+                        } else {
+                            $scope.occupationState = "choicesAvailable";
+                            $scope.occupationChoices = matches.slice(0, 5);
+                            console.log("Showing choices");
+
+                            if ($scope.queueChoiceAutoSelect) {
+                                $scope.chooseOccupation({
+                                    occTitle: $scope.workExperience[$scope.editIndex].occTitle,
+                                    occId: $scope.workExperience[$scope.editIndex].occId
+                                });
+                                $scope.queueChoiceAutoSelect = false;
+                            }
+                        }
+                        // $scope.$apply(); // This doesn't need to be done because me thinks ajax?
+                    });
+                }
             }
         };
         $scope.$watch('occupation.reportedOccTitle', $scope.handleReportedOccTitleChangeImmediate);
@@ -285,7 +298,9 @@
             $scope.occupationChoice = occupationChoice;
             $scope.occupationState = "chosen";
             console.log("Chosen");
-            $event.preventDefault();
+            if ($event) {
+                $event.preventDefault();
+            }
         };
 
         /**

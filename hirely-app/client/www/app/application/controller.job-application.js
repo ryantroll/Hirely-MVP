@@ -74,7 +74,6 @@
             );
 
         $scope.$on('setEnableNextButton', function(event, args) {
-            console.log("Caught enb: ");
             $scope.enableNextButton = args.newValue;
         });
 
