@@ -45,7 +45,7 @@
                 $rootScope.$on('AuthInitted', function(event, args) {
                     AuthInitted = true;
                     console.log("S:AuthInitted:info:0: Caught Auth Init");
-                    handleAuthRequiredRedirect($state.current.name, $state.params, event);
+                    handleAuthRequiredRedirect($state.current, $state.params, event);
                 });
 
                 $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
@@ -54,8 +54,8 @@
                 });
 
                 $rootScope.$on('UserLoggedOut', function(event, args) {
-                    console.log("S:TokenExpired:info:0: Caught user logged out");
-                    handleAuthRequiredRedirect($state.current.name, $state.params, event);
+                    console.log("S:UserLoggedOut:info:0: Caught user logged out");
+                    handleAuthRequiredRedirect($state.current, $state.params, event);
                 });
                 
                 function getPositionTitleFromParams(params) {
