@@ -9,21 +9,26 @@ $candidat-menu-height:40px;
     .sub-header{
         display: block;
         width:100%;
-        min-height: $sub-header-height;
-        background-color:$c-white;
+        // min-height: $sub-header-height;
+        background-color:$c-hirely-light-gray;
         @include drop-shadow();
 
         .title{
-            position: relative;
+            position: absolute;
             float:none;
-            width:100%;
+            width:40%;
             margin:0 auto;
-            padding: 0 1em;
+            padding: 0;
+            top:-60px;
+            left: 0;
+            color:$c-white;
+            display: none;
+
+
 
             @media screen and (min-width:$screen-sm-min){
-                float:left;
-                width:40%;
-                padding: 0 0;
+                margin-left:160px;
+                display: block;
             }
 
             h2{
@@ -31,7 +36,7 @@ $candidat-menu-height:40px;
                 font-size:1.5em;
 
                 a{
-                    color:$c-hirely-mid-gray;
+                    color:$c-white;
                 }
 
                 .icon{
@@ -87,29 +92,29 @@ $candidat-menu-height:40px;
             } //// .menu
         }//// .title
 
-        .buttons{
-            float:left;
-            width:60%;
-            padding-top:13px;
+        // .buttons{
+        //     float:left;
+        //     width:60%;
+        //     padding-top:13px;
 
-            input[type="text"]{
-                border: 1px solid $c-hirely-mid-gray;
-                line-height: 30px;
-                padding:2px 5px;
-                @include border-radius(2px);
-                width:50%;
-                float:left;
-                margin-right:1em;
-            }
-            .btn{
-                border:none;
-                margin-top:-1px;
-                @include border-radius(2px);
-                float:left;
-                padding-top:9px;
-                padding-bottom:9px;
-            }
-        }
+        //     input[type="text"]{
+        //         border: 1px solid $c-hirely-mid-gray;
+        //         line-height: 30px;
+        //         padding:2px 5px;
+        //         @include border-radius(2px);
+        //         width:50%;
+        //         float:left;
+        //         margin-right:1em;
+        //     }
+        //     .btn{
+        //         border:none;
+        //         margin-top:-1px;
+        //         @include border-radius(2px);
+        //         float:left;
+        //         padding-top:9px;
+        //         padding-bottom:9px;
+        //     }
+        // }
 
     }/// .sub-header
 
@@ -121,47 +126,98 @@ $candidat-menu-height:40px;
 
     .status-bar{
         width:100%;
-        margin:1em 0;
+        margin:0 0;
+
+        .drop{
+            display: block;
+            width:10%;
+            height: 60px;
+            float:right;
+            font-size:2em;
+            line-height: 60px;
+            text-align: center;
+            color:$c-hirely-mid-gray;
+            @media screen and (min-width:$screen-sm-min){
+                display: none;
+            }
+        }
 
         ul{
             display: table;
-            width:auto;
-            margin:0 auto;
+            width:90%;
+            float:left;
             list-style: none;
             padding-left:0;
+            margin-bottom:0;
+
+            @media screen and (min-width:$screen-sm-min){
+                width:auto;
+                margin:0 auto;
+                float:none;
+            }
+
 
             li{
                 display: block;
                 float:left;
-                width:auto;
+                width:100%;
                 padding-right:2px;
                 @media screen and (min-width:$screen-sm-min){
                     padding-right:5px;
+                    width:auto;
                 }
                 .btn{
-                    width:65px;
-                    height: 50px;
+                    width:100%;
+                    height: 60px;
                     text-align: center;
-                    padding-left:0;
-                    padding-right:0;
-                    font-size:0.8em;
+                    // padding-left:0;
+                    // padding-right:0;
+                    // font-size:0.8em;
+                    border:0;
+                    display: none;
                     @include border-radius(2px);
                     @media screen and (min-width:$screen-sm-min){
-                        width:140px;
+                        width:120px;
                         font-size:1em;
+                        display: inline-block;
                     }
-                    span{
-                        display:none;
-                        @media screen and (min-width:$screen-sm-min){
-                            display:inline;
-                        }
+                    // span{
+                    //     display:none;
+                    //     @media screen and (min-width:$screen-sm-min){
+                    //         display:inline;
+                    //     }
+                    // }
+                }
+                .btn.active{
+                    display: inline-block;
+                }
+                .btn.red{
+                    @media screen and (max-width:$screen-sm-min){
+                        background-color:$c-hirely-light-gray;
+                        border-color:$c-hirely-light-gray;
+                        color:$c-hirely-mid-gray!important;
+                        border:0 solid $c-hirely-light-gray;
+                        @include box-shadow(none);
                     }
                 }
             }
             li:last-child{
                 padding-right: 0;
             }
+
         } //// ul
+
+        ul.show{
+            background-color:$c-white;
+            position:absolute;
+            top:0;
+            left:0;
+            z-index:1000;
+            @include drop-shadow();
+            .btn{
+                display: inline-block;
+            }
+        }
     } //// .status-bar
 
     .body{
@@ -526,59 +582,62 @@ $candidat-menu-height:40px;
                     line-height: $candidat-menu-height;
                     text-align: center;
                     color:$c-white;
-
-                }
-                .drop{
-                    background-color:$c-hirely-light-gray;
-                    font-size:1.3em;
-                }
-                .execlude{
-                    background-color:$c-hirely-red;
                     font-size:1.6em;
+                    background-color:$c-hirely-mid-gray;
                 }
-                ul{
-                    display: block;
-                    padding-left:0;
-                    list-style: none;
-                    width:120px;
-                    position:absolute;
-                    top:$candidat-menu-height;
-                    left:0;
-                    z-index: 101;
-                    @include drop-shadow();
+                // .drop{
+                //     background-color:$c-hirely-light-gray;
+                //     font-size:1.3em;
+                // }
+                .red{
+                    background-color:$c-hirely-red;
+                }
+                .green{
+                    background-color:$c-hirely-green;
+                }
+                // ul{
+                //     display: block;
+                //     padding-left:0;
+                //     list-style: none;
+                //     width:120px;
+                //     position:absolute;
+                //     top:$candidat-menu-height;
+                //     left:0;
+                //     z-index: 101;
+                //     @include drop-shadow();
 
-                    li{
-                        display: block;
-                        width:100%;
-                        height: $candidat-menu-height;
+                //     li{
+                //         display: block;
+                //         width:100%;
+                //         height: $candidat-menu-height;
 
-                        a{
-                            display: block;
-                            width:100%;
-                            height: $candidat-menu-height;
-                            line-height: $candidat-menu-height;
-                            padding: 0 10px;
-                            background-color:$c-hirely-light-gray;
-                            color:$c-hirely-mid-gray;
-                            border-bottom:1px solid $c-white;
-                        }
-                        a:hover{
-                            background-color: $c-white;
-                            color:$c-hirely-red;
-                        }
-                    }
-                    li:last-child{
-                        a{
-                            border-bottom:none;
-                        }
-                    }
-                    li.active{
-                        a{
-                            background-color:$c-hirely-red;
-                            color:$c-white;
-                        }
-                    }
-                }//// ul
+                //         a{
+                //             display: block;
+                //             width:100%;
+                //             height: $candidat-menu-height;
+                //             line-height: $candidat-menu-height;
+                //             padding: 0 10px;
+                //             background-color:$c-hirely-light-gray;
+                //             color:$c-hirely-mid-gray;
+                //             border-bottom:1px solid $c-white;
+                //         }
+                //         a:hover{
+                //             background-color: $c-white;
+                //             color:$c-hirely-red;
+                //         }
+                //     }
+                //     li:last-child{
+                //         a{
+                //             border-bottom:none;
+                //         }
+                //     }
+                //     li.active{
+                //         a{
+                //             background-color:$c-hirely-red;
+                //             color:$c-white;
+                //         }
+                //     }
+                // }//// ul
             }//// .menu
         }//// .candidate
     }//// .candidates-list
@@ -890,6 +949,30 @@ $candidat-menu-height:40px;
                     font-size:1em;
                 }
             }
+            .title.green{
+                background-color:$c-hirely-green;
+                color:$c-white;
+                h5{
+                    font-weight:700;
+                    font-size:1em;
+                }
+            }
+            .title.red{
+                background-color:$c-hirely-red;
+                color:$c-white;
+                h5{
+                    font-weight:700;
+                    font-size:1em;
+                }
+            }
+            .title.gray{
+                background-color:$c-hirely-mid-gray;
+                color:$c-white;
+                h5{
+                    font-weight:700;
+                    font-size:1em;
+                }
+            }
 
             .prescreen{
                 padding: 0 1em 1em 1em;
@@ -1068,9 +1151,10 @@ $candidat-menu-height:40px;
                     width:auto;
                     display: none;
                     height: $candidat-menu-height;
-                    position:absolute;
+                    // position:absolute;
                     left:50%;
-                    margin-left:-80px;
+                    // margin-left:-80px;
+                    margin:0 auto;
 
                     @media screen and (min-width:$screen-sm-min){
                         display: table;
@@ -1105,16 +1189,19 @@ $candidat-menu-height:40px;
                         line-height: $candidat-menu-height;
                         text-align: center;
                         color:$c-white;
-
+                        background-color:$c-hirely-mid-gray;
+                        font-size: 1.5em;
                     }
 
-                    .drop{
-                        background-color:$c-hirely-light-gray;
-                        font-size:1.3em;
-                    }
-                    .execlude{
+                    // .drop{
+                    //     background-color:$c-hirely-light-gray;
+                    //     font-size:1.3em;
+                    // }
+                    .red{
                         background-color:$c-hirely-red;
-                        font-size:1.6em;
+                    }
+                    .green{
+                        background-color:$c-hirely-green;
                     }
                     ul{
                         display: block;

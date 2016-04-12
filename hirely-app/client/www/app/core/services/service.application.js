@@ -143,11 +143,11 @@
             for (var x = 0; x < ret.total; x++) {
 
                 switch (list[x].status) {
-                    case 1:
-                        ++ret.applied;
-                        break;
                     case 0:
                         ++ret.started;
+                        break;
+                    case 1:
+                        ++ret.applied;
                         break;
                     case 2:
                         ++ret.shortlisted;

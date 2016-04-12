@@ -94,6 +94,23 @@
             }
         ]
       },
+      expired: {
+        name: "Expired",
+        // dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "==",
+        operands: [
+            {
+                type: "attr",
+                value: "application.status"
+            },
+            {
+                type: "number",
+                value: 6
+            }
+        ]
+      },
       greatFit: {
         name: "Great Fit",
         // dateCreated: new Date(),
