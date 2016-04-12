@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'hirely-icons';
-    src:    url('fonts/hirely-icons.eot?996m1b');
-    src:    url('fonts/hirely-icons.eot?996m1b#iefix') format('embedded-opentype'),
-        url('fonts/hirely-icons.ttf?996m1b') format('truetype'),
-        url('fonts/hirely-icons.woff?996m1b') format('woff'),
-        url('fonts/hirely-icons.svg?996m1b#hirely-icons') format('svg');
+    src:    url('fonts/hirely-icons.eot?is4jp');
+    src:    url('fonts/hirely-icons.eot?is4jp#iefix') format('embedded-opentype'),
+        url('fonts/hirely-icons.ttf?is4jp') format('truetype'),
+        url('fonts/hirely-icons.woff?is4jp') format('woff'),
+        url('fonts/hirely-icons.svg?is4jp#hirely-icons') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -92,6 +92,18 @@
 }
 .icon-farming_icon:before {
     content: "\e903";
+}
+.icon-dollar_sign_icon:before {
+    content: "\e92d";
+}
+.icon-expired_icon:before {
+    content: "\e92e";
+}
+.icon-phone_icon:before {
+    content: "\e92f";
+}
+.icon-thumb_up_icon:before {
+    content: "\e930";
 }
 .icon-thumb_down_icon:before {
     content: "\e92b";

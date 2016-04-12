@@ -247,31 +247,53 @@
                 </div><!--box-->
 
                 <div class="box">
-                    <div class="title blue">
+                    <div class="title" ng-class="{blue:application.status==1, red:application.status==5, gray:application.status==6, green:application.status ==2 ||application.status ==3||application.status ==4}">
                         <h5>Applicant Status: {{statusLabels[application.status]}}</h5>
                     </div>
-                    <div class="contacts">
+                    <!-- <div class="contacts">
                         <ul>
                             <li><a href="tel:{{applicants[detailsUserId].mobile}}"><i class="icon green glyphicon glyphicon-earphone"></i>{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></li>
                             <li><a href="mailto:{{applicants[detailsUserId].email}}"><i class="icon blue glyphicon glyphicon-envelope"></i>{{applicants[detailsUserId].email}}</a></li>
                         </ul>
-                    </div>
+                    </div> -->
                     <div class="actions clearfix">
                         <div class="menu">
                             <div class="inner">
-                                <a href="javascript:void(0);" class="action" ng-if="application.status === 1 || application.status === 5" ng-click="updateAppStatus($event, application._id, 2)">Shortlist</a>
+                                <div ng-if="application.status == 1">
+                                    <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 2)" title="Shortlist" uib-tooltip="Shortlist"><i class="icon-thumb_up_icon"></i></a>
+                                    <a class="" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Contact"  uib-tooltip="Contact"><i class="icon-phone_icon"></i></a>
+                                    <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+
+                                <div ng-if="application.status == 2">
+                                    <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Contact" uib-tooltip="Contact"><i class="icon-phone_icon"></i></a>
+                                    <a class="" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 4)" title="Hire"  uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
+                                    <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+
+                                <div ng-if="application.status == 3">
+                                    <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 4)" title="Contact" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
+                                    <a class="" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Contact"  uib-tooltip="Contact"><i class="icon-phone_icon"></i></a>
+                                    <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+
+                                <div ng-if="application.status == 4">
+                                    <a class="green" title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></a>
+                                </div>
+
+                                <div ng-if="application.status == 5">
+                                    <a class="red" title="Dismissed" uib-tooltip="Dismissed"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+
+                                <div ng-if="application.status == 6">
+                                    <a class="red" title="Expired" uib-tooltip="Expired"><i class="icon-expired_icon"></i></a>
+                                </div>
+                                <!-- <a href="javascript:void(0);" class="action" ng-if="application.status === 1 || application.status === 5" ng-click="updateAppStatus($event, application._id, 2)">Shortlist</a>
                                 <a href="javascript:void(0);" class="action" ng-if="application.status === 2" ng-click="updateAppStatus($event, application._id, 3)">Contact</a>
                                 <a href="javascript:void(0);" class="action" ng-if="application.status === 3 || application.status === 4" ng-disabled="application.status === 4" ng-click="updateAppStatus($event, application._id, 4)">Hire</a>
                                 <a class="drop" href="javascript:void(0);" ng-click="toggleActionMenu($event, 'detailsAction')"><i class="glyphicon glyphicon-menu-down"></i></a>
-                                <a class="execlude" href="javascript:void(0);" ng-if="application.status !== 5" ng-click="updateAppStatus($event, application._id, 5)"><i class="icon-thumb_down_icon"></i></a>
+                                <a class="execlude" href="javascript:void(0);" ng-if="application.status !== 5" ng-click="updateAppStatus($event, application._id, 5)"><i class="icon-thumb_down_icon"></i></a> -->
                             </div>
-                            <ul class="hidden" id="menu_detailsAction">
-                                <li ng-if="application.status !== 1"><a href="javascript:void(0);" data-value="applied" ng-click="updateAppStatus($event, application._id, 1)">APPLIED</a></li>
-                                <li ng-if="application.status !== 2"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, application._id, 2)">SHORTLIST</a></li>
-                                <li ng-if="application.status !== 3"><a href="javascript:void(0);" data-value="contact" ng-click="updateAppStatus($event, application._id, 3)">CONTACT</a></li>
-                                <li ng-if="application.status !== 4"><a href="javascript:void(0);" data-value="hire" ng-click="updateAppStatus($event, application._id, 4)">HIRE</a></li>
-                                <li ng-if="application.status !== 5"><a href="javascript:void(0);" data-value="decline" ng-click="updateAppStatus($event, application._id, 5)">DECLINE</a></li>
-                            </ul>
                         </div><!--menu-->
                     </div><!--actions-->
                 </div><!--box-->

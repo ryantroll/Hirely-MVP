@@ -105,6 +105,54 @@
 
     }//// fun. toggleFilterMenu
 
+    $scope.toggleStatusMenu = function(){
+      var menu = angular.element('#statusBtns');
+
+      var handleMenuClick = function(e){
+          if(false === menu.hasClass('show')){
+              menu.addClass('show');
+              //// unbind when menu closed no need to check for click
+
+          }
+          else{
+              menu.removeClass('show');
+              $('body').unbind('click', handleMenuClick);
+          }
+      };
+
+      if(false === menu.hasClass('show')){
+        $('body').bind('click', handleMenuClick);
+      }
+    }//// fun. toggleStatusMenu
+
+    angular.element(window).on('scroll', function(ev){
+      var top = $(ev.currentTarget).scrollTop();
+      var pad = 0;
+
+      var filters = $('#filtersList')
+
+      var limit = filters.offset().top;
+
+      if(top >= limit){
+        $('#mobile-nav').css({'position':'fixed', 'z-index': 1501, 'top': 0, 'width':'100%'})
+        .parent().css('padding-top', 60);
+
+        $('#subHeader').css({'position':'fixed', 'z-index': 1500, 'top': 60})
+        .parent().css('padding-top', 60);
+
+        pad = top - limit;
+      }
+      else{
+        $('#mobile-nav').css({'position':'static'})
+        .parent().css('padding-top', '');
+
+        $('#subHeader').css({'position':'static'})
+        .parent().css('padding-top', '');
+      }
+
+      // $('#filtersList').css('padding-top', pad);
+    })
+
     /**
      * End of layout interactivity code *************************************************
      */
@@ -433,6 +481,8 @@
         }
       )
     }
+
+
 
   }//// controller
 })();

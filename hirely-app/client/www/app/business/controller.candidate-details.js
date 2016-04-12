@@ -8,8 +8,7 @@
     'use strict';
 
     angular.module('hirelyApp').controller('CandidateDetailsController', ['$stateParams', '$scope', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
-    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$scope', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsModalController]);
-
+    angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$stateParams', '$scope', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsModalController]);
 
     function CandidateDetailsControllerCore($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
         $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
@@ -196,18 +195,14 @@
             $scope.activeSection = section;
         }//// fun.showSection
 
-
-
-
-
     }//// controller
 
     function CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
         CandidateDetailsControllerCore($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
-
         $scope.isModal = false;
 
         function initializeApplication() {
+            console.log(JobApplicationService)
             // This page is being accessed outside of a modal
             JobApplicationService.getById($stateParams.applicationId).then(function (applicationData) {
                 $scope.application = applicationData.application;
@@ -220,8 +215,10 @@
 
     }
 
-    function CandidateDetailsModalController($scope, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
-        CandidateDetailsController($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
+    function CandidateDetailsModalController($stateParams, $scope, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
+
+        CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
+
 
         $scope.isModal = true;
 
