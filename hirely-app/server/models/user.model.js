@@ -1339,13 +1339,6 @@ module.exports = UserModel;
 //         console.log("user: "+user.email);
 //         // user.queuedForMetricUpdate = true;
 //
-//         for (let program of user.education) {
-//             try {
-//                 delete program.isCompleted;
-//             } catch(err){}
-//             program.status = 2;
-//         }
-//
 //         user.save();
 //     });
 //     console.log("Done.");
