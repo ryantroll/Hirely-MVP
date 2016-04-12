@@ -231,6 +231,23 @@
 
                 <div class="row">
                     <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': !stepTwoE.languagesSpoken.$valid && stepTwoE.languagesSpoken.$dirty, 'valid' : stepTwoE.languagesSpoken.$valid}">
+                            <label>
+                                Extra-Curricular Activities
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <div class="clearfix text-array-field extraCurricularDiv" ng-repeat="extraCurricular in extraCurricularObjs" name="extraCurricularDiv">
+                                <input type="text" class="text-field text-array-field-input pull-left extraCurricular" name="extraCurricular" ng-model="extraCurricular.text" required minlength="3" />
+                                <button class="pull-right text-array-field-subtract" ng-click="rmAndFocusExtraCurricular($index)"><i class="fa fa-minus"></i></button>
+                            </div>
+                            <button class="btn text-array-field-add" ng-click="addAndFocusExtraCurricular()"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
                         <div class="field-wrapper text-center">
                             <button class="btn btn-lg red" ng-disabled="!stepTwoE.$valid" ng-click="addEducation()">SAVE</button>
                         </div>

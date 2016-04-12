@@ -104,6 +104,7 @@ var locationSchema = new Schema({
       name              :   {type:String, required:true},
       slug              :   {type: String},
       phone             :   {type:String, required:true},
+      heroImageURL    :       {type:String},
       hoursOfOperation  :
       {
         mon   : [Number],

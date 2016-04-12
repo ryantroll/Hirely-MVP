@@ -297,17 +297,17 @@ $day-button-size: 60px;
 		padding:0.3em 0;
 		width:100%;
 		// background-color:#ccc;
-		&.language {
+		&.text-array-field-input {
 			width: 70%;
 			width: calc(100% - 40px);
 		}
 	}
 
-	.languagesSpokenDiv {
+	.text-array-field {
 		margin-bottom: 8px;
 	}
 
-	button.languageSubtract {
+	button.text-array-field-subtract {
 		width: 35px;
 		height: 32px;
 		background-color: rgb(192, 192, 192);
@@ -315,7 +315,7 @@ $day-button-size: 60px;
 		color: white;
 		border: none;
 	}
-	button.languageAdd {
+	button.text-array-field-add {
 		width: 100%;
 		background-color: rgb(192, 192, 192);
 	}
