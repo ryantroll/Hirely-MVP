@@ -203,6 +203,12 @@
                                         </div>
                                         <div class="address"></div>
                                         <div class="date">{{edu.dateEnd | date : 'MMM yyyy'}}</div>
+                                        <div class="curriculars">
+                                            <strong>Extra Curriculars</strong>
+                                            <ul>
+                                                <li ng-repeat="curr in edu.extraCurriculars">{{curr}}</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
