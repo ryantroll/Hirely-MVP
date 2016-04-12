@@ -10,7 +10,7 @@
     angular.module('hirelyApp').controller('CandidateDetailsController', ['$stateParams', '$scope', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
     angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$stateParams', '$scope', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsModalController]);
 
-    function CandidateDetailsControllerCore($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
+    function CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
         $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
         $scope.days = AvailabilityService.days;
         $scope.hours = AvailabilityService.hours;
@@ -198,7 +198,7 @@
     }//// controller
 
     function CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
-        CandidateDetailsControllerCore($scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
+        CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
         $scope.isModal = false;
 
         function initializeApplication() {
@@ -217,8 +217,7 @@
 
     function CandidateDetailsModalController($stateParams, $scope, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
 
-        CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
-
+        CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
 
         $scope.isModal = true;
 
