@@ -250,12 +250,7 @@
                     <div class="title" ng-class="{blue:application.status==1, red:application.status==5, gray:application.status==6, green:application.status ==2 ||application.status ==3||application.status ==4}">
                         <h5>Applicant Status: {{statusLabels[application.status]}}</h5>
                     </div>
-                    <!-- <div class="contacts">
-                        <ul>
-                            <li><a href="tel:{{applicants[detailsUserId].mobile}}"><i class="icon green glyphicon glyphicon-earphone"></i>{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></li>
-                            <li><a href="mailto:{{applicants[detailsUserId].email}}"><i class="icon blue glyphicon glyphicon-envelope"></i>{{applicants[detailsUserId].email}}</a></li>
-                        </ul>
-                    </div> -->
+
                     <div class="actions clearfix">
                         <div class="menu">
                             <div class="inner">
@@ -296,6 +291,17 @@
                             </div>
                         </div><!--menu-->
                     </div><!--actions-->
+                </div><!--box-->
+                <div class="box">
+                    <div class="title blue">
+                        <h5>Contact {{applicant.firstName}}</h5>
+                    </div>
+                    <div class="contacts">
+                        <ul>
+                            <li><a href="tel:{{applicants[detailsUserId].mobile}}"><i class="icon green glyphicon glyphicon-earphone"></i>{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></li>
+                            <li><a href="mailto:{{applicants[detailsUserId].email}}"><i class="icon blue glyphicon glyphicon-envelope"></i>{{applicants[detailsUserId].email}}</a></li>
+                        </ul>
+                    </div>
                 </div><!--box-->
 
                 <div class="arrows clearfix">

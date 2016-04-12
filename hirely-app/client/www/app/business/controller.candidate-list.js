@@ -125,6 +125,7 @@
       }
     }//// fun. toggleStatusMenu
 
+    var docOriginalHeight = $(document).height();
     angular.element(window).on('scroll', function(ev){
       var top = $(ev.currentTarget).scrollTop();
       var pad = 0;
@@ -140,7 +141,11 @@
         $('#subHeader').css({'position':'fixed', 'z-index': 1500, 'top': 60})
         .parent().css('padding-top', 60);
 
-        pad = top - limit;
+        pad = top - limit + 60 + 60 + 14;
+
+        if(pad >= docOriginalHeight ){
+          pad = docOriginalHeight;
+        }
       }
       else{
         $('#mobile-nav').css({'position':'static'})
@@ -150,7 +155,9 @@
         .parent().css('padding-top', '');
       }
 
-      // $('#filtersList').css('padding-top', pad);
+      $('#filtersList').css({'position': 'relative', 'padding-top':pad});
+
+
     })
 
     /**
