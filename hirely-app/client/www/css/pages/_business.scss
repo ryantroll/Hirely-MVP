@@ -13,79 +13,84 @@ $candidat-menu-height:40px;
         background-color:$c-hirely-light-gray;
         @include drop-shadow();
 
-        // .title{
-        //     position: relative;
-        //     float:none;
-        //     width:100%;
-        //     margin:0 auto;
-        //     padding: 0 1em;
+        .title{
+            position: absolute;
+            float:none;
+            width:40%;
+            margin:0 auto;
+            padding: 0;
+            top:-60px;
+            left: 0;
+            color:$c-white;
+            display: none;
 
-        //     @media screen and (min-width:$screen-sm-min){
-        //         float:left;
-        //         width:40%;
-        //         padding: 0 0;
-        //     }
 
-        //     h2{
-        //         font-weight: normal;
-        //         font-size:1.5em;
 
-        //         a{
-        //             color:$c-hirely-mid-gray;
-        //         }
+            @media screen and (min-width:$screen-sm-min){
+                margin-left:160px;
+                display: block;
+            }
 
-        //         .icon{
-        //             font-size:0.8em;
-        //             display: inline-block;
-        //             margin-left:0.5em;
-        //         }
-        //     }/// h2
+            h2{
+                font-weight: normal;
+                font-size:1.5em;
 
-        //     .menu{
-        //         list-style:none;
-        //         display: block;
-        //         width:300px;
-        //         padding:0;
-        //         position:absolute;
-        //         left:0;
-        //         top:60px;
-        //         z-index: 10;
+                a{
+                    color:$c-white;
+                }
 
-        //         li{
-        //             display: block;
-        //             width:100%;
-        //             height: 50px;
-        //             background-color:$c-white;
-        //             border:1px solid $c-hirely-mid-gray;
-        //             margin-top:-1px;
+                .icon{
+                    font-size:0.8em;
+                    display: inline-block;
+                    margin-left:0.5em;
+                }
+            }/// h2
 
-        //             a{
-        //                 color:$c-hirely-mid-gray;
-        //                 display: block;
-        //                 width:100%;
-        //                 height: 48px;
-        //                 padding:5px;
-        //             }
+            .menu{
+                list-style:none;
+                display: block;
+                width:300px;
+                padding:0;
+                position:absolute;
+                left:0;
+                top:60px;
+                z-index: 10;
 
-        //             a:hover{
-        //                 background-color:$c-hirely-red;
-        //                 color:$c-white;
-        //             }
+                li{
+                    display: block;
+                    width:100%;
+                    height: 50px;
+                    background-color:$c-white;
+                    border:1px solid $c-hirely-mid-gray;
+                    margin-top:-1px;
 
-        //             span{
-        //                 display:block;
-        //                 font-size:0.8em;
-        //             }
-        //         }//// li
+                    a{
+                        color:$c-hirely-mid-gray;
+                        display: block;
+                        width:100%;
+                        height: 48px;
+                        padding:5px;
+                    }
 
-        //         li.active{
-        //             a{
-        //                 background-color:$c-hirely-red;
-        //                 color:$c-white;
-        //             }
-        //         }
-        //     } //// .menu
-        // }//// .title
+                    a:hover{
+                        background-color:$c-hirely-red;
+                        color:$c-white;
+                    }
+
+                    span{
+                        display:block;
+                        font-size:0.8em;
+                    }
+                }//// li
+
+                li.active{
+                    a{
+                        background-color:$c-hirely-red;
+                        color:$c-white;
+                    }
+                }
+            } //// .menu
+        }//// .title
 
         // .buttons{
         //     float:left;

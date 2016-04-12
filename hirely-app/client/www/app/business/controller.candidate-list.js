@@ -27,6 +27,7 @@
               $('body').unbind('click', handleMenuClick);
           }
           else{
+
               $scope.showPositionMenu = true;
               $scope.$apply();
           }
