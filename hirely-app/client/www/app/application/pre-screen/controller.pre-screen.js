@@ -10,10 +10,10 @@
     'use strict';
 
     angular.module('hirelyApp')
-        .controller('PreScreenController', ['$rootScope', '$scope', '$timeout', 'JobApplicationService', PreScreenController]);
+        .controller('PreScreenController', ['$scope', '$state', '$stateParams', '$timeout', 'JobApplicationService', PreScreenController]);
 
 
-    function PreScreenController($rootScope, $scope, $timeout, JobApplicationService) {
+    function PreScreenController($scope, $state, $stateParams, $timeout, JobApplicationService) {
 
         $scope.daysUntilReapply = 0;
 
@@ -51,6 +51,10 @@
                 daysUntilReapply = 0;
             }
             return daysUntilReapply;
+        };
+
+        $scope.gotoPosition = function() {
+            $state.go('master.default.job.position', $stateParams);
         };
 
         //// wait for destroy event to update data
