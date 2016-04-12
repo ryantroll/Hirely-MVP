@@ -75,9 +75,9 @@
         ];
 
         $scope.statuss = [
-            {val:0, text:'attending'},
-            {val:1, text:'partial-completion'},
-            {val:2, text:'complete'}
+            {val:0, text:'Attending'},
+            {val:1, text:'Partially Completed'},
+            {val:2, text:'Completed'}
         ];
 
         $scope.initEducation = function () {
@@ -117,11 +117,6 @@
             $(window).scrollTop(0);
         };
         $timeout($scope.initEducation);
-        
-        $scope.statusToStr = function(status) {
-            var statusRef = ['Attending', 'Partial',  'Complete'];
-            return statusRef[status];
-        };
 
         $scope.$watch('educationInstance.status', function(newVal, oldVal) {
             if ($scope.educationInstance && (!$scope.educationInstance.status || $scope.educationInstance.status=='0')) {
@@ -143,14 +138,20 @@
             // Get extraCurriculars from dom as an array
             // Do it this way because direct mapping using ng-model causes focus issues
             var extraCurricularRaws = [];
-            $scope.extraCurricularObjs.forEach(function(extraCurricularObj) {
-                var extraCurricularRaw = extraCurricularObj.text.trim();
-                if (extraCurricularRaw.length != 0) {
-                    extraCurricularRaws.push(extraCurricularRaw);
-                }
-            });
+            if ($scope.educationInstance.programType!='Certificate') {
+                $scope.extraCurricularObjs.forEach(function (extraCurricularObj) {
+                    var extraCurricularRaw = extraCurricularObj.text.trim();
+                    if (extraCurricularRaw.length != 0) {
+                        extraCurricularRaws.push(extraCurricularRaw);
+                    }
+                });
+            }
             $scope.educationInstance.extraCurriculars = extraCurricularRaws;
             $scope.extraCurricularObjs = [];
+
+            if ($scope.educationInstance.programType=='High School') {
+                $scope.educationInstance.focus = null;
+            }
 
             if (angular.isDefined($scope.editIndex)) {
 
