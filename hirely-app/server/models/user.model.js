@@ -1,3 +1,4 @@
+'use strict'
 var Utilities = require('./utilities-for-models');
 var mongoose = require('mongoose');
 mongoose.set('debug', true);
@@ -1040,7 +1041,8 @@ var educationSchema = new Schema({
         required: false,
         validate: [endDateValidator, 'End date must be greater than start date']
     },
-    isCompleted: {type: Boolean, required: true}
+    status: {type: Number, required: true},
+    extraCurriculars: [String]
 });
 
 var scoresSchema = new Schema({
@@ -1335,7 +1337,15 @@ module.exports = UserModel;
 //     console.log("Found users");
 //     users.forEach(function(user) {
 //         console.log("user: "+user.email);
-//         user.queuedForMetricUpdate = true;
+//         // user.queuedForMetricUpdate = true;
+//
+//         for (let program of user.education) {
+//             try {
+//                 delete program.isCompleted;
+//             } catch(err){}
+//             program.status = 2;
+//         }
+//
 //         user.save();
 //     });
 //     console.log("Done.");

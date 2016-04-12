@@ -74,6 +74,12 @@
             {order: 12, name: 'Dec'}
         ];
 
+        $scope.statuss = [
+            {val:0, text:'attending'},
+            {val:1, text:'partial-completion'},
+            {val:2, text:'complete'}
+        ];
+
         $scope.initEducation = function () {
 
             /**
@@ -96,9 +102,7 @@
 
             angular.forEach($scope.education, function (item) {
 
-                item.currentlyEnrolled = !item.isCompleted;
-
-                if (item.isCompleted) {
+                if (item.dateEnd && item.dateEnd.length) {
                     item.dateEnd = new Date(item.dateEnd);
                     item.dateEndYear = item.dateEnd.getFullYear();
                     item.dateEndMonth = String(item.dateEnd.getMonth() + 1);
@@ -113,6 +117,18 @@
             $(window).scrollTop(0);
         };
         $timeout($scope.initEducation);
+        
+        $scope.statusToStr = function(status) {
+            var statusRef = ['Attending', 'Partial',  'Complete'];
+            return statusRef[status];
+        };
+
+        $scope.$watch('educationInstance.status', function(newVal, oldVal) {
+            if ($scope.educationInstance && (!$scope.educationInstance.status || $scope.educationInstance.status=='0')) {
+                $scope.educationInstance.dateEndMonth = null;
+                $scope.educationInstance.dateEndYear = null;
+            }
+        });
 
 
         /**
@@ -124,13 +140,26 @@
 
             $scope.educationChanged = true;
 
+            // Get extraCurriculars from dom as an array
+            // Do it this way because direct mapping using ng-model causes focus issues
+            var extraCurricularRaws = [];
+            $scope.extraCurricularObjs.forEach(function(extraCurricularObj) {
+                var extraCurricularRaw = extraCurricularObj.text.trim();
+                if (extraCurricularRaw.length != 0) {
+                    extraCurricularRaws.push(extraCurricularRaw);
+                }
+            });
+            $scope.educationInstance.extraCurriculars = extraCurricularRaws;
+            $scope.extraCurricularObjs = [];
+
             if (angular.isDefined($scope.editIndex)) {
 
-                if (true !== $scope.educationInstance.currentlyEnrolled) {
+                if ($scope.educationInstance.dateEndYear && $scope.educationInstance.dateEndYear.length &&
+                    $scope.educationInstance.dateEndMonth && $scope.educationInstance.dateEndMonth.length) {
                     $scope.educationInstance.dateEnd = new Date(Number($scope.educationInstance.dateEndYear), Number($scope.educationInstance.dateEndMonth) - 1, 1);
+                } else {
+                    $scope.educationInstance.dateEnd = null;
                 }
-
-                $scope.educationInstance.isCompleted = !$scope.educationInstance.currentlyEnrolled;
 
                 angular.extend($scope.education[$scope.editIndex], $scope.educationInstance);
 
@@ -142,28 +171,27 @@
 
                 $scope.addEducationForm = false;
                 return;
-            }/// if edit
+            } else {
 
-            var newEdu = angular.copy($scope.educationInstance);
+                var newEdu = angular.copy($scope.educationInstance);
 
-            if (true !== newEdu.currentlyEnrolled) {
-                newEdu.dateEnd = new Date(Number(newEdu.dateEndYear), Number(newEdu.dateEndMonth) - 1, 1);
+                if (newEdu.dateEndYear.length && newEdu.dateEndMonth.length) {
+                    newEdu.dateEnd = new Date(Number(newEdu.dateEndYear), Number(newEdu.dateEndMonth) - 1, 1);
+                }
+
+                $scope.education.push(newEdu);
+
+                $scope.education = orderBy($scope.education, 'dateEnd', true);
+
+
+                $scope.educationInstance = {};
+
+                $scope.stepTwoE.$setUntouched();
+                $scope.stepTwoE.$setPristine();
+
+                $scope.addEducationForm = false;
             }
-
-            newEdu.isCompleted = !newEdu.currentlyEnrolled;
-
-            $scope.education.push(newEdu);
-
-            $scope.education = orderBy($scope.education, 'dateEnd', true);
-
-
-            $scope.educationInstance = {};
-
-            $scope.stepTwoE.$setUntouched();
-            $scope.stepTwoE.$setPristine();
-
-            $scope.addEducationForm = false;
-        }
+        };
 
         /**
          * [fixFormDiv will set the form div to window height and scroll page to top
@@ -191,15 +219,26 @@
         $scope.removeEducation = function (index) {
             $scope.education.splice(index, 1);
             $scope.educationChanged = true;
-        }
+        };
 
         $scope.editEducation = function (index) {
             $scope.educationInstance = angular.copy($scope.education[index]);
+            // Convert status from int to string so that the select is chosen correctly
+            $scope.educationInstance.status = String($scope.educationInstance.status);
+
+            // Setup extra curricular activities
+            var extraCurricularRaws = $scope.educationInstance.extraCurriculars ? $scope.educationInstance.extraCurriculars : [''];
+            $scope.extraCurricularObjs = [];
+            // Convert list of strings to list of objects, otherwise angular gets cranky with ngRepeat and inputs
+            extraCurricularRaws.forEach(function(text) {
+                $scope.extraCurricularObjs.push({text:text});
+            });
+
+
             $scope.editIndex = index;
             $scope.addEducationForm = true;
-
             fixFormDiv();
-        }
+        };
 
         /**
          * [cancelJobXp will be trigger when cancel is clicked in form, will reset the form and clear the required variables]
@@ -214,19 +253,35 @@
             $scope.stepTwoE.$setPristine();
 
             $scope.addEducationForm = false;
-        }//// fun. cancelJobXp
+        }; //// fun. cancelJobXp
 
         /**
          * [showJobXp will be triggered when "Add Experinece" clicked to show the form and set the required vars]
          * @return {null} [description]
          */
         $scope.showEducation = function () {
-            $scope.educationInstance = {};
+            $scope.educationInstance = {status: null};
+            $scope.extraCurricularObjs = [{text:''}];
             delete $scope.editIndex;
             $scope.addEducationForm = true;
 
             fixFormDiv();
-        }//// fun. ShowJobXp
+        }; //// fun. ShowJobXp
+
+
+        $scope.addAndFocusExtraCurricular = function() {
+            $scope.extraCurricularObjs.push({text:''});
+            $timeout(function() {
+                $('.extraCurricular:last').focus()
+            });
+        };
+
+        $scope.rmAndFocusExtraCurricular = function(index) {
+            if ($scope.extraCurricularObjs.length == 1) {
+                return;
+            }
+            $scope.extraCurricularObjs.splice(index,1);
+        };
 
         /**
          * Save the entries to database on scope destroy]

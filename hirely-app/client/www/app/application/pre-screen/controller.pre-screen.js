@@ -58,7 +58,7 @@
 
             // If "Finish" was clicked, update the status of the application
             if ($scope.destroyDirection) {
-                console.log("'Sumbit' was clicked, update the status of the application");
+                console.log("'Submit' was clicked, update the status of the application");
                 $scope.application.status = 1;
             }
 

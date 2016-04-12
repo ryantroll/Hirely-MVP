@@ -17,6 +17,11 @@
 
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
+        $scope.heroImageURL = $scope.location.heroImageURL ? $scope.location.heroImageURL : business.heroImageURL;
+
+        console.log("BH:"+business.heroImageURL);
+        console.log("LH:"+$scope.location.heroImageURL);
+
         if (AuthService.currentUserId && $rootScope.addFavoriteAfterLogin == true) {
           $scope.favoriteClick();
         }
