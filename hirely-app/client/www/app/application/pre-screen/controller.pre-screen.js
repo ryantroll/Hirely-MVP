@@ -10,6 +10,18 @@
     'use strict';
 
     angular.module('hirelyApp')
+        .directive('validateQuestion', function () {
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+                link: function (scope, ele, attrs, ctrl) {
+                    ctrl.$validators.validateQuestion = function(modelValue, viewValue) {
+                        return viewValue.length > 3;
+                    };/// unshift
+                }//// fun. link
+            }/// return object
+        })/// validate question is not empty;
+
         .controller('PreScreenController', ['$scope', '$state', '$stateParams', '$timeout', 'JobApplicationService', PreScreenController]);
 
 
@@ -18,7 +30,6 @@
         $scope.daysUntilReapply = 0;
 
         $scope.dayDiff = function (d1, d2) {
-            var months;
             if (isNaN(d2) || !d2) {
                 d2 = new Date();
             }
@@ -53,7 +64,7 @@
             return daysUntilReapply;
         };
 
-        $scope.gotoPosition = function() {
+        $scope.gotoPosition = function () {
             $state.go('master.default.job.position', $stateParams);
         };
 
