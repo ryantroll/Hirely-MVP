@@ -278,7 +278,6 @@
 
         $scope.rmAndFocusExtraCurricular = function(index) {
             if ($scope.extraCurricularObjs.length == 1) {
-                alert("You must list at least one language.");
                 return;
             }
             $scope.extraCurricularObjs.splice(index,1);
