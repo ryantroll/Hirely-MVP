@@ -175,7 +175,8 @@
 
                 var newEdu = angular.copy($scope.educationInstance);
 
-                if (newEdu.dateEndYear.length && newEdu.dateEndMonth.length) {
+                if (newEdu.dateEndYear && newEdu.dateEndYear.length &&
+                    newEdu.dateEndMonth && newEdu.dateEndMonth.length) {
                     newEdu.dateEnd = new Date(Number(newEdu.dateEndYear), Number(newEdu.dateEndMonth) - 1, 1);
                 }
 
@@ -227,7 +228,7 @@
             $scope.educationInstance.status = String($scope.educationInstance.status);
 
             // Setup extra curricular activities
-            var extraCurricularRaws = $scope.educationInstance.extraCurriculars ? $scope.educationInstance.extraCurriculars : [''];
+            var extraCurricularRaws = $scope.educationInstance.extraCurriculars ? $scope.educationInstance.extraCurriculars : [];
             $scope.extraCurricularObjs = [];
             // Convert list of strings to list of objects, otherwise angular gets cranky with ngRepeat and inputs
             extraCurricularRaws.forEach(function(text) {
@@ -261,7 +262,7 @@
          */
         $scope.showEducation = function () {
             $scope.educationInstance = {status: null};
-            $scope.extraCurricularObjs = [{text:''}];
+            $scope.extraCurricularObjs = [];
             delete $scope.editIndex;
             $scope.addEducationForm = true;
 
@@ -277,9 +278,6 @@
         };
 
         $scope.rmAndFocusExtraCurricular = function(index) {
-            if ($scope.extraCurricularObjs.length == 1) {
-                return;
-            }
             $scope.extraCurricularObjs.splice(index,1);
         };
 
