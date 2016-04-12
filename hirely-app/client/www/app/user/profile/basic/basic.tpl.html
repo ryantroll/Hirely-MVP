@@ -133,7 +133,7 @@
 							<span class="fa fa-close feedback-error"></span>
 						</label>
 						<div class="clearfix text-array-field languagesSpokenDiv" ng-repeat="langObj in languagesListObjs" id="languagesSpokenDiv" name="languagesSpokenDiv">
-							<input type="text" class="text-field pull-left language" name="language" ng-model="langObj.language" required minlength="3" />
+							<input type="text" class="text-field text-array-field-input pull-left language" name="language" ng-model="langObj.language" required minlength="3" />
 							<button class="pull-right text-array-field-subtract" ng-click="rmAndFocusLanguage($index)"><i class="fa fa-minus"></i></button>
 						</div>
 						<button class="btn text-array-field-add" ng-click="addAndFocusLanguage()"><i class="fa fa-plus"></i></button>

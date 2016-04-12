@@ -125,7 +125,6 @@
 
         $scope.$watch('educationInstance.status', function(newVal, oldVal) {
             if ($scope.educationInstance && (!$scope.educationInstance.status || $scope.educationInstance.status=='0')) {
-                console.log("Clearing dateend vars");
                 $scope.educationInstance.dateEndMonth = null;
                 $scope.educationInstance.dateEndYear = null;
             }
