@@ -315,7 +315,8 @@ var UserService = {
         // Calc educationMax if education changed
         // Calc if currently in school also
         try {
-            user.educationStatus = "completed";
+            user.educationStatus = 'complete';
+            user.educationMax = {};
             // console.log("US:addEduMetrics:info:1");
 
             if (user.education.length > 0) {
@@ -332,16 +333,11 @@ var UserService = {
                 // console.log("US:addEduMetrics:info:3");
                 for (let program of user['education']) {
                     // console.log("US:addEduMetrics:info:4");
-                    if (program.isCompleted == false) {
+                    if (program.status == 0) {
                         // console.log("US:addEduMetrics:info:5");
-                        user.educationStatus = "attending";
+                        user.educationStatus = 'attending';
                     }
                 }
-            } else {
-                // console.log("US:addEduMetrics:info:6");
-                // set to blank so that filters work
-                user.educationMax = {};
-                // console.log("US:addEduMetrics:info:6.1");
             }
         } catch (error) {
             console.error("US:addEduMetrics:error:1: " + error);

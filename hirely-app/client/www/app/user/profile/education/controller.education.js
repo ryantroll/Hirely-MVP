@@ -74,6 +74,12 @@
             {order: 12, name: 'Dec'}
         ];
 
+        $scope.statuss = [
+            {val:0, text:'attending'},
+            {val:1, text:'partial-completion'},
+            {val:2, text:'complete'}
+        ];
+
         $scope.initEducation = function () {
 
             /**
@@ -96,9 +102,7 @@
 
             angular.forEach($scope.education, function (item) {
 
-                item.currentlyEnrolled = !item.isCompleted;
-
-                if (item.isCompleted) {
+                if (item.dateEnd && item.dateEnd.length) {
                     item.dateEnd = new Date(item.dateEnd);
                     item.dateEndYear = item.dateEnd.getFullYear();
                     item.dateEndMonth = String(item.dateEnd.getMonth() + 1);
@@ -113,6 +117,19 @@
             $(window).scrollTop(0);
         };
         $timeout($scope.initEducation);
+        
+        $scope.statusToStr = function(status) {
+            var statusRef = ['Attending', 'Partial',  'Complete'];
+            return statusRef[status];
+        };
+
+        $scope.$watch('educationInstance.status', function(newVal, oldVal) {
+            if ($scope.educationInstance && (!$scope.educationInstance.status || $scope.educationInstance.status=='0')) {
+                console.log("Clearing dateend vars");
+                $scope.educationInstance.dateEndMonth = null;
+                $scope.educationInstance.dateEndYear = null;
+            }
+        });
 
 
         /**
@@ -126,11 +143,12 @@
 
             if (angular.isDefined($scope.editIndex)) {
 
-                if (true !== $scope.educationInstance.currentlyEnrolled) {
+                if ($scope.educationInstance.dateEndYear && $scope.educationInstance.dateEndYear.length &&
+                    $scope.educationInstance.dateEndMonth && $scope.educationInstance.dateEndMonth.length) {
                     $scope.educationInstance.dateEnd = new Date(Number($scope.educationInstance.dateEndYear), Number($scope.educationInstance.dateEndMonth) - 1, 1);
+                } else {
+                    $scope.educationInstance.dateEnd = null;
                 }
-
-                $scope.educationInstance.isCompleted = !$scope.educationInstance.currentlyEnrolled;
 
                 angular.extend($scope.education[$scope.editIndex], $scope.educationInstance);
 
@@ -146,11 +164,9 @@
 
             var newEdu = angular.copy($scope.educationInstance);
 
-            if (true !== newEdu.currentlyEnrolled) {
+            if (newEdu.dateEndYear.length && newEdu.dateEndMonth.length) {
                 newEdu.dateEnd = new Date(Number(newEdu.dateEndYear), Number(newEdu.dateEndMonth) - 1, 1);
             }
-
-            newEdu.isCompleted = !newEdu.currentlyEnrolled;
 
             $scope.education.push(newEdu);
 
@@ -191,15 +207,16 @@
         $scope.removeEducation = function (index) {
             $scope.education.splice(index, 1);
             $scope.educationChanged = true;
-        }
+        };
 
         $scope.editEducation = function (index) {
             $scope.educationInstance = angular.copy($scope.education[index]);
+            // Convert status from int to string so that the select is chosen correctly
+            $scope.educationInstance.status = String($scope.educationInstance.status);
             $scope.editIndex = index;
             $scope.addEducationForm = true;
-
             fixFormDiv();
-        }
+        };
 
         /**
          * [cancelJobXp will be trigger when cancel is clicked in form, will reset the form and clear the required variables]
@@ -221,7 +238,7 @@
          * @return {null} [description]
          */
         $scope.showEducation = function () {
-            $scope.educationInstance = {};
+            $scope.educationInstance = {status: null};
             delete $scope.editIndex;
             $scope.addEducationForm = true;
 

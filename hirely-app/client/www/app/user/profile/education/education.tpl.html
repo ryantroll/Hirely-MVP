@@ -7,8 +7,11 @@
         <div class="cards-wrapper">
             <div class="card" ng-repeat="eduItem in education">
                 <h3>{{eduItem.institutionName}}</h3>
-                <p>{{eduItem.degree}} / {{eduItem.programType}} </p>
-                <p><span ng-show="eduItem.isCompleted">{{eduItem.dateEndMonth}}/{{eduItem.dateEndYear}}</span><span ng-show="!eduItem.isCompleted">Currently Enrolled</span></p>
+                <p>{{eduItem.programType}} - {{eduItem.degree}} </p>
+                <p>
+                    <span ng-show="eduItem.dateEndMonth.length">End Date: {{eduItem.dateEndMonth}}/{{eduItem.dateEndYear}} - </span>
+                    <span>{{statusToStr(eduItem.status)}}</span>
+                </p>
                 <div class="btn-group">
                     <button class="btn blue" ng-click="editEducation($index)">EDIT</button>
                     <button class="btn red" ng-click="removeEducation($index)">REMOVE</button>
@@ -169,19 +172,24 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="field-wrapper checkbox">
-                            <label class="custom-option toggle" data-off="NO" data-on="YES">
-                                <input type="checkbox" id="eduEnrolled" name="eduEnrolled"
-                                    ng-model="educationInstance.currentlyEnrolled"
-                                />
-                                <span class="button-checkbox"></span>
+                        <div class="field-wrapper" ng-class="{'error': !stepTwoE.status.$valid && stepTwoE.status.$dirty, 'valid' : stepTwoE.status.$valid}">
+                            <label for="eduStatus">
+                                Completion Status
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
                             </label>
-                            <label for="eduEnrolled">currently attend</label>
+                            <select id="eduStatus" name="eduStatus" class="form-control" required
+                                ng-model="educationInstance.status">
+                                <option></option>
+                                <option ng-repeat="s in statuss" value="{{s.val}}">{{s.text}}</option>
+                            </select>
+                            <span class="glyphicon glyphicon-menu-down"></span>
+
                         </div>
                     </div>
                 </div>
 
-                <div class="row" ng-show="!educationInstance.currentlyEnrolled">
+                <div class="row" ng-show="educationInstance.status>0">
                     <div class="col-sm-6">
                         <div class="field-wrapper"  ng-class="{'error': !stepTwoE.eduDateEndM.$valid && stepTwoE.eduDateEndM.$dirty, 'valid' : stepTwoE.eduDateEndM.$valid}">
                             <label for="eduDateEndM">
@@ -191,7 +199,7 @@
                             </label>
                             <select class="form-control" id="eduDateEndM" name="eduDateEndM"
                                 ng-model="educationInstance.dateEndMonth"
-                                ng-required="!educationInstance.currentlyEnrolled"
+                                ng-required="educationInstance.status>0"
                                 validate-month
                             >
                                 <!-- <option></option> -->
@@ -210,7 +218,7 @@
                             <input type="tel" class="text-feild" id="eduDateEndY" name="eduDateEndY"
                                 maxlength="4"
                                 ng-model="educationInstance.dateEndYear"
-                                ng-required="!educationInstance.currentlyEnrolled"
+                                ng-required="educationInstance.status>0"
                                 validate-year
                             />
                         </div>
