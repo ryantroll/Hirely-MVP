@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$scope', '$filter', '$timeout', 'AuthService', 'OccupationService', 'UserService', 'StatesNames', ProfileExperienceController]);
+    var hirelyApp = angular.module('hirelyApp').controller('ProfileExperienceController', ['$scope', '$filter', '$timeout', '$interval', 'AuthService', 'OccupationService', 'UserService', 'StatesNames', ProfileExperienceController]);
 
     hirelyApp.directive('validateMonth', function () {
             return {
@@ -43,7 +43,7 @@
 
         }); /// validate year
 
-    function ProfileExperienceController($scope, $filter, $timeout, AuthService, OccupationService, UserService, StatesNames) {
+    function ProfileExperienceController($scope, $filter, $timeout, $interval, AuthService, OccupationService, UserService, StatesNames) {
 
         $scope.requireWorkOccupationValidation = false;
 
@@ -170,24 +170,6 @@
         }; //// fun. addJobXp
 
         /**
-         * [fixFormDiv will set the form div to window height and scroll page to top
-         * form is shown as an overlay and should cover the whole screen]
-         * @return {null}
-         */
-        function fixFormDiv(divId){
-            var formDiv = $(divId);
-            $(window).scrollTop(0);
-            /**
-             * Add some delay so we can read the height property after div is added to dom
-             */
-            setTimeout(function(){
-                if(formDiv.height() < $(document).height()){
-                    formDiv.height($(document).height());
-                }
-            },100)
-        }
-
-        /**
          * [removeJobXp will remove work wperience from the array]
          * @param  {number} index [index of item to be removed]
          * @return {null}       [description]
@@ -206,7 +188,8 @@
             $scope.occupation = angular.copy($scope.workExperience[index]);
             $scope.editIndex = index;
             $scope.addWorkXpForm = true;
-            fixFormDiv('#expFormDiv');
+            $scope.fixFormDiv();
+            $(window).scrollTop(0);
             $scope.queueChoiceAutoSelect = true;
         };
 
@@ -233,7 +216,8 @@
             $scope.occupation = {};
             delete $scope.editIndex;
             $scope.addWorkXpForm = true;
-            fixFormDiv('#expFormDiv');
+            $scope.fixFormDiv();
+            $(window).scrollTop(0);
         }; //// fun. ShowJobXp
 
         /**
@@ -351,5 +335,16 @@
                     )
             }//// if isAuth
         });/// $on.$destroy
+
+        $scope.fixFormDiv = function() {
+            var formDiv = $('#expFormDiv');
+            if(formDiv.height() < $(document).height()){
+                formDiv.height($(document).height());
+            }
+        }
+
+        $interval(function(){
+            $scope.fixFormDiv();
+        },100);
     }
 })();

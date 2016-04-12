@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$scope', '$filter', '$timeout', 'AuthService', 'UserService', 'StatesNames', 'JobApplicationService', ProfileEducationController]);
+    var hirelyApp = angular.module('hirelyApp').controller('ProfileEducationController', ['$scope', '$filter', '$timeout', '$interval', 'AuthService', 'UserService', 'StatesNames', 'JobApplicationService', ProfileEducationController]);
 
     hirelyApp.directive('validateMonth', function () {
             return {
@@ -43,7 +43,7 @@
 
         })/// validate year
 
-    function ProfileEducationController($scope, $filter, $timeout, AuthService, UserService, StatesNames, JobApplicationService) {
+    function ProfileEducationController($scope, $filter, $timeout, $interval, AuthService, UserService, StatesNames, JobApplicationService) {
 
 
         /**
@@ -114,6 +114,7 @@
             });//// for each
 
             $scope.stepTwoLoaded = true;
+            $scope.fixFormDiv();
             $(window).scrollTop(0);
         };
         $timeout($scope.initEducation);
@@ -196,24 +197,6 @@
         };
 
         /**
-         * [fixFormDiv will set the form div to window height and scroll page to top
-         * form is shown as an overlay and should cover the whole screen]
-         * @return {null}
-         */
-        function fixFormDiv() {
-            var formDiv = $('#expFormDiv');
-            $(window).scrollTop(0);
-            /**
-             * Add some delay so we can read the height property after div is added to dom
-             */
-            setTimeout(function () {
-                if (formDiv.height() < $(document).height()) {
-                    formDiv.height($(document).height());
-                }
-            }, 100)
-        }
-
-        /**
          * [removeEducation will remove one education entry from education list Array by entry index]
          * @param  {Number} index [index of array to be removed]
          * @return {[type]}       [description]
@@ -239,7 +222,8 @@
 
             $scope.editIndex = index;
             $scope.addEducationForm = true;
-            fixFormDiv();
+            $scope.fixFormDiv();
+            $(window).scrollTop(0);
         };
 
         /**
@@ -266,8 +250,8 @@
             $scope.extraCurricularObjs = [];
             delete $scope.editIndex;
             $scope.addEducationForm = true;
-
-            fixFormDiv();
+            $scope.fixFormDiv();
+            $(window).scrollTop(0);
         }; //// fun. ShowJobXp
 
 
@@ -300,6 +284,17 @@
                     )
             }
         });/// $on.$destroy
+
+        $scope.fixFormDiv = function() {
+            var formDiv = $('#expFormDiv');
+            if(formDiv.height() < $(document).height()){
+                formDiv.height($(document).height());
+            }
+        }
+
+        $interval(function(){
+            $scope.fixFormDiv()
+        },100);
 
     }
 })();
