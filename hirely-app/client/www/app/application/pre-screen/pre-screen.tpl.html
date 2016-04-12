@@ -23,7 +23,7 @@
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
-                            <textarea ng-disabled="!isApplyEligible" class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" required></textarea>
+                            <textarea ng-disabled="!isApplyEligible" class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" ng-required="q.required"></textarea>
                         </ng-form>
                     </div>
                 </div>
