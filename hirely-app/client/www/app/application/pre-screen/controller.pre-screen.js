@@ -32,6 +32,16 @@
 
         $scope.daysUntilReapply = 0;
 
+        $scope.initPrescreen = function () {
+            $scope.daysUntilReapply = $scope.getDaysUntilReapply($scope.application);
+            $scope.isApplyEligible = $scope.daysUntilReapply == 0;
+            $scope.$parent.blockFinished = !$scope.isApplyEligible;
+
+            $(window).scrollTop(0);
+            $scope.stepFourLoaded = true;
+        };
+        $timeout($scope.initPrescreen);
+
         $scope.dayDiff = function (d1, d2) {
             if (isNaN(d2) || !d2) {
                 d2 = new Date();
@@ -44,16 +54,6 @@
             }
             return Math.round((d2.getHours() - d1.getHours()) / 24)
         };
-
-        $scope.initPrescreen = function () {
-            $scope.daysUntilReapply = $scope.getDaysUntilReapply($scope.application);
-            $scope.isApplyEligible = $scope.daysUntilReapply == 0;
-            $scope.$parent.blockFinished = !$scope.isApplyEligible;
-
-            $(window).scrollTop(0);
-            $scope.stepFourLoaded = true;
-        };
-        $timeout($scope.initPrescreen);
 
         $scope.getDaysUntilReapply = function (application) {
             if (application.status == 0) {

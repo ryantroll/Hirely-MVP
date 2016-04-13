@@ -124,11 +124,12 @@
                         <table ng-if="myApplications.length > 0">
                             <thead class="clearfix">
                                 <tr>
-                                    <th width="25%">Position</th>
-                                    <th width="22%">Business</th>
-                                    <th width="22%">Location</th>
-                                    <th width="20%">Apply Date</th>
-                                    <th width="20%">Status</th>
+                                    <th width="18%">Position</th>
+                                    <th width="18%">Business</th>
+                                    <th width="24%">Location</th>
+                                    <th width="10%">Apply Date</th>
+                                    <th width="12%">Status</th>
+                                    <th width="8%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -143,8 +144,13 @@
                                     <td>{{app.createdAt | date : 'MM/dd/yyyy'}}</td>
                                     <th>Status</th>
                                     <td>
-                                        <span ng-if="app.status != 0">{{getApplicationStatus(app.status)}}</span>
+                                        <span>{{getApplicationStatus(app.status+1)}}</span>
+                                    </td>
+                                    <th>Action</th>
+                                    <td>
+                                        <button class="btn red" ng-if="app.status == -1" ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Update</button>
                                         <button class="btn red" ng-if="app.status == 0" ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Finish</button>
+                                        <button class="btn red" ng-if="app.status>=6 && getDaysUntilReapply(app)==0 " ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Reapply</button>
                                     </td>
                                 </tr>
                             </tbody>

@@ -122,5 +122,30 @@
         $scope.getFormatedPhone = function (phone) {
             return UserService.formatPhone(phone)
         }//// .getFormatedPhone
+
+        $scope.dayDiff = function (d1, d2) {
+            if (isNaN(d2) || !d2) {
+                d2 = new Date();
+            }
+            if (angular.isString(d1)) {
+                d1 = new Date(d1);
+            }
+            if (angular.isString(d2)) {
+                d2 = new Date(d2);
+            }
+            return Math.round((d2.getHours() - d1.getHours()) / 24)
+        };
+        
+        $scope.getDaysUntilReapply = function (application) {
+            if (application.status == 0) {
+                return 0;
+            }
+            var dayDiff = $scope.dayDiff(application.createdAt);
+            var daysUntilReapply = 30 - dayDiff;
+            if (daysUntilReapply < 0) {
+                daysUntilReapply = 0;
+            }
+            return daysUntilReapply;
+        };
     }
 })();
