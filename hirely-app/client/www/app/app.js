@@ -72,6 +72,13 @@ var myApp = angular.module('hirelyApp',
                 controller: 'JobApplicationController',
                 authRequired: true
             })
+            .state('master.application.applyTmp', {
+                url: '/:businessSlug/:locationSlug/:positionSlug/applink.aspx',
+                templateUrl: 'app/application/job-application.tpl.html',
+                controller: 'JobApplicationController',
+                authRequired: true
+            })
+
 
             .state('master.default.confirm', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/done',
@@ -144,5 +151,5 @@ var myApp = angular.module('hirelyApp',
 
 
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/');
+        // $urlRouterProvider.otherwise('/');
     });

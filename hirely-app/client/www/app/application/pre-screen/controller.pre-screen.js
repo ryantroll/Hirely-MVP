@@ -16,6 +16,9 @@
                 require: 'ngModel',
                 link: function (scope, ele, attrs, ctrl) {
                     ctrl.$validators.validateQuestion = function(modelValue, viewValue) {
+                        if (!viewValue) {
+                            return false;
+                        }
                         return viewValue.length > 3;
                     };/// unshift
                 }//// fun. link
