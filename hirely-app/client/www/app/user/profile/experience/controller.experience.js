@@ -76,12 +76,17 @@
         ];
 
 
+        $scope.$emit('setEnableNextButton', {newValue:false});
         $scope.initExperience = function () {
             if (!AuthService.currentUser.workExperience) {
                 console.log("Initializing new work experience");
                 AuthService.currentUser.workExperience = [];
             }
+
             $scope.workExperience = angular.copy(AuthService.currentUser.workExperience);
+
+            $scope.$emit('setEnableNextButton', {newValue:$scope.workExperience.length>0});
+
             angular.forEach($scope.workExperience, function (item) {
                 /**
                  * do some dates clenaing and fixing
@@ -167,6 +172,7 @@
 
             $scope.addWorkXpForm = false;
             $scope.workExperienceChanged = true;
+            $scope.$emit('setEnableNextButton', {newValue:true});
         }; //// fun. addJobXp
 
         /**
@@ -177,6 +183,9 @@
         $scope.removeJobXp = function (index) {
             $scope.workExperience.splice(index, 1);
             $scope.workExperienceChanged = true;
+            if (!$scope.workExperience.length) {
+                $scope.$emit('setEnableNextButton', {newValue:false});
+            }
         };
 
         /**
@@ -312,6 +321,10 @@
             // $scope.workExperience[x].conflict = false;
 
         });
+
+        $scope.declineExpChange = function() {
+            $scope.$emit('setEnableNextButton', {newValue:$scope.declineExp});
+        };
 
         /**
          * Save the entries to database on scope destroy]

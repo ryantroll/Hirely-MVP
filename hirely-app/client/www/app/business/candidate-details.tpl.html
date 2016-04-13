@@ -25,7 +25,7 @@
                                     <div class="image-wrapper">
                                         <img src="{{applicant.profileImageURL || defaultImage}}" />
                                     </div>
-                                    <div class="date">Applied: {{application.createdAt | date:'MM/dd/yyyy'}}</div>
+                                    <div class="date">Applied: {{application.appliedAt | date:'MM/dd/yyyy'}}</div>
                                 </div>
                             </div>
                             <div class="col-sm-9">
@@ -233,7 +233,7 @@
                                 <div class="image-wrapper">
                                     <img src="{{applicant.profileImageURL || defaultImage}}" />
                                 </div>
-                                <div class="date">Applied: {{application.createdAt | date:'MM/dd/yyyy'}}</div>
+                                <div class="date">Applied: {{application.appliedAt | date:'MM/dd/yyyy'}}</div>
                             </div>
                         </div>
                         <div class="col-sm-12">

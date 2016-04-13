@@ -141,7 +141,7 @@
                                     <th>Location</th>
                                     <td>{{positions[app.positionId].location.neighborhood}} - {{positions[app.positionId].location.city}}, {{positions[app.positionId].location.state}}</td>
                                     <th>Apply Date</th>
-                                    <td>{{app.createdAt | date : 'MM/dd/yyyy'}}</td>
+                                    <td>{{app.appliedAt | date : 'MM/dd/yyyy'}}</td>
                                     <th>Status</th>
                                     <td>
                                         <span>{{getApplicationStatus(app.status+1)}}</span>

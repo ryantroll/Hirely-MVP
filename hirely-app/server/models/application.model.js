@@ -6,6 +6,7 @@ var applicationSchema = new Schema({
   userId      :       {type:String, ref:'users', required:true, index:true},
   positionId   :       {type:String, required:true, index:true},
   createdAt   :       {type:Date, required:true, default:Date.now},
+  appliedAt :       Date,
   isVetted    :       {type:Boolean, default:false},
   status      :       {
                         type:Number, //// -1 Soft Fail, 0 Started, 1 Pre-scree , 2 applied, 3 Shortlisted, 4 Interviewed, 5 Hired, 6 Dismissed, 7 Expired, 8 Failed Vetting.
@@ -40,3 +41,16 @@ var applicationSchema = new Schema({
 var ApplicationModel = mongoose.model('Applications', applicationSchema, "applications");
 
 module.exports = ApplicationModel;
+
+
+//
+// console.log("Running...");
+// ApplicationModel.find({}).then(function(apps) {
+//     console.log("Found apps");
+//     apps.forEach(function(app) {
+//         console.log("app: "+app._id);
+//         app.appliedAt = app.createdAt;
+//         app.save();
+//     });
+//     console.log("Done.");
+// });

@@ -5,6 +5,15 @@
 <div class="form-container user-profile-exp" ng-show="stepTwoLoaded">
     <div class="row">
         <div class="cards-wrapper">
+            <div class="card">
+                <h4>Application Tip</h4>
+                <p>Adding all of your education and training enhances your application. Be sure to enter all completed, partially completed and currently attending education.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="cards-wrapper">
             <div class="card" ng-repeat="eduItem in education">
                 <h3>{{eduItem.institutionName}}</h3>
                 <p>{{eduItem.programType}}<span ng-show="eduItem.focus"> - {{eduItem.focus}}</span></p>
@@ -22,10 +31,19 @@
                 <div class="add-group">
                     <button class="btn btn-circle blue" ng-click="showEducation()">+</button>
                     <p>Add Education</p>
-                </dvi>
-            </dvi>
+                </div>
+            </div>
         </div><!--cards-wrapper-->
     </div><!--row-->
+
+    <div class="row" ng-show="!education.length">
+        <div class="col-sm-12">
+            <div class="field-wrapper">
+                <input name="declineEdu" id="declineEdu" type="checkbox" ng-model="declineEdu" ng-click="declineEduChange()" />
+                <label for="declineEdu">&nbsp;&nbsp;&nbsp;I do not have any education.</label>
+            </div>
+        </div>
+    </div>
 </div><!--user-profile-exp-->
 
 <div class="form-overlay" ng-show="addEducationForm" id="expFormDiv">

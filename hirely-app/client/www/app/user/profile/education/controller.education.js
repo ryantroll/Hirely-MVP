@@ -80,6 +80,7 @@
             {val:2, text:'Completed'}
         ];
 
+        $scope.$emit('setEnableNextButton', {newValue:false});
         $scope.initEducation = function () {
 
             /**
@@ -99,6 +100,8 @@
              * @type {Object}
              */
             $scope.educationInstance = {};
+
+            $scope.$emit('setEnableNextButton', {newValue:$scope.education.length>0});
 
             angular.forEach($scope.education, function (item) {
 
@@ -194,6 +197,7 @@
 
                 $scope.addEducationForm = false;
             }
+            $scope.$emit('setEnableNextButton', {newValue:false});
         };
 
         /**
@@ -204,6 +208,9 @@
         $scope.removeEducation = function (index) {
             $scope.education.splice(index, 1);
             $scope.educationChanged = true;
+            if (!$scope.education.length) {
+                $scope.$emit('setEnableNextButton', {newValue:false});
+            }
         };
 
         $scope.editEducation = function (index) {
@@ -266,9 +273,10 @@
             $scope.extraCurricularObjs.splice(index,1);
         };
 
-        /**
-         * Save the entries to database on scope destroy]
-         */
+        $scope.declineEduChange = function() {
+            $scope.$emit('setEnableNextButton', {newValue:$scope.declineEdu});
+        };
+        
         $scope.$on('$destroy', function () {
             if ($scope.educationChanged || true) {
                 var toSave = {education: angular.copy($scope.education)};

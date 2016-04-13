@@ -133,14 +133,15 @@
             if (angular.isString(d2)) {
                 d2 = new Date(d2);
             }
-            return Math.round((d2.getHours() - d1.getHours()) / 24)
+            var one_day=1000*60*60*24; // one day in milliseconds
+            return Math.round((d2.getTime() - d1.getTime()) / one_day);
         };
         
         $scope.getDaysUntilReapply = function (application) {
-            if (application.status == 0) {
+            if (application.status<=0 || !application.appliedAt) {
                 return 0;
             }
-            var dayDiff = $scope.dayDiff(application.createdAt);
+            var dayDiff = $scope.dayDiff(application.appliedAt);
             var daysUntilReapply = 30 - dayDiff;
             if (daysUntilReapply < 0) {
                 daysUntilReapply = 0;

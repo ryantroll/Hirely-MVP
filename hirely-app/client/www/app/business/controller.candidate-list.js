@@ -296,7 +296,7 @@
 
       var app = angular.copy($scope.applications[index]);
       var now = Date.now();
-      var appDate = new Date(app.createdAt);
+      var appDate = new Date(app.appliedAt);
 
       if(angular.isDefined(app.viewStatus)){
         return JobApplicationService.viewStatusLabels[app.viewStatus];
@@ -346,8 +346,8 @@
           return bScore - aScore;
         }
         else{
-          var aTime = new Date(a.createdAt).getTime();
-          var bTime = new Date(b.createdAt).getTime();
+          var aTime = new Date(a.appliedAt).getTime();
+          var bTime = new Date(b.appliedAt).getTime();
           return bTime - aTime;
         }
 

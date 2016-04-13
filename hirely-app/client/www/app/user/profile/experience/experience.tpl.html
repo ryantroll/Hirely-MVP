@@ -5,6 +5,15 @@
 <div class="form-container user-profile-exp" ng-show="stepTwoLoaded">
     <div class="row">
         <div class="cards-wrapper">
+            <div class="card">
+                <h4>Application Tip</h4>
+                <p>Adding all of your current and past jobs helps our matching process gather your skills and present the strongest possible application.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="cards-wrapper">
             <div class="card" ng-repeat="xpItem in workExperience">
                 <h3>{{xpItem.reportedOccTitle}}</h3>
                 <p>{{xpItem.formattedAddress}} - {{xpItem.city}}, {{xpItem.state}} </p>
@@ -18,10 +27,19 @@
                 <div class="add-group">
                     <button class="btn btn-circle blue" ng-click="showJobXp()">+</button>
                     <p>Add Experience</p>
-                </dvi>
-            </dvi>
+                </div>
+            </div>
         </div><!--cards-wrapper-->
     </div><!--row-->
+
+    <div class="row" ng-show="!workExperience.length">
+        <div class="col-sm-12">
+            <div class="field-wrapper">
+                <input name="declineExp" id="declineExp" type="checkbox" ng-model="declineExp" ng-click="declineExpChange()" />
+                <label for="declineExp">&nbsp;&nbsp;&nbsp;I do not have any experience.</label>
+            </div>
+        </div>
+    </div>
 </div><!--user-profile-exp-->
 
 <div class="form-overlay" ng-show="addWorkXpForm" id="expFormDiv">
