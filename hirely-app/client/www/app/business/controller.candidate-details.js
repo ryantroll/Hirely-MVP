@@ -15,6 +15,7 @@
         $scope.days = AvailabilityService.days;
         $scope.hours = AvailabilityService.hours;
         $scope.statusLabels = JobApplicationService.statusLabels;
+        $scope.dayHours = {};
 
         $scope.daysUntilAvailable = 0;
         $scope.initializeCandidateDetails = function() {
@@ -147,6 +148,10 @@
             $scope.currentDayLabel = $scope.days[$scope.currentDayIndex];
 
         }; //// fun. nextDay
+
+        $scope.dayHours = function(day){
+
+        };//// fun. dayHorus
 
         $scope.getDateDif = function (work) {
             var start = new Date(work.dateStart);

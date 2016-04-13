@@ -94,8 +94,15 @@
 
     $scope.toggleFilterMenu = function(ev){
         var me = angular.element(ev.currentTarget);
-        var menu = me.parent().siblings().eq(0)
+        var menu = me.parent().siblings().eq(0);
+
+
+
         if(menu.hasClass('hidden')){
+            ///// close all menus before opening the new one
+            $('.jsFiltersList').addClass('hidden');
+            $('.jsFiltersListBtn').find('i').addClass('glyphicon-menu-down').removeClass('glyphicon-menu-up');
+
             menu.removeClass('hidden');
             me.find('i').removeClass('glyphicon-menu-down').addClass('glyphicon-menu-up');
         }

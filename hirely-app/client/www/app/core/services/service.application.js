@@ -14,7 +14,7 @@
     function JobApplicationService($q, HirelyApiService) {
 
         var viewStatusLabels = ['New', 'Viewed', 'Aging'];
-        var statusLabels = ['Started', 'Applied', 'Shortlisted', 'Contacted', 'Hired', 'Dismissed', 'Expired'];
+        var statusLabels = ['Started', 'Applied', 'Shortlisted', 'Interviewed', 'Hired', 'Dismissed', 'Expired'];
         var educationPrograms = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
         /**
@@ -47,7 +47,6 @@
 
 
         function save(jobApp) {
-            console.dir(jobApp);
             return HirelyApiService.applications(jobApp._id).patch(jobApp);
         }//// fun. save
 
@@ -135,7 +134,7 @@
             ret.started = 0;
             ret.applied = 0;
             ret.shortlisted = 0;
-            ret.contacted = 0;
+            ret.interviewed = 0;
             ret.hired = 0;
             ret.dismissed = 0;
             ret.expired = 0;
@@ -153,7 +152,8 @@
                         ++ret.shortlisted;
                         break;
                     case 3:
-                        ++ret.contacted;
+
+                        ++ret.interviewed;
                         break;
                     case 4:
                         ++ret.hired;

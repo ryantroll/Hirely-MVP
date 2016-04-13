@@ -26,8 +26,8 @@
             }
         ]
       },
-      contacted:{
-        name: "Contacted",
+      interviewed:{
+        name: "Interviewed",
         // dateCreated: new Date(),
         type: "computation",
         importance: 1,

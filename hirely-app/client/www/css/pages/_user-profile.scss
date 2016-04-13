@@ -888,6 +888,9 @@ $day-button-size: 60px;
 				font-size:1.4em;
                 border:solid 2px $c-hirely-text-gray;
 			}
+            li.green > a{
+                background-color:$c-hirely-green;
+            }
 		}//// ul
 
 	}///.day-list

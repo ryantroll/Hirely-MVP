@@ -8,7 +8,7 @@ var applicationSchema = new Schema({
   createdAt   :       {type:Date, required:true, default:Date.now},
   isVetted    :       {type:Boolean, default:false},
   status      :       {
-                        type:Number, //// 0 Started, 1 Applied, 2 Shortlisted, 3 Contacted, 4 Hired, 5 Dismissed, 6 Expired.
+                        type:Number, //// 0 Started, 1 Applied, 2 Shortlisted, 3 Interviewed, 4 Hired, 5 Dismissed, 6 Expired.
                         required:true,
                         validate:{
                           validator: function(v){
