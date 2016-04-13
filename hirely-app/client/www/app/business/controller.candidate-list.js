@@ -139,10 +139,16 @@
       var pad = 0;
 
       var filters = $('#filtersList')
+      if(filters.length < 1 ){
+
+        return;
+      }
 
       var limit = filters.offset().top;
 
       if(top >= limit){
+        $scope.isHeaderFixed = true;
+
         $('#mobile-nav').css({'position':'fixed', 'z-index': 1501, 'top': 0, 'width':'100%'})
         .parent().css('padding-top', 60);
 
@@ -156,6 +162,8 @@
         }
       }
       else{
+        $scope.isHeaderFixed = false;
+
         $('#mobile-nav').css({'position':'static'})
         .parent().css('padding-top', '');
 
@@ -456,12 +464,19 @@
         scope:$scope
       })
 
+      console.log($scope.isHeaderFixed, '<<<<')
+          if($scope.isHeaderFixed === true){
+            $('#mobile-nav').hide()
+
+            $('#subHeader').hide();
+          }
       /**
        * Resolved when modal successfully open
        */
       detailsModal.opened
       .then(
         function(result){
+
           if(true === result){
             /**
              * Update the viewStats of the application to viewed
@@ -489,7 +504,11 @@
       detailsModal.result
       .then(
         function(d){
+          if($scope.isHeaderFixed === true){
+            $('#mobile-nav').show()
 
+            $('#subHeader').show();
+          }
         },
         function(err){
 

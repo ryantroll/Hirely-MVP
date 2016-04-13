@@ -9,8 +9,8 @@
 
 
     var filters = {
-      applied: {
-        name: "Applied",
+      prescreen: {
+        name: "Pre-screen",
         // dateCreated: new Date(),
         type: "computation",
         importance: 1,
@@ -26,8 +26,8 @@
             }
         ]
       },
-      interviewed:{
-        name: "Interviewed",
+      applied: {
+        name: "Applied",
         // dateCreated: new Date(),
         type: "computation",
         importance: 1,
@@ -39,41 +39,7 @@
             },
             {
                 type: "number",
-                value: 3
-            }
-        ]
-      },
-      hired: {
-        name: "Hired",
-        // dateCreated: new Date(),
-        type: "computation",
-        importance: 1,
-        operator: "==",
-        operands: [
-            {
-                type: "attr",
-                value: "application.status"
-            },
-            {
-                type: "number",
-                value: 4
-            }
-        ]
-      },
-      dismissed: {
-        name: "Dismissed",
-        // dateCreated: new Date(),
-        type: "computation",
-        importance: 1,
-        operator: "==",
-        operands: [
-            {
-                type: "attr",
-                value: "application.status"
-            },
-            {
-                type: "number",
-                value: 5
+                value: 2
             }
         ]
       },
@@ -90,7 +56,58 @@
             },
             {
                 type: "number",
-                value: 2
+                value: 3
+            }
+        ]
+      },
+      interviewed:{
+        name: "Interviewed",
+        // dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "==",
+        operands: [
+            {
+                type: "attr",
+                value: "application.status"
+            },
+            {
+                type: "number",
+                value: 4
+            }
+        ]
+      },
+      hired: {
+        name: "Hired",
+        // dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "==",
+        operands: [
+            {
+                type: "attr",
+                value: "application.status"
+            },
+            {
+                type: "number",
+                value: 5
+            }
+        ]
+      },
+      dismissed: {
+        name: "Dismissed",
+        // dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "==",
+        operands: [
+            {
+                type: "attr",
+                value: "application.status"
+            },
+            {
+                type: "number",
+                value: 6
             }
         ]
       },
@@ -107,7 +124,24 @@
             },
             {
                 type: "number",
-                value: 6
+                value: 7
+            }
+        ]
+      },
+      failedVetting: {
+        name: "Failed Vetting",
+        // dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "==",
+        operands: [
+            {
+                type: "attr",
+                value: "application.status"
+            },
+            {
+                type: "number",
+                value: 8
             }
         ]
       },

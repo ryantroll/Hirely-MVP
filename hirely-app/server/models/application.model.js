@@ -8,11 +8,11 @@ var applicationSchema = new Schema({
   createdAt   :       {type:Date, required:true, default:Date.now},
   isVetted    :       {type:Boolean, default:false},
   status      :       {
-                        type:Number, //// 0 Started, 1 Applied, 2 Shortlisted, 3 Interviewed, 4 Hired, 5 Dismissed, 6 Expired.
+                        type:Number, //// -1 Soft Fail, 0 Started, 1 Pre-scree , 2 applied, 3 Shortlisted, 4 Interviewed, 5 Hired, 6 Dismissed, 7 Expired, 8 Failed Vetting.
                         required:true,
                         validate:{
                           validator: function(v){
-                            return /^(6|5|4|3|2|1|0)$/.test(v.toString());
+                            return /^(8|7|6|5|4|3|2|1|0|-1)$/.test(v.toString());
                           },
                           message:'{VALUE} is not valid value for application status'
                         }
