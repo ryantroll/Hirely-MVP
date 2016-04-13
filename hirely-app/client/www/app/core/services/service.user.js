@@ -6,6 +6,8 @@
 
   function UserService($q, HirelyApiService) {
 
+    this.educationStatus = ['Attending', 'Partially Completed', 'Complete']
+
     /**
      * [createRegisteredNewUser will create user model data based on data sent from registration form
      * and send the user model object to createUser function to save in DB

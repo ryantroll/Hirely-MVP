@@ -1,5 +1,5 @@
 $sub-header-height:60px;
-$candidat-menu-height:40px;
+$candidat-menu-height:60px;
 .business{
     .wrapper{
         background-color:$c-hirely-gray;
@@ -177,8 +177,10 @@ $candidat-menu-height:40px;
                     display: none;
                     @include border-radius(2px);
                     @media screen and (min-width:$screen-sm-min){
-                        width:120px;
+                        width:105px;
                         font-size:1em;
+                        padding-left:0;
+                        padding-right:0;
                         display: inline-block;
                     }
                     // span{
@@ -582,62 +584,24 @@ $candidat-menu-height:40px;
                     line-height: $candidat-menu-height;
                     text-align: center;
                     color:$c-white;
-                    font-size:1.6em;
+                    font-size:2em;
                     background-color:$c-hirely-mid-gray;
+                    margin-right:5px;
                 }
-                // .drop{
-                //     background-color:$c-hirely-light-gray;
-                //     font-size:1.3em;
-                // }
+
+                a:last-of-type{
+                    margin-right: 0;
+                }
+
                 .red{
                     background-color:$c-hirely-red;
                 }
                 .green{
                     background-color:$c-hirely-green;
                 }
-                // ul{
-                //     display: block;
-                //     padding-left:0;
-                //     list-style: none;
-                //     width:120px;
-                //     position:absolute;
-                //     top:$candidat-menu-height;
-                //     left:0;
-                //     z-index: 101;
-                //     @include drop-shadow();
-
-                //     li{
-                //         display: block;
-                //         width:100%;
-                //         height: $candidat-menu-height;
-
-                //         a{
-                //             display: block;
-                //             width:100%;
-                //             height: $candidat-menu-height;
-                //             line-height: $candidat-menu-height;
-                //             padding: 0 10px;
-                //             background-color:$c-hirely-light-gray;
-                //             color:$c-hirely-mid-gray;
-                //             border-bottom:1px solid $c-white;
-                //         }
-                //         a:hover{
-                //             background-color: $c-white;
-                //             color:$c-hirely-red;
-                //         }
-                //     }
-                //     li:last-child{
-                //         a{
-                //             border-bottom:none;
-                //         }
-                //     }
-                //     li.active{
-                //         a{
-                //             background-color:$c-hirely-red;
-                //             color:$c-white;
-                //         }
-                //     }
-                // }//// ul
+                .purple{
+                    background-color: $c-hirely-purple;//#C653FF
+                }
             }//// .menu
         }//// .candidate
     }//// .candidates-list
@@ -1113,7 +1077,10 @@ $candidat-menu-height:40px;
                         }
                     }
                     .address{
-                        margin-bottom: 1em;
+                        margin-bottom: 0.3em;
+                        p{
+                            margin-bottom: 0;
+                        }
                     }
                     .icon{
                         min-height: 74px;
@@ -1210,62 +1177,23 @@ $candidat-menu-height:40px;
                         text-align: center;
                         color:$c-white;
                         background-color:$c-hirely-mid-gray;
-                        font-size: 1.5em;
+                        font-size: 2em;
+                        margin-right: 5px;
+                    }
+                    a:last-of-type{
+                        margin-right: 0;
                     }
 
-                    // .drop{
-                    //     background-color:$c-hirely-light-gray;
-                    //     font-size:1.3em;
-                    // }
                     .red{
                         background-color:$c-hirely-red;
                     }
                     .green{
                         background-color:$c-hirely-green;
                     }
-                    ul{
-                        display: block;
-                        padding-left:0;
-                        list-style: none;
-                        width:120px;
-                        position:absolute;
-                        top:$candidat-menu-height;
-                        left:0;
-                        z-index: 101;
-                        @include drop-shadow();
+                    .purple{
+                        background-color: $c-hirely-purple;//#C653FF
+                    }
 
-                        li{
-                            display: block;
-                            width:100%;
-                            height: $candidat-menu-height;
-
-                            a{
-                                display: block;
-                                width:100%;
-                                height: $candidat-menu-height;
-                                line-height: $candidat-menu-height;
-                                padding: 0 10px;
-                                background-color:$c-hirely-light-gray;
-                                color:$c-hirely-mid-gray;
-                                border-bottom:1px solid $c-white;
-                            }
-                            a:hover{
-                                background-color: $c-white;
-                                color:$c-hirely-red;
-                            }
-                        }
-                        li:last-child{
-                            a{
-                                border-bottom:none;
-                            }
-                        }
-                        li.active{
-                            a{
-                                background-color:$c-hirely-red;
-                                color:$c-white;
-                            }
-                        }
-                    }//// ul
                 }//// .menu
             }//// .actions
 

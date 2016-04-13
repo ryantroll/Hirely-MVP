@@ -47,7 +47,6 @@
 
 
         function save(jobApp) {
-            console.dir(jobApp);
             return HirelyApiService.applications(jobApp._id).patch(jobApp);
         }//// fun. save
 
@@ -133,36 +132,48 @@
             var ret = {};
             ret.total = list.length;
             ret.started = 0;
+            ret.prescreen = 0;
             ret.applied = 0;
             ret.shortlisted = 0;
-            ret.contacted = 0;
+            ret.interviewed = 0;
             ret.hired = 0;
             ret.dismissed = 0;
             ret.expired = 0;
+            ret.failedVetting = 0;
+            ret.softFail = 0;
 
             for (var x = 0; x < ret.total; x++) {
 
                 switch (list[x].status) {
+                    case -1:
+                        ++ret.softFail;
+                        break;
                     case 0:
                         ++ret.started;
                         break;
                     case 1:
-                        ++ret.applied;
+                        ++ret.prescreen;
                         break;
                     case 2:
-                        ++ret.shortlisted;
+                        ++ret.applied;
                         break;
                     case 3:
-                        ++ret.contacted;
+                        ++ret.shortlisted;
                         break;
                     case 4:
-                        ++ret.hired;
+                        ++ret.interviewed;
                         break;
                     case 5:
-                        ++ret.dismissed;
+                        ++ret.hired;
                         break;
                     case 6:
+                        ++ret.dismissed;
+                        break;
+                    case 7:
                         ++ret.expired;
+                        break;
+                    case 8:
+                        ++ret.failedVetting;
                         break;
                 }
             }/// for

@@ -21,9 +21,10 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <ul id="statusBtns">
+                                <li><button class="btn" ng-class="{red:isFilterActive('prescreen'), white:!isFilterActive('prescreen'), active:isFilterActive('prescreen')}" ng-click="setFilter('prescreen')" ng-disabled="statistics.prescreen == 0">Pre-screen <span  ng-show="statistics.prescreen > 0">({{statistics.prescreen}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('applied'), white:!isFilterActive('applied'), active:isFilterActive('applied')}" ng-click="setFilter('applied')" ng-disabled="statistics.applied == 0">Applied <span  ng-show="statistics.applied > 0">({{statistics.applied}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('shortlisted'), white:!isFilterActive('shortlisted'), active:isFilterActive('shortlisted')}" ng-click="setFilter('shortlisted')" ng-disabled="statistics.shortlisted == 0">Shortlisted <span  ng-show="statistics.shortlisted > 0">({{statistics.shortlisted}})</span></button></li>
-                                <li><button class="btn" ng-class="{red:isFilterActive('contacted'), white:!isFilterActive('contacted'), active:isFilterActive('contacted')}" ng-click="setFilter('contacted')" ng-disabled="statistics.contacted == 0">Contacted <span  ng-show="statistics.contacted > 0">({{statistics.contacted}})</span></button></li>
+                                <li><button class="btn" ng-class="{red:isFilterActive('contacted'), white:!isFilterActive('interviewed'), active:isFilterActive('interviewed')}" ng-click="setFilter('interviewed')" ng-disabled="statistics.interviewed == 0">Interviewed <span  ng-show="statistics.interviewed > 0">({{statistics.interviewed}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('hired'), white:!isFilterActive('hired'), active:isFilterActive('hired')}" ng-click="setFilter('hired')" ng-disabled="statistics.hired == 0">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('dismissed'), white:!isFilterActive('dismissed'), active:isFilterActive('dismissed')}" ng-click="setFilter('dismissed')" ng-disabled="statistics.dismissed == 0">Dismiss <span ng-show="statistics.dismissed > 0">({{statistics.dismissed}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('expired'), white:!isFilterActive('expired'), active:isFilterActive('expired')}" ng-click="setFilter('expired')" ng-disabled="statistics.expired == 0">Expired <span ng-show="statistics.expired > 0">({{statistics.expired}})</span></button></li>
@@ -88,9 +89,9 @@
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3>Availability</h3>
-                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
+                            <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
                         </div>
-                        <div class="inner list clearfix">
+                        <div class="inner list clearfix jsFiltersList">
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'weekdays')">Weekdays</a></li>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'weekends')">Weekends</a></li>
@@ -104,9 +105,9 @@
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3>Seasonal</h3>
-                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-down"></i></a>
+                            <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-down"></i></a>
                         </div>
-                        <div class="inner list clearfix hidden">
+                        <div class="inner list clearfix hidden jsFiltersList">
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'winter')">Winter</a></li>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'spring')">Spring</a></li>
@@ -119,9 +120,9 @@
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3>Education</h3>
-                            <a href="javascript:void(0);" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-down"></i></a>
+                            <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-down"></i></a>
                         </div>
-                        <div class="inner list clearfix hidden">
+                        <div class="inner list clearfix hidden jsFiltersList">
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'noEducaiton')">No Education</a></li>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'highSchool')">High School</a></li>
@@ -155,33 +156,38 @@
                         <div class="candidate" ng-repeat="app in filtered">
                             <div class="menu">
                                 <div class="inner">
-                                    <div ng-if="app.status == 1">
-                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Shortlist" uib-tooltip="Shortlist"><i class="icon-thumb_up_icon"></i></a>
-                                        <a class="" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Contact"  uib-tooltip="Contact"><i class="icon-phone_icon"></i></a>
-                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                    <div ng-if="app.status == 1" class="clearfix">
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
+                                        <a class="purple" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, -1)" title="Soft Fail" uib-tooltip="Soft Fail"><i class="icon-stop_triangle_icon"></i></a>
+                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 8)" title="Hard Fail" uib-tooltip="Hard Fail"><i class="icon-hand_stop_icon"></i></a>
                                     </div>
 
-                                    <div ng-if="app.status == 2">
-                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Contact" uib-tooltip="Contact"><i class="icon-phone_icon"></i></a>
-                                        <a class="" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Hire"  uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                    <div ng-if="app.status == 2" class="clearfix">
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Shortlist" uib-tooltip="Shortlist"><i class="icon-thumb_up_icon"></i></a>
+                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
                                     </div>
 
                                     <div ng-if="app.status == 3">
-                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Contact" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                        <a class="" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Contact"  uib-tooltip="Contact"><i class="icon-phone_icon"></i></a>
-                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Interviewd" uib-tooltip="Interviewd"><i class="icon-chat_icon"></i></a>
+                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
                                     </div>
 
                                     <div ng-if="app.status == 4">
-                                        <a class="green" title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></a>
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
+                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
                                     </div>
 
                                     <div ng-if="app.status == 5">
-                                        <a class="red" title="Dismissed" uib-tooltip="Dismissed"><i class="icon-thumb_down_icon"></i></a>
+                                        <a class="gray" href="javascript:void(0);"  ng-click="updateAppStatus($event, app._id, 3)"  title="Undo" uib-tooltip="Undo Hiring"><i class="icon-undo_icon"></i></a>
+                                        <a class="green" title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></a>
                                     </div>
 
                                     <div ng-if="app.status == 6">
+                                        <a class="gray" href="javascript:void(0);"  ng-click="updateAppStatus($event, app._id, 3)"  title="Undo" uib-tooltip="Undo Dismiss"><i class="icon-undo_icon"></i></a>
+                                        <a class="red" title="Dismissed" uib-tooltip="Dismissed"><i class="icon-thumb_down_icon"></i></a>
+                                    </div>
+
+                                    <div ng-if="app.status == 7">
                                         <a class="red" title="Expired" uib-tooltip="Expired"><i class="icon-expired_icon"></i></a>
                                     </div>
                                 </div>
