@@ -7,15 +7,16 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('CandidateDetailsController', ['$stateParams', '$scope', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', CandidateDetailsController]);
+    angular.module('hirelyApp').controller('CandidateDetailsController', ['$stateParams', '$scope', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsController]);
     angular.module('hirelyApp').controller('CandidateDetailsModalController', ['$stateParams', '$scope', '$uibModalInstance', 'DEFAULT_PROFILE_IMAGE', 'AvailabilityService', 'BusinessService', 'JobApplicationService', 'TraitifyService', 'UserService', CandidateDetailsModalController]);
 
-    function CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
+    function CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
         $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
         $scope.days = AvailabilityService.days;
         $scope.hours = AvailabilityService.hours;
         $scope.statusLabels = JobApplicationService.statusLabels;
         $scope.dayHours = {};
+        $scope.educationStatusLabels = UserService.educationStatus;
 
         $scope.daysUntilAvailable = 0;
         $scope.initializeCandidateDetails = function() {
@@ -202,8 +203,8 @@
 
     }//// controller
 
-    function CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService) {
-        CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
+    function CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
+        CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService);
         $scope.isModal = false;
 
         function initializeApplication() {
@@ -222,7 +223,7 @@
 
     function CandidateDetailsModalController($stateParams, $scope, $uibModalInstance, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
 
-        CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService);
+        CandidateDetailsControllerCore($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService);
 
         $scope.isModal = true;
 

@@ -193,7 +193,7 @@
                                 <li class="clearfix" ng-repeat="edu in applicant.education">
 
                                     <div class="exp">
-                                        <h6>{{edu.institutionName}}</h6>
+                                        <h6>{{edu.institutionName}} <span>({{educationStatusLabels[edu.status]}})</span></h6>
                                         <div class="address">
                                             <p>
                                                 {{edu.city}},
