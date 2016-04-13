@@ -1034,7 +1034,7 @@ var educationSchema = new Schema({
             message: '{VALUE} is not valid education program type'
         }
     },
-    degree: {type: String, reqired: true},
+    focus: {type: String, reqired: true},
 
     dateEnd: {
         type: Date,
@@ -1331,13 +1331,17 @@ var UserModel = mongoose.model('User', userSchema, "users");
 
 module.exports = UserModel;
 
-
+//
 // console.log("Running...");
 // UserModel.find({}).then(function(users) {
 //     console.log("Found users");
 //     users.forEach(function(user) {
 //         console.log("user: "+user.email);
 //         // user.queuedForMetricUpdate = true;
+//         user.education.forEach(function(edu) {
+//             edu.focus = "Biology";
+//             delete edu.degree;
+//         })
 //
 //         user.save();
 //     });

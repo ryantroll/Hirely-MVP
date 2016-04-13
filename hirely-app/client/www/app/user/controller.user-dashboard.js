@@ -73,6 +73,7 @@
                 .then(
                     function (positions) {
                         $scope.myPositions = positions;
+                        $scope.showMyPositions = Object.keys(positions).length > 0;
                     },
                     function (err) {
                         console.error("UD4:"+err);

@@ -7,10 +7,11 @@
         <div class="cards-wrapper">
             <div class="card" ng-repeat="eduItem in education">
                 <h3>{{eduItem.institutionName}}</h3>
-                <p>{{eduItem.programType}} - {{eduItem.degree}} </p>
+                <p>{{eduItem.programType}}<span ng-show="eduItem.focus"> - {{eduItem.focus}}</span></p>
                 <p>
-                    <span ng-show="eduItem.dateEndMonth.length">End Date: {{eduItem.dateEndMonth}}/{{eduItem.dateEndYear}} - </span>
-                    <span>{{statusToStr(eduItem.status)}}</span>
+                    <span ng-show="eduItem.status=='0'">Attending</span>
+                    <span ng-show="eduItem.status=='1'">Partially Completed {{eduItem.dateEndMonth}}/{{eduItem.dateEndYear}}</span>
+                    <span ng-show="eduItem.status=='2'">Completed {{eduItem.dateEndMonth}}/{{eduItem.dateEndYear}}</span>
                 </p>
                 <div class="btn-group">
                     <button class="btn blue" ng-click="editEducation($index)">EDIT</button>
@@ -61,6 +62,24 @@
                 </div>
 
 
+                <div class="row" ng-show="educationInstance.programType && educationInstance.programType!='High School'">
+                    <div class="col-sm-12">
+                        <div class="field-wrapper" ng-class="{'error': stepTwoE.focus.$error.required && stepTwoE.focus.$dirty, 'valid' : stepTwoE.focus.$valid}">
+                            <label for="focus">
+                                <span ng-show="educationInstance.programType=='Certificate'">Certificate Name</span>
+                                <span ng-show="educationInstance.programType!='Certificate'">Major</span>
+                                <span class="fa fa-check feedback-valid"></span>
+                                <span class="fa fa-close feedback-error"></span>
+                            </label>
+                            <input type="text" class="text-feild" id="focus" name="focus"
+                                   ng-model="educationInstance.focus"
+                                   ng-required="educationInstance.programType && educationInstance.programType!='High School'"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="field-wrapper" ng-class="{'error': stepTwoE.institution.$error.required && stepTwoE.institution.$dirty, 'valid' : stepTwoE.institution.$valid}">
@@ -106,24 +125,6 @@
                                 <option ng-repeat="state in states" value="{{state.abbreviation}}">{{state.name}}</option>
                             </select>
                             <span class="glyphicon glyphicon-menu-down"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="field-wrapper" ng-class="{'error': stepTwoE.degree.$error.required && stepTwoE.degree.$dirty, 'valid' : stepTwoE.degree.$valid}">
-                            <label for="degree">
-                                DEGREE OR CERTIFICATE
-                                <span class="fa fa-check feedback-valid"></span>
-                                <span class="fa fa-close feedback-error"></span>
-                            </label>
-                            <span class="info-label" ng-click="tipVisibility=!tipVisibility" uib-tooltip="Please provide the name or title of your degree or certificate. Example: GED or Bartending.">?</span>
-                            <div ng-show="tipVisibility">Please provide the name or title of your degree or certificate. Example: GED or Bartending.</div>
-                            <input type="text" class="text-feild" id="degree" name="degree"
-                                ng-model="educationInstance.degree"
-                                required
-                            />
                         </div>
                     </div>
                 </div>
@@ -229,7 +230,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" ng-show="educationInstance.programType!='Certificate'">
                     <div class="col-sm-12">
                         <div class="field-wrapper" ng-class="{'error': !stepTwoE.languagesSpoken.$valid && stepTwoE.languagesSpoken.$dirty, 'valid' : stepTwoE.languagesSpoken.$valid}">
                             <label>

@@ -221,8 +221,25 @@
             $scope.languagesListObjs.splice(index,1);
         };
 
+        $scope.manualFormValidation = function(newVal, oldVal) {
+            if (angular.isArray(newVal) && newVal.length) {
+                $scope.$emit('setEnableNextButton', {newValue:true});
+            } else if (newVal && newVal.length > 3) {
+                $scope.$emit('setEnableNextButton', {newValue:true});
+            } else {
+                $scope.$emit('setEnableNextButton', {newValue:false});
+            }
+        };
+
+        $scope.$watch('user.firstName', $scope.manualFormValidation);
+        $scope.$watch('user.lastName', $scope.manualFormValidation);
+        $scope.$watch('_mobile', $scope.manualFormValidation);
+        $scope.$watch('user.postalCode', $scope.manualFormValidation);
+        $scope.$watch('languagesListObjs', $scope.manualFormValidation);
+
         //// wait for destroy event to update data
         $scope.$on('$destroy', function (event) {
+
             if ($scope._dateOfBirth) {
                 $scope.user.dateOfBirth = new Date($scope._dateOfBirth);
             }
@@ -247,6 +264,8 @@
 
             var toSave = {
                 _id: $scope.user._id,
+                firstName: $scope.user.firstName,
+                lastName: $scope.user.lastName,
                 profileImageURL: $scope.user.profileImageURL,
                 mobile: $scope.user.mobile,
                 dateOfBirth: $scope.user.dateOfBirth,

@@ -47,7 +47,7 @@
                     </div>
                 </div><!--col-sm-3-->
                 <div class="col-xs-6">
-                    <div class="center">
+                    <div class="center" ng-hide="application.status!=0 && $getActiveIndex(step)==6">
                         <div class="red text-center">{{100 * ($getActiveIndex(step)-1) / steps.length | numberRound}}% Completed</div>
                         <div class="progress-bar"><span style="width:{{100 * ($getActiveIndex(step)-1) / steps.length}}%;">&nbsp;</span></div>
                         <!--<div class="text-center">Powered by <a href="javascript:void(0);"><i>Hirely</i></a></div>-->
@@ -56,8 +56,8 @@
                 </div><!--col-sm-6-->
                 <div class="col-xs-3">
                     <div class="right">
-                        <button class="btn next" ng-hide="$isLast()" ng-click="destroyDirection=1; $nextStep()" ng-disabled="!enableNextButton || $isLast() || ($getActiveStep().hasForm && !$getActiveStep().valid)">Next</button>
-                        <button class="btn next" ng-hide="!$isLast() || blockFinished" ng-click="destroyDirection=1; finish()">Submit</button>
+                        <button id="nextButton" class="btn next" ng-hide="$isLast()" ng-click="destroyDirection=1; $nextStep()" ng-disabled="!enableNextButton || ($getActiveStep().hasForm && !$getActiveStep().valid)">Next</button>
+                        <button id="submitButton" class="btn next" ng-hide="!$isLast() || blockFinished" ng-disabled="!enableNextButton || ($getActiveStep().hasForm && !$getActiveStep().valid)" ng-click="destroyDirection=1; finish()">Submit</button>
                     </div>
                 </div><!--col-sm-3-->
             </div><!--row-->

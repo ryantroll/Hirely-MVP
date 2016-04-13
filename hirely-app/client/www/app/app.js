@@ -72,6 +72,13 @@ var myApp = angular.module('hirelyApp',
                 controller: 'JobApplicationController',
                 authRequired: true
             })
+            .state('master.application.applyTmp', {
+                url: '/:businessSlug/:locationSlug/:positionSlug/applink.aspx',
+                templateUrl: 'app/application/job-application.tpl.html',
+                controller: 'JobApplicationController',
+                authRequired: true
+            })
+
 
             .state('master.default.confirm', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/done',

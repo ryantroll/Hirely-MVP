@@ -182,7 +182,7 @@
          */
         $scope.finish = function () {
             delete $scope.layoutModel.noHeader;
-            $state.go('master.default.confirm', {businessSlug: $scope.business.slug, locationSlug: $scope.location.slug, positionSlug: $scope.position.slug});
+            $state.go('master.default.confirm', $stateParams);
         };
 
         function semiFixedFooter() {

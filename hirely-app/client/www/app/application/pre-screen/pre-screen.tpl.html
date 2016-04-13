@@ -6,7 +6,7 @@
         <fieldset>
             <div class="row" ng-show="!isApplyEligible">
                 <div class="col-sm-12 error-label bg-warning" style="margin:0">
-                        <p>You Already Applied for this job! You may re-apply in {{daysUntilReapply}} days.  You're former pre-screen answers are below for reference.</p>
+                        <p>You Already Applied for this job! You may re-apply in {{daysUntilReapply}} days. You're former pre-screen answers are below for reference. Click <a href="javascript:void(0);" ng-click="destroyDirection=0; gotoPosition();">here</a> to go back to the position.</p>
                 </div>
             </div>
             <div class="row" ng-show="isApplyEligible && application.status">
@@ -23,7 +23,8 @@
                                 <span class="fa fa-check feedback-valid"></span>
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
-                            <textarea ng-disabled="!isApplyEligible" class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" required></textarea>
+                            <textarea ng-disabled="!isApplyEligible" class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" validate-question></textarea>
+                            {{q.required}}
                         </ng-form>
                     </div>
                 </div>
@@ -32,7 +33,7 @@
             <br>
             <div class="row" ng-show="isApplyEligible">
                 <div class="col-sm-12 text-center error-label bg-warning" style="margin:0">
-                    <p>Click <a ui-sref="master.default.dashboard">here</a> to save your answers and go to dashboard.</p>
+                    <p>Click <a ui-sref="master.default.dashboard" ng-click="destroyDirection=0;">here</a> to save your answers and go to dashboard, or <a href="javascript:void(0);" ng-click="destroyDirection=0; gotoPosition();">here</a> to go back to the position.</p>
                 </div>
             </div>
 
