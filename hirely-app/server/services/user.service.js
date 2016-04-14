@@ -143,7 +143,7 @@ var UserService = {
     },
 
     createInvitationToken: function (permObjs, expiresIn) {
-        console.log("US:createInvitationToken:info:1");
+        // console.log("US:createInvitationToken:info:1");
         var token = jwt.sign({permObjs: permObjs}, config.jwtSecret, {expiresIn: expiresIn});
         return token;
     },
@@ -159,16 +159,17 @@ var UserService = {
         return userModel.findOne({email: email}).then(function (user) {
             try {
                 if (!user) {
-                    // console.log("US:passwordLogin: user not found for " + email);
+                    console.warn("US:passwordLogin: user not found for " + email);
                     return null;
                 }
                 
                 if (skipPasswordCheck) {
+                    console.warn("US:passwordLogin: skipPasswordCheck");
                     return self.getUserAndTokenObj(user, config.tokenLifeDefault);
                 }
 
                 if (!user.password) {
-                    // console.log("US:passwordLogin: user does not have a password");
+                    console.warn("US:passwordLogin: user does not have a password");
                     return null;
                 }
 
