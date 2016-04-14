@@ -156,7 +156,14 @@
                     <div class="candidates-list">
 
                         <p class="text-center noneFound" ng-show="!filtered.length">
-                            No users found.
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <div class="page-error">
+                                        <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+                                        <h4>No applications submitted for this position yet</h4>
+                                    </div>
+                                </div>
+                            </div>
                         </p>
                         <div class="candidate" ng-repeat="app in filtered">
                             <div class="menu">
