@@ -155,7 +155,7 @@
 
                     <div class="candidates-list">
 
-                        <p class="text-center noneFound" ng-show="!filtered.length">
+                        <div class="text-center noneFound" ng-hide="filtered.length">
                             <div class="row">
                                 <div class="col-sm-12 text-center">
                                     <div class="page-error">
@@ -164,7 +164,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </p>
+                        </div>
+
                         <div class="candidate" ng-repeat="app in filtered">
                             <div class="menu">
                                 <div class="inner">
