@@ -128,55 +128,71 @@
             return deferred.promise;
         }//// getPositionById
 
-        function getStatistics(list) {
+        function getStatistics(list, applicants, scores) {
             var ret = {};
-            ret.total = list.length;
+            ret.total = 0;
             ret.started = 0;
-            ret.prescreen = 0;
+            ret.pending = 0;
             ret.applied = 0;
             ret.shortlisted = 0;
             ret.interviewed = 0;
             ret.hired = 0;
             ret.dismissed = 0;
             ret.expired = 0;
-            ret.failedVetting = 0;
-            ret.softFail = 0;
+            ret.failed = 0;
+            ret.attention = 0;
 
-            for (var x = 0; x < ret.total; x++) {
+            for (var x = 0; x < list.length; x++) {
+
+                //// don't count if applicants or score is not exists of application user
+                if(!scores[list[x].userId] || !applicants[list[x].userId]){
+                    continue;
+                }
 
                 switch (list[x].status) {
                     case -1:
-                        ++ret.softFail;
+                        // ++ret.total;
+                        ++ret.attention;
                         break;
                     case 0:
+                        // ++ret.total;
                         ++ret.started;
                         break;
                     case 1:
-                        ++ret.prescreen;
+                        // ++ret.total;
+                        ++ret.pending;
                         break;
                     case 2:
+                        ++ret.total;
                         ++ret.applied;
                         break;
                     case 3:
+                        ++ret.total;
                         ++ret.shortlisted;
                         break;
                     case 4:
+                        ++ret.total;
                         ++ret.interviewed;
                         break;
                     case 5:
+                        ++ret.total;
                         ++ret.hired;
                         break;
                     case 6:
+                        ++ret.total;
                         ++ret.dismissed;
                         break;
                     case 7:
+                        ++ret.total;
                         ++ret.expired;
                         break;
                     case 8:
-                        ++ret.failedVetting;
+                        // ++ret.total;
+                        ++ret.failed;
                         break;
                 }
             }/// for
+
             return ret;
         }//// fun. getStatistics
 
