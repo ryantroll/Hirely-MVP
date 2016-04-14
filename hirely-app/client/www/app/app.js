@@ -93,6 +93,7 @@ var myApp = angular.module('hirelyApp',
             //     controller: 'CandidateListController'
             // })
 
+
             .state('master.default.account', {
                 abstract: true,
                 templateUrl: 'app/layout/account/account-master.tpl.html',
@@ -117,6 +118,32 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/account/register.tpl.html',
                 controller: 'RegisterController'
             })
+            .state('master.default.account.hmInvitationBusiness', {
+                url: '/:businessSlug/hm-invite',
+                templateUrl: 'app/account/invite.tpl.html',
+                controller: 'InviteController',
+                authRequired: true
+            })
+            .state('master.default.account.hmInvitationLocation', {
+                url: '/:businessSlug/:locationSlug/hm-invite',
+                templateUrl: 'app/account/invite.tpl.html',
+                controller: 'InviteController',
+                authRequired: true
+            })
+            .state('master.default.account.hmInvitationPosition', {
+                url: '/:businessSlug/:locationSlug/:positionSlug/hm-invite',
+                templateUrl: 'app/account/invite.tpl.html',
+                controller: 'InviteController',
+                authRequired: true
+            })
+            .state('master.default.account.hmInvitationDemo', {
+                url: '/hm-invite',
+                templateUrl: 'app/account/invite.tpl.html',
+                controller: 'InviteController',
+                authRequired: true
+            })
+
+
             .state('master.default.job', {
                 abstract: true,
                 templateUrl: 'app/layout/job/job-master.tpl.html',
@@ -126,6 +153,7 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/job/job-position.tpl.html',
                 controller: 'JobPositionController'
             })
+
             .state('interview', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/interviewQs/:interviewQuestionsIndex',
                 templateUrl: 'app/job/interview.tpl.html',

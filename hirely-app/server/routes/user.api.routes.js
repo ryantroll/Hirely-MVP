@@ -65,14 +65,22 @@ var userRoutes = {
 
     },
 
-    createSimpleBusinessInvitationToken : function(req, res) {
-        permissionService.checkPermission(req.permissions, "businesses", req.params.id).then(function(grant) {
+    createInvitationToken : function(req, res) {
+        
+        var permObjs = req.body.permObjs;
+        var expiresIn = req.body.expiresIn;
+
+        var token = UserService.createInvitationToken(permObjs, expiresIn);
+        res.status(200).json(apiUtil.generateResponse(200, "Invitation Results", token));
+        return;
+        
+        permissionService.checkPermissions(req.permissions, permObjs).then(function(grant) {
             if (!grant) {
                 res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
                 return;
             }
 
-            var token = UserService.createSimpleBusinessInvitationToken(req.params.id);
+            var token = UserService.createInvitationToken(permObjs, expiresIn);
             res.status(200).json(apiUtil.generateResponse(200, "Invitation Results", token));
         });
     },

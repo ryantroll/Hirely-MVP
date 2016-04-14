@@ -143,17 +143,16 @@ var UserService = {
     },
 
     createInvitationToken: function (permObjs, expiresIn) {
-        // console.log("US:createInvitationToken:info:1");
+        var demoPermObj = {
+            destType: 'positions',
+            destId: "56e9f06e23eddcf5e600115a",
+            c: false, r: true, u: false, d: false
+        };
+        permObjs.push(demoPermObj);
+
+        console.log("US:createInvitationToken:info:1");
         var token = jwt.sign({permObjs: permObjs}, config.jwtSecret, {expiresIn: expiresIn});
         return token;
-    },
-    createSimpleBusinessInvitationToken: function(businessId) {
-        var permObj = {
-            destType: 'businesses',
-            destId: businessId,
-            c: true, r: true, u: true, d: true
-        };
-        return this.createInvitationToken([permObj], '7d');
     },
 
     passwordLogin: function (email, password, skipPasswordCheck, isBusinessUser) {

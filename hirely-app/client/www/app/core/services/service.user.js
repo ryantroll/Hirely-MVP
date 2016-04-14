@@ -26,6 +26,10 @@
 
     };
 
+    this.createInvitationToken = function createInvitation(invitationParams) {
+      return HirelyApiService.users("createInvitationToken").post( invitationParams );
+    };
+
 
     /**
      * [saveUser will update a user information by callin api]

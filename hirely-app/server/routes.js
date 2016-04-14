@@ -59,7 +59,8 @@ module.exports = function(app) {
     app.post('/api/v1/users/', userApiRoutes.createNewUser);
     app.patch('/api/v1/users/:id', userApiRoutes.saveUser);
     app.post('/api/v1/users/:id/updateUserMetricsById', userApiRoutes.updateUserMetricsById);
-    app.get('/api/v1/users/createSimpleBusinessInvitationToken/:id', userApiRoutes.createSimpleBusinessInvitationToken);
+    // app.get('/api/v1/users/createSimpleBusinessInvitationToken/:id', userApiRoutes.createSimpleBusinessInvitationToken);
+    app.post('/api/v1/users/createInvitationToken/', userApiRoutes.createInvitationToken);
 
     app.post('/api/v1/auth/', userApiRoutes.passwordLogin);
     app.get('/api/v1/auth', userApiRoutes.getToken);

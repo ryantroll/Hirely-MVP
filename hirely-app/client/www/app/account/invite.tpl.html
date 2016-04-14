@@ -1,0 +1,56 @@
+<h1 class="text-center">Invitation generator</h1>
+<div>&nbsp;</div>
+<div class="text-center">Target: Demo
+    <span ng-show="business"> and {{business.slug}}</span>
+    <span ng-show="location">-> {{location.slug}}</span>
+    <span ng-show="position">-> {{position.slug}}</span>
+</div>
+
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loading</p>
+    <div class="loader"></div>
+</div>
+
+<div ng-show="dataError">
+    <p>Error:  URL is bad</p>
+</div>
+
+<div class="invite-generator" ng-show="dataLoaded && !dataError">
+    <p>
+        <label for="expiresIn">Please enter a expiresIn for the token</label><br>
+        <input type="text" class="text-field" id="expiresIn" name="expiresIn" ng-model="expiresIn" required>
+    </p>
+
+    <p>
+        <strong>Permissions</strong>
+        <table>
+            <tr>
+                <td>Create:</td>
+                <td><input type="checkbox" ng-model="create"/></td>
+            </tr>
+            <tr>
+                <td>Read:</td>
+                <td><input type="checkbox" ng-model="read" disabled /></td>
+            </tr>
+            <tr>
+                <td>Update:</td>
+                <td><input type="checkbox" ng-model="update"/></td>
+            </tr>
+            <tr>
+                <td>Delete:</td>
+                <td><input type="checkbox" ng-model="delete"/></td>
+            </tr>
+        </table>
+    </p>
+
+    <p>
+        <button type="submit" ng-click="generate()" class="btn red">Do it, yo.</button>
+    </p>
+
+    <p style="word-wrap: break-word;">
+        <span ng-show="!token">URL:  </span>
+        <span ng-show="token && business">URL: <a target="_blank" href="https://app.hirely.us/#/register?inv={{token}}&b={{business.name}}">https://app.hirely.us/register?inv={{token}}&b={{business.name}}</a></span>
+        <span ng-show="token && !business">URL: <a target="_blank" href="https://app.hirely.us/#/register?inv={{token}}&b=Demo">https://app.hirely.us/register?inv={{token}}&b=Demo</a></span>
+    </p>
+
+</div>
