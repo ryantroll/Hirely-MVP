@@ -9,8 +9,42 @@
 
 
     var filters = {
-      prescreen: {
-        name: "Pre-screen",
+      attention: {
+        name: "Pending Review",
+        // dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "==",
+        operands: [
+            {
+                type: "attr",
+                value: "application.status"
+            },
+            {
+                type: "number",
+                value: -1
+            }
+        ]
+      },
+      started: {
+        name: "Pending Review",
+        // dateCreated: new Date(),
+        type: "computation",
+        importance: 1,
+        operator: "==",
+        operands: [
+            {
+                type: "attr",
+                value: "application.status"
+            },
+            {
+                type: "number",
+                value: 0
+            }
+        ]
+      },
+      pending: {
+        name: "Pending Review",
         // dateCreated: new Date(),
         type: "computation",
         importance: 1,
@@ -128,7 +162,7 @@
             }
         ]
       },
-      failedVetting: {
+      failed: {
         name: "Failed Vetting",
         // dateCreated: new Date(),
         type: "computation",

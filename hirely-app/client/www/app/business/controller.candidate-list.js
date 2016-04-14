@@ -7,10 +7,10 @@
 (function () {
   'use strict';
 
-  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'PositionFiltersService', CandidateListController]);
+  angular.module('hirelyApp').controller('CandidateListController', ['$scope', '$stateParams', '$state', '$timeout', '$interpolate', '$uibModal', 'DEFAULT_PROFILE_IMAGE', 'BusinessService', 'JobApplicationService', 'PositionFiltersService', 'AuthService', CandidateListController]);
 
 
-  function CandidateListController($scope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, PositionFiltersService) {
+  function CandidateListController($scope, $stateParams, $state, $timeout, $interpolate, $uibModal, DEFAULT_PROFILE_IMAGE, BusinessService, JobApplicationService, PositionFiltersService, AuthService) {
     $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
 
     $scope.showPositionMenu = false;
@@ -289,7 +289,7 @@
      * set statistic variables
      */
     function updateStats(){
-      $scope.statistics = JobApplicationService.getStatistics($scope.applications);
+      $scope.statistics = JobApplicationService.getStatistics($scope.applications, $scope.applicants, $scope.scores);
     }
 
     $scope.getViewStatus = function(id, index){
@@ -464,12 +464,11 @@
         scope:$scope
       })
 
-      console.log($scope.isHeaderFixed, '<<<<')
-          if($scope.isHeaderFixed === true){
-            $('#mobile-nav').hide()
+        if($scope.isHeaderFixed === true){
+          $('#mobile-nav').hide()
 
-            $('#subHeader').hide();
-          }
+          $('#subHeader').hide();
+        }
       /**
        * Resolved when modal successfully open
        */
@@ -485,8 +484,9 @@
             appToSave.viewStatus = 1;
             JobApplicationService.save(appToSave).
             then(
-              function(app){
-                  $scope.applications[index] = app;
+              function(savedApp){
+                  // $scope.applications[index] = savedApp;
+                  $scope.applications[index].viewStats = 1;
               },
               function(err){
                 console.log(err);
