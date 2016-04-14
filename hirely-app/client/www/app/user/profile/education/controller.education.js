@@ -197,7 +197,7 @@
 
                 $scope.addEducationForm = false;
             }
-            $scope.$emit('setEnableNextButton', {newValue:false});
+            $scope.$emit('setEnableNextButton', {newValue:true});
         };
 
         /**
