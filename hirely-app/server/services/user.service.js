@@ -353,6 +353,7 @@ var UserService = {
                 var occId = workExperience.occId;
                 // console.log("US:addExpScores:info:260");
                 var monthCount = monthDiff(workExperience.dateStart, workExperience.dateEnd);
+                // console.log("US:addExpScores:info:260.1: "+monthCount);
                 totalWorkMonths += monthCount;
 
                 // If role doesn't already exist, create it
@@ -364,6 +365,7 @@ var UserService = {
                 // console.log("US:addExpScores:info:261.2");
                 roles[occId].monthCount += monthCount;
                 roles[occId].expLvl = this.monthCountToExperienceLevel(roles[occId].monthCount);
+                // console.log("US:addExpScores:info:261.3: " + roles[occId].expLvl);
 
                 if (!workExperience.isSeasonal) {
                     nonSeasonalTotalWorkMonths += monthCount;
@@ -378,12 +380,13 @@ var UserService = {
             }
 
             // console.log("US:addExpScores:info:262");
+            console.dir(Object.keys(roles));
             return onetScoresService.findByIds(Object.keys(roles))
                 .then(function (occScoresArray) {
                     // Extend roles with onet metrics
 
                     try {
-                        // console.log("US:addExpScores:info:262.5");
+                        // console.log("US:addExpScores:info:262.5: " + occScoresArray.length);
                         for (let occScores of occScoresArray) {
                             // console.log("US:addExpScores:info:262.6");
 
@@ -432,21 +435,30 @@ var UserService = {
                         }
 
                         // Add master KSAs
-                        // console.log("US:addExpScores:info:263");
+                        // console.log("US:addExpScores:info:263: " + totalWorkMonths);
                         var scores = {'Knowledge': {}, 'Skills': {}, 'Abilities': {}, 'WorkActivities': {}};
                         for (var occId in roles) {
-                            // console.log("US:addExpScores:info:264");
+                            // console.log("US:addExpScores:info:264: "+ roles[occId].monthCount);
                             // TODO:  Ask Dave if we should be using role.monthCount here instead of expLvl
                             var weight = roles[occId].monthCount / totalWorkMonths;
+                            // console.log("US:addExpScores:info:264.1: "+weight);
                             for (var category in roles[occId]) {
                                 // console.log("US:addExpScores:info:265");
                                 for (var key in roles[occId][category]) {
                                     // console.log("US:addExpScores:info:266");
                                     var weighted = weight * roles[occId][category][key];
-                                    if (!(key in scores[category])) {
+                                    // console.log("US:addExpScores:info:266.1:weighted:"+scores[category][key]);
+                                    if (!(scores[category][key])) {
                                         scores[category][key] = 0;
                                     }
-                                    scores[category][key] = Math.round(scores[category][key]+weighted * 100) / 100;
+                                    scores[category][key] = scores[category][key]+weighted;
+                                    // console.log("US:addExpScores:info:266.2: "+scores[category][key]);
+                                }
+
+                                // Now round them
+                                for (var key in roles[occId][category]) {
+                                    scores[category][key] = Math.round(scores[category][key] * 100) / 100;
+                                    // console.log("US:addExpScores:info:266.3: "+scores[category][key]);
                                 }
                             }
                         }  // end roles.forEach
@@ -493,23 +505,26 @@ var UserService = {
 
         // var deferred = q.defer(); deferred.resolve(user); deferred.promise
         return user.save()
-        .then(function (user) {
-            // console.log("US:updateUserMetrics:info:260: " + user._id);
-            return traitifyService.addTraitifyCareerMatchScoresToUser(user);
-            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
-        }).then(function (user) {
-            // console.log("US:updateUserMetrics:info:261: " + user._id);
-            return self.addExpScores(user);
-            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
-        }).then(function (user) {
-            // console.log("US:updateUserMetrics:info:262: " + user._id);
-            // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
-            user.queuedForMetricUpdate = false;
-            return user.save();
-        }).then(function (user) {
-            // console.log("US:updateUserMetrics:info:263: " + user._id);
-            return matchingService.generateCareerMatchScoresForUser(user);
-        })
+            .then(function (user) {
+                // console.log("US:updateUserMetrics:info:260: " + user._id);
+                return traitifyService.addTraitifyCareerMatchScoresToUser(user);
+                // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
+            })
+            .then(function (user) {
+                // console.log("US:updateUserMetrics:info:261: " + user._id);
+                return self.addExpScores(user);
+                // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
+            })
+            .then(function (user) {
+                // console.log("US:updateUserMetrics:info:262: " + user._id);
+                // var deferred = q.defer(); deferred.resolve(user); return deferred.promise;
+                user.queuedForMetricUpdate = false;
+                return user.save();
+            })
+            .then(function (user) {
+                // console.log("US:updateUserMetrics:info:263: " + user._id);
+                return matchingService.generateCareerMatchScoresForUser(user);
+            })
 
     },  // end updateUserMetricsById
 

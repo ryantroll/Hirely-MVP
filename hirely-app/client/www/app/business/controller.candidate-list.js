@@ -357,8 +357,24 @@
     $scope.updateAppStatus = function(ev, appId, status){
       var app = findAppById(appId);
       if(app){
+
+        // Create history entry
+        var historyEntry = {
+          time: new Date(),
+          type: 'StatusChange',
+          subject: 'Status: '+app.status+"->"+status+" by "+AuthService.currentUser.firstName+" "+AuthService.currentUser.lastName,
+          body: 'Status: '+app.status+"->"+status+" by "+AuthService.currentUser.firstName+" "+AuthService.currentUser.lastName,
+          userId: AuthService.currentUserId
+        };
+        if (!app.history) {
+          app.history = [];
+        }
+        app.history.push(historyEntry);
+
         app.status = status;
+
         if(angular.isDefined($scope.detailsApp)){
+          $scope.detailsApp.history = app.history;
           $scope.detailsApp.status = status;
         }
         JobApplicationService.save(app)

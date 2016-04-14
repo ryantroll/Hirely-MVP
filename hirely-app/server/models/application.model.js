@@ -35,6 +35,16 @@ var applicationSchema = new Schema({
       answer    :     String
     }
   ],/// prescreen array
+    
+  history    : [
+      {
+          time: {type:Date, required:true, default:Date.now},
+          type: {type:String, required:true},
+          subject: {type:String, required:true},
+          body: {type:String, required:true},
+          userId: {type:String, required:true},
+      }
+  ]
 
 });//// applicationSchema
 
