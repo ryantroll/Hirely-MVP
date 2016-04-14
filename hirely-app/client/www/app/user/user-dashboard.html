@@ -49,17 +49,12 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="pos in myPositions">
-                                    <th>Position</th>
-                                    <td><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">{{pos.title}}</a></td>
-                                    <th>Business</th>
+
+                                    <td class="up"><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">{{pos.title}}</a></td>
                                     <td>{{pos.business.name}}</td>
-                                    <th>Location</th>
                                     <td>{{pos.location.neighborhood}} - {{pos.location.city}}, {{pos.location.state}}</td>
-                                    <th>Openings</th>
-                                    <td>{{pos.openingsCount}}</td>
-                                    <th>Candidates</ht>
-                                    <td>{{pos.applicationCount}}</td>
-                                    <th>Action</th>
+                                    <td class="hidden-xs">{{pos.openingsCount}}</td>
+                                    <td class="hidden-xs">{{pos.applicationCount}}</td>
                                     <td><button class="btn red" ui-sref="master.default.business.candidateList({businessSlug:pos.business.slug, locationSlug:pos.location.slug, positionSlug:pos.slug})">Manage</button></td>
                                 </tr>
                             </tbody>
@@ -89,18 +84,12 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="fav in myFavorites">
-                                    <th>Position</th>
-                                    <td><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">{{positions[fav.positionId].title}}</a></td>
-                                    <th>Business</th>
+                                    <td class="up"><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">{{positions[fav.positionId].title}}</a></td>
                                     <td>{{positions[fav.positionId].business.name}}</td>
-                                    <th>Location</th>
                                     <td>{{positions[fav.positionId].location.neighborhood}} - {{positions[fav.positionId].location.city}}, {{positions[fav.positionId].location.state}}</td>
-                                    <th>Wage</th>
                                     <td>${{positions[fav.positionId].compensation.wageAmount}} - {{positions[fav.positionId].compensation.wageType | uppercase}}</td>
-                                    <th>Action</th>
                                     <td><button class="btn red" ui-sref="master.application.apply({businessSlug: positions[fav.positionId].business.slug, locationSlug:positions[fav.positionId].location.slug, positionSlug:positions[fav.positionId].slug })">Apply</button></td>
-                                    <th>&nbsp;</th>
-                                    <td><button class="btn white" ng-click="favoriteUpdate($index, fav.positionId, positions[fav.positionId].locationId, positions[fav.positionId].business._id)"><i class="glyphicon glyphicon-remove"></i></button></td>
+                                    <td class="close-td"><button class="btn white" ng-click="favoriteUpdate($index, fav.positionId, positions[fav.positionId].locationId, positions[fav.positionId].business._id)"><i class="glyphicon glyphicon-remove"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -134,19 +123,13 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="app in myApplications">
-                                    <th>Position</th>
-                                    <td><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">{{positions[app.positionId].title}}</a></td>
-                                    <th>Business</th>
+                                    <td class="up"><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">{{positions[app.positionId].title}}</a></td>
                                     <td>{{positions[app.positionId].business.name}}</td>
-                                    <th>Location</th>
                                     <td>{{positions[app.positionId].location.neighborhood}} - {{positions[app.positionId].location.city}}, {{positions[app.positionId].location.state}}</td>
-                                    <th>Apply Date</th>
                                     <td>{{app.appliedAt | date : 'MM/dd/yyyy'}}</td>
-                                    <th>Status</th>
                                     <td>
-                                        <span>{{getApplicationStatus(app.status+1)}}</span>
+                                        <span class="visible-xs-inline">Status: </span><span>{{getApplicationStatus(app.status+1)}}</span>
                                     </td>
-                                    <th>Action</th>
                                     <td>
                                         <button class="btn red" ng-if="app.status == -1" ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Update</button>
                                         <button class="btn red" ng-if="app.status == 0" ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Finish</button>
