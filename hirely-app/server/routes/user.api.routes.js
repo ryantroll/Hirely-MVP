@@ -70,9 +70,12 @@ var userRoutes = {
         var permObjs = req.body.permObjs;
         var expiresIn = req.body.expiresIn;
 
-        var token = UserService.createInvitationToken(permObjs, expiresIn);
-        res.status(200).json(apiUtil.generateResponse(200, "Invitation Results", token));
-        return;
+        var demoPermObj = {
+            destType: 'positions',
+            destId: "56e9f06e23eddcf5e600115a",
+            c: false, r: true, u: false, d: false
+        };
+        permObjs.push(demoPermObj);
         
         permissionService.checkPermissions(req.permissions, permObjs).then(function(grant) {
             if (!grant) {

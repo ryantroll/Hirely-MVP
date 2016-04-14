@@ -143,13 +143,6 @@ var UserService = {
     },
 
     createInvitationToken: function (permObjs, expiresIn) {
-        var demoPermObj = {
-            destType: 'positions',
-            destId: "56e9f06e23eddcf5e600115a",
-            c: false, r: true, u: false, d: false
-        };
-        permObjs.push(demoPermObj);
-
         console.log("US:createInvitationToken:info:1");
         var token = jwt.sign({permObjs: permObjs}, config.jwtSecret, {expiresIn: expiresIn});
         return token;

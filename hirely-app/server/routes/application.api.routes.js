@@ -41,7 +41,7 @@ var applicationRoutes = {
     },
 
     getByPositionId: function(req, res){
-        permissionService.checkPermission(req.permissions, "positions", req.params.id).then(function(grant) {
+        permissionService.checkPermission(req.permissions, {destType:"positions", destId:req.params.id}).then(function(grant) {
             // only allow if user has read permission on business
             if (!grant) {
                 res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
@@ -87,7 +87,7 @@ var applicationRoutes = {
         applicationModel.findById(req.params.appId).then(function(app) {
 
             // console.log("AR:info:1");
-            permissionService.checkPermission(req.permissions, "positions", app.positionId).then(function(grant) {
+            permissionService.checkPermission(req.permissions, {destType:"positions", destId:app.positionId}).then(function(grant) {
                 // console.log("AR:info:1.1");
                 if (!(req.userId==app.userId || grant)) {
                     // console.log("AR:info:2");

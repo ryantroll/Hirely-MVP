@@ -66,7 +66,7 @@ var businessRoutes = {
     },
 
     isUserFilteredForPosition: function(req, res){
-        permissionService.checkPermission(req.permissions, "positions", req.params.pid).then(function(grant) {
+        permissionService.checkPermission(req.permissions, {destType:"positions", destId:req.params.pid}).then(function(grant) {
             if (!grant) {
                 res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
                 return;
