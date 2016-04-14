@@ -15,7 +15,9 @@ var permissionService = {
             // console.log("PS:checkPermission:info:1");
             if (userPerm.destType == '*' || (userPerm.destType == permObj.destType && userPerm.destId == permObj.destId)) {
                 // console.log("PS:checkPermission:info:1.1: isSuperUser=true");
-                return true;
+                var deferred = q.defer();
+                deferred.resolve(true);
+                return deferred.promise;
             }
             
             
