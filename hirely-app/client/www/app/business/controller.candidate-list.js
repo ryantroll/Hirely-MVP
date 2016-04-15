@@ -337,6 +337,15 @@
       return ret;
     }
 
+    function findAppIndexById(appId){
+      for(var x=0; x<$scope.applications.length; x++){
+        if($scope.applications[x]._id === appId){
+          return x;
+        }
+      }
+      return -1;
+    }
+
     function applySort(){
 
       $scope.filtered.sort(function(a, b){
@@ -366,7 +375,8 @@
           body: 'Status: '+app.status+"->"+status+" by "+AuthService.currentUser.firstName+" "+AuthService.currentUser.lastName,
           userId: AuthService.currentUserId
         };
-        if (!app.history) {
+
+        if (!app.history || !app.history.length) {
           app.history = [];
         }
         app.history.push(historyEntry);
@@ -380,7 +390,12 @@
         JobApplicationService.save(app)
         .then(
           function(saved){
-            // $scope.updateStats();
+            if(angular.isDefined($scope.detailsApp)) {
+              $scope.detailsApp.status = saved.status;
+              $scope.detailsApp.history = saved.history;
+            }
+            var appIndex = findAppIndexById(appId);
+            $scope.applications[appIndex] = saved;
             applyFilters();
           },
           function(err){

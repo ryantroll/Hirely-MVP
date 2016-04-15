@@ -240,15 +240,21 @@ var applicationService = {
 
         // var newApplication = new applicationModel(appObj);
 
+        // console.log("AS:saveApplication:info:0");
+
         validateIds(appObj.userId, appObj.positionId)
         .then(
             function(isValid){
+                // console.log("AS:saveApplication:info:1");
                 if(true === isValid){
+                    // console.log("AS:saveApplication:info:2");
                     applicationModel.findOne({_id: appId}).exec()
                     .then(
                         function(foundedApp){
+                            // console.log("AS:saveApplication:info:3");
 
                             if(null !== foundedApp){
+                                // console.log("AS:saveApplication:info:4");
                                 /**
                                  * App is in Db do the save
                                  */
@@ -258,16 +264,20 @@ var applicationService = {
                                  */
                                 // delete foundedApp.prescreenAnswers;
                                 for(var prop in appObj){
+                                    // console.log("AS:saveApplication:info:5");
                                     foundedApp[prop] = appObj[prop];
                                 }//// for
 
+                                // console.log("AS:saveApplication:info:6");
                                 foundedApp.save()
                                   .then(
                                         function(savedApp){
+                                            // console.log("AS:saveApplication:info:7");
                                             deferred.resolve(savedApp);
                                         },
 
                                         function(err){
+                                            console.error("AS:saveApplication:error:8:"+err);
                                             deferred.reject(err);
                                         }
                                     )/// save.then
@@ -276,6 +286,7 @@ var applicationService = {
                                 /**
                                  * Error in finding application
                                  */
+                                console.error("AS:saveApplication:error:9");
                                 deferred.reject('Application coudn\'t be found with this Id');
                             }/// / if foundedApp else
 
@@ -287,6 +298,7 @@ var applicationService = {
                     /**
                      * This else will not be executed because validateIds return only true
                      */
+                    // console.log("AS:saveApplication:info:10");
                     deferred.reject("User ID or position ID is not valid");
                 }/// i isValid else
             },//// fun. reslove
@@ -294,10 +306,12 @@ var applicationService = {
                 /**
                  * One of the IDs are not valid reject the promise
                  */
+                // console.log("AS:saveApplication:info:11");
                 deferred.reject(err);
             }//// fun. reject
         )///// validateIs.then()
 
+        // console.log("AS:saveApplication:info:12");
         return deferred.promise;
     }
 }/// users object

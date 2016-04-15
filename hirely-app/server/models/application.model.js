@@ -2,6 +2,16 @@ var Utilities = require('./utilities-for-models');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+// var freeSchema = new Schema({}, {strict:false, _id:false});
+
+var historySchema = new Schema({
+    time: {type:Date, default:Date.now},
+    type: {type:String},
+    subject: {type:String},
+    body: {type:String},
+    userId: {type:String}
+}, {_id:false});
+
 var applicationSchema = new Schema({
   userId      :       {type:String, ref:'users', required:true, index:true},
   positionId   :       {type:String, required:true, index:true},
@@ -36,15 +46,9 @@ var applicationSchema = new Schema({
     }
   ],/// prescreen array
     
-  history    : [
-      {
-          time: {type:Date, required:true, default:Date.now},
-          type: {type:String, required:true},
-          subject: {type:String, required:true},
-          body: {type:String, required:true},
-          userId: {type:String, required:true},
-      }
-  ]
+  // This is failing for some reason
+  history    : [historySchema]
+  // history: [{type:freeSchema, required:false}],
 
 });//// applicationSchema
 
