@@ -15,6 +15,7 @@
 
         var viewStatusLabels = ['New', 'Viewed', 'Aging'];
         var statusLabels = ['Requires Attention', 'Started', 'Pending Review', 'Pending Review', 'Shortlisted', 'Interviewed', 'Hired', 'Not Selected', 'Expired', 'Not Selected'];
+        var statusLabelsHm = ['Attention Needed', 'Started', 'Pre-Screening', 'Applied', 'Shortlisted', 'Interviewed', 'Hired', 'Dismissed', 'Expired', 'Disqualified'];
         var educationPrograms = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
         /**
@@ -31,6 +32,7 @@
             getStatistics: getStatistics,
             viewStatusLabels: viewStatusLabels,
             statusLabels: statusLabels,
+            statusLabelsHm: statusLabelsHm,
             educationPrograms: educationPrograms
         };
 

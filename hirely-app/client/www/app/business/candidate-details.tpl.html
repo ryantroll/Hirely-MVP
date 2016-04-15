@@ -53,7 +53,7 @@
                                         <strong>Top Traits</strong> <span uib-tooltip="{{trait.meta.definition}}" ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
                                     </p>
                                     <p class="status">
-                                        {{position.title}} - <span class="{{statusLabels[application.status+1] | lowercase}}">{{statusLabels[application.status+1]}}</span>
+                                        {{position.title}} - <span class="{{statusLabelsHm[application.status+1] | lowercase}}">{{statusLabelsHm[application.status+1]}}</span>
                                     </p>
                                 </div><!--details-->
                             </div><!--col-->
@@ -222,7 +222,6 @@
                                 <div class="list">
                                     <ul>
                                         <li ng-repeat="act in detailsApp.history">
-                                            <h6>fromStatus {{act.meta.fromStatus}} -> toStatus {{act.meta.toStatus}}</h6>
                                             <div class="details">
                                                 <div class="icon" ng-class="activityColor(act)">
                                                     <i ng-class="{'icon-stop_triangle_icon':act.meta.toStatus==-1, 'icon-employeebadge_outline_icon':act.meta.toStatus==1, 'icon-check_circle_icon':act.meta.toStatus==2, 'icon-thumb_up_icon':act.meta.toStatus==3, 'icon-chat_icon':act.meta.toStatus==4, 'icon-dollar_sign_icon':act.meta.toStatus==5, 'icon-thumb_down_icon':act.meta.toStatus==6, 'icon-expired_icon':act.meta.toStatus==7, 'icon-hand_stop_icon':act.meta.toStatus==8 }"></i>
@@ -278,7 +277,7 @@
 
                 <div class="box">
                     <div class="title" ng-class="{blue:application.status==2, red:application.status==6 || application.status==7, gray:application.status==1 || application.status==8, green:application.status ==3 ||application.status ==4||application.status ==5}">
-                        <h5>Applicant Status: {{statusLabels[application.status+1]}}</h5>
+                        <h5>Applicant Status: {{statusLabelsHm[application.status+1]}}</h5>
                     </div>
 
                     <div class="actions clearfix">

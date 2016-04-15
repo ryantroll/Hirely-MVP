@@ -1,7 +1,7 @@
 var requireDir = require('require-dir');
 var _ = require('lodash');
 
-// require('./models/batchUpdate');
+require('./models/batchUpdate');
 
 /**
  * Created by labrina.loving on 9/18/2015.

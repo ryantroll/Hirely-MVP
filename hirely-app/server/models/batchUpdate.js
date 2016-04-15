@@ -68,16 +68,56 @@
 
 
 
-// This snippet useful to update apps with a constant
+// This snippet useful to update apps with a constants
 var ApplicationModel = require('./application.model');
+var UserModel = require('./user.model');
 console.log("Running...");
 ApplicationModel.find({}).then(function(apps) {
     console.log("Found apps");
     apps.forEach(function(app) {
-        console.log("app: "+app._id);
-        // app.appliedAt = app.createdAt;
-        app.history = [];
-        app.save();
+
+        // app.status = 1;
+        // app.save();
+
+        // The following is useful if you need to update initial history with the applicant user name
+        // UserModel.findById(app.userId).then(
+        //     function(user) {
+        //
+        //         try {
+        //             app.appliedAt = app.createdAt;
+        //
+        //             var historyEntry = {
+        //                 time: app.createdAt,
+        //                 type: 'StatusChange',
+        //                 subject: "Status changed from Started to Pre-screening",
+        //                 body: "Status changed from Started to Pre-screening",
+        //                 meta: {
+        //                     fromStatus: app.status,
+        //                     toStatus: app.status
+        //                 },
+        //                 userId: app.userId,
+        //                 userFirstName: user.firstName,
+        //                 userLastName: user.lastName
+        //             };
+        //
+        //             app.history = [historyEntry];
+        //             app.status = 1;
+        //             app.save().then(
+        //                 function (app) {
+        //                     console.log("app save: " + app._id);
+        //                 },
+        //                 function (err) {
+        //                     console.log("app error: " + app._id + " : " + err);
+        //                 }
+        //             );
+        //         } catch (err) {
+        //             console.log("app syntax error: " + app._id + " : " + err);
+        //         }
+        //     },
+        //     function(err) {
+        //         console.log("User "+app.userId+" DNE.");
+        //     }
+        // )
     });
     console.log("Done.");
 });

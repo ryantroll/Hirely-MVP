@@ -14,7 +14,7 @@
         $scope.defaultImage = DEFAULT_PROFILE_IMAGE;
         $scope.days = AvailabilityService.days;
         $scope.hours = AvailabilityService.hours;
-        $scope.statusLabels = JobApplicationService.statusLabels;
+        $scope.statusLabelsHm = JobApplicationService.statusLabelsHm;
         $scope.dayHours = {};
         $scope.educationStatusLabels = UserService.educationStatus;
 

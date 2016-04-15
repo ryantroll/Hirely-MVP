@@ -371,8 +371,8 @@
         var historyEntry = {
           time: new Date(),
           type: 'StatusChange',
-          subject: "Status changed from "+JobApplicationService.statusLabels[app.status+1]+" to "+JobApplicationService.statusLabels[status+1],
-          body: "Status changed from "+JobApplicationService.statusLabels[app.status+1]+" to "+JobApplicationService.statusLabels[status+1],
+          subject: "Status changed from "+JobApplicationService.statusLabelsHm[app.status+1]+" to "+JobApplicationService.statusLabelsHm[status+1],
+          body: "Status changed from "+JobApplicationService.statusLabelsHm[app.status+1]+" to "+JobApplicationService.statusLabelsHm[status+1],
           meta: {
             fromStatus: app.status,
             toStatus: status
