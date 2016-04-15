@@ -553,7 +553,24 @@
       )
     }
 
-
+    $scope.activityColor = function(act){
+      var colors = [
+        'purple', ///-1
+        'gray', /// 0
+        'blue', /// 1
+        'green', /// 2
+        'green', /// 3
+        'green', /// 4
+        'green', /// 5
+        'red', /// 6
+        'gray', /// 7
+        'red', /// 8
+      ];
+      if(!act.meta || !act.meta.toStatus){
+        return 'gray';
+      }
+      return colors[act.meta.toStatus+1];
+    }
 
   }//// controller
 })();

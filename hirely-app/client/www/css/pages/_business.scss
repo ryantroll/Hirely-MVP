@@ -1285,26 +1285,30 @@ $candidat-menu-height:60px;
 
                     .details{
                         width:100%;
-                        background-color:$c-white;
+                        background-color:$c-hirely-light-gray;
                         overflow: hidden;
+                        display: block;
                     }
                     .icon{
-                        display: inline-block;
+                        display: block;
                         width:40px;
-                        background-color:$c-hirely-light-gray;
+                        padding-top:1em;
                         float:left;
-                        margin-right: 1em;
-                        padding:1em 0;
+                        height: 100%;
                         text-align: center;
                         i{
-                            font-size:1.5em;
-                            // line-height: 0.75em;
-                            //
+                            font-size:24px;
+                            width:24px;
+                            height: 24px;
+
+                            // @include vertical-align();
                             color:inherit;
                         }
                     }
                     .body{
-                        padding:1em 0;
+                        padding:1em 1em 1em 1em;
+                        margin-left: 40px;
+                        background-color:$c-white;
                     }
                     .red{
                         color:$c-hirely-red;
