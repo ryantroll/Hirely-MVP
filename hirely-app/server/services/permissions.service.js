@@ -10,10 +10,8 @@ var permissionService = {
         // TODO:  Check CRUD level perms
 
         // console.log("PS:checkPermission:info:0");
-        console.dir(permObj);
         // userPermissions.forEach(function(permission) {
         for (let userPerm of userPermissions) {
-            console.dir(userPerm.toObject());
             // console.log("PS:checkPermission:info:1: "+ permObj.crud);
             // console.log("PS:checkPermission:info:1.1a: "+ userPerm[permObj.crud]);
             if (permObj.crud && userPerm[permObj.crud]==false) {

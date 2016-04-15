@@ -314,14 +314,12 @@ var UserService = {
 
             if (user.education.length > 0) {
                 // console.log("US:addEduMetrics:info:1.1");
-                var educationSortedByRank = user.education;
-                // console.log("US:addEduMetrics:info:1.2");
-                educationSortedByRank.sort(function (a, b) {
+                user.education.sort(function (a, b) {
                     // console.log("US:addEduMetrics:info:1.3");
                     return educationProgramTypes.indexOf(a.programType) - educationProgramTypes.indexOf(b.programType)
                 });
                 // console.log("US:addEduMetrics:info:2");
-                user.educationMax = educationSortedByRank.pop();
+                user.educationMax = user.education.slice(-1);
 
                 // console.log("US:addEduMetrics:info:3");
                 for (let program of user['education']) {
@@ -380,7 +378,6 @@ var UserService = {
             }
 
             // console.log("US:addExpScores:info:262");
-            console.dir(Object.keys(roles));
             return onetScoresService.findByIds(Object.keys(roles))
                 .then(function (occScoresArray) {
                     // Extend roles with onet metrics
