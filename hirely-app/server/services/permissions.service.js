@@ -12,7 +12,12 @@ var permissionService = {
         // console.log("PS:checkPermission:info:0");
         // userPermissions.forEach(function(permission) {
         for (let userPerm of userPermissions) {
-            // console.log("PS:checkPermission:info:1");
+            console.log("PS:checkPermission:info:1");
+            if (permObj.crud && !userPerm[permObj.crud]) {
+                continue;
+            }
+
+            console.log("PS:checkPermission:info:1.1");
             if (userPerm.destType == '*' || (userPerm.destType == permObj.destType && userPerm.destId == permObj.destId)) {
                 // console.log("PS:checkPermission:info:1.1: isSuperUser=true");
                 var deferred = q.defer();

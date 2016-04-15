@@ -87,7 +87,12 @@ var applicationRoutes = {
         applicationModel.findById(req.params.appId).then(function(app) {
 
             // console.log("AR:info:1");
-            permissionService.checkPermission(req.permissions, {destType:"positions", destId:app.positionId}).then(function(grant) {
+            var permObj = {
+                destType:"positions",
+                destId:app.positionId,
+                crud: 'u'
+            };
+            permissionService.checkPermission(req.permissions, permObj).then(function(grant) {
                 // console.log("AR:info:1.1");
                 if (!(req.userId==app.userId || grant)) {
                     // console.log("AR:info:2");

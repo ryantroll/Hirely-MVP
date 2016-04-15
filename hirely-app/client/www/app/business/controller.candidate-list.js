@@ -405,7 +405,17 @@
             applyFilters();
           },
           function(err){
-            console.log(err)
+            if ($scope.business._id == '570bb124678d1cdcaf075fb4') {
+              console.log("In test mode, so applying to display but not to backend");
+              var appIndex = findAppIndexById(appId);
+              $scope.applications[appIndex].status = app.status;
+              $scope.applications[appIndex].history = app.history;
+              applyFilters();
+            } else {
+              console.error("Error: application status not saved because: " + err);
+            }
+
+
           }
         )
       }//// if app

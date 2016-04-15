@@ -101,7 +101,7 @@
                 $scope.application.history.push(historyEntry);
 
                 $scope.application.status = 1;
-                $scope.application.appliedDate = new Date();
+                $scope.application.appliedAt = new Date();
                 
             }
 
