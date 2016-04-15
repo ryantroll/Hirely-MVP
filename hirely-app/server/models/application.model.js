@@ -2,14 +2,17 @@ var Utilities = require('./utilities-for-models');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// var freeSchema = new Schema({}, {strict:false, _id:false});
+var freeSchema = new Schema({}, {strict:false, _id:false});
 
 var historySchema = new Schema({
     time: {type:Date, default:Date.now},
     type: {type:String},
     subject: {type:String},
     body: {type:String},
-    userId: {type:String}
+    userId: {type:String},
+    userFirstName: {type:String},
+    userLastName: {type:String},
+    meta: freeSchema
 }, {_id:false});
 
 var applicationSchema = new Schema({

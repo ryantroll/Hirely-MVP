@@ -79,8 +79,30 @@
             // If "Finish" was clicked, update the status of the application
             if ($scope.destroyDirection) {
                 console.log("'Submit' was clicked, update the status of the application");
+
+                // Create history entry
+                var historyEntry = {
+                    time: new Date(),
+                    type: 'StatusChange',
+                    subject: "Status changed from "+$scope.application.status+" to 1",
+                    body: "Status changed from "+$scope.application.status+" to 1",
+                    meta: {
+                        fromStatus: $scope.application.status,
+                        toStatus: 1
+                    },
+                    userId: AuthService.currentUserId,
+                    userFirstName: AuthService.currentUser.firstName,
+                    userLastName: AuthService.currentUser.lastName
+                };
+
+                if (!$scope.application.history || !$scope.application.history.length) {
+                    $scope.application.history = [];
+                }
+                $scope.application.history.push(historyEntry);
+
                 $scope.application.status = 1;
                 $scope.application.appliedDate = new Date();
+                
             }
 
             JobApplicationService.save($scope.application)

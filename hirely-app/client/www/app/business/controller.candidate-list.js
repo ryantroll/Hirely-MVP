@@ -371,9 +371,15 @@
         var historyEntry = {
           time: new Date(),
           type: 'StatusChange',
-          subject: 'Status: '+app.status+"->"+status+" by "+AuthService.currentUser.firstName+" "+AuthService.currentUser.lastName,
-          body: 'Status: '+app.status+"->"+status+" by "+AuthService.currentUser.firstName+" "+AuthService.currentUser.lastName,
-          userId: AuthService.currentUserId
+          subject: "Status changed from "+app.status+" to "+status,
+          body: "Status changed from "+app.status+" to "+status,
+          meta: {
+            fromStatus: app.status,
+            toStatus: status
+          },
+          userId: AuthService.currentUserId,
+          userFirstName: AuthService.currentUser.firstName,
+          userLastName: AuthService.currentUser.lastName
         };
 
         if (!app.history || !app.history.length) {
