@@ -58,16 +58,3 @@ var applicationSchema = new Schema({
 var ApplicationModel = mongoose.model('Applications', applicationSchema, "applications");
 
 module.exports = ApplicationModel;
-
-
-//
-// console.log("Running...");
-// ApplicationModel.find({}).then(function(apps) {
-//     console.log("Found apps");
-//     apps.forEach(function(app) {
-//         console.log("app: "+app._id);
-//         app.appliedAt = app.createdAt;
-//         app.save();
-//     });
-//     console.log("Done.");
-// });
