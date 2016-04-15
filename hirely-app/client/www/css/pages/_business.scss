@@ -1251,6 +1251,87 @@ $candidat-menu-height:60px;
                 @include border-radius(2px);
             }
         }//// .arrows
+
+        .box-activity{
+            width:100%;
+
+            .title{
+                padding:1.3em 1em;
+                h5{
+                    font-weight: 600;
+                    font-size:1.2em;
+                    text-transform: uppercase;
+                    margin-top:0;
+                    margin-bottom: 0;
+                }
+            }//// .title
+
+            .list{
+                padding: 0 0em;
+                ul{
+                    display: table;
+                    padding-left: 0;
+                    list-style: none;
+                    width:100%;
+                }
+                li{
+                    display: block;
+                    width:100%;
+                    margin-bottom: 1em;
+
+                    h6{
+                        margin-bottom: 4px;
+                    }
+
+                    .details{
+                        width:100%;
+                        background-color:$c-hirely-light-gray;
+                        overflow: hidden;
+                        display: block;
+                    }
+                    .icon{
+                        display: block;
+                        width:40px;
+                        padding-top:1em;
+                        float:left;
+                        height: 100%;
+                        text-align: center;
+                        i{
+                            font-size:24px;
+                            width:24px;
+                            height: 24px;
+
+                            // @include vertical-align();
+                            color:inherit;
+                        }
+                    }
+                    .body{
+                        padding:1em 1em 1em 1em;
+                        margin-left: 40px;
+                        background-color:$c-white;
+                    }
+                    .red{
+                        color:$c-hirely-red;
+                    }
+                    .green{
+                        color:$c-hirely-green;
+                    }
+                    .blue{
+                        color:$c-hirely-blue;
+                    }
+                    .gray{
+                        color:$c-hirely-mid-gray;
+                    }
+                    .purple{
+                        color:$c-hirely-purple;
+                    }
+                }
+                li:last-child{
+                    margin-bottom: 0;
+                }
+            }
+        }///// .box-activity
+
     }//// article
 }//// candidate-details
 
