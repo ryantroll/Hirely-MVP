@@ -14,14 +14,14 @@ var permissionService = {
         // userPermissions.forEach(function(permission) {
         for (let userPerm of userPermissions) {
             console.dir(userPerm.toObject());
-            console.log("PS:checkPermission:info:1: "+ permObj.crud);
-            console.log("PS:checkPermission:info:1.1a: "+ userPerm[permObj.crud]);
+            // console.log("PS:checkPermission:info:1: "+ permObj.crud);
+            // console.log("PS:checkPermission:info:1.1a: "+ userPerm[permObj.crud]);
             if (permObj.crud && userPerm[permObj.crud]==false) {
-                console.log("PS:checkPermission:info:1.1b");
+                // console.log("PS:checkPermission:info:1.1b");
                 continue;
             }
 
-            console.log("PS:checkPermission:info:1.2");
+            // console.log("PS:checkPermission:info:1.2");
             if (userPerm.destType == '*' || (userPerm.destType == permObj.destType && userPerm.destId == permObj.destId)) {
                 // console.log("PS:checkPermission:info:1.3: isSuperUser=true");
                 var deferred = q.defer();
@@ -31,18 +31,18 @@ var permissionService = {
             
             
             // If user has a business permission, check if the requested target is a child of business
-            console.log("PS:checkPermission:info:2");
+            // console.log("PS:checkPermission:info:2");
             if (userPerm.destType == 'businesses') {
 
                 // console.log("PS:checkPermission:info:3");
                 promises.push(BusinessService.getById(userPerm.destId, {complete:true}).then(function(business) {
                     if (business) {
                         if (permObj.destType == "locations" && Object.keys(business.locations.toObject()).indexOf(permObj.destId) != -1) {
-                            console.log("PS:checkPermission:info:3.1");
+                            // console.log("PS:checkPermission:info:3.1");
                             grant = true;
                         }
                         if (permObj.destType == "positions" && Object.keys(business.positions.toObject()).indexOf(permObj.destId) != -1) {
-                            console.log("PS:checkPermission:info:3.2");
+                            // console.log("PS:checkPermission:info:3.2");
                             grant = true;
                         }
                     }
@@ -55,7 +55,7 @@ var permissionService = {
                 promises.push(BusinessService.getByLocationId(userPerm.destId, {complete:true}).then(function(business) {
                     if (business) {
                         if (permObj.destType == "positions" && Object.keys(business.positions).indexOf(permObj.destId) != -1) {
-                            console.log("PS:checkPermission:info:4.1");
+                            // console.log("PS:checkPermission:info:4.1");
                             grant = true;
                         }
                     }
