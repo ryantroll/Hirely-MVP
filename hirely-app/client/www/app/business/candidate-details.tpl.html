@@ -208,6 +208,33 @@
                             </ul>
                         </div>
                     </div><!--box-->
+
+                    <div class="box-activity">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                <div class="title">
+                                    <h5>Activity</h5>
+                                </div>
+
+                                <div class="list">
+                                    <ul>
+                                        <li ng-repeat="act in detailsApp.history">
+                                            <h6>fromStatus {{act.meta.fromStatus}} -> toStatus {{act.meta.toStatus}}</h6>
+                                            <div class="details">
+                                                <div class="icon" ng-class="{purple:act.meta.toStatus===-1, blue:act.meta.toStatus===1, green:act.meta.toStatus===2, green:act.meta.toStatus===3, green:act.meta.toStatus===4, green:act.meta.toStatus===-5, red:act.meta.toStatus===6, gray:act.meta.toStatus===7, red:act.meta.toStatus===8 }">
+                                                    <i ng-class="{'icon-stop_triangle_icon':act.meta.toStatus===-1, 'icon-dd_icon':act.meta.toStatus===1, 'icon-check_circle_icon':act.meta.toStatus===2, 'icon-thumb_up_icon':act.meta.toStatus===3, 'icon-chat_icon':act.meta.toStatus===4, 'icon-dollar_sign_icon':act.meta.toStatus===5, 'icon-thumb_down_icon':act.meta.toStatus===6, 'icon-expired_icon':act.meta.toStatus===7, 'icon-hand_stop_icon':act.meta.toStatus===8 }"></i>
+                                                </div>
+                                                <div class="body">{{act.body}} by <b>{{act.userFirstName}} {{act.userLastName}}</b></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div><!--list-->
+
+                            </div><!--col-->
+                        </div><!--row-->
+                    </div><!--box-activity-->
+
                 </div><!--left-column-->
             </div><!--col-->
 
@@ -281,12 +308,12 @@
                                 </div>
 
                                 <div ng-if="application.status == 5">
-                                    <a class="gray" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Undo Hire" uib-tooltip="Undo Hire"><i class="icon-undo_icon"></i></a>
+                                    <!-- <a class="gray" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Undo Hire" uib-tooltip="Undo Hire"><i class="icon-undo_icon"></i></a> -->
                                     <a class="green" title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></a>
                                 </div>
 
                                 <div ng-if="application.status == 6">
-                                    <a class="gray" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Undo Not Selected" uib-tooltip="Undo Dismiss"><i class="icon-undo_icon"></i></a>
+                                    <!-- <a class="gray" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Undo Not Selected" uib-tooltip="Undo Dismiss"><i class="icon-undo_icon"></i></a> -->
                                     <a class="red" title="Not Selected" uib-tooltip="Not Selected"><i class="icon-thumb_down_icon"></i></a>
                                 </div>
 
