@@ -25,9 +25,16 @@
 
         <div class="header-right">
 
-            <div class="applicant">Candidate Name:______________________________</div>
-            <div class="contact">Email Address & Cell #:________________________</div>
-            <div class="under21"><pre>Under 21:  YES   NO   (Age if YES:____)</pre></div>
+            <div class="applicant" ng-hide="applicant">Candidate Name:______________________________</div>
+            <div class="applicant" ng-show="applicant">Candidate Name: {{applicant.firstName}} {{applicant.lastName}}</div>
+
+            <div class="contact" ng-hide="applicant">Email Address & Cell #:________________________</div>
+            <div class="contact" ng-show="applicant">Email Address & Cell #:{{applicant.email}} &nbsp; {{application.mobile}}</div>
+
+            <div class="under21" ng-hide="applicant"><pre>Under 21:  YES   NO   (Age if YES:____)</pre></div>
+            <div class="under21" ng-show="applicant && isOver21"><pre>Under 21:  No</pre></div>
+            <div class="under21" ng-show="applicant && !isOver21"><pre>Under 21:  YES</pre></div>
+
             <div class="avail"><pre>Avail: OPEN  Weekdays  Weekends  AM  PM</pre></div>
         </div>
     </div>

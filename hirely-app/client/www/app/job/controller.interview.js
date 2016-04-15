@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp.job').controller('InterviewController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', InterviewController]);
+    angular.module('hirelyApp.job').controller('InterviewController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', 'JobApplicationService', 'UserService', InterviewController]);
 
-    function InterviewController($scope, $rootScope, $state, $stateParams, $timeout, BusinessService, AvailabilityService, FavoritesService, AuthService) {
+    function InterviewController($scope, $rootScope, $state, $stateParams, $timeout, BusinessService, AvailabilityService, FavoritesService, AuthService, JobApplicationService, UserService) {
 
         $scope.AuthService = AuthService;
 
@@ -36,6 +36,22 @@
                         });
 
                     });
+
+                    if ($stateParams.applicationId) {
+                        JobApplicationService.getById($stateParams.applicationId).then(function(applicationAndApplicant) {
+                            if (applicationAndApplicant) {
+                                $scope.application = applicationAndApplicant.application;
+                                $scope.applicant = applicationAndApplicant.applicant;
+
+                                $scope.isOver21 = false;
+                                var age = (Date.now() - (new Date($scope.applicant.dateOfBirth)).getTime()) / (1000*60*60*24*365);
+                                if(age > 21) $scope.isOver21 = true;
+                            } else {
+                                console.log("Couldn't find application");
+                            }
+
+                        })
+                    }
 
                 }
             );
