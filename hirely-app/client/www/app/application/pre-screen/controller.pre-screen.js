@@ -25,10 +25,10 @@
             }/// return object
         })/// validate question is not empty;
 
-        .controller('PreScreenController', ['$scope', '$state', '$stateParams', '$timeout', 'JobApplicationService', PreScreenController]);
+        .controller('PreScreenController', ['$scope', '$state', '$stateParams', '$timeout', 'AuthService', 'JobApplicationService', PreScreenController]);
 
 
-    function PreScreenController($scope, $state, $stateParams, $timeout, JobApplicationService) {
+    function PreScreenController($scope, $state, $stateParams, $timeout, AuthService, JobApplicationService) {
 
         $scope.daysUntilReapply = 0;
 
