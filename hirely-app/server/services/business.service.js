@@ -161,7 +161,7 @@ var BusinessService = {
                          * Get the application count where status is not dismiss
                          * @type {Object}
                          */
-                        return applicationModel.aggregate([{$match:{positionId:{$in:ids}, status:{$nin:[0]}}}, {$group:{_id:'$positionId', applicationCount:{"$sum":1}}}]).exec()
+                        return applicationModel.aggregate([{$match:{positionId:{$in:ids}, status:{$in:[2,3,4]}}}, {$group:{_id:'$positionId', applicationCount:{"$sum":1}}}]).exec()
                         // console.log("BS:getPositionsByIds:complete");
                     }//// if isArray
                 } catch(err) {
