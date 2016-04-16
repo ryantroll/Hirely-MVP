@@ -262,6 +262,7 @@
         });
 
         $scope.formatPhoneNumber = function(phone){
+           phone = phone.slice(2);
            return UserService.formatPhone(phone)
         }
     }
