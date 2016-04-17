@@ -51,9 +51,12 @@ var permissionService = {
             // console.log("PS:checkPermission:info:4");
             if (userPerm.destType == 'locations') {
                 promises.push(BusinessService.getByLocationId(userPerm.destId, {complete:true}).then(function(business) {
+                    // console.log("PS:checkPermission:info:4.0");
                     if (business) {
-                        if (permObj.destType == "positions" && Object.keys(business.positions).indexOf(permObj.destId) != -1) {
-                            // console.log("PS:checkPermission:info:4.1");
+                        // console.log("PS:checkPermission:info:4.1: "+permObj.destType);
+
+                        if (permObj.destType == "positions" && Object.keys(business.positions.toObject()).indexOf(permObj.destId) != -1) {
+                            // console.log("PS:checkPermission:info:4.2");
                             grant = true;
                         }
                     }
