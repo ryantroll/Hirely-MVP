@@ -393,7 +393,13 @@
           $scope.detailsApp.history = app.history;
           $scope.detailsApp.status = status;
         }
-        JobApplicationService.save(app)
+
+        var toSave = {
+          _id: app._id,
+          history: app.history,
+          status: app.status
+        };
+        JobApplicationService.save(toSave)
         .then(
           function(saved){
             if(angular.isDefined($scope.detailsApp)) {

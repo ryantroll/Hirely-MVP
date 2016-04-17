@@ -7,57 +7,6 @@ var careerMatchScoresModel = require('../models/careerMatchScores.model');
 var BusinessService = require('./business.service');
 var q = require('q');
 
-function validateIds(userId, positionId){
-    var deferred = q.defer();
-    /**
-     * First Check if user is a valid user
-     */
-    UserService.getById(userId)
-    .then(
-        function(user){
-            if(null !== user){
-                /**
-                 * User existes check if position is there with it's business object
-                 */
-
-                BusinessService.getByPositionId(positionId)
-                .then(
-                    function(business){
-                        /**
-                         * position ID exists is list of returned business more than 0
-                         */
-                        if(null !== business){
-                            /**
-                             * position is found announce
-                             */
-
-                            deferred.resolve(true);
-                        }
-                        else{
-                            /**
-                             * position not there
-                             */
-                            deferred.reject('position ID doesn\'t exists');
-                        }
-
-                    },//// getByPositionIid().then()
-                    function(err){
-                        console.log(err)
-                    }
-                )
-            }//// if null !== user
-            else{
-                /**
-                 * User couldn't be located
-                 */
-                deferred.reject('User ID doen\'t exists');
-            }//// if null !== user else
-        }///// fun. resolve
-    )/// .then
-    return deferred.promise;
-}//// fun. validateIds
-
-
 var applicationService = {
 
     /**
@@ -70,22 +19,28 @@ var applicationService = {
         var self = this;
 
         return applicationModel.findById(id).then(function(application) {
+            console.log("as:getById:0");
             if (application) {
+                console.log("as:getById:1");
                 return userModel.findById(application.userId).then(function(user) {
+                    console.log("as:getById:2");
                     return careerMatchScoresModel.findOne({userId:application.userId}).then(function(cms) {
+                        console.log("as:getById:3");
                         var slimUser = self.convertUserToSlimObject(user);
+                        console.log("as:getById:4");
                         var ret = {
                             application: application,
                             applicant: slimUser,
                             careerMatchScore: cms
                         };
+                        console.log("as:getById:5");
                         return ret;
                     });
                 });
             } else {
+                console.log("as:getById:6");
                 throw "Application not found";
             }
-
         });
     },
 
@@ -185,48 +140,8 @@ var applicationService = {
      * @return {promise}        [description]
      */
     createNewApplication: function(appObj){
-        var deferred = q.defer();
-
         var newApplication = new applicationModel(appObj);
-
-        /**
-         * start with making sure ids of user and positions are exists in DB
-         */
-        validateIds(newApplication.userId, newApplication.positionId)
-        .then(
-            function(isValid){
-
-                if(true === isValid){
-                    /**
-                     * IDs of user and position are valid go ahead and save
-                     */
-                    newApplication.save()
-                    .then(
-                        function(app){
-                            deferred.resolve(app);
-                        },
-                        function(err){
-                            deferred.reject(err);
-                        }
-                    )/// .save().then()
-                }/// it isValid
-                else{
-                    /**
-                     * this else will not be executed as validateIds will return only true
-                     * Add for future
-                     */
-                     deferred.reject("User ID or position ID is not valid");
-                }
-            },//// fun. reslove
-            function(err){
-                /**
-                 * One of the IDs is not valid reject the promise
-                 */
-                 deferred.reject(err);
-            }//// fun. reject
-        )///// validateIs.then()
-
-        return deferred.promise;
+        return newApplication.save();
     },
 
     /**
@@ -235,85 +150,30 @@ var applicationService = {
      * @param  {Object} appObj [Object that hold the properties of application that need to be updated]
      * @return {promise}        [description]
      */
-    saveApplication: function(appId, appObj){
-        var deferred = q.defer();
+    saveApplication: function(appId, appObj) {
+        console.log("AS:saveApplication:info:0");
+        return applicationModel.findOne({_id: appId}).exec()
+            .then(
+                function (foundedApp) {
+                    console.log("AS:saveApplication:info:3");
+                    if (foundedApp) {
+                        console.log("AS:saveApplication:info:4");
+                        for (var prop in appObj) {
+                            console.log("AS:saveApplication:info:5");
+                            foundedApp[prop] = appObj[prop];
+                        }//// for
+                        console.log("AS:saveApplication:info:6");
+                        return foundedApp.save();
+                    }//// if foundedApp
+                    else {
+                        console.error("AS:saveApplication:error:9");
+                        throw 'Application coudn\'t be found with this Id';
+                    }/// / if foundedApp else
 
-        // var newApplication = new applicationModel(appObj);
+                }/// fun. reolve
 
-        // console.log("AS:saveApplication:info:0");
-
-        validateIds(appObj.userId, appObj.positionId)
-        .then(
-            function(isValid){
-                // console.log("AS:saveApplication:info:1");
-                if(true === isValid){
-                    // console.log("AS:saveApplication:info:2");
-                    applicationModel.findOne({_id: appId}).exec()
-                    .then(
-                        function(foundedApp){
-                            // console.log("AS:saveApplication:info:3");
-
-                            if(null !== foundedApp){
-                                // console.log("AS:saveApplication:info:4");
-                                /**
-                                 * App is in Db do the save
-                                 */
-
-                                /**
-                                 * Loop through sent properties and set them
-                                 */
-                                // delete foundedApp.prescreenAnswers;
-                                for(var prop in appObj){
-                                    // console.log("AS:saveApplication:info:5");
-                                    foundedApp[prop] = appObj[prop];
-                                }//// for
-
-                                // console.log("AS:saveApplication:info:6");
-                                foundedApp.save()
-                                  .then(
-                                        function(savedApp){
-                                            // console.log("AS:saveApplication:info:7");
-                                            deferred.resolve(savedApp);
-                                        },
-
-                                        function(err){
-                                            console.error("AS:saveApplication:error:8:"+err);
-                                            deferred.reject(err);
-                                        }
-                                    )/// save.then
-                            }//// if foundedApp
-                            else{
-                                /**
-                                 * Error in finding application
-                                 */
-                                console.error("AS:saveApplication:error:9");
-                                deferred.reject('Application coudn\'t be found with this Id');
-                            }/// / if foundedApp else
-
-                        }/// fun. reolve
-
-                    )//// find.then()
-                }/// it isValid
-                else{
-                    /**
-                     * This else will not be executed because validateIds return only true
-                     */
-                    // console.log("AS:saveApplication:info:10");
-                    deferred.reject("User ID or position ID is not valid");
-                }/// i isValid else
-            },//// fun. reslove
-            function(err){
-                /**
-                 * One of the IDs are not valid reject the promise
-                 */
-                // console.log("AS:saveApplication:info:11");
-                deferred.reject(err);
-            }//// fun. reject
-        )///// validateIs.then()
-
-        // console.log("AS:saveApplication:info:12");
-        return deferred.promise;
+            )
     }
-}/// users object
+}; /// users object
 
 module.exports = applicationService;
