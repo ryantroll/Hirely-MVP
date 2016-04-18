@@ -80,7 +80,7 @@
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3><i class="icon glyphicon glyphicon-filter"></i> Filters</h3>
-                            <a href="javascript:void(0);" ng-click="clearSideFilters()"><i class="icon glyphicon glyphicon-remove"></i> Clear Filters</a>
+                            <a class="jsFilterIcon" href="javascript:void(0);" ng-click="clearSideFilters()"><i class="icon glyphicon glyphicon-remove"></i> Clear Filters</a>
                         </div>
                         <div class="inner padding clearfix" id="filtersDiv">
                             <!-- <div class="filter-item">Great Fit <a href="javascript:void(0);" class="icon glyphicon glyphicon-remove"></a></div>
@@ -90,10 +90,12 @@
                     </div><!--box-->
 
                     <div class="box clearfix">
-                        <div class="header clearfix">
-                            <h3>Availability</h3>
-                            <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-up"></i></a>
-                        </div>
+                        <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)">
+                            <div class="header clearfix">
+                                <h3>Availability</h3>
+                                <i class="icon glyphicon glyphicon-menu-up jsFilterIcon"></i>
+                            </div>
+                        </a>
                         <div class="inner list clearfix jsFiltersList">
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'weekdays')">Weekdays</a></li>
@@ -106,10 +108,12 @@
                     </div><!--box-->
 
                     <div class="box clearfix">
-                        <div class="header clearfix">
-                            <h3>Seasonal</h3>
-                            <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-down"></i></a>
-                        </div>
+                        <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)">
+                            <div class="header clearfix">
+                                <h3>Seasonal</h3>
+                                <i class="icon glyphicon glyphicon-menu-down jsFilterIcon"></i>
+                            </div>
+                        </a>
                         <div class="inner list clearfix hidden jsFiltersList">
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'winter')">Winter</a></li>
@@ -121,10 +125,12 @@
                     </div><!--box-->
 
                     <div class="box clearfix">
-                        <div class="header clearfix">
-                            <h3>Education</h3>
-                            <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)"><i class="icon glyphicon glyphicon-menu-down"></i></a>
-                        </div>
+                        <a href="javascript:void(0);" class="jsFiltersListBtn" ng-click="toggleFilterMenu($event)">
+                            <div class="header clearfix">
+                                <h3>Education</h3>
+                                <i class="icon glyphicon glyphicon-menu-down jsFilterIcon"></i>
+                            </div>
+                        </a>
                         <div class="inner list clearfix hidden jsFiltersList">
                             <ul>
                                 <li><a href="javascript:void(0);" ng-click="setSideFilter($event, 'noEducaiton')">No Education</a></li>

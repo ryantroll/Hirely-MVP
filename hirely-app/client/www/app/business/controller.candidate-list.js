@@ -94,7 +94,7 @@
 
     $scope.toggleFilterMenu = function(ev){
         var me = angular.element(ev.currentTarget);
-        var menu = me.parent().siblings().eq(0);
+        var menu = me.siblings().eq(0);
 
 
 

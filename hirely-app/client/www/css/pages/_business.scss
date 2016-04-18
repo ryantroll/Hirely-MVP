@@ -256,6 +256,7 @@ $candidat-menu-height:60px;
                 width:auto;
                 clear:none;
                 float:left;
+                color:$c-hirely-mid-gray;
 
                 .icon{
                     display: inline-block;
@@ -263,7 +264,7 @@ $candidat-menu-height:60px;
                 }
             }
 
-            a{
+            .jsFilterIcon {
                 // line-height: 2em;
                 color:$c-hirely-mid-gray;
                 float:right;
