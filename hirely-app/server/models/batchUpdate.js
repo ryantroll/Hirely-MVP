@@ -70,16 +70,28 @@
 
 // This snippet useful to update apps with a constants
 // var ApplicationModel = require('./application.model');
+// console.log("Running...");
+// // Demo positionId = 56e9f06e23eddcf5e600115a
+// ApplicationModel.find({positionId: "56e9f06e23eddcf5e600115a"}).then(function(apps) {
+//     console.log("Found apps");
+//     apps.forEach(function(app) {
+//
+//         app.status = 2;
+//         app.history = app.history.slice(0,2);
+//         app.save();
+//     });
+//     console.log("Done.");
+// });
+
+
+// The following is useful if you need to update initial history with the applicant user name
+// var ApplicationModel = require('./application.model');
 // var UserModel = require('./user.model');
 // console.log("Running...");
 // ApplicationModel.find({}).then(function(apps) {
 //     console.log("Found apps");
 //     apps.forEach(function(app) {
 //
-//         // app.status = 1;
-//         // app.save();
-//
-//         // The following is useful if you need to update initial history with the applicant user name
 //         // UserModel.findById(app.userId).then(
 //         //     function(user) {
 //         //
