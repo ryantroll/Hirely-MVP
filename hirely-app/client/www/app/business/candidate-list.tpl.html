@@ -61,7 +61,8 @@
             <div class="col-sm-12 text-center">
                 <div class="page-error">
                     <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
-                    <h4>No applications submitted for this position yet</h4>
+                    <h4 ng-show="isFilterActive('applied')">No applicants found for this stage with the current filters.</h4>
+                    <h4 ng-show="!isFilterActive('applied')">No applicants found for this stage.</h4>
                 </div>
             </div>
         </div>
@@ -160,7 +161,8 @@
                                 <div class="col-sm-12 text-center">
                                     <div class="page-error">
                                         <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
-                                        <h4>No applications submitted for this position yet</h4>
+                                        <h4 ng-show="isFilterActive('applied')">No applicants found for this stage with the current filters.</h4>
+                                        <h4 ng-show="!isFilterActive('applied')">No applicants found for this stage.</h4>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +188,7 @@
                                     </div>
 
                                     <div ng-if="app.status == 3">
-                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Interviewd" uib-tooltip="Interviewd"><i class="icon-chat_icon"></i></a>
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Interviewed" uib-tooltip="Interviewed"><i class="icon-chat_icon"></i></a>
                                         <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
                                     </div>
 
