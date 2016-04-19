@@ -55,13 +55,25 @@
 //     console.log("Found users");
 //     users.forEach(function(user) {
 //         console.log("user: "+user.email);
+//
+//         var fileUrl = user.profileImageURL;
+//         if (fileUrl == "https://lh3.googleusercontent.com/-1p0-ELNl0mk/AAAAAAAAAAI/AAAAAAAAAAA/xeGC2Eu7i0o/photo.jpg") {
+//             user.profileImageURL = null;
+//             user.profileImageThumbURL = null;
+//         }
+//         else if (fileUrl) {
+//             var splitPoint = fileUrl.search('/profile-photos');
+//             var thumbUrl = fileUrl.slice(0, splitPoint) + '/thumbnails' + fileUrl.slice(splitPoint);
+//             user.profileImageThumbURL = thumbUrl;
+//         }
+//
 //         // user.queuedForMetricUpdate = true;
 //         // user.education.forEach(function(edu) {
 //         //     edu.focus = "Biology";
 //         //     delete edu.degree;
 //         // })
 //
-//         user.save();
+//         user.save()
 //     });
 //     console.log("Done.");
 // });

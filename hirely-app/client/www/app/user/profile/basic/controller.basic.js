@@ -187,10 +187,6 @@
                 $scope._dateOfBirth = UserService.formatDate($scope.user.dateOfBirth);
             }
 
-            if (!$scope.user.profileImageURL) {
-                $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
-            }
-
             var languagesListRaw = $scope.user.languagesSpoken;
             if (!languagesListRaw || !languagesListRaw.length) {
                 languagesListRaw = ["English"];
@@ -308,7 +304,15 @@
                         function (fileUrl) {
                             $scope.user.profileImageURL = fileUrl;
                             AuthService.currentUser.profileImageURL = fileUrl;
-                            var userData = {profileImageURL: fileUrl};
+
+                            var splitPoint = fileUrl.search('/profile-photos');
+                            var thumbUrl = fileUrl.slice(0, splitPoint) + '/thumbnails' + fileUrl.slice(splitPoint);
+                            AuthService.currentUser.profileImageThumbURL = thumbUrl;
+
+                            // For scope, don't use thumb in case AWS takes a while to gen the thumb
+                            $scope.user.profileImageThumbURL = fileUrl;
+
+                            var userData = {profileImageURL: fileUrl, profileImageThumbURL: thumbUrl};
                             return UserService.saveUser(userData, AuthService.currentUserId);
                         },
                         function (err) {
@@ -334,9 +338,10 @@
         }//// fun. uploadPhoto
 
         $scope.removeImage = function () {
-            $scope.user.profileImageURL = DEFAULT_PROFILE_IMAGE;
             AuthService.currentUser.profileImageURL = null;
-            var userData = {profileImageURL: null};
+            AuthService.currentUser.profileImageThumbURL = null;
+            $scope.user.profileImageThumbURL = null;
+            var userData = {profileImageURL: null, profileImageThumbURL: null};
             return UserService.saveUser(userData, AuthService.currentUserId)
                 .then(
                     function (savedUser) {

@@ -1245,6 +1245,7 @@ var userSchema = new Schema({
     agreedToTerms: {type: Boolean},
     personalStatment: {type: String},
     profileImageURL: {type: String},
+    profileImageThumbURL: {type: String},
     eligibleToWorkInUS: {type: Boolean},
     tenureAvg: {type: Number},
     queuedForMetricUpdate: {type: Boolean, default: false, index: true},

@@ -23,7 +23,7 @@
                             <div class="col-sm-3">
                                 <div class="image">
                                     <div class="image-wrapper">
-                                        <img src="{{applicant.profileImageURL || defaultImage}}" />
+                                        <img src="{{applicant.profileImageThumbURL || defaultImage}}" />
                                     </div>
                                     <div class="date">Applied: {{application.appliedAt | date:'MM/dd/yyyy'}}</div>
                                 </div>
@@ -248,7 +248,7 @@
                         <div class="col-sm-12">
                             <div class="image">
                                 <div class="image-wrapper">
-                                    <img src="{{applicant.profileImageURL || defaultImage}}" />
+                                    <img src="{{applicant.profileImageThumbURL || defaultImage}}" />
                                 </div>
                                 <div class="date">Applied: {{application.appliedAt | date:'MM/dd/yyyy'}}</div>
                             </div>
