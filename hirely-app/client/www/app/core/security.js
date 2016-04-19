@@ -23,6 +23,10 @@
                     if (toState.authRequired && !AuthService.token.remainingTime){
                         $rootScope.nextState.push({state:toState.name, params:toParams});
 
+                        if (event) {
+                            event.preventDefault();
+                        }
+
                         if (toState.name == 'master.application.apply') {
                             console.log("S:handleAuthRequiredRedirect:info:1: Caught apply without login");
                             getPositionTitleFromParams(toParams).then(function(positionTitle) {
@@ -35,9 +39,6 @@
                                 msg = "You must login to view this page."
                             }
                             $state.go(loginRedirectPath, {message: msg});
-                        }
-                        if (event) {
-                            event.preventDefault();
                         }
                     }
                 }
