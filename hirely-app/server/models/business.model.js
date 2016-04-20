@@ -14,6 +14,12 @@ var positionSchema = new Schema({
     occId         :    {type: String, required:true},
     description   :    {type: String, required:false},
     hasOpenings   :    {type: Boolean, default:false},  // this field should be updated whenever positions are updated
+    interviewMaterials: [
+        {
+            name: String,
+            url: String
+        }
+    ],
 
     workType          :     {
         type:String,

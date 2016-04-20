@@ -349,9 +349,9 @@
                     <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-show="isModal" ng-disabled="detailsIndex >= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
                 </div><!--arrows-->
 
-                <div class="box">
-                    <a target="_blank" ui-sref="interviewApplicant({businessSlug:business.slug, locationSlug:location.slug, positionSlug:position.slug, applicationId:application._id, interviewQuestionsIndex:0})">
-                        <button class="btn mid-gray" style="width:100%">Print Interview 1 Survey</button>
+                <div class="box" ng-repeat="im in position.interviewMaterials">
+                    <a target="_blank" href="{{im.url}}">
+                        <button class="btn mid-gray" style="width:100%">{{im.name}}</button>
                     </a>
                 </div>
             </div><!--col-->

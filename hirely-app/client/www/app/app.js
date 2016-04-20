@@ -153,19 +153,6 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/job/job-position.tpl.html',
                 controller: 'JobPositionController'
             })
-
-            .state('interview', {
-                url: '/:businessSlug/:locationSlug/:positionSlug/interviewQs/:interviewQuestionsIndex',
-                templateUrl: 'app/job/interview.tpl.html',
-                controller: 'InterviewController',
-                authRequired: true
-            })
-            .state('interviewApplicant', {
-                url: '/:businessSlug/:locationSlug/:positionSlug/applicants/:applicationId/interviewQs/:interviewQuestionsIndex',
-                templateUrl: 'app/job/interview.tpl.html',
-                controller: 'InterviewController',
-                authRequired: true
-            })
             .state('master.default.business', {
                 abstract: true,
                 templateUrl: 'app/layout/business/business-master.tpl.html',
