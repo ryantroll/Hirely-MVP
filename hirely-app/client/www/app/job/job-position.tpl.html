@@ -84,9 +84,7 @@
                             <h3><i class="icon-info_outline_icon"></i>ABOUT POSITION</h3>
                         </div>
                         <div class="copy box-inner">
-                            <p>
-                                {{position.description}}
-                            </p>
+                            <div ng-bind-html="positionDescriptionHtml"></div>
                         </div>
                     </div><!--box-->
 
@@ -136,7 +134,7 @@
                                 <div class="icon icon-piggbank_outline_icon"></div>
                                 <div class="title">Retirement Plan</div>
                             </div>
-                            <div class="item" ng-if="position.benefits.flexibleSchedul">
+                            <div class="item" ng-if="position.benefits.flexibleSchedule">
                                 <div class="icon icon-calendar_outline_icon"></div>
                                 <div class="title">Flexible Schedule</div>
                             </div>
@@ -168,6 +166,17 @@
                             <ul>
                                 <li>High School Education</li>
                                 <li>Prior Sales Experience (Optional)</li>
+                            </ul>
+                        </div>
+                    </div><!--box-->
+
+                    <div class="box" ng-show="position.specialSkills.length > 0">
+                        <div class="title">
+                            <h3><i class="icon-employeebadge_outline_icon"></i>Target Skills</h3>
+                        </div>
+                        <div class="copy box-inner">
+                            <ul>
+                                <li ng-repeat="duty in position.specialSkills">{{duty}}</li>
                             </ul>
                         </div>
                     </div><!--box-->
@@ -241,7 +250,7 @@
                         <h3><i class="icon icon-building_outline_icon" style="float:none"></i> ABOUT BUSINESS &amp; LOCATION</h3>
                     </div>
                     <div class="copy box-inner text-center">
-                        <div>{{business.description}}</div>
+                        <div ng-bind-html="businessDescriptionHtml"></div>
                         <h4>{{business.name}} - {{location.city}}</h4>
                         <div class="availability">
                             <ul>

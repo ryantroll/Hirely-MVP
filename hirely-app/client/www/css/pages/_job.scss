@@ -11,6 +11,8 @@
 
     .hero{
         position:relative;
+        max-height:500px;
+        overflow:hidden;
         img{
             display: block;
             width:100%;

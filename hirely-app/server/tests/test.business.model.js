@@ -125,7 +125,7 @@ db.once('open', function(){
                 benefits: {
                     paidVacation: true,
                     paidSickTime: true,
-                    flexibleSchedul: true,
+                    flexibleSchedule: true,
                     healthInsurance: true,
                     dentalInsurance: true,
                     retirementPlan: true,
@@ -196,7 +196,7 @@ db.once('open', function(){
                 {
                     paidVacation    :     true,
                     paidSickTime    :     false,
-                    flexibleSchedul :     false,
+                    flexibleSchedule :     false,
                     healthInsurance :     false,
                     dentalInsurance :     true,
                     retirementPlan  :     true,
@@ -235,7 +235,8 @@ db.once('open', function(){
                     'Enthusiastically embraces the concept of serving the customer and providing an exceptional retail experience',
                     'Is capable of safely lifting and carrying 40lbs on a regular basis',
                     'Is intrinsically motivated, able to work both independently and as a member of a team, and thrives in a dynamic, fast-paced environment'
-                ]
+                ],
+                specialSkills:[]
             }
         }, // positions array
     };

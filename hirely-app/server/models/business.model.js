@@ -72,7 +72,7 @@ var positionSchema = new Schema({
         paidSickTime    :     Boolean,
         tips            :     Boolean,
         bonus           :     Boolean,
-        flexibleSchedul :     Boolean,
+        flexibleSchedule :     Boolean,
         healthInsurance :     Boolean,
         dentalInsurance :     Boolean,
         retirementPlan  :     Boolean,

@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', JobPositionController]);
+  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', JobPositionController]);
 
-  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, BusinessService, AvailabilityService, FavoritesService, AuthService) {
+  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, $sce, BusinessService, AvailabilityService, FavoritesService, AuthService) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -19,8 +19,8 @@
 
         $scope.heroImageURL = $scope.location.heroImageURL ? $scope.location.heroImageURL : business.heroImageURL;
 
-        console.log("BH:"+business.heroImageURL);
-        console.log("LH:"+$scope.location.heroImageURL);
+        $scope.businessDescriptionHtml = $sce.trustAsHtml(business.description);
+        $scope.positionDescriptionHtml = $sce.trustAsHtml($scope.position.description);
 
         if (AuthService.currentUserId && $rootScope.addFavoriteAfterLogin == true) {
           $scope.favoriteClick();
@@ -138,6 +138,15 @@
        */
       $timeout(function() {
         $scope.dataLoaded = true;
+
+        $timeout(function() {
+          var heroHeight = $('.hero').height();
+          var heroImgHeight = $('.hero img').height();
+          if (heroImgHeight - heroHeight) {
+            $('.hero img').css('margin-top', -(heroImgHeight - heroHeight)/2)
+          }
+        })
+
       }, 200);
 
 
@@ -197,7 +206,7 @@
      */
     $scope.getWorkTypeTitle = function(type){
       return BusinessService.getWorkTypeTitle(type);
-    }
+    };
 
     /**
      * [getPositionIcon this function will be called from template to get the display property needed for each position based on occupation id]
