@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
                     <div class="wage">
-                        <h3>${{position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
+                        <h3>${{position.compensation.wageAmountSalary || position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
                     </div>
                 </div>
             </div><!--row-->
@@ -27,7 +27,7 @@
         <div class="col-sm-12">
             <div class="hero">
                 <img src="{{heroImageURL}}"/>
-                <div class="tag">${{position.compensation.wageAmount}}</div>
+                <div class="tag">${{position.compensation.wageAmountSalary || position.compensation.wageAmount}} {{position.compensation.wageType}}</div>
             </div>
         </div>
     </div><!--hero-image-row-->
@@ -100,7 +100,7 @@
                         <div class="benefites  box-inner clearfix">
                             <div class="item" ng-if="position.compensation.wageAmount">
                                 <div class="icon icon-moneybag_outline_icon"></div>
-                                <div class="title">${{position.compensation.wageAmount}} {{position.compensation.wageType}}</div>
+                                <div class="title">${{position.compensation.wageAmountSalary || position.compensation.wageAmount}} {{position.compensation.wageType}}</div>
                             </div>
                             <div class="item" ng-if="position.benefits.commission">
                                 <div class="icon icon-commission_icon"></div>
@@ -209,7 +209,7 @@
                     <div class="sidebar" id="sideBar">
                         <div class="box visible-sm-block visible-md-block visible-lg-block" id="wageBox">
                             <div class="title dark-blue">
-                                <h3>${{position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
+                                <h3>${{position.compensation.wageAmountSalary || position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
                             </div>
                             <div class="buttons box-inner">
                                 <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
@@ -229,7 +229,7 @@
                                             <div class="icon icon-{{getPositionIcon(_pos.occId, 'cssClass')}}" style="color:{{getPositionIcon(_pos.occId, 'iconColor')}}"></div>
                                             <div class="copy">
                                                 <h4>{{_pos.title}}</h4>
-                                                <p>${{_pos.compensation.wageAmount}} {{_pos.compensation.wageType}} - {{getWorkTypeTitle(_pos.workType)}}</p>
+                                                <p>${{_pos.compensation.wageAmountSalary || _pos.compensation.wageAmount}} {{_pos.compensation.wageType}} - {{getWorkTypeTitle(_pos.workType)}}</p>
                                             </div>
                                         </a>
                                     </li>

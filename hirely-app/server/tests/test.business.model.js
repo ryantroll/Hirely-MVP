@@ -186,8 +186,9 @@ db.once('open', function(){
 
                 compensation:
                 {
-                    wageType        :     'hourly',
-                    wageAmount      :     10,
+                    wageType        :     'salary',
+                    wageAmount      :     20,
+                    wageAmountSalary:     40000,
                     commission      :     false,
                     tips            :     false
                 },
