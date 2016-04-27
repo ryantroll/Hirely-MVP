@@ -17,10 +17,6 @@
 
         $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-        $scope.heroImageURL = $scope.location.heroImageURL ? $scope.location.heroImageURL : business.heroImageURL;
-
-        $scope.businessDescriptionHtml = $sce.trustAsHtml(business.description);
-        $scope.positionDescriptionHtml = $sce.trustAsHtml($scope.position.description);
 
         if (AuthService.currentUserId && $rootScope.addFavoriteAfterLogin == true) {
           $scope.favoriteClick();
@@ -80,6 +76,11 @@
         $scope.dataLoaded = true;
         return;
       }
+
+      $scope.heroImageURL = $scope.location.heroImageURL ? $scope.location.heroImageURL : $scope.business.heroImageURL;
+      $scope.businessDescriptionHtml = $sce.trustAsHtml($scope.business.description);
+      $scope.positionDescriptionHtml = $sce.trustAsHtml($scope.position.description);
+
 
 
       $scope.numOfBenefits = getNumOfBenefits();
