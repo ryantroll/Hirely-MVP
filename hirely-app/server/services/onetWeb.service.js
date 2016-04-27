@@ -39,6 +39,8 @@ var onetOccSearchService = {
     onetCall: function (service) {
         var host = "services.onetcenter.org";
         var url = '/ws/' + service;
+        // Use the following line to specify a specific version.  Note that I have not confirmed this will work long term.
+        // var url = '/v1.6/ws/' + service;
         var separator = service.indexOf('?') !== -1 ? '&' : '?';
         url += separator + 'client=app_hirely_us_compas';
         return this.request('GET', host, url);
