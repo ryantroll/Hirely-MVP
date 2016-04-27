@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
                     <div class="title">
-                        <h3>{{business.name}}, {{location.city}} / {{position.title}}</h3>
+                        <h3>{{business.name}} - {{location.neighborhood}} / {{position.title}}</h3>
                     </div>
                 </div>
                 <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
@@ -47,7 +47,7 @@
                                 <span class="icon icon-{{getPositionIcon(position.occId, 'cssClass')}}" style="color:{{getPositionIcon(position.occId, 'iconColor')}}"></span>
                                 <h1>{{position.title}}</h1>
                                 <h2>{{business.name}}</h2>
-                                <h3>{{location.city}}, {{location.state}}</h3>
+                                <h3>{{location.city}}, {{location.state}} - {{location.neighborhood}}</h3>
                             </div>
                         </div><!--col-->
                         <div class="col-sm-6">
@@ -251,7 +251,7 @@
                     </div>
                     <div class="copy box-inner text-center">
                         <div ng-bind-html="businessDescriptionHtml"></div>
-                        <h4>{{business.name}} - {{location.city}}</h4>
+                        <h4>{{business.name}} - {{location.city}}, {{location.state}} - {{location.neighborhood}}</h4>
                         <div class="availability">
                             <ul>
                                 <li ng-repeat="range in aggregatedWeekTimes"><b>{{range.label}}:</b> {{range.hoursRanges.join(' | ')}}</li>
