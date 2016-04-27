@@ -145,3 +145,17 @@
 //     });
 //     console.log("Done.");
 // });
+
+
+// This snippet useful to update users with a constant
+// var BusinessModel = require('./business.model');
+// console.log("Running...");
+// BusinessModel.find({}).then(function(businesses) {
+//     console.log("Found businesses");
+//     businesses.forEach(function(business) {
+//         console.log("business: "+business.slug);
+//
+//         business.save()
+//     });
+//     console.log("Done.");
+// });
