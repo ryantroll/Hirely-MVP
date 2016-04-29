@@ -408,49 +408,17 @@ $candidat-menu-height:60px;
             @include border-radius(2px);
             position:relative;
             margin-bottom: 1em;
+            width: 49%;
+            float: left;
+            height: 232px;
 
+            &:nth-child(odd) {
+                float:right;
+            }
 
-
-            .image{
-                // @include vertical-align();
-
-                .image-wrapper{
-                    width:80px;
-                    height: 80px;
-                    @include border-radius(50%);
-                    overflow: hidden;
-                    margin: 0 auto;
-                    > img{
-                        display: block;
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                }//// .image-wrapper
-
-                .tag{
-                    display:table;
-                    background-color:rgba(0, 0, 0, 0.5);
-                    border:2px solid $c-white;
-                    color:$c-white;
-                    height: 20px;
-                    width:70px;
-                    line-height: 20px;
-                    @include border-radius(10px);
-                    font-size:0.8em;
-                    text-align: center;
-                    margin-left: auto;
-                    margin-right: auto;
-                    margin-top:-10px;
-                    z-index: 1;
-                    position:relative;
-                }
-                .date{
-                    width:100%;
-                    text-align: center;
-                    font-size:0.8em;
-                }
-            }//// .image
+            @media screen and (max-width:$screen-sm-max){
+                width: 100%;
+            }
 
             .details{
 
@@ -458,6 +426,7 @@ $candidat-menu-height:60px;
                     font-size:1.5em;
                     font-weight: 600;
                     text-align:center;
+                    margin-top:0;
                     @media screen and (min-width:$screen-sm-min){
                         text-align: inherit;
                     }
@@ -514,43 +483,32 @@ $candidat-menu-height:60px;
                 }//// .answers
 
                 .traits{
-                    font-weight: 600;
+                    //font-weight: 600;
                     font-size:0.8em;
-                    strong{
-                        display: block;
-                        clear: both;
-                        font-weight: normal;
-
-                        @media screen and (min-width:$screen-sm-min){
-                            display: inline-block;
-                            width:100px;
-                        }
-                    }
+                    //strong{
+                    //    display: block;
+                    //    clear: both;
+                    //    font-weight: normal;
+                    //
+                    //    @media screen and (min-width:$screen-sm-min){
+                    //        display: inline-block;
+                    //        width:100px;
+                    //    }
+                    //}
 
                 }//// .traits
 
-                .more-link{
-                    text-align:center;
-
-                    @media screen and (min-width:$screen-sm-min){
-                        text-align: left;
-                    }
-                    .btn{
-                        @include border-radius(2px);
-                    }
-                }
 
             }//// .details
 
             .menu{
-                width:auto;
-                display: none;
+                width:98%;
+                margin:1%;
                 height: $candidat-menu-height;
-                position:absolute;
-                top:0;
-                right:0;
 
                 z-index: 100;
+                position: absolute;
+                top: 162px;
 
 
                 @media screen and (min-width:$screen-sm-min){
@@ -579,7 +537,7 @@ $candidat-menu-height:60px;
                     cursor:not-allowed;
                 }
                 a{
-                    float:left;
+                    float:right;
                     display: block;
                     width:$candidat-menu-height;
                     height: $candidat-menu-height;
@@ -589,10 +547,12 @@ $candidat-menu-height:60px;
                     font-size:2em;
                     background-color:$c-hirely-mid-gray;
                     margin-right:5px;
-                }
 
-                a:last-of-type{
-                    margin-right: 0;
+                    &:first-of-type {
+                        float: left;
+                        width: 50%;
+                        width: calc( 100% - 140px );
+                    }
                 }
 
                 .red{

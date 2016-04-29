@@ -34,7 +34,7 @@
                             <div class="col-sm-9">
                                 <div class="details">
                                     <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
-                                    <div class="fit-scale">
+                                    <div class="fit-scale hidden">
                                         <i ng-class="getFitClass2(0, application.score)"></i>
                                         <i ng-class="getFitClass2(1, application.score)"></i>
                                         <i ng-class="getFitClass2(2, application.score)"></i>
@@ -259,7 +259,7 @@
                         <div class="col-sm-12">
                             <div class="details center">
                                 <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
-                                <div class="fit-scale">
+                                <div class="fit-scale hidden">
                                     <i ng-class="getFitClass(0, application.score)"></i>
                                     <i ng-class="getFitClass(1, application.score)"></i>
                                     <i ng-class="getFitClass(2, application.score)"></i>
