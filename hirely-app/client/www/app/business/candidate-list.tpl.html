@@ -175,6 +175,9 @@
                         </div>
 
                         <div class="candidate" ng-repeat="app in filtered">
+                            <div class="hidden appId">{{app._id}}</div>
+                            <div class="hidden userId">{{app.userId}}</div>
+                            <div class="hidden posId">{{app.positionId}}</div>
                             <div class="menu">
                                 <div class="inner">
                                     <div ng-if="app.status == -1" class="clearfix">
