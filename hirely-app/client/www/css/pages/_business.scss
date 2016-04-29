@@ -506,8 +506,6 @@ $candidat-menu-height:60px;
                 margin:1%;
                 height: $candidat-menu-height;
 
-                z-index: 100;
-
                 @media screen and (min-width:$screen-sm-min){
                     display: table;
                 }
