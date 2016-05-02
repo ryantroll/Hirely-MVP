@@ -200,7 +200,7 @@
                                 <h3>${{position.compensation.wageAmountSalary || position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
                             </div>
                             <div class="buttons box-inner">
-                                <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
+                                <button id="applyButton" title="Apply button.  If disabled, applications are not currently being accepted through the Hirely application." class="btn btn-lrg red" ng-click="applyClick()" ng-disabled="business.disabled || location.disabled || position.disabled">APPLY</button>
                                 <!-- <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button> -->
                                 <button class="btn btn-secondary" id="favButton" ng-click="favoriteClick()" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>
                             </div>

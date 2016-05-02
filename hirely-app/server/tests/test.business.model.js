@@ -22,6 +22,7 @@ db.once('open', function(){
     var bdata = {
         name: 'Compass Coffee',
         slug: 'compass-coffee',
+        disabled: false,
         email: Math.round(Math.random()*1000).toString() + 'IYAD.bitar@gmail.com',
         website:'http://compasscoffee.com',
         description: 'A local coffee shop in a cool neighborhood.  We look for friendly, enthusiastic, hardworking, teachable coffee lovers.',
@@ -34,6 +35,7 @@ db.once('open', function(){
             tmpLocationId: {
                 _id: locationId,
                 name:'Clifton',
+                disabled: false,
                 country:'USA',
                 state:'NJ',
                 city:'Montclair',
@@ -65,6 +67,7 @@ db.once('open', function(){
             tmpLocationId2: {
                 _id: locationId2,
                 name:'C3 Workplace',
+                disabled: false,
                 country:'USA',
                 state:'NJ',
                 city:'Montclair',
@@ -101,6 +104,7 @@ db.once('open', function(){
             tmpPositionId: {
                 _id: positionId,
                 locationId: locationId,
+                disabled: false,
                 title: 'Barista',
                 occId: '35-3022.01',
                 slug: 'barista',
@@ -171,6 +175,7 @@ db.once('open', function(){
             tmpPositionId2: {
                 _id: positionId2,
                 locationId: locationId2,
+                disabled: false,
                 title: 'Web Developer',
                 occId: '15-1199.09',
                 slug: 'web-developer',
