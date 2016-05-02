@@ -126,18 +126,23 @@ var UserService = {
             }
         }
         return userModel.create(userObj).then(function(user) {
-            var userAndToken = self.getUserAndTokenObj(user, config.tokenLifeDefault);
-
-            if (perms.length) {
-                for (let perm of perms) {
-                    perm.srcId = user._id;
-                }
-                return permissionModel.create(perms).then(function (perms) {
+            user = user.toObject();
+            return self.getUserAndTokenObj(user, config.tokenLifeDefault).then(function(userAndToken) {
+                if (perms.length) {
+                    for (let perm of perms) {
+                        perm.srcId = user._id;
+                    }
+                    return permissionModel.create(perms).then(function (perms) {
+                        var permObjs = [];
+                        permissions.forEach(function(perm) { permObjs.push(perm.toObject()); });
+                        userAndToken.user.permissions = permObjs;
+                        return userAndToken;
+                    });
+                } else {
+                    userAndToken.user.permissions = [];
                     return userAndToken;
-                });
-            } else {
-                return userAndToken;
-            }
+                }
+            });
         });
 
     },
@@ -188,10 +193,29 @@ var UserService = {
         });
     },
     
-    getUserAndTokenObj: function(user, expiresIn) {
+    getUserAndTokenObj: function(user, expiresIn, permissions) {
         var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
         var exp = jwt.verify(token, config.jwtSecret).exp;
-        return {token: {jwt: token, exp:exp}, user: user};
+
+        var userObj = user.toObject();
+
+        if (permissions) {
+            var permObjs = [];
+            permissions.forEach(function(perm) { permObjs.push(perm.toObject()); });
+            userObj.permissions = permObjs;
+            var deferred = q.defer();
+            deferred.resolve({token: {jwt: token, exp:exp}, user: userObj});
+            return deferred.promise;
+        }
+
+        return permissionModel.find({srcId:user._id}).then(function(permissions) {
+            var permObjs = [];
+            permissions.forEach(function(perm) { permObjs.push(perm.toObject()); });
+            userObj.permissions = permObjs;
+            return {token: {jwt: token, exp:exp}, user: userObj};
+        });
+
+
     },
 
     /**

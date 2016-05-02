@@ -16,6 +16,8 @@
         $scope.showPositionMenu = false;
         $scope.showSortMenu = false;
         $scope.sortByLabel = 'Sort By';
+        
+        $scope.AuthService = AuthService;
 
         $scope.togglePositionMenu = function (event) {
 

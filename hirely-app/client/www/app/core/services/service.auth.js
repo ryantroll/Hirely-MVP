@@ -12,6 +12,8 @@
             token: {jwt:null, exp:0, remainingTime:0},
             currentUser: null,
             currentUserId: null,
+            isSuperUser: false,
+            checkIfSuperUser: checkIfSuperUser,
             setToken: setToken,
             refreshSession: refreshSession,
             passwordLogin: passwordLogin,
@@ -21,6 +23,16 @@
         };
 
         return service;
+
+        function checkIfSuperUser(permissions) {
+            var isSuperUser = false;
+            permissions.forEach(function(perm) {
+                if (perm.destId == "*" && perm.destType == "*") {
+                    isSuperUser = true;
+                }
+            });
+            return isSuperUser;
+        }
 
         function setToken(tokenAndExp) {
             $cookies.put("token", JSON.stringify(tokenAndExp));
@@ -41,6 +53,7 @@
                         service.setToken(userAndToken.token);
                         service.currentUser = userAndToken.user;
                         service.currentUserId = userAndToken.user._id;
+                        service.isSuperUser = service.checkIfSuperUser(userAndToken.user.permissions);
                         console.log("AS:SessionRefresh:info: Token Refreshed");
                         $rootScope.$emit('SessionRefreshed');
                         $rootScope.$broadcast('SessionRefreshed');
@@ -65,6 +78,7 @@
                     service.setToken(userAndToken.token);
                     service.currentUser = userAndToken.user;
                     service.currentUserId = userAndToken.user._id;
+                    service.isSuperUser = service.checkIfSuperUser(userAndToken.user.permissions);
                     $rootScope.$emit('UserLoggedIn', userAndToken.user);
                     $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
                     return userAndToken.user;
@@ -79,6 +93,7 @@
                     service.setToken(userAndToken.token);
                     service.currentUser = userAndToken.user;
                     service.currentUserId = userAndToken.user._id;
+                    service.isSuperUser = service.checkIfSuperUser(userAndToken.user.permissions);
                     $rootScope.$emit('UserLoggedIn', userAndToken.user);
                     $rootScope.$broadcast('UserLoggedIn', userAndToken.user);
                     $rootScope.$emit('UserRegistered', userAndToken.user);
@@ -93,6 +108,7 @@
             console.log("Logging out");
             service.currentUser = null;
             service.currentUserId = null;
+            service.isSuperUser = false;
             service.setToken({jwt:null, exp:0});
             $cookies.remove("token");
             $rootScope.$emit('UserLoggedOut');

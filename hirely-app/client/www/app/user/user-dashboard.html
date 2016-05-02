@@ -21,7 +21,7 @@
                 <div class="pull-left" style="margin-top:20px; padding-left:10px">(<a href="javascript:void(0)" ng-click="logout()">Logout</a>)</div>
                 <div class="intro" style="clear:both;">
                     <p>
-                        Hi {{AuthService.currentUser.firstName}}, from your dashboard you can edit your profile, view your applications, manage your positions.
+                        Hi {{AuthService.currentUser.firstName}}<span ng-show="AuthService.isSuperUser"> (SuperUser)</span>, from your dashboard you can edit your profile, view your applications, manage your positions.
                     </p>
                 </div>
             </div><!--col-->

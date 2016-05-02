@@ -1,4 +1,4 @@
-var permissionService = require('../services/permissions.service');
+var PermissionService = require('../services/permissions.service');
 var UserService = require('../services/user.service');
 var apiUtil = require('../utils/api-response');
 var config = require('../config');
@@ -32,13 +32,16 @@ var userRoutes = {
             res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
             return;
         }
-        var isBusinessUser = permissionService.isBusinessUser(req.permissions);
+        var isBusinessUser = PermissionService.isBusinessUser(req.permissions);
         var expiresIn = config.tokenLifeDefault;
         if (isBusinessUser) expiresIn = config.tokenLifeBusiness;
+        
+        req.user.permissions = req.permissions;
 
-        var userAndToken = UserService.getUserAndTokenObj(req.user, expiresIn);
+        UserService.getUserAndTokenObj(req.user, expiresIn, req.permissions).then(function(userAndToken) {
+            res.status(200).json(apiUtil.generateResponse(200, "Token retrieved successfully", userAndToken));
+        });
 
-        res.status(200).json(apiUtil.generateResponse(200, "Token retrieved successfully", userAndToken));
     },
 
     createNewUser : function(req, res){
@@ -77,7 +80,7 @@ var userRoutes = {
         };
         permObjs.push(demoPermObj);
         
-        permissionService.checkPermissions(req.permissions, permObjs).then(function(grant) {
+        PermissionService.checkPermissions(req.permissions, permObjs).then(function(grant) {
             if (!grant) {
                 res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
                 return;
@@ -92,12 +95,12 @@ var userRoutes = {
 
         var skipPasswordCheck = req.isSuperUser;
         console.log("req.isSuperUser:"+req.isSuperUser);
-        var isBusinessUser = permissionService.isBusinessUser(req.permissions);
+        var isBusinessUser = PermissionService.isBusinessUser(req.permissions);
 
         UserService.passwordLogin(req.body.email, req.body.password, skipPasswordCheck, isBusinessUser)
             .then(
-                function(user) {
-                    res.status(200).json(apiUtil.generateResponse(200, "Password login results", user));
+                function(userAndToken) {
+                    res.status(200).json(apiUtil.generateResponse(200, "Password login results", userAndToken));
                 },
                 function(error) {
                     res.status(error.code).json(apiUtil.generateResponse(error.code, error.message, null));
