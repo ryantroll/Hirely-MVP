@@ -6,13 +6,17 @@
     <form name="personalityForm" novalidate form-step-validity>
         <div class="row">
             <div class="col-sm-12">
-                <div class="first-time text-center" ng-show="!resultsLoaded">
+                <!-- <div class="first-time text-center" ng-show="!resultsLoaded">
                     <h4>Help us make you shine by completing a 90 second personality assessment. It’s fast, we promise!</h4>
                     <button class="btn btn-large dark-gray" ng-click="showAssessment()">TAKE ASSESSMENT</button>
                     <div>&nbsp</div>
                 </div>
-                <div>&nbsp</div>
+                <div>&nbsp</div> -->
 
+
+                <div class="assessment" ng-show="personalityExam">
+                    <div class="personality-analysis" ng-show="stepThreeLoaded"></div>
+                </div><!--assessment-->
 
                 <div class="results text-center" ng-show="resultsLoaded">
                     <uib-accordion >
@@ -29,18 +33,15 @@
                         </uib-accordion-group>
                     </uib-accordion>
                 </div>
+
+                <div class="info">
+                    <a href="javascript:void(0)" ng-show="personalityExam" ng-click="toggleInstructions()">?</a>
+                    <div class="instructions" ng-show="true === showInstructions">
+                        Simply click "Me" or "Not Me" as each image relates to you. Remember that this assessment is designed for your work life, so respond to each image based on your work preferences.
+                    </div>
+                </div>
             </div><!--col-->
         </div><!--row-->
     </form>
 </div><!--user-profile-exp-->
 
-<div class="form-overlay" ng-show="personalityExam" id="expFormDiv">
-    <header class="clearfix">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h3>Personality</h3>
-                </div><!--col-xs-->
-            </div><!--row-->
-    </header>
-    <div class="personality-analysis" ng-show="stepThreeLoaded"></div>
-</div>
