@@ -224,9 +224,9 @@
                                         <a ng-if="app.status == -1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
                                         <a ng-if="app.status == -1" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 8)" title="Hard Fail" uib-tooltip="Hard Fail"><i class="icon-hand_stop_icon"></i></a>
 
-                                        <a ng-if="app.status == 1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
-                                        <a ng-if="app.status == 1" class="purple" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, -1)" title="Soft Fail" uib-tooltip="Soft Fail"><i class="icon-stop_triangle_icon"></i></a>
-                                        <a ng-if="app.status == 1" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 8)" title="Hard Fail" uib-tooltip="Hard Fail"><i class="icon-hand_stop_icon"></i></a>
+                                        <a style="width:40px;" ng-if="app.status == 1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
+                                        <a style="width:40px;" ng-if="app.status == 1" class="purple" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, -1)" title="Soft Fail" uib-tooltip="Soft Fail"><i class="icon-stop_triangle_icon"></i></a>
+                                        <a style="width:40px;" ng-if="app.status == 1" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 8)" title="Hard Fail" uib-tooltip="Hard Fail"><i class="icon-hand_stop_icon"></i></a>
 
                                         <a ng-if="app.status == 2" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Shortlist" uib-tooltip="Shortlist"><i class="icon-thumb_up_icon"></i></a>
                                         <a ng-if="app.status == 2" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
