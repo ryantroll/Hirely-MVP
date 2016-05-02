@@ -18,6 +18,8 @@
 
         $scope.resultsLoaded = false;
 
+        $scope.showInstructions = false;
+
         var saved = false;
 
         var assessmentId = null;
@@ -25,6 +27,8 @@
         var traitify = null;
 
         var results = {};
+
+
 
 
         Traitify.setPublicKey(TRAITIFY_PUBLIC_KEY);
@@ -35,6 +39,7 @@
 
         $timeout(function () {
             window.scrollTo(0, 0);
+
         });
 
         /**
@@ -64,6 +69,8 @@
         }//// fun. saveAssessment
 
 
+
+
         /**
          * Start by checking if user taken the personality assessment before
          */
@@ -73,16 +80,21 @@
                 var assessmentId = AuthService.currentUser.personalityExams[0].extId;
                 $scope.assessmentId = assessmentId;
                 $scope.$emit('setEnableNextButton', {newValue:true});
+
                 /**
                  * Load the result
                  * @type {[type]}
                  */
+
+
                 var traitifyResults = Traitify.ui.load("results", assessmentId, ".personality-results"); // Example selector for widget target
                 traitifyResults.onInitialize(function () {
                     $scope.traitifyResultLoaded = true;
                     $scope.stepThreeLoaded = $scope.resultsLoaded = $scope.traitifyResultLoaded && $scope.traitifyTypesLoaded && $scope.traitifyTraitsLoaded;
                     $scope.$apply();
                 });
+
+
 
                 /**
                  * Load Traitify personality types
@@ -101,10 +113,14 @@
                     $scope.$apply();
                 });
 
+                $scope.status = {isFirstOpen:true};
+
                 $(window).scrollTop(0);
 
             } else {
-                $(window).scrollTop(0);
+
+                // $(window).scrollTop(0);
+                $scope.showAssessment();
                 $scope.$emit('setEnableNextButton', {newValue:false});
                 $scope.stepThreeLoaded = true;
             }
@@ -112,9 +128,10 @@
         $timeout($scope.initPersonality);
 
 
+
         $scope.showAssessment = function () {
-            $("header").hide();
-            $("footer").hide();
+            // $("header").hide();
+            // $("footer").hide();
             $(window).scrollTop(0);
 
             TraitifyService.getAssessmentId()
@@ -162,6 +179,7 @@
                                     saveAssessment()
                                 });
                                 $scope.resultsLoaded = true;
+                                $scope.status = {isFirstOpen:true};
                                 $("header").show();
                                 $("footer").show();
                                 $scope.$emit('setEnableNextButton', {newValue:true});
@@ -174,7 +192,30 @@
 
         $scope.$on('$destroy', function (event) {
             $scope.$emit('setEnableNextButton', {newValue:true});
-        })
+        });
+
+        $scope.toggleInstructions = function(){
+            var handleMenuClick = function (e) {
+                if (true === $scope.showInstructions) {
+                    $scope.showInstructions = false;
+                    $scope.$apply();
+                    //// unbind when menu closed no need to check for click
+                    $('body').unbind('click', handleMenuClick);
+                }
+                else {
+
+                    $scope.showInstructions = true;
+                    $scope.$apply();
+                }
+            };
+            /**
+             * the event will bubble up to body so do the work on body click \ only if menu is closed
+             * this to make sure the menu is closed when click outside the menu
+             */
+            if (false === $scope.showInstructions) {
+                $('body').bind('click', handleMenuClick);
+            }
+        }
 
     }
 })();

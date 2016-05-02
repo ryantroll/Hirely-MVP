@@ -80,6 +80,6 @@
       loadingBarLocation = (loadingBarLocation + 1) % 5;
       $(".loadingBar div").css("margin-left", loadingBarLocation*20+"%");
     }, 300);
-    
+
   }
 })();

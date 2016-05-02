@@ -22,6 +22,14 @@ var onetIdsAll = ["11-1011.00", "11-1011.03", "11-1021.00", "11-2011.00", "11-20
 function extractPersonalitySummary(full) {
     var summary = {};
 
+    /**
+     * return empty object if no assessment data is sent
+     * if not assessment data then the the operation is to save assessment ID only
+     */
+    if('undefined' === typeof full.personalityBlend){
+        return summary;
+    }
+
     summary.personalityBlend = {};
     summary.personalityBlend.name = full.personalityBlend.name;
     summary.personalityBlend.personalityTypes = [];
@@ -396,7 +404,8 @@ var traitifySevice = {
         /**
          * end this method if config option set to stop extracting traitify meta
          */
-        if (false === config.extractTraitifyMeta) return deferred.promise;
+
+        if (false === config.extractTraitifyMeta || 'undefined' === typeof data.personalityBlend) return deferred.promise;
 
         /**
          * Save Blend meta
