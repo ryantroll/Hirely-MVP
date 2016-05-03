@@ -4,6 +4,48 @@ var permissionService = require('../services/permissions.service');
 
 var businessRoutes = {
 
+    createNewBusiness : function(req, res){
+        var businessObj = req.body;
+
+        if (!(req.isSuperUser)) {
+            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+            return;
+        }
+
+        BusinessService.createNewBusiness(businessObj)
+            .then(
+                function(business){
+                    // console.log(userAndToken);
+                    res.status(200).json(apiUtil.generateResponse(200, "Business created successfully", business));
+                },
+                function(error){
+                    console.log("Create Business Error: "+error);
+                    res.status(200).json(apiUtil.generateResponse(200, "Create Business Error", null));
+                }
+            )
+    },
+
+    patchBusiness: function(req, res){
+        var businessId = req.params.id;
+        var businessObj = req.body;
+
+        // if (!(req.isSuperUser)) {
+        //     res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
+        //     return;
+        // }
+
+        BusinessService.patchBusiness(businessId, businessObj)
+            .then(
+                function(user){
+                    res.status(200).json(apiUtil.generateResponse(200, "Business updated successfully", user));
+                },
+                function(error){
+                    //// user couldn't be saved 404
+                    res.status(500).json(apiUtil.generateResponse(500, error, null));
+                }
+            );
+    }, //// fun. patchBusiness
+
     getBySlug: function(req, res){
         /**
          * Send public info if all is not requested

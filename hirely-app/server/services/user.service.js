@@ -9,7 +9,6 @@ var config = require('../config');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var permissionModel = require('../models/permission.model');
-var businessModel = require('../models/business.model');
 
 
 /**

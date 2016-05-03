@@ -10,18 +10,10 @@ var freeSchema = new Schema({}, {strict: false, _id: false});
 var positionSchema = new Schema({
     locationId: {type: String, required: true},
     title: {type: String, required: true},
-    disabled: {type:Boolean, default:false},
+    disabled: {type: Boolean, default: false},
     slug: {type: String},
     occId: {type: String, required: true},
     description: {type: String, required: false},
-    hasOpenings: {type: Boolean, default: false},  // this field should be updated whenever positions are updated
-    interviewMaterials: [
-        {
-            name: String,
-            url: String
-        }
-    ],
-
     workType: {
         type: String,
         required: true,
@@ -35,20 +27,8 @@ var positionSchema = new Schema({
 
     hoursPerWeekMin: Number,
     hoursPerWeekMax: Number,
-    minOpeningShifts: Number,
-    minClosingShifts: Number,
-    minWeekdayShifts: Number,
-    minWeekendShifts: Number,
     openingsCount: Number,
     expLvl: Number,
-
-    scoreWeights: {
-        exp: Number,
-        edu: Number,
-        qual: Number,
-        psy: Number,
-    },
-
     compensation: {
         wageType: {
             type: String,
@@ -78,24 +58,20 @@ var positionSchema = new Schema({
         discounts: Boolean
     }, //// benefits
 
-    shifts: {
-        mon: [Number],
-        tue: [Number],
-        wed: [Number],
-        thu: [Number],
-        fri: [Number],
-        sat: [Number],
-        sun: [Number],
-        required: Boolean
-    },/// shift object
+    prescreenQuestions: [{question: String}],
 
-    prescreenQuestions: [
+    jobDuties: [String],
+
+    idealCandidate: [String],
+
+    interviewMaterials: [
         {
-            question: String,
+            name: String,
+            url: String
         }
-    ], /// prescreen array
+    ],
 
-    filters: {type: freeSchema, required: false},
+    filters: {type: freeSchema, required: false}
 
 });//// positionSchema
 /**
@@ -104,56 +80,51 @@ var positionSchema = new Schema({
 //positionSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['title'], unique:false, model:'Businesses'} );
 
 var locationSchema = new Schema({
-        name: {type: String, required: true},
-        disabled: {type:Boolean, default:false},
-        slug: {type: String},
-        phone: {type: String, required: true},
-        heroImageURL: {type: String},
-        hoursOfOperation: {
-            mon: [Number],
-            tue: [Number],
-            wed: [Number],
-            thu: [Number],
-            fri: [Number],
-            sat: [Number],
-            sun: [Number]
-        },
+    name: {type: String, required: true},
+    disabled: {type: Boolean, default: false},
+    slug: {type: String},
+    heroImageURL: {type: String},
+    hoursOfOperation: {
+        mon: [Number],
+        tue: [Number],
+        wed: [Number],
+        thu: [Number],
+        fri: [Number],
+        sat: [Number],
+        sun: [Number]
+    },
 
-        positionSlugs: {type: freeSchema, required: false},
+    positionSlugs: {type: freeSchema, required: false},
 
-        /**
-         * Location Address
-         */
-        country: {type: String, required: true},
-        state: {type: String, required: true},
-        city: {type: String, required: true},
-        street1: {type: String, required: true},
-        street2: String,
-        street3: String,
-        neighbourhood: String,
-        postalCode: {type: String, required: true},
-        formattedAddress: {type: String, required: false},
-        googlePlaceId: {type: String, required: false},
-        lat: Number,
-        lng: Number
+    /**
+     * Location Address
+     */
+    country: {type: String, required: true},
+    state: {type: String, required: true},
+    city: {type: String, required: true},
+    street1: {type: String, required: true},
+    street2: String,
+    street3: String,
+    neighborhood: String,
+    postalCode: {type: String, required: true},
+    phone: {type: String, required: true},
+    formattedAddress: {type: String, required: false},
+    lat: Number,
+    lng: Number
 
-    }///location object
-);/// locationSchema
+});/// locationSchema
 /**
  * Add slug to location schema
  */
 //locationSchema.plugin( Utilities.slug, {slugProperty:'slug', fields:['state', 'city', 'name'], unique:false, model:'Businesses'} );
 
 var businessSchema = new Schema({
-    /**
-     * Business info
-     */
     name: {type: String, required: true},
     slug: {type: String, required: false, unique: true, index: true},
     description: {type: String},
     heroImageURL: {type: String},
     logoImageURL: {type: String},
-    disabled: {type:Boolean, default:false},
+    disabled: {type: Boolean, default: false},
     email: {
         type: String,
         required: true,
@@ -179,13 +150,8 @@ var businessSchema = new Schema({
     agreedToTerms: {type: Boolean, required: true},
 
 
-    /**
-     * Locations
-     */
-    //locations: [locationSchema]///locations array
     locations: {type: freeSchema, required: false},
     locationSlugs: {type: freeSchema, required: false},
-
     positions: {type: freeSchema, required: false}
 
 });
@@ -196,5 +162,11 @@ var businessSchema = new Schema({
 
 
 var BusinessModel = mongoose.model('Businesses', businessSchema, "businesses");
+var LocationModel = mongoose.model('Locations', locationSchema, "locations");
+var PositionModel = mongoose.model('Positions', positionSchema, "positions");
 
-module.exports = BusinessModel;
+// module.exports = BusinessModel;
+// module.exports = LocationModel;
+exports.PositionModel = PositionModel;
+exports.LocationModel = LocationModel;
+exports.BusinessModel = BusinessModel;

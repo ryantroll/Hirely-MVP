@@ -2,7 +2,10 @@
 var q = require('q');
 var onetScoresService = require('../services/onetScores.service');
 var UserService = require('../services/user.service');
-var Business = require('../models/business.model');
+var BusinessModels = require('../models/business.model.js'),
+    PositionModel = BusinessModels.PositionModel,
+    LocationModel = BusinessModels.LocationModel,
+    BusinessModel = BusinessModels.BusinessModel;
 var User = require('../models/user.model');
 var CareerMatchScores = require('../models/careerMatchScores.model');
 var OnetScores = require('../models/onetScores.model');
@@ -244,7 +247,7 @@ var MatchService = {
                 priorApplicationPositionIds.push(application.positionId);
             });
 
-            return Business.find({hasOpenings:true, "location.city":user.city, "location.state":user.state}).then(function(businesses) {
+            return BusinessModel.find({"location.city":user.city, "location.state":user.state}).then(function(businesses) {
                 var promises = [];
 
                 businesses.forEach(function(business) {
