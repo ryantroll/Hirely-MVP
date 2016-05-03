@@ -62,7 +62,7 @@ var userRoutes = {
                 },
                 function(error){
                     console.log("Create User Error: "+error);
-                    res.status(200).json(apiUtil.generateResponse(200, "Email already registered", null));
+                    res.status(200).json(apiUtil.generateResponse(200, "Create User Error", null));
                 }
             )
 

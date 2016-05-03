@@ -1,5 +1,8 @@
 var favoritesModel = require('../models/favorites.model');
-var businessModel = require('../models/business.model');
+var BusinessModels = require('../models/business.model.js'),
+    PositionModel = BusinessModels.PositionModel,
+    LocationModel = BusinessModels.LocationModel,
+    BusinessModel = BusinessModels.BusinessModel;
 var q = require('q');
 
 var favoritesService = {
@@ -9,7 +12,7 @@ var favoritesService = {
      */
     getAll : function(reqQuery){
 
-        return businessModel.find({}, returnFields).exec();
+        return BusinessModel.find({}, returnFields).exec();
     },
 
 
