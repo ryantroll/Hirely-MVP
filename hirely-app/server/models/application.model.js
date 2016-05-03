@@ -48,7 +48,7 @@ var applicationSchema = new Schema({
       answer    :     String
     }
   ],/// prescreen array
-    
+
   // This is failing for some reason
   history    : [historySchema]
   // history: [{type:freeSchema, required:false}],

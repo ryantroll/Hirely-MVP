@@ -9,23 +9,7 @@
 
 
     var filters = {
-      attention: {
-        name: "Pending Review",
-        // dateCreated: new Date(),
-        type: "computation",
-        importance: 1,
-        operator: "==",
-        operands: [
-            {
-                type: "attr",
-                value: "application.status"
-            },
-            {
-                type: "number",
-                value: -1
-            }
-        ]
-      },
+
       started: {
         name: "Pending Review",
         // dateCreated: new Date(),
@@ -43,8 +27,8 @@
             }
         ]
       },
-      pending: {
-        name: "Pending Review",
+      prescreen: {
+        name: "Pre-screen",
         // dateCreated: new Date(),
         type: "computation",
         importance: 1,
@@ -77,8 +61,8 @@
             }
         ]
       },
-      shortlisted: {
-        name: "Shortlisted",
+      liked: {
+        name: "Liked",
         // dateCreated: new Date(),
         type: "computation",
         importance: 1,
@@ -91,23 +75,6 @@
             {
                 type: "number",
                 value: 3
-            }
-        ]
-      },
-      interviewed:{
-        name: "Interviewed",
-        // dateCreated: new Date(),
-        type: "computation",
-        importance: 1,
-        operator: "==",
-        operands: [
-            {
-                type: "attr",
-                value: "application.status"
-            },
-            {
-                type: "number",
-                value: 4
             }
         ]
       },
@@ -124,7 +91,7 @@
             },
             {
                 type: "number",
-                value: 5
+                value: 4
             }
         ]
       },
@@ -141,41 +108,7 @@
             },
             {
                 type: "number",
-                value: 6
-            }
-        ]
-      },
-      expired: {
-        name: "Expired",
-        // dateCreated: new Date(),
-        type: "computation",
-        importance: 1,
-        operator: "==",
-        operands: [
-            {
-                type: "attr",
-                value: "application.status"
-            },
-            {
-                type: "number",
-                value: 7
-            }
-        ]
-      },
-      failed: {
-        name: "Failed Vetting",
-        // dateCreated: new Date(),
-        type: "computation",
-        importance: 1,
-        operator: "==",
-        operands: [
-            {
-                type: "attr",
-                value: "application.status"
-            },
-            {
-                type: "number",
-                value: 8
+                value: 5
             }
         ]
       },

@@ -128,12 +128,11 @@
                                     <td>{{positions[app.positionId].location.neighborhood}} - {{positions[app.positionId].location.city}}, {{positions[app.positionId].location.state}}</td>
                                     <td>{{app.appliedAt | date : 'MM/dd/yyyy'}}</td>
                                     <td>
-                                        <span class="visible-xs-inline">Status: </span><span>{{getApplicationStatus(app.status+1)}}</span>
+                                        <span class="visible-xs-inline">Status: </span><span>{{getApplicationStatus(app.status)}}</span>
                                     </td>
                                     <td>
-                                        <button class="btn red" ng-if="app.status == -1" ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Update</button>
                                         <button class="btn red" ng-if="app.status == 0" ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Finish</button>
-                                        <button class="btn red" ng-if="app.status>=6 && getDaysUntilReapply(app)==0 " ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Reapply</button>
+                                        <button class="btn red" ng-if="app.status == 5 && getDaysUntilReapply(app)==0 " ui-sref="master.application.apply({businessSlug: positions[app.positionId].business.slug, locationSlug:positions[app.positionId].location.slug, positionSlug:positions[app.positionId].slug })">Reapply</button>
                                     </td>
                                 </tr>
                             </tbody>
