@@ -19,7 +19,7 @@
 
         $scope.showInstructions = false;
 
-        $scope.instructions = 'Simply click "Me" or "Not Me" as each image relates to you. Remember that this assessment is designed for your work life, so respond to each image based on your work preferences.';
+        $scope.instructions = 'This is a quick personality exam.  Simply click "Me" or "Not Me" as each image relates to you. Remember that this assessment is designed for your work life, so respond to each image based on your work preferences.';
 
         var saved = false;
 
@@ -199,9 +199,13 @@
         $scope.showInstructionsModal = function(){
             modalInstance = $uibModal.open({
                 size: 'sm',
-                template:'<div class="personality-instructions-modal"><a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a><p>' + $scope.instructions + '</p></div>',
-                scope:$scope
-            })
+                template:'<div style="padding:20px" class="personality-instructions-modal"><a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a><h4>Instructions</h4><p>' + $scope.instructions + '</p></div>',
+                scope:$scope,
+                backdrop:true
+            });
+            $timeout(function() {
+                $(".modal-content").css("top", getBody().clientHeight/2-140);
+            });
         }
 
         $scope.closeModal = function(){
