@@ -1,5 +1,8 @@
 'use strict'
-var businessModel = require('../models/business.model');
+var BusinessModels = require('../models/business.model.js'),
+    PositionModel = BusinessModels.PositionModel,
+    LocationModel = BusinessModels.LocationModel,
+    BusinessModel = BusinessModels.BusinessModel;
 var userModel = require('../models/user.model');
 var onetIconsModel = require('../models/onetIcons.model');
 var applicationModel = require('../models/application.model');
@@ -23,7 +26,7 @@ var BusinessService = {
             returnFields = '-nothing'
         }
 
-        return businessModel.findById(id, returnFields).exec();
+        return BusinessModel.findById(id, returnFields).exec();
     },
 
     /**
@@ -39,7 +42,7 @@ var BusinessService = {
             returnFields = '-nothing'
         }
 
-        return businessModel.findOne({ slug: slug }, returnFields).exec();
+        return BusinessModel.findOne({ slug: slug }, returnFields).exec();
     },
 
     getByLocationId: function(locationId, reqQuery){
@@ -51,7 +54,7 @@ var BusinessService = {
             returnFields = '-nothing'
         }
 
-        return businessModel.findOne({ $where: "obj.locations['"+locationId+"']" }, returnFields).exec();
+        return BusinessModel.findOne({ $where: "obj.locations['"+locationId+"']" }, returnFields).exec();
     },
 
     /**
@@ -70,7 +73,7 @@ var BusinessService = {
 
         var ids = positionId.split('|');
 
-        return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }, returnFields).exec();
+        return BusinessModel.findOne({ $where: "obj.positions['"+positionId+"']" }, returnFields).exec();
     },
 
     /**
@@ -110,7 +113,7 @@ var BusinessService = {
             }
         }
         
-        businessModel.find(query, returnFields)
+        BusinessModel.find(query, returnFields)
         .then(
             function(found){
                 // console.log("BS:getPositionsByIds:11");
@@ -208,7 +211,7 @@ var BusinessService = {
     getPositionsByManagerId: function(managerId, reqQuery, isSuperUser){
 
         if (isSuperUser) {
-            return businessModel.find({}).then(function(businesses) {
+            return BusinessModel.find({}).then(function(businesses) {
                 var positionIds = [];
                 for (var b in businesses) {
                     for (var p in businesses[b].toObject().positions) {
@@ -286,10 +289,10 @@ var BusinessService = {
                     }
 
                     // console.log("BS:getPositionsByManagerId:7");
-                    return businessModel.find(queryNext);
+                    return BusinessModel.find(queryNext);
                     // Both of these work too
-                    // return businessModel.find({$or: queryNext.$or});
-                    // return businessModel.find().or(queryNext.$or);
+                    // return BusinessModel.find({$or: queryNext.$or});
+                    // return BusinessModel.find().or(queryNext.$or);
                 } else {
                     return [];
                 }
@@ -349,21 +352,66 @@ var BusinessService = {
         return deferred.promise;
     },
 
+
+    validateBusinessLocationsAndPositions: function(businessObj) {
+        var validationPromises = [];
+        var validationErrs = "";
+
+        // Validate positions
+        if (businessObj.positions) {
+            Object.keys(businessObj.positions).forEach(function (pid) {
+                var position = new PositionModel(businessObj.positions[pid]);
+                var deferred = q.defer();
+                position.validate(function (err) {
+                    validationErrs += err ? err : "";
+                    deferred.resolve();
+                });
+                validationPromises.push(deferred.promise);
+            });
+        }
+
+
+        // Validate locations
+        if (businessObj.locations) {
+            Object.keys(businessObj.locations).forEach(function (lid) {
+                // console.dir(businessObj.locations[lid]);
+                var location = new LocationModel(businessObj.locations[lid]);
+                var deferred = q.defer();
+                location.validate(function (err) {
+                    validationErrs += err ? err : "";
+                    deferred.resolve();
+                });
+                validationPromises.push(deferred.promise);
+            });
+        }
+
+        return q.all(validationPromises).then(function () {
+            return validationErrs;
+        });
+    },
+
     /**
      * [createNewBusiness will create new business object in database]
      * @param  {[type]} businessObj [JS object with required field in business Model]
      * @return {[type]}         [promise with business basic info]
      */
     createNewBusiness : function(businessObj){
-        var newBusiness = new businessModel(businessObj);
+        this.validateBusinessLocationsAndPositions(businessObj).then(function(errs) {
+            if (errs) {
+                throw errs;
+            }
+            var newBusiness = new BusinessModel(businessObj);
+            return newBusiness.save();
+        });
+    },
 
-        return newBusiness.save()
-        .then(
-            function(business){
-                return businessModel.findById(business._id).exec();
-            }//// then fun.
-
-        );/// then
+    patchBusiness : function(id, businessObj){
+        return this.validateBusinessLocationsAndPositions(businessObj).then(function(errs) {
+            if (errs) {
+                throw errs;
+            }
+            return BusinessModel.update({_id: id}, {$set: businessObj});
+        });
     },
 
     /**
@@ -501,7 +549,7 @@ var BusinessService = {
     },
 
     isUserIdFilteredForPositionId: function(userId, positionId, reqQuery) {
-        return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
+        return BusinessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
             var businessObj = business.toObject();
             var position = businessObj.positions[positionId];
             return userModel.findById(userId).then(function(user) {

@@ -2,7 +2,10 @@
 var applicationModel = require('../models/application.model');
 var UserService = require('./user.service');
 var userModel = require('../models/user.model');
-var businessModel = require('../models/business.model');
+var BusinessModels = require('../models/business.model.js'),
+    PositionModel = BusinessModels.PositionModel,
+    LocationModel = BusinessModels.LocationModel,
+    BusinessModel = BusinessModels.BusinessModel;
 var careerMatchScoresModel = require('../models/careerMatchScores.model');
 var BusinessService = require('./business.service');
 var q = require('q');
@@ -77,7 +80,7 @@ var applicationService = {
         var self = this;
 
         // console.log("as:getByPositionId:0");
-        return businessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
+        return BusinessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
             // console.log("as:getByPositionId:1");
             var businessObj = business.toObject();
             var position = businessObj.positions[positionId];
