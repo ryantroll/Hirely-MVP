@@ -9,10 +9,9 @@
 (function () {
     'use strict';
 
-    angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$timeout', 'AuthService', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', ProfilePersonalityController]);
+    angular.module('hirelyApp').controller('ProfilePersonalityController', ['$scope', '$timeout', 'AuthService', 'TraitifyService', 'TRAITIFY_PUBLIC_KEY', '$uibModal', ProfilePersonalityController]);
 
-
-    function ProfilePersonalityController($scope, $timeout, AuthService, TraitifyService, TRAITIFY_PUBLIC_KEY) {
+    function ProfilePersonalityController($scope, $timeout, AuthService, TraitifyService, TRAITIFY_PUBLIC_KEY, $uibModal) {
 
         $scope.stepThreeLoaded = false;
 
@@ -27,6 +26,8 @@
         var traitify = null;
 
         var results = {};
+
+        var modalInstance;
 
 
 
@@ -159,6 +160,8 @@
                                 $scope.personalityExam = true;
 
                                 $scope.$apply();
+
+                                $scope.showInstructionsModal();
                             });
 
                             traitify.results.onInitialize(function () {
@@ -189,6 +192,21 @@
                     }//// fun.
                 )//// then()
         }/// fun. showAssessment
+
+        $scope.showInstructionsModal = function(){
+            modalInstance = $uibModal.open({
+                size: 'sm',
+                template:'<div class="personality-instructions-modal"><a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a><p>Simply click "Me" or "Not Me" as each image relates to you. Remember that this assessment is designed for your work life, so respond to each image based on your work preferences.</p></div>',
+                scope:$scope
+            })
+        }
+
+        $scope.closeModal = function(){
+            if(angular.isDefined(modalInstance)){
+                modalInstance.close();
+                modalInstance = undefined;
+            }
+        }
 
         $scope.$on('$destroy', function (event) {
             $scope.$emit('setEnableNextButton', {newValue:true});

@@ -830,10 +830,29 @@ $day-button-size: 60px;
             border-right: 10px solid transparent;
             border-bottom: 10px solid $c-hirely-light-gray;
         }
+
     }//// .info
 
 }//// .user-profile-personality
 
+.personality-instructions-modal{
+     padding:2em 1em 1em 1em;
+     position:relative;
+     p{
+        margin-bottom: 0;
+     }
+     .close{
+        display: block;
+        width:30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        position:absolute;
+        font-size:1em;
+        top:5px;
+        right:5px;
+     }
+}
 .user-profile-availability{
 	width:100%;
 	margin:0 auto;
