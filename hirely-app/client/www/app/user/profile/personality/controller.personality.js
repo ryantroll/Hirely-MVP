@@ -19,6 +19,8 @@
 
         $scope.showInstructions = false;
 
+        $scope.instructions = 'Simply click "Me" or "Not Me" as each image relates to you. Remember that this assessment is designed for your work life, so respond to each image based on your work preferences.';
+
         var saved = false;
 
         var assessmentId = null;
@@ -28,6 +30,7 @@
         var results = {};
 
         var modalInstance;
+
 
 
 
@@ -196,7 +199,7 @@
         $scope.showInstructionsModal = function(){
             modalInstance = $uibModal.open({
                 size: 'sm',
-                template:'<div class="personality-instructions-modal"><a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a><p>Simply click "Me" or "Not Me" as each image relates to you. Remember that this assessment is designed for your work life, so respond to each image based on your work preferences.</p></div>',
+                template:'<div class="personality-instructions-modal"><a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a><p>' + $scope.instructions + '</p></div>',
                 scope:$scope
             })
         }
