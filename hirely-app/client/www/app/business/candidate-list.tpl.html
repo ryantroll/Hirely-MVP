@@ -21,15 +21,11 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <ul id="statusBtns">
-                                <li  ng-if="AuthService.isSuperUser"><button class="btn" ng-class="{red:isFilterActive('attention'), white:!isFilterActive('attention'), active:isFilterActive('attention')}" ng-click="setFilter('attention')">Attention <span  ng-show="statistics.attention > 0">({{statistics.attention}})</span></button></li>
-                                <li><button class="btn" ng-class="{red:isFilterActive('pending'), white:!isFilterActive('pending'), active:isFilterActive('pending')}" ng-click="setFilter('pending')">Pre-Screen <span  ng-show="statistics.pending > 0">({{statistics.pending}})</span></button></li>
-                                <li><button class="btn" ng-class="{red:isFilterActive('failed'), white:!isFilterActive('failed'), active:isFilterActive('failed')}" ng-click="setFilter('failed')">Disqualified <span  ng-show="statistics.failed > 0">({{statistics.failed}})</span></button></li>
+                                <li><button class="btn" ng-class="{red:isFilterActive('prescreen'), white:!isFilterActive('prescreen'), active:isFilterActive('prescreen')}" ng-click="setFilter('prescreen')">Pre-Screen <span  ng-show="statistics.prescreen > 0">({{statistics.prescreen}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('applied'), white:!isFilterActive('applied'), active:isFilterActive('applied')}" ng-click="setFilter('applied')">Applied <span  ng-show="statistics.applied > 0">({{statistics.applied}})</span></button></li>
-                                <li><button class="btn" ng-class="{red:isFilterActive('shortlisted'), white:!isFilterActive('shortlisted'), active:isFilterActive('shortlisted')}" ng-click="setFilter('shortlisted')">Shortlisted <span  ng-show="statistics.shortlisted > 0">({{statistics.shortlisted}})</span></button></li>
-                                <li><button class="btn" ng-class="{red:isFilterActive('interviewed'), white:!isFilterActive('interviewed'), active:isFilterActive('interviewed')}" ng-click="setFilter('interviewed')">Interviewed <span  ng-show="statistics.interviewed > 0">({{statistics.interviewed}})</span></button></li>
+                                <li><button class="btn" ng-class="{red:isFilterActive('liked'), white:!isFilterActive('liked'), active:isFilterActive('liked')}" ng-click="setFilter('liked')">liked <span  ng-show="statistics.liked > 0">({{statistics.liked}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('hired'), white:!isFilterActive('hired'), active:isFilterActive('hired')}" ng-click="setFilter('hired')">Hired <span  ng-show="statistics.hired > 0">({{statistics.hired}})</span></button></li>
                                 <li><button class="btn" ng-class="{red:isFilterActive('dismissed'), white:!isFilterActive('dismissed'), active:isFilterActive('dismissed')}" ng-click="setFilter('dismissed')">Dismissed <span ng-show="statistics.dismissed > 0">({{statistics.dismissed}})</span></button></li>
-                                <li><button class="btn" ng-class="{red:isFilterActive('expired'), white:!isFilterActive('expired'), active:isFilterActive('expired')}" ng-click="setFilter('expired')">Expired <span ng-show="statistics.expired > 0">({{statistics.expired}})</span></button></li>
                             </ul>
                             <a href="javascript:void(0)" class="drop" ng-click="toggleStatusMenu();"><i class="glyphicon glyphicon-menu-down"></i></a>
                         </div><!--col-->
@@ -221,32 +217,19 @@
 
                                         <a class="gray" href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)" title="More" uib-tooltip="More"><i class="icon-employeebadge_outline_icon"></i></a>
 
-                                        <a ng-if="app.status == -1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
-                                        <a ng-if="app.status == -1" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 8)" title="Hard Fail" uib-tooltip="Hard Fail"><i class="icon-hand_stop_icon"></i></a>
+                                        <a ng-if="AuthService.isSuperUser && app.status == 1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
 
-                                        <a style="width:40px;" ng-if="AuthService.isSuperUser && app.status == 1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
-                                        <a style="width:40px;" ng-if="AuthService.isSuperUser && app.status == 1" class="purple" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, -1)" title="Soft Fail" uib-tooltip="Soft Fail"><i class="icon-stop_triangle_icon"></i></a>
-                                        <a style="width:40px;" ng-if="AuthService.isSuperUser && app.status == 1" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 8)" title="Hard Fail" uib-tooltip="Hard Fail"><i class="icon-hand_stop_icon"></i></a>
+                                        <a ng-if="app.status == 2" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
+                                        <a ng-if="app.status == 2" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
 
-                                        <a ng-if="app.status == 2" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Shortlist" uib-tooltip="Shortlist"><i class="icon-thumb_up_icon"></i></a>
-                                        <a ng-if="app.status == 2" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                        <a ng-if="app.status == 3" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
+                                        <a ng-if="app.status == 3" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
 
-                                        <a ng-if="app.status == 3" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Interviewed" uib-tooltip="Interviewed"><i class="icon-chat_icon"></i></a>
-                                        <a ng-if="app.status == 3" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                        <a ng-if="app.status == 4" class="green" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
 
-                                        <a ng-if="app.status == 4" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                        <a ng-if="app.status == 4" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 6)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                        <a ng-if="app.status == 5" class="red" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
 
-                                        <!-- <a ng-if="app.status == 5" class="gray" href="javascript:void(0);"  ng-click="updateAppStatus($event, app._id, 3)"  title="Undo" uib-tooltip="Undo Hiring"><i class="icon-undo_icon"></i></a> -->
-                                        <a ng-if="app.status == 5" class="green" title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></a>
 
-                                        <!-- <a ng-if="app.status == 6" class="gray" href="javascript:void(0);"  ng-click="updateAppStatus($event, app._id, 3)"  title="Undo" uib-tooltip="Undo Dismiss"><i class="icon-undo_icon"></i></a> -->
-                                        <a ng-if="app.status == 6" class="red" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-
-                                        <a ng-if="app.status == 7" class="red" title="Expired" uib-tooltip="Expired"><i class="icon-expired_icon"></i></a>
-
-                                        <a ng-if="app.status == 8" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
-                                        <a ng-if="app.status == 8" class="purple" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, -1)" title="Soft Fail" uib-tooltip="Soft Fail"><i class="icon-stop_triangle_icon"></i></a>
                                     </div>
                                 </div>
 

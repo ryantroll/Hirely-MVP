@@ -136,7 +136,7 @@
             var one_day=1000*60*60*24; // one day in milliseconds
             return Math.round((d2.getTime() - d1.getTime()) / one_day);
         };
-        
+
         $scope.getDaysUntilReapply = function (application) {
             if (application.status<=0 || !application.appliedAt) {
                 return 0;

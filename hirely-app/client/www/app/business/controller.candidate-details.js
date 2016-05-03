@@ -57,10 +57,13 @@
              * Get traitify meta data for user personality blend
              * @type {[type]}
              */
-            var blend = $scope.applicant.personalityExams[0].personalityBlend.name;
-            var metaArray = [blend];
-            for(var x=0; x<5; x++){
-                metaArray.push($scope.applicant.personalityExams[0].personalityTraits[x]._id);
+            var metaArray = [];
+            if(angular.isDefined($scope.applicant.personalityExams[0]) ){
+                var blend = $scope.applicant.personalityExams[0].personalityBlend.name;
+                metaArray.push(blend);
+                for(var x=0; x<5; x++){
+                    metaArray.push($scope.applicant.personalityExams[0].personalityTraits[x]._id);
+                }
             }
 
             return TraitifyService.getMeta(metaArray.join('|')).then(

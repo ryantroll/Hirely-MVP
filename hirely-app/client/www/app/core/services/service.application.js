@@ -14,8 +14,8 @@
     function JobApplicationService($q, HirelyApiService) {
 
         var viewStatusLabels = ['New', 'Viewed', 'Aging'];
-        var statusLabels = ['Requires Attention', 'Started', 'Pending Review', 'Pending Review', 'Shortlisted', 'Interviewed', 'Hired', 'Not Selected', 'Expired', 'Not Selected'];
-        var statusLabelsHm = ['Attention Needed', 'Started', 'Pre-Screening', 'Applied', 'Shortlisted', 'Interviewed', 'Hired', 'Dismissed', 'Expired', 'Disqualified'];
+        var statusLabels = ['Started', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed'];
+        var statusLabelsHm = ['Started', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed'];
         var educationPrograms = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
         /**
@@ -133,16 +133,13 @@
         function getStatistics(list, applicants, scores) {
             var ret = {};
             ret.total = 0;
-            ret.started = 0;
-            ret.pending = 0;
+
+            ret.prescreen = 0;
             ret.applied = 0;
-            ret.shortlisted = 0;
-            ret.interviewed = 0;
+            ret.liked = 0;
             ret.hired = 0;
             ret.dismissed = 0;
-            ret.expired = 0;
-            ret.failed = 0;
-            ret.attention = 0;
+
 
             for (var x = 0; x < list.length; x++) {
 
@@ -152,17 +149,14 @@
                 }
 
                 switch (list[x].status) {
-                    case -1:
-                        // ++ret.total;
-                        ++ret.attention;
-                        break;
+
                     case 0:
                         // ++ret.total;
                         ++ret.started;
                         break;
                     case 1:
                         // ++ret.total;
-                        ++ret.pending;
+                        ++ret.prescreen;
                         break;
                     case 2:
                         ++ret.total;
@@ -170,27 +164,15 @@
                         break;
                     case 3:
                         ++ret.total;
-                        ++ret.shortlisted;
+                        ++ret.liked;
                         break;
                     case 4:
                         ++ret.total;
-                        ++ret.interviewed;
+                        ++ret.hired;
                         break;
                     case 5:
                         ++ret.total;
-                        ++ret.hired;
-                        break;
-                    case 6:
-                        ++ret.total;
                         ++ret.dismissed;
-                        break;
-                    case 7:
-                        ++ret.total;
-                        ++ret.expired;
-                        break;
-                    case 8:
-                        // ++ret.total;
-                        ++ret.failed;
                         break;
                 }
             }/// for
