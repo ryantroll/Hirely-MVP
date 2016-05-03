@@ -218,6 +218,7 @@
                                         <a class="gray" href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)" title="More" uib-tooltip="More"><i class="icon-employeebadge_outline_icon"></i></a>
 
                                         <a ng-if="AuthService.isSuperUser && app.status == 1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
+                                        <a ng-if="AuthService.isSuperUser && app.status == 1" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
 
                                         <a ng-if="app.status == 2" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
                                         <a ng-if="app.status == 2" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
