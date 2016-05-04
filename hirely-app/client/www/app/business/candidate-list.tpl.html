@@ -194,8 +194,7 @@
                                     <span class="icon icon-clock_outlone_icon"></span>
                                     <p>
                                         <span ng-repeat="work in applicants[app.userId].workExperience">
-                                            {{work.reportedOccTitle}} {{work.monthCount}}
-                                            <i ng-if="$index < applicants[app.userId].workExperience.length -1">, </i>
+                                            {{work.reportedOccTitle}} {{work.monthCount}}<i ng-if="$index < applicants[app.userId].workExperience.length -1">, </i>
                                         </span>
                                     </p>
                                 </div>
@@ -203,8 +202,7 @@
                                     <span class="icon icon-graduation_hat_icon"></span>
                                     <p><!-- {{applicants[app.userId].education}} -->
                                         <span ng-repeat="edu in applicants[app.userId].education">
-                                            {{edu.institutionName}} ({{edu.programType}})
-                                            <i ng-if="$index < applicants[app.userId].education.length -1">, </i>
+                                            {{edu.institutionName}} ({{edu.programType}})<i ng-if="$index < applicants[app.userId].education.length -1">, </i>
                                     </p>
                                 </div>
                             </div><!--details-->
