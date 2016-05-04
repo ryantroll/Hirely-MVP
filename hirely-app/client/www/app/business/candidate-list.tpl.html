@@ -183,7 +183,7 @@
                                 <h4>{{applicants[app.userId].firstName}} {{applicants[app.userId].lastName}}</h4>
                                 <div class="job">
                                     <span ng-if="applicants[app.userId].workExperience.length < 1">Entry Level</span>
-                                    <span ng-if="applicants[app.userId].workExperience.length > 0">{{applicants[app.userId].workCategories}}</span>
+                                    <span ng-if="applicants[app.userId].workExperience.length > 0">{{applicants[app.userId].workCategories.replace('_', ' ')}}</span>
                                 </div>
                             </div><!--top-->
                             <div class="details">
