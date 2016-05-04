@@ -76,7 +76,7 @@ var applicationService = {
      * @param  {object} reqQuery  [query string parameters]
      * @return {promise}           [description]
      */
-    getByPositionId: function(positionId, reqQuery, isSuperUser){
+    getByPositionId: function(positionId, reqQuery){
         var self = this;
 
         // console.log("as:getByPositionId:0");
@@ -88,12 +88,7 @@ var applicationService = {
             // console.log("as:getByPositionId:2");
 
             var query = {positionId: positionId};
-            if(!isSuperUser){
-                //// exclude soft fail, started, pending, hard fail
-                //// if not user user
-                query.status = {$nin:[-1, 0, 1, 8]};
-            }
-            console.log('>>>>', query)
+            console.log('>>>>', query);
             return applicationModel.find(query).then(function (applications) {
                 // console.log("as:getByPositionId:3");
                 var userIds = [];
