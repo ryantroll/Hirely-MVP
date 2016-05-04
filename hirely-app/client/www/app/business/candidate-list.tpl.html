@@ -188,7 +188,11 @@
                             </div><!--top-->
                             <div class="details">
                                 <div class="exp clearfix text-center">
-                                    <p>"{{app.prescreenAnswers[0].answer}}"</p>
+                                    <p>
+                                        "{{app.prescreenAnswers[0].answer.substring(0,110)}}
+                                        <span ng-show="app.prescreenAnswers[0].answer.length > 110">...</span>
+                                        "
+                                    </p>
                                 </div>
                                 <div class="exp clearfix" ng-if="applicants[app.userId].workExperience.length > 0">
                                     <span class="icon icon-clock_outlone_icon"></span>
