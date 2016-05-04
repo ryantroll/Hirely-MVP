@@ -11,6 +11,7 @@ var positionSchema = new Schema({
     locationId: {type: String, required: true},
     title: {type: String, required: true},
     disabled: {type: Boolean, default: false},
+    hideProfileImages: Boolean,
     slug: {type: String},
     occId: {type: String, required: true},
     description: {type: String, required: false},
@@ -82,6 +83,7 @@ var positionSchema = new Schema({
 var locationSchema = new Schema({
     name: {type: String, required: true},
     disabled: {type: Boolean, default: false},
+    hideProfileImages: Boolean,
     slug: {type: String},
     heroImageURL: {type: String},
     hoursOfOperation: {
@@ -125,6 +127,7 @@ var businessSchema = new Schema({
     heroImageURL: {type: String},
     logoImageURL: {type: String},
     disabled: {type: Boolean, default: false},
+    hideProfileImages: Boolean,
     email: {
         type: String,
         required: true,
