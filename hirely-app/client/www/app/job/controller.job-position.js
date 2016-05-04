@@ -228,8 +228,8 @@
           }
       }/// for
 
-      if(angular.isDefined(icon) && angular.isDefined(icon[property])){
-        return icon[property];
+      if(angular.isDefined(icon) && angular.isDefined(icon.icon)){
+        return icon.icon;
       }
       return null;
     }//// fun. getIcon

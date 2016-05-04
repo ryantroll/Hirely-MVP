@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'hirely-icons';
-    src:    url('fonts/hirely-icons.eot?wnh0yg');
-    src:    url('fonts/hirely-icons.eot?wnh0yg#iefix') format('embedded-opentype'),
-        url('fonts/hirely-icons.ttf?wnh0yg') format('truetype'),
-        url('fonts/hirely-icons.woff?wnh0yg') format('woff'),
-        url('fonts/hirely-icons.svg?wnh0yg#hirely-icons') format('svg');
+    src:    url('fonts/hirely-icons.eot?jnl50c');
+    src:    url('fonts/hirely-icons.eot?jnl50c#iefix') format('embedded-opentype'),
+        url('fonts/hirely-icons.ttf?jnl50c') format('truetype'),
+        url('fonts/hirely-icons.woff?jnl50c') format('woff'),
+        url('fonts/hirely-icons.svg?jnl50c#hirely-icons') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -92,6 +92,12 @@
 }
 .icon-farming_icon:before {
     content: "\e903";
+}
+.icon-graduation_hat_icon:before {
+    content: "\e936";
+}
+.icon-menu_dots_icon:before {
+    content: "\e937";
 }
 .icon-check_circle_icon:before {
     content: "\e933";
