@@ -48,7 +48,7 @@ var applicationRoutes = {
                 return;
             }
 
-            applicationService.getByPositionId(req.params.id, req.query, req.isSuperUser)
+            applicationService.getByPositionId(req.params.id, req.query)
                 .then(
                     function (app) {
                         res.status(200).json(apiUtil.generateResponse(200, "Application retrieved successfully", app));

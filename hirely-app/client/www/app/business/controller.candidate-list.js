@@ -16,8 +16,15 @@
         $scope.showPositionMenu = false;
         $scope.showSortMenu = false;
         $scope.sortByLabel = 'Sort By';
-        
+
         $scope.AuthService = AuthService;
+
+        /**
+         * [occIds array to save the occupation ids for all work experiences]
+         * This array will be used to load the ONet icon display data to show the work category for each position
+         * @type {Array}
+         */
+        var occIds = [];
 
         $scope.togglePositionMenu = function (event) {
 
@@ -208,8 +215,13 @@
                         Object.keys($scope.applicants).forEach(function (key) {
                             $scope.applicants[key].workExperience.forEach(function (work) {
                                 work.monthCount = $scope.getDateDif(work);
+                                occIds.push(work.occId);
                             });
-                        })
+                        });
+
+                        if(occIds.length > 0){
+                            return BusinessService.getPositionDisplayData(occIds.join('|'));
+                        }
 
                     } else {
                         $scope.dataError = "No applications found.";
@@ -220,9 +232,16 @@
                     $scope.dataError = err;
                 }
             )
+            .then(
+                function(iconData){
+                    $scope.iconData = iconData;
+                },
+                function(error){
+                  console.log(error)
+                }
+            )
             .finally(
                 function () {
-
                     initialize();
                 }
             );
@@ -248,6 +267,21 @@
             applyFilters();
 
             $scope.positionsList = BusinessService.getPositionsByLocation($scope.business, $scope.location._id, $scope.position._id);
+
+            /**
+             * Set the work category for each applicant
+             */
+            Object.keys($scope.applicants).forEach(function (key) {
+                var cats = {}; /// object is used to ensure uniqueness
+
+                for(var x=0; x<$scope.applicants[key].workExperience.length; x++) {
+                    if(x>=3) break;
+                    var work = $scope.applicants[key].workExperience[x];
+                    var cat = $scope.getPositionCategory(work.occId);
+                    cats[cat] = true;
+                }//// for
+                $scope.applicants[key].workCategories = Object.keys(cats).join(' | ');
+            });
 
             /**
              * Wait for some time and before showing the page
@@ -609,6 +643,26 @@
             }
             return colors[act.meta.toStatus + 1];
         }
+
+        $scope.getPositionCategory = function(occId){
+
+          if(!occId || !Array.isArray($scope.iconData)){
+            return null;
+          }
+
+          var icon;
+          for(var x=0; x<$scope.iconData.length; x++){
+              if($scope.iconData[x].occId == occId){
+                icon = $scope.iconData[x].icon;
+                break;
+              }
+          }/// for
+
+          if(angular.isDefined(icon) ){
+            return icon.split('_icon')[0];
+          }
+          return null;
+        }//// fun. getIcon
 
     }//// controller
 })();

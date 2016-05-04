@@ -402,6 +402,132 @@ $candidat-menu-height:60px;
         width:100%;
         margin-top: 1em;
 
+        .candidate-v2{
+            width:100%;
+            float:none;
+            margin-right:0;
+            margin-bottom:2%;
+            min-height:300px;
+            background-color:$c-white;
+            position:relative;
+
+            @media screen and (min-width:$screen-sm-max){
+                width:32%;
+                float:left;
+                margin-right:2%;
+                min-height:375px;
+            }
+
+            .card-top{
+                padding:1em;
+                text-align: center;
+                background-color:$c-hirely-navy;
+                color:$c-white;
+                position:relative;
+
+                h4{
+                    // margin:0;
+                    margin:0.7em 0;
+                }
+                .job{
+                    font-size:0.8em;
+                    span{
+                        text-transform: capitalize;
+                    }
+                }
+                .date{
+                    position:absolute;
+                    display: block;
+                    top:5px;
+                    left:7px;
+                    font-size:0.8em;
+                }
+                .icon{
+                    display: block;
+                    width:20px;
+                    height: 20px;
+                    line-height: 20px;
+                    text-align: center;
+                    position:absolute;
+                    top:5px;
+                    right:5px;
+                    color:$c-white;
+                }
+            }//// .top
+            .details{
+                padding:1em;
+
+
+
+                .exp{
+                    margin-bottom: 0.5em;
+                    p{
+                        font-size: 0.8em;
+                        overflow: hidden;///this will prevent text wrap
+                    }
+
+                    .icon{
+                        display: block;
+                        float:left;
+                        margin-right:0.5em;
+                        font-size:2em;
+                    }
+                }
+            }/// .details
+
+            .menu{
+                width:100%;
+                position:absolute;
+                bottom:0;
+                padding:0 0 1em 0;
+                .menu-in{
+                    width:auto;
+                    display: table;
+                    margin:0 auto;
+                    height: $candidat-menu-height;
+                }
+
+                a{
+                    float:left;
+                    display: block;
+                    width:$candidat-menu-height - 10;
+                    height: $candidat-menu-height - 10;
+                    line-height: $candidat-menu-height - 10;
+                    text-align: center;
+                    color:$c-hirely-mid-gray;
+                    font-size:2em;
+                    // background-color:$c-hirely-mid-gray;
+                    margin-right:5px;
+                    @include border-radius(($candidat-menu-height - 10) / 2);
+                    border:2px solid $c-hirely-mid-gray;
+
+                    &:last-of-type{
+                        margin-right: 0;
+                    }
+                }
+
+                .red{
+                    background-color:$c-hirely-red;
+                    border-color:$c-hirely-red;
+                    color:$c-white;
+                }
+                .green{
+                    background-color:$c-hirely-green;
+                    border-color:$c-hirely-green;
+                    color:$c-white;
+                }
+                .purple{
+                    background-color: $c-hirely-purple;//#C653FF
+                    border-color: $c-hirely-purple;//#C653FF
+                    color:$c-white;
+                }
+            }//// .menu
+        }//// .candidate-v2
+
+        .candidate-v2:nth-child(3n+3){
+            margin-right: 0;
+        }
+
         .candidate{
             padding:1.3em 1.3em 4px;
             background-color:$c-white;
@@ -562,9 +688,6 @@ $candidat-menu-height:60px;
             }//// .menu
         }//// .candidate
     }//// .candidates-list
-
-
-
 
 }//// .business
 

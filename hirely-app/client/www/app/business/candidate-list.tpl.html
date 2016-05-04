@@ -158,9 +158,9 @@
                         </div>
                     </div><!--box-->
 
-                    <div class="candidates-list">
+                    <div class="candidates-list"  ng-hide="filtered.length">
 
-                        <div class="text-center noneFound" ng-hide="filtered.length">
+                        <div class="text-center noneFound">
                             <div class="row">
                                 <div class="col-sm-12 text-center">
                                     <div class="page-error">
@@ -172,72 +172,58 @@
                             </div>
                         </div>
 
-                        <div class="candidate" ng-repeat="app in filtered">
-                            <div class="hidden appId">{{app._id}}</div>
-                            <div class="hidden userId">{{app.userId}}</div>
-                            <div class="hidden posId">{{app.positionId}}</div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="details">
-                                        <h4>{{applicants[app.userId].firstName}} {{applicants[app.userId].lastName}}</h4>
-                                        <div>I want to work at {{business.name}} because {{app.prescreenAnswers[0].answer}}</div>
-                                        <div class="traits date" style="margin-top:5px;">Applied: {{app.appliedAt | date:'MM/dd/yyyy'}}</div>
-                                        <div class="traits">
-                                            Recent Work:
-                                            <span ng-show="applicants[app.userId].workExperience.length > 0">{{applicants[app.userId].workExperience[0].reportedOccTitle}} <span>{{applicants[app.userId].workExperience[0].monthCount}}</span></span>
-                                            <span ng-show="applicants[app.userId].workExperience.length == 0">None Listed</span>
-                                        </div>
-                                        <div class="traits">
-                                            Recent Education:
-                                            <span ng-show="applicants[app.userId].education.length > 0">{{applicants[app.userId].education[0].institutionName}} ({{applicants[app.userId].education[0].dateEnd ? "Finished "+(applicants[app.userId].education[0].dateEnd | date : 'yyyy') : "Attending"}})</span>
-                                            <span ng-show="applicants[app.userId].education.length == 0">None Listed</span>
-                                        </div>
+                    </div><!--candidate-list-no-data-->
 
+                    <div class="candidates-list" ng-hide="!filtered.length">
 
-                                        <div class="fit-scale hidden">
-                                            <i ng-class="getFitClass(0, app.score)"></i>
-                                            <i ng-class="getFitClass(1, app.score)"></i>
-                                            <i ng-class="getFitClass(2, app.score)"></i>
-                                            <i ng-class="getFitClass(3, app.score)"></i>
-                                            <i ng-class="getFitClass(4, app.score)"></i>
-                                            <i ng-class="getFitClass(5, app.score)"></i>
-                                            <i ng-class="getFitClass(6, app.score)"></i>
-                                            <i ng-class="getFitClass(7, app.score)"></i>
-                                            <i ng-class="getFitClass(8, app.score)"></i>
-                                            <i ng-class="getFitClass(9, app.score)"></i>
-                                            <span class="legend">{{getFitClass(-1, app.score) | uppercase}} Fit</span>
-                                        </div>
-
-                                    </div>
-
+                        <div class="candidate-v2" ng-repeat="app in filtered">
+                            <div class="card-top">
+                                <span class="date">{{app.appliedAt | date:'MM/dd/yyyy'}}</span>
+                                <a heref="javascript:void(0)" class="icon" ng-if="app.status > 1"><i class="icon-check_circle_icon"></i></a>
+                                <h4>{{applicants[app.userId].firstName}} {{applicants[app.userId].lastName}}</h4>
+                                <div class="job">
+                                    <span ng-if="applicants[app.userId].workExperience.length < 1">Entry Level</span>
+                                    <span ng-if="applicants[app.userId].workExperience.length > 0">{{applicants[app.userId].workCategories.replace('_', ' ')}}</span>
                                 </div>
-
-                                <div class="menu">
-                                    <div class="inner">
-
-                                        <a class="gray" href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)" title="More" uib-tooltip="More"><i class="icon-employeebadge_outline_icon"></i></a>
-
-                                        <a ng-if="AuthService.isSuperUser && app.status == 1" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
-                                        <a ng-if="AuthService.isSuperUser && app.status == 1" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-
-                                        <a ng-if="app.status == 2" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
-                                        <a ng-if="app.status == 2" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-
-                                        <a ng-if="app.status == 3" class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                        <a ng-if="app.status == 3" class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-
-                                        <a ng-if="app.status == 4" class="green" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-
-                                        <a ng-if="app.status == 5" class="red" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-
-
-                                    </div>
+                            </div><!--top-->
+                            <div class="details">
+                                <div class="exp clearfix text-center">
+                                    <p>
+                                        "{{app.prescreenAnswers[0].answer.substring(0,110)}}
+                                        <span ng-show="app.prescreenAnswers[0].answer.length > 110">...</span>
+                                        "
+                                    </p>
                                 </div>
+                                <div class="exp clearfix" ng-if="applicants[app.userId].workExperience.length > 0">
+                                    <span class="icon icon-clock_outlone_icon"></span>
+                                    <p>
+                                        <span ng-repeat="work in applicants[app.userId].workExperience">
+                                            {{work.reportedOccTitle}} {{work.monthCount}}<i ng-if="$index < applicants[app.userId].workExperience.length -1">, </i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="exp clearfix"ng-if="applicants[app.userId].education.length > 0">
+                                    <span class="icon icon-graduation_hat_icon"></span>
+                                    <p><!-- {{applicants[app.userId].education}} -->
+                                        <span ng-repeat="edu in applicants[app.userId].education">
+                                            {{edu.institutionName}} ({{edu.programType}})<i ng-if="$index < applicants[app.userId].education.length -1">, </i>
+                                    </p>
+                                </div>
+                            </div><!--details-->
+                            <div class="menu clearfix">
+                                <div class="menu-in">
+                                    <a class="red" ng-if="app.status < 4 && (app.status!=1 || AuthService.isSuperUser)" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
 
-                            </div><!--row-->
+                                    <a class="" href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)" title="Details" uib-tooltip="Details"><i class="icon-menu_dots_icon"></i></a>
 
-
-                        </div><!--candidate-->
+                                    <a class="green" ng-if="app.status == 1 && AuthService.isSuperUser" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Approve" uib-tooltip="Approve"><i class="icon-check_circle_icon"></i></a>
+                                    <a class="green" ng-if="app.status == 2" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
+                                    <a class="green" ng-if="app.status == 3" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
+                                    <a class="green" ng-if="app.status == 4"  title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></a>
+                                    <a class="red" ng-if="app.status == 5"  title="Dismissed" uib-tooltip="Dismissed"><i class="icon-thumb_down_icon"></i></a>
+                                </div>
+                            </div><!--menu-->
+                        </div><!--candidate-v2-->
 
                     </div><!--candidates-list-->
 
