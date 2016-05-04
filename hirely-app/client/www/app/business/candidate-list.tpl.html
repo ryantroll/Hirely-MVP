@@ -208,11 +208,11 @@
                             </div><!--details-->
                             <div class="menu clearfix">
                                 <div class="menu-in">
-                                    <a class="red" ng-if="app.status < 4" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                    <a class="red" ng-if="app.status < 4 && (app.status!=1 || AuthService.isSuperUser)" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
 
                                     <a class="" href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)" title="Details" uib-tooltip="Details"><i class="icon-menu_dots_icon"></i></a>
 
-                                    <a class="green" ng-if="app.status == 1" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Approve" uib-tooltip="Approve"><i class="icon-check_circle_icon"></i></a>
+                                    <a class="green" ng-if="app.status == 1 && AuthService.isSuperUser" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 2)" title="Approve" uib-tooltip="Approve"><i class="icon-check_circle_icon"></i></a>
                                     <a class="green" ng-if="app.status == 2" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
                                     <a class="green" ng-if="app.status == 3" href="javascript:void(0);" ng-click="updateAppStatus($event, app._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
                                     <a class="green" ng-if="app.status == 4"  title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></a>
