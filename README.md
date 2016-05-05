@@ -63,6 +63,12 @@ unzip WeightedScores.json.zip
 python importweightedscorestoonetscores.py
 ```
 
+Importing ksawDescriptions
+```
+cd seeddata/ksawDescriptions
+mongoimport --db hirely --collection ksawDescriptions --drop --jsonArray ContentModelRef.json
+```
+
 Importing occMetas
 ```
 cd seeddata/occMeta
