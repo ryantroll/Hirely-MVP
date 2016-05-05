@@ -211,7 +211,7 @@
                         $scope.applications = appData.applications;
                         $scope.applicants = appData.users;
                         $scope.scores = appData.careerMatchScoress;
-                        console.log($scope.scores)
+
                         Object.keys($scope.applicants).forEach(function (key) {
                             $scope.applicants[key].workExperience.forEach(function (work) {
                                 work.monthCount = $scope.getDateDif(work);
