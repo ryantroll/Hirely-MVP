@@ -18,7 +18,7 @@ fs.readFile('Skills-Truncated-For-occMeta.json', 'utf8', function (err,data) {
 	rows.forEach(function(row) {
 		if (!(row.occId in occMetasObj)) {
 			occMetasObj[row.occId] = {
-				_id: row.occId,
+				occID: row.occId,
 				skillMetrics: []
 			};
 		}
