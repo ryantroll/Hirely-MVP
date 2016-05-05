@@ -35,6 +35,7 @@
                 strOccIds.push($scope.applicant.workExperience[x].occId);
             }
 
+
             /**
              * initiate the availability table to monday
              */
@@ -268,6 +269,74 @@
            phone = phone.slice(2);
            return UserService.formatPhone(phone)
         }
+
+
+        $scope.getScoreClip = function(num){
+
+            function getPoint(start, dif){
+                return start + Math.round(50 * dif / 12.5);
+            }
+            var ret = {};
+            var per = parseInt(num,10);
+            if(per === 100){
+                return null;
+            }
+            var polArr = ['50% 50%', '50% 0%'];
+            if(per < 12.5){
+                polArr.push(getPoint(50, per)+'% 0%')
+            }
+            if(per >= 12.5){
+                polArr.push('100% 0%');
+                if(per < 25){
+                    polArr.push('100% ' + getPoint(0, per-12.5)+'%');
+                }
+            }
+            if(per >= 25){
+                polArr.push('100% 50%');
+                if(per < 25+12.5){
+                    polArr.push('100% ' + getPoint(50, per-25)+'%');
+                }
+            }
+            if(per >= 25+12.5){
+                polArr.push('100% 100%');
+                if(per < 50){
+                    polArr.push(getPoint(50, 50-per)+'% 100%');
+                }
+            }
+            if(per >= 50){
+                polArr.push('50% 100%');
+                if(per < 50+12.5){
+                    polArr.push(getPoint(0, 50+12.5-per)+'% 100%');
+                }
+            }
+            if(per >= 50+12.5){
+                polArr.push('0% 100%');
+                if(per < 75){
+                    polArr.push('0% ' + getPoint(50, 75-per)+'%');
+                }
+            }
+            if(per >= 75){
+                polArr.push('0% 50%');
+                if(per < 75+12.5){
+                    polArr.push('0% ' + getPoint(0, 75+12.5-per)+'%');
+                }
+            }
+            if(per >= 75+12.5){
+                polArr.push('0% 0%');
+                if(per < 100){
+                    polArr.push(Math.abs(getPoint(-50, 100-per))+'% 0%');
+                }
+            }
+
+            var pol = 'polygon(' + polArr.join(', ') + ')';
+
+            ret['-webkit-clip-path'] = pol;
+            ret['clip-path'] = pol;
+
+            return ret;
+        }
+
+
     }
 
 })();

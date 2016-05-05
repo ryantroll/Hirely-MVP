@@ -84,19 +84,22 @@
                             <h5>Personality <!-- <a href="javascript:void(0)" class="info">?</a> --></h5>
                         </div>
                         <div class="personality clearfix">
-                            <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div>
+                            <!-- <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div> -->
+                            <div class="score">
+                                <div class="border" ng-style="getScoreClip(scores[detailsUserId].maxOverallScore)"></div>
+                                <div class="circle">{{scores[detailsUserId].maxOverallScore | number:0}}</div>
+                            </div><!--score-->
                             <div class="traits clearfix">
-                                <div class="col">
-                                    <strong>Strongest Traits</strong>
-                                    <div ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}</div>
+                                <div class="trait" ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">
+                                    <h5>{{trait._id}}</h5>
+                                    <div class="scale">
+                                        <div class="bar" style="width:{{trait.score}}%;">{{trait.score}}%</div>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <strong>Weakest Traits</strong>
-                                    <div ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5 : 51">{{trait._id}}</div>
-                                </div>
+
                             </div>
                             <div class="environment">
-                                <div class="head">{{applicant.firstName}}'s ideal work environments</div>
+                                <div class="head"><h5>{{applicant.firstName}}'s ideal work environments</h5></div>
                                 <ul>
                                     <li ng-repeat="env in personalityBlendMeta.meta.environments">{{env}}</li>
                                 </ul>

@@ -1037,56 +1037,81 @@ $candidat-menu-height:60px;
 
             .personality{
                 padding: 0 1em 1em 1em;
-                .head{
+                .score{
                     text-align: center;
-                    font-size: 1.4em;
+                    display: table;
+                    width:90px;
+                    margin:0 auto;
                     padding-bottom:1em;
+                    position:relative;
+                    height: 100px;
 
-                    .Visionary{
-                        color:#953ecf;
-                    }
-                    .Mentor{
-                        color:#e62f34;
-                    }
-                    .Analyzer{
-                        color:#369ee2;
-                    }
-                    .Action-Taker{
-                        color:#e05d26
-                    }
-                    .Iventory{
-                        color:#59DDB0;
-                    }
-                    .Naturalist{
-                        color:#4eb73d;
-                    }
-                    .Planner{
-                        color:#f3c927;
-                    }
-
-
-                }//// .head
-                .traits{
-                    .col{
+                    .border{
                         display: block;
-                        width:50%;
-                        float:left;
+                        width:90px;
+                        height: 90px;
+                        // border:5px solid $c-hirely-green;
+                        background-color:$c-hirely-green;
+                        @include border-radius(50%);
+                        position:absolute;
+                        z-index:1;
+
+                        // -webkit-clip-path: polygon(50% 50%, 50% 0%, 100% 0, 100% 50%);
+                    }
+                    .circle{
+                        width:80px;
+                        height: 80px;
+                        background-color:$c-hirely-navy;
+                        color:$c-white;
+                        font-size:2em;
+                        line-height: 80px;
                         text-align: center;
-                        div{
-                            display:block;
-                            margin-bottom: 1em;
-                        }
-                        strong{
-                            display:block;
-                            margin-bottom: 1em;
-                        }
+                        border: 2px solid $c-white;
+                        @include border-radius(40px);
+                        margin: 0 auto 0 auto;
+                        position:absolute;
+                        z-index: 2;
+                        top:5px;
+                        left:5px;
                     }
-                    .col:first-child{
-                        border-right:1px solid $c-hirely-mid-gray;
+                }//// .score
+                .traits{
+                    width:100%;
+                    margin:0 auto;
+                    @media screen and (min-width:$screen-sm-min){
+                        width:60%;
                     }
-                }
+                    .trait{
+                        width:100%;
+
+                        margin-bottom: 1em;
+                        h5{
+                            font-weight: normal;
+                            margin:0;
+                            margin-bottom:5px;
+                        }
+                        .scale{
+                            width:100%;
+                            height: 25px;
+                            background-color:$c-hirely-light-gray;
+                            .bar{
+                                height: 25px;
+                                line-height: 25px;
+                                padding:0 5px;
+                                background-color:$c-hirely-green;
+                                text-align:right;
+                                color:$c-white;
+
+                            }
+                        }
+                    }//// .trait
+                }//// .traits
+
                 .environment{
                     padding-top:1em;
+                    .head{
+                        text-align: center;
+                    }
                     p{
                         text-align:center;
                     }
