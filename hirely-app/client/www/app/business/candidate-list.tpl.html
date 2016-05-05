@@ -69,10 +69,8 @@
 
         <div class="body">
             <div class="row">
-                <div class="col-sm-2 visible-sm-block visible-md-block visible-lg-block" ng-if="!isFilterActive('applied')">
-                    &nbsp; <!--this column to center the list col when applied filter is not active-->
-                </div>
-                <div id="filtersList" class="col-sm-4 visible-sm-block visible-md-block visible-lg-block" ng-if="isFilterActive('applied')">
+
+                <div id="filtersList" class="col-sm-4" ng-if="isFilterActive('applied') || true">
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3><i class="icon glyphicon glyphicon-filter"></i> Filters</h3>
@@ -229,9 +227,7 @@
 
                 </div><!--col-->
 
-                <div class="col-sm-2 visible-sm-block visible-md-block visible-lg-block" ng-if="!isFilterActive('applied')">
-                    &nbsp; <!--this column to center the list col when applied filter is not active-->
-                </div>
+
             </div><!--row-->
         </div><!--body-->
     </div><!--max-width-->
