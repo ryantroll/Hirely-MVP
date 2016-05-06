@@ -8,6 +8,8 @@ var onetIconsModel = require('../models/onetIcons.model');
 var applicationModel = require('../models/application.model');
 var permissionsModel = require('../models/permission.model');
 var careerMatchScoresModel = require('../models/careerMatchScores.model');
+var occupationMetasModel = require('../models/occupationMetas.model');
+var ksawDescriptionsModel = require('../models/ksawDescriptions.model');
 var q = require('q');
 /**
  * [privateFields array to define the names of extended fields in user objects]
@@ -112,7 +114,7 @@ var BusinessService = {
                 query.$or.push(or);
             }
         }
-        
+
         BusinessModel.find(query, returnFields)
         .then(
             function(found){
@@ -609,7 +611,61 @@ var BusinessService = {
         console.log("CPBSUF10");
         return false;
 
-    }  // end isUserFiltered
+    },  // end isUserFiltered
+
+    getOccupationMetas: function(occId){
+        var deferred = q.defer();
+        var query = {occID: occId};
+        var ret = {};
+
+        occupationMetasModel.findOne(query).exec()
+        .then(
+            function(meta){
+                // console.log("BS:getOccupationMeta:01");
+                ret = meta.toObject();
+                /**
+                 * fill the the ksawDescription
+                 * @type {Array}
+                 */
+                var sids = [];
+                if(Array.isArray(meta.skillMetrics)){
+                    for(var x = 0; x< meta.skillMetrics.length; x++){
+                        if(x>5) break;
+                        sids.push(meta.skillMetrics[x].sid);
+                    }//// for
+
+                    if(sids.length > 0){
+                        return ksawDescriptionsModel.find({"Element ID":{$in: sids}})
+                    }
+                }
+
+            },
+            function(err){
+                // console.log("BS:getOccupationMeta:02");
+                console.log(err)
+                deferred.reject(err);
+            }
+        )
+        .then(
+            function(desc){
+                // console.log("BS:getOccupationMeta:03");
+                var descriptions = {};
+                for(var x=0; x<desc.length; x++){
+                    descriptions[desc[x]["Element ID"]] = desc[x].toObject();
+                }
+
+                ret.descriptions = descriptions
+                console.log('>>>>>>>>>>>', ret)
+                deferred.resolve(ret);
+            },
+            function(err){
+                // console.log("BS:getOccupationMeta:04");
+                deferred.reject(err);
+                console.log(err);
+            }
+        )
+        return deferred.promise;
+    }//// fun. getOccupationMeta
 
 
 

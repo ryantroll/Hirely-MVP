@@ -211,6 +211,7 @@
                         $scope.applications = appData.applications;
                         $scope.applicants = appData.users;
                         $scope.scores = appData.careerMatchScoress;
+                        console.log($scope.scores);
 
                         Object.keys($scope.applicants).forEach(function (key) {
                             $scope.applicants[key].workExperience.forEach(function (work) {
@@ -218,7 +219,6 @@
                                 occIds.push(work.occId);
                             });
                         });
-
                         if(occIds.length > 0){
                             return BusinessService.getPositionDisplayData(occIds.join('|'));
                         }
@@ -235,6 +235,15 @@
             .then(
                 function(iconData){
                     $scope.iconData = iconData;
+                    return BusinessService.getPositionOccupationMetas($scope.position.occId)
+                },
+                function(error){
+                  console.log(error)
+                }
+            )
+            .then(
+                function(metas){
+                    $scope.occupationMetas = metas;
                 },
                 function(error){
                   console.log(error)
