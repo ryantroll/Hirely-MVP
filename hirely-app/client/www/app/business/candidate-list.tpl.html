@@ -72,7 +72,7 @@
         <div class="body">
             <div class="row">
 
-                <div id="filtersList" class="col-sm-4 visible-sm-block visible-md-block visible-lg-block" ng-if="isFilterActive('applied') || true">
+                <div id="filtersList" class="col-sm-4 visible-sm-block visible-md-block visible-lg-block" ng-show="showFilter">
                     <div class="box clearfix">
                         <div class="header clearfix">
                             <h3><i class="icon glyphicon glyphicon-filter"></i> Filters</h3>
@@ -138,11 +138,20 @@
 
                 </div><!--col-->
 
-                <div class="col-sm-8">
+                <div ng-class="showFilter ? 'col-sm-8' : 'col-sm-12'">
 
                     <div class="box clearfix">
-                        <div class="header clearfix">
+                        <div class="header candidatesHeader clearfix">
                             <h3><i class="icon icon-users_group_icon"></i> Candidates <span ng-show="filtered.length > 0">({{filtered.length}})</span></h3>
+                            <a id="showHideFilter" href="javascript:void(0);" ng-click="showFilter=!showFilter">
+                                <div>
+                                    <i class="icon glyphicon glyphicon-filter"></i>
+                                    <span ng-show="!showFilter">SHOW</span>
+                                    <span ng-show="showFilter">HIDE</span>
+                                    FILTERS
+                                </div>
+                            </a>
+
                             <div class="sortMenuDiv hidden">
                                 <div class="drop-down visible-sm-block visible-md-block visible-lg-block">
                                     <a href="javascript:void(0);" ng-click="toggleSortMenu($event)">

@@ -251,6 +251,28 @@ $candidat-menu-height:60px;
             overflow: visible;
             // height: 300px;
 
+            &.candidatesHeader {
+                background-color:$c-hirely-gray;
+                h3 {
+                    margin-right: 34px;
+                    line-height: 36px;
+                }
+                #showHideFilter {
+                    color:$c-hirely-mid-gray;
+                    div {
+                        padding:8px;
+                        display:inline-block;
+                        border:1px solid $c-hirely-light-gray;
+                    }
+                    &:hover {
+                        color: #E82A1D;
+                    }
+                    @media screen and (max-width: $screen-sm-max) {
+                        display: none;
+                    }
+                }
+            }
+
 
             h3{
                 margin-top:0;
