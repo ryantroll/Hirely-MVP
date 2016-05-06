@@ -5,6 +5,7 @@
         <div class="menu clearfix">
             <ul>
                 <li ng-class="{active:activeSection === 'pre-screen'}"><a href="javascript:void(0);" ng-click="showSection('pre-screen')">Pre-Screen</a></li>
+                <li ng-class="{active:activeSection === 'skills'}"><a href="javascript:void(0);" ng-click="showSection('skills')">Skills</a></li>
                 <li ng-class="{active:activeSection === 'personality'}"><a href="javascript:void(0);" ng-click="showSection('personality')">Personality</a></li>
                 <li ng-class="{active:activeSection === 'availability'}"><a href="javascript:void(0);" ng-click="showSection('availability')">Availability</a></li>
                 <li ng-class="{active:activeSection === 'experience'}"><a href="javascript:void(0);" ng-click="showSection('experience')">Experience</a></li>
@@ -77,6 +78,32 @@
                                 </li>
                             </ul>
                         </div><!--prescreen-->
+                    </div><!--box-->
+
+                    <div class="box"  ng-show="true && (!activeSection || activeSection === 'skills')">
+                        <div class="title">
+                            <h5>Skills</h5>
+                        </div>
+                        <div class="skills clearfix">
+                            <!-- <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div> -->
+                            <div class="score">
+                                <div class="border" ng-style="getScoreClip(scores[detailsUserId].maxOverallScore)"></div>
+                                <div class="circle">{{scores[detailsUserId].maxOverallScore | number:0}}</div>
+                            </div><!--score-->
+                            <p class="score-title">Experience Match</p>
+                            <div class="traits clearfix">
+                                <h4>Candidate vs Key Position Skills</h4>
+                                <div class="trait" ng-repeat="skill in occupationMetas.skillMetrics | limitTo : 6">
+                                    <h5>{{skill.name}}</h5>
+                                    <div class="scale">
+                                        <div class="bar" style="width:{{ 100 * applicants[detailsUserId].scores.Skills[skill.name] / 7 | number:0}}%;">{{100 * applicants[detailsUserId].scores.Skills[skill.name] / 7 | number:0}}%</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </div><!--box-->
 
                     <div class="box"  ng-show="applicant.personalityExams[0] && (!activeSection || activeSection === 'personality')">

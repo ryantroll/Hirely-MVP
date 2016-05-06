@@ -68,6 +68,7 @@ module.exports = function(app) {
     app.get('/api/v1/auth', userApiRoutes.getToken);
 
     app.get('/api/v1/businesses/positionIcon', businessApiRoutes.getPositionDisplayData);
+    app.get('/api/v1/businesses/occupationMetas', businessApiRoutes.getPositionOccupationMetas);
     app.post('/api/v1/businesses/', businessApiRoutes.createNewBusiness);
     app.patch('/api/v1/businesses/:id', businessApiRoutes.patchBusiness);
     app.get('/api/v1/businesses/:slug', businessApiRoutes.getBySlug);

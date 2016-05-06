@@ -65,8 +65,8 @@ var applicationService = {
         var slimUser = user.toObject();
         if (slimUser.personalityExams && slimUser.personalityExams.length && slimUser.personalityExams[0].careerMatchScores)
             delete slimUser.personalityExams[0].careerMatchScores;
-        if (slimUser.scores)
-            delete slimUser.scores;
+        // if (slimUser.scores)
+        //     delete slimUser.scores;
         return slimUser;
     },
 
@@ -117,6 +117,7 @@ var applicationService = {
                                 careerMatchScoress: careerMatchScoress
                             };
                             // console.log("as:getByPositionId:6");
+                            //
 
                             return returnObj;
                         } catch (err) {

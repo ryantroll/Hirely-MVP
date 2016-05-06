@@ -176,6 +176,23 @@
             return deferred.promise;
         }/// fun. getPositionDisplayData
 
+        this.getPositionOccupationMetas = function (onetId) {
+            var deferred = $q.defer();
+
+
+            HirelyApiService.businesses('occupationMetas', {occId: onetId}).get()
+                .then(
+                    function (metas) {
+                        deferred.resolve(metas);
+                    },
+                    function (err) {
+                        deferred.reject(err)
+                    }
+                );
+
+            return deferred.promise;
+        }/// fun. getPositionOccupationMetas
+
 
         this.filterBasicCalculator = function (operator, left, right) {
             switch (operator) {

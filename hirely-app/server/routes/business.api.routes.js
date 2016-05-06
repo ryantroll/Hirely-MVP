@@ -139,6 +139,19 @@ var businessRoutes = {
                 res.status(500).json(apiUtil.generateResponse(error.code, error.message, null));
             }
         )
+    },
+
+    getPositionOccupationMetas : function(req, res){
+
+        BusinessService.getOccupationMetas(req.query.occId)
+        .then(
+            function(data){
+                res.status(200).json(apiUtil.generateResponse(200, "Meta found", data));
+            },
+            function(error){
+                res.status(500).json(apiUtil.generateResponse(error.code, error.message, null));
+            }
+        )
     }
 
 
