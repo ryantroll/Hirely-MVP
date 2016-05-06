@@ -142,84 +142,90 @@ $candidat-menu-height:60px;
             }
         }
 
-        ul{
-            display: table;
-            width:90%;
-            float:left;
-            list-style: none;
-            padding-left:0;
-            margin-bottom:0;
+        #statusBtnsDiv {
+            width: 90%;
+            float: left;
 
-            @media screen and (min-width:$screen-sm-min){
-                width:auto;
-                margin:0 auto;
-                float:none;
+            @media screen and (min-width: $screen-sm-min) {
+                width: 70%;
+                margin: 0 auto;
+                float: none;
             }
 
+            ul {
+                width: 100%;
+                display: table;
+                list-style: none;
+                padding-left: 0;
+                margin-bottom: 0;
 
-            li{
-                display: block;
-                float:left;
-                width:100%;
-                padding-right:2px;
-                @media screen and (min-width:$screen-sm-min){
-                    padding-right:5px;
-                    width:auto;
-                }
-                .btn{
-                    width:100%;
-                    height: 60px;
-                    text-align: center;
-                    // padding-left:0;
-                    // padding-right:0;
-                    // font-size:0.8em;
-                    border:0;
-                    display: none;
-                    @include border-radius(2px);
-                    @media screen and (min-width:$screen-sm-min){
-                        width:105px;
-                        font-size:1em;
-                        padding-left:0;
-                        padding-right:0;
+                li {
+                    display: block;
+                    float: left;
+                    width: 100%;
+                    padding-right: 2px;
+                    @media screen and (min-width: $screen-sm-min) {
+                        width: 25%;
+                        min-width: 105px;
+                        padding-right: 5px;
+                    }
+                    .btn {
+                        width: 100%;
+                        height: 60px;
+                        text-align: center;
+                        // padding-left:0;
+                        // padding-right:0;
+                        // font-size:0.8em;
+                        border: 0;
+                        display: none;
+                        @include border-radius(2px);
+                        @media screen and (min-width: $screen-sm-min) {
+                            font-size: 1em;
+                            padding-left: 0;
+                            padding-right: 0;
+                            display: inline-block;
+                        }
+                        // span{
+                        //     display:none;
+                        //     @media screen and (min-width:$screen-sm-min){
+                        //         display:inline;
+                        //     }
+                        // }
+                    }
+                    .btn.active {
                         display: inline-block;
                     }
-                    // span{
-                    //     display:none;
-                    //     @media screen and (min-width:$screen-sm-min){
-                    //         display:inline;
-                    //     }
-                    // }
-                }
-                .btn.active{
-                    display: inline-block;
-                }
-                .btn.red{
-                    @media screen and (max-width:$screen-sm-min){
-                        background-color:$c-hirely-light-gray;
-                        border-color:$c-hirely-light-gray;
-                        color:$c-hirely-mid-gray!important;
-                        border:0 solid $c-hirely-light-gray;
-                        @include box-shadow(none);
+                    .btn.red {
+                        @media screen and (max-width: $screen-sm-min) {
+                            background-color: $c-hirely-light-gray;
+                            border-color: $c-hirely-light-gray;
+                            color: $c-hirely-mid-gray !important;
+                            border: 0 solid $c-hirely-light-gray;
+                            @include box-shadow(none);
+                        }
                     }
                 }
-            }
-            li:last-child{
-                padding-right: 0;
-            }
+                li:last-child {
+                    padding-right: 0;
+                }
 
-        } //// ul
-
-        ul.show{
-            background-color:$c-white;
-            position:absolute;
-            top:0;
-            left:0;
-            z-index:1000;
-            @include drop-shadow();
-            .btn{
-                display: inline-block;
             }
-        }
+            //// ul
+
+            ul.show{
+                background-color:$c-white;
+                position:absolute;
+                top:0;
+                left:0;
+                z-index:1000;
+                @include drop-shadow();
+                .btn{
+                    display: inline-block;
+                }
+            }
+        } // statusBtnsDiv
+
+
     } //// .status-bar
 
     .body{
