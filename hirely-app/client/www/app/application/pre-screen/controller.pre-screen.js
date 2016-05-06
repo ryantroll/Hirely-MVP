@@ -84,11 +84,11 @@
                 var historyEntry = {
                     time: new Date(),
                     type: 'StatusChange',
-                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[1+1],
-                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[1+1],
+                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[2],
+                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[2],
                     meta: {
                         fromStatus: $scope.application.status,
-                        toStatus: 1
+                        toStatus: 2
                     },
                     userId: AuthService.currentUserId,
                     userFirstName: AuthService.currentUser.firstName,
@@ -100,7 +100,7 @@
                 }
                 $scope.application.history.push(historyEntry);
 
-                $scope.application.status = 1;
+                $scope.application.status = 2;
                 $scope.application.appliedAt = new Date();
                 
             }
