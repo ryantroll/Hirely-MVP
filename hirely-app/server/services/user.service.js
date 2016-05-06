@@ -125,7 +125,6 @@ var UserService = {
             }
         }
         return userModel.create(userObj).then(function(user) {
-            user = user.toObject();
             return self.getUserAndTokenObj(user, config.tokenLifeDefault).then(function(userAndToken) {
                 if (perms.length) {
                     for (let perm of perms) {
@@ -196,7 +195,11 @@ var UserService = {
         var token = jwt.sign({userId:user._id}, config.jwtSecret, {expiresIn: expiresIn});
         var exp = jwt.verify(token, config.jwtSecret).exp;
 
-        var userObj = user.toObject();
+        try {
+            var userObj = user.toObject();
+        } catch (err) {
+            var userObj = user;
+        }
 
         if (permissions) {
             var permObjs = [];
