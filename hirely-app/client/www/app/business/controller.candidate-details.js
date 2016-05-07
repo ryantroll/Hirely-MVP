@@ -163,8 +163,8 @@
             var end = work.dateEnd ? new Date(work.dateEnd) : new Date();
             var dif = end - start;
             dif = dif / 1000;
-            var secInYear = 525600 * 60;
-            var secInMonth = 43800 * 60;
+            var secInYear = 31536000;
+            var secInMonth = 2628000;
             var years = Math.floor(dif / secInYear);
             var months = Math.round((dif - years * secInYear) / secInMonth);
             var ret = '(';

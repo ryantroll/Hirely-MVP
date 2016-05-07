@@ -18,6 +18,7 @@
         $scope.sortByLabel = 'Sort By';
 
         $scope.AuthService = AuthService;
+        $scope.JobApplicationService = JobApplicationService;
 
         /**
          * [occIds array to save the occupation ids for all work experiences]
@@ -211,14 +212,30 @@
                         $scope.applications = appData.applications;
                         $scope.applicants = appData.users;
                         $scope.scores = appData.careerMatchScoress;
-                        console.log($scope.scores);
+                        // console.log($scope.scores);
 
                         Object.keys($scope.applicants).forEach(function (key) {
                             $scope.applicants[key].workExperience.forEach(function (work) {
                                 work.monthCount = $scope.getDateDif(work);
                                 occIds.push(work.occId);
                             });
+
                         });
+                        
+                        Object.keys($scope.applications).forEach(function (key) {
+                            let app = $scope.applications[key];
+
+                            for (var i=app.history.length-1; i>0; i--) {
+                                let h = app.history[i];
+                                h.age = $scope.getAgeFromDateStr(h.time);
+
+                                if (h.type == "StatusChange") {
+                                    app.lastStatusChange = h;
+                                }
+                            }
+
+                        });
+
                         if(occIds.length > 0){
                             return BusinessService.getPositionDisplayData(occIds.join('|'));
                         }
@@ -289,7 +306,7 @@
                     var cat = $scope.getPositionCategory(work.occId);
                     cats[cat] = true;
                 }//// for
-                $scope.applicants[key].workCategories = Object.keys(cats).join(' | ');
+                $scope.applicants[key].workCategories = Object.keys(cats).splice(0,2).join(' & ').replace('_', ' ');
             });
 
             /**
@@ -345,19 +362,29 @@
             var end = work.dateEnd ? new Date(work.dateEnd) : new Date();
             var dif = end - start;
             dif = dif / 1000;
-            var secInYear = 525600 * 60;
-            var secInMonth = 43800 * 60;
+            var secInYear = 31536000;
+            var secInMonth = 2628000;
             var years = Math.floor(dif / secInYear);
             var months = Math.round((dif - years * secInYear) / secInMonth);
             var ret = '(';
             if (years > 0) {
-                ret += years.toString() + ' year' + (years > 1 ? 's' : '');
+                ret += years.toString() + ' years';
             }
-            if (months > 0) {
-                ret += ' ' + months.toString() + ' month' + (months > 1 ? 's' : '');
+            else {
+                ret += months.toString() + ' months';
             }
             ret += ')';
             return ret;
+        };
+
+        $scope.getAgeFromDateStr = function (dateStr) {
+            var date1 = new Date(dateStr);
+            var date2 = new Date();
+            var dif = date2 - date1;
+            dif = dif / 1000;
+            var secInDay = 86400;
+            var days = Math.floor(dif / secInDay);
+            return days;
         };
 
         $scope.getViewStatus = function (id, index) {
@@ -388,7 +415,7 @@
             return 'New';
 
 
-        }
+        };
 
         function findAppById(appId) {
             var ret;
