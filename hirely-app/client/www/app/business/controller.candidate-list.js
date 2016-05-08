@@ -223,10 +223,10 @@
                         });
                         
                         Object.keys($scope.applications).forEach(function (key) {
-                            let app = $scope.applications[key];
+                            var app = $scope.applications[key];
 
                             for (var i=app.history.length-1; i>0; i--) {
-                                let h = app.history[i];
+                                var h = app.history[i];
                                 h.age = $scope.getAgeFromDateStr(h.time);
 
                                 if (h.type == "StatusChange") {
