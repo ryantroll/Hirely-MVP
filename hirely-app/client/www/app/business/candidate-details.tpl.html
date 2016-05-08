@@ -1,25 +1,12 @@
 <div class="candidate-details clearfix">
-    <a href="javascript:void(0)" ng-show="isModal" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a>
-    <header ng-class="{active:activeSection}">
-        <a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a>
-        <div class="menu clearfix">
-            <ul>
-                <li ng-class="{active:activeSection === 'pre-screen'}"><a href="javascript:void(0);" ng-click="showSection('pre-screen')">Pre-Screen</a></li>
-                <li ng-class="{active:activeSection === 'skills'}"><a href="javascript:void(0);" ng-click="showSection('skills')">Skills</a></li>
-                <li ng-class="{active:activeSection === 'personality'}"><a href="javascript:void(0);" ng-click="showSection('personality')">Personality</a></li>
-                <li ng-class="{active:activeSection === 'availability'}"><a href="javascript:void(0);" ng-click="showSection('availability')">Availability</a></li>
-                <li ng-class="{active:activeSection === 'experience'}"><a href="javascript:void(0);" ng-click="showSection('experience')">Experience</a></li>
-                <li ng-class="{active:activeSection === 'education'}"><a href="javascript:void(0);" ng-click="showSection('education')">Education</a></li>
-                <li class="all" ng-show="activeSection"><a href="javascript:void(0);" ng-click="showSection(undefined)">All</a></li>
-            </ul>
-        </div>
-    </header>
+    <a href="javascript:void(0)" class="close" ng-click="closeModal()"><i class="icon glyphicon glyphicon-remove"></i></a>
+    <!--f-->
     <article>
         <div class="hidden appId">{{application._id}}</div>
         <div class="hidden userId">{{application.userId}}</div>
         <div class="hidden posId">{{application.positionId}}</div>
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-12">
                 <div id="left-column">
 
                     <div class="box" ng-show="!activeSection">
@@ -35,19 +22,7 @@
                             <div class="col-sm-9">
                                 <div class="details">
                                     <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
-                                    <div class="fit-scale hidden">
-                                        <i ng-class="getFitClass2(0, application.score)"></i>
-                                        <i ng-class="getFitClass2(1, application.score)"></i>
-                                        <i ng-class="getFitClass2(2, application.score)"></i>
-                                        <i ng-class="getFitClass2(3, application.score)"></i>
-                                        <i ng-class="getFitClass2(4, application.score)"></i>
-                                        <i ng-class="getFitClass2(5, application.score)"></i>
-                                        <i ng-class="getFitClass2(6, application.score)"></i>
-                                        <i ng-class="getFitClass2(7, application.score)"></i>
-                                        <i ng-class="getFitClass2(8, application.score)"></i>
-                                        <i ng-class="getFitClass2(9, application.score)"></i>
-                                        <span class="legend">{{getFitClass(-1, application.score) | uppercase}} Fit</span>
-                                    </div>
+
                                     <div class="answers visible-sm-block visible-md-block visible-lg-block">
                                         <!-- <div class="answer" ng-repeat="answer in application.prescreenAnswers | limitTo : 1">
                                             <p>{{answer.answer}}</p>
@@ -64,7 +39,68 @@
                         </div><!--row-->
                     </div><!--box-->
 
-                    <div class="box" ng-show="!activeSection || activeSection === 'pre-screen'">
+                    <div class="box">
+                        <div class="title" ng-class="{blue:application.status==2, red:application.status==6 || application.status==7, gray:application.status==1 || application.status==8, green:application.status ==3 ||application.status ==4||application.status ==5}">
+                            <h5>Applicant Status: {{statusLabelsHm[application.status+1]}}</h5>
+                        </div>
+
+                        <div class="actions clearfix">
+                            <div class="menu">
+                                <div class="inner">
+
+                                    <div ng-if="application.status == 1 && AuthService.isSuperUser">
+                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
+                                    </div>
+
+                                    <div ng-if="application.status == 2">
+                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
+                                    </div>
+
+                                    <div ng-if="application.status == 3">
+                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
+                                    </div>
+
+                                    <div ng-if="application.status == 4">
+                                        <a class="green" href="javascript:void(0);" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
+                                    </div>
+
+                                    <div ng-if="application.status == 5">
+                                        <a class="red" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
+                                    </div>
+
+
+                                </div>
+                            </div><!--menu-->
+                        </div><!--actions-->
+                    </div><!--box actions-->
+
+                    <div class="box">
+                        <div class="title blue">
+                            <h5>Contact {{applicant.firstName}}</h5>
+                        </div>
+                        <div class="contacts">
+                            <ul>
+                                <li><a href="tel:{{applicants[detailsUserId].mobile}}"><i class="icon green glyphicon glyphicon-earphone"></i>{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></li>
+                                <li><a href="mailto:{{applicants[detailsUserId].email}}"><i class="icon blue glyphicon glyphicon-envelope"></i>{{applicants[detailsUserId].email}}</a></li>
+                            </ul>
+                        </div>
+                    </div><!--box contact-->
+
+                    <div class="arrows clearfix" style="padding-bottom:20px">
+                        <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-show="isModal" ng-disabled="detailsIndex === 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
+                        <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-show="isModal" ng-disabled="detailsIndex >= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
+                    </div><!--arrows-->
+
+                    <div class="box" ng-repeat="im in position.interviewMaterials">
+                        <a target="_blank" href="{{im.url}}">
+                            <button class="btn mid-gray" style="width:100%">{{im.name}}</button>
+                        </a>
+                    </div><!--box interview materials-->
+
+                    <div class="box">
                         <div class="title">
                             <h5>Pre-Screening</h5>
                         </div>
@@ -78,9 +114,9 @@
                                 </li>
                             </ul>
                         </div><!--prescreen-->
-                    </div><!--box-->
+                    </div><!--box pre-screen-->
 
-                    <div class="box"  ng-show="true && (!activeSection || activeSection === 'skills')">
+                    <div class="box">
                         <div class="title">
                             <h5>Skills</h5>
                         </div>
@@ -104,9 +140,9 @@
 
                         </div>
 
-                    </div><!--box-->
+                    </div><!--box skills-->
 
-                    <div class="box"  ng-show="applicant.personalityExams[0] && (!activeSection || activeSection === 'personality')">
+                    <div class="box">
                         <div class="title">
                             <h5>Personality <!-- <a href="javascript:void(0)" class="info">?</a> --></h5>
                         </div>
@@ -133,9 +169,9 @@
                             </div>
                         </div>
 
-                    </div><!--box-->
+                    </div><!--box personality-->
 
-                    <div class="box" ng-show="!activeSection || activeSection === 'availability'">
+                    <div class="box">
                         <div class="title">
                             <h5>Availability</h5>
                         </div>
@@ -183,9 +219,9 @@
                                 <div class="col-sm-1"></div>
                             </div><!--row-->
                         </div>
-                    </div><!--box-->
+                    </div><!--box avail-->
 
-                    <div class="box" ng-show="!activeSection || activeSection === 'experience'">
+                    <div class="box">
                         <div class="title">
                             <h5>Experience</h5>
                         </div>
@@ -204,9 +240,9 @@
                             </ul>
                             <div ng-if="applicant.workExperience.length < 1">No Experience Provided</div>
                         </div>
-                    </div><!--box-->
+                    </div><!--box exp-->
 
-                    <div class="box" ng-show="!activeSection || activeSection === 'education'">
+                    <div class="box">
                         <div class="title">
                             <h5>Education</h5>
                         </div>
@@ -242,7 +278,7 @@
                             </ul>
                             <div ng-if="applicant.education.length < 1">No Education Provided</div>
                         </div>
-                    </div><!--box-->
+                    </div><!--box edu-->
 
                     <div class="box-activity">
                         <div class="row">
@@ -271,102 +307,6 @@
                     </div><!--box-activity-->
 
                 </div><!--left-column-->
-            </div><!--col-->
-
-
-            <div class="col-sm-4 visible-sm-block visible-md-block visible-lg-block">
-
-                <div class="box" ng-show="activeSection">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="image" ng-show="business.hideProfileImages || location.hideProfileImages || position.hideProfileImages">
-                                <div class="image-wrapper">
-                                    <img src="{{applicant.profileImageThumbURL || defaultImage}}" />
-                                </div>
-                                <div class="date">Applied: {{application.appliedAt | date:'MM/dd/yyyy'}}</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="details center">
-                                <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
-                                <div class="fit-scale hidden">
-                                    <i ng-class="getFitClass(0, application.score)"></i>
-                                    <i ng-class="getFitClass(1, application.score)"></i>
-                                    <i ng-class="getFitClass(2, application.score)"></i>
-                                    <i ng-class="getFitClass(3, application.score)"></i>
-                                    <i ng-class="getFitClass(4, application.score)"></i>
-                                    <i ng-class="getFitClass(5, application.score)"></i>
-                                    <i ng-class="getFitClass(6, application.score)"></i>
-                                    <i ng-class="getFitClass(7, application.score)"></i>
-                                    <i ng-class="getFitClass(8, application.score)"></i>
-                                    <i ng-class="getFitClass(9, application.score)"></i>
-                                    <span class="legend">{{getFitClass(-1, application.score) | uppercase}} Fit</span>
-                                </div>
-
-                            </div><!--details-->
-                        </div><!--col-->
-                    </div><!--row-->
-                </div><!--box-->
-
-                <div class="box">
-                    <div class="title" ng-class="{blue:application.status==2, red:application.status==6 || application.status==7, gray:application.status==1 || application.status==8, green:application.status ==3 ||application.status ==4||application.status ==5}">
-                        <h5>Applicant Status: {{statusLabelsHm[application.status+1]}}</h5>
-                    </div>
-
-                    <div class="actions clearfix">
-                        <div class="menu">
-                            <div class="inner">
-
-                                <div ng-if="application.status == 1 && AuthService.isSuperUser">
-                                    <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                    <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
-                                </div>
-
-                                <div ng-if="application.status == 2">
-                                    <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                    <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
-                                </div>
-
-                                <div ng-if="application.status == 3">
-                                    <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                    <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                </div>
-
-                                <div ng-if="application.status == 4">
-                                    <a class="green" href="javascript:void(0);" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                </div>
-
-                                <div ng-if="application.status == 5">
-                                    <a class="red" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                </div>
-
-
-                            </div>
-                        </div><!--menu-->
-                    </div><!--actions-->
-                </div><!--box-->
-                <div class="box">
-                    <div class="title blue">
-                        <h5>Contact {{applicant.firstName}}</h5>
-                    </div>
-                    <div class="contacts">
-                        <ul>
-                            <li><a href="tel:{{applicants[detailsUserId].mobile}}"><i class="icon green glyphicon glyphicon-earphone"></i>{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></li>
-                            <li><a href="mailto:{{applicants[detailsUserId].email}}"><i class="icon blue glyphicon glyphicon-envelope"></i>{{applicants[detailsUserId].email}}</a></li>
-                        </ul>
-                    </div>
-                </div><!--box-->
-
-                <div class="arrows clearfix" style="padding-bottom:20px">
-                    <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-show="isModal" ng-disabled="detailsIndex === 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
-                    <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-show="isModal" ng-disabled="detailsIndex >= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
-                </div><!--arrows-->
-
-                <div class="box" ng-repeat="im in position.interviewMaterials">
-                    <a target="_blank" href="{{im.url}}">
-                        <button class="btn mid-gray" style="width:100%">{{im.name}}</button>
-                    </a>
-                </div>
             </div><!--col-->
 
         </div><!--row-->
