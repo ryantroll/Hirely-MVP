@@ -607,7 +607,7 @@
                 size: 'full',
                 controller: 'CandidateDetailsModalController',
                 templateUrl: 'app/business/candidate-details.tpl.html',
-                windowClass: 'gray',
+                windowClass: 'gray modal-920-max',
                 scope: $scope
             })
 
