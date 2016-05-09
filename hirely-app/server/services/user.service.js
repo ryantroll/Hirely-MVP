@@ -132,7 +132,7 @@ var UserService = {
                     }
                     return permissionModel.create(perms).then(function (perms) {
                         var permObjs = [];
-                        permissions.forEach(function(perm) { permObjs.push(perm.toObject()); });
+                        perms.forEach(function(perm) { permObjs.push(perm.toObject()); });
                         userAndToken.user.permissions = permObjs;
                         return userAndToken;
                     });
