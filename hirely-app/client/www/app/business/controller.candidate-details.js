@@ -205,6 +205,42 @@
             $scope.activeSection = section;
         }//// fun.showSection
 
+        $scope.getApplicantTraitScore = function(trait){
+            var applicant = $scope.applicants[$scope.detailsUserId];
+
+            /**
+             * Save the traits score in object in applicant object to enhance performance
+             */
+            if(angular.isDefined($scope.applicants[$scope.detailsUserId].traitsScore)
+                && angular.isDefined($scope.applicants[$scope.detailsUserId].traitsScore[trait])
+            ){
+                return $scope.applicants[$scope.detailsUserId].traitsScore[trait];
+            }
+
+            if( !Array.isArray(applicant.personalityExams[0].personalityTraits) ){
+                return 0;
+            }
+
+            var l = applicant.personalityExams[0].personalityTraits.length;
+            var ret = 0;
+
+            /**
+             * Define the traitsScore object in applicant object if it's there                           [description]
+             */
+            if(angular.isUndefined($scope.applicants[$scope.detailsUserId].traitsScore)){
+                $scope.applicants[$scope.detailsUserId].traitsScore = {};
+            }
+            for(var x=0; x<l; x++){
+                if(applicant.personalityExams[0].personalityTraits[x]._id.toLowerCase() == trait.toLowerCase()){
+                    ret = Math.round(applicant.personalityExams[0].personalityTraits[x].score);
+                    $scope.applicants[$scope.detailsUserId].traitsScore[trait] = ret;
+                    break;
+                }
+            }
+
+            return ret;
+        }
+
     }//// controller
 
     function CandidateDetailsController($stateParams, $scope, DEFAULT_PROFILE_IMAGE, AvailabilityService, BusinessService, JobApplicationService, TraitifyService, UserService) {
@@ -242,6 +278,9 @@
             var newIndex = $scope.detailsIndex + 1;
             if (newIndex < $scope.filtered.length) {
                 $scope.detailsIndex = newIndex;
+                $scope.detailsApp = $scope.filtered[$scope.detailsIndex];
+                $scope.detailsUserId = $scope.detailsApp.userId;
+                initializeApplication();
             }
         }; //// fun. nextApplication
 
@@ -250,12 +289,16 @@
             var newIndex = $scope.detailsIndex - 1;
             if (newIndex >= 0) {
                 $scope.detailsIndex = newIndex;
+                $scope.detailsApp = $scope.filtered[$scope.detailsIndex];
+                $scope.detailsUserId = $scope.detailsApp.userId;
+                initializeApplication();
             }
         }//// fun. previousApplication
 
         function initializeApplication() {
             $scope.application = $scope.filtered[$scope.detailsIndex];
             $scope.applicant = $scope.applicants[$scope.application.userId];
+
             // $scope.careerMatchScores = applicationData.careerMatchScores;
             // Assume scope was passed in, ie from candidate list controller
             $scope.initializeCandidateDetails();
