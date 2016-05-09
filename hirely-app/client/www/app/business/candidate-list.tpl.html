@@ -189,6 +189,8 @@
                             <div class="card-top">
                                 <!--<span class="date">{{app.appliedAt | date:'MM/dd/yyyy'}}</span>-->
                                 <a class="dotdotdot" href="javascript:void(0);" ng-click="showDetails($index, app.userId, app)" title="Details" uib-tooltip="Details"><i class="icon-menu_dots_icon"></i></a>
+                                <span class="userId hidden">{{app.userId}}</span>
+                                <span class="appId hidden">{{app._id}}</span>
                                 <h3>{{applicants[app.userId].firstName}} {{applicants[app.userId].lastName}}</h3>
                                 <div class="job">
                                     <span ng-if="applicants[app.userId].workExperience.length < 1">No Experience Listed</span>

@@ -225,7 +225,7 @@
                         Object.keys($scope.applications).forEach(function (key) {
                             var app = $scope.applications[key];
 
-                            for (var i=app.history.length-1; i>0; i--) {
+                            for (var i=app.history.length-1; i>=0; i--) {
                                 var h = app.history[i];
                                 h.age = $scope.getAgeFromDateStr(h.time);
 

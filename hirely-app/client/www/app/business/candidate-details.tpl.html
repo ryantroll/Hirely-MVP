@@ -16,21 +16,16 @@
                                     <div class="image-wrapper" ng-show="business.hideProfileImages || location.hideProfileImages || position.hideProfileImages">
                                         <img src="{{applicant.profileImageThumbURL || defaultImage}}" />
                                     </div>
-                                    <div class="date">Applied: {{application.appliedAt | date:'MM/dd/yyyy'}}</div>
                                 </div>
                             </div>
                             <div class="col-sm-9">
                                 <div class="details">
                                     <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
-
-                                    <div class="answers visible-sm-block visible-md-block visible-lg-block">
-                                        <!-- <div class="answer" ng-repeat="answer in application.prescreenAnswers | limitTo : 1">
-                                            <p>{{answer.answer}}</p>
-                                        </div> -->
+                                    <div class="job">
+                                        <span ng-if="applicant.workExperience.length < 1">No Experience Listed</span>
+                                        <span ng-if="applicant.workExperience.length > 0">{{applicant.workCategories}} Experience</span>
                                     </div>
-                                    <p class="traits visible-sm-block visible-md-block visible-lg-block" ng-show="applicant.personalityExams.length > 0">
-                                        <strong>Top Traits</strong> <span uib-tooltip="{{trait.meta.definition}}" ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">{{trait._id}}<i ng-if="!$last">, </i></span>
-                                    </p>
+
                                     <p class="status">
                                         {{position.title}} - <span class="{{statusLabelsHm[application.status+1] | lowercase}}">{{statusLabelsHm[application.status+1]}}</span>
                                     </p>
