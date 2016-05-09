@@ -117,8 +117,8 @@
                         </div>
                         <div class="skills clearfix">
                             <div class="score">
-                                <div class="border" ng-style="getScoreClip(scores[detailsUserId].maxOverallScore)"></div>
-                                <div class="circle">{{scores[applicant._id].maxOverallScore | number:0}}</div>
+                                <div class="border" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].exp)"></div>
+                                <div class="circle">{{scores[applicant._id].scores[position.expLvl].exp | number:0}}</div>
                             </div><!--score-->
                             <p class="score-title">Experience Match</p>
                             <div class="traits clearfix">
@@ -143,8 +143,8 @@
                         <div class="personality clearfix">
                             <!-- <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div> -->
                             <div class="score">
-                                <div class="border" ng-style="getScoreClip(scores[detailsUserId].maxOverallScore)"></div>
-                                <div class="circle">{{scores[applicant._id].maxOverallScore | number:0}}</div>
+                                <div class="border" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].psy)"></div>
+                                <div class="circle">{{scores[applicant._id].scores[position.expLvl].psy | number:0}}</div>
                             </div><!--score-->
                             <div class="traits clearfix">
                                 <div class="trait" ng-repeat="trait in occupationMetas.traitMetrics | limitTo : 6">
