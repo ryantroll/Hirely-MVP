@@ -486,40 +486,30 @@ $candidat-menu-height:60px;
                 }
             }//// .top
             .details{
-                padding:1em;
-
-
+                padding:1em 1em 0;
 
                 .cardDiv{
                     margin: 1em 0;
                     display:table;
                     min-height: 2em;
+                    font-size: 1em;
 
-                    p {
-                        margin: 0;
-                        font-size: 1em;
-                        overflow: hidden;///this will prevent text wrap
-                    }
-                    div {
-                        margin: .4em 0 0 .8em;
-                        height: 2.4em;
+                    table {
+                        margin: .4em 0 0 1.8em;
 
                         @media screen and (max-width:$screen-sm-max){
                             margin: .4em 0 0 0;
                         }
 
-                        div {
-                            display:inline-block;
-                            max-width: calc( 100% - 2em );
+                        td {
+                            padding-bottom: 0.8em;
+                            padding-right: 0.8em;
+
+                            .icon{
+                                font-size:2em;
+                            }
                         }
 
-                        .icon{
-                            display:inline-block;
-                            vertical-align:top;
-                            margin-right:0.1em;
-                            margin-top:1px;
-                            font-size:2em;
-                        }
                     }
 
                 }
@@ -527,8 +517,7 @@ $candidat-menu-height:60px;
 
             .menu{
                 width:100%;
-                position:absolute;
-                bottom:0;
+
 
                 @media screen and (max-width:$screen-sm-max){
                     position:relative;

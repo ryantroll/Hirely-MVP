@@ -207,38 +207,54 @@
                                         <span ng-show="app.prescreenAnswers[0].answer.length > 94">...</span>"
                                     </div>
                                 </div>
+
                                 <div class="cardDiv clearfix">
 
-                                    <div>
-                                        <div class="icon icon-clock_outlone_icon"></div>
-                                        <div>
-                                            <span ng-repeat="work in applicants[app.userId].workExperience.slice(-1)">
-                                                {{work.reportedOccTitle}} {{work.monthCount}}<br>
-                                            </span>
-                                            <span  ng-if="applicants[app.userId].workExperience.length == 0">
-                                                None Listed
-                                            </span>
-                                        </div>
-                                    </div>
+                                    <table><tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="icon icon-clock_outlone_icon"></div>
+                                            </td>
 
-                                    <div>
-                                        <div class="icon icon-graduation_hat_icon"></div>
-                                        <div>
-                                            <span ng-if="applicants[app.userId].educationMax.institutionName">
-                                                {{applicants[app.userId].educationMax.institutionName}}
-                                            </span>
-                                            <span ng-if="!applicants[app.userId].educationMax.institutionName">
-                                                None Listed
-                                            </span>
-                                        </div>
-                                    </div>
+                                            <td>
+                                                <span ng-repeat="work in applicants[app.userId].workExperience.slice(-1)">
+                                                    {{work.reportedOccTitle}} {{work.monthCount}}<br>
+                                                </span>
+                                                <span  ng-if="applicants[app.userId].workExperience.length == 0">
+                                                    None Listed
+                                                </span>
+                                            </td>
+                                        </tr>
 
-                                    <div>
-                                        <div class="icon icon-clock_outlone_icon"></div>
-                                        <div>
-                                            Can work {{app.prescreenAnswers[0].answer.length%10}} shifts
-                                        </div>
-                                    </div>
+
+
+                                        <tr>
+                                            <td>
+                                                <div class="icon icon-graduation_hat_icon"></div>
+                                            </td>
+
+                                            <td>
+                                                <span ng-if="applicants[app.userId].educationMax.institutionName">
+                                                    {{applicants[app.userId].educationMax.institutionName}}
+                                                </span>
+                                                <span ng-if="!applicants[app.userId].educationMax.institutionName">
+                                                    None Listed
+                                                </span>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td>
+                                                <div class="icon icon-clock_outlone_icon"></div>
+                                            </td>
+
+                                            <td>
+                                                Can work {{app.prescreenAnswers[0].answer.length%10}} shifts
+                                            </td>
+                                        </tr>
+
+                                    </tbody></table>
 
                                 </div>
                             </div><!--details-->
