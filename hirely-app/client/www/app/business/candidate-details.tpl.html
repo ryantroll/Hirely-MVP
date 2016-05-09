@@ -116,18 +116,17 @@
                             <h5>Skills</h5>
                         </div>
                         <div class="skills clearfix">
-                            <!-- <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div> -->
                             <div class="score">
                                 <div class="border" ng-style="getScoreClip(scores[detailsUserId].maxOverallScore)"></div>
-                                <div class="circle">{{scores[detailsUserId].maxOverallScore | number:0}}</div>
+                                <div class="circle">{{scores[applicant._id].maxOverallScore | number:0}}</div>
                             </div><!--score-->
                             <p class="score-title">Experience Match</p>
                             <div class="traits clearfix">
                                 <h4>Candidate vs Key Position Skills</h4>
                                 <div class="trait" ng-repeat="skill in occupationMetas.skillMetrics | limitTo : 6">
-                                    <h5>{{skill.name}}</h5>
+                                    <h5><span uib-tooltip="{{occupationMetas.descriptions[skill.sid].Description}}">{{skill.name}}</span></h5>
                                     <div class="scale">
-                                        <div class="bar" style="width:{{ 100 * applicants[detailsUserId].scores.Skills[skill.name] / 7 | number:0}}%;">{{100 * applicants[detailsUserId].scores.Skills[skill.name] / 7 | number:0}}%</div>
+                                        <div class="bar" style="width:{{ (100 * applicants[applicant._id].scores.Skills[skill.name] / 7 | number:0) || 0 }}%;">{{ (100 * applicants[detailsUserId].scores.Skills[skill.name] / 7 | number:0) || 0}}%</div>
                                     </div>
                                 </div>
 
@@ -145,13 +144,13 @@
                             <!-- <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div> -->
                             <div class="score">
                                 <div class="border" ng-style="getScoreClip(scores[detailsUserId].maxOverallScore)"></div>
-                                <div class="circle">{{scores[detailsUserId].maxOverallScore | number:0}}</div>
+                                <div class="circle">{{scores[applicant._id].maxOverallScore | number:0}}</div>
                             </div><!--score-->
                             <div class="traits clearfix">
-                                <div class="trait" ng-repeat="trait in applicant.personalityExams[0].personalityTraits | limitTo : 5">
-                                    <h5>{{trait._id}}</h5>
+                                <div class="trait" ng-repeat="trait in occupationMetas.traitMetrics | limitTo : 6">
+                                    <h5><span uib-tooltip="{{trait.description}}">{{trait.name}}</span></h5>
                                     <div class="scale">
-                                        <div class="bar" style="width:{{trait.score}}%;">{{trait.score}}%</div>
+                                        <div class="bar" style="width:{{getApplicantTraitScore(trait.name)}}%;">{{getApplicantTraitScore(trait.name)}}%</div>
                                     </div>
                                 </div>
 

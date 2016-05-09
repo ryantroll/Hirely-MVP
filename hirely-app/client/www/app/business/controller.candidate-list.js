@@ -221,7 +221,7 @@
                             });
 
                         });
-                        
+
                         Object.keys($scope.applications).forEach(function (key) {
                             var app = $scope.applications[key];
 
@@ -261,6 +261,7 @@
             .then(
                 function(metas){
                     $scope.occupationMetas = metas;
+                    console.log($scope.applicants)
                 },
                 function(error){
                   console.log(error)
