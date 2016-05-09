@@ -174,12 +174,81 @@
                                 <div class="border" ng-style="getScoreClip(scores[detailsUserId].maxOverallScore)"></div>
                                 <div class="circle">{{scores[applicant._id].maxOverallScore | number:0}}</div>
                             </div><!--score-->
-                            <p class="score-title">Experience Match</p>
+                            <p class="score-title">Shift Match</p>
 
                             <div class="details">
                                 <p>I'm available to start <span ng-show="daysUntilAvailable != 'Immediately'">in</span> <b>{{daysUntilAvailable}}</b> upon hire</p>
                                 <p>Hours Per Week: <b>{{applicant.availability.hoursPerWeekMin}}</b> to <b>{{applicant.availability.hoursPerWeekMax}}</b></p>
                             </div>
+
+                            <div class="shifts">
+                                <h6>Candidate vs Shift</h6>
+                                <div class="table">
+                                    <div class="srow">
+                                        <div class="td srow-label">&nbsp;</div>
+                                        <div class="td srow-shift shift-title">Morning</div>
+                                        <div class="td srow-shift shift-title">Day</div>
+                                        <div class="td srow-shift shift-title">Evening</div>
+                                        <div class="td srow-shift shift-title">Night</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Mon</div>
+                                        <div class="td srow-shift shift-match">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift shift-unmatch">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Tue</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Wed</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Thu</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Fri</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Sat</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Sun</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">&nbsp;</div>
+                                        <div class="td srow-shift shift-no">&nbsp;</div>
+                                        <div class="td srow-shift shift-match">Available</div>
+                                        <div class="td srow-shift shift-unmatch">Unavailable</div>
+                                        <div class="td srow-shift shift-no">&nbsp;</div>
+                                    </div>
+                                </div><!--table-->
+                            </div><!--shifts-->
                         </div><!--availability-->
 
                     </div><!--box avail-->
