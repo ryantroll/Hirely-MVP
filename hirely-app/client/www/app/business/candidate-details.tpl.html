@@ -117,7 +117,9 @@
                         </div>
                         <div class="skills clearfix">
                             <div class="score">
-                                <div class="border" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].exp)"></div>
+
+                                <div class="border" ng-class="getScoreColor(scores[applicant._id].scores[position.expLvl].exp)" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].exp)"></div>
+
                                 <div class="circle">{{scores[applicant._id].scores[position.expLvl].exp | number:0}}</div>
                             </div><!--score-->
                             <p class="score-title">Experience Match</p>
@@ -143,7 +145,7 @@
                         <div class="personality clearfix">
                             <!-- <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div> -->
                             <div class="score">
-                                <div class="border" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].psy)"></div>
+                                <div class="border" ng-class="getScoreColor(scores[applicant._id].scores[position.expLvl].psy)" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].psy)"></div>
                                 <div class="circle">{{scores[applicant._id].scores[position.expLvl].psy | number:0}}</div>
                             </div><!--score-->
                             <div class="traits clearfix">
@@ -169,50 +171,94 @@
                         <div class="title">
                             <h5>Availability</h5>
                         </div>
-                        <div class="details">
-                            <p>I'm available to start <span ng-show="daysUntilAvailable != 'Immediately'">in</span> <b>{{daysUntilAvailable}}</b> upon hire</p>
-                            <p>I'm looking for <b>{{applicant.availability.hoursPerWeekMin}}</b> to <b>{{applicant.availability.hoursPerWeekMax}}</b> hours per week</p>
-                            <p>My current availability for shifts is as follows</p>
-                        </div>
+                        <div class="availability clearfix">
+                            <div class="score">
+                                <div class="border" ng-class="getScoreColor(applicants[detailsUserId].shiftsScore.availabilityScore)" ng-style="getScoreClip(applicants[detailsUserId].shiftsScore.availabilityScore)"></div>
+                                <div class="circle">{{applicants[detailsUserId].shiftsScore.availabilityScore}}</div>
+                            </div><!--score-->
+                            <p class="score-title">Shift Match</p>
 
-                        <div class="timetable">
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-10">
-                                    <div class="days-list">
-                                        <ul>
-                                            <li class="arrow"><a href="javascript:void(0);" class="border" ng-click="previousDay()"><i class="glyphicon glyphicon-menu-left"></i></a></li>
-                                            <li ng-repeat="day in days" ng-class="{active:currentDayLabel === day, green:applicant.availability[day].length>0}"><a href="javascript:void(0);" ng-click="showTimeTable(day)">{{day|uppercase}}</a></li>
-                                            <li class="arrow"><a href="javascript:void(0);" ng-click="nextDay()"><i class="glyphicon glyphicon-menu-right"></i></a></li>
-                                        </ul>
+                            <div class="details">
+                                <p>I'm available to start <span ng-show="daysUntilAvailable != 'Immediately'">in</span> <b>{{daysUntilAvailable}}</b> upon hire</p>
+                                <p>Hours Per Week: <b>{{applicant.availability.hoursPerWeekMin}}</b> to <b>{{applicant.availability.hoursPerWeekMax}}</b></p>
+                            </div>
+
+                            <div class="shifts">
+                                <h6>Candidate vs Shift</h6>
+                                <div class="table">
+                                    <div class="srow">
+                                        <div class="td srow-label">&nbsp;</div>
+                                        <div class="td srow-shift shift-title" ng-repeat="shift in position.shifts.mon">{{shift.label}}</div>
                                     </div>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div><!--row-->
+                                    <div class="srow" ng-repeat="day in days">
+                                        <div class="td srow-label">{{day}}</div>
+                                        <div class="td srow-shift" ng-repeat="shift in applicants[detailsUserId].shiftsScore[day]" ng-class="{'shift-match':shift.match === true, 'shift-unmatch': shift.match === false}">
+                                            {{hours[shift.tStart].label}}
+                                            <span ng-if="shift.tStart || shift.tStart ==0">-</span>
+                                            {{hours[shift.tEnd].label}}
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                    <!-- <div class="srow">
+                                        <div class="td srow-label">Mon</div>
+                                        <div class="td srow-shift shift-match">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift shift-unmatch">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Tue</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Wed</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Thu</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Fri</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Sat</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">Sun</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                        <div class="td srow-shift">12am-6am</div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">&nbsp;</div>
+                                        <div class="td srow-shift shift-no">&nbsp;</div>
+                                        <div class="td srow-shift shift-match">Available</div>
+                                        <div class="td srow-shift shift-unmatch">Unavailable</div>
+                                        <div class="td srow-shift shift-no">&nbsp;</div>
+                                    </div> -->
+                                </div><!--table-->
+                            </div><!--shifts-->
+                        </div><!--availability-->
 
-
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <div class="hours">
-                                        <h4>am</h4>
-                                        <div class="hour-btns clearfix">
-                                            <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'am'}" ng-class="{'active':h.active}"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
-                                        </div><!--hour-btns-->
-                                    </div><!--hours-->
-                                </div><!--col-->
-
-                                <div class="col-sm-5">
-                                    <div class="hours">
-                                        <h4>pm</h4>
-                                        <div class="hour-btns clearfix">
-                                            <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'pm'}" ng-class="{'active':h.active}"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
-                                        </div><!--hour-btns-->
-                                    </div><!--hours-->
-                                </div><!--col-->
-                                <div class="col-sm-1"></div>
-                            </div><!--row-->
-                        </div>
                     </div><!--box avail-->
 
                     <div class="box">

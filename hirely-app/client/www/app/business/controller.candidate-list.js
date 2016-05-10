@@ -261,7 +261,7 @@
             .then(
                 function(metas){
                     $scope.occupationMetas = metas;
-                    console.log($scope.applicants)
+                    // console.log($scope.applicants)
                 },
                 function(error){
                   console.log(error)
