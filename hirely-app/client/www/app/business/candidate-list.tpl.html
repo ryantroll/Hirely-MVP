@@ -12,6 +12,17 @@
     </div>
 </div>
 
+<div class="floating-actions" ng-show="detailsApp">
+    <div class="btns">
+        <button class="btn" ng-if="detailsApp.status < 4" ng-click="updateAppStatus($event, detailsApp._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="fa fa-times"></i></button>
+
+        <button class="btn" ng-if="detailsApp.status == 2" ng-click="updateAppStatus($event, detailsApp._id, 3)" title="Like" uib-tooltip="Like"><i class="fa fa-heart-o"></i></button>
+        <button class="btn" ng-if="detailsApp.status == 3 || detailsApp.status == 2" ng-click="updateAppStatus($event, detailsApp._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></button>
+        <!-- <button class="btn btn-default" disabled ng-if="detailsApp.status == 4"  title="Hired" uib-tooltip="Hired"><i class="icon-dollar_sign_icon"></i></button> -->
+        <!-- <button class="btn btn-default" disabled ng-if="detailsApp.status == 5"  title="Dismissed" uib-tooltip="Dismissed"><i class="fa fa-times"></i></button> -->
+    </div>
+</div>
+
 <div class="sub-header" id="subHeader" ng-show="dataLoaded && !dataError">
     <div class="max-width clearfix">
         <div class="row">

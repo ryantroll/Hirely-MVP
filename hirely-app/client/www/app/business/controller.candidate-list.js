@@ -607,7 +607,7 @@
                 size: 'full',
                 controller: 'CandidateDetailsModalController',
                 templateUrl: 'app/business/candidate-details.tpl.html',
-                windowClass: 'gray',
+                windowClass: 'gray modal-max-900',
                 scope: $scope
             })
 
@@ -655,6 +655,9 @@
 
                             $('#subHeader').show();
                         }
+                        delete $scope.detailsUserId;
+                        delete $scope.detailsIndex;
+                        delete $scope.detailsApp;
                     },
                     function (err) {
 
