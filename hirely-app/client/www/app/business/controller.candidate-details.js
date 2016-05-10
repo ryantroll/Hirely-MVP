@@ -15,8 +15,11 @@
         $scope.days = AvailabilityService.days;
         $scope.hours = AvailabilityService.hours;
         $scope.statusLabelsHm = JobApplicationService.statusLabelsHm;
-        $scope.dayHours = {};
+        // $scope.dayHours = {};
         $scope.educationStatusLabels = UserService.educationStatus;
+
+        $scope.days = AvailabilityService.days
+        $scope.hours = AvailabilityService.hours
 
         $scope.daysUntilAvailable = 0;
         $scope.initializeCandidateDetails = function() {
@@ -24,8 +27,48 @@
                 work.monthCount = $scope.getDateDif(work);
             });
 
-            $scope.availability = AvailabilityService.toFrontEndModel($scope.applicant.availability);
+            // $scope.availability = AvailabilityService.toFrontEndModel($scope.applicant.availability);
             $scope.daysUntilAvailable = getDaysUntilAvailable();
+
+            /**
+             * Set availability score/match against shift
+             */
+            var avScore = angular.copy($scope.position.shifts);
+            var shiftsCount = 0;
+            var shiftsMatched = 0;
+
+            for(var day in avScore){
+
+                for(var s=0; s<avScore[day].length; s++){
+                    var start = avScore[day][s].tStart;
+                    var end = avScore[day][s].tEnd;
+                    var isMatch = false;
+                    var av = $scope.applicants[$scope.detailsUserId].availability[day];
+
+                    var shiftArr = [];
+                    for(var x=start; x<=end-1; x++){
+                        shiftArr.push(x);
+                    }//// for
+
+                    if(angular.isDefined(start) && angular.isDefined(end)){
+                        if( av.join('|').indexOf(shiftArr.join('|')) > -1 ){
+                            isMatch = true;
+                            shiftsMatched++;
+                        }
+                    }
+                    else{
+                        isMatch = null;
+                    }
+
+                    avScore[day][s].match = isMatch;
+
+                    shiftsCount++;
+                }/// for s
+            }//// for d
+            avScore.shiftsMatched = shiftsMatched;
+            avScore.shiftsCount = shiftsCount;
+            avScore.availabilityScore = Math.round(100 * shiftsMatched / shiftsCount);
+            $scope.applicants[$scope.detailsUserId].shiftsScore = avScore;
 
             /**
              * get experience icons
@@ -39,7 +82,7 @@
             /**
              * initiate the availability table to monday
              */
-            $scope.showTimeTable('mon', 0);
+            // $scope.showTimeTable('mon', 0);
 
             /**
              * Get the icons and colors data for all occupations needed for this page
@@ -91,21 +134,6 @@
 
         }
 
-        // Added '2' to not be confused with controller.candidate-list.getFitClass
-        $scope.getFitClass2 = function(i, score){
-
-            var label = 'great';
-            if(score < 90 && score >=70){
-                label = 'good';
-            }else if(score < 70 && score >= 50){
-                label = 'ok';
-            }else if(score < 50){
-                label = 'poor';
-            }
-            // console.log(Math.round(score/10)-1, label, i)
-            return i <= Math.round(score/10)-1 ? label : '';
-        }
-
         function getDaysUntilAvailable() {
             var days = Number($scope.applicant.availability.startAvailability)
             var list = AvailabilityService.startOptions;
@@ -120,43 +148,7 @@
             return ret;
         }
 
-        $scope.showTimeTable = function (day, index) {
-            /**
-             * Don't create new copy of currentDays if exists
-             * this function can be called from inside days buttons in this case the other days data will be erased if copy is exectured
-             * Only save and cancel will delete currentDays
-             */
-            if (angular.isUndefined($scope.currentDays)) {
-                $scope.currentDays = angular.copy($scope.availability.weeklyTimetable);
-            }
-            $scope.currentDayLabel = day;
-            $scope.currentDayIndex = index;
 
-        }//// showTimetable;
-
-        $scope.nextDay = function () {
-            if (angular.isUndefined($scope.currentDays) || angular.isUndefined($scope.currentDayLabel) || angular.isUndefined($scope.currentDayIndex)) {
-                return null;
-            }
-
-            $scope.currentDayIndex = ($scope.currentDayIndex + 1) % 7;
-            $scope.currentDayLabel = $scope.days[$scope.currentDayIndex];
-
-        }; //// fun. nextDay
-
-        $scope.previousDay = function () {
-            if (angular.isUndefined($scope.currentDays) || angular.isUndefined($scope.currentDayLabel) || angular.isUndefined($scope.currentDayIndex)) {
-                return null;
-            }
-            var pre = ($scope.currentDayIndex - 1) % 7;
-            $scope.currentDayIndex = pre < 0 ? 6 : pre;
-            $scope.currentDayLabel = $scope.days[$scope.currentDayIndex];
-
-        }; //// fun. nextDay
-
-        $scope.dayHours = function(day){
-
-        };//// fun. dayHorus
 
         $scope.getDateDif = function (work) {
             var start = new Date(work.dateStart);
@@ -379,7 +371,18 @@
             return ret;
         }
 
+        $scope.getScoreColor = function(score){
 
+            var label = 'great';
+            if(score < 90 && score >=70){
+                label = 'good';
+            }else if(score < 70 && score >= 50){
+                label = 'ok';
+            }else if(score < 50){
+                label = 'poor';
+            }
+            return label;
+        }
     }
 
 })();

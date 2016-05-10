@@ -1089,11 +1089,23 @@ $candidat-menu-height:60px;
                     width:90px;
                     height: 90px;
                     // border:5px solid $c-hirely-green;
-                    background-color:$c-hirely-green;
+                    background-color:$c-hirely-mid-gray;
                     @include border-radius(50%);
                     position:absolute;
                     z-index:1;
 
+                    &.great{
+                        background-color:$c-hirely-green;
+                    }
+                    &.good{
+                        background-color:$c-hirely-green;
+                    }
+                    &.poor{
+                        background-color:$c-hirely-red;
+                    }
+                    &.ok{
+                        background-color:$c-hirely-yellow;
+                    }
                     // -webkit-clip-path: polygon(50% 50%, 50% 0%, 100% 0, 100% 50%);
                 }
                 .circle{
@@ -1307,6 +1319,7 @@ $candidat-menu-height:60px;
                         font-weight: 700;
                         text-align: right;
                         padding:5px 0;
+                        text-transform: capitalize;
                     }
 
                 }/// .shifts
