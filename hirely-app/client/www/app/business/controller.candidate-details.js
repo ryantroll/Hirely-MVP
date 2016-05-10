@@ -206,7 +206,7 @@
             if(angular.isDefined($scope.applicants[$scope.detailsUserId].traitsScore)
                 && angular.isDefined($scope.applicants[$scope.detailsUserId].traitsScore[trait])
             ){
-                return $scope.applicants[$scope.detailsUserId].traitsScore[trait];
+                return Math.round((100 + $scope.applicants[$scope.detailsUserId].traitsScore[trait])/2);
             }
 
             if( !Array.isArray(applicant.personalityExams[0].personalityTraits) ){
@@ -230,7 +230,7 @@
                 }
             }
 
-            return ret;
+            return Math.round((100+ret)/2);
         }
 
     }//// controller

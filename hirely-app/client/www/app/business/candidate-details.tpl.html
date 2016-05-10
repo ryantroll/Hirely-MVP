@@ -9,7 +9,7 @@
             <div class="col-sm-12">
                 <div id="left-column">
 
-                    <div class="box" ng-show="!activeSection">
+                    <div class="box">
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="image">
@@ -117,7 +117,9 @@
                         </div>
                         <div class="skills clearfix">
                             <div class="score">
+
                                 <div class="border" ng-class="getScoreColor(scores[applicant._id].scores[position.expLvl].exp)" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].exp)"></div>
+
                                 <div class="circle">{{scores[applicant._id].scores[position.expLvl].exp | number:0}}</div>
                             </div><!--score-->
                             <p class="score-title">Experience Match</p>
