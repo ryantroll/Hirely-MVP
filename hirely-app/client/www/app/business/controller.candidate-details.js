@@ -18,8 +18,8 @@
         // $scope.dayHours = {};
         $scope.educationStatusLabels = UserService.educationStatus;
 
-        $scope.days = AvailabilityService.days
-        $scope.hours = AvailabilityService.hours
+        $scope.days = AvailabilityService.days;
+        $scope.hours = AvailabilityService.hours;
 
         $scope.daysUntilAvailable = 0;
         $scope.initializeCandidateDetails = function() {
@@ -291,6 +291,19 @@
         $scope.closeModal = function () {
             $uibModalInstance.close();
         };
+
+
+        // If user clicks outside modal, close it.
+        $(document).mouseup(function (e)
+        {
+            var container = $(".modal");
+
+            if (!container.is(e.target) // if the target of the click isn't the container...
+                && container.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                $scope.closeModal();
+            }
+        });
 
 
         // This should only be used when modal

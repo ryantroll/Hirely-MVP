@@ -491,7 +491,7 @@ $candidat-menu-height:60px;
                 .cardDiv{
                     margin: 1em 0;
                     display:table;
-                    min-height: 2em;
+                    min-height: 4.2em;
                     font-size: 1em;
 
                     table {
@@ -501,12 +501,15 @@ $candidat-menu-height:60px;
                             margin: .4em 0 0 0;
                         }
 
-                        td {
-                            padding-bottom: 0.8em;
-                            padding-right: 0.8em;
+                        tr {
+                            min-height: 3.8em;
+                            td {
+                                padding-bottom: 0.8em;
+                                padding-right: 0.8em;
 
-                            .icon{
-                                font-size:2em;
+                                .icon{
+                                    font-size:2em;
+                                }
                             }
                         }
 
