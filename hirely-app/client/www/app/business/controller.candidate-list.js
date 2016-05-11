@@ -609,13 +609,39 @@
                 templateUrl: 'app/business/candidate-details.tpl.html',
                 windowClass: 'gray modal-max-900',
                 scope: $scope
-            })
+            });
+
 
             if ($scope.isHeaderFixed === true) {
                 $('#mobile-nav').hide()
 
                 $('#subHeader').hide();
             }
+            /**
+             * Resolved when modal closed
+             */
+            detailsModal.result
+                .then(
+                    function (d) {
+
+                    },
+                    function (err) {
+
+                    }
+                )
+                .finally(
+                    function (d) {
+                        $scope.showActionButtons = false;
+                        if ($scope.isHeaderFixed === true) {
+                            $('#mobile-nav').show()
+
+                            $('#subHeader').show();
+                        }
+                        // delete $scope.detailsUserId;
+                        // delete $scope.detailsIndex;
+                        // delete $scope.detailsApp;
+                    }
+                )
             /**
              * Resolved when modal successfully open
              */
@@ -627,12 +653,15 @@
                             /**
                              * Update the viewStats of the application to viewed
                              */
+                            $scope.showActionButtons = true;
+
                             var appToSave = angular.copy(app);
                             appToSave.viewStatus = 1;
                             JobApplicationService.save(appToSave).then(
                                 function (savedApp) {
                                     // $scope.applications[index] = savedApp;
                                     $scope.applications[index].viewStats = 1;
+
                                 },
                                 function (err) {
                                     console.log(err);
@@ -644,25 +673,7 @@
                         console.log(err)
                     }
                 )
-            /**
-             * Resolved when modal closed
-             */
-            detailsModal.result
-                .then(
-                    function (d) {
-                        if ($scope.isHeaderFixed === true) {
-                            $('#mobile-nav').show()
 
-                            $('#subHeader').show();
-                        }
-                        delete $scope.detailsUserId;
-                        delete $scope.detailsIndex;
-                        delete $scope.detailsApp;
-                    },
-                    function (err) {
-
-                    }
-                )
         }
 
         $scope.activityColor = function (act) {

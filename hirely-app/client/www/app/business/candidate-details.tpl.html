@@ -51,7 +51,7 @@
                         <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-show="isModal" ng-disabled="detailsIndex >= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
                     </div><!--arrows-->
 
-                    <div class="box" ng-repeat="im in position.interviewMaterials">
+                    <!--<div class="box" ng-repeat="im in position.interviewMaterials">
                         <a target="_blank" href="{{im.url}}">
                             <button class="btn mid-gray" style="width:100%">{{im.name}}</button>
                         </a>
@@ -156,14 +156,14 @@
                                     <div class="srow" ng-repeat="day in days">
                                         <div class="td srow-label">{{day}}</div>
                                         <div class="td srow-shift" ng-repeat="shift in applicants[detailsUserId].shiftsScore[day]" ng-class="{'shift-match':shift.match === true, 'shift-unmatch': shift.match === false}">
-                                            {{hours[shift.tStart].label}}<span ng-if="shift.tStart || shift.tStart ==0">-</span>{{hours[shift.tEnd].label}} <span ng-if="!shift.tStart && shift.tStart !=0">&nbsp;</span>
+                                            {{hours[shift.tStart].hourName}}{{hours[shift.tStart].dayHalfShort}} <span ng-if="shift.tStart || shift.tStart ==0">-</span> {{hours[shift.tEnd].hourName}}{{hours[shift.tEnd].dayHalfShort}} <span ng-if="!shift.tStart && shift.tStart !=0">&nbsp;</span>
                                         </div>
                                     </div>
                                     <div class="srow">
                                         <div class="td srow-label">&nbsp;</div>
                                         <div class="td srow-shift shift-no">&nbsp;</div>
-                                        <div class="td srow-shift shift-match">Available</div>
-                                        <div class="td srow-shift shift-unmatch">Unavailable</div>
+                                        <div class="td srow-shift shift-match small">Available</div>
+                                        <div class="td srow-shift shift-unmatch small">Unavailable</div>
                                         <div class="td srow-shift shift-no">&nbsp;</div>
                                     </div>
                                 </div><!--table-->

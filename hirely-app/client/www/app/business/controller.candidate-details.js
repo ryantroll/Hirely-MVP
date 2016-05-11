@@ -36,10 +36,12 @@
             var avScore = angular.copy($scope.position.shifts);
             var shiftsCount = 0;
             var shiftsMatched = 0;
+            var shiftLabels = {}; /// will be used to add dummy shifts in the days
 
             for(var day in avScore){
-
                 for(var s=0; s<avScore[day].length; s++){
+                    shiftLabels[avScore[day][s].label] = s;
+
                     var start = avScore[day][s].tStart;
                     var end = avScore[day][s].tEnd;
                     var isMatch = false;
@@ -68,6 +70,37 @@
             avScore.shiftsMatched = shiftsMatched;
             avScore.shiftsCount = shiftsCount;
             avScore.availabilityScore = Math.round(100 * shiftsMatched / shiftsCount);
+
+            /**
+             * Fix the missed up shifts in each day by adding dummy shift object based on shift label
+             */
+            var labels = Object.keys(shiftLabels);
+
+            for(day in avScore){
+                var d = avScore[day];
+                if(d.length < labels.length){
+                    var temp = [];
+                    for(var x=0; x<labels.length; x++){
+                        //// search the day array for matching label;
+                        var i = null;
+                        for(var v=0; v<d.length; v++){
+                            if(labels[x] == d[v].label){
+                                i = v;
+                                break;
+                            }
+                        }
+                        if(null !== i){
+                           temp.push( d.splice(i, 1)[0] );
+                        }
+                        else{
+                            temp.push({label:labels[x]});
+                        }
+
+                    }
+                    avScore[day] = temp;
+                }//// if
+            }
+
             $scope.applicants[$scope.detailsUserId].shiftsScore = avScore;
 
             /**
@@ -78,11 +111,6 @@
                 strOccIds.push($scope.applicant.workExperience[x].occId);
             }
 
-
-            /**
-             * initiate the availability table to monday
-             */
-            // $scope.showTimeTable('mon', 0);
 
             /**
              * Get the icons and colors data for all occupations needed for this page
@@ -288,6 +316,8 @@
         }//// fun. previousApplication
 
         function initializeApplication() {
+
+
             $scope.application = $scope.filtered[$scope.detailsIndex];
             $scope.applicant = $scope.applicants[$scope.application.userId];
 
@@ -297,6 +327,7 @@
         }
         initializeApplication();
         $scope.$watch('detailsIndex', function(newVal, oldVal) {
+
             initializeApplication();
         });
 

@@ -1141,7 +1141,7 @@ $candidat-menu-height:60px;
 
                 .shifts{
                     width:100%;
-                    font-size:0.8em;
+                    font-size:0.7em;
                     @media screen and (min-width:$screen-sm-min){
                         width:75%;
                         margin: 0 auto;
@@ -1165,12 +1165,13 @@ $candidat-menu-height:60px;
                             display: block;
                             float:left;
                             margin-right:2.5%;
-                            min-height: 40px;
+                            // min-height: 40px;
+                            font-size:0.9em;
                             &:last-of-type{
                                 margin-right: 0;
                             }
                             @media screen and (min-width:$screen-sm-min){
-                                min-height: auto;
+                                // min-height: auto;
                             }
                         }
 
@@ -1179,14 +1180,14 @@ $candidat-menu-height:60px;
                         width: 20%;
                         background-color:$c-hirely-light-gray;
                         text-align: center;
-                        padding:5px;
+                        padding:5px 0;
                         &.shift-title{
                             background-color:$c-hirely-mid-gray;
                             color:$c-white;
                             font-weight:700;
                         }
                         &.shift-match{
-                            background-color:$c-hirely-green;
+                            background-color:$c-hirely-green-2;
                             color:$c-white;
                             font-weight:700;
                         }
@@ -1197,6 +1198,11 @@ $candidat-menu-height:60px;
                         }
                         &.shift-no{
                             background-color:$c-white;
+                        }
+                        &.small{
+                            @media screen and (max-width:$screen-sm-min){
+                                font-size:0.7em;
+                            }
                         }
                     }
                     .srow-label{
@@ -1288,72 +1294,72 @@ $candidat-menu-height:60px;
                 }
             }//// .experience
 
-            .actions{
-                padding:1.3em 1em;
-                min-height: 76px;
+            // .actions{
+            //     padding:1.3em 1em;
+            //     min-height: 76px;
 
-                .menu{
-                    width:auto;
-                    display: none;
-                    height: $candidat-menu-height;
-                    // position:absolute;
-                    left:50%;
-                    // margin-left:-80px;
-                    margin:0 auto;
+            //     .menu{
+            //         width:auto;
+            //         display: none;
+            //         height: $candidat-menu-height;
+            //         // position:absolute;
+            //         left:50%;
+            //         // margin-left:-80px;
+            //         margin:0 auto;
 
-                    @media screen and (min-width:$screen-sm-min){
-                        display: table;
-                    }
+            //         @media screen and (min-width:$screen-sm-min){
+            //             display: table;
+            //         }
 
-                    .inner{
-                        height: $candidat-menu-height;
-                        @include border-radius(2px);
-                        overflow: hidden;
-                    }
+            //         .inner{
+            //             height: $candidat-menu-height;
+            //             @include border-radius(2px);
+            //             overflow: hidden;
+            //         }
 
-                    .action{
-                        height: $candidat-menu-height;
-                        width:80px;
-                        background-color:$c-hirely-green;
-                        color:$c-white;
-                        text-align: center;
-                        line-height: $candidat-menu-height;
-                        float:left;
-                    }
-                    .action.disabled{
-                        cursor:not-allowed;
-                    }
-                    .action[disabled="disabled"]{
-                        cursor:not-allowed;
-                    }
-                    a{
-                        float:left;
-                        display: block;
-                        width:$candidat-menu-height;
-                        height: $candidat-menu-height;
-                        line-height: $candidat-menu-height;
-                        text-align: center;
-                        color:$c-white;
-                        background-color:$c-hirely-mid-gray;
-                        font-size: 2em;
-                        margin-right: 5px;
-                    }
-                    a:last-of-type{
-                        margin-right: 0;
-                    }
+            //         .action{
+            //             height: $candidat-menu-height;
+            //             width:80px;
+            //             background-color:$c-hirely-green;
+            //             color:$c-white;
+            //             text-align: center;
+            //             line-height: $candidat-menu-height;
+            //             float:left;
+            //         }
+            //         .action.disabled{
+            //             cursor:not-allowed;
+            //         }
+            //         .action[disabled="disabled"]{
+            //             cursor:not-allowed;
+            //         }
+            //         a{
+            //             float:left;
+            //             display: block;
+            //             width:$candidat-menu-height;
+            //             height: $candidat-menu-height;
+            //             line-height: $candidat-menu-height;
+            //             text-align: center;
+            //             color:$c-white;
+            //             background-color:$c-hirely-mid-gray;
+            //             font-size: 2em;
+            //             margin-right: 5px;
+            //         }
+            //         a:last-of-type{
+            //             margin-right: 0;
+            //         }
 
-                    .red{
-                        background-color:$c-hirely-red;
-                    }
-                    .green{
-                        background-color:$c-hirely-green;
-                    }
-                    .purple{
-                        background-color: $c-hirely-purple;//#C653FF
-                    }
+            //         .red{
+            //             background-color:$c-hirely-red;
+            //         }
+            //         .green{
+            //             background-color:$c-hirely-green;
+            //         }
+            //         .purple{
+            //             background-color: $c-hirely-purple;//#C653FF
+            //         }
 
-                }//// .menu
-            }//// .actions
+            //     }//// .menu
+            // }//// .actions
 
             .contacts{
                 padding:1em;
@@ -1530,7 +1536,7 @@ $candidat-menu-height:60px;
         .btn{
             float:left;
             margin-right:1em;
-            font-size:1.4em;
+            font-size:1em;
             color:$c-white;
             @include drop-shadow(1px, 2px, 5px, 1px, 0.3);
             background-color:$c-hirely-mid-gray;
