@@ -130,43 +130,43 @@ db.once('open', function () {
                         ],
                         "shifts":{
                             "mon":[
-                                {"label":"Night", "tStart":0, "tEnd":4},
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
                                 {"label":"Morning", "tStart":5, "tEnd":10},
                                 {"label":"After Noon", "tStart":11, "tEnd":16},
                                 {"label":"Evening", "tStart":17, "tEnd":23}
                             ],
                             "tue":[
-                                {"label":"Night", "tStart":0, "tEnd":4},
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
                                 {"label":"Morning", "tStart":5, "tEnd":10},
                                 {"label":"After Noon", "tStart":11, "tEnd":16},
                                 {"label":"Evening", "tStart":17, "tEnd":23}
                             ],
                             "wed":[
-                                {"label":"Night", "tStart":0, "tEnd":4},
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
                                 {"label":"Morning", "tStart":5, "tEnd":10},
                                 {"label":"After Noon", "tStart":11, "tEnd":16},
                                 {"label":"Evening", "tStart":17, "tEnd":23}
                             ],
                             "thu":[
-                                {"label":"Night", "tStart":0, "tEnd":4},
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
                                 {"label":"Morning", "tStart":5, "tEnd":10},
                                 {"label":"After Noon", "tStart":11, "tEnd":16},
                                 {"label":"Evening", "tStart":17, "tEnd":23}
                             ],
                             "fri":[
-                                {"label":"Night", "tStart":0, "tEnd":4},
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
                                 {"label":"Morning", "tStart":5, "tEnd":10},
                                 {"label":"After Noon", "tStart":11, "tEnd":16},
                                 {"label":"Evening", "tStart":17, "tEnd":23}
                             ],
                             "sat":[
-                                {"label":"Night", "tStart":0, "tEnd":4},
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
                                 {"label":"Morning", "tStart":5, "tEnd":10},
                                 {"label":"After Noon", "tStart":11, "tEnd":16},
                                 {"label":"Evening", "tStart":17, "tEnd":23}
                             ],
                             "sun":[
-                                {"label":"Night", "tStart":0, "tEnd":4},
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
                                 {"label":"Morning", "tStart":5, "tEnd":10},
                                 {"label":"After Noon", "tStart":11, "tEnd":16},
                                 {"label":"Evening", "tStart":17, "tEnd":23}
