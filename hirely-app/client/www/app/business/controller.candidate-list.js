@@ -317,6 +317,17 @@
                 // $scope.updateStats();
                 $scope.dataLoaded = true;
 
+                angular.element(".candidate-v2").hover(
+                    function () {
+                        $(this).find(".card-no-hover").css('visibility', 'hidden');
+                        $(this).find(".card-hover").show();
+                    },
+                    function () {
+                        $(this).find(".card-hover").hide();
+                        $(this).find(".card-no-hover").css('visibility', 'visible');
+                    }
+                );
+
             }, 200);
         }//// initialize
 
