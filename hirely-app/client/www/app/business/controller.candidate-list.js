@@ -310,23 +310,22 @@
                 $scope.applicants[key].workCategories = Object.keys(cats).splice(0,2).join(' & ').replace('_', ' ');
             });
 
+            $(document).on('mouseenter', ".candidate-v2", function() {
+                $(this).find(".card-no-hover").css('visibility', 'hidden');
+                $(this).find(".card-hover").show();
+            });
+            $(document).on('mouseleave', ".candidate-v2", function() {
+                $(this).find(".card-hover").hide();
+                $(this).find(".card-no-hover").css('visibility', 'visible');
+            });
+            
+
             /**
              * Wait for some time and before showing the page
              */
             $timeout(function () {
                 // $scope.updateStats();
                 $scope.dataLoaded = true;
-
-                angular.element(".candidate-v2").hover(
-                    function () {
-                        $(this).find(".card-no-hover").css('visibility', 'hidden');
-                        $(this).find(".card-hover").show();
-                    },
-                    function () {
-                        $(this).find(".card-hover").hide();
-                        $(this).find(".card-no-hover").css('visibility', 'visible');
-                    }
-                );
 
             }, 200);
         }//// initialize
