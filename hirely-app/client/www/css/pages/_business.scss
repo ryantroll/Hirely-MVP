@@ -465,6 +465,11 @@ $candidat-menu-height:60px;
                     border-radius: 0;
                     font-size: 1.2em;
                     margin: .6em 15%;
+
+                    &:hover {
+                        background-color: $c-hirely-red;
+                        border: 1px solid $c-hirely-red;
+                    }
                 }
 
             }
