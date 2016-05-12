@@ -263,11 +263,11 @@
                                                 </td>
 
                                                 <td>
-                                                    <span ng-repeat="work in applicants[app.userId].workExperience.slice(-1)">
-                                                        {{work.reportedOccTitle}} {{work.monthCount}}<br>
-                                                    </span>
                                                     <span  ng-if="applicants[app.userId].workExperience.length == 0">
                                                         None Listed
+                                                    </span>
+                                                    <span  ng-if="applicants[app.userId].workExperience.length > 0">
+                                                        {{applicants[app.userId].workExperience[0].reportedOccTitle}} {{applicants[app.userId].workExperience[0].monthCount}}<br>
                                                     </span>
                                                 </td>
                                             </tr>
