@@ -31,79 +31,6 @@
             $scope.daysUntilAvailable = getDaysUntilAvailable();
 
             /**
-             * Set availability score/match against shift
-             */
-            var avScore = angular.copy($scope.position.shifts);
-            var shiftsCount = 0;
-            var shiftsMatched = 0;
-            var shiftLabels = {}; /// will be used to add dummy shifts in the days
-
-            for(var day in avScore){
-                for(var s=0; s<avScore[day].length; s++){
-                    shiftLabels[avScore[day][s].label] = s;
-
-                    var start = avScore[day][s].tStart;
-                    var end = avScore[day][s].tEnd;
-                    var isMatch = false;
-                    var av = $scope.applicants[$scope.detailsUserId].availability[day];
-
-                    var shiftArr = [];
-                    for(var x=start; x<=end-1; x++){
-                        shiftArr.push(x);
-                    }//// for
-
-                    if(angular.isDefined(start) && angular.isDefined(end)){
-                        if( av.join('|').indexOf(shiftArr.join('|')) > -1 ){
-                            isMatch = true;
-                            shiftsMatched++;
-                        }
-                    }
-                    else{
-                        isMatch = null;
-                    }
-
-                    avScore[day][s].match = isMatch;
-
-                    shiftsCount++;
-                }/// for s
-            }//// for d
-            avScore.shiftsMatched = shiftsMatched;
-            avScore.shiftsCount = shiftsCount;
-            avScore.availabilityScore = Math.round(100 * shiftsMatched / shiftsCount);
-
-            /**
-             * Fix the missed up shifts in each day by adding dummy shift object based on shift label
-             */
-            var labels = Object.keys(shiftLabels);
-
-            for(day in avScore){
-                var d = avScore[day];
-                if(d.length < labels.length){
-                    var temp = [];
-                    for(var x=0; x<labels.length; x++){
-                        //// search the day array for matching label;
-                        var i = null;
-                        for(var v=0; v<d.length; v++){
-                            if(labels[x] == d[v].label){
-                                i = v;
-                                break;
-                            }
-                        }
-                        if(null !== i){
-                           temp.push( d.splice(i, 1)[0] );
-                        }
-                        else{
-                            temp.push({label:labels[x]});
-                        }
-
-                    }
-                    avScore[day] = temp;
-                }//// if
-            }
-
-            $scope.applicants[$scope.detailsUserId].shiftsScore = avScore;
-
-            /**
              * get experience icons
              */
             var strOccIds = [];
@@ -175,8 +102,6 @@
             }
             return ret;
         }
-
-
 
         $scope.getDateDif = function (work) {
             var start = new Date(work.dateStart);
