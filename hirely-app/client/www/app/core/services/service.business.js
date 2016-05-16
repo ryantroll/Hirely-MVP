@@ -193,6 +193,12 @@
             return deferred.promise;
         }/// fun. getPositionOccupationMetas
 
+        this.arrangeLocationsByStates = function(business){
+            var ret = [];
+
+            return ret;
+        }//// fun. arrangeLocationsBySates
+
 
         this.filterBasicCalculator = function (operator, left, right) {
             switch (operator) {
