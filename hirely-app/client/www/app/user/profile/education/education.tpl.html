@@ -6,8 +6,18 @@
     <div class="row">
         <div class="cards-wrapper">
             <div class="card">
-                <h4>Application Tip</h4>
-                <p>Adding all of your education and training enhances your application. Be sure to enter all completed, partially completed and currently attending education.</p>
+                <h4>
+                    <span ng-show="!isSurvey">Application </span>
+                    <span ng-show="isSurvey">Survey </span>
+                    Tip
+                </h4>
+                <p>
+                    Adding all of your education and training enhances your
+                    application
+                    <span ng-show="!isSurvey">application</span>
+                    <span ng-show="isSurvey">survey</span>
+                    . Be sure to enter all completed, partially completed and currently attending education.
+                </p>
             </div>
         </div>
     </div>

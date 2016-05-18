@@ -46,7 +46,22 @@
                                     userId: AuthService.currentUserId,
                                     positionId: $scope.position._id,
                                     prescreenAnswers: $scope.position.prescreenQuestions,
-                                    status: 0
+                                    status: 0,
+                                    history: [
+                                        {
+                                            time: new Date(),
+                                            type: 'StatusChange',
+                                            subject: "Application Started",
+                                            body: "Application Started",
+                                            meta: {
+                                                fromStatus: null,
+                                                toStatus: 0
+                                            },
+                                            userId: AuthService.currentUserId,
+                                            userFirstName: AuthService.currentUser.firstName,
+                                            userLastName: AuthService.currentUser.lastName
+                                        }
+                                    ]
                                 };
                                 return JobApplicationService.create(application)
                                     .then(

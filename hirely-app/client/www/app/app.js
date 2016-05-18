@@ -73,7 +73,7 @@ var myApp = angular.module('hirelyApp',
                 authRequired: true
             })
             .state('master.application.profiler', {
-                url: '/:businessSlug/:locationSlug/:positionSlug/profiler',
+                url: '/:businessSlug/:locationSlug/:positionSlug/survey',
                 templateUrl: 'app/application/job-profiler.tpl.html',
                 controller: 'JobProfilerController',
                 authRequired: true

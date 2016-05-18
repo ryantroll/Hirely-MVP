@@ -6,8 +6,16 @@
     <div class="row">
         <div class="cards-wrapper">
             <div class="card">
-                <h4>Application Tip</h4>
-                <p>Adding all of your current and past jobs helps our matching process gather your skills and present the strongest possible application.</p>
+                <h4>
+                    <span ng-show="!isSurvey">Application </span>
+                    <span ng-show="isSurvey">Survey </span>
+                    Tip
+                </h4>
+                <p>
+                    Adding all of your current and past jobs helps our matching process gather your skills and present the strongest possible
+                    <span ng-show="!isSurvey">application.</span>
+                    <span ng-show="isSurvey">survey.</span>
+                </p>
             </div>
         </div>
     </div>

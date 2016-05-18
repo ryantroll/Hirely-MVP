@@ -27,6 +27,7 @@
         $scope.destroyDirection = 0;
         $scope.blockFinished = false;
         $scope.enableNextButton = true;
+        $scope.isSurvey = true;
 
 
         BusinessService.getBySlug($stateParams.businessSlug)
@@ -42,11 +43,27 @@
                             $scope.application = application;
                             if (!application) {
                                 console.log("JA:info: No prior profile found");
+
                                 application = {
                                     userId: AuthService.currentUserId,
                                     positionId: $scope.position._id,
                                     prescreenAnswers: $scope.position.prescreenQuestions,
-                                    status: 6
+                                    status: 6,
+                                    history: [
+                                        {
+                                            time: new Date(),
+                                            type: 'StatusChange',
+                                            subject: "Survey Started",
+                                            body: "Survey Started",
+                                            meta: {
+                                                fromStatus: null,
+                                                toStatus: 6
+                                            },
+                                            userId: AuthService.currentUserId,
+                                            userFirstName: AuthService.currentUser.firstName,
+                                            userLastName: AuthService.currentUser.lastName
+                                        }
+                                    ]
                                 };
                                 return JobApplicationService.create(application)
                                     .then(

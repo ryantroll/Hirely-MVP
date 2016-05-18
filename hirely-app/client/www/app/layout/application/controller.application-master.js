@@ -27,9 +27,9 @@
     function ApplicationMasterController($scope) {
         $scope.layoutModel = {business: null, noHeader: null};
 
-        $scope.profiling = false;
-        if (window.location.href.indexOf("profiler")!==-1) {
-            $scope.profiling = true;
+        $scope.isSurvey = false;
+        if (window.location.href.indexOf("survey")!==-1) {
+            $scope.isSurvey = true;
         }
 
 

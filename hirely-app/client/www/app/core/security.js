@@ -34,7 +34,7 @@
                                 if (toState.name == 'master.application.apply')
                                     $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
                                 else
-                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to profile for "+positionTitle});
+                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to complete our staff survey for "+positionTitle});
                             });
                         } else {
                             console.log("S:handleAuthRequiredRedirect:info:2: Redirecting to login");
