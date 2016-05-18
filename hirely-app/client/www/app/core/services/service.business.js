@@ -193,6 +193,10 @@
             return deferred.promise;
         }/// fun. getPositionOccupationMetas
 
+        // Returns a state list sorted by abbr: [{name, abbreviation, locations:{id, positions}}]
+        // Does this by creating a dict with key abbr, then looping through the dict. This naturally
+        // sorts and dereferences locations which share a state.
+        // TODO:  sort locations or positions
         this.arrangeLocationsByStates = function(business){
             var ret = [];
 
