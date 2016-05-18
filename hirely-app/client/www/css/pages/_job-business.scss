@@ -115,6 +115,9 @@
                             line-height: 30px;
                             font-size:0.6em;
                         }
+                        b{
+                            font-weight: 400;
+                        }
                     }//// span
                 }//// .link
             } //// .state
@@ -132,6 +135,20 @@
                 text-align: center;
                 h3{
                     font-weight: 400;
+                }
+                .times{
+                    b{
+                        font-weight: 400;
+                        text-transform: capitalize;
+                    }
+                    i{
+                        font-style: normal;
+                    }
+                    span:last-of-type{
+                        i{
+                            display: none;
+                        }
+                    }
                 }
             }/// details
         }//// .location

@@ -35,36 +35,27 @@
                 </div><!--title-->
 
                 <div class="states">
-                    <div class="state">
-                        <a href="javascript:void(0)" class="link">
-                            <span>Florida</span>
-                            <span>Show Location <i class="icon glyphicon glyphicon-plus"></i></span>
+                    <div class="state" ng-repeat="state in businessByStates">
+                        <a href="javascript:void(0)" class="link" ng-click="expandState(state.abbreviation)">
+                            <span>{{state.name}}</span>
+                            <span>
+                                <b ng-show="state.abbreviation != stateToShow">Show</b>
+                                <b ng-show="state.abbreviation == stateToShow">Hide</b>
+                                Location <i class="icon glyphicon " ng-class="{'glyphicon-plus':state.abbreviation != stateToShow, 'glyphicon-minus':state.abbreviation == stateToShow}"></i>
+                            </span>
                         </a>
-                    </div><!--state-->
-
-                    <div class="state">
-                        <a href="javascript:void(0)" class="link">
-                            <span>Florida</span>
-                            <span>Show Location <i class="icon glyphicon glyphicon-plus"></i></span>
-                        </a>
-                    </div><!--state-->
-
-                    <div class="state">
-                        <a href="javascript:void(0)" class="link">
-                            <span>Florida</span>
-                            <span>Show Location <i class="icon glyphicon glyphicon-plus"></i></span>
-                        </a>
-                        <div class="location">
+                        <div class="location" ng-repeat="loc in state.locations" ng-show="state.abbreviation == stateToShow">
                             <div class="details">
-                                <h3>DUPONT CIRCLE</h3>
-                                <p>Mon - Fri: 11:00am to 8:00pm | Sat: 10:00am to 6:00pm | Sun: 12:00pm to 6:00pm</p>
+                                <h3>{{business.locations[loc.id].name}}</h3>
+                                <p class="times">
+                                    <span ng-repeat="range in business.locations[loc.id].aggregatedWeekTimes"><b>{{range.label}}</b>: {{range.hoursRanges.join(' to ').toLowerCase()}} <i>|</i> </span>
+                                </p>
                                 <p>
-                                    1553 7th St NW, Washington, DC 20001
+                                    {{business.locations[loc.id].street1}}, {{business.locations[loc.id].city}}, {{business.locations[loc.id].state}}, {{business.locations[loc.id].postalCode}}
                                     <br>
-                                    0.5 From my location (<a href="javascript:void(0);">change</a>)
+                                    <!-- 0.5 From my location (<a href="javascript:void(0);">change</a>) -->
                                 </p>
                             </div><!--details-->
-
                             <table class="positions">
                                 <thead>
                                     <tr>
@@ -76,34 +67,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Restaurant Team Member</td>
-                                        <td>Full Time</td>
-                                        <td>$12.00</td>
-                                        <td class="no-mobile">YES</td>
-                                        <td class="no-mobile"><a href="javascript:void(0)">VIEW</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Restaurant Team Member</td>
-                                        <td>Full Time</td>
-                                        <td>$12.00</td>
-                                        <td class="no-mobile">YES</td>
-                                        <td class="no-mobile"><a href="javascript:void(0)">VIEW</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Restaurant Team Member</td>
-                                        <td>Full Time</td>
-                                        <td>$12.00</td>
-                                        <td class="no-mobile">YES</td>
-                                        <td class="no-mobile"><a href="javascript:void(0)">VIEW</a></td>
+                                    <tr ng-repeat="pos in loc.positions">
+                                        <td>{{business.positions[pos].title}}</td>
+                                        <td>{{business.positions[pos].workType}}</td>
+                                        <td>${{business.positions[pos].compensation.wageAmount}}</td>
+                                        <td class="no-mobile">
+                                            <span ng-show="business.positions[pos].benefits.paidVacation || business.positions[pos].benefits.paidSickTime || business.positions[pos].benefits.flexibleSchedul || business.positions[pos].benefits.healthInsurance || business.positions[pos].benefits.dentalInsurance || business.positions[pos].benefits.retirementPlan || business.positions[pos].benefits.discounts || business.positions[pos].benefits.commission || business.positions[pos].benefits.tips || business.positions[pos].benefits.bonus">Yes</span>
+                                            <span ng-hide="business.positions[pos].benefits.paidVacation || business.positions[pos].benefits.paidSickTime || business.positions[pos].benefits.flexibleSchedul || business.positions[pos].benefits.healthInsurance || business.positions[pos].benefits.dentalInsurance || business.positions[pos].benefits.retirementPlan || business.positions[pos].benefits.discounts || business.positions[pos].benefits.commission || business.positions[pos].benefits.tips || business.positions[pos].benefits.bonus">No</span>
+                                        </td>
+                                        <td class="no-mobile"><a href="javascript:void(0)" ui-sref="master.default.job.position({businessSlug:business.slug, locationSlug:business.locations[loc.id].slug, positionSlug:business.positions[pos].slug})">VIEW</a></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div><!--location-->
-
                     </div><!--state-->
-
-
                 </div><!--states-->
             </div><!--col-->
         </div><!--row-->
@@ -114,8 +91,7 @@
             <div class="col-sm-12">
                 <div class="inner">
                     <h3>WHO WE ARE</h3>
-                    <p>A local coffee shop in a cool neighborhood. We look for friendly, enthusiastic, hardworking, teachable coffee lovers.</p>
-                    <p>A local coffee shop in a cool neighborhood. We look for friendly, enthusiastic, hardworking, teachable coffee lovers.</p>
+                    <p>{{business.description}}</p>
                 </div>
             </div><!--col-->
         </div><!--row-->

@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobBusinessController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', JobBusinessController]);
+  angular.module('hirelyApp.job').controller('JobBusinessController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', 'BusinessService', 'AuthService', 'AvailabilityService', JobBusinessController]);
 
-  function JobBusinessController($scope, $rootScope, $state, $stateParams, $timeout, $sce, BusinessService, AuthService) {
+  function JobBusinessController($scope, $rootScope, $state, $stateParams, $timeout, $sce, BusinessService, AuthService, AvailabilityService) {
     console.log($stateParams.businessSlug);
 
     BusinessService.getBySlug($stateParams.businessSlug)
@@ -14,6 +14,18 @@
       function(business){
 
         $scope.business = business;
+
+        var businessByStates = BusinessService.arrangeLocationsByStates( business );
+
+        console.log(businessByStates)
+        ///// build an aggregated weekly times
+        for(var s=0; s<businessByStates.length; s++){
+          for(var l=0; l<businessByStates[s].locations.length; l++){
+            var times = AvailabilityService.getWeeklyAggregatedArray($scope.business.locations[ businessByStates[s].locations[l].id ].hoursOfOperation, true);
+            $scope.business.locations[ businessByStates[s].locations[l].id ].aggregatedWeekTimes = times;
+          }///// for l
+        }//// for s
+        $scope.businessByStates = businessByStates;
 
         initialize();
       }
@@ -52,19 +64,20 @@
       $timeout(function() {
         $scope.dataLoaded = true;
 
-        // $timeout(function() {
-        //   var heroHeight = $('.hero').height();
-        //   var heroImgHeight = $('.hero img').height();
-        //   if (heroImgHeight - heroHeight) {
-        //     $('.hero img').css('margin-top', -(heroImgHeight - heroHeight)/2)
-        //   }
-        // })
-
       }, 200);
 
     }//// fun. initialize
 
+    $scope.expandState = function(state){
 
+      if($scope.stateToShow !== state){
+        $scope.stateToShow = state;
+      }
+      else{
+        $scope.stateToShow = null;
+      }
+
+    }
 
   }//// fun. JobController
 

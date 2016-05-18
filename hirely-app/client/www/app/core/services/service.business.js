@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('hirelyApp.account')
-        .service('BusinessService', ['$q', 'HirelyApiService', BusinessService]);
+        .service('BusinessService', ['$q', 'HirelyApiService', 'StatesNames', BusinessService]);
 
-    function BusinessService($q, HirelyApiService) {
+    function BusinessService($q, HirelyApiService, StatesNames) {
 
 
         this.getWorkTypeTitle = function (type) {
@@ -195,6 +195,40 @@
 
         this.arrangeLocationsByStates = function(business){
             var ret = [];
+
+            var states = {};
+            var locs = angular.copy(business.locations);
+            for(var loc in locs){
+                var abbr = locs[loc].state;
+                if( angular.isUndefined(states[abbr]) ){
+                    states[abbr] = {};
+                }
+                var name = '';
+                for(var s=0; s<StatesNames.length; s++){
+                    if(abbr.toUpperCase() == StatesNames[s].abbreviation.toUpperCase()){
+                        name =  StatesNames[s].name;
+                        break;
+                    }
+                }
+                states[abbr].name = name;
+                states[abbr].abbreviation = abbr;
+
+                if(angular.isUndefined(states[abbr].locations)){
+                    states[abbr].locations = [];
+                }
+                var positions = [];
+                for(var pos in locs[loc].positionSlugs){
+                    positions.push(locs[loc].positionSlugs[pos]);
+                }
+                var location = {id:loc, positions:positions};
+                states[abbr].locations.push(location);
+
+            }//// for
+
+
+            for(var state in states){
+                ret.push(states[state]);
+            }
 
             return ret;
         }//// fun. arrangeLocationsBySates
