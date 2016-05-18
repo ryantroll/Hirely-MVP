@@ -41,17 +41,17 @@
                         JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function (application) {
                             $scope.application = application;
                             if (!application) {
-                                console.log("JA:info: No prior application found");
+                                console.log("JA:info: No prior profile found");
                                 application = {
                                     userId: AuthService.currentUserId,
                                     positionId: $scope.position._id,
                                     prescreenAnswers: $scope.position.prescreenQuestions,
-                                    status: 0
+                                    status: 6
                                 };
                                 return JobApplicationService.create(application)
                                     .then(
                                         function (application) {
-                                            console.log("JA:info: Application created");
+                                            console.log("JA:info: Profile created");
                                             $scope.application = application;
                                         },//// save resolve
                                         function (err) {
@@ -59,7 +59,7 @@
                                         }//// save reject
                                     );//// save().then()
                             } else {
-                                console.log("JA:info: Prior application found");
+                                console.log("JA:info: Prior profile found");
                             }
                         }).then(function () {
                             initialize();
@@ -107,9 +107,9 @@
                 //     hasForm: true
                 // },
                 {
-                    templateUrl: '/app/application/pre-screen/pre-screen.tpl.html',
-                    controller: 'PreScreenController',
-                    hasForm: true
+                    templateUrl: '/app/application/profiler-confirm/profiler-confirm.tpl.html',
+                    controller: 'ProfilerConfirmController',
+                    hasForm: false
                 }
             ];
         }//// fun. setStpes
@@ -169,11 +169,7 @@
                 return 4;
             }
 
-            if (!(angular.isDefined(AuthService.currentUser.availability.hoursPerWeekMin) && AuthService.currentUser.availability.hoursPerWeekMin > 0)) {
-                return 5;
-            }
-
-            return 6;
+            return 5;
         };
 
         /**
@@ -182,7 +178,7 @@
          */
         $scope.finish = function () {
             delete $scope.layoutModel.noHeader;
-            $state.go('master.default.confirm', $stateParams);
+            $state.go('master.default.profiler-done', $stateParams);
         };
 
         function semiFixedFooter() {

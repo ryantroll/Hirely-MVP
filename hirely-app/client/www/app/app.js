@@ -92,6 +92,12 @@ var myApp = angular.module('hirelyApp',
                 controller: 'ThankYouApplicationController',
                 authRequired: true
             })
+            .state('master.default.profiler-done', {
+                url: '/:businessSlug/:locationSlug/:positionSlug/profiler-done',
+                templateUrl: 'app/application/profiler-confirm/thank-you.tpl.html',
+                controller: 'ThankYouProfilerController',
+                authRequired: false
+            })
             //
             // .state('master.application.printout', {
             //     url: '/:applicationId',
