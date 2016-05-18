@@ -13,10 +13,10 @@
                 return Math.round(value);
             }
         })
-        .controller('JobApplicationController', ['$scope', '$stateParams', '$state', 'JobApplicationService', 'BusinessService', 'AuthService', JobApplicationController]);
+        .controller('JobProfilerController', ['$scope', '$stateParams', '$state', 'JobApplicationService', 'BusinessService', 'AuthService', JobProfilerController]);
 
 
-    function JobApplicationController($scope, $stateParams, $state, JobApplicationService, BusinessService, AuthService) {
+    function JobProfilerController($scope, $stateParams, $state, JobApplicationService, BusinessService, AuthService) {
 
         /**
          * [availability this scope is the parent of availability step scope and this variaable is needed there]
@@ -27,6 +27,7 @@
         $scope.destroyDirection = 0;
         $scope.blockFinished = false;
         $scope.enableNextButton = true;
+        $scope.isSurvey = true;
 
 
         BusinessService.getBySlug($stateParams.businessSlug)
@@ -41,21 +42,22 @@
                         JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function (application) {
                             $scope.application = application;
                             if (!application) {
-                                console.log("JA:info: No prior application found");
+                                console.log("JA:info: No prior profile found");
+
                                 application = {
                                     userId: AuthService.currentUserId,
                                     positionId: $scope.position._id,
                                     prescreenAnswers: $scope.position.prescreenQuestions,
-                                    status: 0,
+                                    status: 6,
                                     history: [
                                         {
                                             time: new Date(),
                                             type: 'StatusChange',
-                                            subject: "Application Started",
-                                            body: "Application Started",
+                                            subject: "Survey Started",
+                                            body: "Survey Started",
                                             meta: {
                                                 fromStatus: null,
-                                                toStatus: 0
+                                                toStatus: 6
                                             },
                                             userId: AuthService.currentUserId,
                                             userFirstName: AuthService.currentUser.firstName,
@@ -66,7 +68,7 @@
                                 return JobApplicationService.create(application)
                                     .then(
                                         function (application) {
-                                            console.log("JA:info: Application created");
+                                            console.log("JA:info: Profile created");
                                             $scope.application = application;
                                         },//// save resolve
                                         function (err) {
@@ -74,7 +76,7 @@
                                         }//// save reject
                                     );//// save().then()
                             } else {
-                                console.log("JA:info: Prior application found");
+                                console.log("JA:info: Prior profile found");
                             }
                         }).then(function () {
                             initialize();
@@ -116,15 +118,15 @@
                     controller: 'ProfilePersonalityController',
                     hasForm: true
                 },
+                // {
+                //     templateUrl: '/app/user/profile/availability/availability.tpl.html',
+                //     controller: 'ProfileAvailabilityController',
+                //     hasForm: true
+                // },
                 {
-                    templateUrl: '/app/user/profile/availability/availability.tpl.html',
-                    controller: 'ProfileAvailabilityController',
-                    hasForm: true
-                },
-                {
-                    templateUrl: '/app/application/pre-screen/pre-screen.tpl.html',
-                    controller: 'PreScreenController',
-                    hasForm: true
+                    templateUrl: '/app/application/profiler-confirm/profiler-confirm.tpl.html',
+                    controller: 'ProfilerConfirmController',
+                    hasForm: false
                 }
             ];
         }//// fun. setStpes
@@ -184,11 +186,7 @@
                 return 4;
             }
 
-            if (!(angular.isDefined(AuthService.currentUser.availability.hoursPerWeekMin) && AuthService.currentUser.availability.hoursPerWeekMin > 0)) {
-                return 5;
-            }
-
-            return 6;
+            return 5;
         };
 
         /**
@@ -197,7 +195,7 @@
          */
         $scope.finish = function () {
             delete $scope.layoutModel.noHeader;
-            $state.go('master.default.confirm', $stateParams);
+            $state.go('master.default.profiler-done', $stateParams);
         };
 
         function semiFixedFooter() {

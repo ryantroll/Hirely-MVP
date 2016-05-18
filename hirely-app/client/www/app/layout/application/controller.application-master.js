@@ -26,5 +26,13 @@
 
     function ApplicationMasterController($scope) {
         $scope.layoutModel = {business: null, noHeader: null};
+
+        $scope.isSurvey = false;
+        if (window.location.href.indexOf("survey")!==-1) {
+            $scope.isSurvey = true;
+        }
+
+
+
     };
 })();

@@ -84,8 +84,8 @@
                 var historyEntry = {
                     time: new Date(),
                     type: 'StatusChange',
-                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[2],
-                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[2],
+                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
+                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
                     meta: {
                         fromStatus: $scope.application.status,
                         toStatus: 2

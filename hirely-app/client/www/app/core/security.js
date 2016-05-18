@@ -27,11 +27,14 @@
                             event.preventDefault();
                         }
 
-                        if (toState.name == 'master.application.apply') {
+                        if (toState.name == 'master.application.apply' || toState.name == 'master.application.profiler') {
                             console.log("S:handleAuthRequiredRedirect:info:1: Caught apply without login");
                             getPositionTitleFromParams(toParams).then(function(positionTitle) {
                                 console.log("PosTitle = "+positionTitle);
-                                $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
+                                if (toState.name == 'master.application.apply')
+                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
+                                else
+                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to complete our staff survey for "+positionTitle});
                             });
                         } else {
                             console.log("S:handleAuthRequiredRedirect:info:2: Redirecting to login");

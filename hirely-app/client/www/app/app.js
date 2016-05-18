@@ -72,6 +72,12 @@ var myApp = angular.module('hirelyApp',
                 controller: 'JobApplicationController',
                 authRequired: true
             })
+            .state('master.application.profiler', {
+                url: '/:businessSlug/:locationSlug/:positionSlug/survey',
+                templateUrl: 'app/application/job-profiler.tpl.html',
+                controller: 'JobProfilerController',
+                authRequired: true
+            })
             .state('master.application.applyTmp', {
                 url: '/:businessSlug/:locationSlug/:positionSlug/applink.aspx',
                 templateUrl: 'app/application/job-application.tpl.html',
@@ -85,6 +91,12 @@ var myApp = angular.module('hirelyApp',
                 templateUrl: 'app/application/thank-you.tpl.html',
                 controller: 'ThankYouApplicationController',
                 authRequired: true
+            })
+            .state('master.default.profiler-done', {
+                url: '/:businessSlug/:locationSlug/:positionSlug/profiler-done',
+                templateUrl: 'app/application/profiler-confirm/thank-you.tpl.html',
+                controller: 'ThankYouProfilerController',
+                authRequired: false
             })
             //
             // .state('master.application.printout', {

@@ -1,0 +1,68 @@
+<div class="form-loader" ng-show="!dataLoaded">
+    <p>Loading</p>
+    <div class="loader"></div>
+</div>
+
+<div class="hi-content" ng-show="dataLoaded && dataError">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1><i class="red-text glyphicon glyphicon-exclamation-sign"></i></h1>
+            <h4>Position Not Found!</h4>
+        </div>
+    </div>
+</div>
+
+<section class="profile" ng-if="dataLoaded && !dataError">
+    <multi-step-container steps="steps" class="simple-prev-next" initial-step="setInitialStep()">
+    <header>
+        <div class="steps">
+            <ul>
+                <li ng-class="{'active' : $getActiveIndex(step)==1}" ng-if="!($getActiveIndex(step)-1>=2)"><a href="javascript:void(0);">Basics</a></li>
+                <li ng-class="{'active' : $getActiveIndex(step)==2}" ng-if="!($getActiveIndex(step)-1>=3 || $getActiveIndex(step)+1<=1)"><a href="javascript:void(0);">Experience</a></li>
+                <li ng-class="{'active' : $getActiveIndex(step)==3}" ng-if="!($getActiveIndex(step)-1>=4 || $getActiveIndex(step)+1<=2)"><a href="javascript:void(0);">Education</a></li>
+                <li ng-class="{'active' : $getActiveIndex(step)==4}" ng-if="!($getActiveIndex(step)-1>=5 || $getActiveIndex(step)+1<=3)"><a href="javascript:void(0);">Personality</a></li>
+                <!--<li ng-class="{'active' : $getActiveIndex(step)==5}" ng-if="!($getActiveIndex(step)-1>=6 || $getActiveIndex(step)+1<=4)"><a href="javascript:void(0);">Availability</a></li>-->
+                <li ng-class="{'active' : $getActiveIndex(step)==5}" ng-if="!($getActiveIndex(step)-1>=6 || $getActiveIndex(step)+1<=4)"><a href="javascript:void(0);">Confirm</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main step-container></main>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="left" ng-hide="$isFirst()">
+                        <button ng-show="$getActiveIndex(step)!=5"
+                                ng-click="destroyDirection=0;
+                                $previousStep()" class="btn back">
+                            <span>Back</span>
+                        </button>
+                        <button ng-show="$getActiveIndex(step)==5"
+                                ng-click="destroyDirection=0; $setActiveIndex(1)"
+                                class="btn back">
+                            <span>Edit Profile</span>
+                        </button>
+                    </div>
+                </div><!--col-sm-3-->
+                <div class="col-xs-6">
+                    <div class="center" ng-hide="application.status!=0 && $getActiveIndex(step)==5">
+                        <div class="red text-center">{{100 * ($getActiveIndex(step)-1) / steps.length | numberRound}}% Completed</div>
+                        <div class="progress-bar"><span style="width:{{100 * ($getActiveIndex(step)-1) / steps.length}}%;">&nbsp;</span></div>
+                        <!--<div class="text-center">Powered by <a href="javascript:void(0);"><i>Hirely</i></a></div>-->
+                        <div class="text-center">See a bug? <a href="mailto:support@hirely.io?subject=Feedback"><i>Please email us!</i></a></div>
+                    </div>
+                </div><!--col-sm-6-->
+                <div class="col-xs-3">
+                    <div class="right">
+                        <button id="nextButton" class="btn next" ng-hide="$isLast()" ng-click="destroyDirection=1; $nextStep()" ng-disabled="!enableNextButton || ($getActiveStep().hasForm && !$getActiveStep().valid)">Next</button>
+                        <button id="submitButton" class="btn next" ng-hide="!$isLast() || blockFinished" ng-disabled="!enableNextButton || ($getActiveStep().hasForm && !$getActiveStep().valid)" ng-click="destroyDirection=1; finish()">Submit</button>
+                    </div>
+                </div><!--col-sm-3-->
+            </div><!--row-->
+        </div>
+    </footer>
+
+    </multi-step-container>
+</section>

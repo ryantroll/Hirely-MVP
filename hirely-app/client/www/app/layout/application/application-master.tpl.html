@@ -1,7 +1,10 @@
 <div class="job-application" ng-controller="ApplicationMasterController">
     <div class="wrapper">
         <div class="job-title" ng-show="layoutModel.noHeader">
-            <h4>Applying for {{layoutModel.position}} position at {{layoutModel.business}} - {{layoutModel.location}}</h4>
+            <h4>
+                <span ng-show="!isSurvey">Applying </span>
+                <span ng-show="isSurvey">Profiling </span>
+                for {{layoutModel.position}} position at {{layoutModel.business}} - {{layoutModel.location}}</h4>
         </div>
 
         <div ui-view><!--main content--> </div>
