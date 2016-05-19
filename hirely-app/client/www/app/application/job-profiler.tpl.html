@@ -18,9 +18,9 @@
         <div class="steps">
             <ul>
                 <li ng-class="{'active' : $getActiveIndex(step)==1}" ng-if="!($getActiveIndex(step)-1>=2)"><a href="javascript:void(0);">Basics</a></li>
-                <li ng-class="{'active' : $getActiveIndex(step)==2}" ng-if="!($getActiveIndex(step)-1>=3 || $getActiveIndex(step)+1<=1)"><a href="javascript:void(0);">Experience</a></li>
-                <li ng-class="{'active' : $getActiveIndex(step)==3}" ng-if="!($getActiveIndex(step)-1>=4 || $getActiveIndex(step)+1<=2)"><a href="javascript:void(0);">Education</a></li>
-                <li ng-class="{'active' : $getActiveIndex(step)==4}" ng-if="!($getActiveIndex(step)-1>=5 || $getActiveIndex(step)+1<=3)"><a href="javascript:void(0);">Personality</a></li>
+                <li ng-class="{'active' : $getActiveIndex(step)==2}" ng-if="!($getActiveIndex(step)-1>=3 || $getActiveIndex(step)+1<=1)"><a href="javascript:void(0);">Personality</a></li>
+                <li ng-class="{'active' : $getActiveIndex(step)==3}" ng-if="!($getActiveIndex(step)-1>=4 || $getActiveIndex(step)+1<=2)"><a href="javascript:void(0);">Experience</a></li>
+                <li ng-class="{'active' : $getActiveIndex(step)==4}" ng-if="!($getActiveIndex(step)-1>=5 || $getActiveIndex(step)+1<=3)"><a href="javascript:void(0);">Education</a></li>
                 <!--<li ng-class="{'active' : $getActiveIndex(step)==5}" ng-if="!($getActiveIndex(step)-1>=6 || $getActiveIndex(step)+1<=4)"><a href="javascript:void(0);">Availability</a></li>-->
                 <li ng-class="{'active' : $getActiveIndex(step)==5}" ng-if="!($getActiveIndex(step)-1>=6 || $getActiveIndex(step)+1<=4)"><a href="javascript:void(0);">Confirm</a></li>
             </ul>

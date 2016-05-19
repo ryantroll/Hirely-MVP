@@ -97,11 +97,15 @@
         function setSteps() {
 
             $scope.steps = [
-
                 {
                     templateUrl: '/app/user/profile/basic/basic.tpl.html',
                     controller: 'ProfileBasicController',
                     hasForm: false
+                },
+                {
+                    templateUrl: '/app/user/profile/personality/personality.tpl.html',
+                    controller: 'ProfilePersonalityController',
+                    hasForm: true
                 },
                 {
                     templateUrl: '/app/user/profile/experience/experience.tpl.html',
@@ -112,11 +116,6 @@
                     templateUrl: '/app/user/profile/education/education.tpl.html',
                     controller: 'ProfileEducationController',
                     hasForm: false
-                },
-                {
-                    templateUrl: '/app/user/profile/personality/personality.tpl.html',
-                    controller: 'ProfilePersonalityController',
-                    hasForm: true
                 },
                 // {
                 //     templateUrl: '/app/user/profile/availability/availability.tpl.html',
@@ -165,28 +164,7 @@
          * to set the initiale step based on user profile]
          */
         $scope.setInitialStep = function () {
-            // var initialStep = 1;
-            if (
-                !(angular.isDefined(AuthService.currentUser.mobile) && AuthService.currentUser.mobile &&
-                angular.isDefined(AuthService.currentUser.dateOfBirth) && AuthService.currentUser.dateOfBirth &&
-                angular.isDefined(AuthService.currentUser.postalCode) && AuthService.currentUser.postalCode)
-            ) {
-                return 1;
-            }
-
-            if (!(Array.isArray(AuthService.currentUser.workExperience) && AuthService.currentUser.workExperience.length > 0)) {
-                return 2;
-            }
-
-            if (!(Array.isArray(AuthService.currentUser.education) && AuthService.currentUser.education.length > 0)) {
-                return 3;
-            }
-
-            if (!(Array.isArray(AuthService.currentUser.personalityExams) && AuthService.currentUser.personalityExams.length > 0)) {
-                return 4;
-            }
-
-            return 5;
+            return 1;
         };
 
         /**

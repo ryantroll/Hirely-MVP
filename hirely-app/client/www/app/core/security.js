@@ -29,12 +29,12 @@
 
                         if (toState.name == 'master.application.apply' || toState.name == 'master.application.profiler') {
                             console.log("S:handleAuthRequiredRedirect:info:1: Caught apply without login");
-                            getPositionTitleFromParams(toParams).then(function(positionTitle) {
-                                console.log("PosTitle = "+positionTitle);
+                            getBusinessAndPositionNameFromParams(toParams).then(function(res) {
+                                console.log("PosTitle = "+res.positionTitle);
                                 if (toState.name == 'master.application.apply')
-                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+positionTitle});
+                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to apply for "+res.positionTitle});
                                 else
-                                    $state.go('master.default.account.registerWithMessage', {message:"Please register or login to complete our staff survey for "+positionTitle});
+                                    $state.go('master.default.account.registerWithMessage', {message:res.businessName+" is on the hunt for future "+res.positionTitle+"s!"});
                             });
                         } else {
                             console.log("S:handleAuthRequiredRedirect:info:2: Redirecting to login");
@@ -62,10 +62,13 @@
                     handleAuthRequiredRedirect($state.current, $state.params, event);
                 });
                 
-                function getPositionTitleFromParams(params) {
+                function getBusinessAndPositionNameFromParams(params) {
                     return BusinessService.getBySlug(params.businessSlug)
                         .then(function (business) {
-                            return BusinessService.positionBySlug(params.positionSlug, params.locationSlug, business).title;
+                            return {
+                                businessName: business.name,
+                                positionTitle: BusinessService.positionBySlug(params.positionSlug, params.locationSlug, business).title
+                            };
                         }
                     );
 
