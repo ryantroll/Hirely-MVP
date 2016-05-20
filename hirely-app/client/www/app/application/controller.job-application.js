@@ -70,7 +70,8 @@
                                             $scope.application = application;
                                         },//// save resolve
                                         function (err) {
-                                            alert(err);
+                                            console.log(err);
+                                            alert('Error while saving your application\nPlease try again');
                                         }//// save reject
                                     );//// save().then()
                             } else {
@@ -153,7 +154,7 @@
 
                 $scope.layoutModel.noHeader = true;
 
-                
+
             }//// if!dataError
 
         }//// fun. initialize

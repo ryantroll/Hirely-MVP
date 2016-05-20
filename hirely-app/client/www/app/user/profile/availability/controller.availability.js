@@ -64,12 +64,10 @@
 
             $scope.availability = availabilityService.toFrontEndModel(AuthService.currentUser.availability);
 
-            $scope.totalHours = 0;
-            for (var d = 0; d < 7; d++) {
-                var dayHours = availabilityService.getDayHours($scope.availability.weeklyTimetable[$scope.days[d]]);
-                $scope.dayHours[$scope.days[d]] = dayHours;
-                $scope.totalHours += dayHours;
-            }
+            /**
+             * Set total hours after loading data
+             */
+            updateTotalHours();
 
             $scope.isSeasonal = $scope.availability.season != null;
 
@@ -97,12 +95,11 @@
 
         $scope.updateValidity = function () {
             //// set validity for max and min hours
-            // $scope.stepFive.maxHours.$setValidity( 'mismatch', $scope.totalHours.total <= $scope.availability.hoursPerWeekMax);
-            // console.log($scope.totalHours.total, $scope.availability.hoursPerWeekMin)
+            $scope.stepFive.minHours.$setValidity( 'mismatch', $scope.totalHours <= $scope.availability.hoursPerWeekMax);
 
             // The following is not working
-            // $scope.stepFive.minHours.$setValidity('mismatch', $scope.totalHours >= parseInt($scope.availability.hoursPerWeekMin, 10));
-            // $scope.stepFive.maxHours.$setValidity('mismatch', parseInt($scope.availability.hoursPerWeekMin, 10) <= parseInt($scope.availability.hoursPerWeekMax, 10));
+            $scope.stepFive.minHours.$setValidity('mismatch', $scope.totalHours >= parseInt($scope.availability.hoursPerWeekMin, 10));
+            $scope.stepFive.maxHours.$setValidity('mismatch', parseInt($scope.availability.hoursPerWeekMin, 10) <= parseInt($scope.availability.hoursPerWeekMax, 10));
         }
 
         /**
@@ -149,6 +146,16 @@
             $scope.addTimetable = false;
         }/// fun. cancelTimetable
 
+        function updateTotalHours(){
+            $scope.totalHours = 0;
+            for (var d = 0; d < 7; d++) {
+                var dayHours = availabilityService.getDayHours($scope.availability.weeklyTimetable[$scope.days[d]]);
+                $scope.dayHours[$scope.days[d]] = dayHours;
+                $scope.totalHours += dayHours;
+            }
+            console.log($scope.totalHours, '<<')
+        }
+
         $scope.saveTimetable = function () {
             if (angular.isUndefined($scope.currentDays) || angular.isUndefined($scope.currentDayLabel)) {
                 return null;
@@ -159,12 +166,7 @@
             /**
              * Update the number of hours for each day
              */
-            $scope.totalHours = 0;
-            for (var d = 0; d < 7; d++) {
-                var dayHours = availabilityService.getDayHours($scope.availability.weeklyTimetable[$scope.days[d]]);
-                $scope.dayHours[$scope.days[d]] = dayHours;
-                $scope.totalHours += dayHours;
-            }
+             updateTotalHours();
 
             $scope.updateValidity();
 

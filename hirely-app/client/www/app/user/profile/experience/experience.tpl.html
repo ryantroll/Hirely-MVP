@@ -7,12 +7,12 @@
         <div class="cards-wrapper">
             <div class="card">
                 <h4>
-                    <span ng-show="!isSurvey">Application </span>
+                    <span ng-show="!isSurvey">Hirely </span>
                     <span ng-show="isSurvey">Survey </span>
                     Tip
                 </h4>
                 <p>
-                    <span ng-show="!isSurvey">Adding all of your current and past jobs helps our matching process gather your skills and present the strongest possible application.</span>
+                    <span ng-show="!isSurvey">We analyze every job for many types of skills, so add as many jobs as you can for the strongest application!</span>
                     <span ng-show="isSurvey">Please add as many past jobs as possible so that we can understand what types of backgrounds our {{position.title}}s have.</span>
                 </p>
             </div>
@@ -86,6 +86,14 @@
                                    disabled
                                    hidden
                             />
+                        </div>
+                    </div><!--row-->
+
+                    <div class="row" ng-show="occupationChoices.length > 0">
+                        <div class="col-sm-12">
+                            <div class="copy-section text-center">
+                                <p>If you're not finding an occupation that matches well, please try entering a different position title</p>
+                            </div>
                         </div>
                     </div><!--row-->
 
@@ -298,7 +306,7 @@
                                 />
                                 <span class="button-checkbox"></span>
                             </label>
-                            <label for="isSeasonal">This position was seasonal</label>
+                            <label for="isSeasonal">This position <span ng-show="!occupation.currentlyHere">was</span><span ng-show="occupation.currentlyHere">is</span> seasonal</label>
                         </div>
                     </div>
                 </div>
@@ -323,7 +331,7 @@
                     <div class="col-sm-12">
                         <div class="field-wrapper text-center" style="padding-top: 15px;">
                             <!--Powered by <a href="javascript:void(0);"><i>Hirely</i></a>-->
-                            See a bug? <a href="mailto:support@hirely.io?subject=Feedback"><i>Please email us!</i></a>
+                            See a bug? <a href="mailto:support@hirely.us?subject=Feedback" target="_blank"><i>Please email us!</i></a>
                         </div>
                     </div>
                 </div>

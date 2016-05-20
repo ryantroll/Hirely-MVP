@@ -59,7 +59,7 @@
 
                 $scope.application.status = 4;
                 $scope.application.appliedAt = new Date();
-                
+
             }
 
             JobApplicationService.save($scope.application)
@@ -68,7 +68,8 @@
                         console.log("Profile created");
                     },//// save resolve
                     function (err) {
-                        alert(err);
+                        console.log(err);
+                        alert('Error while saving your profile\nPlease try again');
                     }//// save reject
                 );//// save().then()
         });
