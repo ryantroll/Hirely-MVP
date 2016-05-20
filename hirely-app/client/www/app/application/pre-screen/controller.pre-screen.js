@@ -40,7 +40,7 @@
                         var code = e.keyCode || e.which || e.charCode;
                         var allowed = [48, 57, 9, 91, 8, 37, 38, 39, 40, 13, 16, 17, 18, 93];
 
-                        var length = f.val().length + (code === 8 ? -1 : 1); /// +1 because we using keydown and field value not updated yet and -1 for backspace
+                        var length = f.val().length + (code === 8 ? -1 : (allowed.indexOf(code) == -1 ? 1 : 0) ); /// +1 because we using keydown and field value not updated yet and -1 for backspace
                         var left = max - length;
                         scope.leftChars = left < 0 ? 0 : (left > max ? max : left); /// protect left from over boundaries
                         if(left+1  <=  0 && allowed.indexOf(code) ===-1){

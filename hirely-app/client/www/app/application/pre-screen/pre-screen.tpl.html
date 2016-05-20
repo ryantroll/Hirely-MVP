@@ -24,7 +24,7 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <textarea ng-disabled="!isApplyEligible" class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" validate-question></textarea>
-                            {{q.required}} <character-counter field-id="q_{{$index}}" max="{{q.maxChars ? q.maxChars : 8}}"></character-counter>
+                            {{q.required}} <character-counter field-id="q_{{$index}}" max="{{q.maxChars ? q.maxChars : 140}}"></character-counter>
                         </ng-form>
                     </div>
                 </div>
