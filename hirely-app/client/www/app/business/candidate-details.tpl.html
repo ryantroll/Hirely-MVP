@@ -156,7 +156,7 @@
                                     <div class="srow" ng-repeat="day in days">
                                         <div class="td srow-label">{{day}}</div>
                                         <div class="td srow-shift" ng-repeat="shift in applicants[detailsUserId].shiftsScore[day]" ng-class="{'shift-match':shift.match === true, 'shift-unmatch': shift.match === false}">
-                                            {{hours[shift.tStart].hourName}}{{hours[shift.tStart].dayHalfShort}} <span ng-if="shift.tStart || shift.tStart ==0">-</span> {{hours[shift.tEnd].hourName}}{{hours[shift.tEnd].dayHalfShort}} <span ng-if="!shift.tStart && shift.tStart !=0">&nbsp;</span>
+                                            {{hours[shift.tStart].hourName}}{{hours[shift.tStart].dayHalfShort}} <span ng-if="shift.tStart || shift.tStart ==0">-</span> {{hours[shift.tEnd <=23 ? shift.tEnd : 0].hourName}}{{hours[shift.tEnd <=23 ? shift.tEnd : 0].dayHalfShort}} <span ng-if="!shift.tStart && shift.tStart !=0">&nbsp;</span>
                                         </div>
                                     </div>
                                     <div class="srow">
