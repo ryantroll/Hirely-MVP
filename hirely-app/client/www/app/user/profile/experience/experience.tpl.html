@@ -88,15 +88,6 @@
                             />
                         </div>
                     </div><!--row-->
-
-                    <div class="row" ng-show="occupationChoices.length > 0">
-                        <div class="col-sm-12">
-                            <div class="copy-section text-center">
-                                <p>If you're not finding an occupation that matches well, please try entering a different position title</p>
-                            </div>
-                        </div>
-                    </div><!--row-->
-
                 </div>
 
                 <div class="row occupationChoices">
@@ -120,6 +111,9 @@
                                     </div>
                                     <div ng-show="occupationState=='choicesAvailable'" class="occupationChoice" ng-repeat="occChoice in occupationChoices">
                                         <button class="fullwidth" ng-click="chooseOccupation(occChoice, $event)" ng-class="{active: occupationChoice.occTitle==occChoice.occTitle}">{{occChoice.occTitle}}</button>
+                                    </div>
+                                    <div ng-show="occupationState=='choicesAvailable'">
+                                        <p><br>If you're not finding an occupation that matches well, please try entering a different position title</p>
                                     </div>
                                     <div ng-show="occupationState=='chosen'">
                                         <button class="fullwidth active">{{occupationChoice.occTitle}}</button>
