@@ -117,7 +117,7 @@
                     $scope.$apply();
                 });
 
-                $scope.status = {isFirstOpen:true};
+                $scope.status = {isFirstOpen:true, isSecondOpen:false, isThirdOpen:false};
 
                 $(window).scrollTop(0);
 

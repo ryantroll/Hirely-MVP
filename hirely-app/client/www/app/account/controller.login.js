@@ -50,6 +50,7 @@
         };
 
         $scope.goToNextState = function() {
+
             if($rootScope.nextState.length) {
                 var nextState = $rootScope.nextState.pop();
                 if (nextState.state) {
@@ -65,7 +66,7 @@
 
 
         $scope.showForgotPassword = function(){
-            alert("Please email us at support@hirely.io to reset your password.");
+            alert("Please email us at support@hirely.us to reset your password.");
             return;
 
             /**
