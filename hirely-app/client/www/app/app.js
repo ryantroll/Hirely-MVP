@@ -93,7 +93,7 @@ var myApp = angular.module('hirelyApp',
                 authRequired: true
             })
             .state('master.default.profiler-done', {
-                url: '/:businessSlug/:locationSlug/:positionSlug/profiler-done',
+                url: '/:businessSlug/:locationSlug/:positionSlug/survey-done',
                 templateUrl: 'app/application/profiler-confirm/thank-you.tpl.html',
                 controller: 'ThankYouProfilerController',
                 authRequired: false
