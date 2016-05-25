@@ -21,14 +21,23 @@
                 <div class="results text-center" ng-show="resultsLoaded">
                     <uib-accordion >
                         <uib-accordion-group heading="Personality Blend" is-open="status.isFirstOpen">
+                            <uib-accordion-heading>
+                                Personality Blend <i class="glyphicon" ng-class="{'glyphicon-chevron-down': !status.isFirstOpen, 'glyphicon-chevron-up': status.isFirstOpen}"></i>
+                            </uib-accordion-heading>
                             <div class="col-sm-12 personality-results" ng-show="stepThreeLoaded && traitifyResultLoaded"></div>
                         </uib-accordion-group>
 
-                        <uib-accordion-group heading="Personality Breakdown">
+                        <uib-accordion-group heading="Personality Breakdown" is-open="status.isSeocndOpen">
+                            <uib-accordion-heading>
+                                Personality Breakdown <i class="glyphicon" ng-class="{'glyphicon-chevron-down': !status.isSeocndOpen, 'glyphicon-chevron-up': status.isSeocndOpen}"></i>
+                            </uib-accordion-heading>
                             <div class="col-sm-12 personality-types" ng-show="stepThreeLoaded && traitifyTypesLoaded"></div>
                         </uib-accordion-group>
 
-                        <uib-accordion-group heading="Personality Traits">
+                        <uib-accordion-group heading="Personality Traits" is-open="status.isThirdOpen">
+                            <uib-accordion-heading>
+                                Personality Traits <i class="glyphicon" ng-class="{'glyphicon-chevron-down': !status.isThirdOpen, 'glyphicon-chevron-up': status.isThirdOpen}"></i>
+                            </uib-accordion-heading>
                             <div class="col-sm-12 personality-traits" ng-show="stepThreeLoaded && traitifyTraitsLoaded"></div>
                         </uib-accordion-group>
                     </uib-accordion>

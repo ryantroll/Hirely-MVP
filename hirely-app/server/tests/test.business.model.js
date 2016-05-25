@@ -127,7 +127,51 @@ db.once('open', function () {
                             "Self-motivated achiever interested in taking on additional roles and responsibilities",
                             "Open availability and flexibility is a must – ability to work a variety of shifts",
                             "Must be dedicated to excellence and hospitality"
-                        ]
+                        ],
+                        "shifts":{
+                            "mon":[
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
+                                {"label":"Morning", "tStart":5, "tEnd":10},
+                                {"label":"After Noon", "tStart":11, "tEnd":16},
+                                {"label":"Evening", "tStart":17, "tEnd":23}
+                            ],
+                            "tue":[
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
+                                {"label":"Morning", "tStart":5, "tEnd":10},
+                                {"label":"After Noon", "tStart":11, "tEnd":16},
+                                {"label":"Evening", "tStart":17, "tEnd":23}
+                            ],
+                            "wed":[
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
+                                {"label":"Morning", "tStart":5, "tEnd":10},
+                                {"label":"After Noon", "tStart":11, "tEnd":16},
+                                {"label":"Evening", "tStart":17, "tEnd":23}
+                            ],
+                            "thu":[
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
+                                {"label":"Morning", "tStart":5, "tEnd":10},
+                                {"label":"After Noon", "tStart":11, "tEnd":16},
+                                {"label":"Evening", "tStart":17, "tEnd":23}
+                            ],
+                            "fri":[
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
+                                {"label":"Morning", "tStart":5, "tEnd":10},
+                                {"label":"After Noon", "tStart":11, "tEnd":16},
+                                {"label":"Evening", "tStart":17, "tEnd":23}
+                            ],
+                            "sat":[
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
+                                {"label":"Morning", "tStart":5, "tEnd":10},
+                                {"label":"After Noon", "tStart":11, "tEnd":16},
+                                {"label":"Evening", "tStart":17, "tEnd":23}
+                            ],
+                            "sun":[
+                                {"label":"Early Morning", "tStart":0, "tEnd":4},
+                                {"label":"Morning", "tStart":5, "tEnd":10},
+                                {"label":"After Noon", "tStart":11, "tEnd":16},
+                                {"label":"Evening", "tStart":17, "tEnd":23}
+                            ],
+                        }//// shifts
                     }
                 }
 

@@ -24,18 +24,18 @@
                                 <span class="fa fa-close feedback-error"></span>
                             </label>
                             <textarea ng-disabled="!isApplyEligible" class="text-field" name="question" id="q_{{$index}}" ng-model="q.answer" validate-question></textarea>
-                            {{q.required}}
+                            {{q.required}} <character-counter field-id="q_{{$index}}" max="{{q.maxChars ? q.maxChars : 140}}"></character-counter>
                         </ng-form>
                     </div>
                 </div>
             </div>
 
-            <br>
+            <!-- <br>
             <div class="row" ng-show="isApplyEligible">
                 <div class="col-sm-12 text-center error-label bg-warning" style="margin:0">
                     <p>Click <a ui-sref="master.default.dashboard" ng-click="destroyDirection=0;">here</a> to save your answers and go to dashboard, or <a href="javascript:void(0);" ng-click="destroyDirection=0; gotoPosition();">here</a> to go back to the position.</p>
                 </div>
-            </div>
+            </div> -->
 
         </fieldset>
     </form>

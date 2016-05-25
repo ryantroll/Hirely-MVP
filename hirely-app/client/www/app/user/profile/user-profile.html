@@ -32,13 +32,13 @@
                         <div class="red">{{100 * ($getActiveIndex(step)-1) / steps.length}}% Completed</div>
                         <div class="progress-bar"><span style="width:{{100 * ($getActiveIndex(step)-1) / steps.length}}%;">&nbsp;</span></div>
                         <!--<div class="text-center">Powered by <a href="javascript:void(0);"><i>Hirely</i></a></div>-->
-                        <div class="text-center">See a bug? <a href="mailto:support@hirely.io?subject=Feedback"><i>Please email us!</i></a></div>
+                        <div class="text-center">See a bug? <a href="mailto:support@hirely.us?subject=Feedback" target="_blank"><i>Please email us!</i></a></div>
                     </div>
                 </div><!--col-sm-6-->
                 <div class="col-xs-3">
                     <div class="right">
                         <button class="btn next" ng-hide="$isLast()" ng-click="$nextStep()" ng-disabled="$isLast() || ($getActiveStep().hasForm && !$getActiveStep().valid)">Next</button>
-                        <button class="btn next" ng-hide="!$isLast()" ng-click="finish()">Finish</button>
+                        <button class="btn next" ng-hide="!$isLast()" ng-click="finish()" ng-disabled="$getActiveStep().hasForm && !$getActiveStep().valid">Finish</button>
                     </div>
                 </div><!--col-sm-3-->
             </div><!--row-->

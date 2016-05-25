@@ -154,6 +154,18 @@ $day-button-size: 60px;
 
 .form-container.user-profile-personality {
 	padding: 0;
+
+    /**
+     * Fixing the panel heading in personality test result
+     */
+    .panel-heading{
+        padding:0;
+    }
+    .panel-title > a{
+        display: block;
+        width:100%;
+        padding:15px 15px;
+    }
 }
 
 .tf-slide-deck-container .progress-bar {
@@ -228,6 +240,7 @@ $day-button-size: 60px;
             margin-bottom: .5em;
             color:$c-hirely-mid-gray;
         }
+
 	}//// field-wrapper
 
 	.feedback-valid{
@@ -296,7 +309,7 @@ $day-button-size: 60px;
 		color:#000;
 		padding:0.3em 0.5em;
 		width:100%;
-		// background-color:#ccc;
+		background-color:$c-white;//$c-hirely-gray;
 		&.text-array-field-input {
 			width: 70%;
 			width: calc(100% - 40px);
@@ -349,14 +362,16 @@ $day-button-size: 60px;
 		border:none;
 		border-bottom:1px solid $c-hirely-text-gray;
 		// padding:0 0;
-        padding:0 30px 0 10px;
+        // padding:0 30px 0 10px;
+        padding:0.3em 0.5em;
+
 		margin-top:0;
 		margin-bottom:0;
-		height: 29px;
+		height: 32px;
 		@include border-radius(0);
 		border-color:$c-hirely-text-gray;
 		width:100%;
-		background-color:$c-hirely-gray;
+		background-color:$c-white;///$c-hirely-gray;
 
 		option:first-child{
 			color:#ccc;
@@ -575,6 +590,13 @@ $day-button-size: 60px;
 	  font-size: 18px;
 	  color: gray;
 	  line-height: 15px;
+  }
+
+  .char-counter{
+    font-size:0.8em;
+    &.error{
+        color: $c-hirely-red;
+    }
   }
 }//// .hirely-form
 
@@ -1074,5 +1096,6 @@ $day-button-size: 60px;
         float: left;
     }
 }
+
 
 

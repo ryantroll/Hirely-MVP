@@ -6,8 +6,16 @@
     <div class="row">
         <div class="cards-wrapper">
             <div class="card">
-                <h4>Application Tip</h4>
-                <p>Adding all of your education and training enhances your application. Be sure to enter all completed, partially completed and currently attending education.</p>
+                <h4>
+                    <span ng-show="!isSurvey">Hirely </span>
+                    <span ng-show="isSurvey">Survey </span>
+                    Tip:
+                </h4>
+                <p>
+                    <span ng-show="!isSurvey">Be sure to enter all completed, partially completed and currently attending education.</span>
+                    <span ng-show="isSurvey">Please add any degrees or diplomas that you may have, including those which are partial.</span>
+
+                </p>
             </div>
         </div>
     </div>
@@ -285,7 +293,7 @@
                     <div class="col-sm-12">
                         <div class="field-wrapper text-center" style="padding-top: 15px;">
                             <!--Powered by <a href="javascript:void(0);"><i>Hirely</i></a>-->
-                            See a bug? <a href="mailto:support@hirely.io?subject=Feedback"><i>Please email us!</i></a>
+                            See a bug? <a href="mailto:support@hirely.us?subject=Feedback" target="_blank"><i>Please email us!</i></a>
                         </div>
                     </div>
                 </div>

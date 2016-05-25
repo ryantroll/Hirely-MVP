@@ -266,7 +266,7 @@
                             $scope.occupationState = "notFound";
                         } else {
                             $scope.occupationState = "choicesAvailable";
-                            $scope.occupationChoices = matches.slice(0, 5);
+                            $scope.occupationChoices = matches.slice(0, 10);
                             console.log("Showing choices");
 
                             if ($scope.queueChoiceAutoSelect) {

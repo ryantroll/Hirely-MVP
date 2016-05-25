@@ -13,6 +13,8 @@
             <a href="javascript:void(0);" class="day-link" ng-class="{active:dayHours[day] > 0}" ng-click="showTimeTable(day, $index)"><span>{{day|uppercase}}</span></a>
         </div>
     </div>
+
+
 </div>
 
 <div class="form-container hirely-form" ng-show="stepFiveLoaded">
@@ -20,6 +22,13 @@
         <fieldset>
 
             <div class="row">
+
+                    <div class="col-sm-12 no-col-padding" ng-show="totalHours < 1">
+                        <div class="error-label bg-danger">
+                            Please select the hours you are available
+                        </div>
+                    </div><!--col-->
+
                 <div class="col-sm-6">
                     <div class="field-wrapper" ng-class="{'error': !stepFive.minHours.$valid && stepFive.minHours.$dirty, 'valid' : stepFive.minHours.$valid}">
                         <label for="minHours">
@@ -52,13 +61,13 @@
                     </div>
                 </div><!--col-->
                 <div class="col-sm-12 no-col-padding">
-                    <div class="error-label bg-danger" ng-show="stepFive.maxHours.$dirty && availability.hoursPerWeekMax > 168">
+                    <div class="error-label bg-danger" ng-show="availability.hoursPerWeekMax > 168">
                         Max hours should not exceed 168 per week
                     </div>
-                    <div class="error-label bg-danger" ng-show="stepFive.maxHours.$dirty && stepFive.maxHours.$error.mismatch">
+                    <div class="error-label bg-danger" ng-show="stepFive.maxHours.$error.mismatch">
                         Max hours should be greater than or equal to min hours
                     </div>
-                    <div class="error-label bg-danger" ng-show="stepFive.minHours.$dirty && stepFive.minHours.$error.mismatch">
+                    <div class="error-label bg-danger" ng-show="stepFive.minHours.$error.mismatch">
                         Your number of selected available hours per week is less than min number of hours. Please click on one of the days button below and select your hours of availability
                     </div>
                 </div><!--col-->
@@ -68,7 +77,7 @@
                 <div class="col-sm-12">
                     <div class="field-wrapper"  ng-class="{'error': !stepFive.howSoon.$valid && stepFive.howSoon.$dirty, 'valid' : stepFive.howSoon.$valid}">
                         <label for="howSoon">
-                            HOW SOON CAN YOU START ONCE HIRED?
+                            HOW SOON CAN YOU START IF HIRED?
                             <span class="fa fa-check feedback-valid"></span>
                             <span class="fa fa-close feedback-error"></span>
                         </label>
@@ -87,7 +96,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="field-wrapper">
-                        ARE YOU LOOKING FOR SEASONAL WORK?<br>
+                        <label>ARE YOU LOOKING FOR SEASONAL WORK?</label>
                         <button id="isSeasonalBtn" class="btn isSeasonalBtn" ng-class="{active:isSeasonal}" ng-click="isSeasonal=true">Yes</button>
                         <button id="notSeasonalBtn" class="btn isSeasonalBtn pull-right red" ng-class="{active:!isSeasonal}" ng-click="isSeasonal=false">No</button>
                     </div><!--field-wrapper-->
@@ -135,6 +144,13 @@
         </div><!--row-->
 
         <div class="row"><div class="col-sm-12 title"><p>SELECT ALL HOURS YOU ARE AVAILABLE</p></div></div>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8 text-center copy-section" style="padding-top:1em; padding-bottom:1em;">
+                <p>Click each circle for which you are available to work</p>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
 
         <div class="row">
             <div class="col-sm-2"></div>
@@ -178,7 +194,7 @@
             <div class="col-sm-12">
                 <div class="field-wrapper text-center">
                     <!--Powered by <a href="javascript:void(0);"><i>Hirely</i></a>-->
-                    See a bug? <a href="mailto:support@hirely.io?subject=Feedback"><i>Please email us!</i></a>
+                    See a bug? <a href="mailto:support@hirely.us?subject=Feedback" target="_blank"><i>Please email us!</i></a>
                 </div>
             </div>
         </div>

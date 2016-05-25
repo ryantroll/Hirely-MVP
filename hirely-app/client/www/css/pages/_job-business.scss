@@ -1,0 +1,237 @@
+/**
+ * Created by Iyad Bitar on 2/29/16.
+ */
+.job-business{
+    overflow: hidden;
+    background-color:$c-hirely-gray;
+
+    .padding{
+        padding-left:2em;
+        padding-right:2em;
+    }
+
+    .hero{
+        position:relative;
+        max-height:500px;
+        overflow:hidden;
+        img{
+            display: block;
+            width:100%;
+            margin:0 auto;
+            height: auto;
+        }
+
+    }
+    .business-header{
+        padding-top:2em;
+        padding-bottom:1em;
+        position:relative;
+        // @include drop-shadow(0,0,0,0,0); //// conflict fix
+        // border-bottom:1px solid $c-hirely-text-gray;
+
+        .logo{
+            // display: none;
+            width:100%;
+            top:-100px;
+            position:absolute;
+            margin-left:-2em;
+            padding-left:0; //// conflict fix
+            padding-top:0; //// conflict fis
+            @media screen and (min-width:$screen-sm-min){
+                top:-160px;
+            }
+
+            .circle{
+                width:120px;
+                height:120px;
+                margin:0 auto;
+                background-color:#fff;
+                @include border-radius(100px);
+                @include drop-shadow();
+
+                @media screen and (min-width:$screen-sm-min){
+                    width:200px;
+                    height:200px;
+                }
+
+                img{
+                    max-width:100px;
+                    height: auto;
+                    display: block;
+                    margin:0 auto;
+                    @include vertical-align();
+                    @media screen and (min-width:$screen-sm-min){
+                        max-width:180px;
+                    }
+                }
+            }
+        }//// .logo
+    }//// .header
+
+    .details{
+
+        max-width:100%;
+        width:100%;
+        padding:1em 1em;
+        margin:0 auto;
+
+
+        @media screen and (min-width:$screen-sm-min){
+            max-width:900px;
+        }
+
+        .title{
+            text-align: center;
+            padding-bottom:1em;
+            border-bottom:1px solid $c-hirely-text-gray;
+
+            h2{
+                font-weight: 400;
+            }
+        }/// title
+
+        .states{
+            padding-top:2em;
+            .state{
+                    // border-bottom: 1px solid $c-hirely-text-gray;
+                .link{
+                    display: block;
+                    width:100%;
+                    height: 60px;
+                    line-height: 60px;
+                    border-bottom: 1px solid $c-hirely-text-gray;
+                    font-size: 1.5em;
+                    color:$c-hirely-mid-gray;
+
+                    span:nth-child(2){
+                        float:right;
+                        i{
+                            color:$c-hirely-red;
+                            display: inline-block;
+                            width:30px;
+                            height: 30px;
+                            @include border-radius(15px);
+                            border: 1px solid $c-hirely-red;
+                            text-align: center;
+                            line-height: 30px;
+                            font-size:0.6em;
+                        }
+                        b{
+                            font-weight: 400;
+                        }
+                    }//// span
+                }//// .link
+            } //// .state
+        }//// states
+
+        .location{
+            padding:1em 0;
+            border-bottom:1px solid $c-hirely-text-gray;
+
+            &:last-child{
+                border-bottom:none;
+            }
+
+            .details{
+                text-align: center;
+                h3{
+                    font-weight: 400;
+                }
+                .times{
+                    b{
+                        font-weight: 400;
+                        text-transform: capitalize;
+                    }
+                    i{
+                        font-style: normal;
+                    }
+                    span:last-of-type{
+                        i{
+                            display: none;
+                        }
+                    }
+                }
+            }/// details
+        }//// .location
+
+        .positions{
+            width:100%;
+
+            thead{
+                display: none;
+                @media screen and (min-width:$screen-sm-min){
+                    display: table-header-group;
+                }
+                th{
+                    text-align: left;
+                    font-weight: 600;
+                    height: 40px;
+                    vertical-align: middle;
+                    text-transform: uppercase;
+                    padding:0 10px;
+                }
+            }
+            tbody{
+                tr{
+                    display: block;
+                    width:100%;
+                    padding:1em 0;
+                    margin-bottom:1em;
+                    @media screen and (min-width:$screen-sm-min){
+                        display: table-row;
+                        padding:0 0;
+                        margin-bottom: 0;
+                    }
+                    &:nth-child(2n+2){
+                        background-color:$c-hirely-light-gray;
+                    }
+                    &:nth-child(2n+1){
+                        background-color:$c-white;
+                    }
+                }
+                td{
+                    height: auto;
+                    vertical-align: middle;
+                    padding:0 10px;
+                    display: inline-block;
+                    width:100%;
+                    text-align: center;
+
+                    @media screen and (min-width:$screen-sm-min){
+                        display: table-cell;
+                        text-align: left;
+                        width:auto;
+                        height: 40px;
+                    }
+                }
+                td.no-mobile{
+                    display: none;
+                    @media screen and (min-width:$screen-sm-min){
+                        display: table-cell;
+                    }
+                }
+            }//// tbody
+        }//// .positions
+    }//// .details
+
+    .footer{
+        background-color:$c-white;
+        padding:1em 0;
+        height: auto;//// conflict fix
+
+        .inner{
+            width:100%;
+            height: auto;
+            padding:1em;
+            text-align: center;
+            max-width:900px;
+            margin:0 auto;
+        }
+        h3{
+            font-weight: 400;
+            color:$c-hirely-mid-gray;
+        }
+    }//// .footer
+
+
+}/// .job-business

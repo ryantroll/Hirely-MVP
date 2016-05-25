@@ -72,6 +72,44 @@ var positionSchema = new Schema({
         }
     ],
 
+    shifts:{
+        mon:[{
+            label:{type:String, reqired:false},
+            tStart:{type:Number, reqired:false},
+            tEnd:{type:Number, reqired:false},
+        }],
+        tue:[{
+            label:{type:String, reqired:false},
+            tStart:{type:Number, reqired:false},
+            tEnd:{type:Number, reqired:false},
+        }],
+        wed:[{
+            label:{type:String, reqired:false},
+            tStart:{type:Number, reqired:false},
+            tEnd:{type:Number, reqired:false},
+        }],
+        thu:[{
+            label:{type:String, reqired:false},
+            tStart:{type:Number, reqired:false},
+            tEnd:{type:Number, reqired:false},
+        }],
+        fri:[{
+            label:{type:String, reqired:false},
+            tStart:{type:Number, reqired:false},
+            tEnd:{type:Number, reqired:false},
+        }],
+        sat:[{
+            label:{type:String, reqired:false},
+            tStart:{type:Number, reqired:false},
+            tEnd:{type:Number, reqired:false},
+        }],
+        sun:[{
+            label:{type:String, reqired:false},
+            tStart:{type:Number, reqired:false},
+            tEnd:{type:Number, reqired:false},
+        }]
+    },
+
     filters: {type: freeSchema, required: false}
 
 });//// positionSchema

@@ -27,6 +27,16 @@
          */
         var occIds = [];
 
+        $(document).on('mouseenter', ".candidate-v2", function() {
+            $(this).find(".card-no-hover").css('visibility', 'hidden');
+            $(this).find(".card-hover").show();
+        });
+        $(document).on('mouseleave', ".candidate-v2", function() {
+            $(this).find(".card-hover").hide();
+            $(this).find(".card-no-hover").css('visibility', 'visible');
+        });
+        
+
         $scope.togglePositionMenu = function (event) {
 
             var handleMenuClick = function (e) {
@@ -261,7 +271,7 @@
             .then(
                 function(metas){
                     $scope.occupationMetas = metas;
-                    console.log($scope.applicants)
+                    // console.log($scope.applicants)
                 },
                 function(error){
                   console.log(error)
@@ -308,7 +318,11 @@
                     cats[cat] = true;
                 }//// for
                 $scope.applicants[key].workCategories = Object.keys(cats).splice(0,2).join(' & ').replace('_', ' ');
+
+                $scope.applicants[key].shiftsScore = $scope.getShiftScore($scope.applicants[key]);
+
             });
+
 
             /**
              * Wait for some time and before showing the page
@@ -386,6 +400,81 @@
             var secInDay = 86400;
             var days = Math.floor(dif / secInDay);
             return days;
+        };
+
+        $scope.getShiftScore = function(applicant) {
+            /**
+             * Set availability score/match against shift
+             */
+            var avScore = angular.copy($scope.position.shifts);
+            var shiftsCount = 0;
+            var shiftsMatched = 0;
+            var shiftLabels = {}; /// will be used to add dummy shifts in the days
+
+            for(var day in avScore){
+                for(var s=0; s<avScore[day].length; s++){
+                    shiftLabels[avScore[day][s].label] = s;
+
+                    var start = avScore[day][s].tStart;
+                    var end = avScore[day][s].tEnd;
+                    var isMatch = false;
+                    var av = applicant.availability[day];
+
+                    var shiftArr = [];
+                    for(var x=start; x<=end-1; x++){
+                        shiftArr.push(x);
+                    }//// for
+
+                    if(angular.isDefined(start) && angular.isDefined(end)){
+                        if( av.join('|').indexOf(shiftArr.join('|')) > -1 ){
+                            isMatch = true;
+                            shiftsMatched++;
+                        }
+                    }
+                    else{
+                        isMatch = null;
+                    }
+
+                    avScore[day][s].match = isMatch;
+
+                    shiftsCount++;
+                }/// for s
+            }//// for d
+            avScore.shiftsMatched = shiftsMatched;
+            avScore.shiftsCount = shiftsCount;
+            avScore.availabilityScore = Math.round(100 * shiftsMatched / shiftsCount);
+
+            /**
+             * Fix the missed up shifts in each day by adding dummy shift object based on shift label
+             */
+            var labels = Object.keys(shiftLabels);
+
+            for(day in avScore){
+                var d = avScore[day];
+                if(d.length < labels.length){
+                    var temp = [];
+                    for(var x=0; x<labels.length; x++){
+                        //// search the day array for matching label;
+                        var i = null;
+                        for(var v=0; v<d.length; v++){
+                            if(labels[x] == d[v].label){
+                                i = v;
+                                break;
+                            }
+                        }
+                        if(null !== i){
+                            temp.push( d.splice(i, 1)[0] );
+                        }
+                        else{
+                            temp.push({label:labels[x]});
+                        }
+
+                    }
+                    avScore[day] = temp;
+                }//// if
+            }
+
+            return avScore;
         };
 
         $scope.getViewStatus = function (id, index) {
@@ -607,15 +696,41 @@
                 size: 'full',
                 controller: 'CandidateDetailsModalController',
                 templateUrl: 'app/business/candidate-details.tpl.html',
-                windowClass: 'gray',
+                windowClass: 'gray modal-max-900',
                 scope: $scope
-            })
+            });
+
 
             if ($scope.isHeaderFixed === true) {
                 $('#mobile-nav').hide()
 
                 $('#subHeader').hide();
             }
+            /**
+             * Resolved when modal closed
+             */
+            detailsModal.result
+                .then(
+                    function (d) {
+
+                    },
+                    function (err) {
+
+                    }
+                )
+                .finally(
+                    function (d) {
+                        $scope.showActionButtons = false;
+                        if ($scope.isHeaderFixed === true) {
+                            $('#mobile-nav').show()
+
+                            $('#subHeader').show();
+                        }
+                        // delete $scope.detailsUserId;
+                        // delete $scope.detailsIndex;
+                        // delete $scope.detailsApp;
+                    }
+                )
             /**
              * Resolved when modal successfully open
              */
@@ -627,12 +742,15 @@
                             /**
                              * Update the viewStats of the application to viewed
                              */
+                            $scope.showActionButtons = true;
+
                             var appToSave = angular.copy(app);
                             appToSave.viewStatus = 1;
                             JobApplicationService.save(appToSave).then(
                                 function (savedApp) {
                                     // $scope.applications[index] = savedApp;
                                     $scope.applications[index].viewStats = 1;
+
                                 },
                                 function (err) {
                                     console.log(err);
@@ -644,22 +762,7 @@
                         console.log(err)
                     }
                 )
-            /**
-             * Resolved when modal closed
-             */
-            detailsModal.result
-                .then(
-                    function (d) {
-                        if ($scope.isHeaderFixed === true) {
-                            $('#mobile-nav').show()
 
-                            $('#subHeader').show();
-                        }
-                    },
-                    function (err) {
-
-                    }
-                )
         }
 
         $scope.activityColor = function (act) {

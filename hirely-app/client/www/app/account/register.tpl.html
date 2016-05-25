@@ -2,6 +2,17 @@
 <h1 ng-show="user.invitation" class="text-center">Welcome to {{businessName}}!</h1>
 <h1 ng-show="message" class="text-center">{{message}}</h1>
 
+<div class="text-center" ng-show="message && message.indexOf('future')!==-1">
+    <br>
+    <p>
+        This 7-minute survey will assess the background of current staff, and will have no impact on your job or performance reviews.
+    </p>
+    <br>
+    <p>
+        Thanks in advance for you participation!
+    </p>
+</div>
+
 <div class="user-profile-basic hirely-form" ng-class="{waiting:ajaxBusy}">
     <div class="in-form-loader">
         <div class="form-loader">

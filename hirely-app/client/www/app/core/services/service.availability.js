@@ -30,6 +30,7 @@
     for(var h=0; h<24; h++){
       var hourLabel = '';
       var dayHalf = 'am';
+      var dayHalfShort = 'a'
       var hourName = h;
       if(0==h){
           hourLabel += '12AM';
@@ -42,10 +43,10 @@
           hourName = h-12 <= 0 ? 12 : h-12;
           hourLabel += String(hourName) + 'PM';
           dayHalf ='pm';
-
+          dayHalfShort = 'p';
       }
 
-      hours.push({'hour':h, 'label':hourLabel, dayHalf:dayHalf, hourName:hourName});
+      hours.push({'hour':h, 'label':hourLabel, dayHalf:dayHalf, dayHalfShort:dayHalfShort, hourName:hourName});
     }//// for
 
     /**

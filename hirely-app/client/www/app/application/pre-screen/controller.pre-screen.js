@@ -14,6 +14,7 @@
             return {
                 restrict: 'A',
                 require: 'ngModel',
+                replace: true,
                 link: function (scope, ele, attrs, ctrl) {
                     ctrl.$validators.validateQuestion = function(modelValue, viewValue) {
                         if (!viewValue) {
@@ -24,6 +25,45 @@
                 }//// fun. link
             }/// return object
         })/// validate question is not empty;
+        .directive('characterCounter', ['$timeout', function ($timeout) {
+            return {
+                restrict: 'E',
+                // require: 'ngModel',
+                template: '<div class="char-counter pull-right">{{leftChars}}</div>',
+                link: function (scope, ele, attrs, ctrl) {
+                    var max = parseInt(attrs.max, 10);
+                    if(!max) max = 140;
+                    var f;/// the field
+                    var div = $(ele).find('.char-counter').eq(0);
+
+                    var filedKey = function(e){
+                        var code = e.keyCode || e.which || e.charCode;
+                        var allowed = [48, 57, 9, 91, 8, 37, 38, 39, 40, 13, 16, 17, 18, 93];
+
+                        var length = f.val().length + (code === 8 ? -1 : (allowed.indexOf(code) == -1 ? 1 : 0) ); /// +1 because we using keydown and field value not updated yet and -1 for backspace
+                        var left = max - length;
+                        scope.leftChars = left < 0 ? 0 : (left > max ? max : left); /// protect left from over boundaries
+                        if(left+1  <=  0 && allowed.indexOf(code) ===-1){
+                            if(e.preventDefault) e.preventDefault(); else e.returnValue = false;
+                        }
+                        else if(scope.leftChars <= 12){
+
+                            div.addClass('error')
+                        }
+                        else{
+                            div.removeClass('error');
+                        }
+                    }
+
+                    var onDocLoad = function(){
+                        f = angular.element('#' + attrs.fieldId);
+                        scope.leftChars = max - f.val().length;
+                        f.on('keydown', filedKey);
+                    }
+                    $timeout(onDocLoad, 100)//// timeout delay is added to allot DOM element access
+                }//// fun. link
+            }/// return object
+        }])/// .directive;
 
         .controller('PreScreenController', ['$scope', '$state', '$stateParams', '$timeout', 'AuthService', 'JobApplicationService', PreScreenController]);
 
@@ -84,8 +124,8 @@
                 var historyEntry = {
                     time: new Date(),
                     type: 'StatusChange',
-                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[2],
-                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status+1]+" to "+JobApplicationService.statusLabelsHm[2],
+                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
+                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
                     meta: {
                         fromStatus: $scope.application.status,
                         toStatus: 2
@@ -102,7 +142,7 @@
 
                 $scope.application.status = 2;
                 $scope.application.appliedAt = new Date();
-                
+
             }
 
             JobApplicationService.save($scope.application)
@@ -111,7 +151,8 @@
                         console.log("Application created");
                     },//// save resolve
                     function (err) {
-                        alert(err);
+                        console.log(err);
+                        alert('Error while saving your application\nPlease try again');
                     }//// save reject
                 );//// save().then()
         });

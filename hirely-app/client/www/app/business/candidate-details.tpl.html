@@ -6,97 +6,59 @@
         <div class="hidden userId">{{application.userId}}</div>
         <div class="hidden posId">{{application.positionId}}</div>
         <div class="row">
+
+            <div class="box header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="image">
+                            <div class="image-wrapper" ng-show="!business.hideProfileImages || !location.hideProfileImages || !position.hideProfileImages">
+                                <img src="{{applicant.profileImageThumbURL || defaultImage}}" />
+                            </div>
+                        </div>
+                        <div class="details">
+                            <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
+                            <div class="job">
+                                <span ng-if="applicant.workExperience.length < 1">No Experience Listed</span>
+                                <span ng-if="applicant.workExperience.length > 0">{{applicant.workCategories}} Experience</span>
+                            </div>
+                            <div class="job">
+                                <span><a href="tel:{{applicants[detailsUserId].mobile}}">{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></span>
+                                <br>
+                                <span><a href="tel:{{applicants[detailsUserId].email}}">{{applicants[detailsUserId].email}}</a></span>
+                            </div>
+                            <!-- <p class="status">
+                                {{position.title}} - <span class="{{statusLabelsHm[application.status+1] | lowercase}}">{{statusLabelsHm[application.status+1]}}</span>
+                            </p> -->
+                        </div><!--details-->
+                    </div><!--col-->
+                </div><!--row-->
+                <div class="header-status">
+                    <ul>
+                        <li ng-class="{'blue':application.status == 2}">Applied</li>
+                        <li ng-class="{'purple':application.status == 3}">Liked</li>
+                        <li ng-class="{'green':application.status == 4}">Hired</li>
+                        <li ng-class="{'red':application.status == 5}">Dismissed</li>
+                    </ul>
+                </div>
+            </div><!--box-->
+
             <div class="col-sm-12">
                 <div id="left-column">
 
-                    <div class="box">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="image">
-                                    <div class="image-wrapper" ng-show="business.hideProfileImages || location.hideProfileImages || position.hideProfileImages">
-                                        <img src="{{applicant.profileImageThumbURL || defaultImage}}" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-9">
-                                <div class="details">
-                                    <h4>{{applicant.firstName}} {{applicant.lastName}}</h4>
-                                    <div class="job">
-                                        <span ng-if="applicant.workExperience.length < 1">No Experience Listed</span>
-                                        <span ng-if="applicant.workExperience.length > 0">{{applicant.workCategories}} Experience</span>
-                                    </div>
-
-                                    <p class="status">
-                                        {{position.title}} - <span class="{{statusLabelsHm[application.status+1] | lowercase}}">{{statusLabelsHm[application.status+1]}}</span>
-                                    </p>
-                                </div><!--details-->
-                            </div><!--col-->
-                        </div><!--row-->
-                    </div><!--box-->
-
-                    <div class="box">
-                        <div class="title" ng-class="{blue:application.status==2, red:application.status==6 || application.status==7, gray:application.status==1 || application.status==8, green:application.status ==3 ||application.status ==4||application.status ==5}">
-                            <h5>Applicant Status: {{statusLabelsHm[application.status+1]}}</h5>
-                        </div>
-
-                        <div class="actions clearfix">
-                            <div class="menu">
-                                <div class="inner">
-
-                                    <div ng-if="application.status == 1 && AuthService.isSuperUser">
-                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 2)" title="Pass" uib-tooltip="Pass"><i class="icon-check_circle_icon"></i></a>
-                                    </div>
-
-                                    <div ng-if="application.status == 2">
-                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 3)" title="Like" uib-tooltip="Like"><i class="icon-thumb_up_icon"></i></a>
-                                    </div>
-
-                                    <div ng-if="application.status == 3">
-                                        <a class="red" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 5)" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                        <a class="green" href="javascript:void(0);" ng-click="updateAppStatus($event, application._id, 4)" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                    </div>
-
-                                    <div ng-if="application.status == 4">
-                                        <a class="green" href="javascript:void(0);" title="Hire" uib-tooltip="Hire"><i class="icon-dollar_sign_icon"></i></a>
-                                    </div>
-
-                                    <div ng-if="application.status == 5">
-                                        <a class="red" title="Dismiss" uib-tooltip="Dismiss"><i class="icon-thumb_down_icon"></i></a>
-                                    </div>
-
-
-                                </div>
-                            </div><!--menu-->
-                        </div><!--actions-->
-                    </div><!--box actions-->
-
-                    <div class="box">
-                        <div class="title blue">
-                            <h5>Contact {{applicant.firstName}}</h5>
-                        </div>
-                        <div class="contacts">
-                            <ul>
-                                <li><a href="tel:{{applicants[detailsUserId].mobile}}"><i class="icon green glyphicon glyphicon-earphone"></i>{{formatPhoneNumber(applicants[detailsUserId].mobile)}}</a></li>
-                                <li><a href="mailto:{{applicants[detailsUserId].email}}"><i class="icon blue glyphicon glyphicon-envelope"></i>{{applicants[detailsUserId].email}}</a></li>
-                            </ul>
-                        </div>
-                    </div><!--box contact-->
 
                     <div class="arrows clearfix" style="padding-bottom:20px">
                         <button class="btn mid-gray pull-left" ng-click="preApplication()" ng-show="isModal" ng-disabled="detailsIndex === 0"><i class="icon glyphicon glyphicon-menu-left"></i></button>
                         <button class="btn mid-gray pull-right" ng-click="nextApplication()" ng-show="isModal" ng-disabled="detailsIndex >= filtered.length-1"><i class="icon glyphicon glyphicon-menu-right"></i></button>
                     </div><!--arrows-->
 
-                    <div class="box" ng-repeat="im in position.interviewMaterials">
+                    <!--<div class="box" ng-repeat="im in position.interviewMaterials">
                         <a target="_blank" href="{{im.url}}">
                             <button class="btn mid-gray" style="width:100%">{{im.name}}</button>
                         </a>
                     </div><!--box interview materials-->
 
                     <div class="box">
-                        <div class="title">
+                        <div class="title gray">
                             <h5>Pre-Screening</h5>
                         </div>
                         <div class="prescreen">
@@ -112,12 +74,12 @@
                     </div><!--box pre-screen-->
 
                     <div class="box">
-                        <div class="title">
+                        <div class="title gray">
                             <h5>Skills</h5>
                         </div>
                         <div class="skills clearfix">
                             <div class="score">
-                                <div class="border" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].exp)"></div>
+                                <div class="border" ng-class="getScoreColor(scores[applicant._id].scores[position.expLvl].exp)" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].exp)"></div>
                                 <div class="circle">{{scores[applicant._id].scores[position.expLvl].exp | number:0}}</div>
                             </div><!--score-->
                             <p class="score-title">Experience Match</p>
@@ -137,16 +99,19 @@
                     </div><!--box skills-->
 
                     <div class="box">
-                        <div class="title">
+                        <div class="title gray">
                             <h5>Personality <!-- <a href="javascript:void(0)" class="info">?</a> --></h5>
                         </div>
                         <div class="personality clearfix">
-                            <!-- <div class="head">{{applicant.firstName}} is a <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[0]._id}}</span> &amp; <span class="{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}">{{applicant.personalityExams[0].personalityBlend.personalityTypes[1]._id}}</span></div> -->
                             <div class="score">
-                                <div class="border" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].psy)"></div>
+                                <div class="border" ng-class="getScoreColor(scores[applicant._id].scores[position.expLvl].psy)" ng-style="getScoreClip(scores[applicant._id].scores[position.expLvl].psy)"></div>
                                 <div class="circle">{{scores[applicant._id].scores[position.expLvl].psy | number:0}}</div>
                             </div><!--score-->
+                            <p class="score-title">Personality Match</p>
+
                             <div class="traits clearfix">
+                                <h4>Candidate vs Ideal Traits</h4>
+
                                 <div class="trait" ng-repeat="trait in occupationMetas.traitMetrics | limitTo : 6">
                                     <h5><span uib-tooltip="{{trait.description}}">{{trait.name}}</span></h5>
                                     <div class="scale">
@@ -166,57 +131,49 @@
                     </div><!--box personality-->
 
                     <div class="box">
-                        <div class="title">
+                        <div class="title gray">
                             <h5>Availability</h5>
                         </div>
-                        <div class="details">
-                            <p>I'm available to start <span ng-show="daysUntilAvailable != 'Immediately'">in</span> <b>{{daysUntilAvailable}}</b> upon hire</p>
-                            <p>I'm looking for <b>{{applicant.availability.hoursPerWeekMin}}</b> to <b>{{applicant.availability.hoursPerWeekMax}}</b> hours per week</p>
-                            <p>My current availability for shifts is as follows</p>
-                        </div>
+                        <div class="availability clearfix">
+                            <div class="score">
+                                <div class="border" ng-class="getScoreColor(applicants[detailsUserId].shiftsScore.availabilityScore)" ng-style="getScoreClip(applicants[detailsUserId].shiftsScore.availabilityScore)"></div>
+                                <div class="circle">{{applicants[detailsUserId].shiftsScore.shiftsMatched}}</div>
+                            </div><!--score-->
+                            <p class="score-title">Shift Match</p>
 
-                        <div class="timetable">
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-10">
-                                    <div class="days-list">
-                                        <ul>
-                                            <li class="arrow"><a href="javascript:void(0);" class="border" ng-click="previousDay()"><i class="glyphicon glyphicon-menu-left"></i></a></li>
-                                            <li ng-repeat="day in days" ng-class="{active:currentDayLabel === day, green:applicant.availability[day].length>0}"><a href="javascript:void(0);" ng-click="showTimeTable(day)">{{day|uppercase}}</a></li>
-                                            <li class="arrow"><a href="javascript:void(0);" ng-click="nextDay()"><i class="glyphicon glyphicon-menu-right"></i></a></li>
-                                        </ul>
+                            <div class="details">
+                                <p>I'm available to start <span ng-show="daysUntilAvailable != 'Immediately'">in</span> <b>{{daysUntilAvailable}}</b> upon hire</p>
+                                <p>Hours Per Week: <b>{{applicant.availability.hoursPerWeekMin}}</b> to <b>{{applicant.availability.hoursPerWeekMax}}</b></p>
+                            </div>
+
+                            <div class="shifts">
+                                <h4>Candidate vs Shift</h4>
+                                <div class="table">
+                                    <div class="srow">
+                                        <div class="td srow-label">&nbsp;</div>
+                                        <div class="td srow-shift shift-title" ng-repeat="shift in position.shifts.mon">{{shift.label}}</div>
                                     </div>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div><!--row-->
+                                    <div class="srow" ng-repeat="day in days">
+                                        <div class="td srow-label">{{day}}</div>
+                                        <div class="td srow-shift" ng-repeat="shift in applicants[detailsUserId].shiftsScore[day]" ng-class="{'shift-match':shift.match === true, 'shift-unmatch': shift.match === false}">
+                                            {{hours[shift.tStart].hourName}}{{hours[shift.tStart].dayHalfShort}} <span ng-if="shift.tStart || shift.tStart ==0">-</span> {{hours[shift.tEnd <=23 ? shift.tEnd : 0].hourName}}{{hours[shift.tEnd <=23 ? shift.tEnd : 0].dayHalfShort}} <span ng-if="!shift.tStart && shift.tStart !=0">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="srow">
+                                        <div class="td srow-label">&nbsp;</div>
+                                        <div class="td srow-shift shift-no">&nbsp;</div>
+                                        <div class="td srow-shift shift-match small">Available</div>
+                                        <div class="td srow-shift shift-unmatch small">Unavailable</div>
+                                        <div class="td srow-shift shift-no">&nbsp;</div>
+                                    </div>
+                                </div><!--table-->
+                            </div><!--shifts-->
+                        </div><!--availability-->
 
-
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <div class="hours">
-                                        <h4>am</h4>
-                                        <div class="hour-btns clearfix">
-                                            <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'am'}" ng-class="{'active':h.active}"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
-                                        </div><!--hour-btns-->
-                                    </div><!--hours-->
-                                </div><!--col-->
-
-                                <div class="col-sm-5">
-                                    <div class="hours">
-                                        <h4>pm</h4>
-                                        <div class="hour-btns clearfix">
-                                            <button class="btn-hour" ng-repeat="h in currentDays[currentDayLabel] | filter: {dayHalf:'pm'}" ng-class="{'active':h.active}"><span>{{h.hourName}}<br>{{h.dayHalf}}</span></button>
-                                        </div><!--hour-btns-->
-                                    </div><!--hours-->
-                                </div><!--col-->
-                                <div class="col-sm-1"></div>
-                            </div><!--row-->
-                        </div>
                     </div><!--box avail-->
 
                     <div class="box">
-                        <div class="title">
+                        <div class="title gray">
                             <h5>Experience</h5>
                         </div>
                         <div class="experience">
@@ -237,7 +194,7 @@
                     </div><!--box exp-->
 
                     <div class="box">
-                        <div class="title">
+                        <div class="title gray">
                             <h5>Education</h5>
                         </div>
                         <div class="experience">
@@ -305,4 +262,5 @@
 
         </div><!--row-->
     </article>
+
 </div><!--candidate-details
