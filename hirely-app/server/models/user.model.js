@@ -1221,8 +1221,8 @@ var userSchema = new Schema({
     /**
      * Personal info
      */
-    firstName: {type: String, required: true},
-    lastName: {type: String, required: true},
+    firstName: {type: String, required: true, index: true},
+    lastName: {type: String, required: true, index: true},
     email: {
         type: String,
         required: true,

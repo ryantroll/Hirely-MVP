@@ -4,6 +4,10 @@
 .position{
     overflow: hidden;
 
+    button {
+        white-space: normal;
+    }
+
     .padding{
         padding-left:2em;
         padding-right:2em;
@@ -431,9 +435,10 @@
         top:0;
     }
 
-    .business{
+    .application{
         min-height: 200px;
         background-color:$c-white;
+
 
         .box{
             background-color:$c-white;
@@ -443,6 +448,31 @@
             margin:0;
             padding:0;
             margin-bottom:2em;
+
+            #applyButtonBottomP {
+                position: relative;
+                height: 0;
+                top: 80px;
+                z-index: 99;
+
+                button {
+                    width: 100%;
+                    max-width: 300px;
+                    font-size: 1.5em;
+                    padding: 1.4em;
+                    //background: $c-hirely-red;
+                    //color: white;
+                }
+            }
+
+            .form-disabled {
+                opacity: 0.4;
+                background: $c-hirely-light-gray;
+
+                * {
+                    background: $c-hirely-light-gray;
+                }
+            }
 
             .title{
                 width:100%;
@@ -496,7 +526,33 @@
                     }
                 }
             }
+
+            .prescreenBooleanQuestions {
+                padding-top: 1em;
+
+                .field-wrapper {
+                    padding-top: .2em;
+                    label {
+                        text-transform: none;
+                        font-size: 1.2em;
+                    }
+                }
+
+                .checkbox-div {
+                    input {
+                        vertical-align: top;
+                    }
+                    label {
+                        padding-left: 10px;
+                        max-width: calc(100% - 25px);
+                    }
+                }
+
+            }
+
         }//// .box
 
-    }//// .business
+
+
+    }//// .application
 }/// .position

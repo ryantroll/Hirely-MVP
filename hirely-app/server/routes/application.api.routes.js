@@ -62,9 +62,6 @@ var applicationRoutes = {
     },
 
     createNewApplication: function(req, res){
-        if (!req.userId) {
-            res.status(403).json(apiUtil.generateResponse(403, "Forbidden", null));
-        }
         var application = req.body;
 
         applicationService.createNewApplication(application)

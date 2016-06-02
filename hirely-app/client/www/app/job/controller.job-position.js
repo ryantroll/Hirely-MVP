@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', JobPositionController]);
+  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', '$window', '$location', '$anchorScroll', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', 'JobApplicationService', JobPositionController]);
 
-  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, $sce, BusinessService, AvailabilityService, FavoritesService, AuthService) {
+  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, $sce, $window, $location, $anchorScroll, BusinessService, AvailabilityService, FavoritesService, AuthService, JobApplicationService) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -77,10 +77,30 @@
         return;
       }
 
+      var textAreaQs= [];
+      var booleanQs = [];
+      $scope.position.prescreenQuestions.forEach(function(q) {
+        if (q.type == "textarea") {
+          textAreaQs.push(q);
+        } else if (q.type == "boolean") {
+          booleanQs.push(q);
+        } 
+      });
+
+      $scope.application = {
+        user: {email: '', firstName: '', lastName: ''},
+        positionId: $scope.position._id,
+        textAreaQs: textAreaQs,
+        booleanQs: booleanQs
+      };
+      $timeout(function() {
+        $("#application input, #application textarea").prop("disabled", true);
+      });
+
+
       $scope.heroImageURL = $scope.location.heroImageURL ? $scope.location.heroImageURL : $scope.business.heroImageURL;
       $scope.businessDescriptionHtml = $sce.trustAsHtml($scope.business.description);
       $scope.positionDescriptionHtml = $sce.trustAsHtml($scope.position.description);
-
 
 
       $scope.numOfBenefits = getNumOfBenefits();
@@ -190,15 +210,25 @@
         if(true === $scope.position.benefits[ben]) ++numOfBenefits;
       }
       return numOfBenefits;
-    }//// fun. numOfBenefits
+    }; //// fun. numOfBenefits
 
     $scope.applyClick = function(){
-      $state.go('master.application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
-    }
+      // $state.go('master.application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
+      $scope.applyClicked = true;
+      $("#application input, #application textarea").prop("disabled", false);
+      $location.hash("application");
+      $anchorScroll.yOffset = $(document).width() > 768 ? 50 : 80;
+      $anchorScroll();
+
+      if(!AuthService.currentUserId){
+        $window.ga('send', 'pageview', { page: $location.url() });
+      }
+
+    };
 
     $scope.otherPositionClick = function(slug){
       $state.go('master.default.job.position', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:slug});
-    }
+    };
 
     /**
      * [getWorkTypeTitle will return the work type in a displayable way like part-time -> Part Time]
@@ -269,7 +299,43 @@
         $rootScope.addFavoriteAfterLogin = true;
         $state.go('master.default.account.loginWithMessage', {message: "Please login to favorite a business."});
       }
-    }//// fun. favorite click
+    }; //// fun. favorite click
+
+    $scope.registerPasswordUser = function() {
+
+      $scope.applicationBlocked = true;
+
+      if (!$scope.applicationForm.$valid) {
+        return null;
+      }
+
+      $scope.application.booleanQs.forEach(function(q) {
+        if (!q.answer) {
+          q.answer = false;
+        }
+      });
+
+      var application = {
+        user: $scope.application.user,
+        positionId: $scope.position._id,
+        prescreenAnswers: $scope.application.textAreaQs.concat($scope.application.booleanQs)
+      };
+
+      JobApplicationService.create(application)
+          .then(
+              function () {
+                console.log("Application accepted");
+                $state.go('master.default.confirm', $stateParams);
+              },//// save resolve
+              function (err) {
+                console.log(err);
+                alert('Error while saving your application: '+err);
+                applicationBlocked.false;
+              }//// save reject
+          );//// save().then()
+
+    }//// fun. registerPasswrodUser
+
 
   }//// fun. JobController
 

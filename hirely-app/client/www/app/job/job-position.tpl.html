@@ -191,6 +191,27 @@
                         </div>
                     </div><!--box-->
 
+
+                    <div class="box">
+                        <div class="title">
+                            <h3><i class="icon icon-building_outline_icon" style="float:none"></i> ABOUT BUSINESS &amp; LOCATION</h3>
+                        </div>
+                        <div class="copy box-inner">
+                            <div ng-bind-html="businessDescriptionHtml"></div>
+                            <h4>{{business.name}} - {{location.city}}, {{location.state}} - {{location.name}}</h4>
+                            <div class="availability">
+                                <ul>
+                                    <li ng-repeat="range in aggregatedWeekTimes"><b>{{range.label}}:</b> {{range.hoursRanges.join(' | ')}}</li>
+                                </ul>
+                            </div>
+                            <div>
+                                {{location.formattedAddress}}<br>
+                                <!-- 0.5 mi from my location (change) -->
+                            </div>
+                        </div>
+                    </div><!--box-->
+
+
                 </div><!--col-->
 
                 <div class="col-sm-4">
@@ -200,9 +221,10 @@
                                 <h3>${{position.compensation.wageAmountSalary || position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
                             </div>
                             <div class="buttons box-inner">
-                                <button id="applyButton" title="Apply button.  If disabled, applications are not currently being accepted through the Hirely application." class="btn btn-lrg red" ng-click="applyClick()" ng-disabled="business.disabled || location.disabled || position.disabled">APPLY</button>
+                                <button id="applyButton" title="Apply button.  If disabled, applications are not currently being accepted through the Hirely application." class="btn btn-lrg red" ng-click="applyClick()" ng-hide="business.disabled || location.disabled || position.disabled">APPLY</button>
+                                <button title="Applications not currently accepted" class="btn btn-lrg" disabled ng-show="business.disabled || location.disabled || position.disabled">Applications are not currently being accepted.</button>
                                 <!-- <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button> -->
-                                 <button class="btn btn-secondary" id="favButton" ng-click="favoriteClick()" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>
+                                 <!--<button class="btn btn-secondary" id="favButton" ng-click="favoriteClick()" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>-->
                             </div>
                         </div><!--box-->
 
@@ -230,24 +252,110 @@
         </div><!--max-width-->
     </div><!--details-->
 
-    <div class="business padding max-width">
+    <div id="application" class="application padding max-width">
         <div class="row">
             <div class="col-sm-12">
                 <div class="box">
-                    <div class="text-center title">
-                        <h3><i class="icon icon-building_outline_icon" style="float:none"></i> ABOUT BUSINESS &amp; LOCATION</h3>
-                    </div>
-                    <div class="copy box-inner text-center">
-                        <div ng-bind-html="businessDescriptionHtml"></div>
-                        <h4>{{business.name}} - {{location.city}}, {{location.state}} - {{location.name}}</h4>
-                        <div class="availability">
-                            <ul>
-                                <li ng-repeat="range in aggregatedWeekTimes"><b>{{range.label}}:</b> {{range.hoursRanges.join(' | ')}}</li>
-                            </ul>
-                        </div>
-                        <div>
-                            {{location.formattedAddress}}<br>
-                            <!-- 0.5 mi from my location (change) -->
+                    <br>
+                    <h3 class="text-center">APPLICATION</h3>
+                    <p class="text-center" style="color:gray;">If you think you would be a good fit, please complete the information below and we’ll update you by text and email.</p>
+
+                    <p id="applyButtonBottomP" class="text-center" ng-show="!applyClicked">
+                        <button title="Apply button" class="btn btn-lrg red" ng-click="applyClick()" ng-hide="business.disabled || location.disabled || position.disabled">Start</button>
+                        <button title="Applications not current accepted" class="btn btn-lrg" disabled ng-show="business.disabled || location.disabled || position.disabled">Applications are not currently being accepted.</button>
+                    </p>
+
+                    <div class="copy box-inner">
+                        <div class="hirely-form" ng-class="{'form-disabled': !applyClicked}">
+                            <ng-form class="form-horizontal" name="applicationForm" novalidate>
+                                <fieldset>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="field-wrapper" ng-class="{'error': !applicationForm.firstName.$valid && applicationForm.firstName.$dirty, 'valid' : applicationForm.firstName.$valid}">
+                                                <label for="firstName">
+                                                    First Name
+                                                    <span class="fa fa-check feedback-valid"></span>
+                                                    <span class="fa fa-close feedback-error"></span>
+                                                </label>
+                                                <input type="text" class="text-field" id="firstName" name="firstName" ng-model="application.user.firstName" required/>
+                                                <!-- <input type="text" /> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="field-wrapper" ng-class="{'error': !applicationForm.lastName.$valid && applicationForm.lastName.$dirty, 'valid' : applicationForm.lastName.$valid}">
+                                                <label for="lastName">
+                                                    Last Name
+                                                    <span class="fa fa-check feedback-valid"></span>
+                                                    <span class="fa fa-close feedback-error"></span>
+                                                </label>
+                                                <input type="text" class="text-field" name="lastName" id="lastName" ng-model="application.user.lastName" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="field-wrapper" ng-class="{'error': !applicationForm.email.$valid && applicationForm.email.$dirty, 'valid' : applicationForm.email.$valid}">
+                                                <label for="email">
+                                                    Email
+                                                    <span class="fa fa-check feedback-valid"></span>
+                                                    <span class="fa fa-close feedback-error"></span>
+                                                </label>
+                                                <input type="email" class="text-field" name="email" id="email"
+                                                       ng-model="application.user.email"
+                                                       ng-pattern='/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+                                                       required autocapitalize="none"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" ng-repeat="taq in application.textAreaQs">
+                                        <div class="col-sm-12">
+                                            <div class="field-wrapper" ng-class="{'error': !applicationForm.taq_{{$index}}.$valid && applicationForm.taq_{{$index}}.$dirty, 'valid' : applicationForm.taq_{{$index}}.$valid}">
+                                                <label for="taq_{{$index}}">
+                                                    {{taq.question}}
+                                                    <span class="fa fa-check feedback-valid"></span>
+                                                    <span class="fa fa-close feedback-error"></span>
+                                                </label>
+                                                <textarea class="text-field" name="taq_{{$index}}" id="taq_{{$index}}" ng-model="taq.answer" required></textarea>
+                                                <character-counter field-id="taq_{{$index}}" max="{{taq.maxChars ? taq.maxChars : 140}}"></character-counter>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row prescreenBooleanQuestions">
+                                        <div class="col-sm-12">
+                                            <label>
+                                                {{business.name}} values the following qualities.  Check all that apply to you:
+                                            </label>
+
+                                            <div class="field-wrapper checkbox-div" ng-repeat="bq in application.booleanQs">
+                                                <input type="checkbox" id="bq_{{$index}}" name="bq_" ng-model="bq.answer" />
+                                                <label for="bq_{{$index}}">
+                                                    {{bq.question}}
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="field-wrapper text-center">
+                                                <button id="applicationSubmitButton" class="btn btn-lg red" ng-disabled="!applicationForm.$valid || applicationBlocked" ng-click="$('#applicationSubmitButton').disable(); registerPasswordUser()">Submit</button>
+                                                <div style="padding-top:1em;">
+                                                    By clicking submit, you agree to Hirely's<br>
+                                                    <a target="_blank"  href="http://hirely.us/terms-conditions/">Terms of Service</a>
+                                                    &amp; <a target="_blank" href="http://hirely.us/privacy-policy">Privacy Policy</a>.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </ng-form>
                         </div>
                     </div>
                 </div><!--box-->
@@ -259,8 +367,8 @@
     <div class="mobile-footer visible-xs-block">
         <div class="buttons">
             <!-- <button class="btn red"><i class="icon-share_icon"></i></button> -->
-            <button class="btn btn-lrg red" ng-click="applyClick()">APPLY</button>
-             <button class="btn red" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i></button>
+            <button class="btn btn-lrg red" ng-click="applyClick()" ng-hide="applyClicked || business.disabled || location.disabled || position.disabled">APPLY</button>
+             <!--<button class="btn red" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i></button>-->
         </div>
     </div><!--mobile-footer-->
 
