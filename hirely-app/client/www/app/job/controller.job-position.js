@@ -88,10 +88,15 @@
       });
 
       $scope.application = {
-        user: {email: '', firstName: '', lastName: ''},
+        user: {email: '', firstName: '', lastName: '', commPref: 0},
         positionId: $scope.position._id,
         textAreaQs: textAreaQs,
-        booleanQs: booleanQs
+        booleanQs: booleanQs,
+        preferences: {
+          communications: {
+            preferredMode: 0
+          }
+        }
       };
       $timeout(function() {
         $("#application input, #application textarea").prop("disabled", true);

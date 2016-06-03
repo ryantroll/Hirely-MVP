@@ -158,18 +158,19 @@ var applicationService = {
         }
 
         var self = this;
-        return userModel.findOne(userObj)
+        return userModel.findOne({email:userObj.email, firstName:userObj.firstName, lastName:userObj.lastName})
             // Get or create user, return user
             .then(function (user) {
                 console.log("AS:createNewApplication:info:1");
-                if (user) {
-                    var deferred = q.defer();
-                    deferred.resolve(user);
-                    return deferred.promise;
-                } else {
+                if (!user) {
                     user = new userModel(userObj);
-                    return user.save();
+                } else {
+                    user.mobile = userObj.mobile;
+                    user.preferences.communications.preferredMode = userObj.preferences.communications.preferredMode;
                 }
+
+                return user.save();
+
             })
             // Add userid to appObj, return application query
             .then(function (user) {

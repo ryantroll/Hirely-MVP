@@ -1276,7 +1276,12 @@ var userSchema = new Schema({
         dentalInsurance: Boolean,
         retirementPlan: Boolean,
         discounts: Boolean,
-        optOutOfSuggestionsFromEmployers: {type: Boolean, default: false},
+        communications: {
+            preferredMode: {type:Number, default:0},
+            optOutOfMarketing: {type:Boolean, default:false},
+            // optOutOfSuggestionsFromEmployers: {type: Boolean, default: false},
+        }
+
     },
 
 

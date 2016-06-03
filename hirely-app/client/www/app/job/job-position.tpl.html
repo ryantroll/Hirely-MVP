@@ -294,8 +294,9 @@
                                         </div>
                                     </div>
 
+
                                     <div class="row">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-4">
                                             <div class="field-wrapper" ng-class="{'error': !applicationForm.email.$valid && applicationForm.email.$dirty, 'valid' : applicationForm.email.$valid}">
                                                 <label for="email">
                                                     Email
@@ -309,10 +310,35 @@
                                                 />
                                             </div>
                                         </div>
+                                        <div class="col-sm-4">
+                                            <div class="field-wrapper" ng-class="{'error': !applicationForm.mobile.$valid && applicationForm.mobile.$dirty, 'valid' : applicationForm.mobile.$valid}">
+                                                <label for="mobile">
+                                                    Primary Phone Number
+                                                    <span class="fa fa-check feedback-valid"></span>
+                                                    <span class="fa fa-close feedback-error"></span>
+                                                </label>
+                                                <input type="text" class="text-field" id="mobile" name="mobile" ng-model="application.user.mobile" required/>
+                                                <!-- <input type="text" /> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="field-wrapper">
+                                                <label>
+                                                    Communication Preference
+                                                </label>
+                                                <br>
+                                                <input type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commEmailPref" value="0" name="commpref"/>
+                                                <label for="commEmailPref">Email</label>&nbsp;&nbsp;
+                                                <input type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commTextPref" value="1" name="commpref"/>
+                                                <label for="commTextPref">Text</label>&nbsp;&nbsp;
+                                                <input type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commBothPref" value="2" name="commpref"/>
+                                                <label for="commBothPref">Both</label>&nbsp;&nbsp;
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="row" ng-repeat="taq in application.textAreaQs">
-                                        <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-6" ng-repeat="taq in application.textAreaQs">
                                             <div class="field-wrapper" ng-class="{'error': !applicationForm.taq_{{$index}}.$valid && applicationForm.taq_{{$index}}.$dirty, 'valid' : applicationForm.taq_{{$index}}.$valid}">
                                                 <label for="taq_{{$index}}">
                                                     {{taq.question}}
@@ -323,10 +349,8 @@
                                                 <character-counter field-id="taq_{{$index}}" max="{{taq.maxChars ? taq.maxChars : 140}}"></character-counter>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row prescreenBooleanQuestions">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-6 prescreenBooleanQuestions">
                                             <label>
                                                 {{business.name}} values the following qualities.  Check all that apply to you:
                                             </label>
@@ -340,6 +364,7 @@
 
                                         </div>
                                     </div>
+
 
                                     <div class="row">
                                         <div class="col-sm-12">
