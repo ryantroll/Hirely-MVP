@@ -12,22 +12,24 @@ var q = require('q');
 
 var applicationService = {
 
+    statusLabelsHm: ['Started', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed', 'Surveying'],
+
     /**
      * [getById function will get a application by id]
      * @param  {[type]} id [application id should match application object id in DB]
      * @param  {[type]} reqQuery [req.query from service. if it's needed]
      * @return {[type]}        [promise]
      */
-    getById: function(id, reqQuery){
+    getById: function (id, reqQuery) {
         var self = this;
 
-        return applicationModel.findById(id).then(function(application) {
+        return applicationModel.findById(id).then(function (application) {
             console.log("as:getById:0");
             if (application) {
                 console.log("as:getById:1");
-                return userModel.findById(application.userId).then(function(user) {
+                return userModel.findById(application.userId).then(function (user) {
                     console.log("as:getById:2");
-                    return careerMatchScoresModel.findOne({userId:application.userId}).then(function(cms) {
+                    return careerMatchScoresModel.findOne({userId: application.userId}).then(function (cms) {
                         console.log("as:getById:3");
                         var slimUser = self.convertUserToSlimObject(user);
                         console.log("as:getById:4");
@@ -53,15 +55,15 @@ var applicationService = {
      * @param  {ojbect} reqQuery [query string parameters]
      * @return {promise}          [description]
      */
-    getByUserId: function(userId, reqQuery){
-        var filters = {userId:userId};
-        if(undefined !== reqQuery.positionId) {
+    getByUserId: function (userId, reqQuery) {
+        var filters = {userId: userId};
+        if (undefined !== reqQuery.positionId) {
             filters['positionId'] = reqQuery.positionId;
         }
         return applicationModel.find(filters).exec();
     },
 
-    convertUserToSlimObject: function(user) {
+    convertUserToSlimObject: function (user) {
         var slimUser = user.toObject();
         if (slimUser.personalityExams && slimUser.personalityExams.length && slimUser.personalityExams[0].careerMatchScores)
             delete slimUser.personalityExams[0].careerMatchScores;
@@ -76,11 +78,11 @@ var applicationService = {
      * @param  {object} reqQuery  [query string parameters]
      * @return {promise}           [description]
      */
-    getByPositionId: function(positionId, reqQuery){
+    getByPositionId: function (positionId, reqQuery) {
         var self = this;
 
         // console.log("as:getByPositionId:0");
-        return BusinessModel.findOne({ $where: "obj.positions['"+positionId+"']" }).then(function(business) {
+        return BusinessModel.findOne({$where: "obj.positions['" + positionId + "']"}).then(function (business) {
             // console.log("as:getByPositionId:1");
             var businessObj = business.toObject();
             var position = businessObj.positions[positionId];
@@ -138,9 +140,83 @@ var applicationService = {
      * @param  {object} appObj [object that hold the properties of new applictaion to be insterted]
      * @return {promise}        [description]
      */
-    createNewApplication: function(appObj){
-        var newApplication = new applicationModel(appObj);
-        return newApplication.save();
+    createNewApplication: function (appObj) {
+
+        console.log("AS:createNewApplication:info:0");
+
+        if (!appObj.userId && !appObj.user) {
+            console.log("AS:createNewApplication:error:1");
+            throw "Cannot create application without user info";
+        }
+
+        if (appObj.userId) {
+            var userObj = {_id: appObj.userId};
+        }
+        else {
+            var userObj = appObj.user;
+            delete appObj.user;
+        }
+
+        var self = this;
+        return userModel.findOne({email:userObj.email})
+            // Get or create user, return user
+            .then(function (user) {
+                console.log("AS:createNewApplication:info:1");
+                if (!user) {
+                    user = new userModel(userObj);
+                } else {
+                    user.mobile = userObj.mobile;
+                    user.preferences.communications.preferredMode = userObj.preferences.communications.preferredMode;
+                }
+
+                return user.save();
+
+            })
+            // Add userid to appObj, return application query
+            .then(function (user) {
+                console.log("AS:createNewApplication:info:2");
+                appObj.userId = user._id;
+                userObj = user;
+                return applicationModel.findOne({userId: appObj.userId, positionId: appObj.positionId});
+            })
+            // Upsert and return application
+            .then(function (application) {
+                console.log("AS:createNewApplication:info:3");
+                if (!application) {
+                    application = new applicationModel(appObj);
+                }
+
+                var appliedAt = new Date();
+                application.appliedAt = appliedAt;
+
+                if (!application.history) {
+                    application.history = [];
+                }
+
+                var statusFrom = application.status;
+                var statusFromLabel = statusFrom!=undefined ? self.statusLabelsHm[statusFrom] : 'null';
+                application.status = 0;
+                var statusToLabel = self.statusLabelsHm[0];
+                console.log("AS:createNewApplication:info:4");
+                application.history.push(
+                    {
+                        time: appliedAt,
+                        type: 'StatusChange',
+                        subject: "Status changed from " + statusFromLabel + " to " + statusToLabel,
+                        body: "Status changed from " + statusFromLabel + " to " + statusToLabel,
+                        meta: {
+                            fromStatus: statusFrom,
+                            toStatus: 0
+                        },
+                        userId: userObj._id,
+                        userFirstName: userObj.firstName,
+                        userLastName: userObj.lastName
+                    }
+                );
+                console.log("AS:createNewApplication:info:5");
+                return application.save();
+
+            });
     },
 
     /**
@@ -149,7 +225,7 @@ var applicationService = {
      * @param  {Object} appObj [Object that hold the properties of application that need to be updated]
      * @return {promise}        [description]
      */
-    saveApplication: function(appId, appObj) {
+    saveApplication: function (appId, appObj) {
         console.log("AS:saveApplication:info:0");
         return applicationModel.findOne({_id: appId}).exec()
             .then(

@@ -4,9 +4,28 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', JobPositionController]);
+  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', '$window', '$location', '$anchorScroll', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', 'UserService', 'JobApplicationService', JobPositionController])
+      .directive('validatePhone', function () {
+        return {
+          restrict: 'A',
+          require: 'ngModel',
+          link: function (scope, ele, attrs, ctrl) {
+            ctrl.$parsers.unshift(function (value) {
+              var pat = /^((\(\d{3}\))|(\d{3})) ?\d{3}(\-| )?\d{4}$/;
 
-  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, $sce, BusinessService, AvailabilityService, FavoritesService, AuthService) {
+              if (false === pat.test(value)) {
+                ctrl.$setValidity('invalidPhone', false);
+                return value;
+              }
+
+              ctrl.$setValidity('invalidPhone', true);
+              return value;
+            });/// unshift
+          }//// fun. link
+        }/// return object
+      })/// validate date;
+
+  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, $sce, $window, $location, $anchorScroll, BusinessService, AvailabilityService, FavoritesService, AuthService, UserService, JobApplicationService) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -77,10 +96,32 @@
         return;
       }
 
+      var textAreaQs= [];
+      var booleanQs = [];
+      $scope.position.prescreenQuestions.forEach(function(q) {
+        if (q.type == "textarea") {
+          textAreaQs.push(q);
+        } else if (q.type == "boolean") {
+          booleanQs.push(q);
+        } 
+      });
+
+      $scope.application = {
+        user: {email:'', firstName:'', lastName:'', mobile:''},
+        positionId: $scope.position._id,
+        textAreaQs: textAreaQs,
+        booleanQs: booleanQs,
+        preferences: {
+          communications: {
+            preferredMode: null
+          }
+        }
+      };
+
+
       $scope.heroImageURL = $scope.location.heroImageURL ? $scope.location.heroImageURL : $scope.business.heroImageURL;
       $scope.businessDescriptionHtml = $sce.trustAsHtml($scope.business.description);
       $scope.positionDescriptionHtml = $sce.trustAsHtml($scope.position.description);
-
 
 
       $scope.numOfBenefits = getNumOfBenefits();
@@ -190,15 +231,43 @@
         if(true === $scope.position.benefits[ben]) ++numOfBenefits;
       }
       return numOfBenefits;
-    }//// fun. numOfBenefits
+    }; //// fun. numOfBenefits
 
     $scope.applyClick = function(){
-      $state.go('master.application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
-    }
+      // $state.go('master.application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
+      $scope.applyClicked = true;
+      $timeout(function() {
+        $location.hash("application");
+        var yOffset = $(document).width() > 768 ? 50 : 80;
+        var y = $("#application").offset().top - yOffset;
+        $("html, body").animate({ scrollTop: y }, "slow");
+      });
+
+      if(!AuthService.currentUserId){
+        $window.ga('send', 'pageview', { page: $location.url() });
+      }
+
+    };
+
+    /**
+     * [formatPhone Will set the right format for phone while the user typing in]
+     */
+    $scope.formatPhone = function () {
+      var newVal = $scope._mobile;
+
+      if (newVal === false || angular.isUndefined(newVal)) return;
+
+      $scope._mobile = UserService.formatPhone(newVal);
+
+      // Android doesn't move the cursor to the end of the input when we change it, so re-focus
+      $("#email").focus();
+      $("#mobile").focus();
+
+    };
 
     $scope.otherPositionClick = function(slug){
       $state.go('master.default.job.position', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:slug});
-    }
+    };
 
     /**
      * [getWorkTypeTitle will return the work type in a displayable way like part-time -> Part Time]
@@ -269,7 +338,45 @@
         $rootScope.addFavoriteAfterLogin = true;
         $state.go('master.default.account.loginWithMessage', {message: "Please login to favorite a business."});
       }
-    }//// fun. favorite click
+    }; //// fun. favorite click
+
+    $scope.registerPasswordUser = function() {
+
+      $scope.applicationBlocked = true;
+
+      if (!$scope.applicationForm.$valid) {
+        return null;
+      }
+
+      $scope.application.booleanQs.forEach(function(q) {
+        if (!q.answer) {
+          q.answer = false;
+        }
+      });
+
+      $scope.application.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
+
+      var application = {
+        user: $scope.application.user,
+        positionId: $scope.position._id,
+        prescreenAnswers: $scope.application.textAreaQs.concat($scope.application.booleanQs)
+      };
+
+      JobApplicationService.create(application)
+          .then(
+              function () {
+                console.log("Application accepted");
+                $state.go('master.default.confirm', $stateParams);
+              },//// save resolve
+              function (err) {
+                console.log(err);
+                alert('Error while saving your application: '+err);
+                $scope.applicationBlocked.false;
+              }//// save reject
+          );//// save().then()
+
+    }//// fun. registerPasswrodUser
+
 
   }//// fun. JobController
 
