@@ -289,6 +289,7 @@
       if(!occId || !Array.isArray($scope.iconData)){
         return null;
       }
+
       var icon;
       for(var x=0; x<$scope.iconData.length; x++){
           if($scope.iconData[x].occId == occId){
@@ -298,7 +299,10 @@
       }/// for
 
       if(angular.isDefined(icon) && angular.isDefined(icon.icon)){
-        return icon.icon;
+        if (property)
+          return icon[property];
+        else
+          return icon.icon;
       }
       return null;
     }//// fun. getIcon
