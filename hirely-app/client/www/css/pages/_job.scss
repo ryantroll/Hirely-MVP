@@ -2,6 +2,11 @@
  * Created by Iyad Bitar on 2/29/16.
  */
 .position{
+
+    #posDetails {
+        padding:0;
+    }
+
     overflow: hidden;
 
     button {
@@ -9,8 +14,8 @@
     }
 
     .padding{
-        padding-left:2em;
-        padding-right:2em;
+        padding-left:1em;
+        padding-right:1em;
     }
 
     .hero{
@@ -438,6 +443,7 @@
     .application{
         min-height: 200px;
         background-color:$c-white;
+        max-width: 700px;
 
 
         .box{
@@ -462,15 +468,6 @@
                     padding: 1.4em;
                     //background: $c-hirely-red;
                     //color: white;
-                }
-            }
-
-            .form-disabled {
-                opacity: 0.4;
-                background: $c-hirely-light-gray;
-
-                * {
-                    background: $c-hirely-light-gray;
                 }
             }
 

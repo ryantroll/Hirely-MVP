@@ -4,9 +4,28 @@
 (function () {
     'use strict';
 
-  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', '$window', '$location', '$anchorScroll', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', 'JobApplicationService', JobPositionController]);
+  angular.module('hirelyApp.job').controller('JobPositionController', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$sce', '$window', '$location', '$anchorScroll', 'BusinessService', 'AvailabilityService', 'FavoritesService', 'AuthService', 'UserService', 'JobApplicationService', JobPositionController])
+      .directive('validatePhone', function () {
+        return {
+          restrict: 'A',
+          require: 'ngModel',
+          link: function (scope, ele, attrs, ctrl) {
+            ctrl.$parsers.unshift(function (value) {
+              var pat = /^((\(\d{3}\))|(\d{3})) ?\d{3}(\-| )?\d{4}$/;
 
-  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, $sce, $window, $location, $anchorScroll, BusinessService, AvailabilityService, FavoritesService, AuthService, JobApplicationService) {
+              if (false === pat.test(value)) {
+                ctrl.$setValidity('invalidPhone', false);
+                return value;
+              }
+
+              ctrl.$setValidity('invalidPhone', true);
+              return value;
+            });/// unshift
+          }//// fun. link
+        }/// return object
+      })/// validate date;
+
+  function JobPositionController($scope, $rootScope, $state, $stateParams, $timeout, $sce, $window, $location, $anchorScroll, BusinessService, AvailabilityService, FavoritesService, AuthService, UserService, JobApplicationService) {
 
     BusinessService.getBySlug($stateParams.businessSlug)
     .then(
@@ -88,7 +107,7 @@
       });
 
       $scope.application = {
-        user: {email: '', firstName: '', lastName: '', commPref: 0},
+        user: {email:'', firstName:'', lastName:'', mobile:''},
         positionId: $scope.position._id,
         textAreaQs: textAreaQs,
         booleanQs: booleanQs,
@@ -98,9 +117,6 @@
           }
         }
       };
-      $timeout(function() {
-        $("#application input, #application textarea").prop("disabled", true);
-      });
 
 
       $scope.heroImageURL = $scope.location.heroImageURL ? $scope.location.heroImageURL : $scope.business.heroImageURL;
@@ -220,14 +236,32 @@
     $scope.applyClick = function(){
       // $state.go('master.application.apply', {businessSlug:$scope.business.slug, locationSlug:$scope.location.slug, positionSlug:$scope.position.slug});
       $scope.applyClicked = true;
-      $("#application input, #application textarea").prop("disabled", false);
-      $location.hash("application");
-      $anchorScroll.yOffset = $(document).width() > 768 ? 50 : 80;
-      $anchorScroll();
+      $timeout(function() {
+        $location.hash("application");
+        var yOffset = $(document).width() > 768 ? 50 : 80;
+        var y = $("#application").offset().top - yOffset;
+        $("html, body").animate({ scrollTop: y }, "slow");
+      });
 
       if(!AuthService.currentUserId){
         $window.ga('send', 'pageview', { page: $location.url() });
       }
+
+    };
+
+    /**
+     * [formatPhone Will set the right format for phone while the user typing in]
+     */
+    $scope.formatPhone = function () {
+      var newVal = $scope._mobile;
+
+      if (newVal === false || angular.isUndefined(newVal)) return;
+
+      $scope._mobile = UserService.formatPhone(newVal);
+
+      // Android doesn't move the cursor to the end of the input when we change it, so re-focus
+      $("#email").focus();
+      $("#mobile").focus();
 
     };
 
@@ -319,6 +353,8 @@
           q.answer = false;
         }
       });
+
+      $scope.application.user.mobile = '+1.' + UserService.clearPhoneFormat($scope._mobile);
 
       var application = {
         user: $scope.application.user,

@@ -221,7 +221,7 @@
                                 <h3>${{position.compensation.wageAmountSalary || position.compensation.wageAmount}} <span class="pull-right">{{position.compensation.wageType}}</span></h3>
                             </div>
                             <div class="buttons box-inner">
-                                <button id="applyButton" title="Apply button.  If disabled, applications are not currently being accepted through the Hirely application." class="btn btn-lrg red" ng-click="applyClick()" ng-hide="business.disabled || location.disabled || position.disabled">APPLY</button>
+                                <button id="applyButton" title="Apply button.  If disabled, applications are not currently being accepted through the Hirely application." class="btn btn-lrg red" ng-click="applyClick()" ng-hide="business.disabled || location.disabled || position.disabled">QUICK APPLY</button>
                                 <button title="Applications not currently accepted" class="btn btn-lrg" disabled ng-show="business.disabled || location.disabled || position.disabled">Applications are not currently being accepted.</button>
                                 <!-- <button class="btn btn-secondary"><i class="icon-share_icon"></i>SHARE</button> -->
                                  <!--<button class="btn btn-secondary" id="favButton" ng-click="favoriteClick()" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i>FAVORITE</button>-->
@@ -252,21 +252,16 @@
         </div><!--max-width-->
     </div><!--details-->
 
-    <div id="application" class="application padding max-width">
+    <div id="application" class="application padding max-width" ng-show="applyClicked">
         <div class="row">
             <div class="col-sm-12">
                 <div class="box">
                     <br>
-                    <h3 class="text-center">APPLICATION</h3>
+                    <h3 class="text-center">THE QUICK APPLY</h3>
                     <p class="text-center" style="color:gray;">If you think you would be a good fit, please complete the information below and we’ll update you by text and email.</p>
 
-                    <p id="applyButtonBottomP" class="text-center" ng-show="!applyClicked">
-                        <button title="Apply button" class="btn btn-lrg red" ng-click="applyClick()" ng-hide="business.disabled || location.disabled || position.disabled">Start</button>
-                        <button title="Applications not current accepted" class="btn btn-lrg" disabled ng-show="business.disabled || location.disabled || position.disabled">Applications are not currently being accepted.</button>
-                    </p>
-
                     <div class="copy box-inner">
-                        <div class="hirely-form" ng-class="{'form-disabled': !applyClicked}">
+                        <div class="hirely-form">
                             <ng-form class="form-horizontal" name="applicationForm" novalidate>
                                 <fieldset>
 
@@ -296,7 +291,7 @@
 
 
                                     <div class="row">
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="field-wrapper" ng-class="{'error': !applicationForm.email.$valid && applicationForm.email.$dirty, 'valid' : applicationForm.email.$valid}">
                                                 <label for="email">
                                                     Email
@@ -310,18 +305,21 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="field-wrapper" ng-class="{'error': !applicationForm.mobile.$valid && applicationForm.mobile.$dirty, 'valid' : applicationForm.mobile.$valid}">
                                                 <label for="mobile">
-                                                    Primary Phone Number
+                                                    Mobile Phone
                                                     <span class="fa fa-check feedback-valid"></span>
                                                     <span class="fa fa-close feedback-error"></span>
                                                 </label>
-                                                <input type="text" class="text-field" id="mobile" name="mobile" ng-model="application.user.mobile" required/>
+                                                <input type="tel" class="text-field" id="mobile" name="mobile" required
+                                                       ng-model="_mobile"
+                                                       ng-change="formatPhone()"
+                                                       validate-phone/>
                                                 <!-- <input type="text" /> -->
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="field-wrapper" ng-class="{'error': !applicationForm.commpref.$valid && applicationForm.commpref.$dirty, 'valid' : applicationForm.commpref.$valid}">
                                                 <label>
                                                     Communication Preference
@@ -340,7 +338,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-sm-6" ng-repeat="taq in application.textAreaQs">
+                                        <div class="col-sm-12" ng-repeat="taq in application.textAreaQs">
                                             <div class="field-wrapper" ng-class="{'error': !applicationForm.taq_{{$index}}.$valid && applicationForm.taq_{{$index}}.$dirty, 'valid' : applicationForm.taq_{{$index}}.$valid}">
                                                 <label for="taq_{{$index}}">
                                                     {{taq.question}}
@@ -348,11 +346,13 @@
                                                     <span class="fa fa-close feedback-error"></span>
                                                 </label>
                                                 <textarea class="text-field" name="taq_{{$index}}" id="taq_{{$index}}" ng-model="taq.answer" required></textarea>
-                                                <character-counter field-id="taq_{{$index}}" max="{{taq.maxChars ? taq.maxChars : 140}}"></character-counter>
+                                                <!--<character-counter field-id="taq_{{$index}}" max="{{taq.maxChars ? taq.maxChars : 140}}"></character-counter>-->
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="col-sm-6 prescreenBooleanQuestions">
+                                    <div class="row prescreenBooleanQuestions">
+                                        <div class="col-sm-12">
                                             <label>
                                                 {{business.name}} values the following qualities.  Check all that apply to you:
                                             </label>
@@ -394,7 +394,7 @@
     <div class="mobile-footer visible-xs-block">
         <div class="buttons">
             <!-- <button class="btn red"><i class="icon-share_icon"></i></button> -->
-            <button class="btn btn-lrg red" ng-click="applyClick()" ng-hide="applyClicked || business.disabled || location.disabled || position.disabled">APPLY</button>
+            <button class="btn btn-lrg red" ng-click="applyClick()" ng-hide="applyClicked || business.disabled || location.disabled || position.disabled">QUICK APPLY</button>
              <!--<button class="btn red" ng-click="favoriteClick($event)" ng-class="{'fav-active':thisPositionFav}"><i ng-class="{'icon-heart_outline_icon':!thisPositionFav, 'icon-heart_tick_icon':thisPositionFav}"></i></button>-->
         </div>
     </div><!--mobile-footer-->
