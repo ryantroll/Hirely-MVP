@@ -94,7 +94,7 @@
         booleanQs: booleanQs,
         preferences: {
           communications: {
-            preferredMode: 0
+            preferredMode: null
           }
         }
       };
@@ -335,7 +335,7 @@
               function (err) {
                 console.log(err);
                 alert('Error while saving your application: '+err);
-                applicationBlocked.false;
+                $scope.applicationBlocked.false;
               }//// save reject
           );//// save().then()
 

@@ -158,7 +158,7 @@ var applicationService = {
         }
 
         var self = this;
-        return userModel.findOne({email:userObj.email, firstName:userObj.firstName, lastName:userObj.lastName})
+        return userModel.findOne({email:userObj.email})
             // Get or create user, return user
             .then(function (user) {
                 console.log("AS:createNewApplication:info:1");

@@ -322,16 +322,18 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <div class="field-wrapper">
+                                            <div class="field-wrapper" ng-class="{'error': !applicationForm.commpref.$valid && applicationForm.commpref.$dirty, 'valid' : applicationForm.commpref.$valid}">
                                                 <label>
                                                     Communication Preference
+                                                    <span class="fa fa-check feedback-valid"></span>
+                                                    <span class="fa fa-close feedback-error"></span>
                                                 </label>
                                                 <br>
-                                                <input type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commEmailPref" value="0" name="commpref"/>
+                                                <input required type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commEmailPref" value="0" name="commpref"/>
                                                 <label for="commEmailPref">Email</label>&nbsp;&nbsp;
-                                                <input type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commTextPref" value="1" name="commpref"/>
+                                                <input required type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commTextPref" value="1" name="commpref"/>
                                                 <label for="commTextPref">Text</label>&nbsp;&nbsp;
-                                                <input type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commBothPref" value="2" name="commpref"/>
+                                                <input required type="radio" ng-model="application.user.preferences.communications.preferredMode" id="commBothPref" value="2" name="commpref"/>
                                                 <label for="commBothPref">Both</label>&nbsp;&nbsp;
                                             </div>
                                         </div>
