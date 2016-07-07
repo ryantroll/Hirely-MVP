@@ -5,7 +5,7 @@ config.jwtSecret = "iwXye8tYZoGKPdGBckmm3QuX";
 config.googleMapsAPIKey = 'AIzaSyDXt_V8OyuoNph540_ZBTUSjx66QKLUuJc';
 
 config.traitify = {
-  host: 'api.traitify.com',
+  host: 'api-sandbox.traitify.com',
   version: 'v1',
   secretKey: 'jlktk03vvsduai7dq4angojl0l'
 };
