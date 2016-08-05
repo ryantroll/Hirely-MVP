@@ -122,14 +122,12 @@ node tests/test.*.model.js
 Running the server locally
 -------------
 
-Follow steps to run MongoDB first
-
 ```
 cd Hirely-MVP
 npm install
 bower install
 gulp 2>&1 >../gulp.log &
-cd server
+ssh mms-user@hirely-mongo-0.hirely.9550.mongodbdns.com -L 27017:127.0.0.1:27000
 node server.js 2>&1 >../server.log &
 open http://localhost:7200
 ```
@@ -166,6 +164,12 @@ Also, aws is configured to allow inbound mongo ports from the elastic beanstalk 
 
 ```
 mongo --port 27000 --host hirely-mongo-0.hirely.9550.mongodbdns.com hirely
+```
+
+One can also ssh forward mongo to run the app locally:
+
+```
+ssh mms-user@hirely-mongo-0.hirely.9550.mongodbdns.com -L 27017:127.0.0.1:27000
 ```
 
 
