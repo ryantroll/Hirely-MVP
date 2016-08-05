@@ -14,8 +14,8 @@
     function JobApplicationService($q, HirelyApiService) {
 
         var viewStatusLabels = ['New', 'Viewed', 'Aging'];
-        var statusLabels = ['Started', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed', 'Surveying'];
-        var statusLabelsHm = ['Started', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed', 'Surveying'];
+        var statusLabels = ['New', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed', 'Surveying'];
+        var statusLabelsHm = ['New', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed', 'Surveying'];
         var educationPrograms = ['High School', 'Certificate', 'Associate\'s Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Professional Degree', 'Doctoral Degree', 'Post-Doctoral Training'];
 
         /**

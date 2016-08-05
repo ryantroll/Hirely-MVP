@@ -3,27 +3,27 @@
     'use strict';
 
     angular.module('hirelyApp')
-        .controller('ProfilerConfirmController', ['$scope', '$state', '$stateParams', '$timeout', 'AuthService', 'JobApplicationService', ProfilerConfirmController]);
+        .controller('ApplicationConfirmController', ['$scope', '$state', '$stateParams', '$timeout', 'AuthService', 'JobApplicationService', ApplicationConfirmController]);
 
 
-    function ProfilerConfirmController($scope, $state, $stateParams, $timeout, AuthService, JobApplicationService) {
+    function ApplicationConfirmController($scope, $state, $stateParams, $timeout, AuthService, JobApplicationService) {
 
         //// wait for destroy event to update data
         $scope.$on('$destroy', function (event) {
 
             // If "Finish" was clicked, update the status of the application
             if ($scope.destroyDirection) {
-                console.log("'Submit' was clicked, update the status of the profile");
+                console.log("'Submit' was clicked, update the status of the application");
 
                 // Create history entry
                 var historyEntry = {
                     time: new Date(),
                     type: 'StatusChange',
-                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[4],
-                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[4],
+                    subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
+                    body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
                     meta: {
                         fromStatus: $scope.application.status,
-                        toStatus: 4
+                        toStatus: 2
                     },
                     userId: AuthService.currentUserId,
                     userFirstName: AuthService.currentUser.firstName,
@@ -35,7 +35,7 @@
                 }
                 $scope.application.history.push(historyEntry);
 
-                $scope.application.status = 4;
+                $scope.application.status = 2;
                 $scope.application.appliedAt = new Date();
 
             }

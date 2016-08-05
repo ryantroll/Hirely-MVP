@@ -12,7 +12,7 @@ var q = require('q');
 
 var applicationService = {
 
-    statusLabelsHm: ['Started', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed', 'Surveying'],
+    statusLabelsHm: ['New', 'Pending', 'Applied', 'Liked', 'Hired', 'Dismissed', 'Surveying'],
 
     /**
      * [getById function will get a application by id]
@@ -195,8 +195,8 @@ var applicationService = {
 
                 var statusFrom = application.status;
                 var statusFromLabel = statusFrom!=undefined ? self.statusLabelsHm[statusFrom] : 'null';
-                application.status = 0;
-                var statusToLabel = self.statusLabelsHm[0];
+                application.status = appObj.status ? appObj.status : 0;
+                var statusToLabel = self.statusLabelsHm[application.status];
                 console.log("AS:createNewApplication:info:4");
                 application.history.push(
                     {
@@ -206,7 +206,7 @@ var applicationService = {
                         body: "Status changed from " + statusFromLabel + " to " + statusToLabel,
                         meta: {
                             fromStatus: statusFrom,
-                            toStatus: 0
+                            toStatus: application.status
                         },
                         userId: userObj._id,
                         userFirstName: userObj.firstName,

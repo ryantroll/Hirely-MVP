@@ -33,61 +33,64 @@
         BusinessService.getBySlug($stateParams.businessSlug)
             .then(
                 function (business) {
-                    $scope.business = business;
-                    $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
-                    $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
-                    console.log("JA:info: Business loaded successfully");
+                    if (business) {
+                        $scope.business = business;
+                        $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
+                        $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-                    if (AuthService.token.jwt) {
+                        console.log("JA:info: Business loaded successfully");
+
                         JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function (application) {
-                            $scope.application = application;
                             if (!application) {
-                                console.log("JA:info: No prior profile found");
-
-                                application = {
-                                    userId: AuthService.currentUserId,
+                                var application = {
+                                    user: AuthService.currentUserId,
                                     positionId: $scope.position._id,
-                                    prescreenAnswers: $scope.position.prescreenQuestions,
-                                    status: 6,
-                                    history: [
-                                        {
-                                            time: new Date(),
-                                            type: 'StatusChange',
-                                            subject: "Survey Started",
-                                            body: "Survey Started",
-                                            meta: {
-                                                fromStatus: null,
-                                                toStatus: 6
-                                            },
-                                            userId: AuthService.currentUserId,
-                                            userFirstName: AuthService.currentUser.firstName,
-                                            userLastName: AuthService.currentUser.lastName
-                                        }
-                                    ]
+                                    status: 6
                                 };
-                                return JobApplicationService.create(application)
-                                    .then(
-                                        function (application) {
-                                            console.log("JA:info: Profile created");
-                                            $scope.application = application;
-                                        },//// save resolve
-                                        function (err) {
-                                            console.log(err);
-                                            alert('Error while creating your application\nPlease try again');
-                                        }//// save reject
-                                    );//// save().then()
-                            } else {
-                                console.log("JA:info: Prior profile found");
                             }
-                        }).then(function () {
-                            initialize();
+                            $scope.application = application;
+
+                            // Create history entry
+                            var historyEntry = {
+                                time: new Date(),
+                                type: 'StatusChange',
+                                subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
+                                body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
+                                meta: {
+                                    fromStatus: $scope.application.status,
+                                    toStatus: 6
+                                },
+                                userId: AuthService.currentUserId,
+                                userFirstName: AuthService.currentUser.firstName,
+                                userLastName: AuthService.currentUser.lastName
+                            };
+
+                            if (!$scope.application.history || !$scope.application.history.length) {
+                                $scope.application.history = [];
+                            }
+                            $scope.application.history.push(historyEntry);
+
+                            $scope.application.status = 1;
+
+                            JobApplicationService.create($scope.application)
+                                .then(
+                                    function () {
+                                        console.log("Application created");
+                                        initialize();
+                                    },//// save resolve
+                                    function (err) {
+                                        console.log(err);
+                                        initialize();
+                                    }//// save reject
+                                );//// save().then()
+
                         });
-                    } else {
+                    }
+                    else {
+                        console.log(err);
                         initialize();
                     }
-                },
-                function (err) {
-                    console.log(err)
+
                 }
             );
 

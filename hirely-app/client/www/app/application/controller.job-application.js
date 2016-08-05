@@ -32,60 +32,70 @@
         BusinessService.getBySlug($stateParams.businessSlug)
             .then(
                 function (business) {
-                    $scope.business = business;
-                    $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
-                    $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
-                    console.log("JA:info: Business loaded successfully");
+                    if (business) {
+                        $scope.business = business;
+                        $scope.location = BusinessService.locationBySlug($stateParams.locationSlug, business);
+                        $scope.position = BusinessService.positionBySlug($stateParams.positionSlug, $stateParams.locationSlug, business);
 
-                    if (AuthService.token.jwt) {
+                        console.log("JA:info: Business loaded successfully");
+
                         JobApplicationService.isApplicationExists(AuthService.currentUserId, $scope.position._id).then(function (application) {
-                            $scope.application = application;
                             if (!application) {
-                                console.log("JA:info: No prior application found");
-                                application = {
-                                    userId: AuthService.currentUserId,
-                                    positionId: $scope.position._id,
-                                    prescreenAnswers: $scope.position.prescreenQuestions,
-                                    status: 0,
-                                    history: [
-                                        {
-                                            time: new Date(),
-                                            type: 'StatusChange',
-                                            subject: "Application Started",
-                                            body: "Application Started",
-                                            meta: {
-                                                fromStatus: null,
-                                                toStatus: 0
-                                            },
-                                            userId: AuthService.currentUserId,
-                                            userFirstName: AuthService.currentUser.firstName,
-                                            userLastName: AuthService.currentUser.lastName
-                                        }
-                                    ]
-                                };
-                                return JobApplicationService.create(application)
-                                    .then(
-                                        function (application) {
-                                            console.log("JA:info: Application created");
-                                            $scope.application = application;
-                                        },//// save resolve
-                                        function (err) {
-                                            console.log(err);
-                                            alert('Error while saving your application\nPlease try again');
-                                        }//// save reject
-                                    );//// save().then()
-                            } else {
-                                console.log("JA:info: Prior application found");
+                                console.log("Error: No application found");
+                                alert("Error: no application found");
+                                initialize();
+                                return;
                             }
-                        }).then(function () {
-                            initialize();
+                            $scope.application = application;
+
+
+
+                            // TODO:  Consider using JobApplicationService.create to make history log
+
+
+
+
+                            // Create history entry
+                            var historyEntry = {
+                                time: new Date(),
+                                type: 'StatusChange',
+                                subject: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
+                                body: "Status changed from "+JobApplicationService.statusLabelsHm[$scope.application.status]+" to "+JobApplicationService.statusLabelsHm[2],
+                                meta: {
+                                    fromStatus: $scope.application.status,
+                                    toStatus: 1
+                                },
+                                userId: AuthService.currentUserId,
+                                userFirstName: AuthService.currentUser.firstName,
+                                userLastName: AuthService.currentUser.lastName
+                            };
+
+                            if (!$scope.application.history || !$scope.application.history.length) {
+                                $scope.application.history = [];
+                            }
+                            $scope.application.history.push(historyEntry);
+
+                            $scope.application.status = 1;
+
+                            JobApplicationService.save($scope.application)
+                                .then(
+                                    function () {
+                                        console.log("Application created");
+                                        initialize();
+                                    },//// save resolve
+                                    function (err) {
+                                        console.log(err);
+                                        initialize();
+                                    }//// save reject
+                                );//// save().then()
+
                         });
-                    } else {
+                    }
+                    else {
+                        console.log(err);
                         initialize();
                     }
-                },
-                function (err) {
-                    console.log(err)
+
                 }
             );
 
@@ -123,9 +133,9 @@
                     hasForm: true
                 },
                 {
-                    templateUrl: '/app/application/pre-screen/pre-screen.tpl.html',
-                    controller: 'PreScreenController',
-                    hasForm: true
+                    templateUrl: '/app/application/application-confirm/application-confirm.tpl.html',
+                    controller: 'ApplicationConfirmController',
+                    hasForm: false
                 }
             ];
         }//// fun. setStpes
