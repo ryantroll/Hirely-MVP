@@ -17,7 +17,7 @@ var historySchema = new Schema({
 
 var prescreenSchema = new Schema({
     question: String,
-    answer: {type:freeSchema},
+    answer: String,
     type: String,
     maxChars: Number
 }, {_id: false});
