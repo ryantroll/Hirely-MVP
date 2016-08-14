@@ -11,25 +11,27 @@ Overview
 -------------
 
 
+The Hirely app is a custom MEAN stack hosted in Amazon AWS.  There are two AWS Elastic Beanstalk instances and one managed MongoDB service.  Elastic Beanstalk is an auto-scaling cloud solution by Amazon, capable of handling even the heaviest of loads.  There is one computing cloud for each of the two computing services:  web (dubbed "express") and matching algorithm (dubbed "crunchmuncher").  The web service is separated from the backend to mitigate frontend slowdown due to surges in matching algorithm demand.
+
+The technology stack, data architecture, and API behavior have been heavily optimized for performance and scalability.
+
+Though the matching algorithm service and web service are run independently, they share a codebase in order to simplify development. A global variable controls which mode the app runs in.  The web service handles changes to user driven data and queues matching update requests in the database.  The matching algorithm service watches for and executes match update requests.
+
 We are using the following open-source tools and frameworks (not necessarily complete).
 
 **Backend Webserver:**
 - [Node.js](https://nodejs.org/en/) - Javascript Engine
 - [Express.js](http://expressjs.com/en/index.html) - Node.js web-server framework
-- [MongoDB](https://www.mongodb.com/) - NoSql db.  Used to store ONET data, and business data
-- [Firebase JS Library](https://www.firebase.com/docs/web/quickstart.html) - library to comm with Firebase db web service
-- [node geocoder](https://github.com/nchaulet/node-geocoder) - converts addresses to geo coords
+- [MongoDB](https://www.mongodb.com/) - NoSql db
 - [Traitify Node](https://github.com/traitify/traitify-node) - Traitify library for nodejs
 
 **3rd Party Services:**
-- [Firebase](https://www.firebase.com/) - DB as a service. Stores all user info
 - [Traitify](https://www.traitify.com/) - Personality Assessment as a service
+- [ONET Search](https://services.onetcenter.org/demo) - Personality Assessment as a service
 
 **Frontend Web Application:**
 Functional
 - [AngularJS](https://angularjs.org/) - Javascript Web Application framework
-- [AngelFire](https://www.firebase.com/docs/web/libraries/angular/) - Firebase library for AngularJS
-- [Geofire](https://github.com/firebase/geofire-js) - Firebase library for querying based on location
 - [Traitify JS Client](https://github.com/traitify/traitify-js-client) - Traitify library for generic javascript apps
 - [Traitify JS Widgets](https://github.com/traitify/traitify-js-widgets) - Some javascript html widgets
 UX
@@ -44,10 +46,10 @@ UX
 
 ----------
 
-Setup MongoDB Database
+Setup MongoDB Database Locally
 -------------
 
-At minimum, ONET data needs to be installed to your MongoDB.  This procedure is a work in progress.
+The app relies on several db tables be pre-populated.  The following is instructions for creating the minimum db from scratch on a mac.  It's also possible to export/import mongodb from production, but note that is painful.  For instructions on export/import, see the section "How to dump/export and import all mongo dbs".
 
 ```
 brew update; brew install mongodb
