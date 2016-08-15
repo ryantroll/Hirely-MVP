@@ -225,36 +225,68 @@ Note:  The .ebextensions folder is the aws magic that gets the app working with 
 As of Aug 14, 2016
 
 get /api/v1/applications/:id
+
 get /api/v1/applications/byPositionId/:id
+
 get /api/v1/applications/byUserId/:userId
+
 post /api/v1/applications/
+
 patch /api/v1/applications/:appId
+
 post /api/v1/auth/
+
 get /api/v1/auth
+
 get /api/v1/businesses/positionIcon
+
 get /api/v1/businesses/occupationMetas
+
 post /api/v1/businesses/
+
 patch /api/v1/businesses/:id
+
 get /api/v1/businesses/:slug
+
 get /api/v1/businesses/getPositionsByIds/:pid
+
 get /api/v1/businesses/getPositionsByManagerId/:managerId
+
 get /api/v1/businessByPositionId/:pid
+
 get /api/v1/favorites
+
 post /api/v1/favorites
+
 get /api/v1/occupations/searchByKeyword/:keywords
+
 get /api/v1/positions/:pid/isUserFiltered/:uid
+
 get /api/v1/traitify/
+
 get /api/v1/traitify/assessment-id
+
 post /api/v1/traitify/
+
 get /api/v1/traitify/test
+
 get /api/v1/traitify/getAssessmentCareerMatchScoresById/:id
+
 get /api/v1/traitify/meta
+
 post /api/v1/traitify/updateAssessmentCareerMatchScoresByUserId/:id
+
 get /api/v1/users/:id
+
 post /api/v1/users/
+
 patch /api/v1/users/:id
+
 post /api/v1/users/:id/updateUserMetricsById
+
 post /api/v1/users/createInvitationToken/
+
+
 
 
 
